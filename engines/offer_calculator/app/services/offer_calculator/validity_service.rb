@@ -2,58 +2,80 @@
 
 module OfferCalculator
   class ValidityService
-    attr_reader :start_date, :end_date
+    START_BUFFER = 5
+    END_BUFFER = 25
 
     def initialize(logic:, schedules:, direction:, booking_date: Date.current)
       @validity_logic = logic
-      @start_date = 5.days.from_now.to_date
-      @end_date = 25.days.from_now.to_date
       @schedules = schedules
       @direction = direction
       @booking_date = booking_date
-      parse_schedules
-    end
-
-    def parse_schedules
-      return [start_date, end_date] if schedules.blank?
-
-      case validity_logic
-      when 'vatos'
-        handle_vatos_schedules
-      when 'vatoa'
-        handle_vatoa_schedules
-      when 'vatob'
-        @start_date = booking_date.to_date
-        @end_date = booking_date.to_date + 1.day
-      end
-      @start_date = start_value if start_value.present?
-      @end_date = end_value if end_value.present?
-      verify_dates
-    end
-
-    def verify_dates
-      @end_date = @start_date + 1.day if @end_date.to_date == @start_date.to_date
     end
 
     def parse_schedule(schedule:, direction:)
       @schedules = [schedule]
       @direction = direction
-      parse_schedules
     end
 
-    def handle_vatos_schedules
-      @start_value = schedules.first.etd.to_date
-      @end_value = schedules.last.etd.to_date
+    def parse_direction(direction:)
+      @direction = direction
     end
 
-    def handle_vatoa_schedules
-      method = direction == 'export' ? :etd : :eta
-      @start_value = schedules.first.try(method)&.to_date
-      @end_value = schedules.last.try(method)&.to_date
+    def start_date
+      @start_date ||= start_value
+    end
+
+    def end_date
+      @end_date ||= end_value
     end
 
     private
 
-    attr_reader :validity_logic, :schedules, :direction, :booking_date, :start_value, :end_value
+    def start_value
+      return default_start_date if schedules.blank?
+
+      case validity_logic
+      when "vatos"
+        schedules.first.etd.to_date
+      when "vatoa"
+        method = direction == "export" ? :etd : :eta
+        schedules.first.try(method)&.to_date
+      when "vatob"
+        booking_date.to_date
+      else
+        default_start_date
+      end
+    end
+
+    def end_value
+      return default_end_date if schedules.empty?
+
+      date = case validity_logic
+            when "vatos"
+              schedules.last.etd.to_date
+            when "vatoa"
+              method = direction == "export" ? :etd : :eta
+              schedules.last.try(method)&.to_date
+            when "vatob"
+              booking_date.to_date
+            else
+              default_end_date
+      end
+      verify_end_value(date: date)
+    end
+
+    def verify_end_value(date:)
+      date.to_date == start_value.to_date ? start_value + 1.day : date
+    end
+
+    def default_start_date
+      START_BUFFER.days.from_now.to_date
+    end
+
+    def default_end_date
+      END_BUFFER.days.from_now.to_date
+    end
+
+    attr_reader :validity_logic, :schedules, :direction, :booking_date
   end
 end

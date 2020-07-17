@@ -61,7 +61,7 @@ RSpec.describe Wheelhouse::RouteFinderService, type: :service do
   describe '.perform' do
     context 'with origin and destination nexus ids' do
       let(:origin) { { nexus_id: gothenburg_port.nexus_id } }
-      let(:destination) { { nexus_id: shanghai_port.nexus_id } }
+      let(:destination) { { nexus_id: shanghai_airport.nexus_id } }
 
       it 'returns the itineraries between the origin & destination' do
         expect(result).to match_array([ocean_itinerary, air_itinerary])

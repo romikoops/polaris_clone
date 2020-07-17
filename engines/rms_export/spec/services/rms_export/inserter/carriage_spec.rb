@@ -6,7 +6,7 @@ RSpec.describe ::RmsExport::Inserter::Carriage do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:hub) { FactoryBot.create(:hamburg_hub, organization: organization) }
-  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'TEST', organization: organization) }
   let!(:trucking_locations) do
     [
       FactoryBot.create(:trucking_location, zipcode: '12344'),
@@ -17,7 +17,7 @@ RSpec.describe ::RmsExport::Inserter::Carriage do
 
   let!(:truckings) do
     trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub, courier: courier) 
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub, tenant_vehicle: tenant_vehicle) 
     end
   end
   let!(:routes) do

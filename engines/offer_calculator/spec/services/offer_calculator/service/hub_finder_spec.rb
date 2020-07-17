@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::HubFinder do
   let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, legacy_shipment_id: shipment.id) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
@@ -43,7 +44,7 @@ RSpec.describe OfferCalculator::Service::HubFinder do
   context 'class methods' do
     describe '.perform', :vcr do
       it 'returns the correct hub ids' do
-        results = described_class.new(shipment: shipment).perform
+        results = described_class.new(shipment: shipment, quotation: quotation).perform
 
         expect(results[:origin]).to eq([origin_hub])
         expect(results[:destination]).to eq([destination_hub])

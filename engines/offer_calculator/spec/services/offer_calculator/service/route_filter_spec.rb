@@ -16,6 +16,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                       user: user,
                       organization: organization)
   end
+  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
   let(:routes) do
     [
       OfferCalculator::Route.new(
@@ -28,7 +29,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       )
     ]
   end
-  let(:results) { described_class.new(shipment: shipment).perform(routes) }
+  let(:results) { described_class.new(shipment: shipment, quotation: quotation).perform(routes) }
 
   before do
     ::Organizations.current_id = organization.id
@@ -61,8 +62,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
         it 'raises InvalidRoutes when the routes are invalid' do
           expect {
-            described_class.new(shipment: shipment).perform(routes)
-          }.to raise_error(OfferCalculator::Calculator::InvalidRoutes)
+            described_class.new(shipment: shipment, quotation: quotation).perform(routes)
+          }.to raise_error(OfferCalculator::Errors::InvalidRoutes)
         end
       end
 
@@ -73,8 +74,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
         it 'raises InvalidRoutes when the routes are invalid' do
           expect {
-            described_class.new(shipment: shipment).perform(routes)
-          }.to raise_error(OfferCalculator::Calculator::InvalidRoutes)
+            described_class.new(shipment: shipment, quotation: quotation).perform(routes)
+          }.to raise_error(OfferCalculator::Errors::InvalidRoutes)
         end
       end
 
@@ -180,7 +181,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
   end
 
   describe '.target_max_dimension' do
-    let!(:klass) { described_class.new(shipment: shipment) }
+    let!(:klass) { described_class.new(shipment: shipment, quotation: quotation) }
     let(:route) { routes.first }
 
     context 'when non aggregate and mot ' do

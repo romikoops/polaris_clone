@@ -17,6 +17,7 @@ end
 # Table name: quotations_quotations
 #
 #  id                   :uuid             not null, primary key
+#  completed            :boolean          default(FALSE)
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

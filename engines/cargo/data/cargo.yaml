@@ -46,3 +46,6 @@ fcl_45_hq:
 fcl_45_r:
   class: 'L2'
   type: 'R0'
+lcl:
+  class: '00'
+  type: 'LCL'

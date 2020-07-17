@@ -78,7 +78,7 @@ RSpec.describe RmsSync::Pricings do
       book = RmsData::Book.where(sheet_type: :pricings).first
       expect(RmsData::Sheet.where(book_id: book.id).length).to eq(1)
       sheet = RmsData::Sheet.where(book_id: book.id).first
-      expect(sheet.rows_values).to eq([%w(EFFECTIVE_DATE
+      expect(sheet.rows_values).to match_array([%w(EFFECTIVE_DATE
                                           EXPIRATION_DATE
                                           ORIGIN
                                           COUNTRY_ORIGIN
@@ -149,7 +149,25 @@ RSpec.describe RmsSync::Pricings do
                                         'Basic Ocean Freight',
                                         'EUR',
                                         '1.0',
-                                        '6']])
+                                        '6'],
+                                       [pricing.effective_date.to_s,
+                                        pricing.expiration_date.to_s,
+                                        'Gothenburg',
+                                        'Sweden',
+                                        'Shanghai',
+                                        'China',
+                                        'ocean',
+                                        nil,
+                                        'slowly',
+                                        'lcl',
+                                        'PER_KG_RANGE',
+                                        '1001',
+                                        '2000',
+                                        'bas',
+                                        'Basic Ocean Freight',
+                                        'EUR',
+                                        '1.0',
+                                        '5']])
     end
   end
 end

@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :pricings_pricing, class: 'Pricings::Pricing' do
+    wm_rate { 1000 }
     transient do
       fee_attrs { nil }
     end
 
-    wm_rate { 'Gothenburg' }
     effective_date { Time.zone.today }
     expiration_date { 6.months.from_now }
     cargo_class { 'lcl' }

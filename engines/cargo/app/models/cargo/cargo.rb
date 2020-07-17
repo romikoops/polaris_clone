@@ -26,6 +26,14 @@ module Cargo
       Measured::StowageFactor.new(factor.round(6), 'm3/t')
     end
 
+    def lcl?
+      units.all?(&:cargo_class_00?)
+    end
+
+    def consolidated?
+      units.all?(&:cargo_type_AGR?)
+    end
+
     alias area total_area
     alias weight total_weight
     alias volume total_volume

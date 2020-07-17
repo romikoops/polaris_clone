@@ -90,7 +90,7 @@ module OfferCalculator
     def driving_time_in_seconds_for_trucks(seconds)
       # Trucks are slower than normal cars.
       # Trucks have to comply with provisions about resting periods.
-      raise OfferCalculator::Calculator::NoDrivingTime if seconds.nil?
+      raise OfferCalculator::Errors::NoDrivingTime if seconds.nil?
 
       slowness_factor = 1.6
       seconds = (seconds * slowness_factor).round.to_i

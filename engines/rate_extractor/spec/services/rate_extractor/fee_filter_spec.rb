@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RateExtractor::FeeFilter do
   let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation) }
 
   context 'when cargo is LCL' do
     let(:cargo_rate) { FactoryBot.create(:rates_cargo, :lcl, cbm_ratio: 50) }
@@ -27,11 +28,13 @@ RSpec.describe RateExtractor::FeeFilter do
     end
 
     let(:cargo) do
-      FactoryBot.create(:cargo_cargo,
-                        units: FactoryBot.create_list(:lcl_unit, 2,
-                                                      volume_value: 7,
-                                                      weight_value: 7,
-                                                      quantity: 1))
+      FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |cargo|
+        FactoryBot.create_list(:lcl_unit, 2,
+          cargo: cargo,
+          volume_value: 7,
+          weight_value: 7,
+          quantity: 1)
+      end
     end
 
     let(:decorated_cargo) { RateExtractor::Decorators::Cargo.new(cargo) }

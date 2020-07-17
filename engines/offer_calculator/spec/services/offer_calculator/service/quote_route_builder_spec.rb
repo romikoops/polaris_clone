@@ -3,16 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
-  before do
-    ::Organizations.current_id = organization.id
+  include_context "offer_calculator_shared_context"
 
-    FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
-    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
-    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
-  end
-
-  let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
@@ -40,9 +32,13 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       )
     ]
   end
-  let(:results) { described_class.new(shipment: shipment).perform(routes, hubs) }
+  let(:results) { described_class.new(shipment: shipment, quotation: quotation).perform(routes, hubs) }
 
-  describe '.perform', :vcr do
+  before do
+    ::Organizations.current_id = organization.id
+  end
+
+  describe '.perform' do
     context 'without trucking' do
       it 'return the route detail hashes' do
         aggregate_failures do

@@ -5,10 +5,10 @@ FactoryBot.define do
     rate { 1111 }
     min { 1 }
     association :rate_basis, factory: :pricings_rate_basis
-    association :charge_category, factory: :legacy_charge_categories
+    association :charge_category, factory: :bas_charge
     association :organization, factory: :organizations_organization
     currency_name { 'EUR' }
-    base { 1 }
+    base { 1e-6 }
 
     trait :per_wm do
       association :rate_basis, factory: :per_wm_rate_basis
@@ -69,7 +69,7 @@ FactoryBot.define do
 
     trait :per_x_kg_flat do
       base { 100 }
-      rate { 25 }
+      rate { 0.025 }
       min { 25 }
       association :rate_basis, factory: :per_x_kg_flat_rate_basis
       association :charge_category, factory: :bas_charge
@@ -86,13 +86,14 @@ FactoryBot.define do
     end
 
     trait :per_kg_range do
-      association :rate_basis, factory: :per_kg_range_bases_rate_basis
+      association :rate_basis, factory: :per_kg_range_rate_basis
       association :charge_category, factory: :bas_charge
       range do
         [
           { min: 0, max: 100, rate: 10 },
           { min: 101, max: 500, rate: 8 },
-          { min: 501, max: 1000, rate: 6 }
+          { min: 501, max: 1000, rate: 6 },
+          { min: 1001, max: 2000, rate: 5 }
         ]
       end
     end

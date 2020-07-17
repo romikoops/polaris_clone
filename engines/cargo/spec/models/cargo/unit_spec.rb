@@ -30,6 +30,7 @@ end
 #  goods_value_currency :string           not null
 #  height_unit          :string           default("m")
 #  height_value         :decimal(100, 4)  default(0.0)
+#  legacy_type          :string
 #  length_unit          :string           default("m")
 #  length_value         :decimal(100, 4)  default(0.0)
 #  quantity             :integer          default(0)
@@ -48,11 +49,11 @@ end
 #
 # Indexes
 #
-#  index_cargo_units_on_cargo_class      (cargo_class)
-#  index_cargo_units_on_cargo_id         (cargo_id)
-#  index_cargo_units_on_cargo_type       (cargo_type)
-#  index_cargo_units_on_organization_id  (organization_id)
-#  index_cargo_units_on_tenant_id        (tenant_id)
+#  index_cargo_units_on_cargo_class                (cargo_class)
+#  index_cargo_units_on_cargo_id                   (cargo_id)
+#  index_cargo_units_on_cargo_type                 (cargo_type)
+#  index_cargo_units_on_legacy_type_and_legacy_id  (legacy_type,legacy_id)
+#  index_cargo_units_on_tenant_id                  (tenant_id)
 #
 # Foreign Keys
 #

@@ -31,6 +31,7 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
                       user: user,
                       organization: organization)
   end
+  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
   let(:hubs) do
     {
       origin: Legacy::Hub.where(id: origin_hub.id),
@@ -38,7 +39,9 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
     }
   end
   let(:date_range) { (Time.zone.today..Time.zone.today + 20.days) }
-  let(:results) { described_class.new(shipment: shipment).perform(hubs: hubs, date_range: date_range) }
+  let(:results) {
+    described_class.routes(shipment: shipment, quotation: quotation, hubs: hubs, date_range: date_range)
+  }
 
   describe '.perform', :vcr do
     context 'with success' do
@@ -57,7 +60,7 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
       end
 
       it 'raises NoRoute when no routes match the query' do
-        expect { results }.to raise_error(OfferCalculator::Calculator::NoRoute)
+        expect { results }.to raise_error(OfferCalculator::Errors::NoRoute)
       end
     end
   end

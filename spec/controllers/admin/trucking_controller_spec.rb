@@ -31,10 +31,10 @@ RSpec.describe Admin::TruckingController, type: :controller do
   describe 'GET #show' do
     let(:courier_name) { 'Test Courier' }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
-    let(:courier) { FactoryBot.create(:trucking_courier, name: courier_name, organization: organization) }
+    let(:courier) { FactoryBot.create(:legacy_tenant_vehicle, name: courier_name, organization: organization) }
 
     before do
-      FactoryBot.create(:trucking_trucking, hub: hub, courier: courier, organization: organization, group: group)
+      FactoryBot.create(:trucking_trucking, hub: hub, tenant_vehicle: courier, organization: organization, group: group)
     end
 
     it 'returns the truckings for the requested hub' do

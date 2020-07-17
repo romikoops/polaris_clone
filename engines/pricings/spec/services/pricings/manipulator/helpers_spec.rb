@@ -79,24 +79,6 @@ RSpec.describe Pricings::Manipulator do
     end
   end
 
-  describe 'type error' do
-    context 'without schedules' do
-      let(:args) do
-        {
-          sandbox: nil,
-          pricing: pricing,
-          schedules: [],
-          cargo_class_count: target_shipment.cargo_classes.count,
-          without_meta: true
-        }
-      end
-
-      it 'raises an error when there are no schedules and the type is freight margin' do
-        expect { described_class.new(target: user, organization: organization, type: :freight_margin, args: args) }.to raise_error(Pricings::Manipulator::MissingArgument)
-      end
-    end
-  end
-
   describe '.find_applicable_margins' do
     context 'with freight pricings and user margin' do
       let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }

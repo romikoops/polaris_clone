@@ -2,7 +2,7 @@
 
 module Pricings
   class Preview # rubocop:disable Metrics/ClassLength
-    attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :organization
+    attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :organization, :truckings
 
     def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
       @params = params
@@ -34,22 +34,25 @@ module Pricings
       manipulate_local_charges
       manipulate_truckings
       determine_route_combinations
-
       @route_results.compact
     end
 
     def determine_route_combinations
       @route_results = @manipulated_pricings.map do |pricing|
-        origin_hub, destination_hub = ::Legacy::Itinerary.find(pricing[:itinerary_id]).stops.map(&:hub)
-        pre_carriage = @manipulated_truckings.find { |trucking| trucking[:hub_id] == origin_hub.id }
-        on_carriage = @manipulated_truckings.find { |trucking| trucking[:hub_id] == destination_hub.id }
+        origin_hub, destination_hub = ::Legacy::Itinerary.find(pricing.itinerary_id).stops.map(&:hub)
+        pre_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == origin_hub.id }
+        on_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == destination_hub.id }
         origin_charges_mandatory = origin_hub.mandatory_charge&.export_charges || pre_carriage.present?
         destination_charges_mandatory = destination_hub.mandatory_charge&.import_charges || on_carriage.present?
         origin_local_charge = @manipulated_local_charges.find do |lc|
-          lc[:hub_id] == origin_hub.id && lc[:direction] == 'export' && lc[:tenant_vehicle_id] == pricing[:tenant_vehicle_id]
+          lc.result['hub_id'] == origin_hub.id &&
+            lc.direction == 'export' &&
+            lc.tenant_vehicle_id == pricing.tenant_vehicle_id
         end
         destination_local_charge = @manipulated_local_charges.find do |lc|
-          lc[:hub_id] == destination_hub.id && lc[:direction] == 'import' && lc[:tenant_vehicle_id] == pricing[:tenant_vehicle_id]
+          lc.result['hub_id'] == destination_hub.id &&
+            lc.direction == 'import' &&
+            lc.tenant_vehicle_id == pricing.tenant_vehicle_id
         end
 
         next if origin_charges_mandatory && origin_local_charge.nil?
@@ -72,54 +75,35 @@ module Pricings
     end
 
     def build_breakdowns(target:, type:)
-      metadata = case type
-                 when 'pricing'
-                   @metadata_pricings
-                 when 'local_charge'
-                   @metadata_local_charges
-                 when 'trucking'
-                   @metadata_truckings
-                 end
-
-      target_service_level = tenant_vehicles.find_by(id: target[:tenant_vehicle_id])
-      target_metadata = metadata.find { |md| md[:metadata_id] == target[:metadata_id] }
+      target_service_level = tenant_vehicles.find_by(id: target.tenant_vehicle_id)
       breakdowns = {}
-
-      breakdowns[:fees] = build_breakdown_response(metadata: target_metadata)
-
-      breakdowns[:service_level] =
-        if target_service_level.present?
-          target_service_level.full_name
-        else
-          Trucking::Courier.find_by(id: target[:courier_id])&.name
-        end
+      breakdowns[:fees] = build_breakdown_response(target: target)
+      breakdowns[:service_level] = target_service_level.full_name
 
       breakdowns
     end
 
     def manipulate_breakdown(breakdown:)
-      adjusted_breakdown = breakdown.dup
-      adjusted_breakdown[:data] = adjusted_breakdown.delete(:adjusted_rate)
-      adjusted_breakdown[:target_name] = adjusted_breakdown.delete(:margin_target_name)
-      adjusted_breakdown[:target_id] = adjusted_breakdown.delete(:margin_target_id)
-      adjusted_breakdown[:target_type] = adjusted_breakdown.delete(:margin_target_type)
-      adjusted_breakdown[:url_id] =
-        if breakdown[:margin_target_type] == 'Organizations::User'
-          Organizations::User.find(breakdown[:margin_target_id]).id
-        else
-          breakdown[:margin_target_id]
-        end
-
+      adjusted_breakdown = {}
+      adjusted_breakdown[:data] = breakdown.data
+      adjusted_breakdown[:margin_value] = breakdown.delta
+      adjusted_breakdown[:operator] = breakdown.operator
+      adjusted_breakdown[:target_name] = breakdown.target_name
+      adjusted_breakdown[:source_id] = breakdown.source&.id
+      adjusted_breakdown[:source_type] = breakdown.source&.class&.to_s
+      adjusted_breakdown[:target_id] = breakdown.applicable&.id
+      adjusted_breakdown[:target_type] = breakdown.applicable&.class&.to_s
+      adjusted_breakdown[:url_id] = adjusted_breakdown[:target_id]
       adjusted_breakdown
     end
 
-    def build_breakdown_response(metadata:)
-      metadata[:fees].each_with_object({}) do |(fee_key, data), hash|
-        adjusted_breakdowns = data[:breakdowns].map { |breakdown| manipulate_breakdown(breakdown: breakdown) }
+    def build_breakdown_response(target:)
+      target.breakdowns.group_by(&:code).each_with_object({}) do |(fee_key, data), hash|
+        adjusted_breakdowns = data.map { |breakdown| manipulate_breakdown(breakdown: breakdown) }
         margin_breakdowns = adjusted_breakdowns.reject { |breakdown| breakdown[:operator] == '+' }
         flat_breakdowns = adjusted_breakdowns.select { |breakdown| breakdown[:operator] == '+' }
-        original = adjusted_breakdowns.find { |breakdown| breakdown[:source_id].blank? }
-        hash[fee_key] = {
+        original = adjusted_breakdowns.find { |breakdown| breakdown[:source].blank? }
+        hash[fee_key.to_sym] = {
           original: original[:data],
           margins: margin_breakdowns.reject { |breakdown| breakdown == original },
           flatMargins: flat_breakdowns,
@@ -165,14 +149,16 @@ module Pricings
     end
 
     def determine_itineraries
-      origin_stops = ::Legacy::Stop.where(hub_id: origin_hub_ids, index: 0)
-      destination_stops = ::Legacy::Stop.where(hub_id: destination_hub_ids, index: 1)
-      itinerary_ids = origin_stops.select { |os| destination_stops.any? { |ds| ds.itinerary_id == os.itinerary_id } }.map(&:itinerary_id)
-      @itineraries = ::Legacy::Itinerary.where(id: itinerary_ids)
+      origin_stop_itinerary_ids = ::Legacy::Stop.where(hub_id: origin_hub_ids, index: 0).pluck(:itinerary_id)
+      destination_stop_itinerary_ids = ::Legacy::Stop.where(hub_id: destination_hub_ids, index: 1).pluck(:itinerary_id)
+      @itineraries = ::Legacy::Itinerary.where(id: origin_stop_itinerary_ids | destination_stop_itinerary_ids)
     end
 
     def tenant_vehicles
-      @tenant_vehicles ||= ::Legacy::TenantVehicle.where(id: pricings.pluck(:tenant_vehicle_id))
+      @tenant_vehicles ||= begin
+        tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id) | truckings.values.flatten.pluck(:tenant_vehicle_id)
+        ::Legacy::TenantVehicle.where(id: tenant_vehicle_ids)
+      end
     end
 
     def fee_origins
@@ -215,7 +201,7 @@ module Pricings
 
     def manipulate_pricings
       pricings.each do |pricing|
-        manipulated, metadata = Pricings::Manipulator.new(
+        manipulated = Pricings::Manipulator.new(
           type: :freight_margin,
           target: @target,
           organization: @organization,
@@ -227,7 +213,6 @@ module Pricings
           }
         ).perform
         @manipulated_pricings |= manipulated
-        @metadata_pricings |= metadata
       end
     end
 
@@ -236,7 +221,7 @@ module Pricings
         scheds = default_schedules(tenant_vehicle_id: local_charge.tenant_vehicle_id)
         next if scheds.blank?
 
-        manipulated, metadata = Pricings::Manipulator.new(
+        manipulated = Pricings::Manipulator.new(
           type: "#{local_charge.direction}_margin".to_sym,
           target: @target,
           organization: @organization,
@@ -248,13 +233,12 @@ module Pricings
           }
         ).perform
         @manipulated_local_charges |= manipulated
-        @metadata_local_charges |= metadata
       end
     end
 
     def manipulate_truckings
       @truckings.values.flatten.each do |trucking|
-        manipulated, metadata = Pricings::Manipulator.new(
+        manipulated = Pricings::Manipulator.new(
           type: "trucking_#{trucking[:carriage]}_margin".to_sym,
           target: @target,
           organization: @organization,
@@ -268,7 +252,6 @@ module Pricings
         ).perform
 
         @manipulated_truckings << manipulated.first
-        @metadata_truckings |= metadata
       end
     end
 

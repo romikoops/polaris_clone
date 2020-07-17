@@ -23,16 +23,15 @@ class Admin::TruckingController < Admin::AdminBaseController
         page: params[:page] || 1,
         filters: filters,
         per_page: params[:page_size],
-        group_id: params[:group] == 'all' ? nil : params[:group],
-        sandbox: @sandbox
+        group_id: params[:group] == 'all' ? nil : params[:group]
       }
     )
 
     groups = Groups::Group.where(organization_id: current_organization)
-    trucking_providers = Trucking::Courier
+    trucking_providers = Legacy::TenantVehicle
       .where(id: Trucking::Trucking
                   .where(hub_id: params[:id], organization: current_organization)
-                  .select(:courier_id).distinct)
+                  .select(:tenant_vehicle_id).distinct)
       .pluck(:name)
 
     response_handler(
@@ -43,13 +42,6 @@ class Admin::TruckingController < Admin::AdminBaseController
       groups: groups,
       providers: trucking_providers.select(&:presence)
     )
-  end
-
-  def edit
-    tp = Trucking::Trucking.find_by(id: params[:id])
-    ntp = params[:pricing].as_json
-    tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
-    response_handler(tp)
   end
 
   def create

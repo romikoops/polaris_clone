@@ -31,7 +31,7 @@ end
 # Table name: shipments_shipment_requests
 #
 #  id              :uuid             not null, primary key
-#  billing         :integer          default(0)
+#  billing         :integer          default("external")
 #  cargo_notes     :string
 #  eori            :string
 #  eta             :datetime

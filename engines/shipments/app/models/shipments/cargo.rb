@@ -25,6 +25,14 @@ module Shipments
       units.all?(&:stackable)
     end
 
+    def lcl?
+      units.all?(&:cargo_class_00?)
+    end
+
+    def consolidated?
+      units.all?(&:cargo_type_AGR?)
+    end
+
     def stowage_factor
       factor = volume.value / weight.convert_to(:t).value
       Measured::StowageFactor.new(factor.round(6), 'm3/t')

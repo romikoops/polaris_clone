@@ -21,6 +21,7 @@ end
 #  charge_category_id          :integer
 #  children_charge_category_id :integer
 #  edited_price_id             :integer
+#  line_item_id                :uuid
 #  parent_id                   :integer
 #  price_id                    :integer
 #  sandbox_id                  :uuid
@@ -29,5 +30,6 @@ end
 #
 #  index_charges_on_charge_category_id           (charge_category_id)
 #  index_charges_on_children_charge_category_id  (children_charge_category_id)
+#  index_charges_on_line_item_id                 (line_item_id)
 #  index_charges_on_sandbox_id                   (sandbox_id)
 #

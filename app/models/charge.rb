@@ -17,6 +17,7 @@ end
 #  charge_category_id          :integer
 #  children_charge_category_id :integer
 #  edited_price_id             :integer
+#  line_item_id                :uuid
 #  parent_id                   :integer
 #  price_id                    :integer
 #  sandbox_id                  :uuid

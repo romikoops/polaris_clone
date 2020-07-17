@@ -3,613 +3,207 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculator::Service::ChargeCalculator do
-  let(:load_type) { 'cargo_item' }
-  let(:direction) { 'export' }
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:vehicle) do
-    FactoryBot.create(:legacy_vehicle, tenant_vehicles: [tenant_vehicle1, tenant_vehicle2])
+  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, legacy_shipment_id: shipment.id) }
+  let(:cargo_cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
+  let(:lcl_unit) do
+    FactoryBot.create(:lcl_unit,
+                      width_value: 1.20,
+                      height_value: 1.40,
+                      length_value: 0.8,
+                      quantity: 2,
+                      weight_value: 1200,
+                      cargo: cargo_cargo)
   end
-  let(:tenant_vehicle1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
-  let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: 'express') }
-  let(:trip1) do
-    FactoryBot.create(:legacy_trip, itinerary: itinerary1, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle1)
+  let(:fcl_20_unit) do
+    FactoryBot.create(:fcl_20_unit,
+                      quantity: 2,
+                      weight_value: 12_000,
+                      cargo: cargo_cargo)
   end
-  let(:trip2) do
-    FactoryBot.create(:legacy_trip, itinerary: itinerary2, load_type: 'cargo_item', tenant_vehicle: tenant_vehicle2)
+  let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization) }
+  let(:manipulated_result) do
+    FactoryBot.build(:manipulator_result,
+                     original: pricing,
+                     result: pricing.as_json)
   end
-
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-
-  let(:group) do
-    FactoryBot.create(:groups_group, organization: organization).tap do |group|
-      FactoryBot.create(:groups_membership, member: user, group: group)
-    end
+  let(:measures) do
+    OfferCalculator::Service::Measurements::Unit.new(
+      cargo: target_cargo,
+      scope: {},
+      object: manipulated_result
+    )
   end
-  let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
-  let(:hub) { itinerary1.hubs.find_by(name: 'Gothenburg') }
-  let(:destination_hub) { itinerary1.hubs.find_by(name: 'Shanghai') }
-  let(:common_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, location: trucking_location) }
-  let(:address) { FactoryBot.create(:gothenburg_address) }
-  let(:cargo_shipment) do
-    FactoryBot.create(:legacy_shipment,
-                      load_type: load_type,
-                      direction: direction,
-                      user: user,
-                      has_pre_carriage: true,
-                      organization: organization,
-                      trucking: {
-                        'pre_carriage': {
-                          'address_id': address.id,
-                          'truck_type': 'default',
-                          'trucking_time_in_seconds': 145_688
-                        }
-                      },
-                      desired_start_date: Time.zone.today + 4.days,
-                      cargo_items: [cargo_item])
+  let(:min_value) { Money.new(0, 'USD') }
+  let(:max_value) { Money.new(1e12, 'USD') }
+  let(:target_cargo) { lcl_unit }
+  let(:fee_data) { fee.fee_data }
+  let(:rate_builder_fee) do
+    FactoryBot.build(:rate_builder_fee,
+                     min_value: min_value,
+                     max_value: max_value,
+                     rate_basis: fee.rate_basis.internal_code,
+                     target: target_cargo,
+                     measures: measures,
+                     charge_category: fee.charge_category,
+                     raw_fee: fee_data)
   end
-  let(:agg_cargo_shipment) do
-    FactoryBot.create(:legacy_shipment,
-                      load_type: load_type,
-                      direction: direction,
-                      user: user,
-                      has_pre_carriage: true,
-                      organization: organization,
-                      trucking: {
-                        'pre_carriage': {
-                          'address_id': address.id,
-                          'truck_type': 'default',
-                          'trucking_time_in_seconds': 145_688
-                        }
-                      },
-                      desired_start_date: Time.zone.today + 4.days,
-                      aggregated_cargo: FactoryBot.build(:legacy_aggregated_cargo))
-  end
-  let(:container_shipment) do
-    FactoryBot.create(:legacy_shipment,
-                      load_type: 'container',
-                      direction: direction,
-                      has_pre_carriage: true,
-                      user: user,
-                      trucking: {
-                        'pre_carriage': {
-                          'address_id': address.id,
-                          'truck_type': 'chassis',
-                          'trucking_time_in_seconds': 145_688
-                        }
-                      },
-                      desired_start_date: Time.zone.today + 4.days,
-                      organization: organization,
-                      containers: containers)
-  end
+  let(:fees) { [rate_builder_fee] }
+  let(:results) { described_class.charges(shipment: shipment, quotation: quotation, fees: fees) }
 
-  let(:itinerary1) { FactoryBot.create(:legacy_itinerary, :gothenburg_shanghai, organization: organization) }
-  let(:itinerary2) { FactoryBot.create(:legacy_itinerary, :shanghai_gothenburg, organization: organization) }
-  let(:cargo_item) { FactoryBot.create(:legacy_cargo_item) }
-  let(:schedules) do
-    [
-      OfferCalculator::Schedule.from_trip(trip1)
-    ]
-  end
-  let(:containers) do
-    [
-      FactoryBot.build(:fcl_20_container),
-      FactoryBot.build(:fcl_40_container),
-      FactoryBot.build(:fcl_40_hq_container)
-    ]
-  end
+  context 'when calculating per_wm fee' do
+    let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
 
-  let!(:cargo_charge_category) { FactoryBot.create(:cargo_charge_category, organization: organization) }
-  let!(:export_charge_category) { FactoryBot.create(:export_charge_category, organization: organization) }
-  let!(:isps_charge_category) { FactoryBot.create(:legacy_charge_categories, code: 'isps', name: 'isps', organization: organization) }
-  let(:lcl_local_charge_fees) { FactoryBot.build(:lcl_local_charge_fees_hash) }
-  let(:fcl_local_charge_fees) { FactoryBot.build(:fcl_local_charge_fees_hash) }
-  let(:lcl_trucking_data) { FactoryBot.build(:lcl_trucking_data, hub: hub) }
-  let(:fcl_trucking_data) { FactoryBot.build(:all_fcl_trucking_data, hub: hub) }
-  let(:default_pricing) do
-    FactoryBot.create(:lcl_pricing,
-                      itinerary: itinerary1,
-                      tenant_vehicle: tenant_vehicle1)
-  end
-  let(:default_data) do
-    {
-      pricings_by_cargo_class: {
-        'lcl' => default_pricing.as_json
-      },
-      schedules: schedules
-    }
-  end
-
-  before do
-    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
-    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
-
-    ::Organizations.current_id = organization.id
-
-    FactoryBot.create(:profiles_profile, user_id: user.id)
-    %w[ocean air rail truck trucking local_charge].flat_map do |mot|
-      [
-        FactoryBot.create(:freight_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
-        FactoryBot.create(:trucking_on_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
-        FactoryBot.create(:trucking_pre_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
-        FactoryBot.create(:import_margin, default_for: mot, organization: organization, applicable: organization, value: 0),
-        FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
-      ]
-    end
-    FactoryBot.create(:legacy_local_charge,
-                      organization: organization,
-                      hub: hub,
-                      mode_of_transport: 'ocean',
-                      load_type: 'lcl',
-                      direction: 'export',
-                      tenant_vehicle: tenant_vehicle1,
-                      fees: lcl_local_charge_fees,
-                      effective_date: Time.zone.today,
-                      expiration_date: Time.zone.today + 3.months)
-    FactoryBot.create(:legacy_local_charge,
-                      organization: organization,
-                      hub: destination_hub,
-                      mode_of_transport: 'ocean',
-                      load_type: 'lcl',
-                      direction: 'import',
-                      tenant_vehicle: tenant_vehicle1,
-                      fees: lcl_local_charge_fees,
-                      effective_date: Time.zone.today,
-                      expiration_date: Time.zone.today + 3.months)
-    FactoryBot.create(:legacy_local_charge,
-                      organization: organization,
-                      hub: hub,
-                      mode_of_transport: 'ocean',
-                      load_type: 'fcl_20',
-                      direction: 'export',
-                      tenant_vehicle: tenant_vehicle1,
-                      fees: fcl_local_charge_fees,
-                      effective_date: Time.zone.today,
-                      expiration_date: Time.zone.today + 3.months)
-    FactoryBot.create(:legacy_local_charge,
-                      organization: organization,
-                      hub: hub,
-                      mode_of_transport: 'ocean',
-                      load_type: 'fcl_40',
-                      direction: 'export',
-                      tenant_vehicle: tenant_vehicle1,
-                      fees: fcl_local_charge_fees,
-                      effective_date: Time.zone.today,
-                      expiration_date: Time.zone.today + 3.months)
-    FactoryBot.create(:legacy_local_charge,
-                      organization: organization,
-                      hub: hub,
-                      mode_of_transport: 'ocean',
-                      load_type: 'fcl_40_hq',
-                      direction: 'export',
-                      tenant_vehicle: tenant_vehicle1,
-                      fees: fcl_local_charge_fees,
-                      effective_date: Time.zone.today,
-                      expiration_date: Time.zone.today + 3.months)
-  end
-
-  describe '.perform', :vcr do
-    let(:target_shipment) { cargo_shipment }
-    let(:target_trucking_data) { lcl_trucking_data }
-    let(:metadata_list) { [] }
-    let(:args) do
-      {
-        shipment: target_shipment,
-        user: user,
-        data: target_data,
-        trucking_data: target_trucking_data,
-        sandbox: nil,
-        metadata_list: metadata_list
-      }
-    end
-    let(:klass) { described_class.new(args) }
-    let(:results) { klass.perform }
-
-    context 'with base pricing' do
-      let(:target_data) { lcl_data }
-      let(:pricing_one) do
-        FactoryBot.create(:lcl_pricing,
-                          itinerary: itinerary1,
-                          tenant_vehicle: tenant_vehicle1,
-                          organization: organization)
-      end
-      let(:pricing_fcl_20) do
-        FactoryBot.create(:fcl_20_pricing,
-                          itinerary: itinerary1,
-                          organization: organization,
-                          tenant_vehicle: tenant_vehicle1)
-      end
-      let(:pricing_fcl_40) do
-        FactoryBot.create(:fcl_40_pricing,
-                          itinerary: itinerary1,
-                          organization: organization,
-                          tenant_vehicle: tenant_vehicle1)
-      end
-      let(:pricing_fcl_40_hq) do
-        FactoryBot.create(:fcl_40_hq_pricing,
-                          itinerary: itinerary1,
-                          organization: organization,
-                          tenant_vehicle: tenant_vehicle1)
-      end
-      let(:lcl_data) do
-        {
-          pricings_by_cargo_class: {
-            'lcl' => pricing_one.as_json
-          },
-          schedules: schedules
-        }
-      end
-      let(:fcl_data) do
-        {
-          pricings_by_cargo_class: {
-            'fcl_20' => pricing_fcl_20.as_json,
-            'fcl_40' => pricing_fcl_40.as_json,
-            'fcl_40_hq' => pricing_fcl_40_hq.as_json
-          },
-          schedules: schedules
-        }
-      end
-      let(:margin_target) { group }
-      let(:trucking_metadata_list) do
-        [
-          {
-            fees: {
-              trucking_lcl: {
-                breakdowns: [
-                  {
-                    adjusted_rate: {
-                      'kg' => [
-                        { 'rate' => { 'base' => 1.0, 'value' => 68.41, 'currency' => 'USD', 'rate_basis' => 'PER_SHIPMENT' }, 'max_kg' => '50.0', 'min_kg' => '0.0', 'min_value' => 0.0 },
-                        { 'rate' => { 'base' => 1.0, 'value' => 70.81, 'currency' => 'USD', 'rate_basis' => 'PER_SHIPMENT' }, 'max_kg' => '80.0', 'min_kg' => '51.0', 'min_value' => 0.0 }
-                      ]
-                    }
-                  },
-                  {
-                    margin_id: '5d13222b-fe4d-4393-962a-631b0504e618',
-                    margin_value: 0.1e0,
-                    operator: '%',
-                    margin_target_type: margin_target.class.to_s,
-                    margin_target_id: margin_target.id,
-                    margin_target_name: margin_target&.name,
-                    adjusted_rate: {
-                      'kg' =>
-                      [{ 'rate' => { 'base' => 1.0, 'value' => 68.41, 'currency' => 'USD', 'rate_basis' => 'PER_SHIPMENT' }, 'max_kg' => '50.0', 'min_kg' => '0.0', 'min_value' => 0.0 },
-                       { 'rate' => { 'base' => 1.0, 'value' => 70.81, 'currency' => 'USD', 'rate_basis' => 'PER_SHIPMENT' }, 'max_kg' => '80.0', 'min_kg' => '51.0', 'min_value' => 0.0 }]
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        ]
-      end
-      let(:quote_charge_breakdown) { current_results.first[:total].charge_breakdown }
-      let(:cargo_charge) { quote_charge_breakdown.charges.find_by(children_charge_category: cargo_charge_category) }
-      let(:export_charge) { quote_charge_breakdown.charges.find_by(children_charge_category: export_charge_category) }
-      let(:export_cargo_ids) { export_charge.children.map(&:children_charge_category).pluck(:cargo_unit_id).uniq }
-      let(:freight_cargo_ids) { cargo_charge.children.map(&:children_charge_category).pluck(:cargo_unit_id).uniq }
-
-      context 'when lcl' do
-        let!(:current_results) { results }
-
-        it 'returns an object with calculated totals and schedules for lcl' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 596.51)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 505.76)
-            expect(export_cargo_ids).to match_array(target_shipment.cargo_units.ids | [nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(quote_charge_breakdown.charges.find_by(children_charge_category: cargo_charge_category).price.rounded_attributes).to eq(currency: 'EUR', value: 10)
-            expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
-          end
-        end
-      end
-
-      context 'when fcl' do
-        let(:target_data) { fcl_data }
-        let(:target_shipment) { container_shipment }
-        let(:target_trucking_data) { fcl_trucking_data }
-        let!(:current_results) { results }
-
-        it 'returns an object with calculated totals and schedules for fcl cargo classes' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 2611.23)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 426.23)
-            expect(export_cargo_ids).to match_array(target_shipment.cargo_units.ids | [nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(cargo_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 1000)
-            expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
-          end
-        end
-      end
-
-      context 'with aggregated cargo' do
-        let(:target_shipment) { agg_cargo_shipment }
-        let!(:current_results) { results }
-
-        it 'returns an object with calculated totals and schedules for aggregated cargo' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 277.62)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 171.87)
-            expect(export_cargo_ids).to eq([target_shipment.aggregated_cargo.id, nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(cargo_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 25)
-            expect(freight_cargo_ids).to eq([target_shipment.aggregated_cargo.id])
-          end
-        end
-      end
-
-      context 'with relative margins' do
-        before do
-          FactoryBot.create(:export_margin, origin_hub_id: hub.id, applicable: user, organization: organization)
-        end
-
-        let(:metadata_list) { trucking_metadata_list }
-        let!(:current_results) { results }
-
-        it 'returns an object with two quotes with subtotals and grand totals w/ margins' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:metadata]).to be_a(Pricings::Metadatum)
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 647.09)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 556.34)
-            expect(export_cargo_ids).to match_array(target_shipment.cargo_units.ids | [nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(cargo_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 10)
-            expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
-          end
-        end
-      end
-
-      context 'with consolidated backend cargo' do
-        before do
-          allow(OrganizationManager::ScopeService).to receive(:new).and_return(scope_service)
-          allow(scope_service).to receive(:fetch).and_return('validity_logic' => 'vatos', 'consolidation' => { 'cargo' => { 'backend' => true } })
-        end
-
-        let!(:scope_service) { instance_double(OrganizationManager::ScopeService) }
-        let!(:current_results) { results }
-
-        it 'returns an object with calculated totals and schedules for aggregated cargo' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-          end
-        end
-      end
-
-      context 'with absolute margins' do
-        before do
-          FactoryBot.create(:export_margin,
-                            origin_hub_id: hub.id,
-                            applicable: user,
-                            organization: organization,
-                            value: 0,
-                            operator: '%').tap do |tapped_margin|
-            FactoryBot.create(:bas_margin_detail,
-                              margin: tapped_margin,
-                              value: 50,
-                              operator: '&',
-                              charge_category: isps_charge_category)
-          end
-        end
-
-        let(:metadata_list) { trucking_metadata_list }
-        let(:target_data) { fcl_data }
-        let(:target_shipment) { container_shipment }
-        let(:target_trucking_data) { fcl_trucking_data }
-        let!(:current_results) { results }
-
-        it 'returns an object with two quotes with subtotals and grand totals w/ margins' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:metadata]).to be_a(Pricings::Metadatum)
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 2811.23)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 626.23)
-            expect(export_cargo_ids).to match_array(target_shipment.cargo_units.ids | [nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(cargo_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 1000)
-            expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
-          end
-        end
-      end
-
-      context 'with total margins' do
-        before do
-          FactoryBot.create(:export_margin,
-                            origin_hub_id: hub.id,
-                            applicable: user,
-                            organization: organization,
-                            value: 0,
-                            operator: '%').tap do |tapped_margin|
-            FactoryBot.create(:bas_margin_detail,
-                              margin: tapped_margin,
-                              value: 100,
-                              operator: '+',
-                              charge_category: isps_charge_category)
-          end
-        end
-
-        let(:metadata_list) { trucking_metadata_list }
-        let(:target_data) { fcl_data }
-        let(:target_shipment) { container_shipment }
-        let(:target_trucking_data) { fcl_trucking_data }
-        let!(:current_results) { results }
-
-        it 'returns an object with two quotes with subtotals and grand totals w/ margins' do
-          aggregate_failures do
-            expect(current_results.count).to eq(1)
-            expect(current_results.first.keys).to match_array(%i[total schedules metadata])
-            expect(current_results.first[:metadata]).to be_a(Pricings::Metadatum)
-            expect(current_results.first[:total].price.rounded_attributes).to eq(currency: 'EUR', value: 3011.23)
-          end
-        end
-
-        it 'calulates the export charges correctly' do
-          aggregate_failures do
-            expect(export_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 826.23)
-            expect(export_cargo_ids).to match_array(target_shipment.cargo_units.ids | [nil])
-          end
-        end
-
-        it 'calulates the freight charges correctly' do
-          aggregate_failures do
-            expect(cargo_charge.price.rounded_attributes).to eq(currency: 'EUR', value: 1000)
-            expect(freight_cargo_ids).to match_array(target_shipment.cargo_units.ids)
-          end
-        end
+    it 'calculates the per_wm fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.wm.value * fee.rate * 100, fee.currency_name))
       end
     end
   end
 
-  describe '.valid_until' do
-    before { allow(klass).to receive(:scope).and_return(scope) }
+  context 'when calculating per_container fee' do
+    let(:fee) { FactoryBot.create(:fee_per_container, pricing: pricing) }
+    let(:target_cargo) { fcl_20_unit }
 
-    let(:valid_for) { 14 }
-    let(:scope) { {validity_period: valid_for} }
-    let(:shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: "cargo_item", with_breakdown: true) }
-    let(:charge_breakdown) { shipment.charge_breakdowns.first }
-    let(:trip) { charge_breakdown.trip }
-    let(:args) do
-      {
-        shipment: shipment,
-        user: shipment.user,
-        data: default_data,
-        trucking_data: {},
-        sandbox: nil,
-        metadata_list: []
-      }
-    end
-    let(:klass) { described_class.new(args) }
-
-    context "with custom validity" do
-      it "returns the custom validity period over the trips" do
-        valid_until = klass.send(:valid_until, {})
-
-        aggregate_failures do
-          expect(valid_until).to eq(Time.zone.today + valid_for.days)
-          expect(valid_until).not_to eq(default_pricing.expiration_date)
-        end
-      end
-    end
-
-    context "without custom validity" do
-      let(:scope) { {} }
-
-      it "returns the breakdown validity period over the trips" do
-        valid_until = klass.send(:valid_until, {})
-
-        aggregate_failures do
-          expect(valid_until).not_to eq(Time.zone.today + valid_for.days)
-          expect(valid_until).to eq(default_pricing.expiration_date.beginning_of_day)
-        end
+    it 'calculates the per_container fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.unit.value * fee.rate * 100, fee.currency_name))
       end
     end
   end
 
-  describe 'errors' do
-    let(:args) do
-      {
-        shipment: cargo_shipment,
-        user: user,
-        data: default_data,
-        trucking_data: lcl_trucking_data,
-        sandbox: nil,
-        metadata_list: []
-      }
-    end
-    let(:klass) { described_class.new(args) }
+  context 'when calculating per_hbl fee' do
+    let(:fee) { FactoryBot.create(:fee_per_hbl, pricing: pricing) }
 
-    context 'without a valid trucking match' do
-      before do
-        allow(klass).to receive(:trucking_valid_for_schedule).and_return(false)
-      end
-
-      it 'raises InvalidTruckingMatch when there is hubs dont match the results' do
-        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidTruckingMatch }])
+    it 'calculates the per_hbl fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.shipment.value * fee.rate * 100, fee.currency_name))
       end
     end
+  end
 
-    context 'without a valid local charges' do
-      before do
-        failure_response_key = { effective_date: Time.zone.today, expiration_date: Time.zone.today + 4.days }
-        allow(klass).to receive(:local_charge_periods).and_return(failure_response_key => {})
-      end
+  context 'when calculating per_shipment fee' do
+    let(:fee) { FactoryBot.create(:fee_per_shipment, pricing: pricing) }
 
-      it 'raises InvalidLocalCharges when there is no valid local charges' do
-        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidLocalCharges }])
-      end
-    end
-
-    context 'without a valid local charge result' do
-      before do
-        allow(klass).to receive(:calc_local_charges).and_return(nil)
-      end
-
-      it 'raises InvalidLocalChargeResult when there is no valid result' do
-        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidLocalChargeResult }])
+    it 'calculates the per_shipment fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.shipment.value * fee.rate * 100, fee.currency_name))
       end
     end
+  end
 
-    context 'without a valid freight charge result' do
-      before do
-        allow(klass).to receive(:calc_cargo_charges).and_return(nil)
-      end
+  context 'when calculating per_item fee' do
+    let(:fee) { FactoryBot.create(:fee_per_item, pricing: pricing) }
 
-      it 'raises InvalidFreightResult when there is no valid result' do
-        expect(klass.perform).to eq([{ error: OfferCalculator::Calculator::InvalidFreightResult }])
+    it 'calculates the per_item fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.unit.value * fee.rate * 100, fee.currency_name))
       end
+    end
+  end
+
+  context 'when calculating per_cbm fee' do
+    let(:fee) { FactoryBot.create(:fee_per_cbm, pricing: pricing) }
+
+    it 'calculates the per_cbm fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.cbm.value * fee.rate * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when calculating per_kg fee' do
+    let(:fee) { FactoryBot.create(:fee_per_kg, pricing: pricing) }
+
+    it 'calculates the per_kg fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.kg.value * fee.rate * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when calculating per_x_kg_flat fee' do
+    let(:fee) { FactoryBot.create(:fee_per_x_kg_flat, pricing: pricing) }
+    let(:rate_value) { (measures.kg.value / fee.base).ceil * fee.base }
+
+    it 'calculates the per_x_kg_flat fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(rate_value * fee.rate * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when calculating per_ton fee' do
+    let(:fee) { FactoryBot.create(:fee_per_ton, pricing: pricing) }
+
+    it 'calculates the per_ton fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(Money.new(measures.ton.value * fee.rate * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when calculating percentage fee' do
+    let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
+    let(:expected_rate_value) { measures.wm.value * fee.rate * 0.1 }
+
+    before do
+      fees << FactoryBot.build(:rate_builder_fee,
+                               min_value: min_value,
+                               rate_basis: 'PERCENTAGE',
+                               target: nil,
+                               measures: measures,
+                               charge_category: FactoryBot.create(:puf_charge),
+                               raw_fee: { rate: 0.1, rate_basis: 'PERCENTAGE' })
+    end
+
+    it 'calculates the per_ton fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(2)
+        expect(results.second.value).to eq(Money.new(expected_rate_value * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when the minimum is hit' do
+    let(:fee) { FactoryBot.create(:fee_per_ton, pricing: pricing) }
+    let(:min_value) { Money.new(12_000_000, 'USD') }
+
+    it 'calculates the per_ton fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(min_value)
+      end
+    end
+  end
+
+  context 'when the maximum is hit' do
+    let(:fee) { FactoryBot.create(:fee_per_ton, pricing: pricing) }
+    let(:max_value) { Money.new(100, 'USD') }
+
+    it 'calculates the per_ton fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(max_value)
+      end
+    end
+  end
+
+  context 'when an error occurs' do
+    let(:fees) { nil }
+
+    it 'calculates the per_ton fee correctly' do
+      expect { results }.to raise_error(OfferCalculator::Errors::CalculationError)
     end
   end
 end

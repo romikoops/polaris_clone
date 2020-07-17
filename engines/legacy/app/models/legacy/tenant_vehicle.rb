@@ -24,6 +24,7 @@ end
 # Table name: tenant_vehicles
 #
 #  id                :bigint           not null, primary key
+#  carrier_lock      :boolean          default(FALSE)
 #  is_default        :boolean
 #  mode_of_transport :string
 #  name              :string

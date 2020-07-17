@@ -7,7 +7,7 @@ module Quotations
     subject { FactoryBot.build :quotations_quotation }
 
     context 'Associations' do
-      %i(organization user origin_nexus destination_nexus sandbox).each do |association|
+      %i(organization user origin_nexus destination_nexus).each do |association|
         it { is_expected.to respond_to(association) }
       end
     end
@@ -24,6 +24,7 @@ end
 # Table name: quotations_quotations
 #
 #  id                   :uuid             not null, primary key
+#  completed            :boolean          default(FALSE)
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

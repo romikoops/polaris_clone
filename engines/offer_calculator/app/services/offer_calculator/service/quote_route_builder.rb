@@ -13,30 +13,13 @@ module OfferCalculator
 
       def build_route_objs
         @routes.map do |route|
-          OfferCalculator::Schedule.new(attributes(route: route).merge(id: SecureRandom.uuid))
+          OfferCalculator::Schedule.from_trip(faux_trip(route: route))
         end
       end
 
-      def attributes(route:)
+      def faux_trip(route:)
         itinerary = Legacy::Itinerary.find(route.itinerary_id)
-        origin_hub = Legacy::Stop.find_by(id: route.origin_stop_id, sandbox: @sandbox).hub
-        destination_hub = Legacy::Stop.find_by(id: route.destination_stop_id, sandbox: @sandbox).hub
-        faux_trip = generate_trip(itinerary: itinerary, tenant_vehicle_id: route.tenant_vehicle_id)
-
-        {
-          origin_hub_id: origin_hub.id,
-          destination_hub_id: destination_hub.id,
-          origin_hub_name: origin_hub.name,
-          destination_hub_name: destination_hub.name,
-          eta: faux_trip.end_date,
-          etd: faux_trip.start_date,
-          closing_date: Date.tomorrow,
-          trip_id: faux_trip.id,
-          mode_of_transport: route.mode_of_transport,
-          vehicle_name: faux_trip.tenant_vehicle.name,
-          carrier_name: faux_trip.tenant_vehicle&.carrier&.name,
-          transshipment: itinerary.transshipment
-        }
+        generate_trip(itinerary: itinerary, tenant_vehicle_id: route.tenant_vehicle_id)
       end
 
       def generate_trip(itinerary:, tenant_vehicle_id:)

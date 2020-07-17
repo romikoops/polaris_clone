@@ -4,9 +4,8 @@ module Quotations
   class Quotation < ApplicationRecord
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :user, optional: true, class_name: 'Organizations::User'
-    belongs_to :origin_nexus, class_name: 'Legacy::Nexus'
-    belongs_to :destination_nexus, class_name: 'Legacy::Nexus'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
+    belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
+    belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
     has_many :tenders, inverse_of: :quotation
     has_one :cargo, class_name: 'Cargo::Cargo'
     belongs_to :pickup_address, class_name: 'Legacy::Address', optional: true
@@ -22,6 +21,7 @@ end
 #
 #  id                   :uuid             not null, primary key
 #  billing              :integer          default("external")
+#  completed            :boolean          default(FALSE)
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

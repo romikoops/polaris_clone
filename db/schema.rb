@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_13_103913) do
+ActiveRecord::Schema.define(version: 2020_07_15_135058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -203,6 +203,8 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.string "goods_value_currency", null: false
     t.string "height_unit", default: "m"
     t.decimal "height_value", precision: 100, scale: 4, default: "0.0"
+    t.integer "legacy_id"
+    t.string "legacy_type"
     t.string "length_unit", default: "m"
     t.decimal "length_value", precision: 100, scale: 4, default: "0.0"
     t.uuid "organization_id"
@@ -219,6 +221,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.index ["cargo_class"], name: "index_cargo_units_on_cargo_class"
     t.index ["cargo_id"], name: "index_cargo_units_on_cargo_id"
     t.index ["cargo_type"], name: "index_cargo_units_on_cargo_type"
+    t.index ["legacy_id"], name: "index_cargo_units_on_legacy_id"
     t.index ["organization_id"], name: "index_cargo_units_on_organization_id"
     t.index ["tenant_id"], name: "index_cargo_units_on_tenant_id"
   end
@@ -234,6 +237,9 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
 
   create_table "charge_breakdowns", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.integer "delivery_tenant_vehicle_id"
+    t.integer "freight_tenant_vehicle_id"
+    t.integer "pickup_tenant_vehicle_id"
     t.uuid "sandbox_id"
     t.integer "shipment_id"
     t.uuid "tender_id"
@@ -266,6 +272,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.datetime "created_at", null: false
     t.integer "detail_level"
     t.integer "edited_price_id"
+    t.uuid "line_item_id"
     t.integer "parent_id"
     t.integer "price_id"
     t.uuid "sandbox_id"
@@ -1481,6 +1488,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
 
   create_table "quotations_quotations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "billing", default: 0
+    t.boolean "completed", default: false
     t.datetime "created_at", null: false
     t.integer "delivery_address_id"
     t.integer "destination_nexus_id"
@@ -1510,6 +1518,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.string "amount_currency"
     t.string "carrier_name"
     t.datetime "created_at", null: false
+    t.integer "delivery_tenant_vehicle_id"
     t.integer "destination_hub_id"
     t.integer "itinerary_id"
     t.string "load_type"
@@ -1517,12 +1526,15 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.integer "origin_hub_id"
     t.integer "original_amount_cents"
     t.string "original_amount_currency"
+    t.integer "pickup_tenant_vehicle_id"
     t.uuid "quotation_id"
     t.bigint "tenant_vehicle_id"
     t.string "transshipment"
     t.datetime "updated_at", null: false
+    t.index ["delivery_tenant_vehicle_id"], name: "index_quotations_tenders_on_delivery_tenant_vehicle_id"
     t.index ["destination_hub_id"], name: "index_quotations_tenders_on_destination_hub_id"
     t.index ["origin_hub_id"], name: "index_quotations_tenders_on_origin_hub_id"
+    t.index ["pickup_tenant_vehicle_id"], name: "index_quotations_tenders_on_pickup_tenant_vehicle_id"
     t.index ["quotation_id"], name: "index_quotations_tenders_on_quotation_id"
     t.index ["tenant_vehicle_id"], name: "index_quotations_tenders_on_tenant_vehicle_id"
   end
@@ -2079,6 +2091,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
 
   create_table "tenant_vehicles", force: :cascade do |t|
     t.integer "carrier_id"
+    t.boolean "carrier_lock", default: false
     t.datetime "created_at", null: false
     t.boolean "is_default"
     t.string "mode_of_transport"
@@ -2414,6 +2427,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.jsonb "rates"
     t.uuid "sandbox_id"
     t.integer "tenant_id"
+    t.integer "tenant_vehicle_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
@@ -2427,6 +2441,7 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
     t.index ["rate_id", "location_id", "hub_id"], name: "trucking_foreign_keys", unique: true
     t.index ["sandbox_id"], name: "index_trucking_truckings_on_sandbox_id"
     t.index ["tenant_id"], name: "index_trucking_truckings_on_tenant_id"
+    t.index ["tenant_vehicle_id"], name: "index_trucking_truckings_on_tenant_vehicle_id"
     t.index ["user_id"], name: "index_trucking_truckings_on_user_id"
   end
 
@@ -2604,6 +2619,9 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"
   add_foreign_key "cargo_units", "organizations_organizations", column: "organization_id"
+  add_foreign_key "charge_breakdowns", "tenant_vehicles", column: "delivery_tenant_vehicle_id"
+  add_foreign_key "charge_breakdowns", "tenant_vehicles", column: "freight_tenant_vehicle_id"
+  add_foreign_key "charge_breakdowns", "tenant_vehicles", column: "pickup_tenant_vehicle_id"
   add_foreign_key "charge_categories", "organizations_organizations", column: "organization_id"
   add_foreign_key "companies_companies", "addresses"
   add_foreign_key "companies_companies", "organizations_organizations", column: "organization_id"
@@ -2649,6 +2667,8 @@ ActiveRecord::Schema.define(version: 2020_07_13_103913) do
   add_foreign_key "quotations_quotations", "organizations_organizations", column: "organization_id"
   add_foreign_key "quotations_quotations", "users_users", column: "user_id"
   add_foreign_key "quotations_tenders", "quotations_quotations", column: "quotation_id"
+  add_foreign_key "quotations_tenders", "tenant_vehicles", column: "delivery_tenant_vehicle_id"
+  add_foreign_key "quotations_tenders", "tenant_vehicles", column: "pickup_tenant_vehicle_id"
   add_foreign_key "rates_cargos", "rates_sections", column: "section_id"
   add_foreign_key "rates_fees", "rates_cargos", column: "cargo_id"
   add_foreign_key "rates_sections", "carriers"

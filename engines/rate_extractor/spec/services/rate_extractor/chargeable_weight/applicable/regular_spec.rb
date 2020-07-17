@@ -5,33 +5,35 @@ require 'rails_helper'
 RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
   describe 'calculating chargeable weight for each unit separately' do
     let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:quotation) { FactoryBot.create(:quotations_quotation) }
+    let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
 
     context 'when volumetric weight is the highest' do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, units:
-          [
-            FactoryBot.create(:lcl_unit,
-                              width_value: 1.10,
-                              length_value: 1.15,
-                              height_value: 1.20,
-                              weight_value: 30.0 / 45.0,
-                              stackable: false,
-                              quantity: 45),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 1.25,
-                              length_value: 1.30,
-                              height_value: 1.25,
-                              weight_value: 1.0,
-                              stackable: false,
-                              quantity: 50),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 1.25,
-                              length_value: 1.25,
-                              height_value: 1.20,
-                              weight_value: 168.0 / 32.0,
-                              stackable: false,
-                              quantity: 32)
-          ])
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 1.10,
+          length_value: 1.15,
+          height_value: 1.20,
+          weight_value: 30.0 / 45.0,
+          stackable: false,
+          quantity: 45)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 1.25,
+          length_value: 1.30,
+          height_value: 1.25,
+          weight_value: 1.0,
+          stackable: false,
+          quantity: 50)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 1.25,
+          length_value: 1.25,
+          height_value: 1.20,
+          weight_value: 168.0 / 32.0,
+          stackable: false,
+          quantity: 32)
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
@@ -49,31 +51,31 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
     end
 
     context 'when payload weight is the highest' do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, units:
-          [
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.10,
-                              length_value: 0.15,
-                              height_value: 0.20,
-                              weight_value: 100.0 / 45.0,
-                              stackable: false,
-                              quantity: 45),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.25,
-                              length_value: 0.30,
-                              height_value: 0.25,
-                              weight_value: 100.0,
-                              stackable: false,
-                              quantity: 50),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.25,
-                              length_value: 0.25,
-                              height_value: 0.20,
-                              weight_value: 168.0 / 32.0,
-                              stackable: false,
-                              quantity: 32)
-          ])
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.10,
+          length_value: 0.15,
+          height_value: 0.20,
+          weight_value: 100.0 / 45.0,
+          stackable: false,
+          quantity: 45)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.25,
+          length_value: 0.30,
+          height_value: 0.25,
+          weight_value: 100.0,
+          stackable: false,
+          quantity: 50)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.25,
+          length_value: 0.25,
+          height_value: 0.20,
+          weight_value: 168.0 / 32.0,
+          stackable: false,
+          quantity: 32)
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
@@ -89,31 +91,31 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
     end
 
     context 'when ldm weight is the highest' do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, units:
-          [
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.10,
-                              length_value: 0.15,
-                              height_value: 3.20,
-                              weight_value: 10.0 / 45.0,
-                              stackable: false,
-                              quantity: 45),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.25,
-                              length_value: 0.30,
-                              height_value: 3.25,
-                              weight_value: 10.0,
-                              stackable: false,
-                              quantity: 50),
-            FactoryBot.create(:lcl_unit,
-                              width_value: 0.25,
-                              length_value: 0.25,
-                              height_value: 3.20,
-                              weight_value: 90.0 / 32.0,
-                              stackable: false,
-                              quantity: 32)
-          ])
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.10,
+          length_value: 0.15,
+          height_value: 3.20,
+          weight_value: 10.0 / 45.0,
+          stackable: false,
+          quantity: 45)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.25,
+          length_value: 0.30,
+          height_value: 3.25,
+          weight_value: 10.0,
+          stackable: false,
+          quantity: 50)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          width_value: 0.25,
+          length_value: 0.25,
+          height_value: 3.20,
+          weight_value: 90.0 / 32.0,
+          stackable: false,
+          quantity: 32)
       end
 
       let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }

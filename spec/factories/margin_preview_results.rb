@@ -18,20 +18,47 @@ FactoryBot.define do
         'freight' => {
           'fees' => {
             'bas' => {
-              'original' => { 'rate' => '25.0', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.0', 'range' => [] },
+              'original' => {
+                'rate' => '25.0',
+                'base' => '0.000001',
+                'rate_basis' => 'PER_WM',
+                'currency' => 'EUR',
+                'hw_threshold' => nil,
+                'hw_rate_basis' => nil,
+                'min' => '1.0',
+                'range' => []
+              },
               'margins' => [
                 { 'source_id' => margin&.id,
                   'source_type' => margin&.class&.to_s,
                   'margin_value' => '0.1',
                   'operator' => '%',
-                  'data' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
+                  'data' => {
+                    'rate' => '27.5',
+                    'base' => '0.000001',
+                    'rate_basis' => 'PER_WM',
+                    'currency' => 'EUR',
+                    'hw_threshold' => nil,
+                    'hw_rate_basis' => nil,
+                    'min' => '1.1',
+                    'range' => []
+                  },
                   'target_name' => target_name,
                   'target_id' => target&.id,
-                  'target_type' => target.is_a?(Organizations::User) ? target.class.base_class.to_s : target.class.to_s,
+                  'target_type' => target.class.to_s,
                   'url_id' => target.id }
               ],
               'flatMargins' => [],
-              'final' => { 'rate' => '27.5', 'base' => '1.0', 'rate_basis' => 'PER_WM', 'currency' => 'EUR', 'hw_threshold' => nil, 'hw_rate_basis' => nil, 'min' => '1.1', 'range' => [] },
+              'final' => {
+                'rate' => '27.5',
+                'base' => '0.000001',
+                'rate_basis' => 'PER_WM',
+                'currency' => 'EUR',
+                'hw_threshold' => nil,
+                'hw_rate_basis' => nil,
+                'min' => '1.1',
+                'range' => []
+              },
               'rate_origin' => nil
             }
           },

@@ -13,6 +13,8 @@ FactoryBot.define do
     dangerous_goods { false }
     stackable { true }
     cargo_class { 'lcl' }
+
+    factory :lcl_cargo_item
   end
 end
 

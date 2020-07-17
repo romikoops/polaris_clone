@@ -8,15 +8,16 @@ module Legacy
     validates :name, :code, presence: true
     validates_uniqueness_of :name, scope: %i[code organization_id cargo_unit_id]
 
-    def self.from_code(code:, organization_id: nil, name: nil, sandbox: nil)
+    def self.from_code(code:, organization_id: nil, name: nil, cargo_unit_id: nil, sandbox: nil)
       name ||= code
       code = code.to_s.downcase
-      tenant_charge_category = find_by(code: code, organization_id: organization_id, sandbox_id: sandbox&.id)
+      tenant_charge_category = find_by(code: code, organization_id: organization_id, cargo_unit_id: cargo_unit_id)
       return tenant_charge_category unless tenant_charge_category.nil?
 
       find_or_create_by(
         code: code,
         name: name,
+        cargo_unit_id: cargo_unit_id,
         organization_id: organization_id,
         sandbox_id: sandbox&.id
       )

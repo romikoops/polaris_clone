@@ -110,6 +110,27 @@ RSpec.describe Pricings::Preview do
     end
 
     context ' with trucking' do
+      before do
+        FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: zipcode_pre_availability)
+        FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: location_on_availability)
+        Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
+                                          'address_components' => [{ 'types' => ['premise'] }],
+                                          'address' => 'Göteborg, Sweden',
+                                          'city' => pickup_address.city,
+                                          'country' => pickup_address.country.name,
+                                          'country_code' => pickup_address.country.code,
+                                          'postal_code' => pickup_address.zip_code
+                                        ])
+        Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
+                                          'address_components' => [{ 'types' => ['premise'] }],
+                                          'address' => 'Shanghai, China',
+                                          'city' => delivery_address.city,
+                                          'country' => delivery_address.country.name,
+                                          'country_code' => delivery_address.country.code,
+                                          'postal_code' => delivery_address.zip_code
+                                        ])
+      end
+
       let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
       let(:delivery_address) { FactoryBot.create(:shanghai_address) }
       let(:pickup_location) { FactoryBot.create(:trucking_location, zipcode: pickup_address.zip_code, country_code: 'SE') }
@@ -148,45 +169,39 @@ RSpec.describe Pricings::Preview do
       let!(:trucking_on_margin) { FactoryBot.create(:trucking_on_margin, origin_hub: destination_hub, organization: organization, applicable: user) }
       let(:zipcode_pre_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'pre', load_type: 'cargo_item') }
       let(:location_on_availability) { FactoryBot.create(:trucking_type_availability, query_method: :location, carriage: 'on', load_type: 'cargo_item') }
+      let!(:results) { described_class.new(target: user, organization: organization, params: trucking_args).perform }
 
-      before do
-        FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: zipcode_pre_availability)
-        FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: location_on_availability)
-        Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Göteborg, Sweden',
-                                          'city' => pickup_address.city,
-                                          'country' => pickup_address.country.name,
-                                          'country_code' => pickup_address.country.code,
-                                          'postal_code' => pickup_address.zip_code
-                                        ])
-        Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Shanghai, China',
-                                          'city' => delivery_address.city,
-                                          'country' => delivery_address.country.name,
-                                          'country_code' => delivery_address.country.code,
-                                          'postal_code' => delivery_address.zip_code
-                                        ])
-      end
-
-      it 'generates the preview for port-to-port with one pricing available' do
-        results = described_class.new(target: user, organization: organization, params: trucking_args).perform
-
+      it 'generates the preview for freight with one pricing available' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(freight_margin.id)
           expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+        end
+      end
+
+      it 'generates the preview for local charges with one pricing available' do
+        aggregate_failures do
+          expect(results.length).to eq(1)
           expect(results.dig(0, :import, :fees, :solas, :margins, 0, :source_id)).to eq(import_margin.id)
           expect(results.dig(0, :import, :fees, :solas, :final, 'value')).to eq(19.25)
           expect(results.dig(0, :export, :fees, :solas, :margins, 0, :source_id)).to eq(export_margin.id)
           expect(results.dig(0, :export, :fees, :solas, :final, 'value')).to eq(19.25)
+        end
+      end
+
+      it 'generates the preview for pre carriage with one pricing available' do
+        aggregate_failures do
           expect(results.dig(0, :trucking_pre, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
-          expect(results.dig(0, :trucking_pre, :fees, :puf, :final, 'value')).to eq(275)
+          expect(results.dig(0, :trucking_pre, :fees, :puf, :final, 'value')).to eq(275.0)
           expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
-          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'wm', 0, 'rate', 'value')).to eq(110)
+          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'wm', 0, 'rate', 'value')).to eq(110.0)
+        end
+      end
+
+      it 'generates the preview for on carriage with one pricing available' do
+        aggregate_failures do
           expect(results.dig(0, :trucking_on, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
-          expect(results.dig(0, :trucking_on, :fees, :puf, :final, 'value')).to eq(275)
+          expect(results.dig(0, :trucking_on, :fees, :puf, :final, 'value')).to eq(275.0)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :final, 'cbm', 0, 'rate', 'value')).to eq(261.25)
         end
@@ -227,7 +242,7 @@ RSpec.describe Pricings::Preview do
             expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin.id)
             expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
             expect(results.dig(0, :freight, :fees, :baf, :margins, 0, :source_id)).to eq(user_margin.id)
-            expect(results.dig(0, :freight, :fees, :baf, :final, 'rate')).to eq(1100)
+            expect(results.dig(0, :freight, :fees, :baf, :final, 'rate')).to eq(1100.0)
           end
         end
       end

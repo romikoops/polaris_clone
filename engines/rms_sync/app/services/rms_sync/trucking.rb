@@ -298,7 +298,7 @@ module RmsSync
         load_type: trucking_result.dig('truckingPricing', 'load_type'),
         cargo_class: trucking_result.dig('truckingPricing', 'cargo_class'),
         direction: trucking_result.dig('truckingPricing', 'carriage') == 'pre' ? 'export' : 'import',
-        courier: ::Trucking::Courier.find(trucking_result.dig('truckingPricing', 'courier_id'))&.name
+        courier: ::Legacy::TenantVehicle.find(trucking_result.dig('truckingPricing', 'tenant_vehicle_id'))&.name
       }
     end
 

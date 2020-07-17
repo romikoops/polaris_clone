@@ -15,6 +15,8 @@ begin
     config.default_bank.add_rate('EUR', 'AED', 1.34)
     config.default_bank.add_rate('EUR', 'CNY', 0.29)
     config.default_bank.add_rate('CNY', 'EUR', (1 / 0.29))
+    config.default_bank.add_rate('CNY', 'SEK', (1 / 0.29) * 0.125)
+    config.default_bank.add_rate('SEK', 'CNY', 0.29 * 8)
     config.default_currency = 'EUR'
     Money.infinite_precision = true
     config.rounding_mode = BigDecimal::ROUND_HALF_UP

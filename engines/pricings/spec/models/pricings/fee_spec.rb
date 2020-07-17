@@ -11,13 +11,16 @@ module Pricings
       let!(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
 
       describe '.to_fee_hash' do
+        let(:result) { fee.to_fee_hash }
+
         it 'returns the fee as a hash' do
-          result = fee.to_fee_hash
-          expect(result.keys).to eq(['bas'])
-          expect(result['bas']['rate']).to eq(1111)
-          expect(result['bas']['base']).to eq(1)
-          expect(result['bas']['rate_basis']).to eq('PER_WM')
-          expect(result['bas']['currency']).to eq('EUR')
+          aggregate_failures do
+            expect(result.keys).to eq(['bas'])
+            expect(result['bas']['rate']).to eq(fee.rate)
+            expect(result['bas']['base']).to eq(fee.base)
+            expect(result['bas']['rate_basis']).to eq('PER_WM')
+            expect(result['bas']['currency']).to eq('EUR')
+          end
         end
       end
 

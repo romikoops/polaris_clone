@@ -8,7 +8,7 @@ RSpec.describe ::RmsSync::Carriage do
   let(:hub_1) { FactoryBot.create(:hamburg_hub, organization: organization) }
   let(:hub_2) { FactoryBot.create(:shanghai_hub, organization: organization) }
   let(:hub_3) { FactoryBot.create(:gothenburg_hub, organization: organization) }
-  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'TEST', organization: organization) }
   let(:hub_1_trucking_locations) do
     [
       FactoryBot.create(:trucking_location, zipcode: '12344'),
@@ -30,13 +30,13 @@ RSpec.describe ::RmsSync::Carriage do
   end
   let!(:truckings) do
     truckings_1 = hub_1_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_1, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_1, tenant_vehicle: tenant_vehicle)
     end
     truckings_2 = hub_2_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_2, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_2, tenant_vehicle: tenant_vehicle)
     end
     truckings_3 = hub_3_trucking_locations.map do |tl|
-      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_3, courier: courier)
+      FactoryBot.create(:trucking_trucking, location: tl, organization: organization, hub: hub_3, tenant_vehicle: tenant_vehicle)
     end
     truckings_1 | truckings_2 | truckings_3
   end

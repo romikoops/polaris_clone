@@ -4,21 +4,23 @@ module Pricings
   class Breakdown < ApplicationRecord
     belongs_to :source, polymorphic: true, optional: true
     belongs_to :metadatum
-    belongs_to :charge, class_name: 'Legacy::Charge'
-    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :charge, class_name: "Legacy::Charge"
+    belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
     belongs_to :cargo_unit, polymorphic: true, optional: true
     belongs_to :target, polymorphic: true, optional: true
-    validates :source_id, uniqueness: { scope: %i[charge_id charge_category_id metadatum_id] }
+    validates :source_id, uniqueness: {scope: %i[charge_id charge_category_id metadatum_id]}
 
     belongs_to :margin, optional: true
-    deprecate margin: 'Converted to source'
+    deprecate margin: "Converted to source"
 
     def code
       ::Legacy::ChargeCategory.find(charge_category_id)&.code
     end
 
     def target_name
-      target.try(:name)
+      return target.try(:name) unless target.is_a?(Organizations::User)
+
+      Profiles::ProfileDecorator.new(Profiles::Profile.find_by(user: target)).full_name
     end
   end
 end

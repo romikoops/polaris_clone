@@ -31,7 +31,37 @@ FactoryBot.define do
               'max' => nil,
               'min' => 57,
               'name' => 'Wharfage / Quay Dues',
-              'range' => [{ 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' }, { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }],
+              'range' => [
+                { 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' },
+                { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }
+              ],
+              'currency' => 'EUR',
+              'rate_basis' => 'PER_UNIT_TON_CBM_RANGE' }
+        }
+      end
+    end
+
+    trait :multiple_fees do
+      fees do
+        {
+          'SOLAS' => {
+            'key' => 'SOLAS',
+            'max' => nil,
+            'min' => 17.5,
+            'name' => 'SOLAS',
+            'value' => 17.5,
+            'currency' => 'EUR',
+            'rate_basis' => 'PER_SHIPMENT'
+          },
+          'QDF' =>
+            { 'key' => 'QDF',
+              'max' => nil,
+              'min' => 57,
+              'name' => 'Wharfage / Quay Dues',
+              'range' => [
+                { 'max' => 5, 'min' => 0, 'ton' => 41, 'currency' => 'EUR' },
+                { 'cbm' => 8, 'max' => 40, 'min' => 6, 'currency' => 'EUR' }
+              ],
               'currency' => 'EUR',
               'rate_basis' => 'PER_UNIT_TON_CBM_RANGE' }
         }
@@ -45,8 +75,6 @@ FactoryBot.define do
         FactoryBot.create(:legacy_charge_categories, organization: local_charge.organization, code: key.downcase, name: fee['name'])
       end
     end
-
-    factory :local_charge_range, traits: [:range]
   end
 end
 

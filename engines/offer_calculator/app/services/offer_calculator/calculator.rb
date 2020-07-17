@@ -2,22 +2,7 @@
 
 module OfferCalculator
   class Calculator
-    attr_reader :shipment, :detailed_schedules, :hubs
-
-    NoDrivingTime = Class.new(StandardError)
-    NoValidPricings = Class.new(StandardError)
-    NoValidSchedules = Class.new(StandardError)
-    InvalidRoutes = Class.new(StandardError)
-    NoRoute = Class.new(StandardError)
-    NoDirectionsFound = Class.new(StandardError)
-    InvalidPickupAddress = Class.new(StandardError)
-    InvalidDeliveryAddress = Class.new(StandardError)
-    MissingTruckingData = Class.new(StandardError)
-    InvalidTruckingMatch = Class.new(StandardError)
-    InvalidLocalCharges = Class.new(StandardError)
-    InvalidFreightResult = Class.new(StandardError)
-    InvalidLocalChargeResult = Class.new(StandardError)
-    InvalidCargoUnit = Class.new(StandardError)
+    attr_reader :shipment, :detailed_schedules, :quotation, :wheelhouse, :organization, :params
 
     def initialize(shipment:, params:, user:, wheelhouse: false, sandbox: nil)
       @user           = user
@@ -26,70 +11,119 @@ module OfferCalculator
       @isQuote = params['shipment'].delete('isQuote')
       @wheelhouse = wheelhouse
       @sandbox = sandbox
-      instantiate_service_classes(params)
+      @organization = @shipment.organization
+      @quotation = create_quotations_quotations
+      @params = params
       update_shipment
     end
 
     def perform
-      @hubs               = @hub_finder.perform
-      @trucking_data      = @trucking_data_builder.perform(hubs: @hubs)
-      @shipment_update_handler.set_trucking_nexuses(hubs: hubs_filtered_by_trucking)
-      @routes             = @route_finder.perform(hubs: hubs_filtered_by_trucking, date_range: date_range)
-      @routes             = @route_filter.perform(@routes)
-      @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user, @wheelhouse)
+      shipment_update_handler.set_trucking_nexuses(hubs: hubs)
+      @detailed_schedules = OfferCalculator::Service::OfferCreator.offers(
+        shipment: shipment, quotation: quotation, offers: sorted_offers, wheelhouse: wheelhouse
+      )
+    end
+
+    def hubs
+      @hubs ||= OfferCalculator::Service::HubFinder.new(shipment: shipment, quotation: quotation).perform
     end
 
     private
 
-    def instantiate_service_classes(params)
-      @shipment_update_handler = OfferCalculator::Service::ShipmentUpdateHandler.new(shipment: @shipment,
-                                                                                     params: params,
-                                                                                     sandbox: @sandbox,
-                                                                                     wheelhouse: @wheelhouse)
-      @hub_finder = OfferCalculator::Service::HubFinder.new(shipment: @shipment, sandbox: @sandbox)
-      @trucking_data_builder = OfferCalculator::Service::TruckingDataBuilder.new(shipment: @shipment,
-                                                                                 sandbox: @sandbox)
-      @route_finder = OfferCalculator::Service::RouteFinder.new(shipment: @shipment,
-                                                                sandbox: @sandbox)
-      @route_filter = OfferCalculator::Service::RouteFilter.new(shipment: @shipment,
-                                                                sandbox: @sandbox)
-      @schedule_finder = OfferCalculator::Service::ScheduleFinder.new(shipment: @shipment, sandbox: @sandbox)
+    def fees
+      @fees ||= OfferCalculator::Service::RateBuilder.fees(
+        shipment: shipment, quotation: quotation, inputs: manipulated_rates
+      )
+    end
 
-      @quote_route_builder = OfferCalculator::Service::QuoteRouteBuilder.new(shipment: @shipment,
-                                                                             sandbox: @sandbox)
-      @detailed_schedules_builder = OfferCalculator::Service::DetailedSchedulesBuilder.new(shipment: @shipment,
-                                                                                           sandbox: @sandbox)
+    def charges
+      @charges ||= OfferCalculator::Service::ChargeCalculator.charges(
+        shipment: shipment, quotation: quotation, fees: fees
+      )
+    end
+
+    def routes
+      @routes ||= OfferCalculator::Service::RouteFilter.new(
+        shipment: shipment, quotation: quotation
+      ).perform(unfiltered_routes)
+    end
+
+    def valid_rates
+      @valid_rates ||= OfferCalculator::Service::PricingFinder.pricings(
+        shipment: shipment, quotation: quotation, schedules: schedules
+      )
+    end
+
+    def manipulated_rates
+      @manipulated_rates ||= OfferCalculator::Service::PricingManipulator.manipulated_pricings(
+        shipment: shipment, quotation: quotation, schedules: schedules, associations: valid_rates
+      )
+    end
+
+    def sorted_offers
+      @sorted_offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
+        shipment: shipment, quotation: quotation, charges: charges, schedules: schedules
+      )
+    end
+
+    def unfiltered_routes
+      OfferCalculator::Service::RouteFinder.routes(
+        shipment: shipment,
+        quotation: quotation,
+        hubs: hubs,
+        date_range: date_range
+      )
+    end
+
+    def shipment_update_handler
+      @shipment_update_handler ||= OfferCalculator::Service::ShipmentUpdateHandler.new(shipment: shipment,
+                                                                                       params: params,
+                                                                                       quotation: quotation,
+                                                                                       wheelhouse: @wheelhouse)
     end
 
     def update_shipment
-      @shipment_update_handler.update_nexuses
-      @shipment_update_handler.update_trucking
-      @shipment_update_handler.update_incoterm
-      @shipment_update_handler.update_cargo_units
-      @shipment_update_handler.update_selected_day
-      @shipment_update_handler.update_billing
-      @shipment.save!
+      shipment_update_handler.update_nexuses
+      shipment_update_handler.update_trucking
+      shipment_update_handler.update_incoterm
+      shipment_update_handler.update_cargo_units
+      shipment_update_handler.update_selected_day
+      shipment_update_handler.destroy_previous_charge_breakdowns
+      shipment_update_handler.update_billing
+
+      raise OfferCalculator::Errors::InvalidShipmentError unless @shipment.save
+      raise OfferCalculator::Errors::InvalidQuotationError unless @quotation.save
+    end
+
+    def create_quotations_quotations
+      Quotations::Quotation.new(organization: organization,
+                                user: @user,
+                                completed: false,
+                                legacy_shipment_id: shipment.id)
     end
 
     def schedules
-      @schedules ||= if quotation_tool?
-                       @quote_route_builder.perform(@routes, @hubs)
-                     else
-                       @schedule_finder.perform(@routes, @delay, @hubs)
-                     end
+      @schedules ||=
+        if quotation_tool?
+          OfferCalculator::Service::QuoteRouteBuilder.new(shipment: shipment, quotation: quotation)
+            .perform(routes, hubs)
+        else
+          OfferCalculator::Service::ScheduleFinder.new(shipment: shipment, quotation: quotation)
+            .perform(routes, @delay, hubs)
+        end
     end
 
     def quotation_tool?
       scope = ::OrganizationManager::ScopeService.new(
         target: @user || @creator,
-        organization: Organizations::Organization.find(@shipment.organization_id)
+        organization: shipment.organization
       ).fetch
 
       @isQuote || scope['open_quotation_tool'] || scope['closed_quotation_tool']
     end
 
     def date_range
-      (@shipment.desired_start_date..(@shipment.desired_start_date + sanitized_delay_in_days))
+      (shipment.desired_start_date..(shipment.desired_start_date + sanitized_delay_in_days))
     end
 
     def sanitized_delay_in_days
@@ -98,17 +132,6 @@ module OfferCalculator
 
     def default_delay_in_days
       60
-    end
-
-    def hubs_filtered_by_trucking
-      @hubs.each_with_object({}) do |(direction, hubs), result|
-        trucking_carriage = direction == :origin ? 'pre' : 'on'
-        result[direction] = if @shipment.has_carriage?(trucking_carriage)
-          hubs.select { |hub| @trucking_data.dig(:trucking_pricings, trucking_carriage, hub.id) }
-        else
-          hubs
-        end
-      end
     end
   end
 end

@@ -7,6 +7,7 @@ module Cargo
     measured_length :width, :length, :height
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :cargo, class_name: 'Cargo::Cargo'
+    belongs_to :legacy, polymorphic: true, optional: true
 
     enum cargo_class: Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: Specification::TYPE_ENUM, _prefix: true
@@ -24,6 +25,8 @@ module Cargo
     before_validation :ensure_si_units
 
     before_validation :set_volume_and_height
+
+    delegate :lcl?, to: :cargo
 
     def area
       Measured::Area.new(volume_value / height_value, :m2)
@@ -45,6 +48,8 @@ module Cargo
       factor = total_volume.value / total_weight.convert_to(:t).value
       Measured::StowageFactor.new(factor.round(6), 'm3/t')
     end
+
+    alias consolidated? cargo_type_AGR?
 
     private
 
@@ -84,6 +89,7 @@ end
 #  goods_value_currency :string           not null
 #  height_unit          :string           default("m")
 #  height_value         :decimal(100, 4)  default(0.0)
+#  legacy_type          :string
 #  length_unit          :string           default("m")
 #  length_value         :decimal(100, 4)  default(0.0)
 #  quantity             :integer          default(0)
@@ -97,6 +103,7 @@ end
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  cargo_id             :uuid
+#  legacy_id            :integer
 #  organization_id      :uuid
 #  tenant_id            :uuid
 #
@@ -105,6 +112,7 @@ end
 #  index_cargo_units_on_cargo_class      (cargo_class)
 #  index_cargo_units_on_cargo_id         (cargo_id)
 #  index_cargo_units_on_cargo_type       (cargo_type)
+#  index_cargo_units_on_legacy_id        (legacy_id)
 #  index_cargo_units_on_organization_id  (organization_id)
 #  index_cargo_units_on_tenant_id        (tenant_id)
 #

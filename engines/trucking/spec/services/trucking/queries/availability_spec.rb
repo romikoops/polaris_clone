@@ -39,14 +39,6 @@ RSpec.describe Trucking::Queries::Availability do
       end
     end
 
-    context 'with missing arguments (country_code)' do
-      let(:args) { { klass: ::Trucking::Trucking, organization_id: organization.id, zipcode: zipcode, load_type: load_type, carriage: carriage } }
-
-      it 'raises an ArgumentError if no country_code is provided' do
-        expect { trucking_results }.to raise_error(ArgumentError)
-      end
-    end
-
     context 'with missing arguments (wrong keys)' do
       let(:args) { { klass: ::Trucking::Trucking, organization_id: organization.id } }
 

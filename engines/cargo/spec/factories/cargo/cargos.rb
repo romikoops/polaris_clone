@@ -4,8 +4,12 @@ FactoryBot.define do
   factory :cargo_cargo, class: 'Cargo::Cargo' do
     association :organization, factory: :organizations_organization
 
+    quotation_id { SecureRandom.uuid }
     total_goods_value_cents { 100_000 }
     total_goods_value_currency { :usd }
+    transient do
+      clone_legacy { false }
+    end
   end
 end
 

@@ -28,6 +28,8 @@ RSpec.describe Pricings::Manipulator do
                         end_date: base_date + 30.days)
     end
   end
+
+  let(:dates) { { start_date: schedules.first.etd, end_date: schedules.last.etd } }
   let(:schedules) { trips.map { |t| Legacy::Schedule.from_trip(t) } }
   let(:puf_charge_category) { FactoryBot.create(:puf_charge, organization: organization) }
   let(:solas_charge_category) { FactoryBot.create(:solas_charge, organization: organization) }
@@ -40,7 +42,7 @@ RSpec.describe Pricings::Manipulator do
     {
       sandbox: nil,
       pricing: pricing,
-      schedules: schedules,
+      dates: dates,
       cargo_class_count: target_shipment.cargo_classes.count,
       without_meta: true
     }
@@ -52,8 +54,7 @@ RSpec.describe Pricings::Manipulator do
       tenant_vehicle_id: pricing.tenant_vehicle_id,
       cargo_class: pricing.cargo_class,
       schedules: schedules,
-      cargo_class_count: target_shipment.cargo_classes.count,
-      without_meta: true
+      cargo_class_count: target_shipment.cargo_classes.count
     }
   end
   let(:klass) do
@@ -68,6 +69,7 @@ RSpec.describe Pricings::Manipulator do
   let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, organization: organization, load_type: 'fcl_20') }
   let(:target_shipment) { fcl_shipment }
   let(:hub) { itinerary.hubs.first }
+  let(:manipulated_results) { klass.perform }
 
   before do
     FactoryBot.create(:profiles_profile, user_id: user.id)
@@ -90,12 +92,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -106,13 +108,13 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user (single total margin)' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(250)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
-          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{ 'bas' => 100 }])
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(250)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(manipulated_results.map(&:flat_margins)).to eq([{ 'bas' => 100 }])
         end
       end
     end
@@ -125,13 +127,13 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user (single absolute margin)' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
-          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}])
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(manipulated_results.map(&:flat_margins)).to eq([{}])
         end
       end
     end
@@ -155,13 +157,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user with multiple margins' do
-        manipulated_pricings, _metadata = klass.perform
         aggregate_failures do
-          expect(manipulated_pricings.pluck(:id).uniq).to eq([pricing.id])
-          expect(manipulated_pricings.flat_map { |result| result['data'].keys }.uniq).to match_array(['bas'])
-          expect(manipulated_pricings.map { |result| result.dig('data', 'bas', 'rate') }).to match_array([250, 275, 250, 250])
-          expect(manipulated_pricings.map { |result| result.dig('flat_margins') }).to match_array([{}, { 'bas' => 0.1e2 }, { 'bas' => 0.1e2 }, {}])
-          expect(manipulated_pricings.map { |result| result.dig('data', 'bas', 'rate_basis') }.uniq).to match_array(['PER_CONTAINER'])
+          expect(manipulated_results.map(&:id).uniq).to eq([pricing.id])
+          expect(manipulated_results.flat_map { |result| result.result['data'].keys }.uniq).to match_array(['bas'])
+          expect(manipulated_results.map { |result| result.result.dig('data', 'bas', 'rate') }).to match_array([250, 275, 250, 250])
+          expect(manipulated_results.map(&:flat_margins)).to match_array([{}, { 'bas' => 0.1e2 }, { 'bas' => 0.1e2 }, {}])
+          expect(manipulated_results.map { |result| result.result.dig('data', 'bas', 'rate_basis') }.uniq).to match_array(['PER_CONTAINER'])
         end
       end
     end
@@ -172,12 +173,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the group' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -195,12 +196,12 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to the group without pricing' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -230,43 +231,45 @@ RSpec.describe Pricings::Manipulator do
             itinerary_id: pricing.itinerary_id,
             tenant_vehicle_id: pricing.tenant_vehicle_id,
             cargo_class: pricing.cargo_class,
-            schedules: schedules,
+            dates: dates,
             shipment: target_shipment,
             without_meta: true
           }
         end
 
-        let!(:results) { klass.perform.first.sort_by! { |m| m['effective_date'] } }
-
+        let!(:results) { klass.perform.sort_by(&:effective_date) }
+        let(:first_result) { results.first }
+        let(:second_result) { results.second }
+        let(:third_result) { results[2] }
         it 'returns the correct data for the first period' do
           aggregate_failures do
-            expect(results[0]['id']).to eq(pricing.id)
-            expect(results[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-            expect(results.dig(0, 'data').keys).to eq(['bas'])
-            expect(results.dig(0, 'data', 'bas', 'rate')).to eq(275)
-            expect(results.dig(0, 'data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+            expect(first_result.id).to eq(pricing.id)
+            expect(first_result.expiration_date.end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+            expect(first_result.result.dig('data').keys).to eq(['bas'])
+            expect(first_result.result.dig('data', 'bas', 'rate')).to eq(275)
+            expect(first_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
           end
         end
 
         it 'returns the correct data for the middle period' do
           aggregate_failures do
-            expect(results[1]['id']).to eq(pricing.id)
-            expect(results[1]['effective_date']).to eq(margin_b.effective_date)
-            expect(results[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-            expect(results.dig(1, 'data').keys).to eq(['bas'])
-            expect(results.dig(1, 'data', 'bas', 'rate')).to eq(412.5)
-            expect(results.dig(1, 'data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+            expect(second_result.id).to eq(pricing.id)
+            expect(second_result.effective_date).to eq(margin_b.effective_date)
+            expect(second_result.expiration_date.end_of_minute).to eq(margin_a.expiration_date)
+            expect(second_result.result.dig('data').keys).to eq(['bas'])
+            expect(second_result.result.dig('data', 'bas', 'rate')).to eq(412.5)
+            expect(second_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
           end
         end
 
         it 'returns the correct data for the last period' do
           aggregate_failures do
-            expect(results[2]['id']).to eq(pricing.id)
-            expect(results[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-            expect(results[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
-            expect(results.dig(2, 'data').keys).to eq(['bas'])
-            expect(results.dig(2, 'data', 'bas', 'rate')).to eq(375)
-            expect(results.dig(2, 'data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+            expect(third_result.id).to eq(pricing.id)
+            expect(third_result.effective_date).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+            expect(third_result.expiration_date.end_of_minute).to eq(margin_b.expiration_date)
+            expect(third_result.result.dig('data').keys).to eq(['bas'])
+            expect(third_result.result.dig('data', 'bas', 'rate')).to eq(375)
+            expect(third_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
           end
         end
       end
@@ -282,12 +285,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the group via company' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -303,12 +306,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing with specific detail attached to the user' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(50)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(50)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -323,26 +326,27 @@ RSpec.describe Pricings::Manipulator do
           end
         end
       end
-      let!(:results) { klass.perform.first }
+
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated freight pricing with one specific detail and general attached to the user' do
         aggregate_failures do
-          expect(results.first['id']).to eq(pricing.id)
-          expect(results.first['data'].keys.sort).to eq(%w[baf bas])
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys.sort).to eq(%w[baf bas])
         end
       end
 
       it 'returns the manipulated bas rate correctly' do
         aggregate_failures do
-          expect(results.first.dig('data', 'bas', 'rate')).to eq(50)
-          expect(results.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(50)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
 
       it 'returns the manipulated baf rate correctly' do
         aggregate_failures do
-          expect(results.first.dig('data', 'baf', 'rate')).to eq(44)
-          expect(results.first.dig('data', 'baf', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result.dig('data', 'baf', 'rate')).to eq(44)
+          expect(target_result.result.dig('data', 'baf', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -357,12 +361,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user with a range' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'range', 0, 'rate')).to eq(12.5)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_KG_RANGE')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'range', 0, 'rate')).to eq(12.5)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_KG_RANGE')
         end
       end
     end
@@ -373,13 +377,13 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated freight pricing attached to the user for total margin' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(250)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
-          expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(250)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.flat_margins).to eq('bas' => 0.1e2)
         end
       end
     end
@@ -394,13 +398,13 @@ RSpec.describe Pricings::Manipulator do
       let(:charge_category) { pricing.fees.first.charge_category }
 
       it 'returns the manipulated freight pricing attached to the user for addition margin with total margins' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(250)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
-          expect(manipulated_pricings.first.dig('flat_margins')).to eq('bas' => 0.1e2)
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(250)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.flat_margins).to eq('bas' => 0.1e2)
         end
       end
     end
@@ -418,13 +422,12 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to the tenant without pricing' do
-        manipulated_pricings, _metadata = klass.perform
-        manipulated_pricings.sort_by! { |m| m['effective_date'] }
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -440,12 +443,12 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to the tenant with itinerary only' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -454,12 +457,12 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to the tenant with default_for' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(250)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(250)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -472,12 +475,12 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to the tenant with nothing else' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
@@ -494,29 +497,27 @@ RSpec.describe Pricings::Manipulator do
       let(:args) { attribute_args }
 
       it 'returns the manipulated freight pricing attached to hub and cargo class' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(pricing.id)
-          expect(manipulated_pricings.first['data'].keys).to eq(['bas'])
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate')).to eq(275)
-          expect(manipulated_pricings.first.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
+          expect(target_result.result['id']).to eq(pricing.id)
+          expect(target_result.result['data'].keys).to eq(['bas'])
+          expect(target_result.result.dig('data', 'bas', 'rate')).to eq(275)
+          expect(target_result.result.dig('data', 'bas', 'rate_basis')).to eq('PER_CONTAINER')
         end
       end
     end
 
     context 'with manipulated freight pricing with metadata attached to the user - single margin' do
       let!(:margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
-      let!(:metadata) { klass.perform.second }
-      let!(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated freight pricing with metadata attached to the user - single margin' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
-          expect(metadatum[:pricing_id]).to eq(pricing.id)
-          expect(metadatum[:fees].keys).to eq([:bas])
-          expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(2)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin.id)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin.value)
+          expect(target_result.id).to eq(pricing.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[bas])
+          expect(target_result.breakdowns.length).to eq(2)
+          expect(target_result.breakdowns.second.source).to eq(margin)
+          expect(target_result.breakdowns.second.delta).to eq(margin.value)
         end
       end
     end
@@ -524,30 +525,28 @@ RSpec.describe Pricings::Manipulator do
     context 'with manipulated freight pricing with metadata attached to the user - double margin' do
       let!(:margin1) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
       let!(:margin2) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user, value: 50, operator: '+') }
-      let!(:metadata) { klass.perform.second }
-      let(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated freight pricing with metadata attached to the user - general info' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
-          expect(metadatum[:pricing_id]).to eq(pricing.id)
-          expect(metadatum[:fees].keys).to eq([:bas])
+          expect(target_result.id).to eq(pricing.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[bas])
         end
       end
 
       it 'returns the manipulated freight pricing with metadata attached to the user - first margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
+          expect(target_result.breakdowns.length).to eq(3)
+          expect(target_result.breakdowns.second.source).to eq(margin1)
+          expect(target_result.breakdowns.second.delta).to eq(margin1.value)
         end
       end
 
       it 'returns the manipulated freight pricing with metadata attached to the user - second margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_value)).to eq(margin2.value)
+          expect(target_result.breakdowns.length).to eq(3)
+          expect(target_result.breakdowns.third.source).to eq(margin2)
+          expect(target_result.breakdowns.third.delta).to eq(margin2.value)
         end
       end
     end
@@ -560,33 +559,33 @@ RSpec.describe Pricings::Manipulator do
       end
       let!(:margin1) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
       let!(:margin2) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user, value: 50, operator: '+') }
-      let!(:metadata) { klass.perform.second }
-      let(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, general info' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id])
-          expect(metadatum[:pricing_id]).to eq(pricing.id)
-          expect(metadatum[:fees].keys).to match_array(%i[bas baf])
-          expect(metadatum.dig(:fees, :bas, :breakdowns).length).to eq(3)
+          expect(target_result.id).to eq(pricing.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to match_array(%w[bas baf])
+          expect(target_result.breakdowns.length).to eq(6)
         end
       end
 
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, first fee' do
+        bas_breakdowns = target_result.breakdowns.select { |br| br.code == 'bas' }
         aggregate_failures do
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :bas, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
+          expect(bas_breakdowns.second.source).to eq(margin1)
+          expect(bas_breakdowns.second.delta).to eq(margin1.value)
+          expect(bas_breakdowns.third.source).to eq(margin2)
+          expect(bas_breakdowns.third.delta).to eq(margin2.value / 2)
         end
       end
 
       it 'returns the manipulated freight pricing with metadata attached to the user - flat margin, second fee' do
+        baf_breakdowns = target_result.breakdowns.select { |br| br.code == 'baf' }
         aggregate_failures do
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :baf, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
+          expect(baf_breakdowns.second.source).to eq(margin1)
+          expect(baf_breakdowns.second.delta).to eq(margin1.value)
+          expect(baf_breakdowns.third.source).to eq(margin2)
+          expect(baf_breakdowns.third.delta).to eq(margin2.value / 2)
         end
       end
     end

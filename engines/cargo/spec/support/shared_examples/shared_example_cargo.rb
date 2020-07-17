@@ -40,6 +40,18 @@ module Cargo
         end
       end
 
+      describe '.lcl' do
+        it 'return the correct lcl' do
+          expect(subject.lcl?).to eq(true)
+        end
+      end
+
+      describe '.consolidated' do
+        it 'return the correct consolidated' do
+          expect(subject.consolidated?).to eq(false)
+        end
+      end
+
       describe '.stowage_factor' do
         it 'return the correct stowage_factor' do
           expected_stowage_factor = ((1.20 * 0.8 * 1.40 * 2 * 5) / (3000 * 2 * 5 / 1000.0)).round(6)

@@ -8,11 +8,11 @@ module OfferCalculator
       def perform(routes)
         return routes unless should_apply_filter?(routes)
 
-        filtered_routes = routes.select do |route|
+        filtered_routes = routes.select { |route|
           valid_for_route?(route: route)
-        end
+        }
 
-        raise OfferCalculator::Calculator::InvalidRoutes if filtered_routes.empty?
+        raise OfferCalculator::Errors::InvalidRoutes if filtered_routes.empty?
 
         filtered_routes
       end
@@ -20,7 +20,7 @@ module OfferCalculator
       private
 
       def tenant_max_dimensions_bundles
-        query = { organization_id: @shipment.organization_id, cargo_class: @shipment.cargo_classes }
+        query = {organization_id: @shipment.organization_id, cargo_class: @shipment.cargo_classes}
         Legacy::MaxDimensionsBundle.where(query)
       end
 
@@ -56,12 +56,12 @@ module OfferCalculator
 
       def validate_cargo_dimensions(max_dimensions:, cargo:, aggregate:)
         dimension_map = if aggregate.present?
-                          Legacy::AggregatedCargo::AGGREGATE_DIMENSION_MAP
-                        else
-                          Legacy::CargoItem::DIMENSIONS.each_with_object({}) do |dim, hash|
-                            hash[dim] = dim
-                          end
-                        end
+          Legacy::AggregatedCargo::AGGREGATE_DIMENSION_MAP
+        else
+          Legacy::CargoItem::DIMENSIONS.each_with_object({}) do |dim, hash|
+            hash[dim] = dim
+          end
+        end
         dimension_map.reject do |attribute, validating|
           dimension_exceeds?(value: cargo[attribute], limit: max_dimensions[validating])
         end

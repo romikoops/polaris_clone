@@ -24,8 +24,8 @@ RSpec.describe Trucking::Queries::FindByHubIds do
 
     describe '.find_by_hub_id' do
       let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
-      let(:courier_name) { 'Test Courier' }
-      let(:courier) { FactoryBot.create(:trucking_courier, name: courier_name) }
+      let(:tenant_vehicle_name) { 'Test Courier' }
+      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: tenant_vehicle_name, organization: organization) }
 
       context 'when basic tests' do
         it 'raises an ArgumentError if no hub_id are provided' do
@@ -42,8 +42,8 @@ RSpec.describe Trucking::Queries::FindByHubIds do
 
       context 'when zipcode identifier' do
         let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '30001') }
-        let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, courier: courier) }
-        let(:filters) { {courier_name: courier_name} }
+        let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, tenant_vehicle: tenant_vehicle, organization: organization) }
+        let(:filters) { {courier_name: tenant_vehicle_name} }
 
         it 'finds the correct pricing and destinations' do
           query = described_class.new(hub_ids: [hub.id], klass: ::Trucking::Trucking, filters: filters)
@@ -51,7 +51,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
           aggregate_failures do
             expect(truckings.first['zipCode']).to eq('30001')
             expect(truckings.first['countryCode']).to eq('SE')
-            expect(truckings.first['courier']).to eq(courier_name)
+            expect(truckings.first['courier']).to eq(tenant_vehicle_name)
             expect(truckings.first['truckingPricing'].except('created_at', 'updated_at')).to include(target.as_json.except('created_at', 'updated_at'))
           end
         end

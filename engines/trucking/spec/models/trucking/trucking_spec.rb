@@ -127,24 +127,19 @@ end
 #  rate_id             :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
-#  user_id             :uuid
+#  tenant_vehicle_id   :integer
+#  user_id             :integer
 #
 # Indexes
 #
-#  index_trucking_truckings_on_cargo_class      (cargo_class)
-#  index_trucking_truckings_on_carriage         (carriage)
-#  index_trucking_truckings_on_group_id         (group_id)
-#  index_trucking_truckings_on_hub_id           (hub_id)
-#  index_trucking_truckings_on_load_type        (load_type)
-#  index_trucking_truckings_on_location_id      (location_id)
-#  index_trucking_truckings_on_organization_id  (organization_id)
-#  index_trucking_truckings_on_sandbox_id       (sandbox_id)
-#  index_trucking_truckings_on_tenant_id        (tenant_id)
-#  index_trucking_truckings_on_user_id          (user_id)
-#  trucking_foreign_keys                        (rate_id,location_id,hub_id) UNIQUE
-#
-# Foreign Keys
-#
-#  fk_rails_     (user_id => users_users.id)
-#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  index_trucking_truckings_on_cargo_class        (cargo_class)
+#  index_trucking_truckings_on_carriage           (carriage)
+#  index_trucking_truckings_on_group_id           (group_id)
+#  index_trucking_truckings_on_hub_id             (hub_id)
+#  index_trucking_truckings_on_load_type          (load_type)
+#  index_trucking_truckings_on_location_id        (location_id)
+#  index_trucking_truckings_on_sandbox_id         (sandbox_id)
+#  index_trucking_truckings_on_tenant_id          (tenant_id)
+#  index_trucking_truckings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  trucking_foreign_keys                          (rate_id,location_id,hub_id) UNIQUE
 #

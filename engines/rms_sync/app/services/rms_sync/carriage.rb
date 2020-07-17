@@ -45,13 +45,13 @@ module RmsSync
     def write_sheets
       sheet_index = 0
       @hash.each do |country_code, courier_data|
-        courier_data.each do |courier_id, data|
-          courier = ::Trucking::Courier.find(courier_id)
+        courier_data.each do |tenant_vehicle_id, data|
+          courier = ::Legacy::TenantVehicle.find(tenant_vehicle_id)
           @sheet = create_sheet(
             index: sheet_index,
             name: courier&.name,
-            metadata: {
-              courier_id: courier_id,
+            metadata: { 
+              tenant_vehicle_id: tenant_vehicle_id,
               courier_name: courier&.name,
               modifier: data[:modifier]
             }
@@ -79,10 +79,10 @@ module RmsSync
         truckings = ::Trucking::Trucking.where(hub: hubs).distinct
         next if truckings.empty?
 
-        courier_ids = truckings.pluck(:courier_id).uniq
-        courier_ids.each do |courier_id|
-          @hash[country_code][courier_id] = {}
-          courier_truckings = truckings.where(courier_id: courier_id)
+        tenant_vehicle_ids = truckings.pluck(:tenant_vehicle_id).uniq
+        tenant_vehicle_ids.each do |tenant_vehicle_id|
+          @hash[country_code][tenant_vehicle_id] = {}
+          courier_truckings = truckings.where(tenant_vehicle_id: tenant_vehicle_id)
           next if courier_truckings.empty?
 
           locations = ::Trucking::Location.where(id: courier_truckings.pluck(:location_id)).distinct
@@ -93,10 +93,10 @@ module RmsSync
           else
             'city_name'
           end
-          @hash[country_code][courier_id][:locations] = locations.sort_by {|loc| loc[modifier] }
-          @hash[country_code][courier_id][:truckings] = courier_truckings
-          @hash[country_code][courier_id][:hubs] = hubs
-          @hash[country_code][courier_id][:modifier] = modifier
+          @hash[country_code][tenant_vehicle_id][:locations] = locations.sort_by {|loc| loc[modifier] }
+          @hash[country_code][tenant_vehicle_id][:truckings] = courier_truckings
+          @hash[country_code][tenant_vehicle_id][:hubs] = hubs
+          @hash[country_code][tenant_vehicle_id][:modifier] = modifier
         end
       end
     end

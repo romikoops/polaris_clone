@@ -14,8 +14,9 @@ RSpec.describe RateExtractor::TenderFees do
   end
 
   let(:cargo) do
-    FactoryBot.create(:cargo_cargo, units:
-    FactoryBot.create_list(:lcl_unit, 2))
+    FactoryBot.create(:cargo_cargo, quotation_id: tender.quotation_id).tap do |cargo|
+      FactoryBot.create_list(:lcl_unit, 2, cargo: cargo)
+    end
   end
 
   let(:section_rates) do

@@ -53,6 +53,7 @@ RSpec.describe Pricings::Manipulator do
   let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, organization: organization) }
   let(:target_shipment) { lcl_shipment }
   let(:hub) { itinerary.hubs.first }
+  let(:manipulated_results) { klass.perform }
 
   before do
     FactoryBot.create(:profiles_profile, user_id: user.id)
@@ -80,12 +81,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated local_charge (export) attached to the user' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -101,23 +102,23 @@ RSpec.describe Pricings::Manipulator do
                           applicable: user)
       end
 
-      let!(:results) { klass.perform.first.sort_by! { |m| m['effective_date'] } }
+      let!(:results) { klass.perform.sort_by!(&:effective_date) }
 
       it 'returns the manipulated local_charge first charge' do
         aggregate_failures do
-          expect(results.first['id']).to eq(local_charge.id)
-          expect(results.first['fees'].keys).to eq(['solas'])
-          expect(results.first.dig('fees', 'solas', 'value')).to eq(17.5)
-          expect(results.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(results.first.result['id']).to eq(local_charge.id)
+          expect(results.first.result['fees'].keys).to eq(['solas'])
+          expect(results.first.result.dig('fees', 'solas', 'value')).to eq(17.5)
+          expect(results.first.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
 
       it 'returns the manipulated local_charge last charge' do
         aggregate_failures do
-          expect(results.last['id']).to eq(local_charge.id)
-          expect(results.last['fees'].keys).to eq(['solas'])
-          expect(results.last.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(results.last.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(results.last.result['id']).to eq(local_charge.id)
+          expect(results.last.result['fees'].keys).to eq(['solas'])
+          expect(results.last.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(results.last.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -135,12 +136,12 @@ RSpec.describe Pricings::Manipulator do
       let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge (import) attached to the user' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -166,23 +167,23 @@ RSpec.describe Pricings::Manipulator do
                           effective_date: (Time.zone.today + 1.day).beginning_of_day,
                           expiration_date: (Time.zone.today + 30.days).end_of_day)
       end
-      let!(:results) { klass.perform.first.sort_by! { |m| m['effective_date'] } }
+      let!(:results) { klass.perform.sort_by!(&:effective_date) }
 
       it 'returns the manipulated local_charge (export) attached to the user with multiple margins' do
         aggregate_failures do
-          expect(results.map { |mp| mp['id'] }.uniq).to match_array([local_charge.id])
-          expect(results.map { |mp| mp.dig('fees', 'solas', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
-          expect(results.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'solas' => 0.1e2 }, { 'solas' => 0.1e2 }, {}])
+          expect(results.map { |mp| mp.result['id'] }.uniq).to match_array([local_charge.id])
+          expect(results.map { |mp| mp.result.dig('fees', 'solas', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
+          expect(results.map(&:flat_margins)).to eq([{}, { 'solas' => 0.1e2 }, { 'solas' => 0.1e2 }, {}])
         end
       end
 
       it 'returns the manipulated local_charge with the correct dates' do
         aggregate_failures do
-          expect(results[0]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-          expect(results[1]['effective_date']).to eq(margin_b.effective_date)
-          expect(results[1]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-          expect(results[2]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-          expect(results[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+          expect(results[0].expiration_date.end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+          expect(results[1].effective_date).to eq(margin_b.effective_date)
+          expect(results[1].expiration_date.end_of_minute).to eq(margin_a.expiration_date)
+          expect(results[2].effective_date).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+          expect(results[2].expiration_date.end_of_minute).to eq(margin_b.expiration_date)
         end
       end
     end
@@ -211,13 +212,12 @@ RSpec.describe Pricings::Manipulator do
       let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'import', tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge (import) attached to the user with multiple margins' do
-        manipulated_pricings, _metadata = klass.perform
         aggregate_failures do
-          expect(manipulated_pricings.pluck(:id).uniq).to eq([local_charge.id])
-          expect(manipulated_pricings.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['solas'])
-          expect(manipulated_pricings.map { |pricing| pricing.dig('flat_margins') }).to eq([{}, { 'solas' => 0.1e2 }, { 'solas' => 0.1e2 }, {}])
-          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'solas', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
-          expect(manipulated_pricings.map { |pricing| pricing.dig('fees', 'solas', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+          expect(manipulated_results.map(&:id).uniq).to eq([local_charge.id])
+          expect(manipulated_results.flat_map { |pricing| pricing.result['fees'].keys }.uniq).to eq(['solas'])
+          expect(manipulated_results.map(&:flat_margins)).to eq([{}, { 'solas' => 0.1e2 }, { 'solas' => 0.1e2 }, {}])
+          expect(manipulated_results.map { |pricing| pricing.result.dig('fees', 'solas', 'value') }).to match_array([17.5, 19.25, 17.5, 17.5])
+          expect(manipulated_results.map { |pricing| pricing.result.dig('fees', 'solas', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
         end
       end
     end
@@ -228,12 +228,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated local_charge attached to the group' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -259,24 +259,24 @@ RSpec.describe Pricings::Manipulator do
                             value: 0.5,
                             applicable: group)
         end
-        let!(:results) { klass.perform.first.sort_by! { |m| m['effective_date'] } }
+        let!(:results) { klass.perform.sort_by!(&:effective_date) }
 
         it 'returns multiple manipulated local_charges when margins overlap attached to the group' do
           aggregate_failures do
-            expect(results.pluck(:id).uniq).to eq([local_charge.id])
-            expect(results.flat_map { |pricing| pricing['fees'].keys }.uniq).to eq(['solas'])
-            expect(results.map { |pricing| pricing.dig('fees', 'solas', 'value') }).to eq([19.25, 17.5, 26.25, 17.5])
-            expect(results.map { |pricing| pricing.dig('fees', 'solas', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
+            expect(results.map(&:id).uniq).to eq([local_charge.id])
+            expect(results.flat_map { |pricing| pricing.result['fees'].keys }.uniq).to eq(['solas'])
+            expect(results.map { |pricing| pricing.result.dig('fees', 'solas', 'value') }).to eq([19.25, 17.5, 26.25, 17.5])
+            expect(results.map { |pricing| pricing.result.dig('fees', 'solas', 'rate_basis') }.uniq).to eq(['PER_SHIPMENT'])
           end
         end
 
         it 'returns multiple manipulated local_charges with the correct dates' do
           aggregate_failures do
-            expect(results[0]['expiration_date'].end_of_minute).to eq(margin_a.expiration_date)
-            expect(results[1]['effective_date']).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
-            expect(results[1]['expiration_date'].end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
-            expect(results[2]['effective_date']).to eq(margin_b.effective_date)
-            expect(results[2]['expiration_date'].end_of_minute).to eq(margin_b.expiration_date)
+            expect(results[0].expiration_date.end_of_minute).to eq(margin_a.expiration_date)
+            expect(results[1].effective_date).to eq((margin_a.expiration_date + 1.day).beginning_of_day)
+            expect(results[1].expiration_date.end_of_minute).to eq((margin_b.effective_date - 1.day).end_of_day)
+            expect(results[2].effective_date).to eq(margin_b.effective_date)
+            expect(results[2].expiration_date.end_of_minute).to eq(margin_b.expiration_date)
           end
         end
       end
@@ -292,12 +292,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated local_charge attached to the group via company' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -310,12 +310,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated local_charge with specific detail attached to the user' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(21.875)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(21.875)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -354,26 +354,26 @@ RSpec.describe Pricings::Manipulator do
                             }
                           })
       end
-      let!(:results) { klass.perform.first }
+      let!(:results) { klass.perform }
 
       it 'returns the manipulated local_charge with one specific detail and general attached to the user' do
         aggregate_failures do
-          expect(results.first['id']).to eq(local_charge.id)
-          expect(results.first['fees'].keys).to eq(%w[solas baf])
+          expect(results.first.id).to eq(local_charge.id)
+          expect(results.first.result['fees'].keys).to eq(%w[solas baf])
         end
       end
 
       it 'returns the manipulated solas fee' do
         aggregate_failures do
-          expect(results.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(results.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(results.first.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(results.first.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
 
       it 'returns the manipulated baf fee' do
         aggregate_failures do
-          expect(results.first.dig('fees', 'baf', 'value')).to eq(25)
-          expect(results.first.dig('fees', 'baf', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(results.first.result.dig('fees', 'baf', 'value')).to eq(25)
+          expect(results.first.result.dig('fees', 'baf', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -402,13 +402,13 @@ RSpec.describe Pricings::Manipulator do
       let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, direction: 'export', fees: fees, tenant_vehicle: tenant_vehicle, organization: organization) }
 
       it 'returns the manipulated local_charge attached to the user with a range' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'range', 0, 'cbm')).to eq(11)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'range', 0, 'ton')).to eq(44)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'range', 0, 'cbm')).to eq(11)
+          expect(target_result.result.dig('fees', 'solas', 'range', 0, 'ton')).to eq(44)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_CBM_TON_RANGE')
         end
       end
     end
@@ -418,16 +418,16 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin, origin_hub: hub, organization: organization, applicable: user, value: 10, operator: '+')
       end
 
-      let!(:results) { klass.perform.first }
+      let!(:results) { klass.perform }
 
       it 'returns the manipulated local_charge attached to the user for addition margin' do
         aggregate_failures do
-          expect(results.first['id']).to eq(local_charge.id)
-          expect(results.first['fees'].keys).to eq(['solas'])
-          expect(results.first.dig('fees', 'solas', 'value')).to eq(17.5)
-          expect(results.first.dig('flat_margins')).to eq('solas' => 0.1e2)
-          expect(results.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
-          expect(results.map { |pricing| pricing.dig('flat_margins') }).to match_array([{ 'solas' => 0.1e2 }])
+          expect(results.first.result['id']).to eq(local_charge.id)
+          expect(results.first.result['fees'].keys).to eq(['solas'])
+          expect(results.first.result.dig('fees', 'solas', 'value')).to eq(17.5)
+          expect(results.first.flat_margins).to eq('solas' => 0.1e2)
+          expect(results.first.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(results.map(&:flat_margins)).to match_array([{ 'solas' => 0.1e2 }])
         end
       end
     end
@@ -438,12 +438,12 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the manipulated local_charge attached to the tenant with nothing else' do
-        manipulated_pricings, _metadata = klass.perform
+        target_result = manipulated_results.first
         aggregate_failures do
-          expect(manipulated_pricings.first['id']).to eq(local_charge.id)
-          expect(manipulated_pricings.first['fees'].keys).to eq(['solas'])
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'value')).to eq(19.25)
-          expect(manipulated_pricings.first.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
+          expect(target_result.result['id']).to eq(local_charge.id)
+          expect(target_result.result['fees'].keys).to eq(['solas'])
+          expect(target_result.result.dig('fees', 'solas', 'value')).to eq(19.25)
+          expect(target_result.result.dig('fees', 'solas', 'rate_basis')).to eq('PER_SHIPMENT')
         end
       end
     end
@@ -454,22 +454,20 @@ RSpec.describe Pricings::Manipulator do
       end
 
       let!(:margin) { FactoryBot.create(:export_margin, origin_hub: hub, tenant_vehicle: tenant_vehicle, organization: organization, applicable: user) }
-      let(:metadata) { klass.perform.second }
-      let(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated local charge with metadata attached to the user - general info' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
-          expect(metadatum[:pricing_id]).to eq(local_charge.id)
-          expect(metadatum[:fees].keys).to eq([:solas])
-          expect(metadatum.dig(:fees, :solas, :breakdowns).length).to eq(2)
+          expect(target_result.id).to eq(local_charge.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[solas])
+          expect(target_result.breakdowns.length).to eq(2)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - single margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin.id)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin.value)
+          expect(target_result.breakdowns.second.source).to eq(margin)
+          expect(target_result.breakdowns.second.delta).to eq(margin.value)
         end
       end
     end
@@ -491,29 +489,27 @@ RSpec.describe Pricings::Manipulator do
                           value: 50,
                           operator: '+')
       end
-      let(:metadata) { klass.perform.second }
-      let(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated local charge with metadata attached to the user - general info' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
-          expect(metadatum[:pricing_id]).to eq(local_charge.id)
-          expect(metadatum[:fees].keys).to eq([:solas])
-          expect(metadatum.dig(:fees, :solas, :breakdowns).length).to eq(3)
+          expect(target_result.id).to eq(local_charge.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[solas])
+          expect(target_result.breakdowns.length).to eq(3)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - first margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
+          expect(target_result.breakdowns.second.source).to eq(margin1)
+          expect(target_result.breakdowns.second.delta).to eq(margin1.value)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - second margin' do
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_value)).to eq(margin2.value)
+          expect(target_result.breakdowns.third.source).to eq(margin2)
+          expect(target_result.breakdowns.third.delta).to eq(margin2.value)
         end
       end
     end
@@ -566,34 +562,35 @@ RSpec.describe Pricings::Manipulator do
                           value: 50,
                           operator: '+')
       end
-      let(:metadata) { klass.perform.second }
-      let(:metadatum) { metadata.first }
+      let!(:target_result) { manipulated_results.first }
 
       it 'returns the manipulated local charge with metadata attached to the user - general info' do
         aggregate_failures do
-          expect(metadatum.keys).to match_array(%i[pricing_id cargo_class fees metadata_id direction])
-          expect(metadatum[:pricing_id]).to eq(local_charge.id)
-          expect(metadatum[:fees].keys).to eq(%i[solas thc])
-          expect(metadatum.dig(:fees, :solas, :breakdowns).length).to eq(3)
+          expect(target_result.id).to eq(local_charge.id)
+          expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[solas thc])
+          expect(target_result.breakdowns.length).to eq(6)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - first fee' do
+        solas_breakdowns = target_result.breakdowns.select { |br| br.code == 'solas' }
         aggregate_failures do
-          expect(metadatum.dig(:fees, :solas, :breakdowns).length).to eq(3)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :solas, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
+          expect(solas_breakdowns.length).to eq(3)
+          expect(solas_breakdowns.second.source).to eq(margin1)
+          expect(solas_breakdowns.second.delta).to eq(margin1.value)
+          expect(solas_breakdowns.third.source).to eq(margin2)
+          expect(solas_breakdowns.third.delta).to eq(margin2.value / 2)
         end
       end
 
       it 'returns the manipulated local charge with metadata attached to the user - second fee' do
+        thc_breakdowns = target_result.breakdowns.select { |br| br.code == 'thc' }
         aggregate_failures do
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 1, :source_id)).to eq(margin1.id)
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 1, :margin_value)).to eq(margin1.value)
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 2, :source_id)).to eq(margin2.id)
-          expect(metadatum.dig(:fees, :thc, :breakdowns, 2, :margin_value)).to eq(margin2.value / 2)
+          expect(thc_breakdowns.length).to eq(3)
+          expect(thc_breakdowns.second.source).to eq(margin1)
+          expect(thc_breakdowns.second.delta).to eq(margin1.value)
+          expect(thc_breakdowns.third.source).to eq(margin2)
+          expect(thc_breakdowns.third.delta).to eq(margin2.value / 2)
         end
       end
     end

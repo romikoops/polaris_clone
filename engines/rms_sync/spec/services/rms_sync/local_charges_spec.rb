@@ -86,7 +86,7 @@ RSpec.describe RmsSync::LocalCharges do
     end
 
     it 'should create multiple rows for range fees' do
-      local_charge = FactoryBot.create(:local_charge_range, organization: organization, tenant_vehicle: tenant_vehicle)
+      local_charge = FactoryBot.create(:legacy_local_charge, :range, organization: organization, tenant_vehicle: tenant_vehicle)
       described_class.new(organization_id: organization.id, sheet_type: :local_charges).perform
       expect(RmsData::Book.where(sheet_type: :local_charges).length).to eq(1)
       book = RmsData::Book.where(sheet_type: :local_charges).first

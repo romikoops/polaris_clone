@@ -9,6 +9,7 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:address) { FactoryBot.create(:gothenburg_address) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
@@ -31,12 +32,23 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
                       itinerary: itinerary,
                       has_pre_carriage: true)
   end
-  let(:klass) { described_class.new(shipment: shipment) }
+  let(:klass) { described_class.new(shipment: shipment, quotation: quotation) }
   let(:hubs) do
     {
       origin: Legacy::Hub.where(id: origin_hub.id),
       destination: Legacy::Hub.where(id: destination_hub.id)
     }
+  end
+  let(:routes) do
+    [
+      OfferCalculator::Route.new(
+        itinerary_id: itinerary.id,
+        origin_stop_id: itinerary.stops.first.id,
+        destination_stop_id: itinerary.stops.last.id,
+        tenant_vehicle_id: tenant_vehicle.id,
+        mode_of_transport: 'ocean'
+      )
+    ]
   end
   let(:departure_type) { 'departure' }
   let(:results) { klass.perform(routes, 5, hubs) }
@@ -72,25 +84,10 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
     end
 
     describe '.perform' do
-      before do
-        allow(klass).to receive(:current_etd_in_search).and_return(start_date)
-      end
-
-      let(:routes) do
-        [
-          OfferCalculator::Route.new(
-            itinerary_id: itinerary.id,
-            origin_stop_id: itinerary.stops.first.id,
-            destination_stop_id: itinerary.stops.last.id,
-            tenant_vehicle_id: tenant_vehicle.id,
-            mode_of_transport: 'ocean'
-          )
-        ]
-      end
-
-      context 'when filtered by closing date with trip available' do
-        let(:departure_type) { 'closing_date' }
-        let(:start_date) { trip.closing_date - 1.day }
+      context 'without trucking' do
+        before do
+          allow(shipment).to receive(:has_pre_carriage?).and_return(false)
+        end
 
         it 'return the valid schedules' do
           aggregate_failures do
@@ -101,36 +98,16 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
         end
       end
 
-      context 'when filtered by closing date with no trip available' do
-        let(:departure_type) { 'closing_date' }
-        let(:start_date) { trip.closing_date + 1.day }
-
-        it 'return the valid schedules' do
-          aggregate_failures do
-            expect(results).to be_empty
-          end
-        end
-      end
-
-      context 'when filtered by departure date' do
-        it 'return the valid schedules' do
-          aggregate_failures do
-            expect(results.length).to eq(1)
-            expect(results.first.origin_hub).to eq(origin_hub)
-            expect(results.first.destination_hub).to eq(destination_hub)
-          end
+      context 'with trucking' do
+        before do
+          allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+          google_directions = instance_double('OfferCalculator::GoogleDirections')
+          allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
+          allow(google_directions).to receive(:driving_time_in_seconds).and_return(10_000)
+          allow(google_directions).to receive(:driving_time_in_seconds_for_trucks).and_return(14_000)
         end
 
         it 'return the valid schedules with pre_carriage' do
-          shipment.update(has_pre_carriage: true)
-          aggregate_failures do
-            expect(results.length).to eq(1)
-            expect(results.first.origin_hub).to eq(origin_hub)
-            expect(results.first.destination_hub).to eq(destination_hub)
-          end
-        end
-
-        it 'return the valid schedules with default delay' do
           aggregate_failures do
             expect(results.length).to eq(1)
             expect(results.first.origin_hub).to eq(origin_hub)
@@ -139,13 +116,16 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
         end
       end
 
-      context 'with failures' do
+      context 'with no driving time' do
         before do
-          allow(klass).to receive(:current_etd_in_search).and_raise(OfferCalculator::Calculator::NoDirectionsFound)
+          allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+          google_directions = instance_double('OfferCalculator::GoogleDirections')
+          allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
+          allow(google_directions).to receive(:driving_time_in_seconds).and_raise(OfferCalculator::Errors::NoDrivingTime)
         end
 
         it 'return raises an error when no driving time is found' do
-          expect { klass.perform(routes, nil, hubs) }.to raise_error(OfferCalculator::Calculator::NoDirectionsFound)
+          expect { klass.perform(routes, nil, hubs) }.to raise_error(OfferCalculator::Errors::NoDirectionsFound)
         end
       end
     end

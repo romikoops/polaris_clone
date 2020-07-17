@@ -9,6 +9,8 @@ class ShippingTools
   DataMappingError = Class.new(StandardError)
   ContactsRedundancyError = Class.new(StandardError)
 
+  include Wheelhouse::ErrorHandler
+
   attr_reader :current_organization
 
   def initialize
@@ -93,30 +95,8 @@ class ShippingTools
       cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
-  rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
-    raise ApplicationError::LoadMeterageExceeded
-  rescue OfferCalculator::Calculator::MissingTruckingData
-    raise ApplicationError::MissingTruckingData
-  rescue OfferCalculator::Calculator::InvalidPickupAddress
-    raise ApplicationError::InvalidPickupAddress
-  rescue OfferCalculator::Calculator::InvalidDeliveryAddress
-    raise ApplicationError::InvalidDeliveryAddress
-  rescue OfferCalculator::Calculator::InvalidLocalChargeResult
-    raise ApplicationError::InvalidLocalChargeResult
-  rescue OfferCalculator::Calculator::InvalidFreightResult
-    raise ApplicationError::InvalidFreightResult
-  rescue OfferCalculator::Calculator::NoDirectionsFound
-    raise ApplicationError::NoDirectionsFound
-  rescue OfferCalculator::Calculator::NoRoute
-    raise ApplicationError::NoRoute
-  rescue OfferCalculator::Calculator::InvalidRoutes
-    raise ApplicationError::InvalidRoutes
-  rescue OfferCalculator::Calculator::NoValidPricings
-    raise ApplicationError::NoValidPricings
-  rescue OfferCalculator::Calculator::NoValidSchedules
-    raise ApplicationError::NoValidSchedules
-  rescue  OfferCalculator::Calculator::InvalidCargoUnit
-    raise ApplicationError::InvalidCargoUnit
+  rescue OfferCalculator::Errors::Failure => error
+    handle_error(error: error)
   rescue ArgumentError
     raise ApplicationError::InternalError
   end
@@ -278,11 +258,6 @@ class ShippingTools
     shipment.status = current_user.activation_state == 'active' ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
-
-    cargo_creator = Cargo::Creator.new(legacy_shipment: shipment)
-    cargo_creator.perform
-
-    raise ApplicationError::DataMappingError if cargo_creator.errors.any?
 
     shipment_request_creator = Shipments::ShipmentRequestCreator.new(legacy_shipment: shipment, user: current_user, sandbox: sandbox)
     shipment_request_creator.create

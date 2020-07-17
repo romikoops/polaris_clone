@@ -17,9 +17,9 @@ module Trucking
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
 
         @organization_id = args[:organization_id]
-        @load_type    = args[:load_type]
-        @carriage     = args[:carriage]
-        @truck_type   = args[:truck_type]
+        @load_type = args[:load_type]
+        @carriage = args[:carriage]
+        @truck_type = args[:truck_type]
         @cargo_classes = args[:cargo_classes]
         @nexus_ids = args[:nexus_ids]
         @hub_ids = args[:hub_ids]
@@ -101,15 +101,17 @@ module Trucking
       end
 
       def truckings_for_query
-        ::Trucking::Trucking.joins(:hub)
-                            .merge(tenant_hubs)
-                            .where(organization_id: @organization_id)
-                            .where(cargo_class_condition)
-                            .where(load_type_condition)
-                            .where(truck_type_condition)
-                            .where(carriage_condition)
-                            .where(group_condition)
-                            .where(location: valid_trucking_locations)
+        Rails.cache.fetch(cache_key, expires_in: 12.hours) do
+          ::Trucking::Trucking.joins(:hub)
+                              .merge(tenant_hubs)
+                              .where(organization_id: @organization_id)
+                              .where(cargo_class_condition)
+                              .where(load_type_condition)
+                              .where(truck_type_condition)
+                              .where(carriage_condition)
+                              .where(group_condition)
+                              .where(location: valid_trucking_locations)
+        end
       end
 
       def truck_type_condition
@@ -163,24 +165,27 @@ module Trucking
       def tenant_hubs
         @tenant_hubs ||= Legacy::Hub.where(hubs_condition)
       end
+
+      def cache_key
+        [truck_type_condition.values,
+          group_condition.values,
+          cargo_class_condition.values,
+          load_type_condition.values,
+          carriage_condition.values,
+          hubs_condition.values,
+          trucking_location_conditions_binds.values].flatten.join('-')
+      end
       # Argument Errors
 
       def argument_errors(args)
         raise_if_no_valid_filter_error(args)
         raise_if_mandatory_arg_error(args)
-        raise_if_country_code_error(args)
       end
 
       def raise_if_mandatory_arg_error(args)
         MANDATORY_ARGS.each do |mandatory_arg|
           raise ArgumentError, "Must provide #{mandatory_arg}" if args[mandatory_arg].nil?
         end
-      end
-
-      def raise_if_country_code_error(args)
-        return unless args[:address].try(:country).try(:code).nil? && args[:country_code].nil?
-
-        raise ArgumentError, 'Must provide country_code'
       end
 
       def raise_if_no_valid_filter_error(args)

@@ -82,7 +82,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
 
     context 'with ranges' do
       before do
-        create(:local_charge_range, hub: hub, organization: organization)
+        create(:legacy_local_charge, :range, hub: hub, organization: organization)
       end
 
       let(:local_charge_data_with_ranges) do

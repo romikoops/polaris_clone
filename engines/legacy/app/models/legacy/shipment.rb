@@ -307,7 +307,7 @@ module Legacy
 
     def update_carriage_properties!
       %w[on_carriage pre_carriage].each do |carriage|
-        self["has_#{carriage}"] = trucking.dig(carriage, 'truck_type').present?
+        self["has_#{carriage}"] = trucking.dig(carriage, 'address_id').present?
       end
     end
 

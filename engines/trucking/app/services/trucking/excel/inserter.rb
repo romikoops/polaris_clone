@@ -184,7 +184,7 @@ module Trucking
             :carriage,
             :cargo_class,
             :load_type,
-            :courier_id,
+            :tenant_vehicle_id,
             :truck_type,
             :user_id,
             :group_id
@@ -541,6 +541,8 @@ module Trucking
 
       def create_trucking(meta:, sheet_name:, row_number:) # rubocop:disable Metrics/AbcSize
         user_id = meta[:user_email] ? User.find_by(organization_id: @organization.id, email: meta[:user_email])&.id : nil
+        carrier = meta[:carrier] || meta[:courier]
+        service = meta[:service] || 'standard'
         {
           load_meterage: {
             ratio: meta[:load_meterage_ratio],
@@ -561,7 +563,7 @@ module Trucking
           carriage: meta[:direction] == 'import' ? 'on' : 'pre',
           cargo_class: meta[:cargo_class],
           load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
-          courier_id: find_or_create_courier(meta[:courier]).id,
+          courier_id: find_or_create_tenant_vehicle(service: service, carrier: carrier).id,
           truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type],
           sandbox: @sandbox,
           metadata: metadata(row_number: row_number, sheet_name: sheet_name)
@@ -641,8 +643,32 @@ module Trucking
         end.join(', ')
       end
 
-      def find_or_create_courier(courier_name)
-        Courier.find_or_create_by(name: courier_name, organization: @organization)
+      def find_or_create_tenant_vehicle(service:, carrier:)
+        service_carrier = Legacy::Carrier.find_or_initialize_by(code: carrier) if carrier.present?
+        Legacy::TenantVehicle.find_or_initialize_by(
+          name: service.downcase,
+          mode_of_transport: 'truck_carriage',
+          organization: @organization,
+          carrier: service_carrier
+        ).tap do |tenant_vehicle|
+          tenant_vehicle.update(name: service) if tenant_vehicle.name.blank?
+        end
+      end
+
+      def build_trucking_and_locations(single_ident_values_and_country, rate)
+        single_ident_values_and_country.each do |values|
+          location = Location.find_or_initialize_by(
+            'country_code' => values[:country].downcase,
+            identifier_type.to_s => values[:ident]
+          )
+          @trucking_locations << location
+          trucking = Trucking.find_or_initialize_by(
+            hub: @hub,
+            rate: rate,
+            location: location
+          )
+          @trucking_truckings << trucking
+        end
       end
 
       def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity

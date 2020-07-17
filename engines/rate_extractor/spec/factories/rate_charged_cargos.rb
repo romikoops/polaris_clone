@@ -6,7 +6,11 @@ FactoryBot.define do
 
     trait :unit do
       transient do
-        object { FactoryBot.create(:lcl_unit) }
+        object {
+          FactoryBot.create(:lcl_unit,
+            cargo: FactoryBot.create(:cargo_cargo,
+              quotation_id: FactoryBot.create(:quotations_quotation).id))
+        }
       end
     end
   end

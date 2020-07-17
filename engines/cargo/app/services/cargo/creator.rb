@@ -2,84 +2,125 @@
 
 module Cargo
   class Creator
-    attr_reader :legacy_shipment, :quotation, :errors
+    attr_reader :legacy_shipment, :quotation, :errors, :organization, :cargo
 
-    LEGACY_CARGO_MAP = YAML.load_file(File.expand_path('../../../data/cargo.yaml', __dir__)).freeze
-    CARGO_CLASS_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v['class']] }.to_h
-    CARGO_TYPE_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v['type']] }.to_h
+    LEGACY_CARGO_MAP = YAML.load_file(File.expand_path("../../../data/cargo.yaml", __dir__)).freeze
+    CARGO_CLASS_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v["class"]] }.to_h
+    CARGO_TYPE_LEGACY_MAPPER = LEGACY_CARGO_MAP.map { |k, v| [k, v["type"]] }.to_h
 
-    def initialize(legacy_shipment:)
+    def initialize(legacy_shipment:, quotation:)
       @legacy_shipment = legacy_shipment
-      @quotation = Quotations::Tender.find(legacy_shipment.meta['tender_id']).quotation
       @errors = []
+      @quotation = quotation
+      @organization = legacy_shipment.organization
+      @cargo = ::Cargo::Cargo.new(
+        quotation_id: quotation&.id,
+        organization: organization,
+        total_goods_value_cents: shipment_total_goods_value,
+        total_goods_value_currency: shipment_total_goods_currency
+      )
     end
 
     def perform
-      containers = Legacy::Container.where(shipment: legacy_shipment)
-      cargo_items = Legacy::CargoItem.where(shipment: legacy_shipment)
+      cargo.units = cargo_units
 
-      cargo = ::Cargo::Cargo.new(
-        quotation_id: quotation.id,
-        organization: quotation.organization,
-        total_goods_value_cents: legacy_shipment.total_goods_value['value'],
-        total_goods_value_currency: legacy_shipment.total_goods_value['currency']
-      )
+      if cargo.units.empty?
+        @errors << "empty cargo"
+      else
+        cargo.save
+      end
+      self
+    end
 
-      containers.find_each do |container|
+    def shipment_total_goods_value
+      @shipment_total_goods_value ||= legacy_shipment.total_goods_value&.dig("value") || 0
+    end
+
+    def shipment_total_goods_currency
+      @shipment_total_goods_currency ||=
+        legacy_shipment.total_goods_value&.dig("currency") ||
+        Users::Settings.find_by(user_id: legacy_shipment.user_id)&.currency ||
+        organization.scope.content.dig("default_currency")
+    end
+
+    def cargo_units
+      if legacy_shipment.fcl?
+        fcl_units
+      elsif legacy_shipment.aggregated_cargo.present?
+        aggregated_unit
+      else
+        lcl_units
+      end
+    end
+
+    def fcl_units
+      containers.map do |container|
         cargo_class = CARGO_CLASS_LEGACY_MAPPER[container.cargo_class]
         cargo_type = CARGO_TYPE_LEGACY_MAPPER[container.cargo_class]
 
-        cargo.units << Unit.new(
+        Unit.new(
           organization_id: quotation.organization_id,
           quantity: container.quantity,
+          legacy: container,
           cargo_class: cargo_class,
           cargo_type: cargo_type,
           weight_value: container.payload_in_kg,
-          goods_value_cents: legacy_shipment.total_goods_value['value'] / container.quantity,
-          goods_value_currency: legacy_shipment.total_goods_value['currency'],
+          goods_value_cents: shipment_total_goods_value / container.quantity,
+          goods_value_currency: shipment_total_goods_currency,
           dangerous_goods: (container.dangerous_goods ? :unspecified : nil)
         )
       end
+    end
 
-      cargo_items.find_each do |item|
-        cargo.units << Unit.new(
-          organization_id: quotation.organization_id,
-          weight_value: item.payload_in_kg,
-          width_value: item.width.to_f / 100,
-          length_value: item.length.to_f / 100,
-          height_value: item.height.to_f / 100,
-          quantity: item.quantity,
-          cargo_class: '00',
-          cargo_type: 'LCL',
-          goods_value_cents: legacy_shipment.total_goods_value['value'] / item.quantity,
-          goods_value_currency: legacy_shipment.total_goods_value['currency'],
-          dangerous_goods: (item.dangerous_goods ? :unspecified : nil)
+    def lcl_units
+      cargo_items.map do |item|
+        Unit.new(
+          item_attributes(item: item)
         )
       end
+    end
 
+    def aggregated_unit
       if (aggregated_cargo = legacy_shipment.aggregated_cargo)
-        cargo.units << Unit.new(
+        [Unit.new(
           organization_id: quotation.organization_id,
           weight_value: aggregated_cargo.weight,
           volume_value: aggregated_cargo.volume,
           quantity: 1,
-          cargo_class: '00',
-          cargo_type: 'AGR',
-          goods_value_cents: legacy_shipment.total_goods_value['value'],
-          goods_value_currency: legacy_shipment.total_goods_value['currency'],
+          legacy: aggregated_cargo,
+          cargo_class: "00",
+          cargo_type: "AGR",
+          goods_value_cents: shipment_total_goods_value,
+          goods_value_currency: shipment_total_goods_currency,
           dangerous_goods: (aggregated_cargo.dangerous_goods? ? :unspecified : nil)
-        )
+        )]
       end
+    end
 
-      if cargo.units.empty?
-        @errors << 'empty cargo'
-      elsif cargo.invalid?
-        @errors << cargo.errors.messages
-      else
-        cargo.save
-      end
+    def item_attributes(item:)
+      {
+        organization_id: quotation.organization_id,
+        weight_value: item.payload_in_kg,
+        width_value: item.width.to_f / 100,
+        length_value: item.length.to_f / 100,
+        height_value: item.height.to_f / 100,
+        quantity: item.quantity,
+        cargo_class: "00",
+        cargo_type: "LCL",
+        legacy: item,
+        stackable: item.stackable,
+        goods_value_cents: shipment_total_goods_value / item.quantity,
+        goods_value_currency: shipment_total_goods_currency,
+        dangerous_goods: (item.dangerous_goods ? :unspecified : nil)
+      }
+    end
 
-      self
+    def cargo_items
+      @cargo_items ||= Legacy::CargoItem.where(shipment: legacy_shipment)
+    end
+
+    def containers
+      @containers ||= Legacy::Container.where(shipment: legacy_shipment)
     end
   end
 end

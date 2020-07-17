@@ -68,32 +68,40 @@ RSpec.describe OfferCalculator::ValidityService do
     it 'returns the default dates for no schedules V.A.T.O.S import' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: 'import', booking_date: booking_date)
       aggregate_failures do
-        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
-        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+        expect(validity_service.start_date).to eq(described_class::START_BUFFER.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(described_class::END_BUFFER.days.from_now.to_date)
       end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.A import' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: 'import', booking_date: booking_date)
       aggregate_failures do
-        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
-        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+        expect(validity_service.start_date).to eq(described_class::START_BUFFER.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(described_class::END_BUFFER.days.from_now.to_date)
       end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.S export' do
       validity_service = described_class.new(logic: 'vatos', schedules: [], direction: 'export', booking_date: booking_date)
       aggregate_failures do
-        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
-        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+        expect(validity_service.start_date).to eq(described_class::START_BUFFER.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(described_class::END_BUFFER.days.from_now.to_date)
       end
     end
 
     it 'returns the default dates for no schedules V.A.T.O.A export' do
       validity_service = described_class.new(logic: 'vatoa', schedules: [], direction: 'export', booking_date: booking_date)
       aggregate_failures do
-        expect(validity_service.start_date).to eq(5.days.from_now.to_date)
-        expect(validity_service.end_date).to eq(25.days.from_now.to_date)
+        expect(validity_service.start_date).to eq(described_class::START_BUFFER.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(described_class::END_BUFFER.days.from_now.to_date)
+      end
+    end
+
+    it 'returns the default dates for unknown logic export' do
+      validity_service = described_class.new(logic: 'aaa', schedules: schedules, direction: 'export', booking_date: booking_date)
+      aggregate_failures do
+        expect(validity_service.start_date).to eq(described_class::START_BUFFER.days.from_now.to_date)
+        expect(validity_service.end_date).to eq(described_class::END_BUFFER.days.from_now.to_date)
       end
     end
   end

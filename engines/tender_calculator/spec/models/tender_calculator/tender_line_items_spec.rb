@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe TenderCalculator::TenderLineItems do
   let(:section) { FactoryBot.create(:rates_section) }
   let(:descorated_section) { RateExtractor::Decorators::SectionRate.new(section) }
-  let(:cargo_unit) { FactoryBot.create(:lcl_unit, quantity: 1) }
+  let!(:quotation) { FactoryBot.create(:quotations_quotation) }
+  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
+  let(:cargo_unit) { FactoryBot.create(:lcl_unit, quantity: 1, cargo: cargo) }
 
   let(:shipment_targeted_rate) { FactoryBot.create(:rate_extractor_cargo_rate, :shipment_targeted_rate, section: section) }
   let(:section_targeted_rate) { FactoryBot.create(:rate_extractor_cargo_rate, :section_targeted_rate, section: section) }

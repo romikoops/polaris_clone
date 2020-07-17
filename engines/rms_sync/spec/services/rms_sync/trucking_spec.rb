@@ -4,8 +4,9 @@ require 'rails_helper'
 
 RSpec.describe ::RmsSync::Trucking do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:hub) { FactoryBot.create(:hamburg_hub, organization: organization) }
-  let(:courier) { FactoryBot.create(:trucking_courier, name: 'TEST', organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'TEST', organization: organization) }
   let(:zip_trucking_locations) do
     [
       {
@@ -63,7 +64,7 @@ RSpec.describe ::RmsSync::Trucking do
           location: tl,
           organization: organization,
           hub: hub,
-          courier: courier,
+          tenant_vehicle: tenant_vehicle,
           parent_id: tl_obj[:parent_id]
         )
       end
@@ -78,7 +79,7 @@ RSpec.describe ::RmsSync::Trucking do
           cargo_class: 'fcl_20',
           load_type: 'container',
           hub: hub,
-          courier: courier,
+          tenant_vehicle: tenant_vehicle,
           parent_id: tl_obj[:parent_id]
         )
       end

@@ -105,11 +105,8 @@ RSpec.describe ShippingTools do
 
   describe '.request_shipment' do
     before do
-      cargo_creator = instance_double('Cargo::Creator', errors: [])
       shipment_request_creator = instance_double('Shipments::ShipmentRequestCreator', errors: [])
       shipment_request = instance_double('Shipments::ShipmentRequest', id: 1, organization_id: 123)
-      allow(Cargo::Creator).to receive(:new).with(legacy_shipment: shipment).and_return(cargo_creator)
-      allow(cargo_creator).to receive(:perform).once
       allow(Shipments::ShipmentRequestCreator).to receive(:new).with(legacy_shipment: shipment, user: user, sandbox: nil).and_return(shipment_request_creator)
       allow(shipment_request_creator).to receive(:create).once
       allow(shipment_request_creator).to receive(:shipment_request).and_return(shipment_request)
@@ -261,17 +258,7 @@ RSpec.describe ShippingTools do
     context 'when failing in OfferCalculator' do
       let(:offer_calculator_error_map) do
         {
-          "OfferCalculator::TruckingTools::LoadMeterageExceeded": 'Your shipment has exceeded the load meterage limits for online booking.',
-          "OfferCalculator::Calculator::MissingTruckingData": 'A problem occurred calculating trucking for this shipment',
-          "OfferCalculator::Calculator::InvalidPickupAddress": 'Unable to build pickup location from address fields.',
-          "OfferCalculator::Calculator::InvalidDeliveryAddress": 'Unable to build delivery location from address fields.',
-          "OfferCalculator::Calculator::NoDirectionsFound": 'Unable to determine trucking directions. Please check the address and try again.',
-          "OfferCalculator::Calculator::NoRoute": 'No route matches the selected origin and destination.',
-          "OfferCalculator::Calculator::InvalidRoutes": ' Exceded maximum total chargeable weight for the modes of transport available in the selected route. ',
-          "OfferCalculator::Calculator::NoValidPricings": 'There are no pricings valid for this timeframe.',
-          "OfferCalculator::Calculator::NoValidSchedules": 'There are no departures for this timeframe.',
-          "OfferCalculator::Calculator::InvalidLocalChargeResult": 'The system was unable to calculate a valid set of local charges for this booking.',
-          "OfferCalculator::Calculator::InvalidFreightResult": 'The system was unable to calculate a valid set of freight charges for this booking.',
+          "OfferCalculator::Errors::LoadMeterageExceeded": 'Your shipment has exceeded the load meterage limits for online booking.',
           "ArgumentError": 'Something has gone wrong!'
         }
       end

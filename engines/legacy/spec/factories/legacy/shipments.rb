@@ -29,6 +29,7 @@ FactoryBot.define do
       with_full_breakdown { false }
       with_tenders { false }
       with_aggregated_cargo { false }
+      custom_cargo_classes {}
     end
 
     trait :with_contacts do
@@ -95,6 +96,10 @@ FactoryBot.define do
       end
       if evaluator.with_aggregated_cargo
         create(:legacy_aggregated_cargo, shipment: shipment)
+      elsif evaluator.custom_cargo_classes
+        shipment.cargo_units = evaluator.custom_cargo_classes.map do |cargo_class|
+          create("#{cargo_class}_#{shipment.load_type}".to_sym, shipment: shipment)
+        end
       else
         shipment.cargo_units << create("legacy_#{shipment.load_type}".to_sym, shipment: shipment)
       end

@@ -30,6 +30,11 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       external_code { 'PER_ITEM' }
     end
 
+    trait :unit do
+      internal_code { 'PER_UNIT' }
+      external_code { 'PER_UNIT' }
+    end
+
     trait :cbm do
       internal_code { 'PER_CBM' }
       external_code { 'PER_CBM' }
@@ -120,6 +125,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :per_hbl_rate_basis, traits: [:hbl]
     factory :per_shipment_rate_basis, traits: [:shipment]
     factory :per_item_rate_basis, traits: [:item]
+    factory :per_unit_rate_basis, traits: [:unit]
     factory :per_cbm_rate_basis, traits: [:cbm]
     factory :per_kg_rate_basis, traits: [:kg]
     factory :per_kg_per_cbm_rate_basis, traits: [:kg_per_cbm]
@@ -127,7 +133,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     factory :per_cbm_ton_rate_basis, traits: [:cbm_ton]
     factory :per_ton_rate_basis, traits: [:ton]
     factory :per_kg_range_rate_basis, traits: [:kg_range]
-    factory :per_kg_range_bases_rate_basis, traits: [:kg_range]
     factory :per_kg_range_flat_rate_basis, traits: [:kg_range_flat]
     factory :per_unit_ton_cbm_range_rate_basis, traits: [:unit_ton_cbm_range]
     factory :per_container_range_rate_basis, traits: [:container_range]

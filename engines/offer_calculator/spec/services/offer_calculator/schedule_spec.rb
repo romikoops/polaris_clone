@@ -34,10 +34,13 @@ RSpec.describe OfferCalculator::Schedule do
       origin_hub
       destination_hub
       transshipment
+      itinerary_id
+      carrier_id
+      carrier_lock
     ]
   end
 
-  context 'class methods' do
+  context 'when class methods' do
     describe '.from_routes', :vcr do
       it 'returns the schedules for the route' do
         results = described_class.from_routes(routes, current_etd, 60, 'cargo_item', 'depature')
@@ -59,7 +62,7 @@ RSpec.describe OfferCalculator::Schedule do
     end
   end
 
-  context 'instance methods' do
+  context 'when instance methods' do
     let(:schedule) { described_class.from_trip(trip) }
 
     describe '.hub_for_carriage', :vcr do
@@ -69,6 +72,10 @@ RSpec.describe OfferCalculator::Schedule do
 
       it 'returns the destination hub' do
         expect(schedule.hub_for_carriage('on')).to eq(destination_hub)
+      end
+
+      it 'returns the itinerary' do
+        expect(schedule.itinerary).to eq(itinerary)
       end
 
       it 'raises an argument error' do

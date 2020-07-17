@@ -7,14 +7,19 @@ module OfferCalculator
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
                   :origin_hub_name, :destination_hub_name, :mode_of_transport,
                   :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                  :quote, :carrier_name, :load_type, :voyage_code, :vessel, :transshipment
+                  :quote, :carrier_name, :load_type, :voyage_code, :vessel, :transshipment,
+                  :itinerary_id, :tenant_vehicle_id, :carrier_id, :carrier_lock
 
     def origin_hub
-      Legacy::Hub.find origin_hub_id
+      Legacy::Hub.find(origin_hub_id)
     end
 
     def destination_hub
-      Legacy::Hub.find destination_hub_id
+      Legacy::Hub.find(destination_hub_id)
+    end
+
+    def itinerary
+      Legacy::Itinerary.find(itinerary_id)
     end
 
     def hub_for_carriage(carriage)
@@ -25,7 +30,7 @@ module OfferCalculator
     end
 
     def trip
-      Legacy::Trip.find trip_id
+      Legacy::Trip.find(trip_id)
     end
 
     def self.quote_trip_end_date
@@ -41,8 +46,8 @@ module OfferCalculator
     end
 
     def to_detailed_hash
-      keys = %i(id mode_of_transport total_price eta etd closing_date vehicle_name
-                carrier_name voyage_code vessel trip_id transshipment)
+      keys = %i[id mode_of_transport total_price eta etd closing_date vehicle_name
+                carrier_name voyage_code vessel trip_id transshipment itinerary_id carrier_id carrier_lock]
 
       as_json.symbolize_keys.slice(*keys).merge(origin_hub: detailed_hash_hub_data_for(:origin),
                                                 destination_hub: detailed_hash_hub_data_for(:destination))
@@ -59,6 +64,7 @@ module OfferCalculator
           destination_hubs.name         AS destination_hub_name,
           itineraries.mode_of_transport AS mode_of_transport,
           itineraries.transshipment     AS transshipment,
+          itineraries.id                AS itinerary_id,
           destination_layovers.eta      AS eta,
           origin_layovers.etd           AS etd,
           origin_layovers.closing_date  AS closing_date,
@@ -66,7 +72,10 @@ module OfferCalculator
           carriers.name                 AS carrier_name,
           trips.id                      AS trip_id,
           trips.vessel                  AS vessel,
-          trips.voyage_code             AS voyage_code
+          trips.voyage_code             AS voyage_code,
+          trips.tenant_vehicle_id       AS tenant_vehicle_id,
+          tenant_vehicles.carrier_lock  AS carrier_lock,
+          tenant_vehicles.carrier_id    AS carrier_id
         FROM itineraries
         JOIN stops    AS origin_stops         ON itineraries.id       = origin_stops.itinerary_id
         JOIN stops    AS destination_stops    ON itineraries.id       = destination_stops.itinerary_id
@@ -104,8 +113,10 @@ module OfferCalculator
           }
         ]
       )
+      results = ActiveRecord::Base.connection.exec_query(sanitized_query).to_a
+      raise OfferCalculator::Errors::NoValidSchedules if results.empty?
 
-      ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
+      results.map do |attributes|
         OfferCalculator::Schedule.new(attributes.merge(id: SecureRandom.uuid))
       end
     end
@@ -125,7 +136,11 @@ module OfferCalculator
         vehicle_name: trip.tenant_vehicle.name,
         carrier_name: trip.tenant_vehicle&.carrier&.name,
         trip_id: trip.id,
-        load_type: trip.load_type
+        itinerary_id: trip.itinerary_id,
+        tenant_vehicle_id: trip.tenant_vehicle_id,
+        load_type: trip.load_type,
+        carrier_lock: trip.tenant_vehicle.carrier_lock,
+        carrier_id: trip.tenant_vehicle.carrier_id
       )
     end
 
@@ -138,7 +153,7 @@ module OfferCalculator
     private
 
     def detailed_hash_hub_data_for(target)
-      %i(id name).each_with_object({}) do |hub_attribute, obj|
+      %i[id name].each_with_object({}) do |hub_attribute, obj|
         obj[hub_attribute] = send("#{target}_hub_#{hub_attribute}")
       end
     end

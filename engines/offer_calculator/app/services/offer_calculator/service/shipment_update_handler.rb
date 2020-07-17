@@ -6,9 +6,10 @@ module OfferCalculator
       InvalidPickupAddress = Class.new(StandardError)
       InvalidDeliveryAddress = Class.new(StandardError)
 
-      def initialize(shipment:, params:, sandbox:, wheelhouse: false)
+      def initialize(shipment:, params:, quotation:, wheelhouse: false, sandbox: nil)
         @params = params
-        super(shipment: shipment, sandbox: sandbox)
+        @quotation = quotation
+        super(shipment: shipment, quotation: quotation)
       end
 
       def clear_previous_itinerary
@@ -22,19 +23,30 @@ module OfferCalculator
       def update_nexuses
         @shipment.origin_nexus_id      = @params[:shipment][:origin][:nexus_id]
         @shipment.destination_nexus_id = @params[:shipment][:destination][:nexus_id]
+        @quotation.origin_nexus_id      = @params[:shipment][:origin][:nexus_id]
+        @quotation.destination_nexus_id = @params[:shipment][:destination][:nexus_id]
       end
 
       def update_trucking
         # Setting trucking also sets has_on_carriage and has_pre_carriage
         @shipment.update(trucking: trucking_params.to_h)
         { origin: 'pre', destination: 'on' }.each do |target, carriage|
-          next unless @shipment.has_carriage?(carriage)
+          next unless trucking_requested(target: target)
 
           address = Legacy::Address.new_from_raw_params(address_params(target))
           raise_trucking_address_error(target) if trucking_address_invalid?(address)
           address.save!
           @shipment.trucking["#{carriage}_carriage"]['address_id'] = address.id
+          if carriage == 'pre'
+            @quotation.pickup_address_id = address.id
+          else
+            @quotation.delivery_address_id = address.id
+          end
         end
+      end
+
+      def trucking_requested(target:)
+        @params[:shipment][target][:nexus_id].blank?
       end
 
       def update_updated_at
@@ -59,8 +71,9 @@ module OfferCalculator
         else
           @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
         end
+        Cargo::Creator.new(legacy_shipment: @shipment, quotation: @quotation).perform if @quotation.save
       rescue ActiveRecord::RecordNotSaved
-        raise OfferCalculator::Calculator::InvalidCargoUnit
+        raise OfferCalculator::Errors::InvalidCargoUnit
       end
 
       def update_incoterm
@@ -71,6 +84,11 @@ module OfferCalculator
         date = Chronic.parse(@params[:shipment][:selected_day], endian_precedence: :little)
         date_limit = Time.zone.today
         @shipment.desired_start_date = [date, date_limit].max
+        @quotation.selected_date = @shipment.desired_start_date
+      end
+
+      def destroy_previous_charge_breakdowns
+        @shipment.charge_breakdowns.destroy_all
       end
 
       def set_trucking_nexuses(hubs:)
@@ -147,8 +165,8 @@ module OfferCalculator
       end
 
       def raise_trucking_address_error(target)
-        raise OfferCalculator::Calculator::InvalidPickupAddress   if target == :origin
-        raise OfferCalculator::Calculator::InvalidDeliveryAddress if target == :destination
+        raise OfferCalculator::Errors::InvalidPickupAddress   if target == :origin
+        raise OfferCalculator::Errors::InvalidDeliveryAddress if target == :destination
       end
 
       def trucking_params

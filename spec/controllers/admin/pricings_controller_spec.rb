@@ -38,7 +38,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'itinerary_id' => itinerary.id,
           'organization_id' => organization.id,
           'tenant_vehicle_id' => pricings.first.tenant_vehicle_id,
-          'wm_rate' => '0.0',
+          'wm_rate' => '1000.0',
           'data' => {},
           'load_type' => 'cargo_item',
           'cargo_class' => 'lcl',

@@ -121,6 +121,7 @@ digraph G {
     "cargo" [shape=ellipse];
     "cargo" -> "core" [color=grey];
     "cargo" -> "organizations" [color=grey];
+    "cargo" -> "legacy" [color=grey];
     "quotations" [shape=ellipse];
     "quotations" -> "cargo" [color=grey];
     "quotations" -> "core" [color=grey];
@@ -244,6 +245,7 @@ digraph G {
     "tender_calculator" -> "rate_extractor" [color=grey];
     "tender_calculator" -> "rates" [color=grey];
     "tender_calculator" -> "tenant_routing" [color=grey];
+    "tender_calculator" -> "quotations" [color=grey];
     "tender_calculator" -> "legacy" [color=grey];
     "validator" [shape=ellipse];
     "validator" -> "core" [color=grey];

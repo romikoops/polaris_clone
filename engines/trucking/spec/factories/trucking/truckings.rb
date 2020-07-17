@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :trucking_trucking, class: 'Trucking::Trucking' do
     association :hub, factory: :legacy_hub
     association :location, factory: :zipcode_location
+    association :tenant_vehicle, factory: :legacy_tenant_vehicle
     cbm_ratio { 460 }
     modifier { 'kg' }
     load_meterage { { 'ratio' => 1850.0, 'height_limit' => 130 }.freeze }
@@ -13,7 +14,7 @@ FactoryBot.define do
           {
             rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_X_KG' },
             max_kg: '200.0',
-            min_kg: '0.0',
+            min_kg: '0.1',
             min_value: 400.0
           },
           {
@@ -96,7 +97,6 @@ FactoryBot.define do
     cargo_class { 'lcl' }
     truck_type { 'default' }
     carriage { 'pre' }
-    association :courier, factory: :trucking_courier
 
     trait :fcl_20 do
       load_type { 'container' }
@@ -213,10 +213,10 @@ FactoryBot.define do
             'key' => 'MFEE',
             'name' => 'M Fee',
             'min' => 10,
-            'kgr' => 10,
+            'shipment' => 10,
             'kg' => 1,
             'currency' => 'CNY',
-            'rate_basis' => 'PER_UNIT_KG'
+            'rate_basis' => 'PER_SHIPMENT_KG'
           },
           'NFEE' => {
             'key' => 'NFEE',
@@ -381,8 +381,8 @@ FactoryBot.define do
           unit: [
             {
               rate: { value: 100, currency: 'SEK', rate_basis: 'PER_UNIT' },
-              max_unit: '0',
-              min_unit: '10',
+              min_unit: '0',
+              max_unit: '10',
               min_value: 400.0
             }
           ]
@@ -522,6 +522,7 @@ FactoryBot.define do
     end
 
     factory :fcl_20_trucking, traits: [:fcl_20]
+    factory :fcl_20_unit_trucking, traits: %i[fcl_20 unit_rates]
     factory :trucking_with_fees, traits: [:with_fees]
     factory :trucking_with_return, traits: [:return_distance]
 
@@ -564,24 +565,19 @@ end
 #  rate_id             :uuid
 #  sandbox_id          :uuid
 #  tenant_id           :integer
-#  user_id             :uuid
+#  tenant_vehicle_id   :integer
+#  user_id             :integer
 #
 # Indexes
 #
-#  index_trucking_truckings_on_cargo_class      (cargo_class)
-#  index_trucking_truckings_on_carriage         (carriage)
-#  index_trucking_truckings_on_group_id         (group_id)
-#  index_trucking_truckings_on_hub_id           (hub_id)
-#  index_trucking_truckings_on_load_type        (load_type)
-#  index_trucking_truckings_on_location_id      (location_id)
-#  index_trucking_truckings_on_organization_id  (organization_id)
-#  index_trucking_truckings_on_sandbox_id       (sandbox_id)
-#  index_trucking_truckings_on_tenant_id        (tenant_id)
-#  index_trucking_truckings_on_user_id          (user_id)
-#  trucking_foreign_keys                        (rate_id,location_id,hub_id) UNIQUE
-#
-# Foreign Keys
-#
-#  fk_rails_     (user_id => users_users.id)
-#  fk_rails_...  (organization_id => organizations_organizations.id)
+#  index_trucking_truckings_on_cargo_class        (cargo_class)
+#  index_trucking_truckings_on_carriage           (carriage)
+#  index_trucking_truckings_on_group_id           (group_id)
+#  index_trucking_truckings_on_hub_id             (hub_id)
+#  index_trucking_truckings_on_load_type          (load_type)
+#  index_trucking_truckings_on_location_id        (location_id)
+#  index_trucking_truckings_on_sandbox_id         (sandbox_id)
+#  index_trucking_truckings_on_tenant_id          (tenant_id)
+#  index_trucking_truckings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  trucking_foreign_keys                          (rate_id,location_id,hub_id) UNIQUE
 #

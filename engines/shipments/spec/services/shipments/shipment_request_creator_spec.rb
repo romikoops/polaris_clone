@@ -8,7 +8,7 @@ module Shipments
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:currency) { FactoryBot.create(:legacy_currency) }
       let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-      let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, meta: { tender_id: tender.id }) }
+      let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id) }
       let(:tender) { FactoryBot.create(:quotations_tender) }
 
       context 'when creating a shipment request' do

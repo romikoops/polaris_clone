@@ -68,9 +68,13 @@ en:
       http_code: 400
       code: 1007
       message: "There are no departures for this timeframe."
-    invalid_cargo_unit:
+    hub_not_found:
       http_code: 400
       code: 1008
+      message: "Unable to locate the desired hub"
+    invalid_cargo_unit:
+      http_code: 400
+      code: 1009
       message: 'Cargo Units entered are invalid. Please reenter shipment data and if the problem persists, restart shipment.'
 
     # Pricing : Code prefix 2
@@ -94,14 +98,61 @@ en:
       http_code: 400
       code: 2005
       message: "There are no local charges valid for this timeframe."
-
     unavailable_local_charges:
       http_code: 400
-      code: 2003
+      code: 2006
       message: "
         The availability of this route is pending confirmation
         of the applicable local charges.
       "
+    calculation_error:
+      http_code: 400
+      code: 2007
+      message: "An error has occurred during calculation."
+    rate_builder_error:
+      http_code: 400
+      code: 2008
+      message: "An error has occurred collecting the rates."
+    no_pricings_found:
+      http_code: 400
+      code: 2009
+      message: "There are no pricings valid for this timeframe."
+    no_pre_carriage_found:
+      http_code: 400
+      code: 2010
+      message: "Unable to find any pre-carriage rates for your journey."
+    no_on_carriage_found:
+      http_code: 400
+      code: 2011
+      message: "Unable to find any on-carriage rates for your journey."
+    no_export_fees_found:
+      http_code: 400
+      code: 2012
+      message: "Unable to find any export fees for your journey."
+    no_import_fees_found:
+      http_code: 400
+      code: 2013
+      message: "Unable to find any import fees for your journey."
+    no_manipulated_pricings_found:
+      http_code: 400
+      code: 2014
+      message: "There are no pricings valid for this timeframe."
+    no_manipulated_pre_carriage_found:
+      http_code: 400
+      code: 2015
+      message: "Unable to find any pre-carriage rates for your journey."
+    no_manipulated_on_carriage_found:
+      http_code: 400
+      code: 2016
+      message: "Unable to find any on-carriage rates for your journey."
+    no_manipulated_export_fees_found:
+      http_code: 400
+      code: 2017
+      message: "Unable to find any export fees for your journey."
+    no_manipulated_import_fees_found:
+      http_code: 400
+      code: 2018
+      message: "Unable to find any import fees for your journey."
 
       # Trucking : Prefix 3
     missing_trucking_data:
@@ -118,52 +169,53 @@ en:
     #   code: 1004
     #   message: ""
 
-
+    # Admiralty Error prefix (7)
     invalid_remark:
       http_code: 400
-      code: 1008
+      code: 7008
       message: "Unable to build remark from user input."
     unable_to_delete_remark:
       http_code: 400,
-      code: 1009
+      code: 7009
       message: "Unable to delete requested remark."
     unable_to_update_emails:
       http_code: 400,
-      code: 1010
+      code: 7010
       message: "Unable to update shop emails."
     invalid_tenant:
       http_code: 400
-      code: 1011
+      code: 7011
       message: "Unable to update tenant"
 
     non_agent_user:
       http_code: 400
-      code: 1013
+      code: 7013
       message: "Current user is not an agent"
 
+      #Admin errors prefix (8)
     internal_error:
       http_code: 400
-      code: 1016
+      code: 8016
       message: "Something has gone wrong!"
     missing_modifier_keys:
       http_code: 400
-      code: 1017
+      code: 8017
       message: "Please check the sheet to make sure each column has a modifer key above it"
     not_logged_in:
       http_code: 400
-      code: 1018
+      code: 8018
       message: "Please sign in to continue with your booking request."
     shipment_not_found:
       http_code: 404
-      code: 1019
+      code: 8019
       message: "Shipment not found!"
     tenant_slug_taken:
       http_code: 409
-      code: 1020
+      code: 8020
       message: "The subdomain (slug) has already been taken"
     invalid_cargo:
       http_code: 400
-      code: 1022
+      code: 8022
 
 
     # Authentication Errors
@@ -261,3 +313,17 @@ en:
     uneditable_fee:
       code: 5001
       message: 'This fee is not available for editing.'
+
+    #General OfferCalculator errors
+    offer_builer:
+      code: 6001
+      message: 'An error has occurred building your offers'
+    no_valid_offers:
+      code: 6002
+      message: 'We were unable to build any valid offers. Try adjusting the date of departure'
+    invalid_shipment_error:
+      code: 6003
+      message: 'A problem occured building your shipment'
+    invalid_quotation_error:
+      code: 6004
+      message: 'A problem occured building your shipment'

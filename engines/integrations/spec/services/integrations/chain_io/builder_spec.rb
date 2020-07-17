@@ -11,7 +11,7 @@ module Integrations
         let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
         let(:profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
         let(:tender) { FactoryBot.create(:quotations_tender) }
-        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
+        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id) }
         let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user, sandbox: nil) }
         let(:shipment_request) { shipment_request_creator.create.shipment_request }
         let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
@@ -22,12 +22,11 @@ module Integrations
           profile
           ::Organizations.current_id = organization.id
           FactoryBot.create(:legacy_charge_breakdown, shipment: fcl_legacy_shipment, tender_id: tender.id)
-          FactoryBot.create(:cargo_cargo,
-                            quotation_id: tender.quotation_id,
-                            units:
-                              FactoryBot.create_list(:fcl_20_unit, 2, weight_value: 3000, volume_value: 1.3).concat(
-                                FactoryBot.create_list(:lcl_unit, 2)
-                              ))
+          FactoryBot.create(:cargo_cargo, quotation_id: tender.quotation_id).tap do |cargo|
+            FactoryBot.create_list(:fcl_20_unit, 2, weight_value: 3000, volume_value: 1.3, cargo: cargo).concat(
+              FactoryBot.create_list(:lcl_unit, 2, cargo: cargo)
+            )
+          end
           FactoryBot.create(:legacy_container, cargo_class: 'fcl_20', shipment: fcl_legacy_shipment)
           FactoryBot.create(:legacy_container, cargo_class: 'fcl_40', shipment: fcl_legacy_shipment)
         end
@@ -87,8 +86,8 @@ module Integrations
           end
 
           it 'has the correct package group' do
-            expect(json_shipment['package_group']).to match [{ description_of_goods: '', gross_weight_kgs: '6000.0', package_quantity: 2, volume_cbms: '1.344' },
-                                                             { description_of_goods: '', gross_weight_kgs: '6000.0', package_quantity: 2, volume_cbms: '1.344' }]
+            expect(json_shipment['package_group']).to match [{ description_of_goods: '', gross_weight_kgs: '500.0', package_quantity: 1, volume_cbms: '1.344' },
+                                                             { description_of_goods: '', gross_weight_kgs: '500.0', package_quantity: 1, volume_cbms: '1.344' }]
           end
         end
 

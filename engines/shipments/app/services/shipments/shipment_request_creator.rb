@@ -27,7 +27,7 @@ module Shipments
     def build_shipment_request
       @organization =  Organizations::Organization.find(legacy_shipment.organization_id)
       @shipment_request = ShipmentRequest.new(
-        tender_id: legacy_shipment.meta['tender_id'],
+        tender_id: legacy_shipment.tender_id,
         billing: legacy_shipment.billing,
         organization_id: organization.id,
         eta: legacy_shipment.planned_eta,

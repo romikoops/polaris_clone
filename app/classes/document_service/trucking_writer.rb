@@ -106,7 +106,7 @@ module DocumentService
         load_type: trucking_pricing.load_type,
         cargo_class: trucking_pricing.cargo_class,
         direction: trucking_pricing.carriage == 'pre' ? 'export' : 'import',
-        courier: Trucking::Courier.find(trucking_pricing['courier_id'])&.name
+        courier: trucking_pricing.tenant_vehicle&.name
       }
     end
 

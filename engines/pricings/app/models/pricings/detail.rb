@@ -13,7 +13,7 @@ module Pricings
       margin.get_pricing&.fees&.find_by(charge_category_id: charge_category_id)&.rate_basis&.external_code
     end
 
-    delegate :itinerary_name, to: :margin
+    delegate :itinerary_name, :target, :applicable, to: :margin
 
     def fee_code
       charge_category&.code

@@ -11,6 +11,10 @@ Measured::StowageFactor = Measured.build do
   unit 'm3/t'
 end
 
+Measured::Quantity = Measured.build do
+  unit 'pcs'
+end
+
 Measured::WeightMeasure = Measured.build do
   unit 't/m3'
 end

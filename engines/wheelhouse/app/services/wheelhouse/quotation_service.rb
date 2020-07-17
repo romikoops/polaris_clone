@@ -2,7 +2,12 @@
 
 module Wheelhouse
   class QuotationService
+    CARGO_ITEM_CARGO_CLASS = 'lcl'
+    CONAINER_CARGO_CLASS = 'fcl_20'
+    CARGO_ITEM_TYPE = "Pallet"
+
     attr_reader :estimated, :organization
+    include Wheelhouse::ErrorHandler
 
     def initialize(organization:, quotation_details:, shipping_info:)
       @user_id = quotation_details[:user_id]
@@ -28,37 +33,16 @@ module Wheelhouse
         sandbox: nil
       )
       offer_calculator.perform
-    rescue OfferCalculator::TruckingTools::LoadMeterageExceeded
-      raise ApplicationError::LoadMeterageExceeded
-    rescue OfferCalculator::Calculator::MissingTruckingData
-      raise ApplicationError::MissingTruckingData
-    rescue OfferCalculator::Calculator::InvalidPickupAddress
-      raise ApplicationError::InvalidPickupAddress
-    rescue OfferCalculator::Calculator::InvalidDeliveryAddress
-      raise ApplicationError::InvalidDeliveryAddress
-    rescue OfferCalculator::Calculator::InvalidLocalChargeResult
-      raise ApplicationError::InvalidLocalChargeResult
-    rescue OfferCalculator::Calculator::InvalidFreightResult
-      raise ApplicationError::InvalidFreightResult
-    rescue OfferCalculator::Calculator::NoDirectionsFound
-      raise ApplicationError::NoDirectionsFound
-    rescue OfferCalculator::Calculator::NoRoute
-      raise ApplicationError::NoRoute
-    rescue OfferCalculator::Calculator::InvalidRoutes
-      raise ApplicationError::InvalidRoutes
-    rescue OfferCalculator::Calculator::NoValidPricings
-      raise ApplicationError::NoValidPricings
-    rescue OfferCalculator::Calculator::NoValidSchedules
-      raise ApplicationError::NoValidSchedules
-    rescue OfferCalculator::Calculator::InvalidCargoUnit
-      raise ApplicationError::InvalidCargoUnit
+      offer_calculator.quotation
+    rescue OfferCalculator::Errors::Failure => error
+      handle_error(error: error)
     rescue ArgumentError
       raise ApplicationError::InternalError
     end
 
     def tenders
       result.tenders.map do |tender|
-        Wheelhouse::TenderDecorator.new(tender, context: { estimated: estimated })
+        Wheelhouse::TenderDecorator.new(tender, context: {estimated: estimated})
       end
     end
 
@@ -84,19 +68,19 @@ module Wheelhouse
 
     def default_trucking_params
       [
-        { carriage: :pre_carriage, hub: @origin },
-        { carriage: :on_carriage, hub: @destination }
+        {carriage: :pre_carriage, hub: @origin},
+        {carriage: :on_carriage, hub: @destination}
       ].each_with_object({}) do |carriage_hub, hash|
-        truck_type = @load_type == 'cargo_item' ? 'default' : 'chassis'
-        hash[carriage_hub[:carriage]] = { truck_type: carriage_hub[:hub][:nexus_id] ? '' : truck_type }
+        truck_type = @load_type == "cargo_item" ? "default" : "chassis"
+        hash[carriage_hub[:carriage]] = {truck_type: carriage_hub[:hub][:nexus_id] ? "" : truck_type}
       end
     end
 
     def cargo_units
       case @load_type
-      when 'cargo_item'
+      when "cargo_item"
         cargo_item_default
-      when 'container'
+      when "container"
         container_default
       end
     end
@@ -134,7 +118,7 @@ module Wheelhouse
           total_volume: 1,
           stackable: true,
           cargo_item_type_id: default_cargo_item_type&.id,
-          cargo_class: 'lcl',
+          cargo_class: CARGO_ITEM_CARGO_CLASS,
           dangerous_goods: false
         }]
       }
@@ -153,13 +137,13 @@ module Wheelhouse
         origin: origin,
         destination: destination,
         dedicated_pricings_only: dedicated_pricings_only
-      ).perform.first || 'fcl_20'
+      ).perform.first || CONAINER_CARGO_CLASS
     end
 
     def default_cargo_item_type
       org_cargo_item_types = Legacy::TenantCargoItemType.where(organization_id: @organization.id).select(:cargo_item_type_id)
       cargo_item_types = Legacy::CargoItemType.where(id: org_cargo_item_types)
-      cargo_item_types.find_by(description: 'Pallet') || cargo_item_types.take
+      cargo_item_types.find_by(description: CARGO_ITEM_TYPE) || cargo_item_types.take
     end
 
     def dedicated_pricings_only

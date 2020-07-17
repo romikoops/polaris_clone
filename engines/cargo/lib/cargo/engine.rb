@@ -3,6 +3,7 @@
 require 'measured-rails'
 require 'cargo/measured_units'
 
+require 'legacy'
 require 'organizations'
 
 module Cargo
