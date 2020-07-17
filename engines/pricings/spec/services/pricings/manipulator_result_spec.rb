@@ -83,6 +83,12 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.direction).to eq("export")
       end
     end
+
+    describe ".truck_type" do
+      it "returns the correct truck_type" do
+        expect(instance.truck_type).to eq("default")
+      end
+    end
   end
 
   context "with local charges" do

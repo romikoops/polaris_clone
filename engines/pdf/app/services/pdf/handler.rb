@@ -26,7 +26,7 @@ module Pdf
       @remarks               = args[:remarks]
       @cargo_units           = args[:cargo_units]
       @note_remarks          = args[:note_remarks]
-      @selected_offer        = args[:selected_offer]
+      @selected_offer = args[:selected_offer]
       @hide_cargo_sub_totals = false
       @content               = {}
       @has_legacy_charges = {}
@@ -42,12 +42,6 @@ module Pdf
       }
 
       @shipments << @shipment if @shipments.empty?
-      @quotes.each do |quote|
-        generate_fee_string(
-          quote: quote,
-          shipment: @shipments.find { |shipment| shipment.id == quote['shipment_id'] }
-        )
-      end
 
       @shipments.each do |s|
         calculate_cargo_data(s)
@@ -85,65 +79,6 @@ module Pdf
       @notes[shipment.id] = notes_association
                             .where(target: hubs | nexii | countries)
                             .or(notes_association.where(pricings_pricing_id: pricings.ids))
-    end
-
-    def generate_fee_string(quote:, shipment:)
-      charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: quote['trip_id'])
-      charge_breakdown.charges.where(detail_level: FEE_DETAIL_LEVEL).each do |charge|
-        charge_section_key = charge.parent&.charge_category&.code
-        charge_category = charge.children_charge_category
-        adjusted_key = extract_key(
-          section_key: charge_section_key,
-          key: charge_category.code,
-          mot: quote['mode_of_transport']
-        )
-        adjusted_name = extract_name(
-          section_key: charge_section_key,
-          name: charge_category.name,
-          mot: quote['mode_of_transport']
-        )
-        @fee_keys_and_names[charge_category.code] = determine_render_string(
-          key: adjusted_key,
-          name: adjusted_name
-        )
-      end
-
-      @fee_keys_and_names
-    end
-
-    def extract_key(section_key:, key:, mot:)
-      if section_key == 'cargo' && @scope['fine_fee_detail'] && key.include?('unknown')
-        "#{mot.capitalize} Freight"
-      elsif section_key == 'cargo' && @scope['fine_fee_detail'] && key.include?('included')
-        key.sub('included_', '')&.upcase.to_s
-      else
-        key.tr('_', ' ').upcase
-      end
-    end
-
-    def extract_name(section_key:, name:, mot:)
-      if section_key == 'cargo' && @scope['consolidated_cargo'] && mot == 'ocean'
-        'Ocean Freight'
-      elsif section_key == 'cargo' && @scope['consolidated_cargo']
-        'Consolidated Freight Rate'
-      elsif section_key == 'cargo' && !@scope['fine_fee_detail']
-        "#{mot&.capitalize} Freight Rate"
-      elsif %w[trucking_on trucking_pre].include?(section_key)
-        'Trucking Rate'
-      else
-        name
-      end
-    end
-
-    def determine_render_string(key:, name:)
-      case @scope['fee_detail']
-      when 'key'
-        key.tr('_', ' ').upcase
-      when 'key_and_name'
-        "#{key.upcase} - #{name}"
-      when 'name'
-        name
-      end
     end
 
     def calculate_cargo_data(shipment)
@@ -312,13 +247,11 @@ module Pdf
         pricing_data: @pricing_data,
         scope: @scope,
         cargo_units: @cargo_units,
-        hub_names: @hub_names,
         note_remarks: @note_remarks,
-        fee_keys_and_names: @fee_keys_and_names,
         shipper_profile: profile_for_user(user_id: @shipment.user_id),
-        selected_offer: @selected_offer,
         fees: @fees,
-        exchange_rates: exchange_rates
+        exchange_rates: exchange_rates,
+        selected_offer: @selected_offer
       }
     end
 

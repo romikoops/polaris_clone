@@ -30,6 +30,10 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyMeta do
       pre_carriage_carrier
       on_carriage_carrier
       exchange_rates
+      on_carriage_service
+      on_carriage_truck_type
+      pre_carriage_service
+      pre_carriage_truck_type
     ]
   end
 

@@ -5,14 +5,19 @@ require 'rails_helper'
 RSpec.describe Pdf::Service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:trip) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
+  let(:carrier) { FactoryBot.create(:legacy_carrier, code: 'saco', name: 'SACO') }
   let(:load_type) { 'cargo_item' }
   let!(:shipment) {
     FactoryBot.create(:complete_legacy_shipment,
       organization: organization,
       user: user,
+      trip: trip,
       load_type: load_type,
       with_breakdown: true,
-      with_tenders: true)
+      with_tenders: true,
+      with_full_breakdown: true)
   }
   let(:pdf_service) { described_class.new(organization: organization, user: user) }
   let(:default_args) do
@@ -22,6 +27,7 @@ RSpec.describe Pdf::Service do
       quotes: pdf_service.quotes_with_trip_id(nil, [shipment])
     }
   end
+  let(:scope_content) { { show_chargeable_weight: true } }
   let(:quotation) { FactoryBot.create(:legacy_quotation, user: user, load_type: load_type, original_shipment: shipment) }
   let(:klass) { described_class.new(organization: organization, user: user) }
 
@@ -29,7 +35,7 @@ RSpec.describe Pdf::Service do
     ::Organizations.current_id = organization.id
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png')
       .to_return(status: 200, body: '', headers: {})
-    FactoryBot.create(:organizations_scope, target: organization, content: { show_chargeable_weight: true })
+    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
     FactoryBot.create(:organizations_theme, organization: organization)
   end
 
@@ -203,10 +209,49 @@ RSpec.describe Pdf::Service do
       [shipment.charge_breakdowns.first.tender_id]
     end
 
-    it 'limits the quotes returned when tender ids are provided' do
-      quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
-      aggregate_failures do
-        expect(quotes.length).to eq(1)
+    context 'with default settings' do
+      it 'limits the quotes returned when tender ids are provided' do
+        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        aggregate_failures do
+          expect(quotes.length).to eq(1)
+          expect(quotes.dig(0, 'pre_carriage_service')).to eq('')
+        end
+      end
+    end
+
+    context 'with pickup carrier info settings' do
+      let(:scope_content) { { voyage_info: { pre_carriage_carrier: true } } }
+
+      it 'returns the carrier info in the correct format' do
+        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        aggregate_failures do
+          expect(quotes.length).to eq(1)
+          expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by SACO')
+        end
+      end
+    end
+
+    context 'with pickup service info settings' do
+      let(:scope_content) { { voyage_info: { pre_carriage_service: true } } }
+
+      it 'returns the carrier info in the correct format' do
+        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        aggregate_failures do
+          expect(quotes.length).to eq(1)
+          expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by standard')
+        end
+      end
+    end
+
+    context 'with pickup carrier and service info settings' do
+      let(:scope_content) { { voyage_info: { pre_carriage_service: true, pre_carriage_carrier: true } } }
+
+      it 'returns the carrier info in the correct format' do
+        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        aggregate_failures do
+          expect(quotes.length).to eq(1)
+          expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by SACO(standard)')
+        end
       end
     end
   end

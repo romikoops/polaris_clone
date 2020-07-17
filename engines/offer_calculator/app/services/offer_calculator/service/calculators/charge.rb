@@ -9,7 +9,7 @@ module OfferCalculator
 
         delegate :code, :name, to: :charge_category
         delegate :section, :load_type, :cargo_class, :validity, :itinerary_id, :tenant_vehicle_id,
-          :pricing_id, :stackability, :target, :charge_category, :object, to: :fee
+          :pricing_id, :stackability, :target, :charge_category, :truck_type, :object, to: :fee
 
         def initialize(value:, fee:, fee_component:)
           @value = value

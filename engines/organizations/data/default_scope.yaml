@@ -132,6 +132,10 @@ voyage_info:
   vessel: true
   service_level: true
   transshipmentVia: true
+  pre_carriage_carrier: false
+  pre_carriage_service: false
+  on_carriage_carrier: false
+  on_carriage_service: false
 side_nav:
   agent:
   - dashboard

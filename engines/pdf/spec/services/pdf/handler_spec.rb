@@ -43,72 +43,6 @@ RSpec.describe Pdf::Handler do
              })
     end
 
-    describe '.determine_render_string' do
-      it 'returns the key and name' do
-        scope.update(content: scope.content.merge(fee_detail: 'key_and_name'))
-        expect(klass.determine_render_string(key: 'BAS', name: 'Basic Ocean Freight')).to eq('BAS - Basic Ocean Freight')
-      end
-
-      it 'returns the key' do
-        scope.update(content: scope.content.merge(fee_detail: 'key'))
-        expect(klass.determine_render_string(key: 'BAS', name: 'Basic Ocean Freight')).to eq('BAS')
-      end
-
-      it 'returns the name' do
-        scope.update(content: scope.content.merge(fee_detail: 'name'))
-        expect(klass.determine_render_string(key: 'BAS', name: 'Basic Ocean Freight')).to eq('Basic Ocean Freight')
-      end
-    end
-
-    describe '.extract_key' do
-      it 'returns MOT Freight as key' do
-        result = klass.extract_key(section_key: 'cargo', key: 'unknown_bas', mot: 'ocean')
-        expect(result).to eq('Ocean Freight')
-      end
-
-      it 'returns the key without the _included' do
-        result = klass.extract_key(section_key: 'cargo', key: 'included_bas', mot: 'ocean')
-        expect(result).to eq('BAS')
-      end
-
-      it 'returns the key stripped of underscores and upcased' do
-        result = klass.extract_key(section_key: 'cargo', key: 'piracy_surcharge', mot: 'ocean')
-        expect(result).to eq('PIRACY SURCHARGE')
-      end
-    end
-
-    describe '.extract_name' do
-      it 'returns Trucking Rate as the name' do
-        scope.update(content: scope.content.merge(consolidated_cargo: false))
-        result = klass.extract_name(section_key: 'trucking_pre', name: 'Basic Trucking Freight', mot: 'ocean')
-        expect(result).to eq('Trucking Rate')
-      end
-
-      it 'returns Ocean Freight as the name' do
-        scope.update(content: scope.content.merge(consolidated_cargo: true))
-        result = klass.extract_name(section_key: 'cargo', name: 'Basic Ocean Freight', mot: 'ocean')
-        expect(result).to eq('Ocean Freight')
-      end
-
-      it 'returns Consolidated Freight Rate as the name' do
-        scope.update(content: scope.content.merge(consolidated_cargo: true))
-        result = klass.extract_name(section_key: 'cargo', name: 'Basic Trucking Freight', mot: 'depot')
-        expect(result).to eq('Consolidated Freight Rate')
-      end
-
-      it 'returns Ocean Freight Rate as the name' do
-        scope.update(content: scope.content.merge(fine_fee_detail: false))
-        result = klass.extract_name(section_key: 'cargo', name: 'Basic Ocean Freight', mot: 'ocean')
-        expect(result).to eq('Ocean Freight Rate')
-      end
-
-      it 'returns the key stripped of underscores and upcased' do
-        scope.update(content: scope.content.merge(fine_fee_detail: true, consolidated_cargo: false))
-        result = klass.extract_name(section_key: 'cargo', name: 'Basic Ocean Freight', mot: 'ocean')
-        expect(result).to eq('Basic Ocean Freight')
-      end
-    end
-
     describe '.calculate_cargo_data' do
       it 'returns a hash displaying chargeable weight in kg' do
         result = klass.calculate_cargo_data(shipment)
@@ -143,27 +77,6 @@ RSpec.describe Pdf::Handler do
         scope.update(content: scope.content.merge(chargeable_weight_view: ''))
         result = klass.calculate_cargo_data(agg_shipment)
         expect(result).to eq(200)
-      end
-    end
-
-    describe '.generate_fee_string' do
-      let(:charge_shipment) {
-        FactoryBot.create(:legacy_shipment,
-          with_breakdown: true,
-          organization: organization,
-          with_tenders: true
-        )
-      }
-      let(:quotes) { pdf_service.quotes_with_trip_id(quotation: nil, shipments: [charge_shipment]) }
-      let(:string_klass) { described_class.new(default_args.merge(quotes: quotes, shipment: charge_shipment)) }
-
-      before do
-        FactoryBot.create(:organizations_theme, organization: organization)
-      end
-
-      it 'returns MOT Freight as key' do
-        result = string_klass.generate_fee_string(quote: quotes.first, shipment: charge_shipment)
-        expect(result).to eq('bas' => 'BAS - Basic Freight')
       end
     end
   end

@@ -43,9 +43,18 @@ module OfferCalculator
             service_level: freight_tenant_vehicle.name,
             carrier_name: freight_tenant_vehicle.carrier&.name,
             origin_hub: itinerary.origin_hub,
-            tenant_vehicle_id: freight_tenant_vehicle.id,
-            pre_carriage_carrier: pre_carriage_tenant_vehicle&.name,
-            on_carriage_carrier: on_carriage_tenant_vehicle&.name
+            tenant_vehicle_id: freight_tenant_vehicle.id
+          }.merge(trucking_info)
+        end
+
+        def trucking_info
+          {
+            pre_carriage_carrier: pre_carriage_tenant_vehicle&.carrier&.name,
+            on_carriage_carrier: on_carriage_tenant_vehicle&.carrier&.name,
+            pre_carriage_service: pre_carriage_tenant_vehicle&.name,
+            on_carriage_service: on_carriage_tenant_vehicle&.name,
+            pre_carriage_truck_type: offer.truck_type(carriage: "pre"),
+            on_carriage_truck_type: offer.truck_type(carriage: "on")
           }
         end
 

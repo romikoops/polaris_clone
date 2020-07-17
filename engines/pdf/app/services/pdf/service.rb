@@ -92,9 +92,6 @@ module Pdf
     end
 
     def wheelhouse_quotation(shipment:, tenders:)
-      existing_document = existing_document(shipment: shipment, type: 'quotation')
-      return existing_document if existing_document
-
       object = shipment
       shipments = [shipment]
       quotes = quotes_with_trip_id(
@@ -103,7 +100,7 @@ module Pdf
         admin: true,
         tender_ids: tenders.pluck(:id)
       )
-      note_remarks = get_note_remarks(quotes.first['trip_id'])
+      note_remarks = get_note_remarks(quotes.dig(0, 'trip_id'))
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: shipments,
@@ -171,21 +168,10 @@ module Pdf
     end
 
     def offer_manipulation_block(charge_breakdown:, shipment:, trip: nil, admin: false)
-      hidden_args = hidden_value_args(admin: admin)
-      trip = charge_breakdown.trip if trip.nil?
-      origin_hub = Legacy::HubDecorator.new(trip.itinerary.first_stop.hub, context: {scope: scope})
-      destination_hub = Legacy::HubDecorator.new(trip.itinerary.last_stop.hub, context: {scope: scope})
       tender = charge_breakdown.tender
-      charge_breakdown.to_nested_hash(hidden_args).merge(
-        offer_merge_data(
-          trip: trip,
-          shipment: shipment,
-          origin_hub: origin_hub,
-          destination_hub: destination_hub
-        ).merge(
-          fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope, type: :pdf).perform,
-          currency: tender.amount_currency
-        )
+      offer_merge_data(tender: tender, shipment: shipment).merge(
+        fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope, type: :pdf).perform,
+        currency: tender.amount_currency
       ).deep_stringify_keys
     end
 
@@ -233,6 +219,8 @@ module Pdf
     private
 
     def get_note_remarks(trip_id)
+      return [] if trip_id.nil?
+
       trip = Legacy::Trip.find(trip_id)
       start_date = trip.start_date || OfferCalculator::Schedule.quote_trip_start_date
       end_date = trip.end_date || OfferCalculator::Schedule.quote_trip_end_date
@@ -247,34 +235,73 @@ module Pdf
                       .pluck(:body)
     end
 
-    def offer_merge_data(trip:, shipment:, origin_hub:, destination_hub:)
+    def offer_merge_data(tender:, shipment:)
+      tender_merge_data(tender: tender)
+        .merge(shipment_merge_data(shipment: shipment))
+        .merge(trucking_information(tender: tender))
+        .merge(routing_merge_data(tender: tender))
+    end
+
+    def tender_merge_data(tender:)
       {
-        trip_id: trip.id,
-        origin: origin_hub.name,
-        destination: destination_hub.name,
-        origin_free_out: origin_hub.free_out,
-        destination_free_out: destination_hub.free_out,
-        pickup_address: shipment.pickup_address&.full_address,
-        delivery_address: shipment.delivery_address&.full_address,
-        mode_of_transport: trip.itinerary.mode_of_transport,
-        valid_until: shipment.valid_until(trip),
-        imc_reference: shipment.imc_reference,
-        shipment_id: shipment.id,
-        load_type: shipment.lcl? ? 'cargo_item' : 'container',
-        carrier: trip.tenant_vehicle.carrier&.name&.upcase,
-        service_level: trip.tenant_vehicle.name,
-        transshipment: transshipment(trip: trip),
+        mode_of_transport: tender.mode_of_transport,
+        valid_until: tender.charge_breakdown.valid_until,
+        load_type: tender.load_type,
+        carrier: tender.tenant_vehicle.carrier&.name&.upcase,
+        service_level: tender.tenant_vehicle.name,
+        transshipment: tender.itinerary.transshipment,
         transit_time: ::Legacy::TransitTime.find_by(
-          tenant_vehicle: trip.tenant_vehicle,
-          itinerary: trip.itinerary
+          tenant_vehicle: tender.tenant_vehicle,
+          itinerary: tender.itinerary
         )&.duration
       }
     end
 
-    def transshipment(trip:)
-      ::Pricings::Pricing
-        .find_by(itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id)
-         &.transshipment
+    def routing_merge_data(tender:)
+      origin_hub = Legacy::HubDecorator.new(tender.origin_hub, context: {scope: scope})
+      destination_hub = Legacy::HubDecorator.new(tender.destination_hub, context: {scope: scope})
+      {
+        trip_id: tender.charge_breakdown.trip_id,
+        origin: origin_hub.name,
+        destination: destination_hub.name,
+        origin_free_out: origin_hub.free_out,
+        destination_free_out: destination_hub.free_out
+      }
+    end
+
+    def shipment_merge_data(shipment:)
+      {
+        imc_reference: shipment.imc_reference,
+        shipment_id: shipment.id
+      }
+    end
+
+    def trucking_information(tender:)
+      {
+        pre_carriage_service: carriage_service_string(tender: tender, carriage: 'pre'),
+        on_carriage_service: carriage_service_string(tender: tender, carriage: 'on'),
+        pickup_address: tender.pickup_address&.full_address,
+        delivery_address: tender.delivery_address&.full_address
+      }
+    end
+
+    def carriage_service_string(tender:, carriage:)
+      voyage_info = scope.dig(:voyage_info)
+      carrier_key = "#{carriage}_carriage_carrier"
+      service_key = "#{carriage}_carriage_service"
+      return '' if voyage_info.slice(service_key, carrier_key).values.none?
+
+      service = carriage == 'pre' ? tender.pickup_tenant_vehicle : tender.delivery_tenant_vehicle
+      operator = if voyage_info.slice(service_key, carrier_key).values.all?
+        "#{service&.carrier&.name}(#{service&.name})"
+      elsif voyage_info.dig(service_key)
+        service&.name
+      elsif voyage_info.dig(carrier_key)
+        service&.carrier&.name
+      else
+        ''
+      end
+      "operated by #{operator}"
     end
 
     def create_file(object:, file:, user:, shipments: [], sandbox: nil)

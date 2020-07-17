@@ -108,14 +108,27 @@
                 <%= quote['service_level'] %>
               </p>
             <% end %>
+
           </div>
         </div>
         <% if quote['pickup_address'] || quote['delivery_address'] %>
           <div class="delivery-info">
-            <div class="cargo-info">
-              <% if quote['pickup_address'].present? %> <p> <b> Pickup from</b>: <%=  quote['pickup_address'] %> </p> <% end %>
-              <% if quote['delivery_address'].present? %> <p> <b> Delivery to</b>: <%=  quote['delivery_address']  %></p>  <% end %>
-            </div>
+ 
+              <% if quote['pickup_address'].present? %>
+                <p> 
+                  <b> Pickup from</b>: 
+                  <%=  quote['pickup_address'] %>
+                  <%= quote['pre_carriage_service'] %>
+                </p>
+              <% end %>
+              <% if quote['delivery_address'].present? %>
+                <p> 
+                  <b> Delivery to</b>: 
+                  <%=  quote['delivery_address']  %>
+                  <%=  quote['on_carriage_service']  %>
+                </p>
+              <% end %>
+ 
           </div>
         <% end %>
       </div>

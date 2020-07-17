@@ -33,6 +33,8 @@ FactoryBot.define do
         charge_breakdown.tender = tender
       end
       evaluator.sections.each do |section|
+        tender.update(pickup_tenant_vehicle: tender.tenant_vehicle) if section == "trucking_pre"
+        tender.update(delivery_tenant_vehicle: tender.tenant_vehicle) if section == "trucking_on"
         section_charge_category = Legacy::ChargeCategory.find_by(
           code: section,
           organization_id: shipment.organization_id

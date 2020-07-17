@@ -81,6 +81,12 @@ module Pricings
       result.dig("expiration_date")
     end
 
+    def truck_type
+      return unless original.is_a? Trucking::Trucking
+
+      original.truck_type
+    end
+
     private
 
     def initial_breakdowns

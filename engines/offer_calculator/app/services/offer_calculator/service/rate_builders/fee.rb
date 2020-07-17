@@ -11,7 +11,8 @@ module OfferCalculator
 
         delegate :code, to: :charge_category
         delegate :object, :stackability, to: :measures
-        delegate :section, :load_type, :cargo_class, :validity, :itinerary_id, :tenant_vehicle_id, to: :object
+        delegate :section, :load_type, :cargo_class, :validity, :itinerary_id,
+          :tenant_vehicle_id, :truck_type, to: :object
 
         def initialize(inputs:)
           @components = []

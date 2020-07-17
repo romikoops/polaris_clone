@@ -488,18 +488,28 @@ class ShippingTools
 
   def save_pdf_quotes(shipment, organization, schedules, sandbox = nil)
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
-    main_quote = QuotedShipmentsService.new(shipment: shipment, trip_ids: trip_ids).perform
+    tenders = shipment.charge_breakdowns
+                      .where(trip_id: trip_ids)
+                      .pluck(:tender_id)
+                      .map { |id| { id: id } }
+    main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     send_on_download = ::OrganizationManager::ScopeService.new(
       target: shipment.user
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    Pdf::Service.new(user: shipment.user, organization: organization).quotation_pdf(quotation: main_quote)
+    Wheelhouse::PdfService.new(tenders: tenders).download
   end
 
   def save_and_send_quotes(shipment, schedules, email, sandbox = nil)
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
-    main_quote = QuotedShipmentsService.new(shipment: shipment, trip_ids: trip_ids).perform
-    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote, sandbox).deliver_later
+    main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
+    QuoteMailer.quotation_email(
+      shipment,
+      main_quote.shipments.where(trip_id: trip_ids).to_a,
+      email,
+      main_quote,
+      sandbox
+    ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
       target: shipment.user,
     ).fetch(:send_email_on_quote_email)

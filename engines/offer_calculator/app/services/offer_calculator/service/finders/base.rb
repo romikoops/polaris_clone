@@ -18,6 +18,7 @@ module OfferCalculator
           @hierarchy = ::OrganizationManager::HierarchyService.new(target: @user).fetch.select { |target|
             target.is_a?(Groups::Group)
           }
+          raise OfferCalculator::Errors::NoValidSchedules if schedules.empty?
         end
 
         private

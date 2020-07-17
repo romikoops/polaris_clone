@@ -57,6 +57,14 @@ module OfferCalculator
 
           Legacy::TenantVehicle.find_by(id: target.first.tenant_vehicle_id)
         end
+
+        def truck_type(carriage:)
+          target = section(key: "trucking_#{carriage}")
+
+          return if target.blank?
+
+          target.first.truck_type
+        end
       end
     end
   end
