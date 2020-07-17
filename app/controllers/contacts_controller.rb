@@ -14,15 +14,10 @@ class ContactsController < ApplicationController
   end
 
   def show
-    contact = Contact.find_by(id: params[:id], sandbox: @sandbox)
-    scs = contact.shipment_contacts.where(sandbox: @sandbox)
-    shipments = []
-    scs.each do |s|
-      tmp_shipment = s.shipment
-      next unless tmp_shipment
-
-      shipments.push(tmp_shipment.with_address_index_json)
-    end
+    contact = Legacy::Contact.find(params[:id])
+    shipments = Legacy::ShipmentDecorator.decorate_collection(
+      Legacy::Shipment.where(id: contact.shipment_contacts.select(:shipment_id))
+    ).map(&:legacy_address_json)
     address = contact.address
     response_handler(contact: contact, shipments: shipments, address: address.to_custom_hash)
   end

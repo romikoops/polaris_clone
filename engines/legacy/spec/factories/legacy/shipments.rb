@@ -115,9 +115,22 @@ FactoryBot.define do
       end
     end
 
+    trait :completed do
+      transient do
+        with_breakdown { true }
+        with_full_breakdown { false }
+        with_tenders { true }
+        with_aggregated_cargo { false }
+      end
+
+      after(:create) do |shipment|
+        shipment.update(trip: shipment.charge_breakdowns.first.trip)
+      end
+    end
+
     factory :complete_legacy_shipment, traits: %i[with_contacts with_hubs]
     factory :legacy_shipment_without_notifyee, traits: %i[without_notifyee with_hubs]
-    factory :completed_legacy_shipment, traits: %i[with_contacts with_hubs with_meta]
+    factory :completed_legacy_shipment, traits: %i[with_contacts with_hubs with_meta completed]
   end
 end
 

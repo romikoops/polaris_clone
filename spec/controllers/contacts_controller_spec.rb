@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe ContactsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { create(:organizations_user, organization: organization) }
-  let!(:contacts) { create_list(:contact, 5, user: user) }
+  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
+  let!(:contacts) { create_list(:legacy_contact, 5, user: user) }
 
   before do
     append_token_header
@@ -80,6 +80,32 @@ RSpec.describe ContactsController do
       post :create, params: contact_params
 
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #show' do
+    let(:contact) { contacts.first }
+    let(:shipment_user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let(:shipment) { FactoryBot.create(:completed_legacy_shipment, organization: organization, user: shipment_user) }
+
+    before { FactoryBot.create(:legacy_shipment_contact, shipment: shipment, contact: contact) }
+
+    it 'returns http success' do
+      get :show, params: { organization_id: user.organization_id, id: contact.id }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json.dig(:data, :shipments).count).to eq 1
+        expect(json.dig(:data, :contact, :id)).to eq contact.id
+      end
+    end
+
+    it 'returns http not found if no contact' do
+      get :show, params: { organization_id: user.organization_id, id: 'dkfhskjfh' }
+
+      aggregate_failures do
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 end
