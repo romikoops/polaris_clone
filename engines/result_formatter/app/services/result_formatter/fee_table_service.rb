@@ -47,7 +47,9 @@ module ResultFormatter
           chargeCategoryId: charge_category&.id
         )
         @rows << section_row
-        create_cargo_section_rows(row: section_row, items: items)
+        if scope.dig(:quote_card, :sections, section.gsub("_section", ""))
+          create_cargo_section_rows(row: section_row, items: items)
+        end
       end
     end
 

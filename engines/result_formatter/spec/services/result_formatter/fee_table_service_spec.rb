@@ -210,7 +210,14 @@ module ResultFormatter
                 import
                 export
                 trucking_pre
-              ]
+              ],
+              sections: {
+                trucking_on: true,
+                cargo: true,
+                import: true,
+                export: true,
+                trucking_pre: true
+              }
             },
             fee_detail: "name"
           }
@@ -243,6 +250,55 @@ module ResultFormatter
             expect(results.length).to eq(16)
             expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+          end
+        end
+      end
+
+      context "with collapsed sections" do
+        let(:custom_scope) do
+          {
+            quote_card: {
+              order: %w[
+                trucking_on
+                cargo
+                import
+                export
+                trucking_pre
+              ],
+              sections: {
+                trucking_on: false,
+                cargo: true,
+                import: true,
+                export: true,
+                trucking_pre: false
+              }
+            },
+            fee_detail: "name"
+          }
+        end
+        let(:load_type) { "cargo_item" }
+        let(:results) { klass.perform }
+        let(:expected_descriptions) do
+          [
+            nil,
+            "Trucking on",
+            "Cargo",
+            "1 x Pallet",
+            "Basic Freight",
+            "Import",
+            "1 x Pallet",
+            "Basic Freight",
+            "Export",
+            "1 x Pallet",
+            "Basic Freight",
+            "Trucking pre"
+          ]
+        end
+
+        it "returns rows for each level of charge table" do
+          aggregate_failures do
+            expect(results.length).to eq(12)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
           end
         end
       end
