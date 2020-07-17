@@ -1,4 +1,5 @@
 class TruckingMigrationJob < ApplicationJob
+  concurrency 1, drop: false
   queue_as :default
 
   def perform(organization_id:) # rubocop:disable Metrics/MethodLength

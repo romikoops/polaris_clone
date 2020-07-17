@@ -778,6 +778,10 @@ GEM
     activejob (5.2.2)
       activesupport (= 5.2.2)
       globalid (>= 0.3.6)
+    activejob-traffic_control (0.1.3)
+      activejob (>= 4.2)
+      activesupport (>= 4.2)
+      suo
     activemodel (5.2.2)
       activesupport (= 5.2.2)
     activemodel-serializers-xml (1.0.2)
@@ -1355,6 +1359,10 @@ GEM
       rubocop-performance (~> 1.5.2)
     strong_migrations (0.6.2)
       activerecord (>= 5)
+    suo (0.3.4)
+      dalli
+      msgpack
+      redis
     table_print (1.5.6)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -1390,6 +1398,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activejob-traffic_control
   activerecord-import
   activerecord-postgis-adapter (~> 5.2.2)
   activestorage-cascade (~> 0.1.1)

@@ -53,10 +53,11 @@ gem "aws-sdk-sqs", "~> 1.30.0"
 gem "font-awesome-rails"
 
 # Background jobs
+gem "activejob-traffic_control"
 gem "shoryuken", "~> 5.0.1"
 gem "sidekiq", "~> 6.1"
-gem "sidekiq_alive"
 gem "sidekiq-failures"
+gem "sidekiq_alive"
 
 # PDF generation
 gem "pdfkit"

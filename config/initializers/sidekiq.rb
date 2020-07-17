@@ -1,3 +1,6 @@
+# ActiveJob
+ActiveJob::TrafficControl.client = ConnectionPool.new(size: 5, timeout: 5) { Redis.new }
+
 require "prometheus_exporter/instrumentation"
 
 Sidekiq.configure_server do |config|
