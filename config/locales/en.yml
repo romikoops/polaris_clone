@@ -315,7 +315,7 @@ en:
       message: 'This fee is not available for editing.'
 
     #General OfferCalculator errors
-    offer_builer:
+    offer_builder:
       code: 6001
       message: 'An error has occurred building your offers'
     no_valid_offers:
