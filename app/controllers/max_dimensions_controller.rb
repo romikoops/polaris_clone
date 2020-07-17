@@ -19,7 +19,7 @@ class MaxDimensionsController < ApplicationController
 
   def default_max_dimensions(aggregate:)
     dimensions = Legacy::MaxDimensionsBundle.where(organization_id: current_organization.id)
-    aggregate ? dimensions.aggregate.to_max_dimensions_hash : dimensions.to_max_dimensions_hash
+    aggregate ? dimensions.aggregate.to_max_dimensions_hash : dimensions.unit.to_max_dimensions_hash
   end
 
   def max_dimensions(aggregate:)

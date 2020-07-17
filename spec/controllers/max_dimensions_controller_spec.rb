@@ -39,9 +39,17 @@ RSpec.describe MaxDimensionsController, type: :controller do
       end
     end
 
-    context 'without carrier mdbs but itinerary ids provided' do
+    context 'without carrier mdbs but itinerary ids and service provided' do
+      let(:params) {
+        {
+          organization_id: organization.id,
+          itinerary_ids: [itinerary.id].join(','),
+          tenant_vehicle: tenant_vehicle
+        }
+      }
+
       it 'returns the default max dimensions' do
-        get :index, params: { organization_id: organization.id, itinerary_ids: [itinerary.id].join(',') }
+        get :index, params: params
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(response_data['maxDimensions']).to eq(default_max_dimensions)
@@ -50,9 +58,32 @@ RSpec.describe MaxDimensionsController, type: :controller do
       end
     end
 
+    context 'without unit limits but filters provided' do
+      let!(:max_dimensions) { nil }
+      let(:params) {
+        {
+          organization_id: organization.id,
+          itinerary_ids: [itinerary.id].join(','),
+          tenant_vehicle: tenant_vehicle
+        }
+      }
+
+      it 'returns the default max dimensions' do
+        get :index, params: params
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(response_data['maxDimensions']).to eq({})
+          expect(response_data['maxAggregateDimensions']).to eq(default_max_agg_dimensions)
+        end
+      end
+    end
+
     context 'with carrier mdbs' do
       before do
-        FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle: tenant_vehicle, itinerary: itinerary)
+        FactoryBot.create(:lcl_pricing,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle,
+          itinerary: itinerary)
       end
 
       let!(:carrier_mdb) {
@@ -75,7 +106,10 @@ RSpec.describe MaxDimensionsController, type: :controller do
 
     context 'with tenant_vehicle mdbs' do
       before do
-        FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle: tenant_vehicle, itinerary: itinerary)
+        FactoryBot.create(:lcl_pricing,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle,
+          itinerary: itinerary)
       end
 
       let!(:tenant_vehicle_mdb) {
