@@ -22,9 +22,9 @@ class QuoteMailer < ApplicationMailer
     @theme = @org_theme.legacy_format
     @email = email[/[^@]+/]
     @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
-
+    mot = @quotes.dig(0, 'mode_of_transport') || 'ocean'
     @mot_icon = URI.open(
-      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{mot}.png"
     ).read
 
     pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
@@ -107,6 +107,6 @@ class QuoteMailer < ApplicationMailer
   end
 
   def invalid_records(shipments:)
-    shipments.any?(&:deleted?)
+    shipments.any?(&:deleted?) || shipments.any?(&:destroyed?)
   end
 end
