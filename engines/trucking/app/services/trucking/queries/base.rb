@@ -115,31 +115,31 @@ module Trucking
       end
 
       def truck_type_condition
-        @truck_type ? { truck_type: @truck_type } : {}
+        @truck_type.present? ? { truck_type: @truck_type } : {}
       end
 
       def group_condition
-        @groups ? { group_id: @groups.ids | [nil] } : {}
+        @groups.present? ? { group_id: @groups.ids | [nil] } : {}
       end
 
       def cargo_class_condition
-        @cargo_classes ? { cargo_class: @cargo_classes } : {}
+        @cargo_classes.present? ? { cargo_class: @cargo_classes } : {}
       end
 
       def load_type_condition
-        @load_type ? { load_type: @load_type } : {}
+        @load_type.present? ? { load_type: @load_type } : {}
       end
 
       def carriage_condition
-        @carriage ? { carriage: @carriage } : {}
+        @carriage.present? ? { carriage: @carriage } : {}
       end
 
       def nexuses_condition
-        @nexus_ids ? { 'hubs.nexus_id': @nexus_ids } : {}
+        @nexus_ids.present? ? { 'hubs.nexus_id': @nexus_ids } : {}
       end
 
       def hubs_condition
-        @hub_ids ? { organization_id: @organization_id, id: @hub_ids } : { organization_id: @organization_id }
+        @hub_ids.present? ? { organization_id: @organization_id, id: @hub_ids } : { organization_id: @organization_id }
       end
 
       def trucking_location_where_statement
