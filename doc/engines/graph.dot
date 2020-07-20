@@ -121,6 +121,7 @@ digraph G {
     "cargo" [shape=ellipse];
     "cargo" -> "core" [color=grey];
     "cargo" -> "organizations" [color=grey];
+    "cargo" -> "organization_manager" [color=grey];
     "cargo" -> "legacy" [color=grey];
     "quotations" [shape=ellipse];
     "quotations" -> "cargo" [color=grey];

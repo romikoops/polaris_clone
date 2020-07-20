@@ -5,6 +5,7 @@ require 'cargo/measured_units'
 
 require 'legacy'
 require 'organizations'
+require 'organization_manager'
 
 module Cargo
   class Engine < ::Rails::Engine

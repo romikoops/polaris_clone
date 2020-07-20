@@ -18,8 +18,12 @@ module OfferCalculator
         end
 
         def currency_for_user
+          @scope = ::OrganizationManager::ScopeService.new(
+            organization: Organizations::Organization.current
+          ).fetch
+
           Users::Settings.find_by(user_id: shipment.user_id)&.currency ||
-            Organizations::Organization.current.scope&.content&.dig("default_currency")
+            @scope.fetch(:default_currency)
         end
       end
     end

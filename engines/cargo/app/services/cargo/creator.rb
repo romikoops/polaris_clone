@@ -13,6 +13,10 @@ module Cargo
       @errors = []
       @quotation = quotation
       @organization = legacy_shipment.organization
+      @scope = ::OrganizationManager::ScopeService.new(
+        target: legacy_shipment.user,
+        organization: @organization
+      )
       @cargo = ::Cargo::Cargo.new(
         quotation_id: quotation&.id,
         organization: organization,
@@ -40,7 +44,7 @@ module Cargo
       @shipment_total_goods_currency ||=
         legacy_shipment.total_goods_value&.dig("currency") ||
         Users::Settings.find_by(user_id: legacy_shipment.user_id)&.currency ||
-        organization.scope.content.dig("default_currency")
+        @scope.fetch(:default_currency)
     end
 
     def cargo_units

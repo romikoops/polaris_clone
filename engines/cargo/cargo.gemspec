@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   # Internal Engines
   s.add_dependency "imc-core"
   s.add_dependency "imc-organizations"
+  s.add_dependency "imc-organization_manager"
   s.add_dependency "imc-legacy"
 
   Gemhelper.common(s)

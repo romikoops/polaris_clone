@@ -191,6 +191,7 @@ PATH
       config (~> 2.2)
       imc-core
       imc-legacy
+      imc-organization_manager
       imc-organizations
       measured-rails
       money-rails
