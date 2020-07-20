@@ -28,13 +28,13 @@ module Api
         org_id = params[:organization_id] if params[:organization_id]
 
         org_id ||= begin
-          domains = [
+          domain = [
             URI(request.referer.to_s).host,
             request.host,
             ENV.fetch("DEFAULT_TENANT") { "demo.local" }
-          ]
+          ].find { |domain| Organizations::Domain.exists?(domain: domain) }
 
-          Organizations::Domain.where(domain: domains).pluck(:organization_id).first
+          Organizations::Domain.where(domain: domain).pluck(:organization_id).first
         end
 
         org_id
