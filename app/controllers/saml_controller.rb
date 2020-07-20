@@ -96,4 +96,24 @@ class SamlController < ApplicationController
   def set_current_organization
     Organizations.current_id = organization.id
   end
+
+  def organization_id
+    return @organization_id if defined?(@organization_id)
+
+    @organization_id ||= begin
+      org_id = params[:organization_id] if params[:organization_id]
+
+      org_id ||= begin
+        domains = [
+          URI(request.referer.to_s).host,
+          request.host,
+          ENV.fetch("DEFAULT_TENANT") { "demo.local" }
+        ]
+
+        Organizations::Domain.where(domain: domains).pluck(:organization_id).first
+      end
+
+      org_id
+    end
+  end
 end
