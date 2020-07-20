@@ -65,7 +65,7 @@ class DatabaseReloader # rubocop:disable Rails/Output
     attr_reader :profile, :date, :seed_file
 
     def stale?
-      seed_file.exist? && seed_file.mtime < seed_object.last_modified
+      (seed_file.exist? && seed_file.mtime < seed_object.last_modified) || !seed_file.exist?
     end
 
     def stale_seed?
