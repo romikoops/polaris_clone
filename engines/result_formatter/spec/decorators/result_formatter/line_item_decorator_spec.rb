@@ -49,6 +49,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
     end
 
     context "when trucking" do
+      let(:charge_category) { FactoryBot.create(:legacy_charge_categories, :trucking_lcl) }
       let(:line_item) { FactoryBot.create(:quotations_line_item, charge_category: charge_category, section: 1) }
 
       it "decorates the line item with the correct name" do

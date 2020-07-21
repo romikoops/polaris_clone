@@ -16,11 +16,7 @@ module OfferCalculator
 
         def perform
           offer.sections.each do |section_charges|
-            if section_charges.first.section.include?("trucking")
-              build_trucking_section(section_charges: section_charges)
-            else
-              build_section(section_charges: section_charges)
-            end
+            build_section(section_charges: section_charges)
           end
           charge_breakdown
         end
@@ -65,28 +61,10 @@ module OfferCalculator
           end
         end
 
-        def build_trucking_section(section_charges:)
-          section_charge = build_section_charge(charges: section_charges)
-          section_charges.group_by(&:cargo).values.each do |charges|
-            cargo_charge = build_trucking_cargo_charge(fees: charges, section_charge: section_charge)
-            build_child_charges(fees: charges, cargo_charge: cargo_charge)
-          end
-        end
-
         def build_cargo_charge(fees:, section_charge:, target:)
           Legacy::Charge.create(
             charge_category: section_charge.children_charge_category,
             children_charge_category: cargo_charge_category(target: target),
-            charge_breakdown: charge_breakdown,
-            parent: section_charge,
-            price: price_from_fees_in_user_currency(fees: fees)
-          )
-        end
-
-        def build_trucking_cargo_charge(fees:, section_charge:)
-          Legacy::Charge.create(
-            charge_category: section_charge.children_charge_category,
-            children_charge_category: trucking_cargo_charge_category(fee: fees.first),
             charge_breakdown: charge_breakdown,
             parent: section_charge,
             price: price_from_fees_in_user_currency(fees: fees)
@@ -138,15 +116,8 @@ module OfferCalculator
           )
         end
 
-        def trucking_cargo_charge_category(fee:)
-          Legacy::ChargeCategory.from_code(
-            code: fee.cargo ? "trucking_#{fee.cargo_class}" : "shipment",
-            organization_id: shipment.organization_id
-          )
-        end
-
         def legacy_cargo_code_and_id(target:)
-          if target.nil?
+          if target.nil? || target.is_a?(Cargo::Cargo)
             ["shipment", nil]
           else
             legacy_cargo = legacy_cargo_from_target(target: target)

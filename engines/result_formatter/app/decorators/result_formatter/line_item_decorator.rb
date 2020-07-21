@@ -51,8 +51,6 @@ module ResultFormatter
         "Consolidated Freight Rate"
       elsif section == "cargo_section" && !scope["fine_fee_detail"]
         "#{mode_of_transport&.capitalize} Freight Rate"
-      elsif %w[trucking_on_section trucking_pre_section].include?(section)
-        "Trucking Rate"
       else
         name
       end

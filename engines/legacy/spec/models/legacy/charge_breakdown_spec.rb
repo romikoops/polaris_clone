@@ -96,7 +96,7 @@ module Legacy
             { 'total' => { 'value' => 0.999e1, 'currency' => 'EUR' },
               'edited_total' => nil,
               'name' => 'Container',
-              'bas' => { 'currency' => 'EUR', 'sandbox_id' => nil, 'value' => 0.999e1, 'name' => 'Basic Freight' } } },
+              'bas' => { 'currency' => 'EUR', 'sandbox_id' => nil, 'value' => 0.999e1, 'name' => 'Basic Ocean Freight' } } },
             'trip_id' => 2107
           }
 

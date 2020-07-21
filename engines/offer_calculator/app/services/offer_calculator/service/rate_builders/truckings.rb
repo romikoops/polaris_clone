@@ -41,11 +41,7 @@ module OfferCalculator
         delegate :scope, to: :measures
 
         def trucking_charge_category(target_measure:)
-          code = if target_measure.cargo.lcl?
-            target_measure.stackability ? "stackable" : "non_stackable"
-          else
-            "#{target_measure.load_type}_#{target_measure.cargo.legacy_id}"
-          end
+          code = "trucking_#{target_measure.cargo_class}"
           ::Legacy::ChargeCategory.from_code(
             organization_id: object.organization.id,
             code: code

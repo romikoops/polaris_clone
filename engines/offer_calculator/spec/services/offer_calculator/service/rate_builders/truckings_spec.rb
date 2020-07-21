@@ -10,7 +10,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
   let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, organization: organization, cbm_ratio: cbm_ratio) }
   let(:cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let!(:puf_charge_category) { FactoryBot.create(:puf_charge, organization: organization) }
-  let!(:trucking_lcl_charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: "non_stackable") }
+  let!(:trucking_lcl_charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: "trucking_lcl") }
   let(:puf_original_fee) { trucking_pricing.fees["PUF"] }
   let(:trucking_original_fee) { trucking_pricing.rates.dig("kg", 0, "rate") }
   let(:scope) { {} }

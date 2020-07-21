@@ -80,6 +80,14 @@ FactoryBot.define do
             parent_id: grand_total_charge.id,
             detail_level: 2
           )
+          trait = case section
+          when /trucking_/
+            :trucking_lcl
+          when 'import', 'export'
+            :thc
+          else
+            :bas
+          end
 
           cargo_unit_charge = create(
             :legacy_charge,
@@ -88,9 +96,8 @@ FactoryBot.define do
             parent_id: cargo_charge.id,
             detail_level: 3,
             children_charge_category: create(:legacy_charge_categories,
-                                             name: 'Basic Freight',
-                                             code: 'bas',
-                                             organization_id: shipment.organization_id)
+              trait,
+              organization_id: shipment.organization_id)
           )
           if evaluator.with_tender
             FactoryBot.create(:quotations_line_item,

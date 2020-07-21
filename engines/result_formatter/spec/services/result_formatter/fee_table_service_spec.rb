@@ -28,13 +28,13 @@ module ResultFormatter
           "Trucking Rate",
           "Export",
           "1 x Fcl 20",
-          "Basic Freight",
+          "Terminal Handling Cost",
           "Cargo",
           "1 x Fcl 20",
-          "Basic Freight",
+          "Basic Ocean Freight",
           "Import",
           "1 x Fcl 20",
-          "Basic Freight",
+          "Terminal Handling Cost",
           "Trucking on",
           "1 x Fcl 20",
           "Trucking Rate"]
@@ -60,13 +60,13 @@ module ResultFormatter
             "Trucking Rate",
             "Export",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Cargo",
             "1 x Pallet",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking on",
             "1 x Pallet",
             "Trucking Rate"]
@@ -84,7 +84,7 @@ module ResultFormatter
 
       context "with custom names" do
         before do
-          FactoryBot.create(:legacy_charge_categories, code: 'cargo', name: 'Bananas', organization: organization)
+          FactoryBot.create(:legacy_charge_categories, code: "cargo", name: "Bananas", organization: organization)
         end
 
         let(:load_type) { "cargo_item" }
@@ -95,13 +95,13 @@ module ResultFormatter
             "Trucking Rate",
             "Export",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Bananas",
             "1 x Pallet",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking on",
             "1 x Pallet",
             "Trucking Rate"]
@@ -142,11 +142,11 @@ module ResultFormatter
             "Trucking pre",
             "Trucking Rate",
             "Export",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Cargo",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking on",
             "Trucking Rate"]
         end
@@ -177,15 +177,15 @@ module ResultFormatter
             "Trucking Rate",
             "Export",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Shipment",
             "Bunker Adjustment Fee",
             "Cargo",
             "1 x Pallet",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking on",
             "1 x Pallet",
             "Trucking Rate"]
@@ -232,13 +232,13 @@ module ResultFormatter
             "Trucking Rate",
             "Cargo",
             "1 x Pallet",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Export",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking pre",
             "1 x Pallet",
             "Trucking Rate"
@@ -284,13 +284,13 @@ module ResultFormatter
             "Trucking on",
             "Cargo",
             "1 x Pallet",
-            "Basic Freight",
+            "Basic Ocean Freight",
             "Import",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Export",
             "1 x Pallet",
-            "Basic Freight",
+            "Terminal Handling Cost",
             "Trucking pre"
           ]
         end

@@ -62,6 +62,11 @@ FactoryBot.define do
       code { 'trucking_on' }
     end
 
+    trait :trucking_lcl do
+      name { 'Trucking Rate' }
+      code { 'trucking_lcl' }
+    end
+
     to_create do |instance|
       instance.attributes = Legacy::ChargeCategory.create_with(code: instance.code)
                                                   .find_or_create_by(
