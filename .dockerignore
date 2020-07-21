@@ -4,7 +4,6 @@
 .vscode/
 **/coverage/
 chart/
-client/
 danger/
 db/dummydata/
 docker-compose.test.yaml

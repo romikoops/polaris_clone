@@ -1,6 +1,9 @@
 # By default, backend team
-*               @itsmycargo/Backend
+*               @itsmycargo/backend
 
 # Data related changes
-**/db/migrate/* @itsmycargo/Data
-db/schema.rb    @itsmycargo/Data
+**/db/migrate/* @itsmycargo/data
+db/schema.rb    @itsmycargo/data
+
+Dockerfile      @itsmycargo/sre
+Jenkinsfile     @itsmycargo/sre
