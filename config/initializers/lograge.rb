@@ -13,6 +13,7 @@ Rails.application.configure do
     options = {}
 
     options[:host] = event.payload[:host]
+    options[:referer] = event.payload[:referer]
     options[:params] = event.payload[:params].except(*exceptions)
     options[:search] = event.payload[:searchkick_runtime] if event.payload[:searchkick_runtime].to_f > 0
     options[:organization] = event.payload[:organization]
@@ -23,7 +24,8 @@ Rails.application.configure do
 
   config.lograge.custom_payload do |controller|
     {
-      host: controller.request.host
+      host: controller.request.host,
+      referer: controller.request.referer
     }
   end
 end
