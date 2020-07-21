@@ -2,7 +2,7 @@
 
 class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style/ClassAndModuleChildren
   def geojsons
-    @hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    @hub = Hub.find_by(id: params[:id])
     @truckings = @hub.truckings.where(sandbox: @sandbox)
     response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) do
       @truckings.first(20).map { |tl| response_hash(tl) }
@@ -11,7 +11,7 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style
   end
 
   def geojson
-    trucking = Trucking::Trucking.find_by(id: params[:id], sandbox: @sandbox)
+    trucking = Trucking::Trucking.find_by(id: params[:id])
     response_handler(response_hash(trucking))
   end
 
@@ -49,7 +49,7 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style
   end
 
   def coverage
-    coverage = Trucking::Coverage.find_by(hub_id: params[:id], sandbox: @sandbox)&.geojson
+    coverage = Trucking::Coverage.find_by(hub_id: params[:id])&.geojson
     response_handler(coverage)
   end
 
