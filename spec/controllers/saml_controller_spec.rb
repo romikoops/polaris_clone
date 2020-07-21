@@ -2,15 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe SamlController, type: :controller, skip: true do
+RSpec.describe SamlController, type: :controller do
   let(:organization) { create(:organizations_organization, slug: 'test') }
   let(:saml_response) { build(:saml_response) }
   let(:user) { create(:organizations_user, organization: organization) }
-  let!(:organizations_domain) { create(:organizations_domain, domain: 'test.host', organization: organization) }
+  let!(:organizations_domain) { create(:organizations_domain, domain: 'test.host', organization: organization, default: true) }
   let!(:default_group) { create(:groups_group, organization: organization, name: 'default') }
+  let(:forwarded_host) { organizations_domain.domain }
+  let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
 
   before do
     create(:organizations_saml_metadatum, organization: organization)
+    request.headers['X-Forwarded-Host'] = forwarded_host
   end
 
   describe 'GET init' do
@@ -48,31 +51,27 @@ RSpec.describe SamlController, type: :controller, skip: true do
           expect(response.status).to eq(302)
           redirect_location = response.location
           response_params = Rack::Utils.parse_nested_query(redirect_location.split('success?').second)
-          expect(response_params.keys).to match_array(%w[access-token client expiry organizationId token-type uid userId])
+          expect(response_params.keys).to match_array(expected_keys)
           expect(response_params['organizationId']).to eq(organization.id)
         end
       end
     end
 
-    context 'with successful login and existing user (no groups)' do
+    context 'with successful login from saco idp' do
       before do
-        allow(one_login).to receive(:name_id).and_return(user.email)
-        post :consume, params: { SAMLResponse: {} }
+        organizations_domain.update(domain: 'saco.itsmycargo.com')
       end
 
+      let(:forwarded_host) { 'saco.itsmycargo.com, api.itsmycargo.com' }
+
       it 'returns an http status of success' do
+        post :consume, params: { SAMLResponse: {} }
         aggregate_failures do
           expect(response.status).to eq(302)
           redirect_location = response.location
           response_params = Rack::Utils.parse_nested_query(redirect_location.split('success?').second)
-          expect(response_params.keys).to match_array(%w[access-token client expiry organizationId token-type uid userId])
+          expect(response_params.keys).to match_array(expected_keys)
           expect(response_params['organizationId']).to eq(organization.id)
-        end
-      end
-
-      it 'attaches the user to the default group' do
-        aggregate_failures do
-          expect(user.groups).to match_array([default_group])
         end
       end
     end
@@ -91,14 +90,14 @@ RSpec.describe SamlController, type: :controller, skip: true do
           expect(response.status).to eq(302)
           redirect_location = response.location
           response_params = Rack::Utils.parse_nested_query(redirect_location.split('success?').second)
-          expect(response_params.keys).to match_array(%w[access-token client expiry tenantId token-type uid userId])
-          expect(response_params['tenantId']).to eq(tenant.id.to_s)
+          expect(response_params.keys).to match_array(expected_keys)
+          expect(response_params['organizationId']).to eq(organization.id.to_s)
         end
       end
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(tenants_user.groups).to match_array([group])
+          expect(user.groups).to match_array([group])
         end
       end
     end
@@ -127,14 +126,14 @@ RSpec.describe SamlController, type: :controller, skip: true do
           expect(response.status).to eq(302)
           redirect_location = response.location
           response_params = Rack::Utils.parse_nested_query(redirect_location.split('success?').second)
-          expect(response_params.keys).to match_array(%w[access-token client expiry tenantId token-type uid userId])
-          expect(response_params['tenantId']).to eq(tenant.id.to_s)
+          expect(response_params.keys).to match_array(expected_keys)
+          expect(response_params['organizationId']).to eq(organization.id.to_s)
         end
       end
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(tenants_user.groups).to match_array([group, group_2])
+          expect(user.groups).to match_array([group, group_2])
         end
       end
     end
@@ -150,8 +149,8 @@ RSpec.describe SamlController, type: :controller, skip: true do
     end
   end
 
-  context 'when tenant is not found' do
-    describe 'POST #consume (no tenant)' do
+  context 'when organization is not found' do
+    describe 'POST #consume (no organization)' do
       it 'redirects to error url when the response is not valid' do
         post :consume, params: { SAMLResponse: saml_response }
 

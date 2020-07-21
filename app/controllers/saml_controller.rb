@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SamlController < ApplicationController
-  skip_before_action :doorkeeper_authorize!
+  skip_before_action :doorkeeper_authorize!, :ensure_organization!
   before_action :set_current_organization
 
   def init
@@ -25,13 +25,13 @@ class SamlController < ApplicationController
     token = generate_token_for(user: user, scope: 'public')
     token_header = Doorkeeper::OAuth::TokenResponse.new(token).body
     response_params = token_header.merge(userId: user.id, organizationId: organization.id)
-    redirect_to generate_url(url_string: "https://#{request.host}/login/saml/success", params: response_params)
+    redirect_to generate_url(url_string: "https://#{saml_domain}/login/saml/success", params: response_params)
   end
 
   private
 
   def error_redirect
-    redirect_to "https://#{request.host}/login/saml/error"
+    redirect_to "https://#{saml_domain}/login/saml/error"
   end
 
   def user_from_saml(response:, organization_id:)
@@ -60,13 +60,17 @@ class SamlController < ApplicationController
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
       settings = idp_metadata_parser.parse(organization_saml_metadata.content)
 
-      settings.assertion_consumer_service_url = "https://#{request.host}/saml/consume"
-      settings.sp_entity_id = "https://#{request.host}/saml/metadata"
+      settings.assertion_consumer_service_url = "https://#{saml_domain}/saml/consume"
+      settings.sp_entity_id = "https://#{saml_domain}/saml/metadata"
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
       settings.authn_context = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
 
       settings
     end
+  end
+
+  def saml_domain
+    @saml_domain ||= Organizations::Domain.find_by(default: true, organization_id: organization_id)&.domain
   end
 
   def generate_url(url_string:, params: {})

@@ -4,6 +4,7 @@ require_dependency 'api/application_controller'
 
 module Api
   class ApiController < ApplicationController
+    API_HOST= 'api.itsmycargo.com'
     include ErrorHandler
     include Pagination
 
@@ -28,13 +29,7 @@ module Api
         org_id = params[:organization_id] if params[:organization_id]
 
         org_id ||= begin
-          domain = [
-            URI(request.referer.to_s).host,
-            request.host,
-            ENV.fetch("DEFAULT_TENANT") { "demo.local" }
-          ].find { |domain| Organizations::Domain.exists?(domain: domain) }
-
-          Organizations::Domain.where(domain: domain).pluck(:organization_id).first
+          Organizations::Domain.where(domain: organization_domain).pluck(:organization_id).first
         end
 
         org_id
@@ -84,6 +79,30 @@ module Api
 
     def ensure_organization!
       return head :not_found unless current_organization
+    end
+
+    def organization_domain
+      @organization_domain ||= begin
+        domains = [
+          URI(request.referer.to_s).host,
+          request.host,
+          Rails.env.production? ? nil : ENV.fetch("DEFAULT_TENANT") { "demo.local" }
+        ]
+
+        domains.push(parse_saco_idp)
+        domains.compact.flatten.find { |domain| Organizations::Domain.exists?(domain: domain) }
+      end
+    end
+
+    def parse_saco_idp
+      forwarded_host = request.headers['X-Forwarded-Host']
+      return if forwarded_host.nil?
+
+      forwarded_host.split(',').map(&:strip).reject { |host| host == API_HOST }
+    end
+
+    def referer
+      URI(request.referer.to_s)
     end
   end
 end

@@ -14,6 +14,7 @@ Rails.application.configure do
 
     options[:host] = event.payload[:host]
     options[:referer] = event.payload[:referer]
+    options[:fowarded_host] = event.payload[:fowarded_host]
     options[:params] = event.payload[:params].except(*exceptions)
     options[:search] = event.payload[:searchkick_runtime] if event.payload[:searchkick_runtime].to_f > 0
     options[:organization] = event.payload[:organization]
@@ -25,7 +26,8 @@ Rails.application.configure do
   config.lograge.custom_payload do |controller|
     {
       host: controller.request.host,
-      referer: controller.request.referer
+      referer: controller.request.referer,
+      fowarded_host: controller.request.headers['X-Forwarded-Host']
     }
   end
 end
