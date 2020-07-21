@@ -175,6 +175,28 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     end
   end
 
+  context 'when calculating percentage fee with min value' do
+    let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
+    let(:min_value) { Money.new(12_000_000, 'USD') }
+
+    before do
+      fees << FactoryBot.build(:rate_builder_fee,
+                               min_value: min_value,
+                               rate_basis: 'PERCENTAGE',
+                               target: nil,
+                               measures: measures,
+                               charge_category: FactoryBot.create(:puf_charge),
+                               raw_fee: { rate: 0.1, rate_basis: 'PERCENTAGE' })
+    end
+
+    it 'calculates the per_ton fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(2)
+        expect(results.second.value).to eq(min_value)
+      end
+    end
+  end
+
   context 'when the minimum is hit' do
     let(:fee) { FactoryBot.create(:fee_per_ton, pricing: pricing) }
     let(:min_value) { Money.new(12_000_000, 'USD') }

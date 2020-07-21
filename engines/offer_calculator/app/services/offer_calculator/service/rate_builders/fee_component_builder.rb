@@ -21,9 +21,10 @@ module OfferCalculator
         def perform
           fee_values.map do |result|
             OfferCalculator::Service::RateBuilders::FeeComponent.new(
-              value: Money.new(result[:value] * 100.0, fee.dig("currency")),
+              value: value(result: result),
               modifier: result[:modifier_key],
-              base: fee.dig("base") || fee.dig("x_base")
+              base: fee.dig("base") || fee.dig("x_base"),
+              percentage: percentage(result: result)
             )
           end
         end
@@ -34,6 +35,22 @@ module OfferCalculator
 
         def find_modifier_by_rate_basis(rate_basis:)
           MODIFIERS_BY_RATE_BASIS.entries.find { |entry| entry.second.include?(rate_basis) }&.first
+        end
+
+        def value(result:)
+          return Money.new(0, "USD") if rate_basis == "PERCENTAGE"
+
+          Money.new(result[:value] * 100.0, fee.dig("currency"))
+        end
+
+        def percentage(result:)
+          return nil if rate_basis != "PERCENTAGE"
+
+          result[:value]
+        end
+
+        def value_currency
+          fee.dig("currency")
         end
 
         def rate_basis

@@ -50,15 +50,15 @@ module OfferCalculator
         input.select { |fee| fee.rate_basis == 'PERCENTAGE' }.map do |fee|
           component = fee.components.first
           OfferCalculator::Service::Calculators::Charge.new(
-            value: percentage_result_from_component(percentage: component.value, total: existing_total),
+            value: percentage_result_from_component(percentage: component.percentage, total: existing_total, fee: fee),
             fee: fee,
             fee_component: component
           )
         end
       end
 
-      def percentage_result_from_component(percentage:, total:)
-        percentage.amount * total
+      def percentage_result_from_component(percentage:, total:, fee:)
+        (percentage * total).clamp(fee.min_value, fee.max_value)
       end
 
       def calulate_charge_from_fee(fee:)

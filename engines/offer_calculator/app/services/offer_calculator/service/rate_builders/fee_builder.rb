@@ -26,6 +26,7 @@ module OfferCalculator
             measures,
             determine_target(rate_basis: fee.fetch("rate_basis"))
           )
+
           OfferCalculator::Service::RateBuilders::Fee.new(inputs: fee_inputs)
         end
 

@@ -6,12 +6,14 @@ FactoryBot.define do
     value { {} }
     modifier { {} }
     base { {} }
+    percentage { 0 }
 
     initialize_with do
       OfferCalculator::Service::RateBuilders::FeeComponent.new(
         value: value,
         modifier: modifier,
-        base: base
+        base: base,
+        percentage: percentage
       )
     end
   end

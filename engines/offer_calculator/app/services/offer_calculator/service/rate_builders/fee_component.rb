@@ -6,11 +6,12 @@ module OfferCalculator
       class FeeComponent
         DEFAULT_BASE = 1e-6
 
-        attr_reader :value, :modifier, :base
+        attr_reader :value, :modifier, :base, :percentage
 
-        def initialize(value:, modifier:, base: DEFAULT_BASE)
+        def initialize(value:, modifier:, percentage: nil, base: DEFAULT_BASE)
           @value = value
           @modifier = modifier
+          @percentage = percentage
           @base = sanitized_base(input: base)
         end
 

@@ -63,6 +63,17 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
       "rate_basis" => "PER_CBM_TON"
     }
   end
+  let(:percentage_fee) do
+    {
+      "key" => "FSC",
+      "max" => nil,
+      "min" => 5,
+      "name" => "Fuel Surcharge",
+      "rate" => 0.325,
+      "currency" => "EUR",
+      "rate_basis" => "PERCENTAGE"
+    }
+  end
 
   describe "it creates a valid FeeComponent object" do
     let(:fee_components) do
@@ -94,6 +105,20 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
           expect(fee_components.first.value).to eq(target_value)
           expect(fee_components.first.modifier).to eq(:wm)
           expect(fee_components.first.base).to eq(200)
+        end
+      end
+    end
+
+    context "with percentage fee type " do
+      let(:fee) { percentage_fee }
+
+      it "returns the properly set up Fee Component" do
+        aggregate_failures do
+          expect(fee_components.length).to eq(1)
+          expect(fee_components.first.value).to eq(Money.new(0, "USD"))
+          expect(fee_components.first.percentage).to eq(0.325)
+          expect(fee_components.first.modifier).to eq(:percentage)
+          expect(fee_components.first.base).to eq(default_base)
         end
       end
     end

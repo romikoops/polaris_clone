@@ -49,6 +49,7 @@ FactoryBot.define do
           value = raw_fee.dig(:value) || raw_fee.dig(:rate)
           fee.components << FactoryBot.build(:rate_builder_fee_component,
             value: Money.new(value * 100.0, raw_fee.dig("currency")),
+            percentage: value,
             modifier: modifier_lookup.find { |_key, modifiers| modifiers.include?(rate_basis) }.first,
             base: raw_fee.dig("base"))
         end
