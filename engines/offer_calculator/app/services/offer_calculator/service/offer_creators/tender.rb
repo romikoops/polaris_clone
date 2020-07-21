@@ -17,7 +17,9 @@ module OfferCalculator
         end
 
         def perform
-          update_tender
+          assign_routing_attributes
+          assign_trucking_attributes
+          tender.save!
           tender
         end
 
@@ -25,14 +27,12 @@ module OfferCalculator
 
         attr_reader :tender, :shipment, :quotation, :offer
 
-        def update_tender
-          itinerary = offer.itinerary
-          freight_tenant_vehicle = offer.tenant_vehicle(section_key: "cargo")
-          tender.update(
+        delegate :itinerary, to: :offer
+
+        def assign_routing_attributes
+          tender.assign_attributes(
             carrier_name: freight_tenant_vehicle.carrier&.name,
             tenant_vehicle_id: freight_tenant_vehicle.id,
-            pickup_tenant_vehicle: offer.tenant_vehicle(section_key: "trucking_pre"),
-            delivery_tenant_vehicle: offer.tenant_vehicle(section_key: "trucking_on"),
             load_type: shipment.load_type,
             name: itinerary.name,
             itinerary: itinerary,
@@ -43,6 +43,19 @@ module OfferCalculator
             original_amount: offer.total,
             transshipment: itinerary.transshipment
           )
+        end
+
+        def assign_trucking_attributes
+          tender.assign_attributes(
+            pickup_tenant_vehicle: offer.tenant_vehicle(section_key: "trucking_pre"),
+            delivery_tenant_vehicle: offer.tenant_vehicle(section_key: "trucking_on"),
+            pickup_truck_type: offer.truck_type(carriage: "pre"),
+            delivery_truck_type: offer.truck_type(carriage: "on")
+          )
+        end
+
+        def freight_tenant_vehicle
+          @freight_tenant_vehicle ||= offer.tenant_vehicle(section_key: "cargo")
         end
       end
     end

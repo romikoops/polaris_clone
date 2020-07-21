@@ -4,13 +4,15 @@ require 'rails_helper'
 
 RSpec.describe Wheelhouse::TenderDecorator do
   let(:itinerary) { FactoryBot.create(:default_itinerary) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: FactoryBot.create(:legacy_carrier, name: 'Maersk')) }
+  let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'Maersk', code: 'maersk') }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
   let(:origin_hub) { itinerary.hubs.first }
   let(:destination_hub) { itinerary.hubs.last }
   let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: 'container') }
   let(:amount) { Money.new(25_090, 'EUR') }
   let(:transshipment) { nil }
   let(:context) { nil }
+  let(:truck_type) { 'default' }
   let(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:tender) do
     FactoryBot.create(:quotations_tender,
@@ -19,6 +21,10 @@ RSpec.describe Wheelhouse::TenderDecorator do
                       origin_hub: origin_hub,
                       destination_hub: destination_hub,
                       tenant_vehicle: tenant_vehicle,
+                      pickup_tenant_vehicle: tenant_vehicle,
+                      delivery_tenant_vehicle: tenant_vehicle,
+                      pickup_truck_type: truck_type,
+                      delivery_truck_type: truck_type,
                       transshipment: transshipment,
                       amount: amount)
   end
@@ -29,7 +35,7 @@ RSpec.describe Wheelhouse::TenderDecorator do
       aggregate_failures do
         expect(decorated_tender.origin).to eq(origin_hub.name)
         expect(decorated_tender.destination).to eq(destination_hub.name)
-        expect(decorated_tender.carrier).to eq('Maersk')
+        expect(decorated_tender.carrier).to eq(carrier.name)
       end
     end
 
@@ -96,6 +102,38 @@ RSpec.describe Wheelhouse::TenderDecorator do
     it 'returns nil for a money object' do
       aggregate_failures do
         expect(decorated_tender.total).to eq(nil)
+      end
+    end
+  end
+
+  describe 'pickup_carrier' do
+    it 'returns carrier name' do
+      aggregate_failures do
+        expect(decorated_tender.pickup_carrier).to eq(carrier.name)
+      end
+    end
+  end
+
+  describe 'pickup_service' do
+    it 'returns service name' do
+      aggregate_failures do
+        expect(decorated_tender.pickup_service).to eq(tenant_vehicle.name)
+      end
+    end
+  end
+
+  describe 'delivery_carrier' do
+    it 'returns carrier name' do
+      aggregate_failures do
+        expect(decorated_tender.delivery_carrier).to eq(carrier.name)
+      end
+    end
+  end
+
+  describe 'delivery_service' do
+    it 'returns service name' do
+      aggregate_failures do
+        expect(decorated_tender.delivery_service).to eq(tenant_vehicle.name)
       end
     end
   end

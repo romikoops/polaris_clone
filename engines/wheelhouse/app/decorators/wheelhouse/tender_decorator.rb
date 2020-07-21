@@ -57,6 +57,22 @@ module Wheelhouse
       SecureRandom.uuid
     end
 
+    def pickup_service
+      pickup_tenant_vehicle&.name
+    end
+
+    def delivery_service
+      delivery_tenant_vehicle&.name
+    end
+
+    def pickup_carrier
+      pickup_tenant_vehicle&.carrier&.name
+    end
+
+    def delivery_carrier
+      delivery_tenant_vehicle&.carrier&.name
+    end
+
     private
 
     def organization

@@ -53,8 +53,8 @@ module OfferCalculator
             on_carriage_carrier: on_carriage_tenant_vehicle&.carrier&.name,
             pre_carriage_service: pre_carriage_tenant_vehicle&.name,
             on_carriage_service: on_carriage_tenant_vehicle&.name,
-            pre_carriage_truck_type: offer.truck_type(carriage: "pre"),
-            on_carriage_truck_type: offer.truck_type(carriage: "on")
+            pre_carriage_truck_type: tender.pickup_truck_type,
+            on_carriage_truck_type: tender.delivery_truck_type
           }
         end
 

@@ -251,7 +251,7 @@ end
 
 # == Route Map
 #
-# D, [2020-07-16T10:30:29.332007 #1161] DEBUG -- : using default configuration
+# D, [2020-07-17T16:17:11.103755 #16245] DEBUG -- : using default configuration
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
@@ -549,6 +549,7 @@ end
 #                      v1_organization_client GET    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#show
 #                                             PATCH  /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
 #                                             PUT    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
+#                                             DELETE /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#destroy
 #                  v1_organization_equipments GET    /v1/organizations/:organization_id/equipments(.:format)                                  api/v1/equipments#index
 #                                             GET    /v1/organizations/:organization_id/dashboard(.:format)                                   api/v1/dashboard#show
 #                                             POST   /v1/organizations/:organization_id/quotations/:quotation_id/download(.:format)           api/v1/quotations#download

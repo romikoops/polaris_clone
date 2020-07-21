@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_15_135058) do
+ActiveRecord::Schema.define(version: 2020_07_17_141554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1519,6 +1519,7 @@ ActiveRecord::Schema.define(version: 2020_07_15_135058) do
     t.string "carrier_name"
     t.datetime "created_at", null: false
     t.integer "delivery_tenant_vehicle_id"
+    t.string "delivery_truck_type"
     t.integer "destination_hub_id"
     t.integer "itinerary_id"
     t.string "load_type"
@@ -1527,6 +1528,7 @@ ActiveRecord::Schema.define(version: 2020_07_15_135058) do
     t.integer "original_amount_cents"
     t.string "original_amount_currency"
     t.integer "pickup_tenant_vehicle_id"
+    t.string "pickup_truck_type"
     t.uuid "quotation_id"
     t.bigint "tenant_vehicle_id"
     t.string "transshipment"

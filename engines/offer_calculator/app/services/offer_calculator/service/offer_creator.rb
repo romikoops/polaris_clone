@@ -52,7 +52,8 @@ module OfferCalculator
           meta: legacy_meta,
           scope: scope
         )
-      rescue
+      rescue => e
+        Raven.capture_exception(e)
         raise OfferCalculator::Errors::OfferBuilder
       end
     end

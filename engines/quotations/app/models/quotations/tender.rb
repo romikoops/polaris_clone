@@ -33,10 +33,12 @@ end
 #  amount_cents               :integer
 #  amount_currency            :string
 #  carrier_name               :string
+#  delivery_truck_type        :string
 #  load_type                  :string
 #  name                       :string
 #  original_amount_cents      :integer
 #  original_amount_currency   :string
+#  pickup_truck_type          :string
 #  transshipment              :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
