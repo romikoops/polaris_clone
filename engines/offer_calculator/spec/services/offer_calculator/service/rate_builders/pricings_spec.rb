@@ -87,7 +87,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
     context "with freight pricing (consolidation)" do
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let(:scope) { {consolidation: {cargo: {backend: true}}} }
+      let(:scope) { {consolidation: {cargo: {backend: true}}}.with_indifferent_access }
       let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
 
       it "returns the correct fees" do
@@ -95,6 +95,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
           expect(fee).to be_a(OfferCalculator::Service::RateBuilders::Fee)
           expect(results.length).to eq(1)
           expect(fee.charge_category).to eq(pricing.fees.first.charge_category)
+          expect(fee.target).to eq(cargo)
         end
       end
 
@@ -166,7 +167,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
         aggregate_failures do
           expect(fee).to be_a(OfferCalculator::Service::RateBuilders::Fee)
           expect(results.length).to eq(4)
-          expect(results.map(&:target)).to match_array(cargo.units + [nil, nil])
+          expect(results.map(&:target)).to match_array(cargo.units + [cargo, cargo])
           expect(results.count { |result| result.charge_category == baf_charge_category }).to eq(2)
         end
       end

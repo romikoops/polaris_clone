@@ -41,7 +41,11 @@ module OfferCalculator
         end
 
         def determine_target(rate_basis:, target_measure: measures)
-          SHIPMENT_LEVEL_RATE_BASES.include?(rate_basis) ? nil : target_measure.cargo
+          SHIPMENT_LEVEL_RATE_BASES.include?(rate_basis) ? parent_cargo : target_measure.cargo
+        end
+
+        def parent_cargo
+          measures.cargo.is_a?(Cargo::Unit) ? measures.cargo.cargo : measures.cargo
         end
 
         def handle_json_fees(json:, target_measure:)
