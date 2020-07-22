@@ -55,13 +55,12 @@ class QuoteMailer < ApplicationMailer
     @shipment = quotation ? Shipment.find(quotation.original_shipment_id) : shipment
     return if invalid_records(shipments: [@shipment, *@shipments])
 
+    @quotation = quotation
+    organization_id = (@user&.organization_id || @shipment&.organization_id)
+    set_current_id(organization_id: organization_id)
     @scope = scope_for(record: @user)
     @shipments = Legacy::ShipmentDecorator.decorate_collection(@shipments, context: { scope: @scope})
     @shipment = Legacy::ShipmentDecorator.new(@shipment, context: { scope: @scope})
-    @quotation = quotation
-
-    organization_id = (@user&.organization_id || @shipment&.organization_id)
-    set_current_id(organization_id: organization_id)
     @organization = ::Organizations::Organization.current
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format
