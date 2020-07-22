@@ -4,9 +4,10 @@ module TenderCalculator
   class Node
     TreeError = Class.new(StandardError)
 
-    attr_reader :children
+    attr_reader :children, :rate
 
-    def initialize
+    def initialize(rate: nil)
+      @rate = rate
       @children = []
     end
 

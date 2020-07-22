@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :groups_group, class: 'Groups::Group' do
+    association :organization, factory: :organizations_organization
+
     name { "MyString" }
-    organization { nil }
   end
 end
 
