@@ -106,4 +106,35 @@ RSpec.describe Pricings::Manipulator do
       end
     end
   end
+
+  describe '.decorate_margins' do
+    context 'with freight pricings and user margin' do
+      let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
+      let!(:group_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: group) }
+      let(:group) {
+        FactoryBot.create(:groups_group, name: 'Test', organization: organization).tap do |tapped_group|
+          FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+        end
+      }
+      let(:company) do
+        FactoryBot.create(:companies_companies, organization: organization).tap do |tapped_company|
+          FactoryBot.create(:companies_membership, member: user, company: tapped_company)
+        end
+      end
+
+      before do
+        FactoryBot.create(:groups_group, name: 'default', organization: organization).tap do |tapped_group|
+          FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+        end
+      end
+
+      it 'returns the applicable margin attached to the user' do
+        margins = klass.find_applicable_margins
+        expect(margins.first[:margin]).to eq(user_margin)
+        expect(margins.first[:priority]).to eq(0)
+        expect(margins.second[:margin]).to eq(group_margin)
+        expect(margins.second[:priority]).to eq(2)
+      end
+    end
+  end
 end

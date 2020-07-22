@@ -165,10 +165,9 @@ module Pricings
 
     def decorate_margins(target_margins:, target_hierarchy:)
       target_margins.map do |margin|
-        priority = target.is_a?(::Tenants::Membership) ? margin.priority : 0
         hierarchy_data = target_hierarchy.find { |hier| hier[:data] == margin.applicable }
         rank = hierarchy_data ? hierarchy_data[:rank] : 0
-
+        priority = hierarchy_data ? target_hierarchy.index(hierarchy_data) : 0
         {priority: priority, margin: margin, rank: rank}
       end
     end
