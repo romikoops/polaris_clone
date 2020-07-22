@@ -42,11 +42,13 @@ module Pdf
       }
 
       @shipments << @shipment if @shipments.empty?
+      @shipments.map(&:charge_breakdowns).flatten.each do |charge_breakdown|
+        prep_notes(charge_breakdown: charge_breakdown)
+      end
 
       @shipments.each do |s|
         calculate_cargo_data(s)
         calculate_pricing_data(s)
-        prep_notes(s)
       end
       @content = Legacy::Content.get_component('QuotePdf', @shipment.organization_id) if @name == 'quotation'
       @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
@@ -64,13 +66,14 @@ module Pdf
       @pricing_data[shipment.id] = result
     end
 
-    def prep_notes(shipment)
-      hubs = [shipment.origin_hub, shipment.destination_hub].compact
-      return hubs if hubs.empty?
+    def prep_notes(charge_breakdown:)
+      tender = charge_breakdown.tender
+      shipment = charge_breakdown.shipment
+      hubs = [tender.origin_hub, tender.destination_hub]
 
       nexii = hubs.map(&:nexus)
       countries = nexii.map(&:country)
-      pricings = shipment.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
+      pricings = tender.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
       notes_association = Legacy::Note.where(
         organization_id: shipment.organization_id,
         transshipment: false,
