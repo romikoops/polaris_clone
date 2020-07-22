@@ -9,7 +9,6 @@ module Legacy
     belongs_to :itinerary, optional: true, class_name: 'Legacy::Itinerary'
     belongs_to :hub, optional: true, class_name: 'Legacy::Hub'
     belongs_to :trucking_pricing, optional: true, class_name: 'Legacy::TruckingPricing'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :organization, optional: true, class_name: 'Organizations::Organization'
 
     validates :target, presence: true, unless: :pricings_pricing_id

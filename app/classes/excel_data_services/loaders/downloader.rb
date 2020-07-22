@@ -3,12 +3,11 @@
 module ExcelDataServices
   module Loaders
     class Downloader < ExcelDataServices::Loaders::Base
-      def initialize(organization:, category_identifier: nil, file_name:, user: nil, sandbox:, options: {})
+      def initialize(organization:, category_identifier: nil, file_name:, user: nil, options: {})
         super(organization: organization)
         @category_identifier = category_identifier
         @file_name = file_name
         @user = user
-        @sandbox = sandbox
 
         @options = options
       end
@@ -18,14 +17,13 @@ module ExcelDataServices
           organization: organization,
           file_name: file_name,
           user: user,
-          sandbox: sandbox,
           options: options
         )
       end
 
       private
 
-      attr_reader :category_identifier, :file_name, :user, :sandbox, :options
+      attr_reader :category_identifier, :file_name, :user, :options
     end
   end
 end

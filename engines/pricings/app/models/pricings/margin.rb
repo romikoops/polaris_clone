@@ -14,7 +14,6 @@ module Pricings
     belongs_to :itinerary, class_name: 'Legacy::Itinerary', optional: true
     belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
     belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     scope :for_cargo_classes, (lambda do |cargo_classes|
       where(cargo_class: cargo_classes.map(&:downcase))

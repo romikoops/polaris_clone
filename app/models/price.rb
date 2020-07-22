@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Price < ApplicationRecord
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   def rounded_attributes
     {
       value: value&.round(2),

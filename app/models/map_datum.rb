@@ -2,7 +2,6 @@
 
 class MapDatum < ApplicationRecord
   belongs_to :itinerary
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   belongs_to :organization, class_name: 'Organizations::Organization'
 
   def self.create_all_from_itineraries

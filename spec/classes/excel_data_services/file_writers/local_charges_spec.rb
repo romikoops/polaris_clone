@@ -7,7 +7,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let!(:hub) { create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
-  let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: {}) }
+  let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: {}) }
   let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
   let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 

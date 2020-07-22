@@ -6,7 +6,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
   attr_accessor :scope, :user, :shipment, :metadata
   attr_reader :currency
 
-  def initialize(user:, shipment: nil, sandbox: nil, metadata: [])
+  def initialize(user:, shipment: nil, metadata: [])
     @user = user
     @shipment = shipment
     @target = @user
@@ -16,7 +16,6 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
       target: @target,
       organization: @organization
     )
-    @sandbox = sandbox
     @metadata = metadata
     @currency = Users::Settings.find_by(user: user)&.currency || @scope.fetch(:default_currency)
   end

@@ -61,8 +61,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit_service_price
-    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
-    new_price = Legacy::Price.new(price_params.merge(sandbox: @sandbox))
+    @shipment = Shipment.find_by(id: params[:id])
+    new_price = Legacy::Price.new(price_params)
     charge = edit_service_charge_breakdown.charge(params['charge_category'])
     tender = edit_service_charge_breakdown.tender
     tender.amount += (new_price.money - charge.price.money)
@@ -87,8 +87,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def edit
-    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
-    @containers = Container.where(shipment_id: @shipment.id, sandbox: @sandbox)
+    @shipment = Shipment.find_by(id: params[:id])
+    @containers = Container.where(shipment_id: @shipment.id)
     @container_descriptions = CONTAINER_DESCRIPTIONS.invert
     @all_hubs = Address.all_hubs_prepared
   end
@@ -102,8 +102,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         doc_type: params[:type],
         user: @shipment.user,
         organization: current_organization,
-        file: params[:file],
-        sandbox: @sandbox
+        file: params[:file]
       )
 
       document_with_url = document.as_json.merge(
@@ -115,12 +114,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def update
-    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    @shipment = Shipment.find_by(id: params[:id])
     shipment_action if params[:shipment_action]
   end
 
   def document_action
-    @document = Legacy::File.find_by(id: params[:id], sandbox: @sandbox)
+    @document = Legacy::File.find_by(id: params[:id])
     @user = @document.user
     decide_document_action
 
@@ -129,7 +128,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def document_delete
-    @document = Legacy::File.find_by(id: params[:id], sandbox: @sandbox)
+    @document = Legacy::File.find_by(id: params[:id])
     @document.destroy
 
     response_handler(id: params[:id])
@@ -302,7 +301,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     if @shipment
       @shipment
     else
-      shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+      shipment = Shipment.find_by(id: params[:id])
       shipment.planned_eta = new_eta
       shipment.planned_etd = new_etd
       shipment.planned_origin_drop_off_date = new_planned_origin_drop_off_date
@@ -350,7 +349,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     if @shipment
       @shipment
     else
-      shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+      shipment = Shipment.find_by(id: params[:id])
       shipment.total_price = { value: params[:priceObj]['value'], currency: params[:priceObj]['currency'] }
       shipment.save!
       @shipment = shipment
@@ -386,19 +385,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def populate_documents
-    @documents = @shipment.files.where(sandbox_id: @sandbox&.id).select { |doc| doc.file.attached? }.map do |doc|
+    @documents = @shipment.files.select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment'))
     end
   end
 
   def do_for_show
-    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    @shipment = Shipment.find_by(id: params[:id])
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
   end
 
   def populate_contacts
-    @shipment_contacts = @shipment.shipment_contacts.where(sandbox: @sandbox)
+    @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
       next unless sc.contact
 
@@ -530,24 +529,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def documents
     @documents ||= {
       'requested_shipments' => Legacy::File.where(
-        shipment_id: tenant_shipments.requested.select(:id),
-        sandbox: @sandbox
+        shipment_id: tenant_shipments.requested.select(:id)
       ).group_by(&:doc_type),
       'open_shipments' => Legacy::File.where(
-        shipment_id: tenant_shipments.open.select(:id),
-        sandbox: @sandbox
+        shipment_id: tenant_shipments.open.select(:id)
       ).group_by(&:doc_type),
       'finished_shipments' => Legacy::File.where(
-        shipment_id: tenant_shipments.finished.select(:id),
-        sandbox: @sandbox
+        shipment_id: tenant_shipments.finished.select(:id)
       ).group_by(&:doc_type),
       'rejected_shipments' => Legacy::File.where(
-        shipment_id: tenant_shipments.rejected.select(:id),
-        sandbox: @sandbox
+        shipment_id: tenant_shipments.rejected.select(:id)
       ).group_by(&:doc_type),
       'archived_shipments' => Legacy::File.where(
-        shipment_id: tenant_shipments.archived.select(:id),
-        sandbox: @sandbox
+        shipment_id: tenant_shipments.archived.select(:id)
       ).group_by(&:doc_type)
     }
   end

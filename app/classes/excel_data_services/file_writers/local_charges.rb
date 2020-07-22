@@ -34,7 +34,6 @@ module ExcelDataServices
         @filtered_local_charges ||= Legacy::LocalCharge
                                           .where(organization: organization)
                                           .current
-                                          .where(sandbox: @sandbox)
                                           .yield_self do |result|
           mot = options['mode_of_transport']
           result = result.for_mode_of_transport(mot) if mot.present? && !mot.casecmp?('all')

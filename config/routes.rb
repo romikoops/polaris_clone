@@ -177,7 +177,6 @@ Rails.application.routes.draw do
       get "account", as: :account
       get "hubs", as: :hubs
       put "update", as: :update
-      get "toggle_sandbox", as: :toggle_sandbox
 
       resources :addresses, controller: :user_addresses, only: %i[index create update destroy]
       post "addresses/:address_id/edit", to: "user_addresses#edit"
@@ -416,7 +415,6 @@ end
 #                                    organization_user_account GET    /organizations/:organization_id/users/:user_id/account(.:format)                                   users#account
 #                                       organization_user_hubs GET    /organizations/:organization_id/users/:user_id/hubs(.:format)                                      users#hubs
 #                                     organization_user_update PUT    /organizations/:organization_id/users/:user_id/update(.:format)                                    users#update
-#                             organization_user_toggle_sandbox GET    /organizations/:organization_id/users/:user_id/toggle_sandbox(.:format)                            users#toggle_sandbox
 #                                  organization_user_addresses GET    /organizations/:organization_id/users/:user_id/addresses(.:format)                                 user_addresses#index
 #                                                              POST   /organizations/:organization_id/users/:user_id/addresses(.:format)                                 user_addresses#create
 #                                    organization_user_address PATCH  /organizations/:organization_id/users/:user_id/addresses/:id(.:format)                             user_addresses#update

@@ -5,7 +5,7 @@ module RateExtractor
     attr_reader :cargo, :organization, :desired_date
     attr_accessor :tender
 
-    def initialize(organization:, tender:, cargo:, desired_date:, sandbox: nil)
+    def initialize(organization:, tender:, cargo:, desired_date:)
       @organization = organization
       @tender = tender
       @cargo = RateExtractor::Decorators::Cargo.new(cargo)

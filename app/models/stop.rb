@@ -4,7 +4,6 @@ class Stop < Legacy::Stop
   belongs_to :itinerary, dependent: :destroy
   belongs_to :hub
   has_many :layovers, dependent: :destroy
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   validates_uniqueness_of :index, scope: %i(itinerary_id hub_id)
 end

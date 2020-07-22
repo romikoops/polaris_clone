@@ -65,9 +65,7 @@ module ExcelDataServices
           longitude: row[:longitude],
           country: { name: row[:country] },
           city: row[:name],
-          geocoded_address: row[:full_address],
-          sandbox: @sandbox
-
+          geocoded_address: row[:full_address]
         }
       end
 
@@ -78,8 +76,7 @@ module ExcelDataServices
           longitude: row[:longitude],
           locode: row[:locode],
           country: { name: row[:country] },
-          organization_id: organization.id,
-          sandbox: @sandbox
+          organization_id: organization.id
         }
       end
 
@@ -99,7 +96,6 @@ module ExcelDataServices
           latitude: row[:latitude],
           longitude: row[:longitude],
           name: row[:name],
-          sandbox_id: @sandbox&.id,
           hub_code: row[:locode]
         }
       end

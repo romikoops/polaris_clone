@@ -15,7 +15,6 @@ module Legacy
 
     belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :stops, dependent: :destroy
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :shipments, dependent: :nullify
     has_many :layovers,  dependent: :destroy
     has_many :trips,     dependent: :destroy
@@ -46,8 +45,7 @@ module Legacy
                                       closing_date:,
                                       vessel:,
                                       voyage_code:,
-                                      load_type:,
-                                      sandbox: nil)
+                                      load_type:)
       results = {
         layovers: [],
         trips: []
@@ -98,14 +96,14 @@ module Legacy
       end
     end
 
-    def default_generate_schedules(end_date:, base_pricing: true, sandbox: nil) # rubocop:disable Metrics/AbcSize
+    def default_generate_schedules(end_date:, base_pricing: true) # rubocop:disable Metrics/AbcSize
       finish_date = end_date || DateTime.now + 21.days
       association = base_pricing ? rates : pricings
-      tenant_vehicle_ids = association.where(sandbox_id: sandbox&.id).pluck(:tenant_vehicle_id).uniq
-      stops_in_order = stops.where(sandbox_id: sandbox&.id).order(:index)
+      tenant_vehicle_ids = association.pluck(:tenant_vehicle_id).uniq
+      stops_in_order = stops.order(:index)
       tenant_vehicle_ids.each do |tv_id|
         %w[container cargo_item].each do |load_type|
-          existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type, sandbox_id: sandbox&.id).first
+          existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
           steps_in_order = if existing_trip
                              (existing_trip.end_date - existing_trip.start_date) / 86_400
                            else
@@ -119,8 +117,7 @@ module Legacy
             ordinal_array: [1, 5],
             tenant_vehicle_id: tv_id,
             closing_date_buffer: 4,
-            load_type: load_type,
-            sandbox: sandbox
+            load_type: load_type
           )
         end
       end
@@ -133,8 +130,7 @@ module Legacy
                                   ordinal_array:,
                                   tenant_vehicle_id:,
                                   closing_date_buffer: 4,
-                                  load_type:,
-                                  sandbox: nil)
+                                  load_type:)
       results = {
         layovers: [],
         trips: []
@@ -157,8 +153,7 @@ module Legacy
             end_date: journey_end,
             tenant_vehicle_id: tenant_vehicle_id,
             closing_date: closing_date,
-            load_type: parse_load_type(load_type),
-            sandbox_id: sandbox&.id
+            load_type: parse_load_type(load_type)
           )
 
           unless trip.save
@@ -177,8 +172,7 @@ module Legacy
                 itinerary_id: stop.itinerary_id,
                 stop_id: stop.id,
                 closing_date: closing_date,
-                trip_id: trip.id,
-                sandbox_id: sandbox&.id
+                trip_id: trip.id
               }
             else
               journey_start += steps_in_order[stop.index - 1].days
@@ -189,8 +183,7 @@ module Legacy
                 itinerary_id: stop.itinerary_id,
                 stop_id: stop.id,
                 trip_id: trip.id,
-                closing_date: nil,
-                sandbox_id: sandbox&.id
+                closing_date: nil
               }
             end
           end

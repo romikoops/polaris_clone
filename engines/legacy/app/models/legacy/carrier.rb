@@ -5,7 +5,6 @@ module Legacy
     self.table_name = 'carriers'
 
     has_many :tenant_vehicles
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     validates_uniqueness_of :code
 
     def get_tenant_vehicle(tenant_id, mode_of_transport, name)

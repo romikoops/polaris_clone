@@ -7,7 +7,6 @@ module Trucking
 
       def initialize(args)
         params = args[:params]
-        @sandbox = args[:sandbox]
         @document = args[:document]
         @stats = _stats
         @results = _results

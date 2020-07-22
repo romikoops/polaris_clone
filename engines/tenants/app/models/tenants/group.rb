@@ -4,7 +4,6 @@ module Tenants
   class Group < ApplicationRecord
     include PgSearch::Model
 
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :memberships, class_name: 'Groups::Membership', dependent: :destroy

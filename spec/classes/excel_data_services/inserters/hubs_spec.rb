@@ -56,8 +56,7 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            longitude: 138.6007456,
            country: { name: 'Australia' },
            city: 'Adelaide',
-           geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia',
-           sandbox: nil },
+           geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia' },
          nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, organization_id: organization.id },
          mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
          hub: { organization_id: organization.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide', photo: nil, hub_code: 'AUADL' } }]

@@ -4,7 +4,6 @@ module Tenants
   class Scope < ApplicationRecord
     belongs_to :target, polymorphic: true
     validates_uniqueness_of :target_id, scope: :target_type
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 

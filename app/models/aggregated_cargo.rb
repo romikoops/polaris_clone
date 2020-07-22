@@ -3,7 +3,6 @@
 class AggregatedCargo < Legacy::AggregatedCargo
   belongs_to :shipment
   before_validation :set_chargeable_weight!
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   def set_chargeable_weight!
     return nil if shipment.itinerary.nil?

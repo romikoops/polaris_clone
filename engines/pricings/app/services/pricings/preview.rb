@@ -120,7 +120,6 @@ module Pricings
         organization_id: @organization.id,
         truck_type: @cargo_class == 'lcl' ? 'default' : 'chassis',
         cargo_classes: [@cargo_class],
-        sandbox: @sandbox,
         order_by: 'group_id'
       }
       @params.slice(:selectedOriginTrucking, :selectedDestinationTrucking).each do |key, target|
@@ -208,8 +207,7 @@ module Pricings
           args: {
             schedules: default_schedules(tenant_vehicle_id: pricing.tenant_vehicle_id),
             pricing: pricing,
-            cargo_class_count: 1,
-            sandbox: @sandbox
+            cargo_class_count: 1
           }
         ).perform
         @manipulated_pricings |= manipulated
@@ -228,8 +226,7 @@ module Pricings
           args: {
             schedules: scheds,
             local_charge: local_charge,
-            cargo_class_count: 1,
-            sandbox: @sandbox
+            cargo_class_count: 1
           }
         ).perform
         @manipulated_local_charges |= manipulated
@@ -247,7 +244,6 @@ module Pricings
             trucking_pricing: trucking,
             date: Date.today,
             cargo_class_count: 1,
-            sandbox: @sandbox
           }
         ).perform
 

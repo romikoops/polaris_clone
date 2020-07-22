@@ -10,7 +10,6 @@ module Legacy
     belongs_to :tenant_vehicle, optional: true
     belongs_to :itinerary, optional: true
     belongs_to :carrier, optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :mode_of_transport, presence: true, uniqueness: {
       scope: %i[organization_id aggregate tenant_vehicle_id carrier_id cargo_class itinerary_id],

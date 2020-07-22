@@ -24,7 +24,7 @@ module ExcelDataServices
       def create_missing_charge_categories(charges_data)
         keys_and_names = charges_data.flat_map { |single| single[:fees].values.map { |fee| fee.slice(:key, :name) } }
         keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
-          ChargeCategory.from_code(code: pair[:key], organization_id: organization.id, name: pair[:name], sandbox: @sandbox)
+          ChargeCategory.from_code(code: pair[:key], organization_id: organization.id, name: pair[:name])
         end
       end
 
@@ -62,7 +62,7 @@ module ExcelDataServices
 
       def all_carriers_of_tenant
         @all_carriers_of_tenant ||= Carrier.where(
-          id: TenantVehicle.where(organization_id: organization.id, sandbox: @sandbox).pluck(:carrier_id).compact.uniq
+          id: TenantVehicle.where(organization_id: organization.id).pluck(:carrier_id).compact.uniq
         )
       end
 
@@ -71,8 +71,7 @@ module ExcelDataServices
         tv_params = { name: service_level,
                       carrier: carrier,
                       organization: organization,
-                      mode_of_transport: params[:mot],
-                      sandbox: @sandbox }
+                      mode_of_transport: params[:mot] }
         tv_params.delete(:name) if service_level.casecmp?('all')
 
         # FIX: `Vehicle` shouldn't be creating a `TenantVehicle`!
@@ -81,7 +80,7 @@ module ExcelDataServices
             name: service_level,
             carrier_name: carrier&.name,
             organization_id: organization.id,
-            mot: params[:mot], sandbox: @sandbox
+            mot: params[:mot]
           )]
       end
 
@@ -113,7 +112,6 @@ module ExcelDataServices
           expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
           mode_of_transport: params[:mot],
           tenant_vehicle_id: tenant_vehicle_id,
-          sandbox: @sandbox,
           group_id: @group_id.presence || params[:group_id],
           metadata: metadata(row: params)
         )

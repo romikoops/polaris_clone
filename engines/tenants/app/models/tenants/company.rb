@@ -6,7 +6,6 @@ module Tenants
 
     acts_as_paranoid
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :memberships, as: :member
     has_many :users, class_name: 'Tenants::User'
     has_many :groups, through: :memberships

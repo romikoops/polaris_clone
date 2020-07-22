@@ -24,13 +24,12 @@ module Wheelhouse
     end
 
     def result
-      params = ActionController::Parameters.new(shipment: shipping_params, sandbox: nil)
+      params = ActionController::Parameters.new(shipment: shipping_params)
       offer_calculator = OfferCalculator::Calculator.new(
         shipment: @shipment,
         params: params,
         user: @user,
-        wheelhouse: true,
-        sandbox: nil
+        wheelhouse: true
       )
       offer_calculator.perform
       offer_calculator.quotation

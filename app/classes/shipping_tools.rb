@@ -17,7 +17,7 @@ class ShippingTools
     @current_organization = ::Organizations::Organization.current
   end
 
-  def create_shipment(details, current_user, sandbox = nil)
+  def create_shipment(details, current_user)
     scope = OrganizationManager::ScopeService.new(
       target: current_user,
       organization: current_organization
@@ -33,8 +33,7 @@ class ShippingTools
       status: 'booking_process_started',
       load_type: load_type,
       direction: direction,
-      organization: current_organization,
-      sandbox: sandbox
+      organization: current_organization
     )
     shipment.save!
 
@@ -56,7 +55,7 @@ class ShippingTools
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def get_offers(params, current_user, sandbox = nil)
+  def get_offers(params, current_user)
     scope = OrganizationManager::ScopeService.new(
       target: current_user,
       organization: current_organization
@@ -64,8 +63,8 @@ class ShippingTools
 
     raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.blank?
 
-    shipment = Legacy::Shipment.where(sandbox: sandbox).find(params[:shipment_id])
-    offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user, sandbox: sandbox)
+    shipment = Legacy::Shipment.find(params[:shipment_id])
+    offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user)
 
     Skylight.instrument title: 'OfferCalculator Perform' do
       offer_calculator.perform
@@ -101,13 +100,13 @@ class ShippingTools
     raise ApplicationError::InternalError
   end
 
-  def generate_shipment_pdf(shipment:, sandbox: nil)
+  def generate_shipment_pdf(shipment:)
     document = Pdf::Service.new(user: shipment.user, organization: shipment.organization).shipment_pdf(shipment: shipment)
     document.attachment
   end
 
-  def update_shipment(params, current_user, sandbox = nil)
-    shipment = Shipment.where(sandbox: sandbox).find(params[:shipment_id])
+  def update_shipment(params, current_user)
+    shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
 
     hsCodes = shipment_data[:hsCodes].as_json
@@ -120,26 +119,24 @@ class ShippingTools
 
     # Shipper
     resource = shipment_data.require(:shipper)
-    contact_address = Address.create_and_geocode(contact_address_params(resource).merge(sandbox: sandbox))
+    contact_address = Address.create_and_geocode(contact_address_params(resource))
     contact_params = contact_params(resource, contact_address.id)
-    contact = search_contacts(contact_params, current_user, sandbox)
+    contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by(
       contact_id: contact.id,
-      contact_type: 'shipper',
-      sandbox: sandbox
+      contact_type: 'shipper'
     )
     shipper = { data: contact, address: contact_address.to_custom_hash }
 
     # Consignee
     resource = shipment_data.require(:consignee)
-    contact_address = Address.create_and_geocode(contact_address_params(resource).merge(sandbox: sandbox))
+    contact_address = Address.create_and_geocode(contact_address_params(resource))
     contact_params = contact_params(resource, contact_address.id)
-    contact = search_contacts(contact_params, current_user, sandbox)
+    contact = search_contacts(contact_params, current_user)
 
     consignee = shipment.shipment_contacts.find_or_create_by(
       contact_id: contact.id,
-      contact_type: 'consignee',
-      sandbox: sandbox
+      contact_type: 'consignee'
     )
 
     raise ApplicationError::ContactsRedundancyError if consignee.invalid?
@@ -149,11 +146,10 @@ class ShippingTools
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
       contact_params = contact_params(resource, nil)
-      contact = search_contacts(contact_params, current_user, sandbox)
+      contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(
         contact_id: contact.id,
-        contact_type: 'notifyee',
-        sandbox: sandbox
+        contact_type: 'notifyee'
       )
       contact
     end || []
@@ -253,13 +249,13 @@ class ShippingTools
     }
   end
 
-  def request_shipment(params, current_user, sandbox = nil)
-    shipment = Legacy::Shipment.find_by(id: params[:shipment_id], sandbox: sandbox)
+  def request_shipment(params, current_user)
+    shipment = Legacy::Shipment.find_by(id: params[:shipment_id])
     shipment.status = current_user.activation_state == 'active' ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
 
-    shipment_request_creator = Shipments::ShipmentRequestCreator.new(legacy_shipment: shipment, user: current_user, sandbox: sandbox)
+    shipment_request_creator = Shipments::ShipmentRequestCreator.new(legacy_shipment: shipment, user: current_user)
     shipment_request_creator.create
 
     raise ApplicationError::DataMappingError if shipment_request_creator.errors.any?
@@ -284,10 +280,10 @@ class ShippingTools
             .merge(address_id: address_id)
   end
 
-  def choose_offer(params, current_user, sandbox = nil)
+  def choose_offer(params, current_user)
     raise ApplicationError::NotLoggedIn if current_user.blank?
 
-    shipment = Shipment.find_by(id: params[:shipment_id] || params[:id], sandbox: sandbox)
+    shipment = Shipment.find_by(id: params[:shipment_id] || params[:id])
 
     raise ApplicationError::ShipmentNotFound if shipment.blank?
 
@@ -304,7 +300,7 @@ class ShippingTools
 
     @schedule = params[:schedule].as_json
 
-    shipment.itinerary = Trip.find_by(id: @schedule['trip_id'], sandbox: sandbox)&.itinerary
+    shipment.itinerary = Trip.find_by(id: @schedule['trip_id'])&.itinerary
     case shipment.load_type
     when 'cargo_item'
       @dangerous = false
@@ -315,8 +311,8 @@ class ShippingTools
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub = Hub.find_by(id: @schedule['origin_hub']['id'], sandbox: sandbox)
-    @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'], sandbox: sandbox)
+    @origin_hub = Hub.find_by(id: @schedule['origin_hub']['id'])
+    @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'])
     if shipment.has_pre_carriage?
       trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - trucking_seconds
@@ -438,10 +434,10 @@ class ShippingTools
     }
   end
 
-  def search_contacts(contact_params, current_user, sandbox = nil)
+  def search_contacts(contact_params, current_user)
     contact_email = contact_params['email']
-    existing_contact = Contact.where(user: current_user, email: contact_email, sandbox: sandbox).first
-    existing_contact || Contact.create(contact_params.merge(sandbox: sandbox, user: current_user))
+    existing_contact = Contact.where(user: current_user, email: contact_email).first
+    existing_contact || Contact.create(contact_params.merge(user: current_user))
   end
 
   def reuse_cargo_units(shipment, cargo_units)
@@ -462,20 +458,20 @@ class ShippingTools
     end
   end
 
-  def view_more_schedules(trip_id, delta, sandbox = nil)
+  def view_more_schedules(trip_id, delta)
     trip = Trip.find(trip_id)
     trips = if delta.to_i.positive?
-              trip.later_trips(sandbox: sandbox)
+              trip.later_trips
             else
-              trip.earlier_trips(sandbox: sandbox).sort_by(&:start_date)
+              trip.earlier_trips.sort_by(&:start_date)
             end
     final_results = false
 
-    trips = trip.last_trips(sandbox: sandbox).sort_by(&:start_date) if trips.empty? && delta.to_i.positive?
+    trips = trip.last_trips.sort_by(&:start_date) if trips.empty? && delta.to_i.positive?
 
     final_results = true if (trips.length < 5 || trips.empty?) && delta.to_i.positive?
     if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
-      trips = trip.earliest_trips(sandbox: sandbox).sort_by(&:start_date)
+      trips = trip.earliest_trips.sort_by(&:start_date)
     end
 
     {
@@ -486,7 +482,7 @@ class ShippingTools
     }
   end
 
-  def save_pdf_quotes(shipment, organization, schedules, sandbox = nil)
+  def save_pdf_quotes(shipment, organization, schedules)
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
     tenders = shipment.charge_breakdowns
                       .where(trip_id: trip_ids)
@@ -500,40 +496,38 @@ class ShippingTools
     Wheelhouse::PdfService.new(tenders: tenders).download
   end
 
-  def save_and_send_quotes(shipment, schedules, email, sandbox = nil)
+  def save_and_send_quotes(shipment, schedules, email)
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     QuoteMailer.quotation_email(
       shipment,
       main_quote.shipments.where(trip_id: trip_ids).to_a,
       email,
-      main_quote,
-      sandbox
+      main_quote
     ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
       target: shipment.user,
     ).fetch(:send_email_on_quote_email)
-    QuoteMailer.quotation_admin_email(main_quote, sandbox).deliver_later if send_on_quote
+    QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_quote
   end
 
-  def tenant_notification_email(user, shipment, sandbox = nil)
-    ShipmentMailer.tenant_notification(user, shipment, sandbox).deliver_later
+  def tenant_notification_email(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
-  def shipper_notification_email(user, shipment, sandbox = nil)
-    ShipmentMailer.shipper_notification(user, shipment, sandbox).deliver_later
+  def shipper_notification_email(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
-  def shipper_welcome_email(user, sandbox = nil)
+  def shipper_welcome_email(user)
     no_welcome_content = Legacy::Content.where(organization_id: user.organization_id, component: 'WelcomeMail').empty?
-    WelcomeMailer.welcome_email(user, sandbox).deliver_later unless no_welcome_content
+    WelcomeMailer.welcome_email(user).deliver_later unless no_welcome_content
   end
 
-  def shipper_confirmation_email(user, shipment, sandbox = nil)
+  def shipper_confirmation_email(user, shipment)
     ShipmentMailer.shipper_confirmation(
       user,
-      shipment,
-      sandbox
+      shipment
     ).deliver_later
   end
 

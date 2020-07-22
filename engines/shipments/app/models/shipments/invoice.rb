@@ -2,7 +2,7 @@
 
 module Shipments
   class Invoice < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     attr_readonly :invoice_number
 

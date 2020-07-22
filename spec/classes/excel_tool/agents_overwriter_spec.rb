@@ -11,8 +11,7 @@ RSpec.deprecate "ExcelTool::AgentsOverwriter#perform" do
       let(:options) do
         {
           params: { xlsx: file_fixture('excel').join('dummy.xlsx').to_s },
-          user: user,
-          sandbox: nil
+          user: user
         }
       end
       let(:dummy_agents_row_data) do

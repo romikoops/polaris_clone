@@ -16,7 +16,7 @@ module Shipments
           FactoryBot.create_list(:legacy_file, 2, :with_file, shipment: legacy_shipment, organization: organization)
         end
 
-        let(:creator) { described_class.new(legacy_shipment: legacy_shipment, user: user, sandbox: nil) }
+        let(:creator) { described_class.new(legacy_shipment: legacy_shipment, user: user) }
         let(:shipment_request) { creator.create.shipment_request }
 
         it 'creates a valid shipment request' do

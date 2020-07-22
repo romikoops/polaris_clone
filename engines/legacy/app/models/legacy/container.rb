@@ -27,7 +27,6 @@ module Legacy
     CARGO_CLASSES = TARE_WEIGHTS.keys.map(&:to_s)
 
     belongs_to :shipment, class_name: 'Legacy::Shipment'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class, :set_tare_weight
 

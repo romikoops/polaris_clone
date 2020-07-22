@@ -2,10 +2,9 @@
 
 module Tenants
   class ScopeService
-    def initialize(target: nil, organization: nil, sandbox: nil)
+    def initialize(target: nil, organization: nil)
       @target = target
       @organization = organization
-      @sandbox = sandbox
     end
 
     def fetch(*keys)
@@ -18,12 +17,12 @@ module Tenants
 
     private
 
-    attr_reader :sandbox, :target, :organization
+    attr_reader :target, :organization
 
     def scope
       @scope ||= begin
         resolved_scope = hierarchy.each_with_object(Tenants::DEFAULT_SCOPE.deep_dup) do |hierachy_target, result|
-          next unless Tenants::Scope.exists?(target: hierachy_target, sandbox: sandbox)
+          next unless Tenants::Scope.exists?(target: hierachy_target)
 
           result.deep_merge!(Tenants::Scope.find_by(target: hierachy_target).content)
         end

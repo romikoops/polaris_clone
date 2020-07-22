@@ -3,7 +3,6 @@
 class ApplicationController < Api::ApiController
   include Response
 
-  before_action :set_sandbox, except: [:health]
   before_action :set_raven_context, except: [:health]
   before_action :set_paper_trail_whodunnit, except: [:health]
 
@@ -78,11 +77,6 @@ class ApplicationController < Api::ApiController
       url: request.url,
       scope: current_scope
     )
-  end
-
-  def set_sandbox
-    @sandbox = nil
-    # @sandbox = Tenants::Sandbox.find_by(id: request.headers[:sandbox])
   end
 
   def test_user?

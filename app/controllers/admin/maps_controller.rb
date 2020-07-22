@@ -3,7 +3,7 @@
 class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style/ClassAndModuleChildren
   def geojsons
     @hub = Hub.find_by(id: params[:id])
-    @truckings = @hub.truckings.where(sandbox: @sandbox)
+    @truckings = @hub.truckings
     response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) do
       @truckings.first(20).map { |tl| response_hash(tl) }
     end
@@ -26,7 +26,7 @@ class Admin::MapsController < Admin::AdminBaseController # rubocop:disable Style
       south: params[:south],
       north: params[:north]
     }
-    raw_query = 
+    raw_query =
     <<-SQL
     SELECT *
     FROM locations_locations

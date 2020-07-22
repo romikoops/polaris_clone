@@ -53,20 +53,14 @@ RSpec.describe Admin::PricingsController, type: :controller do
       second_stop = stops.second
       stops_table_jsons = [
         { 'id' => first_stop.id,
-          'created_at' => first_stop.created_at,
           'hub_id' => first_stop.hub_id,
           'index' => 0,
           'itinerary_id' => itinerary.id,
-          'sandbox_id' => nil,
-          'updated_at' => first_stop.updated_at,
           'hub' => { 'id' => first_stop.hub_id, 'name' => 'Gothenburg', 'nexus' => { 'id' => first_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } },
         { 'id' => second_stop.id,
-          'created_at' => second_stop.created_at,
           'hub_id' => second_stop.hub_id,
           'index' => 1,
           'itinerary_id' => itinerary.id,
-          'sandbox_id' => nil,
-          'updated_at' => second_stop.updated_at,
           'hub' => { 'id' => second_stop.hub_id, 'name' => 'Gothenburg', 'nexus' => { 'id' => second_stop.hub.nexus.id, 'name' => 'Gothenburg' }, 'address' => { 'geocoded_address' => '438 80 Landvetter, Sweden', 'latitude' => 57.694253, 'longitude' => 11.854048 } } }
       ]
 

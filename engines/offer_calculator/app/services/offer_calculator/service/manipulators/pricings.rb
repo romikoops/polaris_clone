@@ -14,8 +14,7 @@ module OfferCalculator
           {
             dates: export_dates,
             cargo_class_count: shipment.cargo_classes.count,
-            pricing: object,
-            sandbox: @sandbox
+            pricing: object
           }
         end
       end

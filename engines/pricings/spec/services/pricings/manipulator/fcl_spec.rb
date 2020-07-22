@@ -40,7 +40,6 @@ RSpec.describe Pricings::Manipulator do
 
   let(:args) do
     {
-      sandbox: nil,
       pricing: pricing,
       dates: dates,
       cargo_class_count: target_shipment.cargo_classes.count,
@@ -49,7 +48,6 @@ RSpec.describe Pricings::Manipulator do
   end
   let(:attribute_args) do
     {
-      sandbox: nil,
       itinerary_id: pricing.itinerary_id,
       tenant_vehicle_id: pricing.tenant_vehicle_id,
       cargo_class: pricing.cargo_class,
@@ -227,7 +225,6 @@ RSpec.describe Pricings::Manipulator do
         end
         let(:args) do
           {
-            sandbox: nil,
             itinerary_id: pricing.itinerary_id,
             tenant_vehicle_id: pricing.tenant_vehicle_id,
             cargo_class: pricing.cargo_class,

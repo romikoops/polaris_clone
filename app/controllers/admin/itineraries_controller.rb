@@ -28,7 +28,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def stops
-    response_handler(itinerary_stops.where(sandbox: @sandbox).map { |stop| stop_index_json(stop: stop) })
+    response_handler(itinerary_stops.map { |stop| stop_index_json(stop: stop) })
   end
 
   def edit_notes
@@ -36,7 +36,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def show
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id])
     resp = {
              itinerary: itinerary,
              validationResult: Validator::Itinerary.new(user: organization_user, itinerary: itinerary).perform,
@@ -47,7 +47,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   private
 
   def handle_search
-    itinerary_relation = ::Legacy::Itinerary.where(organization: current_organization, sandbox: @sandbox)
+    itinerary_relation = ::Legacy::Itinerary.where(organization: current_organization)
 
     {
       name: ->(query, param) { query.list_search(param) },
@@ -88,7 +88,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def hub_address(current_hub_type, el)
-    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el, sandbox: @sandbox)
+    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el)
   end
 
   def first_sheet
@@ -100,13 +100,12 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     {
       mode_of_transport: params['itinerary']['mot'],
       name: params['itinerary']['name'],
-      organization_id: current_organization_id,
-      sandbox: @sandbox
+      organization_id: current_organization_id
     }
   end
 
   def as_json_itineraries
-    itineraries = Itinerary.where(organization: current_organization, sandbox: @sandbox)
+    itineraries = Itinerary.where(organization: current_organization)
     itineraries.map(&:as_options_json)
   end
 
@@ -129,16 +128,15 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def itinerary_stops
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id])
     itinerary.stops.order(:index)
   end
 
   def itinerary_with_notes
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id])
     itinerary.notes.find_or_create_by!(body: params[:notes][:body],
                                        header: params[:notes][:header],
-                                       level: params[:notes][:level],
-                                       sandbox: @sandbox)
+                                       level: params[:notes][:level])
     itinerary.notes
   end
 

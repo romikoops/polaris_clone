@@ -2,7 +2,7 @@
 
 module Shipments
   class LineItem < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     belongs_to :invoice
   end

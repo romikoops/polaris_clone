@@ -92,7 +92,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def all_hubs
-    processed_hubs = Hub.where(sandbox: @sandbox, organization_id: current_organization.id).map do |hub|
+    processed_hubs = Hub.where(organization_id: current_organization.id).map do |hub|
       { data: hub, address: hub.address.to_custom_hash }
     end
     response_handler(hubs: processed_hubs)
@@ -104,7 +104,6 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
       text: "#{current_organization.slug} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
       type: 'hubs',
       options: {
-        sandbox: @sandbox,
         user: organization_user,
         group_id: upload_params[:group_id]
       }
@@ -118,8 +117,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     document = ExcelDataServices::Loaders::Downloader.new(
       organization: current_organization,
       category_identifier: category_identifier,
-      file_name: file_name,
-      sandbox: @sandbox
+      file_name: file_name
     ).perform
 
     response_handler(
@@ -212,7 +210,6 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
     hub[:organization_id] = current_organization.id
     hub[:address_id] = @new_loc.id
     hub[:nexus_id] = @new_nexus.id
-    hub[:sandbox] = @sandbox
     hub
   end
 
@@ -222,7 +219,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def geo_address
-    Address.create_and_geocode(params[:address].as_json.merge(sandbox: @sandbox))
+    Address.create_and_geocode(params[:address].as_json)
   end
 
   def nexus
@@ -249,7 +246,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def hub_route_map(hub)
-    hub.stops.where(sandbox: @sandbox).map(&:itinerary).map do |itinerary|
+    hub.stops.map(&:itinerary).map do |itinerary|
       itinerary.as_options_json(methods: :routes)
     end
   end

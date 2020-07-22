@@ -67,10 +67,9 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(organization:, file_name:, user:, sandbox:, options:)
+      def initialize(organization:, file_name:, user:, options:)
         @organization = organization
         @user = user
-        @sandbox = sandbox
         @options = options
 
         @scope = ::OrganizationManager::ScopeService.new(organization: organization, target: user).fetch

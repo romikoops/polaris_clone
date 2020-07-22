@@ -3,7 +3,7 @@
 module AddressBook
   class Contact < ApplicationRecord
     include PgSearch::Model
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     pg_search_scope :contact_search, against: %i[first_name last_name company_name email phone country_code], using: {
       tsearch: { prefix: true }

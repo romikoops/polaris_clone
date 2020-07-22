@@ -153,7 +153,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
       section = address_params.dig(:address, key)
       memo + (section.presence || '')
     end
-    Legacy::Address.geocoded_address(address_string, @sandbox)
+    Legacy::Address.geocoded_address(address_string)
   end
 
   def country_table_ref

@@ -35,7 +35,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
 
   describe 'quotation_email' do
-    let(:mail) { described_class.quotation_email(original_shipment, quotation.shipments, user.email, quotation, false).deliver_now }
+    let(:mail) { described_class.quotation_email(original_shipment, quotation.shipments, user.email, quotation).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq(
@@ -52,7 +52,7 @@ RSpec.describe QuoteMailer, type: :mailer do
       create(:legacy_quotation, user: user, shipment_count: 1, original_shipment: original_shipment, billing: :internal)
     end
     let(:mail) {
-      described_class.quotation_email(original_shipment, quotation.shipments, user.email, quotation, false).deliver_now
+      described_class.quotation_email(original_shipment, quotation.shipments, user.email, quotation).deliver_now
     }
     let(:imc_reference) { quotation.shipments.pluck(:imc_reference).join(',') }
 

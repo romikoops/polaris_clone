@@ -13,17 +13,6 @@ module MultiTenantTools
     )
   end
 
-  def create_sandboxes
-    sandbox_tenants = []
-    Tenant.all.map do |t|
-      sandbox_tenants << t if ::Tenants::Tenant.find_by(legacy_id: t.id).slug.include? 'sandbox'
-    end
-
-    sandbox_tenants.each do |st|
-      new_site_from_tenant(st)
-    end
-  end
-
   def create_internal_users(tenant)
     unless tenant.users.exists?(email: 'shopadmin@itsmycargo.com')
       user = tenant.users.create!(

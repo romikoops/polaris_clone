@@ -2,7 +2,6 @@
 
 class Remark < Legacy::Remark
   belongs_to :organization, class_name: 'Organizations::Organization'
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 end
 
 # == Schema Information

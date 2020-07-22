@@ -25,7 +25,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'tenant_notification' do
-    let(:mail) { described_class.tenant_notification(user, shipment, false).deliver_now }
+    let(:mail) { described_class.tenant_notification(user, shipment).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq("FCL Booking: Gothenburg - Gothenburg, Refs: #{shipment.imc_reference}")
@@ -36,7 +36,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'shipper_notification' do
-    let(:mail) { described_class.shipper_notification(user, shipment, false).deliver_now }
+    let(:mail) { described_class.shipper_notification(user, shipment).deliver_now }
 
     context 'when shipment is external' do
       it 'renders', :aggregate_failures do
@@ -71,7 +71,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   end
 
   describe 'shipper_confirmation' do
-    let(:mail) { described_class.shipper_confirmation(user, shipment, false).deliver_now }
+    let(:mail) { described_class.shipper_confirmation(user, shipment).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq("FCL Booking: Gothenburg - Gothenburg, Refs: #{shipment.imc_reference}")

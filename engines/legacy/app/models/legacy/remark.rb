@@ -5,7 +5,6 @@ module Legacy
     self.table_name = 'remarks'
 
     belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 

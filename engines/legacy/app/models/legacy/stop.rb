@@ -9,7 +9,6 @@ module Legacy
     belongs_to :itinerary
     belongs_to :hub
     has_many :layovers, dependent: :destroy
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 

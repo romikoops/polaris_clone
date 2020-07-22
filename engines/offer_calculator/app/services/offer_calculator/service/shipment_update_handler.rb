@@ -6,7 +6,7 @@ module OfferCalculator
       InvalidPickupAddress = Class.new(StandardError)
       InvalidDeliveryAddress = Class.new(StandardError)
 
-      def initialize(shipment:, params:, quotation:, wheelhouse: false, sandbox: nil)
+      def initialize(shipment:, params:, quotation:, wheelhouse: false)
         @params = params
         @quotation = quotation
         super(shipment: shipment, quotation: quotation)
@@ -160,7 +160,6 @@ module OfferCalculator
         snakefied_address_hash.deep_symbolize_keys!
         snakefied_address_hash[:geocoded_address] = snakefied_address_hash.delete(:full_address)
         snakefied_address_hash[:street_number] = snakefied_address_hash.delete(:number)
-        snakefied_address_hash[:sandbox] = @sandbox
         ActionController::Parameters.new(snakefied_address_hash)
       end
 

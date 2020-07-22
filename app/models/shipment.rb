@@ -16,7 +16,6 @@ class Shipment < Legacy::Shipment
   belongs_to :destination_nexus, class_name: 'Nexus', optional: true
   belongs_to :origin_hub, class_name: 'Hub', optional: true
   belongs_to :destination_hub, class_name: 'Hub', optional: true
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   has_many :contacts, through: :shipment_contacts
   has_many :messages, through: :conversations
@@ -28,7 +27,7 @@ class Shipment < Legacy::Shipment
     end
   end
 
-  has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+  has_paper_trail
 
   self.per_page = 4
   accepts_nested_attributes_for :containers, allow_destroy: true

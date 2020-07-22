@@ -6,7 +6,7 @@ module Shipments
 
     enum billing: {external: 0, internal: 1, test: 2}
 
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     belongs_to :tender, class_name: 'Quotations::Tender'
     belongs_to :organization, class_name: 'Organizations::Organization'

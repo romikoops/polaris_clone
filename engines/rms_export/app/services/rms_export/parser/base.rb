@@ -3,9 +3,8 @@
 module RmsExport
   module Parser
     class Base
-      def initialize(organization_id:, sandbox: nil)
+      def initialize(organization_id:)
         @organization = Organizations::Organization.find_by(id: organization_id)
-        @sandbox = sandbox
       end
 
       def create_csv_file(data:, key:, headers: false)

@@ -4,10 +4,9 @@ module RateExtractor
   class Section
     attr_reader :path, :organization
 
-    def initialize(organization:, path:, sandbox: nil)
+    def initialize(organization:, path:)
       @organization = organization
       @path = path
-      @sandbox = sandbox
     end
 
     def rates

@@ -34,7 +34,6 @@ RSpec.describe Pricings::Manipulator do
   let(:dates) { { start_date: schedules.first.etd, end_date: schedules.last.etd } }
   let(:args) do
     {
-      sandbox: nil,
       pricing: pricing,
       dates: dates,
       cargo_class_count: target_shipment.cargo_classes.count,
@@ -65,7 +64,6 @@ RSpec.describe Pricings::Manipulator do
     let(:margin_type) { :trucking_pre_margin }
     let(:args) do
       {
-        sandbox: nil,
         trucking_pricing: trucking_pricing,
         cargo_class_count: target_shipment.cargo_classes.count,
         dates: dates,

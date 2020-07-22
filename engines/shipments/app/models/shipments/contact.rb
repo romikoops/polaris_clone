@@ -2,7 +2,7 @@
 
 module Shipments
   class Contact < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     enum contact_type: { consignee: 0,
                          consignor: 1,

@@ -24,8 +24,7 @@ module ExcelDataServices
         Itinerary.find_by(
           organization: organization,
           name: row.itinerary_name,
-          mode_of_transport: row.mot,
-          sandbox: @sandbox
+          mode_of_transport: row.mot
         )
       end
 
@@ -36,8 +35,7 @@ module ExcelDataServices
           organization: organization,
           name: row.service_level,
           mode_of_transport: row.mot,
-          carrier: carrier,
-          sandbox: @sandbox
+          carrier: carrier
         )
       end
 
@@ -51,7 +49,6 @@ module ExcelDataServices
             value: margin_applies_to_all_fees ? row.margin : 0,
             cargo_class: row.load_type,
             itinerary_id: itinerary.id,
-            sandbox: @sandbox,
             margin_type: row.margin_type,
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
@@ -110,14 +107,12 @@ module ExcelDataServices
 
           charge_category = ChargeCategory.from_code(
             organization_id: organization.id,
-            code: row.fee_code,
-            sandbox: @sandbox
+            code: row.fee_code
           )
 
           { organization_id: organization.id,
             charge_category_id: charge_category.id,
             operator: row.operator,
-            sandbox: @sandbox,
             value: row.margin }
         end
       end

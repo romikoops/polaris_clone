@@ -7,7 +7,7 @@ class ShipmentMailer < ApplicationMailer
 
   TESTING_EMAIL = 'angelica@itsmycargo.com'
 
-  def tenant_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
     @user_profile = ProfileTools.profile_for_user(user: @user)
@@ -41,7 +41,7 @@ class ShipmentMailer < ApplicationMailer
     mail(mail_options, &:html)
   end
 
-  def shipper_notification(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+  def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
     @user_profile = ProfileTools.profile_for_user(user: @user)
@@ -73,7 +73,7 @@ class ShipmentMailer < ApplicationMailer
     mail(mail_options, &:html)
   end
 
-  def shipper_confirmation(user, shipment, sandbox = nil) # rubocop:disable Metrics/AbcSize
+  def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
     @user_profile = ProfileTools.profile_for_user(user: @user)

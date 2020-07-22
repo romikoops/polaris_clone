@@ -4,7 +4,6 @@ class ShipmentContact < Legacy::ShipmentContact
   CONTACT_TYPES = %w[shipper consignee notifyee].freeze
 
   belongs_to :shipment
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   belongs_to :contact
 
   validates :contact_type,

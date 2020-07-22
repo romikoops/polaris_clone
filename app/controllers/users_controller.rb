@@ -15,7 +15,7 @@ class UsersController < ApplicationController
       end
       user_locs = Legacy::UserAddress.where(user: organization_user)
       addresses = user_locs.map do |ul|
-        { user: ul, address: ul.address.to_custom_hash } if ul.address.sandbox == @sandbox
+        { user: ul, address: ul.address.to_custom_hash }
       end
 
       {
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
 
   def account
     user = organization_user
-    @addresses = Legacy::UserAddress.where(user: user, sandbox: @sandbox).map(&:address)
+    @addresses = Legacy::UserAddress.where(user: user).map(&:address)
 
     { addresses: @addresses }
   end
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     # @user.send_confirmation_instructions if @user.valid? && !@user.guest && updating_guest_to_regular_user
 
     if params[:update][:address]
-      address = Address.create_from_raw_params!(address_params.merge(sandbox: @sandbox))
+      address = Address.create_from_raw_params!(address_params)
       address.geocode_from_address_fields!
       unless address.nil?
         Legacy::UserAddress.create(user: user, address: address)

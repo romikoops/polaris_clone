@@ -2,7 +2,6 @@
 
 module Tenants
   class Membership < ApplicationRecord
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :member, polymorphic: true
     belongs_to :group
     validates_uniqueness_of :member_type, scope: %i(member_id priority)

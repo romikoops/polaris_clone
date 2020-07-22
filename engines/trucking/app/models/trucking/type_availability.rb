@@ -9,7 +9,6 @@ module Trucking
 
     has_many :hub_availabilities
     belongs_to :country, class_name: 'Legacy::Country', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     validates :truck_type,
               uniqueness: {
                 scope: %i(carriage load_type query_method country_id),

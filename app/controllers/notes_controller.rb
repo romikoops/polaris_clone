@@ -16,10 +16,10 @@ class NotesController < ApplicationController
   end
 
   def delete
-    itinerary = current_organization.itineraries.find_by(id: params[:itinerary_id], sandbox: @sandbox)
-    note = itinerary.notes.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = current_organization.itineraries.find_by(id: params[:itinerary_id])
+    note = itinerary.notes.find_by(id: params[:id])
     note.destroy
-    resp = itinerary.notes.where(sandbox: @sandbox)
+    resp = itinerary.notes
     response_handler(resp)
   end
 end

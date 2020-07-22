@@ -9,7 +9,6 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   has_many :notes,     dependent: :destroy, as: :target
   has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
   has_many :hubs, through: :stops
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   self.per_page = 12
 
@@ -21,8 +20,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     closing_date:,
     vessel:,
     voyage_code:,
-    load_type:,
-    sandbox: nil
+    load_type:
   )
     results = {
       layovers: [],
@@ -81,8 +79,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
                                 ordinal_array:,
                                 tenant_vehicle_id:,
                                 closing_date_buffer: 4,
-                                load_type:,
-                                sandbox: nil)
+                                load_type:)
     results = {
       layovers: [],
       trips: []
@@ -105,8 +102,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
           end_date: journey_end,
           tenant_vehicle_id: tenant_vehicle_id,
           closing_date: closing_date,
-          load_type: parse_load_type(load_type),
-          sandbox_id: sandbox&.id
+          load_type: parse_load_type(load_type)
         )
 
         unless trip.save
@@ -125,8 +121,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
               itinerary_id: stop.itinerary_id,
               stop_id: stop.id,
               closing_date: closing_date,
-              trip_id: trip.id,
-              sandbox_id: sandbox&.id
+              trip_id: trip.id
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
@@ -137,8 +132,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
               itinerary_id: stop.itinerary_id,
               stop_id: stop.id,
               trip_id: trip.id,
-              closing_date: nil,
-              sandbox_id: sandbox&.id
+              closing_date: nil
             }
           end
         end
@@ -245,8 +239,8 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     pricings.exists?(user_id: ids)
   end
 
-  def pricing_count(sandbox = nil)
-    pricings.where(sandbox: sandbox).count
+  def pricing_count
+    pricings.count
   end
 
   def dedicated_pricing_count(user)
@@ -409,10 +403,9 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
   end
 
   def as_pricing_json(options = {})
-    sandbox = options.delete(:sandbox)
     {
       users_with_pricing: users_with_pricing,
-      pricing_count: pricing_count(sandbox)
+      pricing_count: pricing_count
     }.merge(attributes)
   end
 

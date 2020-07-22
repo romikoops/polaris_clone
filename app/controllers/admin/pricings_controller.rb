@@ -18,7 +18,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def client
-    @client = User.find_by(id: params[:id], sandbox: @sandbox)
+    @client = User.find_by(id: params[:id])
     @pricings = PricingTools.new(user: @client).get_user_pricings(params[:id])
 
     response_handler(userPricings: @pricings, client: @client)
@@ -26,8 +26,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def search # rubocop:disable Metrics/AbcSize
     query = {
-      organization_id: current_organization.id,
-      sandbox: @sandbox
+      organization_id: current_organization.id
     }
 
     query[:mode_of_transport] = params[:mot] if params[:mot]
@@ -47,8 +46,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   def disable
     pricing = Pricings::Pricing.find_by(
       id: params[:pricing_id],
-      organization_id: params[:organization_id],
-      sandbox: @sandbox
+      organization_id: params[:organization_id]
     )
     pricing.update(internal: params[:target_action] == 'disable')
 
@@ -56,7 +54,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def route
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id])
 
     pricings = pricings_based_on_scope(itinerary)
     if current_user.is_a? Organizations::User
@@ -67,13 +65,13 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
     response_handler(
       pricings: pricings.map(&:for_table_json),
-      itinerary: itinerary,
+      itinerary: itinerary.as_json.except(:sandbox_id),
       stops: Stop.where(itinerary_id: itinerary.id).map { |stop| stop_index_json(stop: stop) }
     )
   end
 
   def group
-    pricings = Pricings::Pricing.current.where(sandbox: @sandbox, group_id: params[:id])
+    pricings = Pricings::Pricing.current.where(group_id: params[:id])
 
     response_handler(
       pricings: pricings.map(&:for_table_json),
@@ -84,8 +82,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   def destroy
     Pricings::Pricing.find_by(
       organization_id: current_organization.id,
-      id: params[:id],
-      sandbox: @sandbox
+      id: params[:id]
     )&.destroy
 
     response_handler({})
@@ -97,7 +94,6 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       text: "group_id:#{params[:group_id] || 'all'}",
       type: 'pricings',
       options: {
-        sandbox: @sandbox,
         user: organization_user,
         group_id: upload_params[:group_id]
       }
@@ -116,7 +112,6 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       category_identifier: category_identifier,
       file_name: file_name,
       user: organization_user,
-      sandbox: @sandbox,
       options: {
         mode_of_transport: mot,
         load_type: load_type,
@@ -210,7 +205,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def handle_search
-    itinerary_relation = ::Legacy::Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox)
+    itinerary_relation = ::Legacy::Itinerary.where(organization_id: current_organization.id)
 
     relation_modifiers = {
       name: ->(query, param) { query.list_search(param) },
@@ -262,6 +257,6 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
 
   def pricings_based_on_scope(itinerary)
     pricings = itinerary.rates
-    pricings.current.where(sandbox: @sandbox)
+    pricings.current
   end
 end

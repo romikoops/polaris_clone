@@ -16,7 +16,6 @@ module Legacy
 
     belongs_to :role, optional: true, class_name: 'Legacy::Role'
     belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     has_many :user_addresses, class_name: 'Legacy::UserAddress', dependent: :destroy
     has_many :addresses, class_name: 'Legacy::Address', through: :user_addresses

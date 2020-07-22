@@ -24,7 +24,6 @@ module ExcelTool
       @schedules = _schedules
       @itinerary = params['itinerary']
       @user = args[:_user]
-      @sandbox = args[:sandbox]
     end
 
     def _stats
@@ -78,8 +77,7 @@ module ExcelTool
           closing_date: row[:closing_date],
           vessel: row[:vessel],
           voyage_code: row[:voyage_code],
-          load_type: row[:load_type],
-          sandbox: @sandbox
+          load_type: row[:load_type]
         )
         push_results(generator_results)
         push_stats(generator_results)
@@ -104,21 +102,18 @@ module ExcelTool
         organization_id: @user.organization_id,
         mode_of_transport: itinerary.mode_of_transport,
         name: row[:service_level],
-        sandbox: @sandbox,
         carrier: Carrier.find_by(name: row[:carrier])
       )
       tv ||= TenantVehicle.find_by(
         organization_id: @user.organization_id,
         mode_of_transport: itinerary.mode_of_transport,
-        sandbox: @sandbox,
         name: row[:service_level]
       )
       tv ||= Vehicle.create_from_name(
         name: service_level,
         mot: itinerary.mode_of_transport,
         organization_id: @user.organization_id,
-        carrier: row[:carrier],
-        sandbox: @sandbox
+        carrier: row[:carrier]
       )
       tv
     end

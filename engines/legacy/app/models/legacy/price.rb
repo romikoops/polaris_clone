@@ -5,8 +5,6 @@ module Legacy
     self.table_name = 'prices'
     belongs_to :charge, optional: true, class_name: 'Legacy::Charge'
 
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
-
     def rounded_attributes
       {
         value: value&.round(2),

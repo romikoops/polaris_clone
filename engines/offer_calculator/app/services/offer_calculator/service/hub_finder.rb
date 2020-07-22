@@ -18,7 +18,7 @@ module OfferCalculator
         if @shipment.has_carriage?(carriage)
           trucking_hubs(carriage)
         else
-          Legacy::Hub.where(organization_id: @shipment.organization_id, sandbox_id: @sandbox&.id,
+          Legacy::Hub.where(organization_id: @shipment.organization_id,
                             nexus_id: @shipment["#{target}_nexus_id"])
         end
       end
@@ -33,7 +33,6 @@ module OfferCalculator
           truck_type: trucking_details['truck_type'],
           carriage: carriage,
           cargo_classes: @shipment.cargo_classes,
-          sandbox: @sandbox,
           order_by: base_pricing_enabled ? 'group_id' : 'user_id'
         }
 

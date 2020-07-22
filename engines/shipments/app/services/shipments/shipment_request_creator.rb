@@ -4,10 +4,9 @@ module Shipments
   class ShipmentRequestCreator
     attr_reader :shipment_request, :legacy_shipment, :organization, :user, :errors
 
-    def initialize(legacy_shipment:, user:, sandbox:)
+    def initialize(legacy_shipment:, user:)
       @legacy_shipment = legacy_shipment
       @user = user
-      @sandbox_id = sandbox&.id
       @shipment_request = nil
       @errors = []
     end
@@ -38,7 +37,6 @@ module Shipments
         eori: legacy_shipment.eori,
         ref_number: legacy_shipment.imc_reference,
         submitted_at: Time.current,
-        sandbox_id: @sandbox_id,
         user: @user
       )
     end

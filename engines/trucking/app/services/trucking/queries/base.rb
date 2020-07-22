@@ -24,7 +24,6 @@ module Trucking
         @nexus_ids = args[:nexus_ids]
         @hub_ids = args[:hub_ids]
         @distance = args[:distance]
-        @sandbox = args[:sandbox]
         @groups = args[:groups]
       end
 

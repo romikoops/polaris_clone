@@ -2,7 +2,7 @@
 
 module Shipments
   class Shipment < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     belongs_to :destination, class_name: 'Routing::Terminal'
     belongs_to :origin, class_name: 'Routing::Terminal'

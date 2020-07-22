@@ -10,7 +10,6 @@ module Legacy
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :counterpart_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :notes, dependent: :destroy, as: :target
 
     scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }

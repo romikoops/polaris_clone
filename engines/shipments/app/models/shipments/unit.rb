@@ -2,7 +2,7 @@
 
 module Shipments
   class Unit < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     measured_weight :weight
     measured_volume :volume

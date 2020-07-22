@@ -6,7 +6,7 @@ module ExcelDataServices
       private
 
       def load_and_prepare_data
-        hubs = Hub.where(organization: organization, sandbox: @sandbox)
+        hubs = Hub.where(organization: organization)
 
         { 'Hubs' => prepare_hub_data(hubs: hubs) }
       end

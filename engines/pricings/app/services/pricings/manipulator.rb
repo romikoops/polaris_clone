@@ -10,7 +10,6 @@ module Pricings
       @target = target || Groups::Group.find_by(name: "default", organization: organization)
       @organization = organization
       @scope = OrganizationManager::ScopeService.new(target: target, organization: organization).fetch
-      @sandbox = args[:sandbox]
       @cargo_unit_id = args[:cargo_unit_id]
       @meta = {}
       if @type == :freight_margin
@@ -608,7 +607,6 @@ module Pricings
       {
         margin_type: type,
         organization_id: organization.id,
-        sandbox: sandbox,
         default_for: nil
       }
     end
@@ -642,8 +640,7 @@ module Pricings
       end
       @metadata_charge_category = ::Legacy::ChargeCategory.from_code(
         code: "trucking_#{cargo_class}",
-        organization_id: trucking_pricing.organization_id,
-        sandbox: sandbox
+        organization_id: trucking_pricing.organization_id
       )
       @tenant_vehicle_id = trucking_pricing.tenant_vehicle_id
       find_margins(default_for: "trucking")
@@ -669,14 +666,13 @@ module Pricings
         margin_type: type,
         organization_id: organization.id,
         applicable: organization,
-        sandbox: sandbox,
         default_for: default_for
       )
     end
 
     private
 
-    attr_reader :target, :organization, :scope, :shipment, :sandbox, :cargo_unit_id, :meta, :type,
+    attr_reader :target, :organization, :scope, :shipment, :cargo_unit_id, :meta, :type,
       :applicable_margins, :margins_to_apply, :pricings_to_return, :default_margin, :itinerary,
       :origin_hub_id, :destination_hub_id, :tenant_vehicle_id, :cargo_class, :pricing, :end_date,
       :local_charge, :margins, :trucking_pricing, :trucking_charge_category, :direction, :schedules,

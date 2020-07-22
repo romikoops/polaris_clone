@@ -11,8 +11,7 @@ RSpec.describe ExcelTool::ClientsOverwriter do
     let(:options) do
       {
         params: { xlsx: file_fixture('excel').join('dummy.xlsx').to_s },
-        _user: user,
-        sandbox: nil
+        _user: user
       }
     end
 

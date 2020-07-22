@@ -51,7 +51,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context 'when all pricings are valid' do
       let(:pricing) { create(:fcl_20_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
+      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -70,7 +70,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     context 'when all pricings are valid with attached group' do
       let(:group_id) { create(:groups_group, organization: organization, name: 'TEST').id }
       let(:pricing) { create(:fcl_20_pricing, organization: organization, group_id: group_id, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
+      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean', group_id: group_id }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -124,7 +124,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       end
 
       let!(:pricing) { create(:lcl_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
+      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -173,7 +173,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         ]
       end
       let!(:pricing) { create(:lcl_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean' }) }
+      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean' }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -224,7 +224,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           8
         ]
       end
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', sandbox: nil, options: { mode_of_transport: 'ocean', group_id: group_id }) }
+      let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean', group_id: group_id }) }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 

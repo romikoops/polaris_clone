@@ -3,7 +3,7 @@
 module RmsSync
   class Carriage < RmsSync::Base
 
-    def initialize(organization_id:, sheet_type: :carriage, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :carriage)
       super
       @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
       @hash = Hash.new { |h, k| h[k] = {} }

@@ -9,7 +9,7 @@ module ExcelDataServices
 
       def load_and_prepare_data
         charge_categories = Legacy::ChargeCategory.where(
-          organization_id: organization.id, cargo_unit_id: nil, sandbox_id: @sandbox&.id
+          organization_id: organization.id, cargo_unit_id: nil
         )
         rows_data = charge_categories&.map do |charge_category|
           build_row_data(charge_category)

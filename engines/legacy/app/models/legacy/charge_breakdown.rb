@@ -10,7 +10,6 @@ module Legacy
     belongs_to :pickup_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :freight_tenant_vehicle, class_name: 'Legacy::TenantVehicle'
     belongs_to :delivery_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :freight_tenant_vehicle, uniqueness: {
       scope: %i[trip_id shipment_id pickup_tenant_vehicle delivery_tenant_vehicle]

@@ -9,7 +9,7 @@ module Legacy
     VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default).freeze
     CARGO_CLASSES = (%w(lcl) + Container::CARGO_CLASSES).freeze
 
-    def self.create_from_name(name:, mot:, organization_id:, carrier_name: nil, sandbox: nil)
+    def self.create_from_name(name:, mot:, organization_id:, carrier_name: nil)
       vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)
 
       if carrier_name

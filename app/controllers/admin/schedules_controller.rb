@@ -12,7 +12,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def show
-    itinerary = Itinerary.find_by(id: params[:id], sandbox: @sandbox)
+    itinerary = Itinerary.find_by(id: params[:id])
     schedules = trips_for_table(itinerary: itinerary, limit: 100)
     response_handler(schedules: schedules, itinerary: itinerary.as_options_json)
   end
@@ -38,7 +38,6 @@ class Admin::SchedulesController < Admin::AdminBaseController
       text: "#{current_organization.slug}:schedule_generator",
       type: 'schedules_generator',
       options: {
-        sandbox: @sandbox,
         user: organization_user
       }
     )
@@ -50,14 +49,13 @@ class Admin::SchedulesController < Admin::AdminBaseController
       text: "#{current_organization.slug}:schedules",
       type: 'schedules',
       options: {
-        sandbox: @sandbox,
         user: organization_user
       }
     )
   end
 
   def destroy
-    Trip.find_by(id: params[:id], sandbox: @sandbox).destroy
+    Trip.find_by(id: params[:id]).destroy
     response_handler(true)
   end
 
@@ -76,13 +74,13 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def mot_schedule(mot)
-    Itinerary.where(organization: current_organization, mode_of_transport: mot, sandbox: @sandbox).flat_map do |itin|
+    Itinerary.where(organization: current_organization, mode_of_transport: mot).flat_map do |itin|
       itin.trips.limit(10).order(:start_date)
     end
   end
 
   def itinerary_route_json
-    Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox).map(&:as_options_json)
+    Itinerary.where(organization_id: current_organization.id).map(&:as_options_json)
   end
 
   def stops
@@ -90,7 +88,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def vehicle
-    @vehicle ||= TenantVehicle.find_by(id: params[:vehicleTypeId], sandbox: @sandbox).id
+    @vehicle ||= TenantVehicle.find_by(id: params[:vehicleTypeId]).id
   end
 
   def itin_weekly_schedules
@@ -102,17 +100,16 @@ class Admin::SchedulesController < Admin::AdminBaseController
       ordinal_array: params[:weekdays],
       tenant_vehicle_id: vehicle,
       closing_date_buffer: params[:closing_date].to_i,
-      load_type: params[:load_type].to_i,
-      sandbox: @sandbox
+      load_type: params[:load_type].to_i
     )
   end
 
   def itinerary
-    @itinerary ||= Itinerary.find_by(id: params[:itinerary], sandbox: @sandbox)
+    @itinerary ||= Itinerary.find_by(id: params[:itinerary])
   end
 
   def itineraries
-    @itineraries ||= Itinerary.where(organization_id: current_organization.id, sandbox: @sandbox)
+    @itineraries ||= Itinerary.where(organization_id: current_organization.id)
   end
 
   def trip_layovers
@@ -133,7 +130,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def trip
-    @trip ||= Trip.find_by(id: params[:id], sandbox: @sandbox)
+    @trip ||= Trip.find_by(id: params[:id])
   end
 
   def upload_params

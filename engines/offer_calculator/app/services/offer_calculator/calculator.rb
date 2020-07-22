@@ -4,13 +4,12 @@ module OfferCalculator
   class Calculator
     attr_reader :shipment, :detailed_schedules, :quotation, :wheelhouse, :organization, :params
 
-    def initialize(shipment:, params:, user:, wheelhouse: false, sandbox: nil)
+    def initialize(shipment:, params:, user:, wheelhouse: false)
       @user           = user
       @shipment       = shipment
       @delay          = params['delay']
       @isQuote = params['shipment'].delete('isQuote')
       @wheelhouse = wheelhouse
-      @sandbox = sandbox
       @organization = @shipment.organization
       @quotation = create_quotations_quotations
       @params = params

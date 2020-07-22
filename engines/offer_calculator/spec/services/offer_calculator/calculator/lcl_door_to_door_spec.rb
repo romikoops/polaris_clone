@@ -88,8 +88,7 @@ RSpec.describe OfferCalculator::Calculator do
       zip_code: pickup_address.zip_code,
       country: pickup_address.country.name,
       geocoded_address: pickup_address.geocoded_address,
-      street_number: pickup_address.street_number,
-      sandbox: nil
+      street_number: pickup_address.street_number
     }.with_indifferent_access
   end
   let(:destination_address_params) do
@@ -100,11 +99,10 @@ RSpec.describe OfferCalculator::Calculator do
       country: delivery_address.country.name,
       geocoded_address: delivery_address.geocoded_address,
       street_number: delivery_address.street_number,
-      sandbox: nil
     }.with_indifferent_access
   end
   let(:quotation) { Quotations::Quotation.first }
-  let(:service) { described_class.new(shipment: shipment, params: params, user: user, sandbox: nil) }
+  let(:service) { described_class.new(shipment: shipment, params: params, user: user) }
 
   include_context "complete_route_with_trucking"
 

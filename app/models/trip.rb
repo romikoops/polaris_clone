@@ -4,7 +4,6 @@ class Trip < Legacy::Trip
   has_paper_trail
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   belongs_to :itinerary
   validates :itinerary_id, uniqueness: {
     scope: %i(start_date end_date closing_date tenant_vehicle_id load_type),
@@ -31,7 +30,7 @@ class Trip < Legacy::Trip
     end
   end
 
-  def later_trips(sandbox: nil)
+  def later_trips
     itinerary.trips
              .where(tenant_vehicle: tenant_vehicle)
              .where('start_date > ?', start_date)
@@ -39,14 +38,14 @@ class Trip < Legacy::Trip
              .limit(5)
   end
 
-  def last_trips(sandbox: nil)
+  def last_trips
     itinerary.trips
              .where(tenant_vehicle: tenant_vehicle)
              .order(start_date: :desc)
              .limit(5)
   end
 
-  def earlier_trips(min_date: Date.today + 5.days, sandbox: nil)
+  def earlier_trips(min_date: Date.today + 5.days)
     itinerary.trips
              .where(tenant_vehicle: tenant_vehicle)
              .where('start_date < ? AND start_date > ?', start_date, min_date)
@@ -54,7 +53,7 @@ class Trip < Legacy::Trip
              .limit(5)
   end
 
-  def earliest_trips(min_date: Date.today + 5.days, sandbox: nil)
+  def earliest_trips(min_date: Date.today + 5.days)
     itinerary.trips
              .where(tenant_vehicle: tenant_vehicle)
              .where('start_date > ?', min_date)

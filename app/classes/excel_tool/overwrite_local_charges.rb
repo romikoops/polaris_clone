@@ -5,7 +5,6 @@ module ExcelTool
     attr_reader :user, :dangerous
     def post_initialize(args)
       @user = args[:user]
-      @sandbox = args[:sandbox]
       @dangerous = {}
     end
 
@@ -144,8 +143,7 @@ module ExcelTool
         name: name,
         mot: row[:mot].downcase,
         organization_id: user.organization_id,
-        carrier: row[:carrier],
-        sandbox: @sandbox
+        carrier: row[:carrier]
       ).try(:id)
     end
 

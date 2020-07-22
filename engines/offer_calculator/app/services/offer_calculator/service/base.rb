@@ -14,7 +14,6 @@ module OfferCalculator
           target: Users::User.find_by(id: @shipment.user_id) || @creator,
           organization: organization
         ).fetch
-        @sandbox = nil
       end
 
       attr_reader :scope, :organization, :wheelhouse, :shipment, :quotation

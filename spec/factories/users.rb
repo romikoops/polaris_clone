@@ -5,7 +5,6 @@ FactoryBot.define do
     currency { 'USD' }
     sequence(:email) { |n| "demo#{n}@demo.com" }
     password { 'demo123456789' }
-    sandbox { false }
     association :organization, factory: :organizations_organization
     association :role
 

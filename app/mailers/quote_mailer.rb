@@ -5,7 +5,7 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_email(shipment, shipments, email, quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     set_current_id(organization_id: shipment.organization_id)
     return if invalid_records(shipments: [shipment, *shipments])
 
@@ -46,7 +46,7 @@ class QuoteMailer < ApplicationMailer
     end
   end
 
-  def quotation_admin_email(quotation, shipment = nil, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_admin_email(quotation, shipment = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     user_id = quotation&.user_id || shipment&.user_id
     @user = Users::User.find_by(id: user_id)
     @user_profile = Profiles::ProfileService.fetch(user_id: user_id)
@@ -89,7 +89,7 @@ class QuoteMailer < ApplicationMailer
 
   private
 
-  def generate_and_upload_quotation(quotes, sandbox = nil)
+  def generate_and_upload_quotation(quotes)
     quotation = Pdf::Handler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/quotations.pdf.erb',

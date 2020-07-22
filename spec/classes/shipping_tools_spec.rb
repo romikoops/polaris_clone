@@ -107,7 +107,7 @@ RSpec.describe ShippingTools do
     before do
       shipment_request_creator = instance_double('Shipments::ShipmentRequestCreator', errors: [])
       shipment_request = instance_double('Shipments::ShipmentRequest', id: 1, organization_id: 123)
-      allow(Shipments::ShipmentRequestCreator).to receive(:new).with(legacy_shipment: shipment, user: user, sandbox: nil).and_return(shipment_request_creator)
+      allow(Shipments::ShipmentRequestCreator).to receive(:new).with(legacy_shipment: shipment, user: user).and_return(shipment_request_creator)
       allow(shipment_request_creator).to receive(:create).once
       allow(shipment_request_creator).to receive(:shipment_request).and_return(shipment_request)
       allow(Integrations::Processor).to receive(:process).once.with(shipment_request_id: 1, organization_id: 123)

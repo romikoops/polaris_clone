@@ -55,10 +55,10 @@ module Trucking
 
       def create_coverage
         if ::Trucking::Coverage.exists?(hub_id: @hub.id)
-          c = ::Trucking::Coverage.find_by(hub_id: @hub.id, sandbox: @sandbox)
+          c = ::Trucking::Coverage.find_by(hub_id: @hub.id)
           c.save
         else
-          ::Trucking::Coverage.create!(hub_id: @hub.id, sandbox: @sandbox)
+          ::Trucking::Coverage.create!(hub_id: @hub.id)
         end
       end
 
@@ -99,13 +99,11 @@ module Trucking
             carriage: direction,
             load_type: load_type,
             query_method: query_method,
-            country: ::Legacy::Country.find_by(code: country_code),
-            sandbox: @sandbox
+            country: ::Legacy::Country.find_by(code: country_code)
           )
           HubAvailability.find_or_create_by(
             hub_id: hub.id,
-            type_availability_id: trucking_type_availability.id,
-            sandbox: @sandbox
+            type_availability_id: trucking_type_availability.id
           )
         end
       end
@@ -166,8 +164,7 @@ module Trucking
         single_ident_values_and_country.each do |ident_and_country|
           tl = Location.find_or_initialize_by(
             @identifier_type.to_s => ident_and_country[:ident],
-            country_code: ident_and_country[:country],
-            sandbox: @sandbox
+            country_code: ident_and_country[:country]
           )
 
           tl.city_name = ident_and_country[:sub_ident] if ident_and_country[:sub_ident]
@@ -565,7 +562,6 @@ module Trucking
           load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
           courier_id: find_or_create_tenant_vehicle(service: service, carrier: carrier).id,
           truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type],
-          sandbox: @sandbox,
           metadata: metadata(row_number: row_number, sheet_name: sheet_name)
         }
       end

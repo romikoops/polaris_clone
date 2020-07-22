@@ -4,13 +4,13 @@ module RmsSync
   class Trucking < RmsSync::Base
     FEE_HEADERS = %w(FEE MOT FEE_CODE TRUCK_TYPE DIRECTION CURRENCY RATE_BASIS TON CBM KG
          ITEM SHIPMENT BILL CONTAINER MINIMUM WM PERCENTAGE).freeze
-    def initialize(organization_id:, sandbox: nil, group_id: nil)
+    def initialize(organization_id:, group_id: nil)
       @books = Hash.new { |h, k| h[k] = {} }
       @zones = Hash.new { |h, k| h[k] = [] }
       @group_id = group_id
       @pages = {}
       @dir_fees = {}
-      super(organization_id: organization_id, sheet_type: :trucking, sandbox: sandbox)
+      super(organization_id: organization_id, sheet_type: :trucking)
     end
 
     def perform

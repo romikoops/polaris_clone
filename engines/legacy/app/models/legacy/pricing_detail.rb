@@ -6,7 +6,6 @@ module Legacy
 
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :priceable, polymorphic: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def to_fee_hash
       {

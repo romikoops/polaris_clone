@@ -30,7 +30,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
-    hubs = Hub.where(sandbox: @sandbox, organization_id: current_organization.id)
+    hubs = Hub.where(organization_id: current_organization.id)
     @hubs = hubs.limit(8).map do |hub|
       { data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash }
     end

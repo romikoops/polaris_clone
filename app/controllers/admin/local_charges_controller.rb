@@ -4,8 +4,8 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   include ExcelTools
 
   def hub_charges # rubocop:disable Metrics/AbcSize
-    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
-    charges = hub.local_charges.where(sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id])
+    charges = hub.local_charges
     service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
       carrier_name = if tenant_vehicle['carrier']
                        "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}"
@@ -21,7 +21,7 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
 
     resp = {
       hub_id: params[:id],
-      charges: hub.local_charges.where(sandbox: @sandbox),
+      charges: hub.local_charges,
       customs: hub.customs_fees,
       serviceLevels: service_levels,
       counterpartHubs: counter_part_hubs
@@ -32,7 +32,7 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   def edit
     data = params[:data].as_json
     id = data.delete('id')
-    local_charge = ::Legacy::LocalCharge.find_by(id: id, sandbox: @sandbox)
+    local_charge = ::Legacy::LocalCharge.find_by(id: id)
     local_charge.update(fees: data['fees'])
     response_handler(local_charge)
   end
@@ -70,7 +70,6 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
       text: "group_id:#{upload_params[:group_id] || 'all'}",
       type: 'local_charges',
       options: {
-        sandbox: @sandbox,
         group_id: upload_params[:group_id],
         user: organization_user
       }
@@ -86,7 +85,6 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
       organization: current_organization,
       category_identifier: category_identifier,
       file_name: file_name,
-      sandbox: @sandbox,
       options: {
         mode_of_transport: mot,
         group_id: upload_params[:group_id]

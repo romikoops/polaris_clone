@@ -7,7 +7,6 @@ module Legacy
     belongs_to :vehicle
     belongs_to :carrier, optional: true
     has_many :pricings, class_name: 'Pricings::Pricing'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def full_name
       carrier_id ? "#{carrier&.name} - #{name}" : name

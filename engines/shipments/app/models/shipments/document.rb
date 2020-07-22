@@ -2,7 +2,7 @@
 
 module Shipments
   class Document < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     enum doc_type: { packing_sheet: 0,
                      commercial_invoice: 1,

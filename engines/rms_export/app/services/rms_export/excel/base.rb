@@ -10,7 +10,6 @@ module RmsExport
         file_name = options[:file_name] || "#{@organization.slug}_#{sheet_type}.xlsx"
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
-        @sandbox = options[:sandbox]
       end
 
       def self.write_document(options)

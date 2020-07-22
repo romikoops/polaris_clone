@@ -11,7 +11,6 @@ module Legacy
     before_validation :sanitize_zip_code!
     after_validation :reverse_geocode, if: proc { |address| address.country.nil? }
 
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_many :user_addresses, class_name: 'Legacy::UserAddress'
     has_many :users, class_name: 'Legacy::User', through: :user_addresses, dependent: :destroy
     has_many :shipments
@@ -52,9 +51,8 @@ module Legacy
       new(address_params(raw_address_params))
     end
 
-    def self.geocoded_address(user_input, sandbox = nil)
+    def self.geocoded_address(user_input)
       address = Address.new(geocoded_address: user_input)
-      address.sandbox = sandbox
       address.geocode
       address.reverse_geocode
       address.save!

@@ -4,14 +4,13 @@ module Trucking
   class Location < ApplicationRecord
     validates :zipcode,
               uniqueness: {
-                scope: %i(country_code city_name distance location_id sandbox_id),
+                scope: %i(country_code city_name distance location_id),
                 message: 'is a duplicate (all attributes match an existing record in the DB)'
               }
 
     belongs_to :location, optional: true, class_name: 'Locations::Location'
     has_many :truckings, class_name: 'Trucking::Trucking'
     has_many :hubs, through: :truckings
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   end
 end
 

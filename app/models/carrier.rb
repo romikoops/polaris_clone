@@ -2,7 +2,6 @@
 
 class Carrier < Legacy::Carrier
   has_many :tenant_vehicles
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   def get_tenant_vehicle(organization_id, mode_of_transport, name)
     tv = tenant_vehicles.find_by(

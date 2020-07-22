@@ -16,7 +16,7 @@ class TruckingAvailabilityController < ApplicationController
       truck_type = trucking_pricing.truck_type
       truck_type_object[hub_id] << trucking_pricing.truck_type unless truck_type_object[hub_id].include?(truck_type)
     end
-    nexus_ids = Hub.where(id: hub_ids, sandbox: @sandbox).pluck(:nexus_id).uniq
+    nexus_ids = Hub.where(id: hub_ids).pluck(:nexus_id).uniq
 
     response = build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
     response_handler(response)
@@ -41,7 +41,6 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage],
       klass: Trucking::Trucking,
-      sandbox: @sandbox,
       order_by: @base_pricing_enabled ? 'group_id' : 'user_id'
     }
     Trucking::Queries::Availability.new(args).perform

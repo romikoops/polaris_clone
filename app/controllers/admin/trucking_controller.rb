@@ -8,7 +8,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def show
-    hub = Hub.find_by(id: params[:id], sandbox: @sandbox)
+    hub = Hub.find_by(id: params[:id])
     filters = {
       cargo_class: params[:cargo_class],
       truck_type: params[:truck_type],
@@ -63,7 +63,6 @@ class Admin::TruckingController < Admin::AdminBaseController
         hub_id: upload_params[:id],
         user: organization_user,
         group: upload_params[:group] == 'all' ? nil : upload_params[:group],
-        sandbox: @sandbox,
         document: document
       }
 

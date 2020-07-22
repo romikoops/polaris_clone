@@ -16,8 +16,7 @@ module ExcelDataServices
       def update_or_create_charge_category(params)
         correct_charge_category = Legacy::ChargeCategory.find_or_initialize_by(
           organization_id: @organization.id,
-          code: params[:fee_code].downcase,
-          sandbox_id: @sandbox&.id
+          code: params[:fee_code].downcase
         )
 
         correct_charge_category.name = params[:fee_name] if correct_charge_category.name != params[:fee_name]

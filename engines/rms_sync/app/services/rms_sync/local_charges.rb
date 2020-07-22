@@ -3,7 +3,7 @@
 module RmsSync
   class LocalCharges < RmsSync::Base
 
-    def initialize(organization_id:, sheet_type: :local_charges, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :local_charges)
       super
       @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
     end

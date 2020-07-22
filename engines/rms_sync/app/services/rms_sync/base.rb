@@ -2,9 +2,8 @@
 
 module RmsSync
   class Base
-    def initialize(organization_id:, sheet_type:, sandbox: nil)
+    def initialize(organization_id:, sheet_type:)
       @organization = Organizations::Organization.find_by(id: organization_id)
-      @sandbox = sandbox
       @sheet_type = sheet_type
       @cells = []
     end

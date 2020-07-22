@@ -44,8 +44,7 @@ module Api
 
       def ports_itineraries
         itineraries = Legacy::Itinerary.joins(:stops)
-                                       .where(sandbox: @sandbox,
-                                              organization_id: current_organization.id,
+                                       .where(organization_id: current_organization.id,
                                               mode_of_transport: 'ocean',
                                               stops: { index: default_stop_index })
 

@@ -25,7 +25,7 @@ class ContactsController < ApplicationController
   def update
     update_data = JSON.parse(params[:update])
 
-    contact = Contact.find_by(id: params[:id], sandbox: @sandbox)
+    contact = Contact.find_by(id: params[:id])
     loc = contact.address || Address.new
     update_data.delete('id')
     update_data.delete('userId')
@@ -38,7 +38,6 @@ class ContactsController < ApplicationController
     edited_contact_data[:company_name] = update_data['companyName']
     edited_contact_data[:phone] = update_data['phone']
     edited_contact_data[:email] = update_data['email']
-    edited_contact_data[:sandbox] = @sandbox
     if !update_data['geocodedAddress']
       edited_contact_address[:geocoded_address] =
         "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}, #{update_data['city']}, #{update_data['zipCode']}, #{update_data['country']}"
@@ -49,7 +48,6 @@ class ContactsController < ApplicationController
     edited_contact_address[:street] = update_data['street']
     edited_contact_address[:street_address] = "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}"
     edited_contact_address[:city] = update_data['city']
-    edited_contact_address[:sandbox] = @sandbox
     edited_contact_address[:zip_code] = update_data['zipCode']
     edited_contact_address[:country] = Country.geo_find_by_name(update_data['country'])
     loc.update_attributes(edited_contact_address)
@@ -87,7 +85,7 @@ class ContactsController < ApplicationController
 
   def update_contact_address
     data = JSON.parse(params[:address])
-    loc = Address.find_by(id: data['id'], sandbox: @sandbox)
+    loc = Address.find_by(id: data['id'])
     data['country'] = Country.geo_find_by_name(data['country'])
     data.delete('id')
     data.delete('address_type')
@@ -97,7 +95,7 @@ class ContactsController < ApplicationController
   end
 
   def delete_contact_address
-    loc = Address.find_by(id: params[:id], sandbox: @sandbox)
+    loc = Address.find_by(id: params[:id])
     loc.destroy!
     response_handler({})
   end
@@ -112,7 +110,7 @@ class ContactsController < ApplicationController
   end
 
   def is_valid
-    valid = !Contact.where(user: organization_user, email: params[:email], sandbox: @sandbox).empty?
+    valid = !Contact.where(user: organization_user, email: params[:email]).empty?
     response_handler(email: valid)
   end
 
@@ -127,7 +125,7 @@ class ContactsController < ApplicationController
   end
 
   def contacts
-    @contacts ||= Contact.where(user: organization_user, sandbox: @sandbox).order(updated_at: :desc)
+    @contacts ||= Contact.where(user: organization_user).order(updated_at: :desc)
   end
 
   def pagination_options
@@ -168,7 +166,6 @@ class ContactsController < ApplicationController
       street: contact_params['street'],
       city: contact_params['city'],
       zip_code: contact_params['zipCode'],
-      sandbox: @sandbox,
       country: Country.find_by_name(contact_params['country'])
     }
   end

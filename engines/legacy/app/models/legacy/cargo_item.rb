@@ -18,7 +18,6 @@ module Legacy
 
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     delegate :organization, to: :shipment
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     belongs_to :cargo_item_type
 

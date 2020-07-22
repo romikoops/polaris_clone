@@ -4,7 +4,7 @@ class WelcomeMailer < ApplicationMailer
   layout 'mailer.html.mjml'
   add_template_helper(ApplicationHelper)
 
-  def welcome_email(user, sandbox = nil) # rubocop:disable Metrics/AbcSize
+  def welcome_email(user) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: user.organization_id)
     return unless Legacy::Content.exists?(organization_id: user.organization_id, component: 'WelcomeMail')
 
@@ -20,7 +20,7 @@ class WelcomeMailer < ApplicationMailer
     attachments.inline['logo.png'] = email_logo.attached? ? email_logo.download : ''
     attachments.inline['ngl_welcome_image.jpg'] = welcome_email_image.attached? ? welcome_email_image.download : ''
 
-    subject = sandbox ? "[SANDBOX] - #{@content['subject'][0]['text']}" : @content['subject'][0]['text']
+    subject = @content['subject'][0]['text']
 
     mail(
       from: Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")

@@ -9,7 +9,6 @@ class Contact < Legacy::Contact
 
   has_many :shipment_contacts
   belongs_to :address, optional: true
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   # Validations
   # validates :company_name, presence: true, length: { in: 2..50 }

@@ -3,7 +3,7 @@
 module RmsSync
   class Pricings < RmsSync::Base
 
-    def initialize(organization_id:, sheet_type: :pricings, sandbox: nil)
+    def initialize(organization_id:, sheet_type: :pricings)
       super
       @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
     end

@@ -7,7 +7,6 @@ module Legacy
     belongs_to :user, class_name: 'Organizations::User', optional: true
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :quotation, optional: true
-    belongs_to :sandbox, optional: true, class_name: 'Tenants::Sandbox'
 
     def attachment
       file&.download

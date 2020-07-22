@@ -34,7 +34,6 @@ RSpec.describe Pricings::Manipulator do
   let(:margin_type) { :export_margin }
   let(:args) do
     {
-      sandbox: nil,
       local_charge: local_charge,
       schedules: schedules,
       cargo_class_count: target_shipment.cargo_classes.count,

@@ -25,7 +25,6 @@ RSpec.describe Pricings::Manipulator do
 
   let(:args) do
     {
-      sandbox: nil,
       pricing: pricing,
       schedules: schedules,
       cargo_class_count: target_shipment.cargo_classes.count,
@@ -52,7 +51,6 @@ RSpec.describe Pricings::Manipulator do
   describe 'fee_keys' do
     let(:args) do
       {
-        sandbox: nil,
         schedules: schedules,
         itinerary_id: itinerary.id,
         cargo_class_count: target_shipment.cargo_classes.count
@@ -67,7 +65,6 @@ RSpec.describe Pricings::Manipulator do
   describe 'sanitize_date' do
     let(:args) do
       {
-        sandbox: nil,
         schedules: schedules,
         itinerary_id: itinerary.id,
         cargo_class_count: target_shipment.cargo_classes.count

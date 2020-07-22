@@ -24,7 +24,7 @@ module ExcelDataServices
           )[:hub]
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
-          
+
           stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary, row[:row_nr])
           itinerary.stops << stops - itinerary.stops
 
@@ -56,8 +56,7 @@ module ExcelDataServices
           destination_hub: destination_hub,
           organization: organization,
           mode_of_transport: row.mot,
-          transshipment: row.transshipment,
-          sandbox: @sandbox
+          transshipment: row.transshipment
         ).tap do |itinerary|
           itinerary.update(name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}") if itinerary.name.blank?
         end
@@ -65,8 +64,8 @@ module ExcelDataServices
 
       def find_or_initialize_stops(hubs, itinerary, row_nr)
         hubs.map.with_index do |hub, i|
-          stop = itinerary.stops.find_by(hub_id: hub.id, index: i, sandbox: @sandbox)
-          stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i, sandbox: @sandbox)
+          stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
+          stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i)
 
           stop
         end
@@ -79,8 +78,7 @@ module ExcelDataServices
           organization: organization,
           name: row.service_level,
           mode_of_transport: row.mot,
-          carrier: carrier,
-          sandbox: @sandbox
+          carrier: carrier
         )
 
         # FIX: `Vehicle` shouldn't be creating a `TenantVehicle`!:
@@ -88,8 +86,7 @@ module ExcelDataServices
           name: row.service_level,
           mot: row.mot,
           organization_id: organization.id,
-          carrier_name: carrier&.name,
-          sandbox: @sandbox
+          carrier_name: carrier&.name
         ) # returns a `TenantVehicle`!
       end
 
@@ -102,7 +99,6 @@ module ExcelDataServices
             cargo_class: row.load_type,
             load_type: load_type,
             tenant_vehicle: tenant_vehicle,
-            sandbox: @sandbox,
             group_id: find_group_id(row),
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
@@ -177,14 +173,12 @@ module ExcelDataServices
             { organization_id: organization.id,
               currency_name: row.currency&.upcase,
               currency_id: nil,
-              sandbox: @sandbox,
               hw_threshold: row.hw_threshold }
 
           charge_category = Legacy::ChargeCategory.from_code(
             organization_id: organization.id,
             code: fee_code,
-            name: row.fee_name || fee_code,
-            sandbox: @sandbox
+            name: row.fee_name || fee_code
           )
 
           pricing_detail_params[:rate_basis] = Pricings::RateBasis.create_from_external_key(row.rate_basis)

@@ -142,7 +142,6 @@ class Admin::MarginsController < Admin::AdminBaseController
       text: "target_id:#{upload_params[:target_id]},target_type:#{upload_params[:target_type]}",
       type: 'margins',
       options: {
-        sandbox: @sandbox,
         applicable: applicable,
         group_id: upload_params[:group_id],
         user: organization_user
@@ -173,7 +172,7 @@ class Admin::MarginsController < Admin::AdminBaseController
       .find_by(id: params[:itinerary_id], organization: current_organization)
       .rates.pluck(:tenant_vehicle_id)
     elsif params[:tenant_vehicle_ids] == 'all'
-      Legacy::TenantVehicle.where(organization: current_organization, sandbox: @sandbox).ids
+      Legacy::TenantVehicle.where(organization: current_organization).ids
     else
       params[:tenant_vehicle_ids].split(',')
     end
@@ -181,7 +180,7 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def extract_cargo_classes
     if params[:cargo_classes] == 'all' && params[:itinerary_id]
-      Legacy::Itinerary.where(organization: current_organization, sandbox: @sandbox)
+      Legacy::Itinerary.where(organization: current_organization)
                     .find(params[:itinerary_id]).rates.pluck(:cargo_class)
     elsif params[:cargo_classes] == 'all'
       %w(lcl) + Legacy::Container::CARGO_CLASSES
@@ -215,7 +214,6 @@ class Admin::MarginsController < Admin::AdminBaseController
     local_charges =
       Legacy::LocalCharge.where(
         organization: current_organization,
-        sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         direction: params[:directions].split(','),
         counterpart_hub_id: params[:counterpart_hub_id] != 'null' ? params[:counterpart_hub_id] : nil,
@@ -235,7 +233,6 @@ class Admin::MarginsController < Admin::AdminBaseController
 
     truckings =
       Trucking::Trucking.where(
-        sandbox: @sandbox,
         hub_id: params[:hub_ids].split(','),
         carriage: carriages,
         organization: current_organization,

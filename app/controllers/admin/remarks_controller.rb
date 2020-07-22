@@ -3,7 +3,7 @@
 module Admin
   class RemarksController < Admin::AdminBaseController
     def create
-      remark = Legacy::Remark.new(remarks_params.merge(sandbox: @sandbox))
+      remark = Legacy::Remark.new(remarks_params)
       remark.organization_id = current_organization.id
 
       raise ApplicationError::InvalidRemark unless remark.save
@@ -12,12 +12,12 @@ module Admin
     end
 
     def index
-      remarks = Legacy::Remark.where(organization_id: current_organization.id, sandbox: @sandbox).order(order: :asc)
+      remarks = Legacy::Remark.where(organization_id: current_organization.id).order(order: :asc)
       response_handler(remarks)
     end
 
     def update
-      remark = Legacy::Remark.find_by(id: params[:id], sandbox: @sandbox)
+      remark = Legacy::Remark.find_by(id: params[:id])
       remark.assign_attributes(remarks_params)
 
       raise ApplicationError::InvalidRemark unless remark.save
@@ -26,7 +26,7 @@ module Admin
     end
 
     def destroy
-      remark = Legacy::Remark.find_by(id: params[:id], sandbox: @sandbox)
+      remark = Legacy::Remark.find_by(id: params[:id])
       raise ApplicationError::UnableToDeleteRemark unless remark.destroy!
 
       response_handler(remark)

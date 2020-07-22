@@ -24,7 +24,6 @@ module Legacy
     acts_as_paranoid
 
     belongs_to :user, -> { with_deleted }, class_name: 'Organizations::User', optional: true
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true

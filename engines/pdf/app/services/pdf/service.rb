@@ -3,7 +3,7 @@
 require 'active_storage'
 module Pdf
   class Service < Pdf::Base
-    attr_reader :organization, :user, :pdf, :url, :sandbox
+    attr_reader :organization, :user, :pdf, :url
 
     def generate_pdf(
       template:,
@@ -22,7 +22,7 @@ module Pdf
         layout: 'pdfs/simple.pdf.html.erb',
         margin: { top: 10, bottom: 5, left: 8, right: 8 },
         logo: logo,
-        remarks: Legacy::Remark.where(organization: organization, sandbox_id: sandbox&.id).order(order: :asc),
+        remarks: Legacy::Remark.where(organization: organization).order(order: :asc),
         template: template,
         name: name,
         shipment: shipment,
@@ -88,7 +88,7 @@ module Pdf
       )
       return nil if file.nil?
 
-      create_file(object: object, shipments: shipments, file: file, user: user, sandbox: sandbox)
+      create_file(object: object, shipments: shipments, file: file, user: user)
     end
 
     def wheelhouse_quotation(shipment:, tenders:)
@@ -110,7 +110,7 @@ module Pdf
       )
       return nil if file.nil?
 
-      create_file(object: object, shipments: shipments, file: file, user: user, sandbox: sandbox)
+      create_file(object: object, shipments: shipments, file: file, user: user)
     end
 
     def existing_document(quotation: nil, shipment: nil, type:)
@@ -120,16 +120,14 @@ module Pdf
                      organization: organization,
                      user: user,
                      quotation: quotation,
-                     doc_type: type,
-                     sandbox_id: sandbox&.id
+                     doc_type: type
                    )
                  else
                    Legacy::File.find_by(
                      organization: organization,
                      user: user,
                      shipment: shipment,
-                     doc_type: type,
-                     sandbox_id: sandbox&.id
+                     doc_type: type
                    )
                  end
 
@@ -191,7 +189,7 @@ module Pdf
       )
       return nil if file.nil?
 
-      create_file(object: quotation, file: file, user: user, sandbox: sandbox)
+      create_file(object: quotation, file: file, user: user)
     end
 
     def shipment_pdf(shipment:)
@@ -204,7 +202,7 @@ module Pdf
       )
       return nil if file.nil?
 
-      create_file(object: shipment, file: file, user: user, sandbox: sandbox)
+      create_file(object: shipment, file: file, user: user)
     end
 
     def load_type_plural(shipment:)
@@ -304,13 +302,12 @@ module Pdf
       "operated by #{operator}"
     end
 
-    def create_file(object:, file:, user:, shipments: [], sandbox: nil)
+    def create_file(object:, file:, user:, shipments: [])
       args = {
         text: file_text(object: object, shipments: shipments),
         doc_type: doc_type(object: object),
         user: user,
         organization: @organization,
-        sandbox_id: sandbox&.id,
         file: {
           io: StringIO.new(file),
           filename: "#{file_text(object: object, shipments: shipments)}.pdf",

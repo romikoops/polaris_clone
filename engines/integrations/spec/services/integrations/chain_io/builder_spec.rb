@@ -12,7 +12,7 @@ module Integrations
         let(:profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
         let(:tender) { FactoryBot.create(:quotations_tender) }
         let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id) }
-        let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user, sandbox: nil) }
+        let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user) }
         let(:shipment_request) { shipment_request_creator.create.shipment_request }
         let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
         let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }
@@ -93,7 +93,7 @@ module Integrations
 
         context 'with no notifyee' do
           let(:no_notifyee_shipment) { FactoryBot.create(:legacy_shipment_without_notifyee, organization: organization, user: user, meta: { tender_id: tender.id }, tender_id: tender.id) }
-          let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: no_notifyee_shipment, user: user, sandbox: nil) }
+          let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: no_notifyee_shipment, user: user) }
           let(:shipment_request) { shipment_request_creator.create.shipment_request }
           let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
           let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }

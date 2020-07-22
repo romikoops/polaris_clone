@@ -2,7 +2,7 @@
 
 module Shipments
   class Cargo < ApplicationRecord
-    has_paper_trail unless: proc { |t| t.sandbox_id.present? }
+    has_paper_trail
 
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :shipment

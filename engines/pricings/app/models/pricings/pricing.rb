@@ -16,7 +16,6 @@ module Pricings
     has_many :margins, class_name: 'Pricings::Margin'
     belongs_to :group, class_name: 'Groups::Group', optional: true
     has_many :notes, foreign_key: 'pricings_pricing_id', dependent: :destroy
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     validates :itinerary_id, uniqueness: {
       scope: %i[ organization_id

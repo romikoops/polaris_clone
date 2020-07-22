@@ -18,10 +18,10 @@ class UserAddressesController < ApplicationController
   def create
     user = Organizations::User.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
-    address = Address.create_from_raw_params!(JSON.parse(params[:new_address].merge(sandbox: @sandbox)))
-    user_addresses.create!(primary: false, address_id: address.id, sandbox: @sandbox)
+    address = Address.create_from_raw_params!(JSON.parse(params[:new_address]))
+    user_addresses.create!(primary: false, address_id: address.id)
     resp = []
-    user_locs = user_addresses.where(sandbox: @sandbox)
+    user_locs = user_addresses
     user_locs.each do |ul|
       resp.push(user: ul, address: ul.address.to_custom_hash)
     end
@@ -31,15 +31,15 @@ class UserAddressesController < ApplicationController
   def update
     user = Organizations::User.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
-    primary_uls = user_addresses.where(primary: true, sandbox: @sandbox)
+    primary_uls = user_addresses.where(primary: true)
     primary_uls.each do |ul|
       ul.update_attribute(:primary, false)
     end
 
-    ul = UserAddress.find_by(user_id: params[:user_id], address_id: params[:id], sandbox: @sandbox)
+    ul = UserAddress.find_by(user_id: params[:user_id], address_id: params[:id])
     ul.update_attribute(:primary, true)
     resp = []
-    user_locs = user_addresses.where(sandbox: @sandbox)
+    user_locs = user_addresses
     user_locs.each do |ul|
       resp.push(user: ul, address: ul.address.to_custom_hash)
     end
@@ -52,11 +52,11 @@ class UserAddressesController < ApplicationController
     address_data = JSON.parse(params[:edit_address])
     address_data.delete('id')
     address_data['country'] = Country.geo_find_by_name(address_data['country'])
-    user_loc = Address.find_by(id: params[:address_id], sandbox: @sandbox)
+    user_loc = Address.find_by(id: params[:address_id])
     user_loc.update_attributes(address_data)
     user_loc.save!
     resp = []
-    user_locs = user_addresses.where(sandbox: @sandbox)
+    user_locs = user_addresses
     user_locs.each do |ul|
       resp.push(user: ul, address: ul.address.to_custom_hash)
     end
@@ -64,7 +64,7 @@ class UserAddressesController < ApplicationController
   end
 
   def destroy
-    ul = UserAddress.find_by(user_id: params[:user_id], address_id: params[:id], sandbox: @sandbox)
+    ul = UserAddress.find_by(user_id: params[:user_id], address_id: params[:id])
     ul.destroy
 
     response_handler(id: params[:id])

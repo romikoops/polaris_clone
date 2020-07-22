@@ -2,12 +2,11 @@
 
 module Analytics
   class Base
-    def initialize(user:, organization:, start_date: 30.days.ago, end_date: DateTime.now, sandbox: nil)
+    def initialize(user:, organization:, start_date: 30.days.ago, end_date: DateTime.now)
       @user = user
       @organization = organization
       @start_date = start_date
       @end_date = end_date
-      @sandbox = sandbox
     end
 
     def quotations
@@ -28,7 +27,7 @@ module Analytics
     end
 
     def itineraries
-      Legacy::Itinerary.where(organization_id: organization.id, sandbox: sandbox)
+      Legacy::Itinerary.where(organization_id: organization.id)
     end
 
     def requests
@@ -67,7 +66,7 @@ module Analytics
 
     private
 
-    attr_reader :organization, :user, :sandbox, :start_date, :end_date
+    attr_reader :organization, :user, :start_date, :end_date
 
     def admin_roles
       Legacy::Role.where(name: %w[admin sub_admin super_admin])

@@ -12,7 +12,6 @@ module Legacy
     belongs_to :charge_breakdown, optional: true
     belongs_to :parent, class_name: 'Legacy::Charge', optional: true
     has_many :children, foreign_key: 'parent_id', class_name: 'Legacy::Charge', dependent: :destroy
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     before_validation :set_detail_level, on: :create
 
     validates :detail_level, presence: true

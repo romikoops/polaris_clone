@@ -2,7 +2,7 @@
 
 module RmsSync
     class Routes < RmsSync::Base
-      def initialize(organization_id:, sheet_type: :routes, sandbox: nil)
+      def initialize(organization_id:, sheet_type: :routes)
         super
         @book = RmsData::Book.find_or_create_by(organization: @organization, sheet_type: sheet_type)
       end

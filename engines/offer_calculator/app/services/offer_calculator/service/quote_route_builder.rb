@@ -28,8 +28,7 @@ module OfferCalculator
                                            load_type: @shipment.load_type,
                                            start_date: OfferCalculator::Schedule.quote_trip_start_date,
                                            end_date: end_date(transit_time: transit_time),
-                                           closing_date: OfferCalculator::Schedule.quote_trip_closing_date,
-                                           sandbox: @sandbox)
+                                           closing_date: OfferCalculator::Schedule.quote_trip_closing_date)
       end
 
       def end_date(transit_time:)

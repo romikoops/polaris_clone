@@ -11,7 +11,6 @@ class Admin::AdminBaseController < ApplicationController
     document = Legacy::File.create!(
       text: text,
       doc_type: type,
-      sandbox: @sandbox,
       organization: current_organization,
       file: params[:file]
     )
@@ -28,14 +27,17 @@ class Admin::AdminBaseController < ApplicationController
   end
 
   def stop_index_json(stop:)
-    stop.as_json(include: {
-      hub: {
-        include: {
-          nexus: { only: %i[id name] },
-          address: { only: %i[longitude latitude geocoded_address] }
-        },
-        only: %i[id name]
-      }
-    })
+    stop.as_json(
+      include: {
+        hub: {
+          include: {
+            nexus: { only: %i[id name] },
+            address: { only: %i[longitude latitude geocoded_address] }
+          },
+          only: %i[id name]
+        }
+      },
+      only: %i[id hub_id itinerary_id index]
+    )
   end
 end

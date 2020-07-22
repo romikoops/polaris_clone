@@ -75,7 +75,7 @@ class ShipmentsController < ApplicationController
 
   # Uploads document and returns Document item
   def upload_document
-    @shipment = Shipment.find_by(id: params[:shipment_id], sandbox: @sandbox)
+    @shipment = Shipment.find_by(id: params[:shipment_id])
     if params[:file]
       document = Legacy::File.create!(
         shipment: @shipment,
@@ -83,8 +83,7 @@ class ShipmentsController < ApplicationController
         doc_type: params[:type],
         user: organization_user,
         organization: current_organization,
-        file: params[:file],
-        sandbox: @sandbox
+        file: params[:file]
       )
 
       document_with_url = document.as_json.merge(
@@ -96,20 +95,20 @@ class ShipmentsController < ApplicationController
   end
 
   def update_user
-    Shipment.find_by(id: update_user_params[:id], sandbox: @sandbox).update(user: organization_user)
+    Shipment.find_by(id: update_user_params[:id]).update(user: organization_user)
   end
 
   def show # rubocop:disable Metrics/AbcSize
-    @shipment = Shipment.find_by(id: params[:id], sandbox: @sandbox)
+    @shipment = Shipment.find_by(id: params[:id])
     cargo_item_types = @shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
     end
 
-    contacts = @shipment.shipment_contacts.where(sandbox: @sandbox).map do |sc|
+    contacts = @shipment.shipment_contacts.map do |sc|
       { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
-    documents = @shipment.files.where(sandbox: @sandbox).select { |doc| doc.file.attached? }.map do |doc|
+    documents = @shipment.files.select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(
         signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )

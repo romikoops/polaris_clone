@@ -59,7 +59,6 @@ class Admin::ClientsController < Admin::AdminBaseController
       text: "#{current_organization.slug}_clients",
       type: 'clients',
       options: {
-        sandbox: @sandbox,
         user: organization_user
       }
     )

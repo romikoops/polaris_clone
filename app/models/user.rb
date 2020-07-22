@@ -22,7 +22,6 @@ class User < Legacy::User # rubocop:disable Metrics/ClassLength
   # Basic associations
   belongs_to :organization, class_name: 'Organizations::Organization'
   belongs_to :role
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
   has_many :shipments
   has_many :user_addresses, dependent: :destroy
   has_many :addresses, through: :user_addresses

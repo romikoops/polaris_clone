@@ -9,7 +9,6 @@ module Tenants
     }, using: {
       tsearch: { prefix: true }
     }
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
     has_one :scope, as: :target, class_name: 'Tenants::Scope'
     has_one :profile, class_name: 'Profiles::Profile', foreign_key: :user_id, dependent: :destroy
     belongs_to :organization, class_name: 'Organizations::Organization', optional: true

@@ -9,7 +9,6 @@ module Pricings
     belongs_to :rate_basis, class_name: '::Pricings::RateBasis'
     belongs_to :hw_rate_basis, class_name: '::Pricings::RateBasis', optional: true
     belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
-    belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
     def to_fee_hash
       return unless charge_category.present?

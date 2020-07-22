@@ -7,7 +7,6 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
       text: "#{current_organization.slug}_charge_categories",
       type: 'charge_categories',
       options: {
-        sandbox: @sandbox,
         user: organization_user
       }
     )
@@ -20,8 +19,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
     document = ExcelDataServices::Loaders::Downloader.new(
       organization: current_organization,
       category_identifier: category_identifier,
-      file_name: file_name,
-      sandbox: @sandbox
+      file_name: file_name
     ).perform
 
     # TODO: When timing out, file will not be downloaded!!!

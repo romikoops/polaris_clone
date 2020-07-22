@@ -2,10 +2,9 @@
 
 module RateExtractor
   class CargoRates
-    def initialize(section_rates:, cargo:, sandbox: nil)
+    def initialize(section_rates:, cargo:)
       @section_rates = section_rates
       @cargo = cargo
-      @sandbox = sandbox
     end
 
     def rates

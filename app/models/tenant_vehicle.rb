@@ -5,7 +5,6 @@ class TenantVehicle < Legacy::TenantVehicle
   belongs_to :vehicle
   belongs_to :carrier, optional: true
   has_many :pricings
-  belongs_to :sandbox, class_name: 'Tenants::Sandbox', optional: true
 
   after_create do |tvt|
     vt = tvt.vehicle
