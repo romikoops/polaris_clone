@@ -42,7 +42,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def search_shipments
-    index_search_results = Shipment.where(id: target_shipments).index_search(params[:query])
+    index_search_results = Legacy::Shipment.where(id: target_shipments).index_search(params[:query])
+    # pgsearch issue requires this will be solved in shipment refactor
     user_search_results = target_shipments.user_search(params[:query])
     results = index_search_results | user_search_results
     per_page = params.fetch(:per_page, 4).to_f
@@ -443,7 +444,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def tenant_shipments
     @tenant_shipments ||= begin
       association = Legacy::Shipment.where(organization_id: current_organization.id)
-                                  .joins(:user).where(users_users: { deleted_at: nil })
+                                  .left_joins(:user).where(users_users: { deleted_at: nil })
       test_user? ? association : association.excluding_tests
     end
   end

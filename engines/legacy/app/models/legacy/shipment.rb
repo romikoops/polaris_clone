@@ -278,13 +278,15 @@ module Legacy
     end
 
     def client_name
-      shipment_user_profile.full_name
+      shipment_user_profile&.full_name
     end
 
-    delegate :company_name, to: :shipment_user_profile
+    delegate :company_name, to: :shipment_user_profile, allow_nil: true
 
     def shipment_user_profile
       profile = Profiles::Profile.find_by(user_id: user_id)
+      return if profile.nil?
+
       Profiles::ProfileDecorator.new(profile)
     end
 

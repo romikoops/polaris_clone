@@ -37,6 +37,20 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
     end
+
+    context 'when a user is nil' do
+      let!(:nil_user_shipment) {
+        FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true, organization: organization, user: nil, status: 'requested')
+      }
+
+      it 'returns an http status of success' do
+        get :index, params: { organization_id: organization.id }
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json.dig(:data, :requested).pluck(:id)).to include(nil_user_shipment.id)
+        end
+      end
+    end
   end
 
   describe 'GET #search_shipments' do
