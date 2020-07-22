@@ -4,7 +4,7 @@ module OfferCalculator
   module Service
     module OfferCreators
       class Base
-        attr_reader :shipment, :scope
+        attr_reader :shipment
 
         def initialize(shipment:)
           @shipment = shipment
@@ -18,12 +18,15 @@ module OfferCalculator
         end
 
         def currency_for_user
-          @scope = ::OrganizationManager::ScopeService.new(
-            organization: Organizations::Organization.current
-          ).fetch
-
           Users::Settings.find_by(user_id: shipment.user_id)&.currency ||
-            @scope.fetch(:default_currency)
+            scope.fetch(:default_currency)
+        end
+
+        def scope
+          @scope ||= ::OrganizationManager::ScopeService.new(
+            target: shipment.user,
+            organization: shipment.organization
+          ).fetch
         end
       end
     end

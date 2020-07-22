@@ -20,7 +20,11 @@ module OfferCalculator
         end
 
         def valid_until
-          @valid_until ||= charges.map { |charge_section| charge_section.validity.last }.min
+          @valid_until ||= begin
+            return scope.dig(:validity_period).days.from_now.to_date if scope.dig(:validity_period)
+
+            charges.map { |charge_section| charge_section.validity.last }.min
+          end
         end
 
         def valid_from
