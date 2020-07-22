@@ -42,7 +42,14 @@ module OfferCalculator
 
       def deduplicate_shipment_fees(results:)
         results.uniq do |result|
-          [result.tenant_vehicle_id, result.target&.id, result.charge_category.code, result.validity, result.section]
+          [
+            result.tenant_vehicle_id,
+            result.target&.id,
+            result.charge_category.code,
+            result.validity,
+            result.section,
+            result.filter_id
+          ]
         end
       end
 

@@ -98,7 +98,7 @@ RSpec.describe OfferCalculator::Calculator do
       zip_code: delivery_address.zip_code,
       country: delivery_address.country.name,
       geocoded_address: delivery_address.geocoded_address,
-      street_number: delivery_address.street_number,
+      street_number: delivery_address.street_number
     }.with_indifferent_access
   end
   let(:quotation) { Quotations::Quotation.first }
@@ -201,6 +201,83 @@ RSpec.describe OfferCalculator::Calculator do
         aggregate_failures do
           expect(tenders.count).to be(4)
           expect(tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq).to match_array(desired_tenant_vehicle_combos)
+        end
+      end
+    end
+
+    context "with parallel routes" do
+      before do
+        cargo_classes.each do |cargo_class|
+          FactoryBot.create(:trucking_with_unit_rates,
+            :with_fees,
+            hub: itinerary_2.origin_hub,
+            organization: organization,
+            cargo_class: cargo_class,
+            load_type: load_type,
+            truck_type: truck_type,
+            tenant_vehicle: tenant_vehicle_2,
+            location: pickup_trucking_location)
+          FactoryBot.create(:trucking_with_unit_rates,
+            :with_fees,
+            hub: itinerary_2.destination_hub,
+            organization: organization,
+            cargo_class: cargo_class,
+            load_type: load_type,
+            truck_type: truck_type,
+            tenant_vehicle: tenant_vehicle_2,
+            location: delivery_trucking_location,
+            carriage: "on")
+          FactoryBot.create(:pricings_pricing,
+            load_type: load_type,
+            cargo_class: cargo_class,
+            organization: organization,
+            itinerary: itinerary_2,
+            tenant_vehicle: tenant_vehicle_2,
+            fee_attrs: {rate: 250, rate_basis: :per_unit_rate_basis, min: nil})
+          %w[import export].map do |direction|
+            FactoryBot.create(:legacy_local_charge,
+              direction: direction,
+              hub: direction == "export" ? itinerary_2.origin_hub : itinerary_2.destination_hub,
+              load_type: cargo_class,
+              organization: organization,
+              tenant_vehicle: tenant_vehicle_2)
+          end
+        end
+        service.perform
+      end
+
+      let!(:itinerary_2) { FactoryBot.create(:default_itinerary, organization: organization) }
+      let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
+      let(:legacy_results) { service.detailed_schedules }
+      let(:desired_tenant_vehicle_combos) do
+        [
+          [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id, itinerary.id],
+          [tenant_vehicle_2.id, tenant_vehicle_2.id, tenant_vehicle_2.id, itinerary_2.id]
+        ]
+      end
+
+      it "perform a booking calculation" do
+        aggregate_failures do
+          expect(legacy_results.length).to eq(2)
+          expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
+        end
+      end
+
+      it "creates the Quotation correctly" do
+        aggregate_failures do
+          expect(Quotations::Quotation.count).to be(1)
+          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
+          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
+        end
+      end
+
+      it "creates the Tenders correctly" do
+        tenders = Quotations::Tender.all
+        aggregate_failures do
+          expect(tenders.count).to be(2)
+          expect(
+            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id, t.itinerary_id] }.uniq
+          ).to match_array(desired_tenant_vehicle_combos)
         end
       end
     end

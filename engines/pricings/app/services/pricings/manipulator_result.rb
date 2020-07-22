@@ -3,7 +3,7 @@
 module Pricings
   class ManipulatorResult
     attr_reader :result, :breakdowns, :original, :flat_margins
-    delegate :id, :organization, :tenant_vehicle_id, :itinerary_id, to: :original
+    delegate :id, :organization, :tenant_vehicle_id, to: :original
 
     def initialize(original:, result:, breakdowns:, flat_margins:)
       @original = original
@@ -85,6 +85,18 @@ module Pricings
       return unless original.is_a? Trucking::Trucking
 
       original.truck_type
+    end
+
+    def itinerary_id
+      return unless original.is_a?(Pricings::Pricing)
+
+      original.itinerary_id
+    end
+
+    def hub_id
+      return if original.is_a?(Pricings::Pricing)
+
+      original.hub_id
     end
 
     private

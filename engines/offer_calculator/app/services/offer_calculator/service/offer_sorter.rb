@@ -158,9 +158,11 @@ module OfferCalculator
         if grouping_keys[:carrier_lock]
           return trucking_carrier_lock_matcher(section: section, date: date, carrier_id: grouping_keys[:carrier_id])
         end
-
+        target_hub_id = section.match?(/pre/) ? grouping_keys[:origin_hub_id] : grouping_keys[:destination_hub_id]
         charges.select do |charge|
-          charge.section == section && charge.validity.cover?(date)
+          charge.section == section &&
+            charge.validity.cover?(date) &&
+            charge.hub_id == target_hub_id
         end
       end
 
@@ -209,7 +211,9 @@ module OfferCalculator
             tenant_vehicle_id: schedule.tenant_vehicle_id,
             itinerary_id: schedule.itinerary_id,
             carrier_lock: schedule.carrier_lock,
-            carrier_id: schedule.carrier_id
+            carrier_id: schedule.carrier_id,
+            origin_hub_id: schedule.origin_hub_id,
+            destination_hub_id: schedule.destination_hub_id
           }
         end
       end

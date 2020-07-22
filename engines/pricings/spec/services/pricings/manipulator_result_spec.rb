@@ -49,6 +49,12 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.load_type).to eq(original.load_type)
       end
     end
+
+    describe ".itinerary_id" do
+      it "returns the correct itinerary_id" do
+        expect(instance.itinerary_id).to eq(original.itinerary_id)
+      end
+    end
   end
 
   context "with trucking rates" do
@@ -89,6 +95,12 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.truck_type).to eq("default")
       end
     end
+
+    describe ".hub_id" do
+      it "returns the correct hub_id" do
+        expect(instance.hub_id).to eq(original.hub_id)
+      end
+    end
   end
 
   context "with local charges" do
@@ -115,6 +127,12 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".direction" do
       it "returns the correct direction" do
         expect(instance.direction).to eq("export")
+      end
+    end
+
+    describe ".hub_id" do
+      it "returns the correct hub_id" do
+        expect(instance.hub_id).to eq(original.hub_id)
       end
     end
   end

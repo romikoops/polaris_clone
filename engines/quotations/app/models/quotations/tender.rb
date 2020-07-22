@@ -20,7 +20,7 @@ module Quotations
     delegate :pickup_address, :delivery_address, :cargo, to: :quotation
 
     validates :tenant_vehicle, uniqueness: {
-      scope: %i[quotation_id pickup_tenant_vehicle delivery_tenant_vehicle]
+      scope: %i[quotation_id pickup_tenant_vehicle delivery_tenant_vehicle itinerary_id]
     }
   end
 end

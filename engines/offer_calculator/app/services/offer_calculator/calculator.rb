@@ -29,24 +29,6 @@ module OfferCalculator
 
     private
 
-    def fees
-      @fees ||= OfferCalculator::Service::RateBuilder.fees(
-        shipment: shipment, quotation: quotation, inputs: manipulated_rates
-      )
-    end
-
-    def charges
-      @charges ||= OfferCalculator::Service::ChargeCalculator.charges(
-        shipment: shipment, quotation: quotation, fees: fees
-      )
-    end
-
-    def routes
-      @routes ||= OfferCalculator::Service::RouteFilter.new(
-        shipment: shipment, quotation: quotation
-      ).perform(unfiltered_routes)
-    end
-
     def valid_rates
       @valid_rates ||= OfferCalculator::Service::PricingFinder.pricings(
         shipment: shipment, quotation: quotation, schedules: schedules
@@ -59,10 +41,28 @@ module OfferCalculator
       )
     end
 
+    def fees
+      @fees ||= OfferCalculator::Service::RateBuilder.fees(
+        shipment: shipment, quotation: quotation, inputs: manipulated_rates
+      )
+    end
+
+    def charges
+      @charges ||= OfferCalculator::Service::ChargeCalculator.charges(
+        shipment: shipment, quotation: quotation, fees: fees
+      )
+    end
+
     def sorted_offers
       @sorted_offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
         shipment: shipment, quotation: quotation, charges: charges, schedules: schedules
       )
+    end
+
+    def routes
+      @routes ||= OfferCalculator::Service::RouteFilter.new(
+        shipment: shipment, quotation: quotation
+      ).perform(unfiltered_routes)
     end
 
     def unfiltered_routes
