@@ -648,6 +648,7 @@ module Trucking
           carrier: service_carrier
         ).tap do |tenant_vehicle|
           tenant_vehicle.update(name: service) if tenant_vehicle.name.blank?
+          tenant_vehicle.save!
         end
       end
 

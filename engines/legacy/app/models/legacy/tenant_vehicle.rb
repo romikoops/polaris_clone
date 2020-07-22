@@ -4,7 +4,7 @@ module Legacy
   class TenantVehicle < ApplicationRecord
     self.table_name = 'tenant_vehicles'
     belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :vehicle
+    belongs_to :vehicle, optional: true
     belongs_to :carrier, optional: true
     has_many :pricings, class_name: 'Pricings::Pricing'
 
