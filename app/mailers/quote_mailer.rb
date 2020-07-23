@@ -5,7 +5,7 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def quotation_email(shipment, shipments, email, quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     set_current_id(organization_id: shipment.organization_id)
     return if invalid_records(shipments: [shipment, *shipments])
 
