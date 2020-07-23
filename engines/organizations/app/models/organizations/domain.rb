@@ -4,8 +4,8 @@ module Organizations
   class Domain < ApplicationRecord
     belongs_to :organization
 
-    validates :domain, presence: true, uniqueness: true, length: { maximum: 253 }
-    validates :default, inclusion: { in: [true, false] }, uniqueness: { scope: :organization_id, if: :default? }
+    validates :domain, presence: true, uniqueness: true, length: {maximum: 253}
+    validates :default, inclusion: {in: [true, false]}, uniqueness: {scope: :organization_id, if: :default?}
 
     scope :default, -> { find_by(default: true) }
   end

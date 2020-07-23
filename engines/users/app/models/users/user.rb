@@ -13,22 +13,9 @@ module Users
     validates :email, presence: true, uniqueness: {scope: :organization_id},
                       format: {with: URI::MailTo::EMAIL_REGEXP}
 
-    before_destroy :destroy_memberships
-
     acts_as_paranoid
 
     has_paper_trail skip: %i[last_activity_at unlock_token magic_login_token reset_password_token activation_token]
-
-    def groups
-      company_ids = Companies::Membership.where(member: self).pluck(:company_id)
-      Groups::Group.joins(:memberships)
-        .where(groups_memberships: {member_id: [id] | company_ids})
-    end
-
-    def destroy_memberships
-      Groups::Membership.where(member: self).destroy_all
-      Companies::Membership.where(member: self).destroy_all
-    end
   end
 end
 

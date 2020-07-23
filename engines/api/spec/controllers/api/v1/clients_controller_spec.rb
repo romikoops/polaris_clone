@@ -13,7 +13,7 @@ module Api
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:organization_group) { Groups::Group.create(organization: organization) }
-    let(:user) { FactoryBot.create(:users_user, :with_profile, email: 'test@example.com') }
+    let!(:user) { FactoryBot.create(:users_user, :with_profile, email: 'test@example.com') }
 
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
@@ -141,6 +141,11 @@ module Api
       let(:request_object) do
         post :create, params: { organization_id: organization.id, client: { **user_info, **profile_info, **address_info } }, as: :json
       end
+      let(:user_groups) {
+        OrganizationManager::HierarchyService.new(target: client, organization: organization).fetch
+          .select { |hier| hier.is_a?(Groups::Group) }
+      }
+      let(:client) { Organizations::User.find_by(email: user_info[:email]) }
 
       context 'when request is successful' do
         it 'returns http status of success' do
@@ -161,9 +166,8 @@ module Api
 
         it 'assigns the default role (shipper) to the new user' do
           perform_request
-          user = Organizations::User.find_by(email: user_info[:email])
 
-          expect(user.organization_id).to eq(user_info[:organization_id])
+          expect(client.organization_id).to eq(user_info[:organization_id])
         end
       end
 
@@ -176,8 +180,7 @@ module Api
 
         it 'assigns the default group of the organization to the new user membership' do
           perform_request
-          user = Organizations::User.find_by(email: user_info[:email])
-          expect(user.groups.pluck(:name)).to include('default')
+          expect(user_groups.pluck(:name)).to include('default')
         end
       end
 
@@ -199,19 +202,19 @@ module Api
     end
 
     describe 'DELETE #destroy' do
-      let(:user) {
+      let(:client) {
         FactoryBot.create(:authentication_user,
         :organizations_user,
         :with_profile,
         :active,
         organization_id: organization.id)
       }
-      let(:profile) { Profiles::Profile.with_deleted.find_by(user_id: user.id) }
-      let(:organization_user) { Organizations::User.with_deleted.find_by(id: user.id) }
+      let(:profile) { Profiles::Profile.with_deleted.find_by(user_id: client.id) }
+      let(:organization_user) { Organizations::User.with_deleted.find_by(id: client.id) }
       let(:request_object) {
         delete :destroy,
         params: { organization_id: organization.id,
-                  id: user.id },
+                  id: client.id },
         as: :json
       }
 
@@ -228,8 +231,8 @@ module Api
 
         it 'deletes the authentication user successfully' do
           perform_request
-          user.reload
-          expect(user.deleted?).to be_truthy
+          client.reload
+          expect(client.deleted?).to be_truthy
         end
 
         it 'deletes the organization user successfully' do
@@ -241,7 +244,7 @@ module Api
 
       context 'when request cannot find a user' do
         before do
-          user.destroy!
+          client.destroy!
         end
 
         it 'returns with a 404 response' do

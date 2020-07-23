@@ -21,10 +21,12 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/docs"
   mount Rswag::Api::Engine => "/docs"
 
-  namespace :saml do
-    get :init
-    get :metadata
-    post :consume
+  constraints subdomain: "api" do
+    namespace :saml do
+      get :init
+      get :metadata
+      post :consume
+    end
   end
 
   resource :user, only: [:show, :create]

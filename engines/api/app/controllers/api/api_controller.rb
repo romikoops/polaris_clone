@@ -4,7 +4,7 @@ require_dependency 'api/application_controller'
 
 module Api
   class ApiController < ApplicationController
-    API_HOST= 'api.itsmycargo.com'
+    API_HOST = 'api.itsmycargo.com'
     include ErrorHandler
     include Pagination
 
@@ -103,6 +103,11 @@ module Api
 
     def referer
       URI(request.referer.to_s)
+    end
+
+    def target_groups(target:)
+      OrganizationManager::HierarchyService.new(target: target, organization: current_organization).fetch
+        .select { |hier| hier.is_a?(Groups::Group) }
     end
   end
 end

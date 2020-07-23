@@ -107,6 +107,11 @@ digraph G {
     "api" -> "trucking" [color=grey];
     "api" -> "users" [color=grey];
     "api" -> "wheelhouse" [color=grey];
+    "idp" [shape=ellipse];
+    "idp" -> "authentication" [color=grey];
+    "idp" -> "organization_manager" [color=grey];
+    "idp" -> "organizations" [color=grey];
+    "idp" -> "profiles" [color=grey];
   };
   subgraph cluster4 {
     label = "service";

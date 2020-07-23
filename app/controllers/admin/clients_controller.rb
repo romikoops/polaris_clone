@@ -25,7 +25,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def show
     client = Users::User.find_by(organization_id: params[:organization_id], id: params[:id])
     addresses = Address.joins(:user_addresses).where(user_addresses: { user_id: client.id })
-    groups = client.groups.map { |g| group_index_json(g) }
+    groups = target_groups(target: client).map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client.id)
     profile = Profiles::Profile.find_by(user_id: client.id).as_json(except: %i[user_id id])
     client_data = client.as_json.merge(profile)

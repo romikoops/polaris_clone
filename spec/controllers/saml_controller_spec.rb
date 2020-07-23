@@ -10,6 +10,10 @@ RSpec.describe SamlController, type: :controller do
   let!(:default_group) { create(:groups_group, organization: organization, name: 'default') }
   let(:forwarded_host) { organizations_domain.domain }
   let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
+  let(:user_groups) {
+    OrganizationManager::HierarchyService.new(target: user, organization: organization).fetch
+      .select { |hier| hier.is_a?(Groups::Group) }
+  }
 
   before do
     create(:organizations_saml_metadatum, organization: organization)
@@ -97,7 +101,7 @@ RSpec.describe SamlController, type: :controller do
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(user.groups).to match_array([group])
+          expect(user_groups).to match_array([group])
         end
       end
     end
@@ -133,7 +137,7 @@ RSpec.describe SamlController, type: :controller do
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(user.groups).to match_array([group, group_2])
+          expect(user_groups).to match_array([group, group_2])
         end
       end
     end
