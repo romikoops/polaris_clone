@@ -32,6 +32,8 @@ RSpec.describe Pricings::Manipulator do
     }
   end
 
+  let!(:default_group) { FactoryBot.create(:groups_group, name: 'default', organization: organization) }
+
   let(:klass) do
     described_class.new(
       target: user,
@@ -77,11 +79,12 @@ RSpec.describe Pricings::Manipulator do
   end
 
   describe '.find_applicable_margins' do
+    let(:margins) { klass.find_applicable_margins }
+
     context 'with freight pricings and user margin' do
       let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
 
       it 'returns the applicable margin attached to the user' do
-        margins = klass.find_applicable_margins
         expect(margins.first[:margin]).to eq(user_margin)
       end
     end
@@ -90,25 +93,11 @@ RSpec.describe Pricings::Manipulator do
       let!(:tenant_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: organization) }
 
       it 'returns the applicable margin attached to the tenant when the user has none' do
-        margins = klass.find_applicable_margins
         expect(margins.first[:margin]).to eq(tenant_margin)
       end
     end
-  end
 
-  context 'when initializing variables' do
-    context 'when user is nil' do
-      let(:user) { nil }
-      let!(:default_group) { FactoryBot.create(:groups_group, name: 'default', organization: organization) }
-
-      it 'sets the target as the default group' do
-        expect(klass.send(:target)).to eq(default_group)
-      end
-    end
-  end
-
-  describe '.decorate_margins' do
-    context 'with freight pricings and user margin' do
+    context 'with freight pricings and user and company group margin' do
       let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
       let!(:group_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: group) }
       let(:group) {
@@ -122,6 +111,9 @@ RSpec.describe Pricings::Manipulator do
         end
       end
 
+      let(:user_result) { margins.find { |result| result[:margin] == user_margin } }
+      let(:group_result) { margins.find { |result| result[:margin] == group_margin } }
+
       before do
         FactoryBot.create(:groups_group, name: 'default', organization: organization).tap do |tapped_group|
           FactoryBot.create(:groups_membership, member: user, group: tapped_group)
@@ -129,11 +121,20 @@ RSpec.describe Pricings::Manipulator do
       end
 
       it 'returns the applicable margin attached to the user' do
-        margins = klass.find_applicable_margins
-        expect(margins.first[:margin]).to eq(user_margin)
-        expect(margins.first[:priority]).to eq(0)
-        expect(margins.second[:margin]).to eq(group_margin)
-        expect(margins.second[:priority]).to eq(2)
+        aggregate_failures do
+          expect(user_result[:priority]).to eq(0)
+          expect(group_result[:priority]).to eq(2)
+        end
+      end
+    end
+  end
+
+  context 'when initializing variables' do
+    context 'when user is nil' do
+      let(:user) { nil }
+
+      it 'sets the target as the default group' do
+        expect(klass.send(:target)).to eq(default_group)
       end
     end
   end
