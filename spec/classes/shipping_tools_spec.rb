@@ -330,6 +330,7 @@ RSpec.describe ShippingTools do
           origin_hub: origin_hub,
           destination_hub: destination_hub)
       }
+      let(:result) { described_class.new.get_offers(params, user) }
 
       before do
         create(:charge_breakdown, shipment: shipment, trip: trip, tender: tender)
@@ -339,7 +340,6 @@ RSpec.describe ShippingTools do
       end
 
       it 'returns the correct response including the cargo units' do
-        result = described_class.new.get_offers(params, user)
         aggregate_failures do
           expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
           expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
@@ -352,7 +352,6 @@ RSpec.describe ShippingTools do
         Organizations::Scope.find_by(target_id: organization.id)
           .update(content: { closed_quotation_tool: true, email_all_quotes: true })
 
-        result = described_class.new.get_offers(params, user)
         aggregate_failures do
           expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
           expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
@@ -370,7 +369,21 @@ RSpec.describe ShippingTools do
         it 'returns the correct response including the cargo units for a quote setup with trucking' do
           Organizations::Scope.find_by(target_id: organization.id).update(content: { closed_quotation_tool: true })
 
-          result = described_class.new.get_offers(params, user)
+          aggregate_failures do
+            expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
+            expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
+            expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
+            expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+          end
+        end
+      end
+
+      context 'with shipment created by guest user' do
+        before do
+          shipment.update(user_id: nil)
+        end
+
+        it 'returns the correct response including the cargo units for a quote setup with trucking' do
           aggregate_failures do
             expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
             expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])

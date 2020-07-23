@@ -63,7 +63,9 @@ class ShippingTools
 
     raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.blank?
 
-    shipment = Legacy::Shipment.find(params[:shipment_id])
+    shipment = Legacy::Shipment.find(params[:shipment_id]).tap do |tapped_shipment|
+      tapped_shipment.update(user: current_user) if tapped_shipment.user_id.nil?
+    end
     offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user)
 
     Skylight.instrument title: 'OfferCalculator Perform' do
