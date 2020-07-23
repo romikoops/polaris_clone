@@ -7,7 +7,7 @@ module Api
     included do
       def paginate(collection)
         paginated = collection.paginate_api(pagination_params[:page])
-          .per(pagination_params[:per_page])
+          .per(pagination_params[:per_page] || 10)
 
         paginated
       end

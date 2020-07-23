@@ -8,7 +8,10 @@ module Api
       def index
         quotations = quotations_filter.perform
 
-        decorated_quotations = QuotationDecorator.decorate_collection(quotations)
+        paginated = paginate(quotations)
+
+        decorated_quotations = QuotationDecorator.decorate_collection(paginated,
+          { context: { links: pagination_links(paginated) }})
 
         render json: QuotationSerializer.new(decorated_quotations, params: { scope: current_scope })
       end

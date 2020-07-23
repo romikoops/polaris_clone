@@ -264,6 +264,14 @@ module Api
             expect(response_data.count).to eq 5
           end
         end
+
+        it 'paginates results' do
+          get :index, params: { organization_id: organization.id, per_page: 2 }
+
+          aggregate_failures do
+            expect(response_data.map { |q| q['id'] }).to eq Quotations::Quotation.limit(2).ids
+          end
+        end
       end
 
       context "when quotations do not exist" do
