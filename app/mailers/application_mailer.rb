@@ -3,6 +3,7 @@
 class ApplicationMailer < ActionMailer::Base
   default from: 'no-reply@itsmycargo.tech'
   layout 'mailer'
+  CHARACTER_COUNT = 90
 
   include ActionView::Helpers::TextHelper
 
@@ -33,10 +34,17 @@ class ApplicationMailer < ActionMailer::Base
     template = scope_for(record: shipment.user).dig(:email_subject_template)
     liquid = Liquid::Template.parse(template)
     noun = type == :quotation ? 'Quotation' : 'Booking'
-    truncate(
-      liquid.render(context(shipment: ::Legacy::ShipmentDecorator.new(shipment), references: references, noun: noun)),
-      length: 78
+    liquid_string = liquid.render(
+      context(
+        shipment: ::Legacy::ShipmentDecorator.new(shipment),
+        references: references,
+        noun: noun
+      )
     )
+    grapheme_clusters = liquid_string.each_grapheme_cluster
+    return liquid_string if grapheme_clusters.count < CHARACTER_COUNT
+
+    grapheme_clusters.take(CHARACTER_COUNT).join + '…'
   end
 
   def context(shipment:, references:, noun:)

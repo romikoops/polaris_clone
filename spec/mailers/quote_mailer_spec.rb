@@ -121,6 +121,33 @@ RSpec.describe QuoteMailer, type: :mailer do
       FactoryBot.create(:organizations_scope, target: organization, content: {email_subject_template: liquid})
     end
 
+    context 'with escaping' do
+      before do
+        allow(original_shipment).to receive(:origin_nexus).and_return(origin_hub.nexus)
+        allow(original_shipment).to receive(:destination_nexus).and_return(destination_hub.nexus)
+      end
+
+      let(:liquid) {
+        [
+          'ItsMyCargo Quotation Tool: {{imc_reference}} - from: \'{{origin_city}}\' "{{origin}}" - to:',
+          '\'{{destination_city}}\' "{{destination}}" / {{total_weight}}kg / {{total_volume}}cbm'
+        ].join(' ')
+      }
+      let(:result) {
+        [
+          "ItsMyCargo Quotation Tool: #{original_shipment.imc_reference} - from:",
+          "'Gothenburg' \"SEGOT\" - to: 'Shanghai' \"CNS…"
+        ].join(' ')
+      }
+
+      it 'renders', :aggregate_failures do
+        expect(mail.subject).to eq(result)
+        expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
+        expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
+        expect(mail.to).to eq(['sales.general@demo.com'])
+      end
+    end
+
     context 'without trucking' do
       before do
         allow(original_shipment).to receive(:origin_nexus).and_return(origin_hub.nexus)

@@ -16,7 +16,6 @@ class ShipmentMailer < ApplicationMailer
     @organization = ::Organizations::Organization.current
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format
-    base_url = base_url(@organization)
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
@@ -50,7 +49,7 @@ class ShipmentMailer < ApplicationMailer
     @organization = ::Organizations::Organization.current
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format
-    @shipment_page = "#{base_url(@organization)}account/shipments/view/#{shipment.id}"
+    @shipment_page = "#{base_url}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
@@ -82,7 +81,7 @@ class ShipmentMailer < ApplicationMailer
     @organization = ::Organizations::Organization.current
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format
-    @shipment_page = "#{base_url(@organization)}account/shipments/view/#{shipment.id}"
+    @shipment_page = "#{base_url}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
@@ -134,7 +133,7 @@ class ShipmentMailer < ApplicationMailer
     end
   end
 
-  def base_url(tenant)
+  def base_url
     case Rails.env
     when 'production'  then "https://#{default_domain}/"
     when 'review'      then ENV['REVIEW_URL']

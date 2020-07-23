@@ -6,11 +6,11 @@ class Legacy::ShipmentDecorator < Draper::Decorator
   delegate :external_id, to: :shipment_user_profile
 
   def origin
-    origin_nexus&.locode || pickup_postal_code
+    origin_nexus&.locode || pickup_postal_code || origin_city
   end
 
   def destination
-    destination_nexus&.locode || delivery_postal_code
+    destination_nexus&.locode || delivery_postal_code || destination_city
   end
 
   def origin_city
