@@ -392,7 +392,11 @@ class ShippingTools
                       mode_of_transport: shipment.mode_of_transport
                     )
                   end
-    currency = Users::Settings.find_by(user: current_user).currency
+    default_currency = OrganizationManager::ScopeService.new(
+      target: current_user,
+      organization: current_organization
+    ).fetch(:default_currency)
+    currency = Users::Settings.find_by(user: current_user)&.currency || default_currency
     total_fees = { total: { value: 0, currency: currency } }
     total_fees[:total][:value] += import_fees.dig('total', 'value') if import_fees
     total_fees[:total][:value] += export_fees.dig('total', 'value') if export_fees

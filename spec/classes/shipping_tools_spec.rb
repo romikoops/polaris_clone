@@ -538,6 +538,40 @@ RSpec.describe ShippingTools do
       end
     end
 
+    context 'when user settings is nil' do
+      let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
+      let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
+      let(:params) do
+        {
+          shipment_id: shipment.id,
+          customs_credit: {},
+          schedule: schedule.as_json.merge(
+            origin_hub: schedule.origin_hub,
+            destination_hub: schedule.destination_hub,
+            charge_trip_id: schedule.trip_id
+          ).with_indifferent_access,
+          meta: {
+            pricing_rate_data: {},
+            pricing_breakdown: {},
+            tender_id: nil
+          }
+        }
+      end
+
+      before do
+        Users::Settings.find_by(user_id: user.id).destroy
+        FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender_id)
+      end
+
+      it 'selects an offer for the shipment and assigns a reference number' do
+        result = described_class.new.choose_offer(params, user)
+        aggregate_failures do
+          expect(result[:shipment]['trip_id']).to eq(trip.id)
+          expect(result[:shipment]['tender_id']).to eq(tender_id)
+        end
+      end
+    end
+
     context 'when it is a basic lcl with documents customs' do
       let(:address) { create(:address) }
       let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
