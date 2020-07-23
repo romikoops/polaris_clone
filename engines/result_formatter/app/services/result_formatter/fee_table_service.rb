@@ -124,9 +124,9 @@ module ResultFormatter
         item.charge_category
       elsif item.nil? && section.present?
         section_code = section.sub("_section", "")
-        charge_breakdown.charge_categories.find_by(code: section_code)
+        org_charge_categories.find_by(code: section_code)
       else
-        charge_breakdown.charge_categories.find_by(
+        org_charge_categories.find_by(
           cargo_unit_id: cargo&.id,
           code: shipment_or_cargo_unit_code(cargo: cargo)
         )
@@ -240,6 +240,14 @@ module ResultFormatter
 
     def consolidated_cargo?
       tender.load_type == "cargo_item" && scope.dig(:consolidation, :cargo, :backend)
+    end
+
+    def org_charge_categories
+      Legacy::ChargeCategory.where(organization: organization)
+    end
+
+    def organization
+      @organization ||= tender.quotation.organization
     end
   end
 end
