@@ -135,6 +135,8 @@ class QuotedShipmentsService
       tapped_metadatum.save
     end
 
+    return unless clone_metadatum.valid?
+
     metadatum.breakdowns.each do |breakdown|
       breakdown.dup.tap { |clone_breakdown| clone_breakdown.update(metadatum: clone_metadatum) }
     end

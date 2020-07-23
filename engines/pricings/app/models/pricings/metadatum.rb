@@ -5,7 +5,7 @@ module Pricings
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :charge_breakdown, class_name: 'Legacy::ChargeBreakdown'
     has_many :breakdowns, dependent: :destroy
-    validates_uniqueness_of :charge_breakdown_id, scope: %(organization_id)
+    validates_uniqueness_of :charge_breakdown_id, scope: %i[organization_id]
   end
 end
 
