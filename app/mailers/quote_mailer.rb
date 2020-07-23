@@ -14,7 +14,7 @@ class QuoteMailer < ApplicationMailer
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
     @user = @shipment.user
-    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @user_profile = Profiles::ProfileService.fetch(user_id: @shipment.user_id)
     @organization = ::Organizations::Organization.current
     pdf_service = Pdf::Service.new(user: @user, organization: @organization)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)

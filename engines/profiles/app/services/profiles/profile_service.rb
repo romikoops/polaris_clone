@@ -20,7 +20,7 @@ module Profiles
     end
 
     def self.fetch(user_id:)
-      user_profile = user_id.nil? ? Profiles::Profile.new :  Profiles::Profile.with_deleted.find_by(user_id: user_id)
+      user_profile = user_id.nil? ? Profiles::Profile.new : Profiles::Profile.with_deleted.find_by(user_id: user_id)
       Profiles::ProfileDecorator.new(user_profile)
     end
   end

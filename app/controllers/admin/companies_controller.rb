@@ -19,7 +19,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
       user = membership.member
       ProfileTools.merge_profile(
         target: user.as_json,
-        profile: ProfileTools.profile_for_user(user: user)
+        profile: Profiles::ProfileService.fetch(user_id: user.id)
       )
     end
     groups = Groups::Membership.where(member: company).map do |membership|

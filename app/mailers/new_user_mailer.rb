@@ -8,7 +8,7 @@ class NewUserMailer < ApplicationMailer
   def new_user_email(user:) # rubocop:disable Metrics/AbcSize
     @user = user
     set_current_id(organization_id: user.organization_id)
-    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @user_profile = Profiles::ProfileService.fetch(user_id: @user.id)
     @organization = current_organization
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format

@@ -10,7 +10,7 @@ class ShipmentMailer < ApplicationMailer
   def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @user_profile = Profiles::ProfileService.fetch(user_id: @user&.id)
     @scope = scope_for(record: @user)
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @organization = ::Organizations::Organization.current
@@ -44,7 +44,7 @@ class ShipmentMailer < ApplicationMailer
   def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @user_profile = Profiles::ProfileService.fetch(user_id: @user&.id)
     @scope = scope_for(record: @user)
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @organization = ::Organizations::Organization.current
@@ -76,7 +76,7 @@ class ShipmentMailer < ApplicationMailer
   def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     set_current_id(organization_id: shipment.organization_id)
     @user = user
-    @user_profile = ProfileTools.profile_for_user(user: @user)
+    @user_profile = Profiles::ProfileService.fetch(user_id: @user&.id)
     @shipment = shipment
     @scope = scope_for(record: @user)
     @organization = ::Organizations::Organization.current
