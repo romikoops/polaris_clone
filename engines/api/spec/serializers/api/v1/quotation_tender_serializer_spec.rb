@@ -33,7 +33,7 @@ module Api
     end
 
     it 'returns the correct charges for the object passed' do
-      expect(target[:charges].count).to eq(18)
+      expect(target[:charges].count).to eq(19)
     end
   end
 end

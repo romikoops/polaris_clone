@@ -46,6 +46,7 @@ module ResultFormatter
           level: 1,
           chargeCategoryId: charge_category&.id
         )
+
         @rows << section_row
         if scope.dig(:quote_card, :sections, section.gsub("_section", ""))
           create_cargo_section_rows(row: section_row, items: items)
@@ -78,7 +79,9 @@ module ResultFormatter
 
     def create_cargo_currency_section_rows(row:, items:, cargo:, level:)
       sorted_currency_items = sorted_items_for_currency_sections(items: items)
-      return create_fee_rows(row: row, items: items, level: level) if sorted_currency_items.keys.length == 1
+      if sorted_currency_items.keys.length == 1 && sorted_currency_items.first.first == base_currency.iso_code
+        return create_fee_rows(row: row, items: items, level: level)
+      end
 
       sorted_currency_items.each do |currency, items_by_currency|
         fee_value = value(items: items_by_currency, currency: currency)
@@ -171,11 +174,11 @@ module ResultFormatter
     end
 
     def value(items:, currency: base_currency)
-      items.sum(Money.new(0, currency), &:amount)
+      items.inject(Money.new(0, currency)) { |sum, item| sum + item.amount }
     end
 
     def original_value(items:, currency: base_currency)
-      items.sum(Money.new(0, currency), &:original_amount)
+      items.inject(Money.new(0, currency)) { |sum, item| sum + item.original_amount }
     end
 
     def value_with_currency(value)

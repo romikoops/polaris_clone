@@ -82,6 +82,49 @@ module ResultFormatter
         end
       end
 
+      context "with varied currencies" do
+        let(:load_type) { "cargo_item" }
+        let(:expected_descriptions) do
+          [nil,
+            "Trucking pre",
+            "1 x Pallet",
+            "Trucking Rate",
+            "Export",
+            "1 x Pallet",
+            "Terminal Handling Cost",
+            "Shipment",
+            "Fees charged in USD:",
+            "SOLAS FEE",
+            "Cargo",
+            "1 x Pallet",
+            "Basic Ocean Freight",
+            "Import",
+            "1 x Pallet",
+            "Terminal Handling Cost",
+            "Trucking on",
+            "1 x Pallet",
+            "Trucking Rate"]
+        end
+
+        before do
+          FactoryBot.create(:quotations_line_item,
+            tender: tender,
+            section: :export_section,
+            amount: Money.new(3500, "USD"),
+            original_amount: Money.new(3500, "USD"),
+            charge_category: FactoryBot.create(:solas_charge))
+        end
+
+        it "returns rows for each level of charge table" do
+          results = klass.perform
+          aggregate_failures do
+            expect(results.length).to eq(19)
+            expect(results.pluck(:description)).to eq(expected_descriptions)
+            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+          end
+        end
+      end
+
       context "with custom names" do
         before do
           FactoryBot.create(:legacy_charge_categories, code: "cargo", name: "Bananas", organization: organization)
@@ -179,6 +222,7 @@ module ResultFormatter
             "1 x Pallet",
             "Terminal Handling Cost",
             "Shipment",
+            "Fees charged in SEK:",
             "Bunker Adjustment Fee",
             "Cargo",
             "1 x Pallet",
@@ -193,7 +237,7 @@ module ResultFormatter
 
         it "returns rows for each level of charge table" do
           aggregate_failures do
-            expect(results.length).to eq(18)
+            expect(results.length).to eq(19)
             expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
           end
