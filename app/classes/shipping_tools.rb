@@ -43,14 +43,21 @@ class ShippingTools
       scope: scope,
       load_type: load_type
     )
+    cargo_classes = shipment.lcl? ? ['lcl'] : Legacy::Container::CARGO_CLASSES
+    max_dimensions = Legacy::MaxDimensionsBundle.unit
+    .where(organization: current_organization, cargo_class: cargo_classes)
+    .to_max_dimensions_hash
+    max_aggregate_dimensions = Legacy::MaxDimensionsBundle.aggregate
+    .where(organization: current_organization, cargo_class: cargo_classes)
+    .to_max_dimensions_hash
 
     {
       shipment: shipment,
       routes: routes_data[:route_hashes],
       lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types: Legacy::TenantCargoItemType.where(organization: current_organization).map(&:cargo_item_type),
-      max_dimensions: Legacy::MaxDimensionsBundle.unit.where(organization: current_organization).to_max_dimensions_hash,
-      max_aggregate_dimensions: Legacy::MaxDimensionsBundle.aggregate.where(organization: current_organization).to_max_dimensions_hash,
+      max_dimensions: max_dimensions,
+      max_aggregate_dimensions: max_aggregate_dimensions,
       last_available_date: Date.today
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
@@ -511,7 +518,7 @@ class ShippingTools
       main_quote
     ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
-      target: shipment.user,
+      target: shipment.user
     ).fetch(:send_email_on_quote_email)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_quote
   end

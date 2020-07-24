@@ -48,7 +48,10 @@ class MaxDimensionsController < ApplicationController
 
   def max_dimensions_bundles(aggregate:)
     collection = Legacy::MaxDimensionsBundle.where(
-      organization: current_organization, aggregate: aggregate, mode_of_transport: modes_of_transport, cargo_class: cargo_classes
+      organization: current_organization,
+      aggregate: aggregate,
+      mode_of_transport: modes_of_transport,
+      cargo_class: cargo_classes
     )
     collection.where(tenant_vehicle: tenant_vehicles).or(collection.where(carrier: carriers))
   end
@@ -66,7 +69,14 @@ class MaxDimensionsController < ApplicationController
   end
 
   def pricings
-    @pricings ||= Pricings::Pricing.where(itinerary: itineraries)
+    @pricings ||= Pricings::Pricing.where(itinerary: itineraries, load_type: load_type)
+  end
+
+  def load_type
+    return max_dimensions_params[:load_type] if max_dimensions_params[:load_type].present?
+
+    Shipment.where(user: organization_user, organization: current_organization)
+      .order(created_at: :desc).limit(1).first&.load_type
   end
 
   def tenant_vehicles
@@ -78,7 +88,7 @@ class MaxDimensionsController < ApplicationController
   end
 
   def max_dimensions_params
-    params.permit(:itinerary_ids)
+    params.permit(:itinerary_ids, :load_type)
   end
 
   def itinerary_ids

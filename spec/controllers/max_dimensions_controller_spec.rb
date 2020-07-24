@@ -22,6 +22,8 @@ RSpec.describe MaxDimensionsController, type: :controller do
     agg_dimensions = Legacy::MaxDimensionsBundle.where(id: max_agg_dimensions.pluck(:id)).to_max_dimensions_hash
     agg_dimensions.deep_transform_keys! { |key| key.to_s.camelize(:lower) }.as_json
   end
+  let(:load_type) { 'cargo_item' }
+  let(:default_params) { { organization_id: organization.id, load_type: load_type, itinerary_ids: [itinerary.id].join(',') } }
 
   before do
     allow(controller).to receive(:current_organization).and_return(organization)
@@ -30,7 +32,42 @@ RSpec.describe MaxDimensionsController, type: :controller do
   describe 'GET #index' do
     context 'without carrier mdbs' do
       it 'returns the default max dimensions' do
-        get :index, params: { organization_id: organization.id }
+        get :index, params: default_params.except(:itinerary_ids)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(response_data['maxDimensions']).to eq(default_max_dimensions)
+          expect(response_data['maxAggregateDimensions']).to eq(default_max_agg_dimensions)
+        end
+      end
+    end
+
+    context 'without carrier mdbs fcl' do
+      let(:load_type) { 'container' }
+      let!(:max_dimensions) { FactoryBot.create_list(:legacy_max_dimensions_bundle, 1, cargo_class: 'fcl_20', organization: organization) }
+      let!(:max_agg_dimensions) {
+        FactoryBot.create_list(:legacy_max_dimensions_bundle, 1, cargo_class: 'fcl_20', organization: organization, aggregate: true)
+      }
+
+      it 'returns the default max dimensions' do
+        get :index, params: default_params.except(:itinerary_ids)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(response_data['maxDimensions']).to eq(default_max_dimensions)
+          expect(response_data['maxAggregateDimensions']).to eq(default_max_agg_dimensions)
+        end
+      end
+    end
+
+    context 'without load_type' do
+      before do
+        FactoryBot.create(:legacy_shipment, load_type: load_type, organization: organization, user: user)
+        allow(controller).to receive(:organization_user).and_return(user)
+      end
+
+      let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+
+      it 'returns the default max dimensions' do
+        get :index, params: default_params.except(:load_type)
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(response_data['maxDimensions']).to eq(default_max_dimensions)
@@ -40,16 +77,10 @@ RSpec.describe MaxDimensionsController, type: :controller do
     end
 
     context 'without carrier mdbs but itinerary ids and service provided' do
-      let(:params) {
-        {
-          organization_id: organization.id,
-          itinerary_ids: [itinerary.id].join(','),
-          tenant_vehicle: tenant_vehicle
-        }
-      }
+      let(:params) { default_params.merge(tenant_vehicle: tenant_vehicle) }
 
       it 'returns the default max dimensions' do
-        get :index, params: params
+        get :index, params: default_params
         aggregate_failures do
           expect(response).to have_http_status(:success)
           expect(response_data['maxDimensions']).to eq(default_max_dimensions)
@@ -60,13 +91,7 @@ RSpec.describe MaxDimensionsController, type: :controller do
 
     context 'without unit limits but filters provided' do
       let!(:max_dimensions) { nil }
-      let(:params) {
-        {
-          organization_id: organization.id,
-          itinerary_ids: [itinerary.id].join(','),
-          tenant_vehicle: tenant_vehicle
-        }
-      }
+      let(:params) { default_params.merge(tenant_vehicle: tenant_vehicle) }
 
       it 'returns the default max dimensions' do
         get :index, params: params
@@ -95,7 +120,7 @@ RSpec.describe MaxDimensionsController, type: :controller do
       }
 
       it 'returns the default max dimensions' do
-        get :index, params: { organization_id: organization.id, itinerary_ids: [itinerary.id].join(',') }
+        get :index, params: default_params.merge(tenant_vehicle: tenant_vehicle)
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
@@ -121,7 +146,7 @@ RSpec.describe MaxDimensionsController, type: :controller do
       }
 
       it 'returns the default max dimensions' do
-        get :index, params: { organization_id: organization.id, itinerary_ids: [itinerary.id].join(',') }
+        get :index, params: default_params
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
