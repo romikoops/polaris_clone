@@ -28,4 +28,35 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyResponse do
       end
     end
   end
+
+  context "when notes are present" do
+    let!(:country_note) {
+      FactoryBot.create(:legacy_note,
+        target: tender.origin_hub.nexus.country,
+        organization: organization,
+        body: tender.origin_hub.nexus.country.name
+      )
+    }
+    let!(:nexus_note) {
+      FactoryBot.create(:legacy_note,
+        target: tender.origin_hub.nexus,
+        organization: organization,
+        body: tender.origin_hub.nexus.name
+      )
+    }
+    let!(:hub_note) {
+      FactoryBot.create(:legacy_note,
+        target: tender.origin_hub,
+        organization: organization,
+        body: tender.origin_hub_id
+      )
+    }
+
+    it "returns a valid response" do
+      aggregate_failures do
+        expect(response[:notes].length).to eq(3)
+        expect(response[:notes]).to match_array([country_note, nexus_note, hub_note])
+      end
+    end
+  end
 end

@@ -34,11 +34,12 @@ module OfferCalculator
         attr_reader :offer, :charge_breakdown, :meta, :scope
 
         def grab_notes
-          hubs = [meta[:origin_hub], meta[:destination_hub]]
+          tender = charge_breakdown.tender
+          hubs = [tender.origin_hub, tender.destination_hub]
           nexii = ::Legacy::Nexus.where(id: hubs.pluck(:nexus_id))
           countries = ::Legacy::Country.where(id: nexii.select(:country_id))
           pricings = ::Pricings::Pricing.where(id: offer.pricing_ids(section_key: "cargo"))
-          regular_notes = ::Legacy::Note.where(transshipment: false, tenant_id: charge_breakdown.shipment.tenant_id)
+          regular_notes = ::Legacy::Note.where(transshipment: false, organization_id: charge_breakdown.shipment.organization_id)
           regular_notes.where(target: hubs | nexii | countries)
             .or(regular_notes.where(pricings_pricing_id: pricings.ids))
         end
