@@ -61,7 +61,7 @@ module OfferCalculator
           if STANDARD_RATE_BASES.include?(rate_basis)
             [
               {
-                value: fee.fetch("value", fee.fetch("rate", 0)).to_d,
+                value: (fee.dig("value") || fee.dig("rate") || fee.dig(measure_key)).to_d,
                 modifier_key: find_modifier_by_rate_basis(rate_basis: rate_basis)
               }
             ]
@@ -86,8 +86,12 @@ module OfferCalculator
             .map(&:downcase)
         end
 
-        def measure_key
+        def range_measure_key
           rate_basis[/PER_(.*)?_RANGE/, 1]&.downcase&.to_sym
+        end
+
+        def measure_key
+          rate_basis[/PER_(.*)?/, 1]&.downcase&.to_sym
         end
 
         def handle_range_fee
@@ -95,9 +99,9 @@ module OfferCalculator
                        when "PER_UNIT_TON_CBM_RANGE"
                          [measures.stowage_factor, false]
                        when /FLAT/
-                         [measures.send(measure_key), false]
+                         [measures.send(range_measure_key), false]
                        else
-                         [measures.send(measure_key), true]
+                         [measures.send(range_measure_key), true]
           end
           target = target_in_range(ranges: fee["range"], measure: value, max: max)
           update_range_fee_metadata(key: fee["key"], final_range: target) if target.present?
@@ -120,8 +124,8 @@ module OfferCalculator
             handle_stowage_range(target: target)
           else
             {
-              value: extract_range_value(target: target, key: measure_key),
-              modifier_key: rate_basis.match?(/FLAT/) ? :shipment : measure_key
+              value: extract_range_value(target: target, key: range_measure_key),
+              modifier_key: rate_basis.match?(/FLAT/) ? :shipment : range_measure_key
             }
           end
         end

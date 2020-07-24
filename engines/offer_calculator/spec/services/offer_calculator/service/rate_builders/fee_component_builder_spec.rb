@@ -40,40 +40,10 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
   end
   let(:target_value) { Money.new(pricing_fee.rate * 100.0, pricing_fee.currency_name) }
   let(:default_base) { OfferCalculator::Service::RateBuilders::FeeComponent::DEFAULT_BASE }
-  let(:stowage_fee) do
-    {
-      "key" => "QDF",
-      "max" => nil,
-      "min" => 5,
-      "name" => "Wharfage / Quay Dues",
-      "range" => [{"max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR"}, {"cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR"}],
-      "currency" => "EUR",
-      "rate_basis" => "PER_UNIT_TON_CBM_RANGE"
-    }
-  end
-  let(:dynamic_fee) do
-    {
-      "key" => "QDF",
-      "max" => nil,
-      "min" => 5,
-      "name" => "Wharfage / Quay Dues",
-      "cbm" => 10,
-      "ton" => 20,
-      "currency" => "EUR",
-      "rate_basis" => "PER_CBM_TON"
-    }
-  end
-  let(:percentage_fee) do
-    {
-      "key" => "FSC",
-      "max" => nil,
-      "min" => 5,
-      "name" => "Fuel Surcharge",
-      "rate" => 0.325,
-      "currency" => "EUR",
-      "rate_basis" => "PERCENTAGE"
-    }
-  end
+  let(:stowage_fee) { FactoryBot.build(:component_builder_fee, :stowage) }
+  let(:dynamic_fee) { FactoryBot.build(:component_builder_fee, :dynamic) }
+  let(:percentage_fee) { FactoryBot.build(:component_builder_fee, :percentage) }
+  let(:ton_fee) { FactoryBot.build(:component_builder_fee, :ton) }
 
   describe "it creates a valid FeeComponent object" do
     let(:fee_components) do
@@ -105,6 +75,20 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
           expect(fee_components.first.value).to eq(target_value)
           expect(fee_components.first.modifier).to eq(:wm)
           expect(fee_components.first.base).to eq(200)
+        end
+      end
+    end
+
+    context "with rate under attribute key (ton)" do
+      let(:fee) { ton_fee }
+      let(:target_value) { Money.new(fee[:ton] * 100.0, fee[:currency]) }
+
+      it "returns the properly set up Fee Component" do
+        aggregate_failures do
+          expect(fee_components.length).to eq(1)
+          expect(fee_components.first.value).to eq(target_value)
+          expect(fee_components.first.modifier).to eq(:ton)
+          expect(fee_components.first.base).to eq(default_base)
         end
       end
     end
