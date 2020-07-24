@@ -42,17 +42,30 @@ RSpec.describe ShipmentsController do
   end
 
   describe 'Patch #update_user' do
-    before do
-      patch :update_user, params: { organization_id: organization.id, id: shipment.id }
-      shipment.reload
+    context 'with shipment' do
+      before do
+        patch :update_user, params: { organization_id: organization.id, id: shipment.id }
+        shipment.reload
+      end
+
+      it 'returns http success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'updates the shipment user' do
+        expect(shipment.user_id).to eq(user.id)
+      end
     end
 
-    it 'returns http success' do
-      expect(response).to have_http_status(:success)
-    end
+    context 'when shipment is deleted' do
+      before do
+        shipment.destroy
+        patch :update_user, params: { organization_id: organization.id, id: shipment.id }
+      end
 
-    it 'updates the shipment user' do
-      expect(shipment.user_id).to eq(user.id)
+      it 'returns http not found' do
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 

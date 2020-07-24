@@ -95,7 +95,7 @@ class ShipmentsController < ApplicationController
   end
 
   def update_user
-    Shipment.find_by(id: update_user_params[:id]).update(user: organization_user)
+    Shipment.find(update_user_params[:id]).update(user: organization_user)
   end
 
   def show # rubocop:disable Metrics/AbcSize
