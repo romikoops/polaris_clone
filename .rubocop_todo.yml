@@ -2572,7 +2572,6 @@ Style/PercentLiteralDelimiters:
     - 'config/environment.rb'
     - 'config/initializers/assets.rb'
     - 'config/initializers/cors.rb'
-    - 'config/initializers/lograge.rb'
     - 'config/initializers/raven.rb'
     - 'config/spring.rb'
     - 'db/migrate/20171109093035_devise_token_auth_create_users.rb'
@@ -2884,7 +2883,6 @@ Style/StringLiterals:
     - 'config/initializers/easymon.rb'
     - 'config/initializers/elasticsearch.rb'
     - 'config/initializers/inflections.rb'
-    - 'config/initializers/lograge.rb'
     - 'config/initializers/mimemagic.rb'
     - 'config/initializers/money.rb'
     - 'config/initializers/pdf_kit.rb'
@@ -4449,6 +4447,5 @@ Style/TrailingCommaInHashLiteral:
   Exclude:
     - 'app/controllers/admin/itineraries_controller.rb'
     - 'app/controllers/admin/maps_controller.rb'
-    - 'config/initializers/lograge.rb'
     - 'engines/rms_export/app/services/rms_export/parser/carriage.rb'
     - 'lib/tasks/trucking/seed_all.rake'

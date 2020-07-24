@@ -1,5 +1,7 @@
 module IDP
   class SamlController < ApplicationController
+    skip_before_action :verify_authenticity_token, only: [:consume]
+
     def metadata
       render xml: OneLogin::RubySaml::Metadata.new.generate(saml_settings), content_type: "application/samlmetadata+xml"
     end

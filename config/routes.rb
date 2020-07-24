@@ -18,8 +18,10 @@ Rails.application.routes.draw do
   mount Api::Engine, at: "/"
   mount Admiralty::Engine, at: "/admiralty"
   mount Sidekiq::Web, at: "/sidekiq"
-  mount Rswag::Ui::Engine => "/docs"
-  mount Rswag::Api::Engine => "/docs"
+  mount Rswag::Ui::Engine, at: "/docs"
+  mount Rswag::Api::Engine, at: "/docs"
+
+  mount Coverband::Reporters::Web.new, at: "/coverage"
 
   constraints subdomain: "api" do
     namespace :saml do
