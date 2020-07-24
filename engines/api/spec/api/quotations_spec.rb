@@ -26,11 +26,11 @@ RSpec.describe "Quotations" do
       with_breakdown: true, with_tenders: true, organization: organization, user: user)
   }
   let(:quotation) do
-    FactoryBot.create(:quotations_quotation, user: user, tenders:
+    FactoryBot.create(:quotations_quotation, user: user, legacy_shipment_id: shipment.id, tenders:
       FactoryBot.create_list(:quotations_tender, 5))
   end
 
-  let(:quotation_2) { FactoryBot.create(:quotations_quotation, user: user) }
+  let(:quotation_2) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id, user: user) }
 
   before do
     ::Organizations.current_id = organization.id

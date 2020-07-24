@@ -14,8 +14,7 @@ module Api
       end
 
       def shipment
-        breakdown = Legacy::ChargeBreakdown.find_by(tender_id: object.tenders.ids)
-        Legacy::Shipment.find(breakdown&.shipment_id)
+        Legacy::Shipment.with_deleted.find_by(id: legacy_shipment_id)
       end
     end
   end

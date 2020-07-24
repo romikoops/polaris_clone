@@ -92,6 +92,7 @@ FactoryBot.define do
                                       destination_nexus: shipment.destination_nexus,
                                       user: shipment.user,
                                       created_at: shipment.created_at,
+                                      legacy_shipment: shipment,
                                       organization: shipment.organization)
       end
       if evaluator.with_aggregated_cargo

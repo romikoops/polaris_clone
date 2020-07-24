@@ -10,6 +10,7 @@ module Quotations
     has_one :cargo, class_name: 'Cargo::Cargo'
     belongs_to :pickup_address, class_name: 'Legacy::Address', optional: true
     belongs_to :delivery_address, class_name: 'Legacy::Address', optional: true
+    belongs_to :legacy_shipment, class_name: 'Legacy::Shipment', optional: true
 
     enum billing: {external: 0, internal: 1, test: 2}
   end
