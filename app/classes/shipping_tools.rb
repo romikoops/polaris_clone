@@ -492,14 +492,13 @@ class ShippingTools
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
     tenders = shipment.charge_breakdowns
                       .where(trip_id: trip_ids)
-                      .pluck(:tender_id)
-                      .map { |id| { id: id } }
+                      .map(&:tender)
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     send_on_download = ::OrganizationManager::ScopeService.new(
       target: shipment.user
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    Wheelhouse::PdfService.new(tenders: tenders).download
+    Wheelhouse::PdfService.new(quotation_id: tenders.first.quotation_id, tender_ids: tenders.pluck(:id)).download
   end
 
   def save_and_send_quotes(shipment, schedules, email)

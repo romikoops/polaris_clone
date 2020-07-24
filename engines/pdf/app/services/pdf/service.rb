@@ -91,14 +91,14 @@ module Pdf
       create_file(object: object, shipments: shipments, file: file, user: user)
     end
 
-    def wheelhouse_quotation(shipment:, tenders:)
+    def wheelhouse_quotation(shipment:, tender_ids:)
       object = shipment
       shipments = [shipment]
       quotes = quotes_with_trip_id(
         quotation: nil,
         shipments: shipments,
         admin: true,
-        tender_ids: tenders.pluck(:id)
+        tender_ids: tender_ids
       )
       note_remarks = get_note_remarks(quotes.dig(0, 'trip_id'))
       file = generate_quote_pdf(

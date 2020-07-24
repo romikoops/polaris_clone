@@ -34,11 +34,23 @@ module Api
       end
 
       def download
-        document = Wheelhouse::PdfService.new(tenders: download_params[:tenders]).download
+        document = Wheelhouse::PdfService.new(
+          tender_ids: safe_tender_ids,
+          quotation_id: download_params[:quotation_id]
+        ).download
         render json: PdfSerializer.new(document)
       end
 
       private
+
+      def safe_tender_ids
+        # Backwards compatibility while we clean up original request
+        return download_params[:tender_ids] if download_params[:tender_ids].present?
+
+        return [] if download_params[:tenders].blank?
+
+        download_params[:tenders].pluck(:id)
+      end
 
       def validation
         validator = Wheelhouse::ValidationService.new(
@@ -68,7 +80,11 @@ module Api
       end
 
       def quotation_service
-        Wheelhouse::QuotationService.new(organization: current_organization, quotation_details: quotation_details, shipping_info: modified_shipment_params)
+        Wheelhouse::QuotationService.new(
+          organization: current_organization,
+          quotation_details: quotation_details,
+          shipping_info: modified_shipment_params
+        )
       end
 
       def quotation_details
@@ -125,7 +141,7 @@ module Api
       end
 
       def download_params
-        params.permit(tenders: %i[id])
+        params.permit(:quotation_id, tenders: %i[id], tender_ids: [])
       end
 
       def routing

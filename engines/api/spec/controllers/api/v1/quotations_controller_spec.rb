@@ -11,6 +11,7 @@ module Api
       { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
         FactoryBot.create(:legacy_exchange_rate, from: currency, to: "EUR", rate: rate)
       end
+      FactoryBot.create(:organizations_theme, organization: organization)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
@@ -280,6 +281,48 @@ module Api
 
           aggregate_failures do
             expect(response_data).to eq []
+          end
+        end
+      end
+    end
+
+    describe 'POST #download' do
+      before do
+        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
+      end
+
+      context 'without tender ids' do
+        let(:quotation) { Quotations::Quotation.last }
+
+        it 'renders origin and destination as nexus objects' do
+          post :download, params: { organization_id: organization.id, quotation_id: quotation.id }
+
+          aggregate_failures do
+            expect(response_data.dig('attributes', 'url')).to include('test.host')
+          end
+        end
+      end
+
+      context 'with tender ids' do
+        let(:quotation) { Quotations::Quotation.last }
+
+        it 'renders origin and destination as nexus objects' do
+          post :download, params: { organization_id: organization.id, quotation_id: quotation.id, tender_ids: quotation.tenders.ids }
+
+          aggregate_failures do
+            expect(response_data.dig('attributes', 'url')).to include('test.host')
+          end
+        end
+      end
+
+      context 'with legacy tender ids' do
+        let(:quotation) { Quotations::Quotation.last }
+
+        it 'renders origin and destination as nexus objects' do
+          post :download, params: { organization_id: organization.id, quotation_id: quotation.id, tenders: [{id: quotation.tenders.first.id }] }
+
+          aggregate_failures do
+            expect(response_data.dig('attributes', 'url')).to include('test.host')
           end
         end
       end

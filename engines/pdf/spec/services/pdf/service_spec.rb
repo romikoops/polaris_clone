@@ -43,12 +43,10 @@ RSpec.describe Pdf::Service do
     let(:load_type) { 'container' }
 
     describe '.wheelhouse_quotation (booking shop)' do
-      let(:tenders) do
-        shipment.charge_breakdowns.map { |cb| { id: cb.tender_id } }
-      end
+      let(:tenders) { shipment.charge_breakdowns.map(&:tender_id) }
 
       it 'generates the wheelhouse quote pdf' do
-        pdf = klass.wheelhouse_quotation(shipment: shipment, tenders: tenders)
+        pdf = klass.wheelhouse_quotation(shipment: shipment, tender_ids: tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
