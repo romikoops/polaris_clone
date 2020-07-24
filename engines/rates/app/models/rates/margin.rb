@@ -4,7 +4,7 @@ module Rates
     belongs_to :applicable_to, polymorphic: true
     belongs_to :target, polymorphic: true, optional: true
 
-    enum operator: {addition: 0, percentage: 1}
+    enum operator: {addition: 0, multiplication: 1}
     enum rate_basis: {
       wm: 1,
       bill: 2,
@@ -12,7 +12,8 @@ module Rates
       kg: 4,
       stowage: 5,
       unit: 6,
-      km: 7
+      km: 7,
+      percentage: 8
     }
 
     monetize :amount_cents

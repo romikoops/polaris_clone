@@ -4,13 +4,15 @@ module TenderCalculator
   class TenderLineItems
     attr_reader :root
 
-    def initialize(section_rates:, cargo:, margins: Rates::Margin.none)
+    def initialize(section_rates:, cargo:, margins: Rates::Margin.none, discounts: Rates::Discount.none)
       @section_rates = section_rates
       @cargo = cargo
       @margins = margins
+      @discounts = discounts
       @root = TenderCalculator::ParentMap.new
       @line_items = []
       @margin_line_items = []
+      @discount_line_items = []
     end
 
     def build
@@ -22,9 +24,10 @@ module TenderCalculator
 
         # adding percentage margins with target = section_rate
         section_node = percentage_margins(target: section_rate, node: section_node)
-
         # adding flat margins with target = section_rate
         section_node = flat_margins(target: section_rate, node: section_node)
+
+        section_node = construct_discounts(rate: section_rate, base_node: section_node)
 
         shipment_node = percentage_line_items(cargo_rates['shipment'], section_node)
 
@@ -35,6 +38,9 @@ module TenderCalculator
       @root = percentage_margins(target: nil, node: @root)
       @root = flat_margins(target: nil, node: @root)
 
+      # adding shipment discounts with target = nil
+      @root = construct_discounts(rate: nil, base_node: @root)
+
       self
     end
 
@@ -42,31 +48,61 @@ module TenderCalculator
       all_cargo_node = TenderCalculator::ParentMap.new(rate: rate)
 
       cargo_applicable_rates.each do |cargo_rate|
-        targeted_margins = @margins.where(target: cargo_rate.object, operator: :addition)
-        cargo_node = TenderCalculator::ParentMap.new(rate: cargo_rate)
+        cargo_node = construct_buying_rates(rate: cargo_rate)
+        cargo_node = construct_margins(rate: cargo_rate, base_node: cargo_node)
+        cargo_node = construct_discounts(rate: cargo_rate.object, base_node: cargo_node)
 
-        cargo_rate.targets.each do |cargo|
-          cargo_rate_value = TenderCalculator::CargoRate.new(cargo_rate: cargo_rate, cargo: cargo).value
-          fee_node = TenderCalculator::Value.new(value: cargo_rate_value)
-          @line_items << fee_node
-          cargo_node << fee_node
-        end
-
-        # adding percentage margins with target = cargo_rate
-        cargo_node_with_margins = percentage_margins(target: cargo_rate.object, node: cargo_node)
-
-        # adding flat margins with target = cargo_rate on cargos
-        targeted_margins.each do |margin|
-          cargo_margin = TenderCalculator::Margin.new(margin: margin, cargo: @cargo)
-          margin_node = TenderCalculator::Value.new(value: cargo_margin.amount, rate: margin)
-          cargo_node_with_margins << margin_node
-          @margin_line_items << margin_node
-        end
-
-        all_cargo_node << cargo_node_with_margins
+        all_cargo_node << cargo_node
       end
 
       all_cargo_node
+    end
+
+    def construct_buying_rates(rate:)
+      cargo_node = TenderCalculator::ParentMap.new(rate: rate)
+
+      rate.targets.each do |cargo|
+        cargo_rate_value = TenderCalculator::CargoRate.new(cargo_rate: rate, cargo: cargo).value
+        fee_node = TenderCalculator::Value.new(value: cargo_rate_value)
+        @line_items << fee_node
+        cargo_node << fee_node
+      end
+
+      cargo_node
+    end
+
+    def construct_margins(rate:, base_node:)
+      flat_margins = @margins.where(target: rate.object, operator: :addition)
+
+      # adding percentage margins with target = cargo_rate
+      percentage_margins_node = percentage_margins(target: rate.object, node: base_node)
+
+      return percentage_margins_node if flat_margins.empty?
+
+      flat_margins_node = TenderCalculator::ParentMap.new
+      flat_margins_node << percentage_margins_node
+
+      # adding flat margins with target = cargo_rate on cargos
+      flat_margins.each do |margin|
+        cargo_margin = TenderCalculator::Margin.new(margin: margin, cargo: @cargo)
+        margin_node = TenderCalculator::Value.new(value: cargo_margin.amount, rate: margin)
+        flat_margins_node << margin_node
+        @margin_line_items << margin_node
+      end
+
+      flat_margins_node
+    end
+
+    def construct_discounts(rate:, base_node:)
+      applicable_discounts = @discounts.where(target: rate).order(:order)
+      branch = base_node
+
+      applicable_discounts.each do |discount|
+        klass = TenderCalculator::Discounts.const_get(discount.operator.camelize)
+        branch = klass.apply(discount: discount, branch: branch, cargo: @cargo)
+      end
+
+      branch
     end
 
     def percentage_line_items(applicable_rates, node)
@@ -108,7 +144,7 @@ module TenderCalculator
     end
 
     def percentage_margins(target:, node:)
-      rate_margins = @margins.where(target: target, operator: :percentage).order(:order)
+      rate_margins = @margins.where(target: target, operator: :multiplication).order(:order)
       return node if rate_margins.empty?
 
       branch = node

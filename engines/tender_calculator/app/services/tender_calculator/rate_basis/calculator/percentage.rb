@@ -3,8 +3,10 @@
 module TenderCalculator
   module RateBasis
     module Calculator
-      class Shipment < Base
-        delegate :amount, to: :fee
+      class Percentage < Base
+        def amount
+          fee.percentage
+        end
       end
     end
   end

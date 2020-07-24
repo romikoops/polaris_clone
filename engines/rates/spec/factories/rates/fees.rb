@@ -56,13 +56,19 @@ FactoryBot.define do
       rate_basis { :shipment }
     end
 
+    trait :percentage_basis do
+      min_amount_cents { 0 }
+      max_amount_cents { 100 }
+      rate_basis { :percentage }
+    end
+
     trait :km_basis do
       rate_basis { 7 }
       km_range { (0..Float::INFINITY) }
     end
 
-    trait :percentage do
-      operator { 1 }
+    trait :multiplication do
+      operator { :multiplication }
     end
 
     factory :unit_based_fee, traits: %i[unit_basis]

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :rates_margin, class: "Rates::Margin" do
+  factory :rates_discount, class: "Rates::Discount" do
     association :organization, factory: :organizations_organization
     association :applicable_to, factory: :organizations_user
     cargo_class { "00" }
@@ -46,8 +46,8 @@ FactoryBot.define do
       amount_currency { "USD" }
     end
 
-    trait :percentage do
-      operator { :percentage }
+    trait :multiplication do
+      operator { :multiplication }
       percentage { 5 }
     end
 

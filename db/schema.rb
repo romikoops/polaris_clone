@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_141554) do
+ActiveRecord::Schema.define(version: 2020_07_22_085901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1567,6 +1567,41 @@ ActiveRecord::Schema.define(version: 2020_07_17_141554) do
     t.index ["section_id"], name: "index_rates_cargos_on_section_id"
   end
 
+  create_table "rates_discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "amount_cents", default: 0, null: false
+    t.string "amount_currency", null: false
+    t.uuid "applicable_to_id"
+    t.string "applicable_to_type"
+    t.integer "cargo_class", default: 0
+    t.integer "cargo_type", default: 0
+    t.numrange "cbm_range"
+    t.decimal "cbm_ratio", default: "1000.0"
+    t.datetime "created_at", null: false
+    t.numrange "kg_range"
+    t.numrange "km_range"
+    t.bigint "max_amount_cents", default: 0, null: false
+    t.string "max_amount_currency", null: false
+    t.bigint "min_amount_cents", default: 0, null: false
+    t.string "min_amount_currency", null: false
+    t.integer "operator"
+    t.integer "order", default: 0
+    t.uuid "organization_id"
+    t.decimal "percentage"
+    t.integer "rate_basis", default: 0, null: false
+    t.numrange "stowage_range"
+    t.uuid "target_id"
+    t.string "target_type"
+    t.numrange "unit_range"
+    t.datetime "updated_at", null: false
+    t.daterange "validity"
+    t.numrange "wm_range"
+    t.index ["applicable_to_type", "applicable_to_id"], name: "index_rates_discounts_on_applicable_to_type_and_id"
+    t.index ["cargo_class"], name: "index_rates_discounts_on_cargo_class"
+    t.index ["cargo_type"], name: "index_rates_discounts_on_cargo_type"
+    t.index ["organization_id"], name: "index_rates_discounts_on_organization_id"
+    t.index ["target_type", "target_id"], name: "index_rates_discounts_on_target_type_and_target_id"
+  end
+
   create_table "rates_fees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "amount_cents", default: 0, null: false
     t.string "amount_currency", null: false
@@ -2707,6 +2742,7 @@ ActiveRecord::Schema.define(version: 2020_07_17_141554) do
   add_foreign_key "quotations_tenders", "tenant_vehicles", column: "delivery_tenant_vehicle_id"
   add_foreign_key "quotations_tenders", "tenant_vehicles", column: "pickup_tenant_vehicle_id"
   add_foreign_key "rates_cargos", "rates_sections", column: "section_id"
+  add_foreign_key "rates_discounts", "organizations_organizations", column: "organization_id"
   add_foreign_key "rates_fees", "rates_cargos", column: "cargo_id"
   add_foreign_key "rates_margins", "organizations_organizations", column: "organization_id"
   add_foreign_key "rates_sections", "carriers"
