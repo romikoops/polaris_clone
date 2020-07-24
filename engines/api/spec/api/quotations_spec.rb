@@ -112,13 +112,7 @@ RSpec.describe "Quotations" do
                            serviceLevel: {type: :string},
                            total: {"$ref" => "#/components/schemas/money"},
                            transitTime: {type: :number},
-                           transshipment: {type: :string},
-                           exchangeRates: {
-                             type: :object,
-                             properties: {
-                               base: {type: :string}
-                             }
-                           }
+                           transshipment: {type: :string}
                          },
                          required: %w[carrier destination estimated id
                            modeOfTransport origin quotationId serviceLevel

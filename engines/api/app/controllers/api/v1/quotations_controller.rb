@@ -13,7 +13,7 @@ module Api
         decorated_quotations = QuotationDecorator.decorate_collection(paginated,
           { context: { links: pagination_links(paginated) }})
 
-        render json: QuotationSerializer.new(decorated_quotations, params: { scope: current_scope })
+        render json: QuotationListSerializer.new(decorated_quotations, params: { scope: current_scope })
       end
 
       def create
