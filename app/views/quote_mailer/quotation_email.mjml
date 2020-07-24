@@ -3,8 +3,8 @@
     <mj-column>
       <mj-text>
         <p style="display: none;max-height: 0px;overflow: hidden;">
-          Hello <%= @email %>, <%= @user_profile.full_name %> from <%= @org_theme.name %>
-                prepared for you a document with the best quotations for the itinerary:
+          Hello <%= @user_profile.full_name %>, <%= @org_theme.name %>
+          has prepared a document for you with the best quotations available for the itinerary:
         </p>
       </mj-text>
       <mj-text>
@@ -41,7 +41,7 @@
       <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p>
           Hello
-          <%= @email %>,
+          <%= @user_profile.full_name  %>,
         </p>
       </mj-text>
     </mj-column>
@@ -51,9 +51,8 @@
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          <%= @user_profile.full_name %> from <strong>
-            <%= @org_theme.name %></strong>
-          prepared for you a document with the best quotations for the itinerary:
+          <strong><%= @org_theme.name %></strong>
+          has prepared a document for you with the best quotations available for the itinerary:
         </p>
       </mj-text>
     </mj-column>

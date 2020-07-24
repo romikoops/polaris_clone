@@ -247,6 +247,7 @@ module Pdf
         load_type: tender.load_type,
         carrier: tender.tenant_vehicle.carrier&.name&.upcase,
         service_level: tender.tenant_vehicle.name,
+        total: tender.amount.format(symbol: tender.amount.currency.to_s + ' '),
         transshipment: tender.itinerary.transshipment,
         transit_time: ::Legacy::TransitTime.find_by(
           tenant_vehicle: tender.tenant_vehicle,

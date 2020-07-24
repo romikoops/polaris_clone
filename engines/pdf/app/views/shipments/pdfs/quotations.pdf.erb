@@ -105,10 +105,15 @@
             <% if quote['service_level'].present? && scope.dig('voyage_info', 'service_level').present? %>
               <p class="voyage-info">
                 <strong>Service:</strong>
-                <%= quote['service_level'] %>
+                <%= quote['service_level'].capitalize %>
               </p>
             <% end %>
-
+            <% if quote['transit_time'].present? && scope.dig('voyage_info', 'transit_time').present?%>
+              <p class="voyage-info">
+                <strong>Estimated T/T:</strong>
+                <%= "#{quote['transit_time']} days" %>
+              </p>
+            <% end %>
           </div>
         </div>
         <% if quote['pickup_address'] || quote['delivery_address'] %>
@@ -268,9 +273,7 @@
       <% unless quote['total'].nil? %>
         <div class="total-row">
           <h4>Total</h4>
-          <p class="quote"><%= quote.dig('total', 'value')&.to_f&.round(2) %>
-            &nbsp;<%= quote["total"]["currency"] %>
-          </p>
+          <p class="quote"><%= quote.dig('total')%></p>
         </div>
       <% end %>
       <div class="exchange-row">

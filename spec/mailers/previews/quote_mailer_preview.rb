@@ -2,10 +2,11 @@
 
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    ids = Tenant.find_by(subdomain: 'demo').shipments.ids
-    quotation = Quotation.where(original_shipment_id: ids).last
-    @shipments = Shipment.where(quotation_id: quotation.id)
-    @shipment = @shipments.first
+    organization = Organizations::Organization.find_by(slug: 'lclsaco')
+    user = Users::User.find_by(organization_id: organization.id, email: 'agent@itsmycargo.com')
+    quotation = Legacy::Quotation.where(user: user).last
+    @shipments = Legacy::Shipment.where(quotation_id: quotation.id)
+    @shipment = Legacy::Shipment.find(quotation.original_shipment_id)
     @email = 'demo@itsmycargo.com'
     QuoteMailer.quotation_email(@shipment, @shipments, @email, quotation)
   end
