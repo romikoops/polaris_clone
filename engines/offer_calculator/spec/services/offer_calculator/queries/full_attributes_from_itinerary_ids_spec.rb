@@ -19,26 +19,30 @@ RSpec.describe OfferCalculator::Queries:: FullAttributesFromItineraryIds do
       FactoryBot.create(:fcl_40_hq_pricing, itinerary: itinerary, organization: organization)
     ]
   end
+  let(:load_type) { 'cargo_item' }
+  let(:results) { described_class.new(itinerary_ids: [itinerary.id, itinerary_2.id], options: { load_type: load_type }).perform }
+  let(:result) { results.first }
 
-  context 'base_pricing' do
-    let(:scope) { FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true }) }
-    describe '.perform', :vcr do
-      it 'return the route detail hashes for cargo_item' do
-        results = described_class.new(itinerary_ids: [itinerary.id, itinerary_2.id], options: { base_pricing: true, with_truck_types: { load_type: 'cargo_item' } }).perform
-
+  describe '.perform', :vcr do
+    context 'when lcl' do
+      it 'return the route detail hashes for cargo_item', :aggregate_failures do
         expect(results.length).to eq(1)
-        expect(results.first['itinerary_id']).to eq(itinerary.id)
-        expect(results.first['origin_hub_id']).to eq(origin_hub.id)
-        expect(results.first['destination_hub_id']).to eq(destination_hub.id)
+        expect(result['itinerary_id']).to eq(itinerary.id)
+        expect(result['origin_hub_id']).to eq(origin_hub.id)
+        expect(result['destination_hub_id']).to eq(destination_hub.id)
+        expect(results.any? { |res| res['cargo_classes'].match?(/fcl/) }).to be_falsy
       end
+    end
 
-      it 'return the route detail hashes for cargo_item' do
-        results = described_class.new(itinerary_ids: [itinerary.id, itinerary_2.id], options: { base_pricing: true, with_truck_types: { load_type: 'container' } }).perform
+    context 'when fcl' do
+      let(:load_type) { 'container' }
 
+      it 'return the route detail hashes for cargo_item', :aggregate_failures do
         expect(results.length).to eq(1)
-        expect(results.first['itinerary_id']).to eq(itinerary.id)
-        expect(results.first['origin_hub_id']).to eq(origin_hub.id)
-        expect(results.first['destination_hub_id']).to eq(destination_hub.id)
+        expect(result['itinerary_id']).to eq(itinerary.id)
+        expect(result['origin_hub_id']).to eq(origin_hub.id)
+        expect(result['destination_hub_id']).to eq(destination_hub.id)
+        expect(results.any? { |res| res['cargo_classes'].match?(/lcl/) }).to be_falsy
       end
     end
   end

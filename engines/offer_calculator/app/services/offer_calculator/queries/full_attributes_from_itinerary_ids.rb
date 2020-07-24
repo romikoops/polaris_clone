@@ -15,12 +15,10 @@ module OfferCalculator
 
       private
 
-      def binds
-        truck_types_binds.merge(itinerary_ids: @itinerary_ids)
-      end
+      attr_reader :options, :itinerary_ids
 
-      def truck_types_binds
-        @options[:with_truck_types].is_a?(Hash) ? @options[:with_truck_types] : {}
+      def binds
+        {itinerary_ids: itinerary_ids, load_type: options[:load_type]}
       end
 
       def raw_query
@@ -103,6 +101,7 @@ module OfferCalculator
                destination_trucking_type_availabilities.id
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index
+          AND   pricings_pricings.load_type = :load_type
           GROUP BY origin_stops.id, destination_stops.id
         SQL
       end

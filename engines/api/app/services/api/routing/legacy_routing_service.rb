@@ -18,7 +18,7 @@ module Api
       def perform
         OfferCalculator::Route.detailed_hashes_from_itinerary_ids(
           itinerary_ids,
-          with_truck_types: {load_type: load_type}
+          load_type: load_type
         )
       end
 

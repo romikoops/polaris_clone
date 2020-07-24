@@ -33,7 +33,7 @@ RSpec.describe OfferCalculator::Route do
   describe '.detailed_hashes_from_itinerary_ids', :vcr do
     it 'return the route detail hashes' do
       results = described_class.detailed_hashes_from_itinerary_ids(
-        [itinerary.id, itinerary_2.id], with_truck_types: { load_type: 'cargo_item' }, base_pricing: true
+        [itinerary.id, itinerary_2.id], {load_type: 'cargo_item'}
       )
       aggregate_failures do
         expect(results).to be_a(Hash)

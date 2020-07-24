@@ -67,11 +67,10 @@ module OfferCalculator
     end
 
     def self.hash_from_attributes(attributes, target, options)
-      attribute_names = %i[stop_id hub_id hub_name nexus_id nexus_name latitude longitude country locode]
-      attribute_names << :truck_types if options[:with_truck_types]
+      attribute_names = %i[stop_id hub_id hub_name nexus_id nexus_name latitude longitude country locode truck_types]
       attribute_names.each_with_object({}) do |attribute_name, obj|
         obj[attribute_name] = attributes["#{target}_#{attribute_name}"] || ''
-        obj[attribute_name] = obj[attribute_name].split(',') if attribute_name == :truck_types
+        obj[attribute_name] = obj[attribute_name].to_s.split(',') if attribute_name == :truck_types
       end
     end
   end
