@@ -7,7 +7,9 @@ class PasswordResetsController < ApplicationController
     @user = Authentication::User.authentication_scope.find_by(email: params[:email])
 
     if @user
+      @user.organization_id = params[:organization_id] if @user.organization_id.blank?
       @user.deliver_reset_password_instructions!
+
       response_handler(@user)
     else
       head :not_found
