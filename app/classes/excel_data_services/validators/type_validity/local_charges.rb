@@ -14,7 +14,7 @@ module ExcelDataServices
           'counterpart_country': :optional_string,
           'service_level': :optional_string,
           'carrier': :optional_string,
-          'fee_code': :optional_string,
+          'fee_code': :required_string,
           'direction': :optional_string,
           'rate_basis': :required_string,
           'mot': :required_string,
