@@ -30,11 +30,11 @@ class Legacy::ShipmentDecorator < Draper::Decorator
   end
 
   def pickup_postal_code
-    has_pre_carriage? ? "#{pickup_address.country.code}-(#{pickup_address&.zip_code})" : ""
+    has_pre_carriage? ? "#{pickup_address.country.code}-#{pickup_address&.zip_code}" : ""
   end
 
   def delivery_postal_code
-    has_on_carriage? ? "#{delivery_address.country.code}-(#{delivery_address&.zip_code})" : ""
+    has_on_carriage? ? "#{delivery_address.country.code}-#{delivery_address&.zip_code}" : ""
   end
 
   def total_weight
@@ -104,4 +104,3 @@ class Legacy::ShipmentDecorator < Draper::Decorator
     Legacy::HubDecorator.new(hub, context: {scope: scope})
   end
 end
-# hidden_args = Pdf::HiddenValueService.new(user: user).hide_total_args

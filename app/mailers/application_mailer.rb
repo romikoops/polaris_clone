@@ -44,7 +44,7 @@ class ApplicationMailer < ActionMailer::Base
     grapheme_clusters = liquid_string.each_grapheme_cluster
     return liquid_string if grapheme_clusters.count < CHARACTER_COUNT
 
-    grapheme_clusters.take(CHARACTER_COUNT).join + '…'
+    grapheme_clusters.take(CHARACTER_COUNT).join + '...'
   end
 
   def context(shipment:, references:, noun:)

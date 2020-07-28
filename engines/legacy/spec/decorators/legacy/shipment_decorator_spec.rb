@@ -18,7 +18,7 @@ RSpec.describe Legacy::ShipmentDecorator do
       end
 
       it "returns the postal code when nexus is nil" do
-        expect(decorated_shipment.origin).to eq("#{address.country.code}-(#{address&.zip_code})")
+        expect(decorated_shipment.origin).to eq("#{address.country.code}-#{address&.zip_code}")
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe Legacy::ShipmentDecorator do
       end
 
       it "returns the postal code when nexus is nil" do
-        expect(decorated_shipment.destination).to eq("#{address.country.code}-(#{address&.zip_code})")
+        expect(decorated_shipment.destination).to eq("#{address.country.code}-#{address&.zip_code}")
       end
     end
 

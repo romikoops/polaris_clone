@@ -136,7 +136,7 @@ RSpec.describe QuoteMailer, type: :mailer do
       let(:result) {
         [
           "ItsMyCargo Quotation Tool: #{original_shipment.imc_reference} - from:",
-          "'Gothenburg' \"SEGOT\" - to: 'Shanghai' \"CNS…"
+          "'Gothenburg' \"SEGOT\" - to: 'Shanghai' \"CNS..."
         ].join(' ')
       }
 
@@ -174,8 +174,8 @@ RSpec.describe QuoteMailer, type: :mailer do
         [
           original_shipment.imc_reference.to_s,
           "[#{profile.external_id}]",
-          "#{pickup_address.country.code}-(#{pickup_address.zip_code})",
-          "#{delivery_address.country.code}-(#{delivery_address.zip_code})",
+          "#{pickup_address.country.code}-#{pickup_address.zip_code}",
+          "#{delivery_address.country.code}-#{delivery_address.zip_code}",
           decorated_shipment.total_weight.to_s,
           decorated_shipment.total_volume.to_s
         ].join('/')
