@@ -103,8 +103,6 @@ module OfferCalculator
       end
 
       def result_matcher(section:, date:, grouping_keys:)
-        tenant_vehicle_id = grouping_keys[:tenant_vehicle_id]
-        itinerary_id = grouping_keys[:itinerary_id]
         if TRUCKING_SECTIONS.include?(section)
           return trucking_result_matcher(section: section, date: date, grouping_keys: grouping_keys)
         end
@@ -114,27 +112,28 @@ module OfferCalculator
             charge: charge,
             section: section,
             date: date,
-            tenant_vehicle_id: tenant_vehicle_id,
-            itinerary_id: itinerary_id
+            grouping_keys: grouping_keys
           )
         end
       end
 
-      def result_comparator(charge:, section:, date:, tenant_vehicle_id:, itinerary_id:)
+      def result_comparator(charge:, section:, date:, grouping_keys:)
         if section == "cargo"
           freight_result_comparator(
             charge: charge,
             section: section,
             date: date,
-            tenant_vehicle_id: tenant_vehicle_id,
-            itinerary_id: itinerary_id
+            tenant_vehicle_id: grouping_keys[:tenant_vehicle_id],
+            itinerary_id: grouping_keys[:itinerary_id]
           )
         else
+          hub_key = section == "export" ? :origin_hub_id : :destination_hub_id
           local_charge_result_comparator(
             charge: charge,
             section: section,
             date: date,
-            tenant_vehicle_id: tenant_vehicle_id
+            tenant_vehicle_id: grouping_keys[:tenant_vehicle_id],
+            hub_id: grouping_keys[hub_key]
           )
         end
       end
@@ -147,8 +146,9 @@ module OfferCalculator
           charge.itinerary_id == itinerary_id
       end
 
-      def local_charge_result_comparator(charge:, section:, date:, tenant_vehicle_id:)
+      def local_charge_result_comparator(charge:, section:, date:, tenant_vehicle_id:, hub_id:)
         charge.section == section &&
+          charge.hub_id == hub_id &&
           charge.tenant_vehicle_id == tenant_vehicle_id &&
           charge.validity.cover?(date) &&
           shipment.cargo_classes.include?(charge.cargo_class)

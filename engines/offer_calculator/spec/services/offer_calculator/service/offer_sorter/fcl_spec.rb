@@ -46,7 +46,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   let(:trips) do
     FactoryBot.build(:trip_generator,
       organization: organization,
-      itinerary: itinerary,
+      itineraries: [itinerary],
       tenant_vehicles: [tenant_vehicle],
       days: [1, 7, 10, 15])
   end

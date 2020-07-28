@@ -5,13 +5,13 @@ FactoryBot.define do
     # skip_create
 
     tenant { FactoryBot.create(:organizations_organization) }
-    itinerary { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    itineraries { [FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)] }
     tenant_vehicles { [FactoryBot.create(:legacy_tenant_vehicle, organization: organization)] }
     load_type { "cargo_item" }
     days { [1] }
     trips do
-      days.product(tenant_vehicles)
-        .map do |period, tenant_vehicle|
+      days.product(tenant_vehicles, itineraries)
+        .map do |period, tenant_vehicle, itinerary|
         FactoryBot.create(:trip_with_layovers,
           itinerary: itinerary,
           load_type: load_type,

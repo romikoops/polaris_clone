@@ -69,7 +69,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     let(:trips) do
       FactoryBot.build(:trip_generator,
         organization: organization,
-        itinerary: itinerary,
+        itineraries: [itinerary],
         tenant_vehicles: [tenant_vehicle],
         days: [1, 7, 10, 15])
     end
@@ -83,14 +83,14 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
   end
 
-  context "with end to end andd pricings split by period" do
+  context "with end to end and pricings split by period" do
     let(:raw_objects) do
       [pricing_1, pricing_2] | local_charges | truckings
     end
     let(:trips) do
       FactoryBot.build(:trip_generator,
         organization: organization,
-        itinerary: itinerary,
+        itineraries: [itinerary],
         tenant_vehicles: [tenant_vehicle],
         days: [1, 7, 10, 15])
     end
@@ -105,6 +105,73 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
         expect(results.length).to eq(2)
         expect(results.first.schedules.count).to eq(3)
         expect(results.second.schedules.count).to eq(1)
+      end
+    end
+  end
+
+  context "with parallel routes" do
+    let(:pricing_2) do
+      FactoryBot.create(:lcl_pricing,
+        organization: organization,
+        itinerary: itinerary_2,
+        tenant_vehicle: tenant_vehicle_2)
+    end
+    let(:raw_objects) do
+      [pricing_1, pricing_2] | local_charges | local_charges_2 | truckings | truckings_2
+    end
+    let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization) }
+    let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "tv_2", organization: organization) }
+    let(:local_charges_2) do
+      cargo_classes.flat_map do |cc|
+        %w[import export].map do |direction|
+          FactoryBot.create(:legacy_local_charge,
+            direction: direction,
+            hub: direction == "export" ? itinerary_2.origin_hub : itinerary_2.destination_hub,
+            load_type: cc,
+            organization: organization,
+            tenant_vehicle: tenant_vehicle_2)
+        end
+      end
+    end
+    let(:truckings_2) do
+      cargo_classes.flat_map do |cargo_class|
+        [FactoryBot.create(:trucking_with_unit_rates,
+          hub: itinerary_2.origin_hub,
+          organization: organization,
+          cargo_class: cargo_class,
+          load_type: load_type,
+          truck_type: truck_type,
+          tenant_vehicle: tenant_vehicle_2,
+          location: pickup_trucking_location),
+          FactoryBot.create(:trucking_with_unit_rates,
+            hub: itinerary_2.destination_hub,
+            organization: organization,
+            cargo_class: cargo_class,
+            load_type: load_type,
+            truck_type: truck_type,
+            tenant_vehicle: tenant_vehicle_2,
+            location: delivery_trucking_location,
+            carriage: "on")]
+      end
+    end
+    let(:trips) do
+      FactoryBot.build(:trip_generator,
+        organization: organization,
+        itineraries: [itinerary, itinerary_2],
+        tenant_vehicles: [tenant_vehicle, tenant_vehicle_2],
+        days: [1, 7, 10, 15])
+    end
+
+    before do
+      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+      allow(shipment).to receive(:has_on_carriage?).and_return(true)
+    end
+
+    it "returns two sorted offers" do
+      aggregate_failures do
+        expect(results.length).to eq(4)
+        expect(results.first.result["export"].length).to eq(1)
+        expect(results.second.result["export"].length).to eq(1)
       end
     end
   end
