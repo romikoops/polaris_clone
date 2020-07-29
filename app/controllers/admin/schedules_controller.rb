@@ -134,6 +134,6 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def upload_params
-    params.permit(:file)
+    params.permit(:async, :file)
   end
 end

@@ -9,6 +9,8 @@ RSpec.describe UsersController do
   let(:domain) { create(:organizations_domain, organization: organization, domain: 'itsmycargo.example') }
 
   before do
+    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
+
     request.env["HTTP_REFERER"] = "http://#{domain.domain}"
     Organizations.current_id = organization.id
     append_token_header

@@ -101,7 +101,7 @@ class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disab
   private
 
   def upload_params
-    params.permit(:file, :group_id)
+    params.permit(:async, :file, :group_id)
   end
 
   def for_index_json(local_charge, options = {})

@@ -252,7 +252,7 @@ class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metri
   end
 
   def upload_params
-    params.permit(:file, :mot, :load_type, :group_id)
+    params.permit(:async, :file, :mot, :load_type, :group_id)
   end
 
   def decorated_hub(hub:)

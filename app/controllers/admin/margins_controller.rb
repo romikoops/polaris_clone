@@ -308,7 +308,7 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def upload_params
-    params.permit(:file, :target_id, :target_type)
+    params.permit(:async, :file, :target_id, :target_type)
   end
 
   def test_params

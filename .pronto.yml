@@ -6,3 +6,6 @@ rubocop:
 
   # Enable suggestions
   suggestions: true
+stylelint:
+  exclude:
+    - '**/*'

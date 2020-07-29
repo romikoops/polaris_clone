@@ -7,6 +7,10 @@ RSpec.deprecate "ExcelTool::AgentsOverwriter#perform" do
     let(:user) { create(:organizations_user, organization: organization) }
     let(:xlsx) { instance_double('xlsx') }
 
+    before do
+      stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
+    end
+
     describe '.parse' do
       let(:options) do
         {

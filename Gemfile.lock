@@ -904,6 +904,8 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
+    css_parser (1.7.1)
+      addressable
     dalli (2.7.10)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
@@ -1159,6 +1161,13 @@ GEM
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     popper_js (1.16.0)
+    premailer (1.12.1)
+      addressable
+      css_parser (>= 1.6.0)
+      htmlentities (>= 4.0.0)
+    premailer-rails (1.11.1)
+      actionmailer (>= 3)
+      premailer (~> 1.7, >= 1.7.9)
     prometheus_exporter (0.5.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
@@ -1515,6 +1524,7 @@ DEPENDENCIES
   pdfkit
   pg (>= 0.18, < 2.0)
   pg_search (~> 2.3.0)
+  premailer-rails
   prometheus_exporter (~> 0.5.2)
   pry-rails
   puma (~> 4.3.5)

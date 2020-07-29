@@ -193,7 +193,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def upload_params
-    params.permit(:file, :mot, :load_type, :group_id)
+    params.permit(:async, :file, :mot, :load_type, :group_id)
   end
 
   def download_params

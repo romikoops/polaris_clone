@@ -32,6 +32,8 @@ RSpec.describe ExcelTool::ClientsOverwriter do
     let(:parser) { described_class.new(options) }
 
     before do
+      stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
+
       allow(sheet_double).to receive(:parse).and_return(dummy_clients_data)
       allow(xlsx).to receive(:sheet).and_return(sheet_double)
       allow(xlsx).to receive(:sheets).and_return(['Clients'])

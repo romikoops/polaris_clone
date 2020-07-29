@@ -7,6 +7,7 @@ RSpec.describe Admin::ClientsController do
   let(:user) { FactoryBot.create(:authentication_user, :users_user, :with_profile) }
 
   before do
+    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
     append_token_header
   end
 

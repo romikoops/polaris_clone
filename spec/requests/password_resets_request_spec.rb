@@ -5,6 +5,7 @@ RSpec.describe "PasswordResets", type: :request do
   let(:user) { create(:authentication_user, organization_id: organization.id) }
 
   before do
+    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
     create(:organizations_theme, organization: organization)
   end
 

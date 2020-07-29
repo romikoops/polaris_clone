@@ -127,6 +127,7 @@ gem "will_paginate", "~> 3.3.0"
 
 # Email support
 gem "mailgun-ruby", "~> 1.2.0"
+gem "premailer-rails"
 gem "recipient_interceptor"
 
 # New email gem

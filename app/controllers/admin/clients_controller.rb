@@ -138,7 +138,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def upload_params
-    params.permit(:file)
+    params.permit(:async, :file)
   end
 
   def download_params

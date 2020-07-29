@@ -83,6 +83,6 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def upload_params
-    params.permit(:file, :group, :id)
+    params.permit(:async, :file, :group, :id)
   end
 end

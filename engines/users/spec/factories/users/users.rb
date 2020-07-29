@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :users_user, class: 'Users::User' do
+  factory :users_user, class: "Users::User" do
     transient do
       activate { false }
     end
 
+    activation_state { "active" }
     sequence(:email) { |n| "john.doe.#{n}@itsmycargo.test" }
 
     after(:create) do |user, evaluator|

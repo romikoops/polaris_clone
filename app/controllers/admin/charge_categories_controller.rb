@@ -32,7 +32,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
   private
 
   def upload_params
-    params.permit(:file)
+    params.permit(:async, :file)
   end
 
   def download_params
