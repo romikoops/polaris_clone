@@ -513,9 +513,10 @@ class ShippingTools
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     QuoteMailer.quotation_email(
       shipment,
-      main_quote.shipments.where(trip_id: trip_ids).to_a,
+      [],
       email,
-      main_quote
+      main_quote,
+      trip_ids
     ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
       target: shipment.user

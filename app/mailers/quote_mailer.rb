@@ -5,19 +5,24 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def quotation_email(shipment, shipments, email, quotation, sandbox = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_email(shipment, shipments, email, quotation, trip_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     set_current_id(organization_id: shipment.organization_id)
-    return if invalid_records(shipments: [shipment, *shipments])
+    return if invalid_records(shipments: [shipment])
 
     @scope = scope_for(record: @user)
-    @shipments = Legacy::ShipmentDecorator.decorate_collection(shipments, context: { scope: @scope})
-    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
+    @shipments = Legacy::ShipmentDecorator.decorate_collection(
+      quotation.shipments.where(trip_id: trip_ids),
+      context: { scope: @scope}
+    )
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @user = @shipment.user
     @user_profile = Profiles::ProfileService.fetch(user_id: @shipment.user_id)
     @organization = ::Organizations::Organization.current
     pdf_service = Pdf::Service.new(user: @user, organization: @organization)
     @quotes = pdf_service.quotes_with_trip_id(quotation: @quotation, shipments: @shipments)
+    return if @quotes.empty?
+
     @org_theme = ::Organizations::ThemeDecorator.new(@organization.theme)
     @theme = @org_theme.legacy_format
     @email = email[/[^@]+/]
