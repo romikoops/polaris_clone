@@ -30,18 +30,27 @@ class Legacy::ShipmentDecorator < Draper::Decorator
   end
 
   def pickup_postal_code
-    has_pre_carriage? ? "#{pickup_address.country.code}-#{pickup_address&.zip_code}" : ""
+    return unless has_pre_carriage?
+
+    pickup_address&.zip_code.present? ? "#{pickup_address.country.code}-#{pickup_address&.zip_code}" : nil
   end
 
   def delivery_postal_code
-    has_on_carriage? ? "#{delivery_address.country.code}-#{delivery_address&.zip_code}" : ""
+    return unless has_on_carriage?
+
+    delivery_address&.zip_code.present? ? "#{delivery_address.country.code}-#{delivery_address&.zip_code}" : nil
   end
 
   def total_weight
+    return aggregated_cargo.weight.to_i if aggregated_cargo.present?
+
     cargo_units.sum { |unit| unit.payload_in_kg * unit.quantity }.to_i
   end
 
   def total_volume
+    return unless lcl?
+    return aggregated_cargo.volume.round(2) if aggregated_cargo.present?
+
     cargo_items.sum { |unit| unit.volume * unit.quantity }.round(2)
   end
 
