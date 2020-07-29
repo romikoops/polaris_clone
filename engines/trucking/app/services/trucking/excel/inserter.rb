@@ -560,7 +560,7 @@ module Trucking
           carriage: meta[:direction] == 'import' ? 'on' : 'pre',
           cargo_class: meta[:cargo_class],
           load_type: meta[:load_type] == 'container' ? 'container' : 'cargo_item',
-          courier_id: find_or_create_tenant_vehicle(service: service, carrier: carrier).id,
+          tenant_vehicle_id: find_or_create_tenant_vehicle(service: service, carrier: carrier).id,
           truck_type: !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type],
           metadata: metadata(row_number: row_number, sheet_name: sheet_name)
         }
