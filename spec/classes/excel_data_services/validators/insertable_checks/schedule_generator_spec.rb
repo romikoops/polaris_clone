@@ -39,11 +39,21 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::ScheduleGenerato
       it 'logs the errors' do
         validator = described_class.new(options)
         validator.perform
-        expect(validator.results).to eq(
+        expect(validator.results).to match_array(
           [
             { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
               reason: "There exists no carrier called 'NO_NAME'.",
               row_nr: 2,
+              sheet_name: 'Sheet1',
+              type: :error },
+            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
+              reason: "There exists no service called 'standard'.",
+              row_nr: 2,
+              sheet_name: 'Sheet1',
+              type: :error },
+            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
+              reason: "There exists no service called 'standard' for carrier 'MSC'.",
+              row_nr: 3,
               sheet_name: 'Sheet1',
               type: :error },
             { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,

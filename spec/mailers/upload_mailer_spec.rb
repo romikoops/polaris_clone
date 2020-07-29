@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe UploadMailer, type: :mailer do
   let(:user) { create(:organizations_user) }
-  let(:user.organization) { user.organization }
+  let(:organization) { user.organization }
 
   before do
     stub_request(:get, "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png").to_return(status: 200, body: "", headers: {})

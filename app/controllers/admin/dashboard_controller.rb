@@ -34,7 +34,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     @hubs = hubs.limit(8).map do |hub|
       { data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash }
     end
-    @map_data = MapDatum.where(organization_id: current_organization.id)
+    @map_data = MapDatum.where(organization_id: current_organization.id).limit(100)
   end
 
   def shipments_hash

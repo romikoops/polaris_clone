@@ -25,6 +25,7 @@ module ExcelDataServices
           name: itinerary_name
         )
         itineraries = itineraries.where(mode_of_transport: mode_of_transport) if mode_of_transport.present?
+
         return if itineraries.blank?
 
         itineraries.find_in_batches do |itinerary_batch|

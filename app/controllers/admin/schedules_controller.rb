@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Admin::SchedulesController < Admin::AdminBaseController
-  before_action :initialize_variables, only: %i(index auto_generate_schedules)
+  before_action :initialize_variables, only: %i(auto_generate_schedules)
 
   def index
-    map_data = MapDatum.where(organization: current_organization)
+    map_data = MapDatum.where(organization: current_organization).limit(100)
     response_handler(
       mapData: map_data,
       itineraries: itinerary_route_json
@@ -80,7 +80,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def itinerary_route_json
-    Itinerary.where(organization_id: current_organization.id).map(&:as_options_json)
+    Itinerary.where(organization_id: current_organization.id)
   end
 
   def stops
