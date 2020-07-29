@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'api_auth/resource_helper.rb'
+require 'api_auth/resource_authenticator.rb'
 
 ::Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
@@ -16,8 +17,12 @@ require 'api_auth/resource_helper.rb'
 
   resource_owner_from_credentials do
     ::Organizations.current_id = params[:organization_id] if params[:organization_id]
-    resource = ApiAuth::ResourceHelper.resource_for_login(email: params[:email], client: server.client)
-    resource.authenticate(params[:email], params[:password]) || nil
+    resource = ApiAuth::ResourceHelper.resource_for_login(client: server.client)
+    ApiAuth::ResourceAuthenticator.authenticate(
+      resource: resource,
+      email: params[:email],
+      password: params[:password]
+    ) || nil
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for

@@ -1,6 +1,6 @@
 module ApiAuth
   class ResourceHelper
-    def self.resource_for_login(email:, client:)
+    def self.resource_for_login(client:)
       bridge = client.present? && client.name[/bridge/]
 
       return ::Authentication::User.with_membership if bridge.present?

@@ -19,7 +19,7 @@ RSpec.describe ApiAuth::ResourceHelper do
       let(:client) { double("client", name: "bridge") }
 
       it "returns Authentication::User with the with_membership" do
-        described_class.resource_for_login(email: "test@test.com", client: client)
+        described_class.resource_for_login(client: client)
 
         expect(Authentication::User).to have_received(:with_membership)
       end
@@ -33,7 +33,7 @@ RSpec.describe ApiAuth::ResourceHelper do
       let(:client) { nil }
 
       it "returns Authentication::User " do
-        described_class.resource_for_login(email: "test@test.com", client: client)
+        described_class.resource_for_login(client: client)
 
         expect(Authentication::User).to have_received(:authentication_scope)
       end
