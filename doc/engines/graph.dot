@@ -86,7 +86,6 @@ digraph G {
     "admiralty" -> "shipments" [color=grey];
     "admiralty" -> "organizations" [color=grey];
     "admiralty" -> "organization_manager" [color=grey];
-    "admiralty" -> "tenants" [color=grey];
     "api_auth" [shape=ellipse];
     "api_auth" -> "core" [color=grey];
     "api_auth" -> "users" [color=grey];
@@ -133,11 +132,6 @@ digraph G {
     "quotations" -> "core" [color=grey];
     "quotations" -> "legacy" [color=grey];
     "quotations" -> "organizations" [color=grey];
-    "tenants" [shape=ellipse];
-    "tenants" -> "core" [color=grey];
-    "tenants" -> "legacy" [color=grey];
-    "tenants" -> "profiles" [color=grey];
-    "tenants" -> "groups" [color=grey];
     "locations" [shape=ellipse];
     "locations" -> "core" [color=grey];
     "trucking" [shape=ellipse];
@@ -152,7 +146,6 @@ digraph G {
     "pricings" -> "legacy" [color=grey];
     "pricings" -> "organizations" [color=grey];
     "pricings" -> "organization_manager" [color=grey];
-    "pricings" -> "tenants" [color=grey];
     "pricings" -> "trucking" [color=grey];
     "shipments" [shape=ellipse];
     "shipments" -> "address_book" [color=grey];

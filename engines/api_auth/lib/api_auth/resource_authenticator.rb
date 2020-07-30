@@ -5,7 +5,7 @@ module ApiAuth
         target: nil,
         organization: Organizations::Organization.current
       ).fetch(:signup_form_fields, :password)
-      return resource.authenticate(email, password) if password_required
+      return resource.authenticate(email, password) if password_required || password.present?
 
       resource.where(organization_id: Organizations.current_id).find_by(email: email)
     end
