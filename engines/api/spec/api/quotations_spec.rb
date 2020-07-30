@@ -175,6 +175,7 @@ RSpec.describe "Quotations" do
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :id, in: :path, type: :string, schema: {type: :string}
       parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :format, type: :string, in: :query, description: "The desired download format (pdf/xlsx)"
       parameter name: :params, in: :body, schema: {
         type: :object,
         properties: {
@@ -197,7 +198,8 @@ RSpec.describe "Quotations" do
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
         let(:id) { quotation.id }
-        let(:params) { {tenders: [{id: quotation.tenders.first.id}]} }
+        let(:params) { {tenders: [{id: quotation.tenders.first.id}], format: format} }
+        let(:format) { "pdf" }
 
         run_test!
       end

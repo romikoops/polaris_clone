@@ -193,3 +193,7 @@ en:
       http_code: 422
       code: 1023
       message: 'Shipper and Consignee cannot be the same contacts'
+    missing_download_format:
+      http_code: 422
+      code: 1024
+      message: 'Download format is missing or invalid'

@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-organization_manager'
 
   s.add_dependency 'draper', '~> 4.0'
+  s.add_dependency 'write_xlsx'
 
   Gemhelper.common(s)
 end

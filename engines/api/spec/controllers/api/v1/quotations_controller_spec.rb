@@ -291,39 +291,69 @@ module Api
         FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
       end
 
-      context 'without tender ids' do
-        let(:quotation) { Quotations::Quotation.last }
+      shared_examples_for "a downloadable quotation format" do |format|
+        context 'without tender ids' do
+          let(:quotation) { Quotations::Quotation.last }
 
-        it 'renders origin and destination as nexus objects' do
-          post :download, params: { organization_id: organization.id, quotation_id: quotation.id }
+          it 'returns the url of the generated document for the quotation tenders' do
+            post :download, params: { organization_id: organization.id, quotation_id: quotation.id, format: format }
 
-          aggregate_failures do
-            expect(response_data.dig('attributes', 'url')).to include('test.host')
+            aggregate_failures do
+              expect(response_data.dig('attributes', 'url')).to include('test.host')
+            end
+          end
+        end
+
+        context 'with tender ids' do
+          let(:quotation) { Quotations::Quotation.last }
+
+          it 'returns the url of the generated document for the specified tenders' do
+            post :download, params: {
+              organization_id: organization.id,
+              format: format,
+              quotation_id: quotation.id,
+              tender_ids: quotation.tenders.ids
+            }
+
+            aggregate_failures do
+              expect(response_data.dig('attributes', 'url')).to include('test.host')
+            end
+          end
+        end
+
+        context 'with legacy tender ids' do
+          let(:quotation) { Quotations::Quotation.last }
+
+          it 'renders origin and destination as nexus objects' do
+            post :download, params: {
+              organization_id: organization.id,
+              quotation_id: quotation.id,
+              format: format,
+              tenders: [{id: quotation.tenders.first.id }]
+            }
+
+            aggregate_failures do
+              expect(response_data.dig('attributes', 'url')).to include('test.host')
+            end
           end
         end
       end
 
-      context 'with tender ids' do
-        let(:quotation) { Quotations::Quotation.last }
-
-        it 'renders origin and destination as nexus objects' do
-          post :download, params: { organization_id: organization.id, quotation_id: quotation.id, tender_ids: quotation.tenders.ids }
-
-          aggregate_failures do
-            expect(response_data.dig('attributes', 'url')).to include('test.host')
-          end
-        end
+      context 'when downloading as pdf' do
+        it_should_behave_like "a downloadable quotation format", "pdf"
       end
 
-      context 'with legacy tender ids' do
+      context 'when downloading as xlsx' do
+        it_should_behave_like "a downloadable quotation format", "xlsx"
+      end
+
+      context "when format is not specified" do
         let(:quotation) { Quotations::Quotation.last }
 
-        it 'renders origin and destination as nexus objects' do
-          post :download, params: { organization_id: organization.id, quotation_id: quotation.id, tenders: [{id: quotation.tenders.first.id }] }
-
-          aggregate_failures do
-            expect(response_data.dig('attributes', 'url')).to include('test.host')
-          end
+        it "is unsuccessful" do
+          post :download, params: { organization_id: organization.id, quotation_id: quotation.id, tenders: []}
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body).dig('error')).to eq('Download format is missing or invalid')
         end
       end
     end

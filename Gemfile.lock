@@ -730,6 +730,7 @@ PATH
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
       strong_migrations (~> 0.6)
+      write_xlsx
 
 PATH
   remote: lib/money_cache

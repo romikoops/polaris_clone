@@ -8,6 +8,7 @@ require 'pdf'
 require 'organizations'
 
 require 'draper'
+require 'write_xlsx'
 
 module Wheelhouse
   class Engine < ::Rails::Engine

@@ -34,11 +34,15 @@ module Api
       end
 
       def download
-        document = Wheelhouse::PdfService.new(
-          tender_ids: safe_tender_ids,
-          quotation_id: download_params[:quotation_id]
-        ).download
-        render json: PdfSerializer.new(document)
+        document = download_service.document
+        case download_params[:format]
+        when Wheelhouse::QuotationDownloadService::XLSX
+          render json: XlsxSerializer.new(document)
+        when Wheelhouse::QuotationDownloadService::PDF
+          render json: PdfSerializer.new(document)
+        end
+      rescue Wheelhouse::ApplicationError => e
+        render json: { error: e.message }, status: 422
       end
 
       private
@@ -84,6 +88,15 @@ module Api
           organization: current_organization,
           quotation_details: quotation_details,
           shipping_info: modified_shipment_params
+        )
+      end
+
+      def download_service
+        Wheelhouse::QuotationDownloadService.new(
+          quotation_id: download_params[:quotation_id],
+          tender_ids: safe_tender_ids,
+          format: download_params[:format],
+          scope: current_scope
         )
       end
 
@@ -141,7 +154,7 @@ module Api
       end
 
       def download_params
-        params.permit(:quotation_id, tenders: %i[id], tender_ids: [])
+        params.permit(:quotation_id, :format, tenders: %i[id], tender_ids: [])
       end
 
       def routing
