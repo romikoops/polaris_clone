@@ -6,7 +6,6 @@ require 'geocoder'
 require 'groups'
 require 'legacy'
 require 'organizations'
-require 'tenants'
 require 'trucking'
 
 module Pricings

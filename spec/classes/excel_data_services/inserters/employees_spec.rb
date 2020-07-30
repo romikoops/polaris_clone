@@ -18,7 +18,6 @@ RSpec.describe ExcelDataServices::Inserters::Employees do
   before do
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
     FactoryBot.create(:organizations_theme, organization: organization)
-    FactoryBot.create(:role)
   end
 
   describe '.insert' do

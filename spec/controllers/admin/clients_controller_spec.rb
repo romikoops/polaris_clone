@@ -100,7 +100,7 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe 'post #create' do
-    let(:user_attributes) { attributes_for(:user, email: 'email123@demo.com').deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:user_attributes) { attributes_for(:organizations_user, email: 'email123@demo.com').deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:profile_attributes) { attributes_for(:profiles_profile).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
 
@@ -153,7 +153,7 @@ RSpec.describe Admin::ClientsController do
 
     it 'the removal of the user' do
       delete :destroy, params: { organization_id: organization, id: user.id }
-      expect(User.find_by(id: user.id)).to be(nil)
+      expect(Users::User.find_by(id: user.id)).to be(nil)
     end
   end
 end

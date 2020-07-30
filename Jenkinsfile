@@ -46,7 +46,7 @@ pipeline {
           }
 
           steps {
-            defaultCheckout()
+            checkout(scm)
             appPrepare()
             appRunner("app")
           }
@@ -93,7 +93,7 @@ pipeline {
           }
 
           steps {
-            defaultCheckout()
+            checkout(scm)
             appPrepare()
             appRunner("engines")
           }

@@ -68,10 +68,6 @@ module Analytics
 
     attr_reader :organization, :user, :start_date, :end_date
 
-    def admin_roles
-      Legacy::Role.where(name: %w[admin sub_admin super_admin])
-    end
-
     def blacklisted_emails
       scope['blacklisted_emails']
     end

@@ -29,7 +29,7 @@ module AdmiraltyTenants
       @organization = ::AdmiraltyTenants::OrganizationDecorator.new(organization)
       @render_scope = Organizations::DEFAULT_SCOPE
       @theme = @organization.theme || Organizations::Theme.new
-      # @saml_metadatum = ::Tenants::SamlMetadatum.find_or_initialize_by(organization_id: @organization.id)
+      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_initialize_by(organization_id: @organization.id)
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id).order(:id)
       render :new
     end
@@ -57,7 +57,7 @@ module AdmiraltyTenants
       @scope = @organization.scope || {}
       @render_scope = ::OrganizationManager::ScopeService.new(organization: @organization.object).fetch
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id).order(:id)
-      # @saml_metadatum = ::Tenants::SamlMetadatum.find_or_create_by(organization_id: @organization.id)
+      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_create_by(organization_id: @organization.id)
       @theme = @organization.theme || Organizations::Theme.new
     end
 

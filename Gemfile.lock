@@ -98,7 +98,6 @@ PATH
       imc-organizations
       imc-quotations
       imc-shipments
-      imc-tenants
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
@@ -453,7 +452,6 @@ PATH
       imc-legacy
       imc-organization_manager
       imc-organizations
-      imc-tenants
       imc-trucking
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)
@@ -650,24 +648,6 @@ PATH
       strong_migrations (~> 0.6)
 
 PATH
-  remote: engines/tenants
-  specs:
-    imc-tenants (1)
-      activerecord-import
-      activerecord-postgis-adapter (= 5.2.2)
-      config (~> 2.2)
-      imc-core
-      imc-groups
-      imc-legacy
-      imc-profiles
-      paper_trail (~> 10.3)
-      paranoia
-      pg (>= 0.18, < 2.0)
-      pg_search (~> 2.3.0)
-      rails (= 5.2.2)
-      strong_migrations (~> 0.6)
-
-PATH
   remote: engines/tender_calculator
   specs:
     imc-tender_calculator (1)
@@ -845,9 +825,6 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-elasticbeanstalk (1.34.0)
-      aws-sdk-core (~> 3, >= 3.99.0)
-      aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.36.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
@@ -1329,10 +1306,6 @@ GEM
       hashie
     sentry-raven (2.11.2)
       faraday (>= 0.7.6, < 1.0)
-    shoryuken (5.0.1)
-      aws-sdk-core (>= 2)
-      concurrent-ruby
-      thor
     shoulda-matchers (4.1.2)
       activesupport (>= 4.2.0)
     sidekiq (6.1.0)
@@ -1430,7 +1403,6 @@ DEPENDENCIES
   activerecord-postgis-adapter (~> 5.2.2)
   activestorage-cascade (~> 0.1.1)
   annotate (~> 3.0)
-  aws-sdk-elasticbeanstalk (~> 1.34.0)
   aws-sdk-s3 (~> 1.75.0)
   aws-sdk-sqs (~> 1.30.0)
   better_errors
@@ -1493,7 +1465,6 @@ DEPENDENCIES
   imc-sequential!
   imc-shipments!
   imc-tenant_routing!
-  imc-tenants!
   imc-tender_calculator!
   imc-trucking!
   imc-users!
@@ -1550,7 +1521,6 @@ DEPENDENCIES
   sass-rails
   scientist
   sentry-raven
-  shoryuken (~> 5.0.1)
   shoulda-matchers
   sidekiq (~> 6.1)
   sidekiq-failures

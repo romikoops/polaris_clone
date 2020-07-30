@@ -56,13 +56,7 @@ Rails.application.configure do
   end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  if ENV["REDIS_URL"]
-    config.active_job.queue_adapter = :sidekiq
-  else
-    config.active_job.queue_adapter = :shoryuken
-    config.action_mailer.deliver_later_queue_name = Settings.mailer.queue
-    config.active_storage.queue = Settings.mailer.queue
-  end
+  config.active_job.queue_adapter = :sidekiq
 
   config.action_mailer.perform_caching = false
 

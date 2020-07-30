@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-legacy'
   s.add_dependency 'imc-organizations'
   s.add_dependency 'imc-organization_manager'
-  s.add_dependency 'imc-tenants'
   s.add_dependency 'imc-trucking'
 
   s.add_dependency 'geocoder'

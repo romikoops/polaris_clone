@@ -30,8 +30,8 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Pricing do
   let(:tenant_vehicle) { create(:tenant_vehicle, organization: organization) }
 
   context 'with faulty data' do
-    let(:group_a) { build_stubbed(:tenants_group, organization: organization, name: 'GROUP A', id: '000-gr0up-a-id-123') }
-    let(:group_b) { build_stubbed(:tenants_group, organization: organization, name: 'GROUP B', id: '000-gr0up-b-id-456') }
+    let(:group_a) { build_stubbed(:groups_group, organization: organization, name: 'GROUP A', id: '000-gr0up-a-id-123') }
+    let(:group_b) { build_stubbed(:groups_group, organization: organization, name: 'GROUP B', id: '000-gr0up-b-id-456') }
 
     before do
       allow(Groups::Group).to receive(:find_by).with(organization: organization, id: 'other-000-gr0up-a-id-123')

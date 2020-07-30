@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-shipments'
   s.add_dependency 'imc-organizations'
   s.add_dependency 'imc-organization_manager'
-  s.add_dependency 'imc-tenants'
 
   Gemhelper.common(s)
 end

@@ -3,7 +3,7 @@
 require 'admiralty_auth'
 require 'admiralty_reports'
 require 'admiralty_tenants'
-require 'tenants'
+require 'organizations'
 
 module Admiralty
   class Engine < ::Rails::Engine

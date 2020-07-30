@@ -12,7 +12,7 @@ module Legacy
     after_validation :reverse_geocode, if: proc { |address| address.country.nil? }
 
     has_many :user_addresses, class_name: 'Legacy::UserAddress'
-    has_many :users, class_name: 'Legacy::User', through: :user_addresses, dependent: :destroy
+    has_many :users, class_name: 'Organizations::User', through: :user_addresses, dependent: :destroy
     has_many :shipments
 
     reverse_geocoded_by :latitude, :longitude do |address, results|

@@ -46,7 +46,6 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "sprockets", "~> 3.7.2"
 
 # AWS SDK
-gem "aws-sdk-elasticbeanstalk", "~> 1.34.0"
 gem "aws-sdk-s3", "~> 1.75.0"
 gem "aws-sdk-sqs", "~> 1.30.0"
 
@@ -54,7 +53,6 @@ gem "font-awesome-rails"
 
 # Background jobs
 gem "activejob-traffic_control"
-gem "shoryuken", "~> 5.0.1"
 gem "sidekiq", "~> 6.1"
 gem "sidekiq-failures"
 gem "sidekiq_alive"
@@ -76,18 +74,6 @@ gem "scientist"
 
 gem "dalli"
 gem "oj"
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
-
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false

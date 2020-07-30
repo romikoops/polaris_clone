@@ -7,13 +7,13 @@ class OrganizationsController < ApplicationController
   skip_before_action :ensure_organization!, only: [:index]
 
   def index
-    tenants = if Rails.env.production?
+    organizations = if Rails.env.production?
                 []
               else
                 Organizations::Organization.order(:slug).map { |t| { label: t.slug, value: t } }
               end
 
-    response_handler(tenants)
+    response_handler(organizations)
   end
 
   def get_tenant

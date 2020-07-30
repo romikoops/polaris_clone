@@ -54,7 +54,7 @@ generator:
 Engine type is mandatory argument and that defines what files are
 generated in the new engine.
 
-**Note**: Please note that engine gem name is prefixed with _imc-_ but engine and namespace is always without IMC prefix. For example _imc-tenants_ engine has namespace _Tenants_ only.
+**Note**: Please note that engine gem name is prefixed with _imc-_ but engine and namespace is always without IMC prefix. For example _imc-organizations_ engine has namespace _Tenants_ only.
 
 #### Dependencies
 
@@ -65,12 +65,12 @@ Engine is most likely requiring external dependencies as well other engines.
 To use other engines in the runtime, add required engines in engine's `gemspec` file as dependency:
 
     s.add_dependency 'imc-api_auth'
-    s.add_dependency 'imc-tenants'
+    s.add_dependency 'imc-organizations'
 
 Then add to `lib/<ENGINE NAME>/engine.rb` file necessary requires:
 
     require 'api_auth'
-    require 'tenants'
+    require 'organizations'
 
 All runtime dependencies are automatically required in engine's
 Gemfile.

@@ -248,7 +248,6 @@ Rails.application.routes.draw do
     post "messaging/data" => "notifications#shipment_data"
     post "messaging/shipments" => "notifications#shipments_data"
     post "messaging/mark" => "notifications#mark_as_read"
-    post "clear_shoryuken" => "application#clear_shoryuken"
     get "content/component/:component" => "contents#component"
     get "booking_process/contacts", to: "contacts#booking_process"
   end
@@ -491,7 +490,6 @@ end
 #                                  organization_messaging_data POST   /organizations/:organization_id/messaging/data(.:format)                                           notifications#shipment_data
 #                             organization_messaging_shipments POST   /organizations/:organization_id/messaging/shipments(.:format)                                      notifications#shipments_data
 #                                  organization_messaging_mark POST   /organizations/:organization_id/messaging/mark(.:format)                                           notifications#mark_as_read
-#                                 organization_clear_shoryuken POST   /organizations/:organization_id/clear_shoryuken(.:format)                                          application#clear_shoryuken
 #                                                              GET    /organizations/:organization_id/content/component/:component(.:format)                             contents#component
 #                        organization_booking_process_contacts GET    /organizations/:organization_id/booking_process/contacts(.:format)                                 contacts#booking_process
 #                                                organizations GET    /organizations(.:format)                                                                           organizations#index

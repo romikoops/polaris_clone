@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
   let(:organization) { create(:organizations_organization, slug: 'test') }
-  let(:saml_response) { build(:saml_response) }
+  let(:saml_response) { FactoryBot.build(:idp_saml_response) }
   let(:user) { create(:organizations_user, organization: organization) }
   let!(:organizations_domain) { create(:organizations_domain, domain: 'test.host', organization: organization, default: true) }
   let!(:default_group) { create(:groups_group, organization: organization, name: 'default') }
@@ -41,7 +41,6 @@ RSpec.describe SamlController, type: :controller do
     let(:attributes) { { firstName: 'Test', lastName: 'User', phoneNumber: 123_456_789 } }
 
     before do
-      create(:role, name: 'shipper')
       allow(one_login).to receive(:is_valid?).and_return(true)
       allow(one_login).to receive(:name_id).and_return('test@itsmycargo.com')
       allow(one_login).to receive(:attributes).and_return(attributes)
