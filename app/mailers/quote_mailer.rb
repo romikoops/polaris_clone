@@ -5,14 +5,14 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def quotation_email(shipment, shipments, email, quotation, trip_ids) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def quotation_email(shipment, shipments, email, quotation, trip_ids = []) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     set_current_id(organization_id: shipment.organization_id)
     return if invalid_records(shipments: [shipment])
 
     @scope = scope_for(record: @user)
     @quotation = quotation
     @shipments = Legacy::ShipmentDecorator.decorate_collection(
-      quotation.shipments.where(trip_id: trip_ids),
+      shipments.presence || quotation.shipments.where(trip_id: trip_ids),
       context: { scope: @scope}
     )
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})

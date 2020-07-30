@@ -63,7 +63,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) {
       described_class.quotation_email(
         original_shipment,
-        quotation.shipments.pluck(:trip_id),
+        quotation.shipments,
         user.email,
         quotation,
         quotation.shipments.pluck(:trip_id)
