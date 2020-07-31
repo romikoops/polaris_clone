@@ -12,6 +12,5 @@ Geocoder.configure(
   # Geocoding service request timeout, in seconds (default 3):
   timeout: 2000,
 
-  cache: Redis.new,
-  cache_prefix: "geocoder:"
+  cache: Rails.cache
 )
