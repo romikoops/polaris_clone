@@ -17,7 +17,12 @@ module Wheelhouse
     attr_reader :quotation_id, :tender_ids
 
     def shipment
-      Legacy::ChargeBreakdown.find_by(tender_id: tender_ids_for_download.first).shipment
+      Legacy::ChargeBreakdown.find_by(tender_id: tender_ids_for_download.first)&.shipment ||
+        Legacy::Shipment.with_deleted.find_by(id: quotation.legacy_shipment_id)
+    end
+
+    def quotation
+      @quotation ||= Quotations::Quotation.find(quotation_id)
     end
 
     def tender_ids_for_download

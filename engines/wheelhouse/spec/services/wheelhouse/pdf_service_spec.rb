@@ -7,8 +7,9 @@ RSpec.describe Wheelhouse::PdfService do
   let(:user) { FactoryBot.create(:organizations_user_with_profile, organization: organization) }
   let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, user: user, organization: organization) }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment) }
-  let(:tender_ids) { [shipment.charge_breakdowns.first.tender_id] }
-  let(:result) { described_class.new(tender_ids: tender_ids, quotation_id: quotation.id).download }
+  let(:tender_ids) { quotation.tenders.ids }
+  let(:pdf_service) { described_class.new(tender_ids: tender_ids, quotation_id: quotation.id) }
+  let(:result) { pdf_service.download }
 
   before do
     ::Organizations.current_id = organization.id
@@ -27,6 +28,22 @@ RSpec.describe Wheelhouse::PdfService do
 
       it 'returns the Legacy::File' do
         expect(result.file).to be_attached
+      end
+    end
+  end
+
+  describe '.shipment' do
+    context 'when shipment is linked to the quotation' do
+      it 'returns the Legacy::File' do
+        expect(pdf_service.send(:shipment)).to eq(shipment)
+      end
+    end
+
+    context "when shipment is soft deleted" do
+      let(:shipment) { FactoryBot.create(:legacy_shipment, deleted_at: Time.zone.now, with_tenders: true, user: user, organization: organization) }
+
+      it "returns the shipment" do
+        expect(pdf_service.send(:shipment)).to eq(shipment)
       end
     end
   end
