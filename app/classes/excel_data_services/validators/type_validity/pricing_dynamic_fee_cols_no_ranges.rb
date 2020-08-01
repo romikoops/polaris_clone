@@ -5,6 +5,8 @@ module ExcelDataServices
     module TypeValidity
       class PricingDynamicFeeColsNoRanges < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
+          'effective_date': :date,
+          'expiration_date': :date,
           'origin_locode': :locode,
           'destination_locode': :locode,
           'load_type': :load_type,
