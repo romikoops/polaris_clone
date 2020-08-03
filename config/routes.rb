@@ -33,7 +33,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :user, only: [:show, :create]
+  resource :user, only: [:show, :create] do
+    collection do
+      post :passwordless_authentication
+    end
+  end
 
   resources :organizations, only: %i[index show] do
     resources :password_resets, only: %i[create edit update]
@@ -177,6 +181,9 @@ Rails.application.routes.draw do
     resources :users do
       member do
         get :activate
+      end
+      collection do
+        post :passwordless_authentication
       end
       get "home", as: :home
       get "show", as: :show

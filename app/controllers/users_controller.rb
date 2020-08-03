@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :doorkeeper_authorize!, only: [:currencies, :create, :activate]
+  skip_before_action :doorkeeper_authorize!, only: [:currencies, :create, :activate, :passwordless_authentication]
 
   def home
     current_shipments = organization_user_shipments
@@ -63,26 +63,42 @@ class UsersController < ApplicationController
   end
 
   def create
-    begin
-      user = Authentication::User.new(new_user_params).tap do |u|
-        u.type = 'Organizations::User' if new_user_params[:organization_id].present?
-      end
-      user.save!
-      Profiles::ProfileService.create_or_update_profile(user: user,
-                                                        first_name: profile_params[:first_name],
-                                                        last_name: profile_params[:last_name],
-                                                        company_name: profile_params[:company_name],
-                                                        phone: profile_params[:phone])
-      response = generate_token_for(user: user, scope: 'public')
-      response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
-    rescue ActiveRecord::RecordInvalid => e
-      response_handler(
-        ApplicationError.new(
-          http_code: 422,
-          message: user.errors
-        )
-      )
+    user = Authentication::User.new(new_user_params).tap do |u|
+      u.type = 'Organizations::User' if new_user_params[:organization_id].present?
     end
+    user.save!
+    create_or_update_profile(user: user)
+    response = generate_token_for(user: user, scope: 'public')
+    response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
+  rescue ActiveRecord::RecordInvalid
+    response_handler(
+      ApplicationError.new(
+        http_code: 422,
+        message: user.errors
+      )
+    )
+  end
+
+  def passwordless_authentication
+    if current_scope.dig(:signup_form_fields, :password)
+      not_authenticated && return
+    end
+    raise ActiveRecord::RecordInvalid if passwordless_new_user_params[:email].blank?
+
+    user = Authentication::User.find_by(passwordless_new_user_params)
+    user ||= Authentication::User.create!(passwordless_new_user_params).tap do |org_user|
+      org_user.type = 'Organizations::User'
+    end
+    create_or_update_profile(user: user)
+    response = generate_token_for(user: user, scope: 'public')
+    response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
+  rescue ActiveRecord::RecordInvalid
+    response_handler(
+      ApplicationError.new(
+        http_code: 422,
+        message: user&.errors
+      )
+    )
   end
 
   def download_gdpr
@@ -116,12 +132,26 @@ class UsersController < ApplicationController
 
   private
 
+  def create_or_update_profile(user:)
+    Profiles::ProfileService.create_or_update_profile(
+      user: user,
+      first_name: profile_params[:first_name],
+      last_name: profile_params[:last_name],
+      company_name: profile_params[:company_name],
+      phone: profile_params[:phone]
+    )
+  end
+
   def not_authenticated
     render json: {success: false}, status: 401
   end
 
   def new_user_params
     params.require(:user).permit(:email, :password, :organization_id)
+  end
+
+  def passwordless_new_user_params
+    params.require(:user).permit(:email, :organization_id)
   end
 
   def profile_params

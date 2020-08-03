@@ -102,6 +102,79 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'POST #passwordless_authentication' do
+    before do
+      create(:organizations_theme, organization: organization)
+      create(:organizations_scope, target: organization, content: {'signup_form_fields' => { 'password' => false } })
+    end
+
+    context 'when user does not exist' do
+      let(:test_email) { 'test_new@itsmycargo.com' }
+
+      it 'creates a new user without password' do
+        params = {
+          user: {
+            email: test_email,
+            organization_id: user.organization_id,
+            phone: '01628710344'
+          }
+        }
+        post :passwordless_authentication, params: params
+
+        expect(json[:data][:access_token]).to be_present
+      end
+    end
+
+    context 'when user already exists' do
+      it 'reuturns a new token for the existing user' do
+        params = {
+          user: {
+            email: user.email,
+            organization_id: user.organization_id,
+            phone: '01628710344'
+          }
+        }
+        post :passwordless_authentication, params: params
+
+        expect(json[:data][:access_token]).to be_present
+      end
+    end
+
+    context 'when password is required' do
+      before do
+        organization.scope.update(content: {'signup_form_fields' => { 'password' => true } })
+      end
+
+      it 'reuturns 401 - unauthorized' do
+        params = {
+          user: {
+            email: user.email,
+            organization_id: user.organization_id,
+            phone: '01628710344'
+          }
+        }
+        post :passwordless_authentication, params: params
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when no email provided' do
+      it 'reuturns 422 - unprocessable_entity' do
+        params = {
+          user: {
+            email: nil,
+            organization_id: user.organization_id,
+            phone: '01628710344'
+          }
+        }
+        post :passwordless_authentication, params: params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
   describe 'POST #update' do
     it 'returns http success, updates the user and send the email' do
       params = {
