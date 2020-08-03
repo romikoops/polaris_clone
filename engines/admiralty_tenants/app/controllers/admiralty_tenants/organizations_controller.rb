@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'admiralty_tenants/application_controller'
+require_dependency "admiralty_tenants/application_controller"
 
 module AdmiraltyTenants
   class OrganizationsController < ApplicationController
@@ -10,14 +10,15 @@ module AdmiraltyTenants
       @organizations = ::AdmiraltyTenants::OrganizationDecorator.decorate_collection(::Organizations::Organization.order(:slug))
     end
 
-    def show; end
+    def show
+    end
 
     def new
       @organization = ::AdmiraltyTenants::OrganizationDecorator.new(Organizations::Organization.new)
       @render_scope = Organizations::DEFAULT_SCOPE
       @theme = Organizations::Theme.new
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization: @organization).order(:id)
-    #  @saml_metadatum = Tenants::SamlMetadatum.new(organization_id: @organization.id)
+      @saml_metadatum = Organizations::SamlMetadatum.new(organization_id: @organization.id)
     end
 
     def create
@@ -34,14 +35,15 @@ module AdmiraltyTenants
       render :new
     end
 
-    def edit; end
+    def edit
+    end
 
     def update
       @organization.update(slug: organization_params[:slug])
       @theme = @organization.theme
       @theme.update(organization_params[:theme]) if organization_params[:theme].present?
       @scope.update(content: remove_default_values)
-      # @saml_metadatum.update(content: organization_params[:saml_metadatum][:content])
+      @saml_metadatum.update(content: organization_params[:saml_metadatum][:content])
       update_max_dimensions
       if @max_dimensions.all?(&:valid?)
         redirect_to organization_path(@organization)
@@ -57,7 +59,7 @@ module AdmiraltyTenants
       @scope = @organization.scope || {}
       @render_scope = ::OrganizationManager::ScopeService.new(organization: @organization.object).fetch
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id).order(:id)
-      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_create_by(organization_id: @organization.id)
+      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_initialize_by(organization_id: @organization.id)
       @theme = @organization.theme || Organizations::Theme.new
     end
 
@@ -71,17 +73,17 @@ module AdmiraltyTenants
 
     def organization_params
       params.require(:organization)
-            .permit(
-              :name,
-              :slug,
-              :scope,
-              :max_dimensions_bundle,
-              saml_metadatum: :content,
-              theme: %i[
-                primary_color secondary_color bright_primary_color bright_secondary_color
-                background small_logo large_logo email_logo white_logo wide_logo booking_process_image
-              ]
-            )
+        .permit(
+          :name,
+          :slug,
+          :scope,
+          :max_dimensions_bundle,
+          saml_metadatum: :content,
+          theme: %i[
+            primary_color secondary_color bright_primary_color bright_secondary_color
+            background small_logo large_logo email_logo white_logo wide_logo booking_process_image
+          ]
+        )
     end
 
     def remove_default_values

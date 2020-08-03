@@ -1,4 +1,4 @@
-# require 'rails_helper'
+require "rails_helper"
 
 class QuotedShipmentsJob < ApplicationJob
   concurrency 1, drop: false

@@ -1,6 +1,7 @@
 module Organizations
   class SamlMetadatum < ApplicationRecord
     belongs_to :organization
+    validates :content, presence: true
   end
 end
 
