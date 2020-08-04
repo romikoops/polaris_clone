@@ -213,10 +213,10 @@ module Wheelhouse
       end
 
       def si_attribute_limit(max_dimensions:, attribute:)
-        main_mot_limit = max_dimensions.select(attribute).max.send(attribute)
+        main_mot_limit = max_dimensions.select(attribute).max&.send(attribute)
         trucking_limit = trucking_limit(attribute: attribute)
 
-        for_comparison = [main_mot_limit, trucking_limit].min
+        for_comparison = [main_mot_limit, trucking_limit].compact.min
         validation_limit = for_comparison || DEFAULT_MAX
 
         if %i[chargeable_weight payload_in_kg].include?(attribute)
