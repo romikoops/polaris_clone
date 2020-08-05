@@ -7,9 +7,10 @@ RSpec.describe OfferCalculator::GoogleDirections do
   let(:destination) { '53.536975,9.918213' }
   let(:departure_time) { 1_576_540_800 }
   let(:departure_time_future) { 1_576_545_800 }
+  let(:url) { 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=now&destination=53.536975,9.918213&key=&language=en&mode=driving&origin=53.5453188,10.000840899999957&traffic_model=pessimistic' }
 
-  before(:each) do
-    stub_request(:get, 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=1576540800&destination=53.536975,9.918213&key=&language=en&mode=driving&origin=53.5453188,10.000840899999957&traffic_model=pessimistic')
+  before do
+    stub_request(:get, url)
       .with(
         headers: {
           'Accept' => '*/*',
@@ -18,7 +19,7 @@ RSpec.describe OfferCalculator::GoogleDirections do
         }
       )
       .to_return(status: 200, body: FactoryBot.create(:google_directions_response), headers: {})
-    stub_request(:get, 'https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=now&destination=53.536975,9.918213&key=&language=en&mode=driving&origin=53.5453188,10.000840899999957&traffic_model=pessimistic')
+    stub_request(:get, "https://maps.googleapis.com/maps/api/directions/xml?alternative=false&departure_time=1576540800&destination=53.536975,9.918213&key=&language=en&mode=driving&origin=53.5453188,10.000840899999957&traffic_model=pessimistic")
       .with(
         headers: {
           'Accept' => '*/*',
@@ -129,6 +130,26 @@ RSpec.describe OfferCalculator::GoogleDirections do
           target = described_class.new(origin, destination, departure_time)
           expect(target.departure_time).to eq('now')
         end
+      end
+    end
+
+    context "with subsequent requests with the same url(cache key)" do
+      let(:mock_xml) do
+        <<-XML
+        <note>
+        <body>TEST XML STRING</body>
+        </note>
+        XML
+      end
+
+      before do
+        allow(Rails.cache).to receive(:fetch).and_return(mock_xml)
+      end
+
+      it "fetches the response from cache" do
+        klass = described_class.new(origin, destination, 1000)
+        expect(klass.xml).to eq(mock_xml)
+        expect(a_request(:get, url)).to_not have_been_made
       end
     end
   end

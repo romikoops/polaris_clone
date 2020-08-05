@@ -30,7 +30,7 @@ module OfferCalculator
       @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
       path = BASE_PATH + '?' + querify(@options)
       @url = BASE_URL + path
-      open(@url) { |io| @xml = io.read } # rubocop:disable Security/Open
+      @xml = xml_from_cache(cache_key: @url)
       @doc = Nokogiri::XML(@xml)
       @status = @doc.css('status').text
     end
@@ -128,6 +128,12 @@ module OfferCalculator
       end
 
       params.join('&')
+    end
+
+    def xml_from_cache(cache_key:)
+      Rails.cache.fetch(cache_key) do
+        open(cache_key) { |io| io.read }  # rubocop:disable Security/Open
+      end
     end
   end
 end
