@@ -53,7 +53,7 @@ class QuoteMailer < ApplicationMailer
 
   def quotation_admin_email(quotation, shipment = nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     user_id = quotation&.user_id || shipment&.user_id
-    @user = Users::User.find_by(id: user_id)
+    @user = Users::User.find_by(id: user_id)&.becomes(Organizations::User)
     @user_profile = Profiles::ProfileService.fetch(user_id: user_id)
 
     @shipments = quotation ? quotation.shipments : [shipment]

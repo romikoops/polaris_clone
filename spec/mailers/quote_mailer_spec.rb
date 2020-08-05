@@ -93,6 +93,22 @@ RSpec.describe QuoteMailer, type: :mailer do
     end
   end
 
+  describe 'quotation_admin_ email for quotation wihtout user' do
+    let(:shipment_count) { 2 }
+    let(:mail) { described_class.quotation_admin_email(quotation).deliver_now }
+
+    before { allow(quotation).to receive(:user_id).and_return(nil) }
+
+    it 'renders', :aggregate_failures do
+      expect(mail.subject).to eq(
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference},..."
+      )
+      expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
+      expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
+      expect(mail.to).to eq(['sales.general@demo.com'])
+    end
+  end
+
   describe 'quotation_admin_ email for shipment' do
     let(:mail) { described_class.quotation_admin_email(nil, original_shipment).deliver_now }
 
