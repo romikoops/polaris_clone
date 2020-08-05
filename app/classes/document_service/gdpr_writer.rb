@@ -6,11 +6,12 @@ module DocumentService
   class GdprWriter
     include AwsConfig
     include WritingTool
-    attr_reader :tenant, :user_contacts, :filename, :directory, :workbook, :worksheet, :user,
+    attr_reader :organization, :user_contacts, :filename, :directory, :workbook, :worksheet, :user,
                 :user_shipments, :user_messages, :user_addresses, :user_sheet, :contacts_sheet, :shipment_sheet
 
     def initialize(options)
       @user = Users::User.find(options[:user_id])
+      @organization = Organizations::Organization.find_by(id: user.organization_id)
       @user_contacts = Legacy::Contact.where(user: @user)
       @user_shipments = Legacy::Shipment.where(user: @user).where.not(status: 'booking_process_started')
       @user_addresses = Legacy::UserAddress.where(user: @user)
@@ -29,7 +30,7 @@ module DocumentService
       write_contacts_data
       write_shipment_data
       workbook.close
-      write_to_aws(directory, user.organization, filename, 'gdpr')
+      write_to_aws(directory, organization, filename, 'gdpr')
     end
 
     private
