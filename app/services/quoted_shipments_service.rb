@@ -92,7 +92,8 @@ class QuotedShipmentsService
       tender_id: tender.id,
       quotation_id: quotation.id,
       itinerary_id: trip.itinerary_id,
-      desired_start_date: shipment.desired_start_date
+      desired_start_date: shipment.desired_start_date,
+      booking_placed_at: DateTime.now
     )
     handle_clone_dates(cloned_shipment: cloned_shipment, trip: trip)
   end
