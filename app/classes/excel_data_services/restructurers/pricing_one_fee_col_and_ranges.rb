@@ -52,7 +52,7 @@ module ExcelDataServices
         restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = cut_based_on_date_overlaps(
           restructured_data,
-          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date]
+          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date wm_ratio]
         )
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
         restructured_data = group_by_params(restructured_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)

@@ -39,6 +39,10 @@ module ExcelDataServices
       def transit_time
         @transit_time ||= data[:transit_time]&.to_i
       end
+
+      def wm_ratio
+        @wm_ratio ||= data[:wm_ratio]&.to_i || Pricings::Pricing::WM_RATIO_LOOKUP[mode_of_transport]
+      end
     end
   end
 end

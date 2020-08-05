@@ -100,11 +100,13 @@ module ExcelDataServices
             load_type: load_type,
             tenant_vehicle: tenant_vehicle,
             group_id: find_group_id(row),
+            wm_rate: row.wm_ratio,
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
         new_pricing = itinerary.rates.new(pricing_params)
         old_pricings = itinerary.rates.where(pricing_params.except(:effective_date,
+                                                                   :wm_rate,
                                                                    :expiration_date,
                                                                    :internal))
 

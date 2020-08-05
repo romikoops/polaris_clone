@@ -2,6 +2,10 @@
 
 module Pricings
   class Pricing < ApplicationRecord
+    WM_RATIO_LOOKUP = {ocean: 1000,
+                       air: 167,
+                       rail: 500,
+                       truck: 333}.freeze
     attr_accessor :transient_marked_as_old
     self.ignored_columns = ['disabled']
 

@@ -59,7 +59,8 @@ module ExcelDataServices
           load_type: load_type,
           transit_time: transit_time,
           group_name: group_name,
-          transshipment: transshipment
+          transshipment: transshipment,
+          wm_ratio: pricing.wm_rate
         )
       end
 

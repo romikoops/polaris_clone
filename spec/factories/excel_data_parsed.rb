@@ -47,6 +47,7 @@ FactoryBot.define do
                destination: 'Shanghai',
                country_destination: 'China',
                mot: 'ocean',
+               wm_ratio: 800,
                carrier: nil,
                service_level: 'standard',
                load_type: 'lcl',
@@ -241,6 +242,7 @@ FactoryBot.define do
                currency: 'USD',
                fee_min: 17,
                fee: 17,
+               wm_rate: 800,
                transit_time: 24,
                transshipment: 'ZACPT',
                remarks: 'test',
@@ -271,6 +273,7 @@ FactoryBot.define do
                currency: 'USD',
                fee_min: 17,
                fee: 17,
+               wm_ratio: 800,
                transit_time: 24,
                transshipment: 'ZACPT',
                row_nr: 2 }] }]

@@ -69,6 +69,7 @@ module ExcelDataServices
           transshipment
           transit_time
           remarks
+          wm_ratio
         ].freeze
 
         PRICING_ONE_FEE_COL_AND_RANGES = %i[
@@ -101,6 +102,7 @@ module ExcelDataServices
           transshipment
           transit_time
           remarks
+          wm_ratio
         ].freeze
 
         SACO_SHIPPING = %i[
