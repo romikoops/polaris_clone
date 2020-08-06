@@ -70,7 +70,7 @@ module AdmiraltyTenants
     describe "PATCH #update" do
       let(:organization) { organizations.first }
       let(:max_dimension_bundle) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization) }
-      let(:organization_params) { organization.attributes.slice("name", "slug").merge(scope: {foo: true}.to_json, saml_metadatum: {content: ""}) }
+      let(:organization_params) { organization.attributes.slice("name", "slug").merge(scope: {foo: true}.to_json) }
       let(:updated_max_bundle) { {max_dimension_bundle.id => {width: 10}} }
 
       before do
@@ -92,7 +92,7 @@ module AdmiraltyTenants
       end
 
       let(:organization) { organizations.first }
-      let(:organization_params) { organization.attributes.slice("name", "slug").merge(scope: {foo: true}.to_json, saml_metadatum: {content: ""}) }
+      let(:organization_params) { organization.attributes.slice("name", "slug").merge(scope: {foo: true}.to_json) }
       let(:updated_max_bundle) { {max_bundle.id => {width: -10}} }
 
       it "renders page without update" do

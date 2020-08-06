@@ -18,7 +18,6 @@ module AdmiraltyTenants
       @render_scope = Organizations::DEFAULT_SCOPE
       @theme = Organizations::Theme.new
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization: @organization).order(:id)
-      @saml_metadatum = Organizations::SamlMetadatum.new(organization_id: @organization.id)
     end
 
     def create
@@ -30,7 +29,6 @@ module AdmiraltyTenants
       @organization = ::AdmiraltyTenants::OrganizationDecorator.new(organization)
       @render_scope = Organizations::DEFAULT_SCOPE
       @theme = @organization.theme || Organizations::Theme.new
-      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_initialize_by(organization_id: @organization.id)
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id).order(:id)
       render :new
     end
@@ -43,7 +41,6 @@ module AdmiraltyTenants
       @theme = @organization.theme
       @theme.update(organization_params[:theme]) if organization_params[:theme].present?
       @scope.update(content: remove_default_values)
-      @saml_metadatum.update(content: organization_params[:saml_metadatum][:content])
       update_max_dimensions
       if @max_dimensions.all?(&:valid?)
         redirect_to organization_path(@organization)
@@ -59,7 +56,6 @@ module AdmiraltyTenants
       @scope = @organization.scope || {}
       @render_scope = ::OrganizationManager::ScopeService.new(organization: @organization.object).fetch
       @max_dimensions = ::Legacy::MaxDimensionsBundle.where(organization_id: @organization.id).order(:id)
-      @saml_metadatum = ::Organizations::SamlMetadatum.find_or_initialize_by(organization_id: @organization.id)
       @theme = @organization.theme || Organizations::Theme.new
     end
 
@@ -78,7 +74,6 @@ module AdmiraltyTenants
           :slug,
           :scope,
           :max_dimensions_bundle,
-          saml_metadatum: :content,
           theme: %i[
             primary_color secondary_color bright_primary_color bright_secondary_color
             background small_logo large_logo email_logo white_logo wide_logo booking_process_image

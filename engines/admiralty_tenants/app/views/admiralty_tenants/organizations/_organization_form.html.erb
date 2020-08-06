@@ -30,9 +30,6 @@
           </div>
         <% end %>
       </dl>
-      <dl class="row">
-        <%= render partial: "saml", locals: { f: f } %>
-      </dl>
     <%= f.fields_for @theme do |ftheme|%>
       <dl class="row">
         <dt class="col-12">Tenants Colors</dt>
