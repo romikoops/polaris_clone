@@ -55,11 +55,18 @@ module OfferCalculator
 
       def update_billing
         email = @shipment.user&.email || ''
-        return @shipment.billing = :test if email.include?('itsmycargo.com')
         internal_domain = scope.fetch(:internal_domains).find { |domain|  email.include?(domain) }
-        return @shipment.billing = :internal if internal_domain.present? || wheelhouse
 
-        @shipment.billing = :external
+        billing = if excluded_emails(organization: shipment.organization).include? email
+          :test
+        elsif internal_domain.present? || wheelhouse
+          :internal
+        else
+          :external
+        end
+
+        @shipment.billing = billing
+        @quotation.billing = billing
       end
 
       def update_cargo_units
@@ -172,6 +179,10 @@ module OfferCalculator
         @params.require(:shipment).require(:trucking).permit(
           on_carriage: :truck_type, pre_carriage: :truck_type
         )
+      end
+
+      def excluded_emails(organization:)
+        ::OrganizationManager::ScopeService.new(organization: organization).fetch('blacklisted_emails')
       end
     end
   end

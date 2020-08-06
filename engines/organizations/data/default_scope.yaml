@@ -158,7 +158,10 @@ side_nav:
   - contacts
 landing_page_video:
 loading_image:
-blacklisted_emails: []
+blacklisted_emails:
+  - shipper@itsmycargo.com
+  - agent@itsmycargo.com
+  - test@itsmycargo.com
 validity_logic: vatos
 transport_insurance_rate: 0
 hs_fee: 0

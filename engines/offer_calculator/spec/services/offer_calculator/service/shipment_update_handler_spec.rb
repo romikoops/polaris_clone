@@ -242,12 +242,24 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         end
       end
 
-      context "when test" do
-        let(:email) { "xxxx@itsmycargo.com" }
+      describe "test" do
+        context "when scope blacklisted email" do
+          let(:email) { "xxxx@itsmycargo.com" }
+          let(:scope_content) { {blacklisted_emails: ["xxxx@itsmycargo.com"]} }
 
-        it "updates the billing attribute when test" do
-          service.update_billing
-          expect(base_shipment.billing).to eq("test")
+          it "updates the billing attribute when test" do
+            service.update_billing
+            expect(base_shipment.billing).to eq("test")
+          end
+        end
+
+        context "when default scope blacklisted email" do
+          let(:email) { "shipper@itsmycargo.com" }
+
+          it "updates the billing attribute when test" do
+            service.update_billing
+            expect(base_shipment.billing).to eq("test")
+          end
         end
       end
 
