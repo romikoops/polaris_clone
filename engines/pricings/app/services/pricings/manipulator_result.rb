@@ -23,7 +23,7 @@ module Pricings
     end
 
     def cbm_ratio
-      result.dig("cbm_ratio") || result.dig("wm_rate")
+      result.dig("cbm_ratio") || result.dig("wm_rate") || Pricings::Pricing::WM_RATIO_LOOKUP[mot.to_sym]
     end
 
     def load_meterage_ratio
@@ -150,6 +150,17 @@ module Pricings
 
     def charge_category(key:)
       ::Legacy::ChargeCategory.find_by(code: key.downcase, organization_id: original.organization_id)
+    end
+
+    def mot
+      case original.class.to_s
+      when "Pricings::Pricing"
+        ::Legacy::Itinerary.find(itinerary_id).mode_of_transport
+      when "Legacy::LocalCharge"
+        original.mode_of_transport
+      when "Trucking::Trucking"
+        original.hub.hub_type
+      end
     end
   end
 end

@@ -8,6 +8,9 @@ RSpec.describe Pricings::ManipulatorResult do
   let(:instance) { FactoryBot.build(:manipulator_result, original: original, result: original.as_json) }
 
   context "with freight rates" do
+    let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, mode_of_transport: "rail") }
+    let(:original) { FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary) }
+
     describe ".validity" do
       it "returns the correct date range" do
         expect(instance.validity).to eq(original.validity)
@@ -55,10 +58,17 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.itinerary_id).to eq(original.itinerary_id)
       end
     end
+
+    describe ".mot" do
+      it "returns the correct mot" do
+        expect(instance.send(:mot)).to eq "rail"
+      end
+    end
   end
 
   context "with trucking rates" do
-    let(:original) { FactoryBot.create(:trucking_trucking, organization: organization) }
+    let(:hub) { FactoryBot.create(:legacy_hub, hub_type: "air") }
+    let(:original) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub) }
 
     describe ".load_meterage_ratio" do
       it "returns the correct ratio" do
@@ -101,10 +111,16 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.hub_id).to eq(original.hub_id)
       end
     end
+
+    describe ".mot" do
+      it "returns the correct mot" do
+        expect(instance.send(:mot)).to eq "air"
+      end
+    end
   end
 
   context "with local charges" do
-    let(:original) { FactoryBot.create(:legacy_local_charge, organization: organization) }
+    let(:original) { FactoryBot.create(:legacy_local_charge, organization: organization, mode_of_transport: "air") }
 
     describe ".section" do
       it "returns the correct section" do
@@ -133,6 +149,18 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".hub_id" do
       it "returns the correct hub_id" do
         expect(instance.hub_id).to eq(original.hub_id)
+      end
+    end
+
+    describe ".mot" do
+      it "returns the correct mot" do
+        expect(instance.send(:mot)).to eq "air"
+      end
+    end
+
+    describe ".cbm_ratio" do
+      it "returns the correct ratio" do
+        expect(instance.cbm_ratio).to eq(167)
       end
     end
   end
