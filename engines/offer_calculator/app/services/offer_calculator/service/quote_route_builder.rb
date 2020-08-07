@@ -26,9 +26,9 @@ module OfferCalculator
         transit_time = Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id)
         itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
                                            load_type: @shipment.load_type,
-                                           start_date: OfferCalculator::Schedule.quote_trip_start_date,
+                                           start_date: start_date,
                                            end_date: end_date(transit_time: transit_time),
-                                           closing_date: OfferCalculator::Schedule.quote_trip_closing_date)
+                                           closing_date: closing_date)
       end
 
       def end_date(transit_time:)
@@ -37,6 +37,19 @@ module OfferCalculator
         else
           OfferCalculator::Schedule.quote_trip_end_date
         end
+      end
+
+      def start_date
+        buffer = scope.dig(:search_buffer)
+        return OfferCalculator::Schedule.quote_trip_start_date if buffer.blank?
+
+        buffer.to_i.days.from_now.beginning_of_day
+      end
+
+      def closing_date
+        return Time.zone.today.beginning_of_day if scope.dig(:search_buffer).present?
+
+        OfferCalculator::Schedule.quote_trip_closing_date
       end
     end
   end

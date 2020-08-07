@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative "../../../shared_contexts/basic_setup.rb"
 
 RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
   include_context "offer_calculator_shared_context"
@@ -63,6 +64,24 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
           expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
           expect(results.first.eta).to eq(desired_end_date)
+        end
+      end
+    end
+
+    context 'with custom buffer' do
+      before do
+        FactoryBot.create(:organizations_scope, target: organization, content: { search_buffer: 0})
+      end
+
+      let(:desired_start_date) { Time.zone.now.beginning_of_day }
+
+      it 'return the route detail hashes' do
+        aggregate_failures do
+          expect(results.length).to eq(1)
+          expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
+          expect(results.first.etd).to eq(desired_start_date)
+          expect(results.first.closing_date).to eq(desired_start_date)
+          expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
         end
       end
     end
