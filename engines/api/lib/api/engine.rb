@@ -2,6 +2,7 @@
 
 require 'api_auth'
 require 'cargo'
+require 'cms_data'
 require 'core'
 require 'pricings'
 require 'profiles'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_06_101121) do
+ActiveRecord::Schema.define(version: 2020_08_06_150658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -2077,6 +2077,16 @@ ActiveRecord::Schema.define(version: 2020_08_06_101121) do
     t.index ["sandbox_id"], name: "index_shipments_units_on_sandbox_id"
   end
 
+  create_table "cms_data_widgets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "data", null: false
+    t.string "name", null: false
+    t.integer "order", null: false
+    t.uuid "organization_id"
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_cms_data_widgets_on_organization_id"
+  end
+
   create_table "stops", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "hub_id"
@@ -2776,6 +2786,7 @@ ActiveRecord::Schema.define(version: 2020_08_06_101121) do
   add_foreign_key "shipments_shipments", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "shipments_shipments", "users_users", column: "user_id"
   add_foreign_key "shipments_units", "tenants_sandboxes", column: "sandbox_id"
+  add_foreign_key "cms_data_widgets", "organizations_organizations", column: "organization_id"
   add_foreign_key "stops", "itineraries"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "organizations_organizations", column: "organization_id"

@@ -8,7 +8,7 @@ inherit_gem:
     - config/rspec.yml
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
   Exclude:
     - '**/bin/*'
     - 'db/schema.rb'
@@ -51,6 +51,10 @@ Metrics/ParameterLists:
   Max: 5
   Exclude:
     - qa/features/**/*_steps.rb
+
+RSpec/VariableName:
+  Exclude:
+    - 'engines/*/spec/api/*_spec.rb'
 
 RSpec/EmptyExampleGroup:
   Exclude:

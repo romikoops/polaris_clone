@@ -70,6 +70,8 @@ Api::Engine.routes.draw do
           end
         end
       end
+
+      resources :widgets, only: :index
     end
   end
 end

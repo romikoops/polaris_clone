@@ -32,6 +32,8 @@ digraph G {
     "routing" -> "legacy" [color=grey];
     "sequential" [shape=ellipse];
     "sequential" -> "core" [color=grey];
+    "cms_data" [shape=ellipse];
+    "cms_data" -> "organizations" [color=grey];
     "tenant_routing" [shape=ellipse];
     "tenant_routing" -> "core" [color=grey];
     "tenant_routing" -> "routing" [color=grey];
@@ -103,6 +105,7 @@ digraph G {
     "api" -> "pricings" [color=grey];
     "api" -> "profiles" [color=grey];
     "api" -> "result_formatter" [color=grey];
+    "api" -> "cms_data" [color=grey];
     "api" -> "trucking" [color=grey];
     "api" -> "users" [color=grey];
     "api" -> "wheelhouse" [color=grey];

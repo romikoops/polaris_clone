@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-result_formatter'
+  s.add_dependency 'imc-cms_data'
   s.add_dependency 'imc-trucking'
   s.add_dependency 'imc-users'
   s.add_dependency 'imc-wheelhouse'
