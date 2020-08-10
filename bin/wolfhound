@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker pull itsmycargo/wolfhound
+docker run -v "$(pwd):/workspace" -ti --init itsmycargo/wolfhound
