@@ -83,6 +83,27 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
       end
     end
 
+    context "with hard trucking limit and multiple ranges (one above range)" do
+      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, :unit_and_kg, organization: organization, cbm_ratio: cbm_ratio, fees: {}) }
+      let(:cargo) do
+        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
+          FactoryBot.create(:lcl_unit,
+            weight_value: 2100,
+            cargo: tapped_cargo)
+        end
+      end
+      let(:scope) { {hard_trucking_limit: true} }
+
+      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+
+      it "returns fees as one range is valid" do
+        aggregate_failures do
+          expect(results.first).to be_a(OfferCalculator::Service::RateBuilders::Fee)
+          expect(trucking_fee.components.length).to eq(1)
+        end
+      end
+    end
+
     context "without hard trucking limit" do
       let(:cargo) do
         FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|

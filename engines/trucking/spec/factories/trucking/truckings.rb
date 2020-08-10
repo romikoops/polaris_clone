@@ -477,13 +477,13 @@ FactoryBot.define do
         {
           unit_in_kg: [
             {
-              rate: { value: 100, currency: 'SEK', rate_basis: 'PER_SHIPMENT' },
+              rate: { value: 100, currency: 'SEK', rate_basis: 'PER_UNIT_KG' },
               max_unit_in_kg: '1000',
               min_unit_in_kg: '0',
               min_value: 400.0
             },
             {
-              rate: { value: 100, currency: 'SEK', rate_basis: 'PER_WM' },
+              rate: { value: 100, currency: 'SEK', rate_basis: 'PER_UNIT_KG' },
               max_unit_in_kg: '2000',
               min_unit_in_kg: '1001',
               min_value: 400.0
@@ -491,19 +491,19 @@ FactoryBot.define do
           ],
           kg: [
             {
-              rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_X_KG' },
+              rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_UNIT_KG' },
               max_kg: '500.0',
               min_kg: '100.0',
               min_value: 400.0
             },
             {
-              rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_X_KG' },
+              rate: { base: 100.0, value: 237.5, currency: 'SEK', rate_basis: 'PER_UNIT_KG' },
               max_kg: '1000.0',
               min_kg: '500.0',
               min_value: 400.0
             },
             {
-              rate: { base: 100.0, value: 135.0, currency: 'SEK', rate_basis: 'PER_X_KG' },
+              rate: { base: 100.0, value: 135.0, currency: 'SEK', rate_basis: 'PER_UNIT_KG' },
               max_kg: '2500.0',
               min_kg: '1000.0',
               min_value: 400.0

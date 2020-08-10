@@ -14,6 +14,7 @@ module OfferCalculator
           measures.children.each do |target_measure|
             @charge_category = trucking_charge_category(target_measure: target_measure)
             @fee_components = []
+            check_limits(target_measure: target_measure)
             create_rates_from_ranges(target_measure: target_measure)
             @fee_arguments = Struct::FeeInputs.new(
               charge_category,
@@ -48,14 +49,10 @@ module OfferCalculator
           )
         end
 
-        def exceeded_hard_limit?(rates:, key:, limit:, measure:)
+        def exceeded_hard_limit?(rates:, key:, measure:)
           last_rate = rates.compact.last[key].to_d
           decimal_value = measure.value
-          return false if last_rate > decimal_value
-
-          raise OfferCalculator::Errors::LoadMeterageExceeded if decimal_value > last_rate && limit
-
-          true
+          decimal_value > last_rate
         end
 
         def add_fee_to_arguments(rate:, rate_key: modifier, target_measure:)
@@ -92,19 +89,34 @@ module OfferCalculator
           MODIFIERS_BY_RATE_BASIS.find { |_key, value| value.include?(@rate_basis) }.first
         end
 
-        def check_hard_limit(modifier_key:, target_measure:)
-          if exceeded_hard_limit?(
-            rates: sorted_ranges[modifier_key],
+        def check_limits(target_measure:)
+          exceeded = sorted_ranges.all? do |modifier_key, range|
+            exceeded_hard_limit?(
+              rates: range,
+              key: "max_#{modifier_key}",
+              measure: measure_for_modifer(
+                modifier_key: modifier_key,
+                target_measure: target_measure,
+                rate_basis: range.first.dig("rate", "rate_basis")
+              )
+            )
+          end
+
+          raise OfferCalculator::Errors::LoadMeterageExceeded if exceeded && scope["hard_trucking_limit"]
+        end
+
+        def upper_rate(rates:, modifier_key:, target_measure:)
+          exceeded = exceeded_hard_limit?(
+            rates: rates,
             key: "max_#{modifier_key}",
-            limit: scope["hard_trucking_limit"],
             measure: measure_for_modifer(
               modifier_key: modifier_key,
               target_measure: target_measure,
-              rate_basis: sorted_ranges[modifier_key].first.dig("rate", "rate_basis")
+              rate_basis: rates.first.dig("rate", "rate_basis")
             )
           )
-            sorted_ranges[modifier_key].last
-          end
+
+          return rates.last if !scope["hard_trucking_limit"] && exceeded
         end
 
         def trucking_rate_range_finder(min:, max:, measure:)
@@ -113,6 +125,8 @@ module OfferCalculator
 
         def range_handler(modifier_key:, target_measure:)
           rate = rate_from_range(modifier_key: modifier_key, target_measure: target_measure)
+          return if rate.blank?
+
           update_trucking_rate_metadata(
             modifier_key: modifier_key,
             min_max: rate.slice("min_#{modifier_key}", "max_#{modifier_key}")
@@ -121,7 +135,11 @@ module OfferCalculator
         end
 
         def rate_from_range(modifier_key:, target_measure:)
-          rate = check_hard_limit(modifier_key: modifier_key, target_measure: target_measure)
+          rate = upper_rate(
+            rates: sorted_ranges[modifier_key],
+            modifier_key: modifier_key,
+            target_measure: target_measure
+          )
           rate ||= sorted_ranges[modifier_key].find { |range_rate|
             trucking_rate_range_finder(
               min: range_rate["min_#{modifier_key}"],
