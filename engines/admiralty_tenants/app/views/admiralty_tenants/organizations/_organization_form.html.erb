@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-sm-9">
       <nav class="navbar navbar-expand-sm navbar-light bg-white">
-        <span class="navbar-brand"><%= @organization.name %></span>
+        <span class="navbar-brand"><%= @organization.theme&.name %></span>
         <ul class="navbar-nav mr-auto"></ul>
         <span class="navbar-text">
           <%= submit_tag 'Save', class: 'btn btn-primary' %>
@@ -15,9 +15,10 @@
   <div class="row justify-content-center">
     <div class="col-sm-4">
       <dl class="row">
-        <dt class="col-sm-5">Tenant Name</dt>
-        <dd class="col-sm-7"><%= f.text_field :name, value: @organization.slug %></dd>
-
+        <%= f.fields_for @theme do |ftheme| %>
+          <dt class="col-sm-5">Tenant Name</dt>
+          <dd class="col-sm-7"><%= ftheme.text_field :name %></dd>
+        <% end %>
         <dt class="col-sm-5">Tenant Slug</dt>
         <dd class="col-sm-7"><%= f.text_field :slug %></dd>
         <% if @organization.errors.present? %>

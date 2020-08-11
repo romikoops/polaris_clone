@@ -70,13 +70,13 @@ module AdmiraltyTenants
     def organization_params
       params.require(:organization)
         .permit(
-          :name,
           :slug,
           :scope,
           :max_dimensions_bundle,
           theme: %i[
             primary_color secondary_color bright_primary_color bright_secondary_color
             background small_logo large_logo email_logo white_logo wide_logo booking_process_image
+            name
           ]
         )
     end

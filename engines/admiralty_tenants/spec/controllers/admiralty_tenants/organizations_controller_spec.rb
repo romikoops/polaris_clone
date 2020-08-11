@@ -12,7 +12,6 @@ module AdmiraltyTenants
     end
 
     let(:organizations) { FactoryBot.create_list(:organizations_organization, 5) }
-
     let(:max_bundle) do
       Legacy::MaxDimensionsBundle.create(mode_of_transport: "general",
                                          organization_id: organizations.sample.id,
@@ -59,6 +58,10 @@ module AdmiraltyTenants
     end
 
     describe "GET #edit" do
+      before do
+        FactoryBot.create(:organizations_theme, organization: organizations.first)
+      end
+
       it "renders page" do
         get :edit, params: {id: organizations.first.id}
 
