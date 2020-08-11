@@ -14,7 +14,7 @@ module OfferCalculator
         delegate :total_weight, :height, :width, :length, :total_area, :total_volume, :id,
           :consolidated?, :stackable?, :stowage_factor, :lcl?, to: :cargo
         delegate :cargo_class, :load_type, :cbm_ratio, :load_meterage_ratio, :load_meterage_limit,
-          :section, :load_meterage_type, to: :object
+          :section, :load_meterage_type, :type, to: :object
 
         def initialize(cargo:, scope:, object:, km: 0)
           @cargo = cargo
@@ -50,14 +50,20 @@ module OfferCalculator
         def chargeable_weight
           @chargeable_weight ||=
             if lcl?
-              [
-                volumetric_weight,
-                total_weight,
-                load_meterage_weight
-              ].max
+              lcl_chargeable_weight.max
             else
               total_weight
             end
+        end
+
+        def lcl_chargeable_weight
+          return [total_weight] if type == "Legacy::LocalCharge"
+
+          [
+            total_weight,
+            load_meterage_weight,
+            volumetric_weight
+          ]
         end
 
         def trucking_chargeable_weight_by_area

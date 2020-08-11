@@ -64,6 +64,12 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.send(:mot)).to eq "rail"
       end
     end
+
+    describe ".type" do
+      it "returns the correct type" do
+        expect(instance.send(:type)).to eq "Pricings::Pricing"
+      end
+    end
   end
 
   context "with trucking rates" do
@@ -117,6 +123,12 @@ RSpec.describe Pricings::ManipulatorResult do
         expect(instance.send(:mot)).to eq "air"
       end
     end
+
+    describe ".type" do
+      it "returns the correct type" do
+        expect(instance.send(:type)).to eq "Trucking::Trucking"
+      end
+    end
   end
 
   context "with local charges" do
@@ -161,6 +173,12 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".cbm_ratio" do
       it "returns the correct ratio" do
         expect(instance.cbm_ratio).to eq(167)
+      end
+    end
+
+    describe ".type" do
+      it "returns the correct type" do
+        expect(instance.send(:type)).to eq "Legacy::LocalCharge"
       end
     end
   end

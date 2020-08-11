@@ -34,6 +34,10 @@ module Pricings
       result.dig("data") || result.dig("fees")
     end
 
+    def type
+      original.class.to_s
+    end
+
     def section
       case original.class.to_s
       when "Pricings::Pricing"
