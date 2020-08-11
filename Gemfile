@@ -46,7 +46,7 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "sprockets", "~> 3.7.2"
 
 # AWS SDK
-gem "aws-sdk-s3", "~> 1.75.0"
+gem "aws-sdk-s3", "~> 1.77.0"
 gem "aws-sdk-sqs", "~> 1.30.0"
 
 gem "font-awesome-rails"
