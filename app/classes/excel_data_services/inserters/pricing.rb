@@ -162,6 +162,7 @@ module ExcelDataServices
         notes.each do |note|
           note[:organization_id] = organization.id
           note[:pricings_pricing_id] = pricing_id
+          note[:remarks] = true
         end
       end
 
