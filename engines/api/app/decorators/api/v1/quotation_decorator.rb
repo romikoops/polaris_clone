@@ -2,7 +2,7 @@
 
 module Api
   module V1
-    class QuotationDecorator < Draper::Decorator
+    class QuotationDecorator < ApplicationDecorator
       delegate_all
 
       decorates_association :user, with: UserDecorator
