@@ -9,7 +9,7 @@ module Api
       delegate :first_name, :last_name, :phone, :company_name, to: :profile
 
       def profile
-        @profile ||= Profiles::Profile.find_by(user_id: id)
+        @profile ||= Profiles::Profile.with_deleted.find_by(user_id: id)
       end
 
       def membership
