@@ -11,10 +11,12 @@ module Migrator
     end
 
     def perform
+      old_count = count_required
+
       @updated = [*data].map { |sql| execute(sql, "#{self.class}#data") }.sum if data
       [*sync].each { |sql| execute(sql, "#{self.class}#sync") } if sync
 
-      new_count, old_count = verify
+      new_count = count_migrated
 
       unless new_count == old_count
         puts "!! Verification has failed for #{self.class}"

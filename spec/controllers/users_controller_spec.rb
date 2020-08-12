@@ -121,7 +121,10 @@ RSpec.describe UsersController do
         }
         post :passwordless_authentication, params: params
 
-        expect(json[:data][:access_token]).to be_present
+        aggregate_failures do
+          expect(json[:data][:access_token]).to be_present
+          expect(Organizations::User.find_by(email: test_email)).to be_present
+        end
       end
     end
 

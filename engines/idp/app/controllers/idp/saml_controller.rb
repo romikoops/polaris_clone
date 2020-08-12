@@ -77,6 +77,7 @@ module IDP
 
     def user_from_saml(response:, organization_id:)
       Authentication::User.find_or_initialize_by(
+        type: "Organizations::User",
         organization_id: organization_id,
         email: response.attributes[:email] || response.name_id
       )

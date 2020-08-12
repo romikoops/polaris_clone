@@ -10,6 +10,7 @@ module Authentication
     authenticates_with_sorcery!
 
     validates :password, confirmation: true, if: -> { new_record? || changes[:crypted_password] }
+    validates :type, presence: true
 
     after_create :assign_default_group
 

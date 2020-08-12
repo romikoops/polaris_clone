@@ -41,6 +41,9 @@ RSpec.describe IDP::SamlController, type: :controller do
   describe "POST #consume" do
     let(:one_login) { instance_double("OneLogin::RubySaml::Response", is_valid?: true) }
     let(:attributes) { {firstName: "Test", lastName: "User", phoneNumber: 123_456_789} }
+    let(:redirect_location) { response.location }
+    let(:response_params) { Rack::Utils.parse_nested_query(redirect_location.split("success?").second) }
+    let(:created_user) { Organizations::User.unscoped.find_by(id: response_params["userId"], organization_id: organization.id) }
 
     before do
       allow(one_login).to receive(:is_valid?).and_return(true)
@@ -52,12 +55,13 @@ RSpec.describe IDP::SamlController, type: :controller do
     context "with successful login" do
       it "returns an http status of success" do
         post :consume, params: {id: organization.id, SAMLResponse: {}}
+
         aggregate_failures do
           expect(response.status).to eq(302)
-          redirect_location = response.location
-          response_params = Rack::Utils.parse_nested_query(redirect_location.split("success?").second)
           expect(response_params.keys).to match_array(expected_keys)
           expect(response_params["organizationId"]).to eq(organization.id)
+
+          expect(created_user).to be_present
         end
       end
     end
@@ -74,10 +78,10 @@ RSpec.describe IDP::SamlController, type: :controller do
       it "returns an http status of success" do
         aggregate_failures do
           expect(response.status).to eq(302)
-          redirect_location = response.location
-          response_params = Rack::Utils.parse_nested_query(redirect_location.split("success?").second)
           expect(response_params.keys).to match_array(expected_keys)
           expect(response_params["organizationId"]).to eq(organization.id.to_s)
+
+          expect(created_user).to be_present
         end
       end
 
@@ -110,10 +114,10 @@ RSpec.describe IDP::SamlController, type: :controller do
       it "returns an http status of success" do
         aggregate_failures do
           expect(response.status).to eq(302)
-          redirect_location = response.location
-          response_params = Rack::Utils.parse_nested_query(redirect_location.split("success?").second)
           expect(response_params.keys).to match_array(expected_keys)
           expect(response_params["organizationId"]).to eq(organization.id.to_s)
+
+          expect(created_user).to be_present
         end
       end
 

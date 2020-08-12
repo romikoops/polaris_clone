@@ -64,7 +64,7 @@ class UsersController < ApplicationController
 
   def create
     user = Authentication::User.new(new_user_params).tap do |u|
-      u.type = 'Organizations::User' if new_user_params[:organization_id].present?
+      u.type = 'Organizations::User'
     end
     user.save!
     create_or_update_profile(user: user)
@@ -86,9 +86,10 @@ class UsersController < ApplicationController
     raise ActiveRecord::RecordInvalid if passwordless_new_user_params[:email].blank?
 
     user = Authentication::User.find_by(passwordless_new_user_params)
-    user ||= Authentication::User.create!(passwordless_new_user_params).tap do |org_user|
+    user ||= Authentication::User.new(passwordless_new_user_params).tap do |org_user|
       org_user.type = 'Organizations::User'
     end
+    user.save!
     create_or_update_profile(user: user)
     response = generate_token_for(user: user, scope: 'public')
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)

@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :authentication_user, class: "Authentication::User", parent: :users_user do
+    type { "Organizations::User" }
+
     trait :organizations_user do
       type { "Organizations::User" }
     end
