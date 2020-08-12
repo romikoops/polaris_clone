@@ -11,7 +11,7 @@ module Migrator
     end
 
     def perform
-      updated = [*data].map { |sql| execute(sql, "#{self.class}#data") }.sum if data
+      @updated = [*data].map { |sql| execute(sql, "#{self.class}#data") }.sum if data
       [*sync].each { |sql| execute(sql, "#{self.class}#sync") } if sync
 
       new_count, old_count = verify
@@ -22,7 +22,7 @@ module Migrator
         exit(1)
       end
 
-      updated
+      @updated
     end
 
     def data
@@ -36,6 +36,7 @@ module Migrator
     end
 
     def count_migrated
+      @updated
     end
 
     def count_required
