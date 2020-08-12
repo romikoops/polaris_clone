@@ -842,7 +842,7 @@ GEM
     aws-sdk-kms (1.36.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.77.0)
+    aws-sdk-s3 (1.78.0)
       aws-sdk-core (~> 3, >= 3.104.3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -1417,7 +1417,7 @@ DEPENDENCIES
   activerecord-postgis-adapter (~> 5.2.2)
   activestorage-cascade (~> 0.1.1)
   annotate (~> 3.0)
-  aws-sdk-s3 (~> 1.77.0)
+  aws-sdk-s3 (~> 1.78.0)
   aws-sdk-sqs (~> 1.30.0)
   better_errors
   binding_of_caller
