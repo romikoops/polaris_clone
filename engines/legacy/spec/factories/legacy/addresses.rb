@@ -54,7 +54,15 @@ FactoryBot.define do
       association :country, factory: :country_de
     end
 
+    trait :dusseldorf do
+      name { 'Düsseldorf' }
+      city { 'Düsseldorf' }
+      street { 'Dorf Street' }
+      association :country, factory: :country_de
+    end
+
     factory :hamburg_address, traits: [:hamburg]
+    factory :dusseldorf_address, traits: [:dusseldorf]
     factory :shanghai_address, traits: [:shanghai]
     factory :felixstowe_address, traits: [:felixstowe]
     factory :gothenburg_address, traits: [:gothenburg]

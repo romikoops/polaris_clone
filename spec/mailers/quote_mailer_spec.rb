@@ -25,6 +25,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     end
   end
   let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
+  let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }
   let(:delivery_address) { FactoryBot.create(:hamburg_address) }
 
   before do
@@ -214,6 +215,36 @@ RSpec.describe QuoteMailer, type: :mailer do
 
       it 'renders', :aggregate_failures do
         expect(mail.subject).to eq(result)
+        expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
+        expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
+        expect(mail.to).to eq(['sales.general@demo.com'])
+      end
+    end
+
+    context 'with trucking with umlaut' do
+      before do
+        allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
+        allow(original_shipment).to receive(:has_on_carriage?).and_return(true)
+        allow(original_shipment).to receive(:pickup_address).and_return(umlaut_address)
+        allow(original_shipment).to receive(:delivery_address).and_return(delivery_address)
+      end
+
+      let(:email_subject) do
+        [
+          original_shipment.imc_reference.to_s,
+          "[#{profile.external_id}]",
+          "#{umlaut_address.city} - #{delivery_address.city}",
+          decorated_shipment.total_weight.to_s,
+          decorated_shipment.total_volume.to_s
+        ].join('/')
+      end
+
+      let(:liquid) do
+        "{{imc_reference}}/[{{external_id}}]/{{routing}}/{{total_weight}}/{{total_volume}}"
+      end
+
+      it 'renders', :aggregate_failures do
+        expect(mail.subject).to eq(email_subject)
         expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
         expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
         expect(mail.to).to eq(['sales.general@demo.com'])
