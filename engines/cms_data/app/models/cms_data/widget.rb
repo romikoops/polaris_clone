@@ -24,7 +24,7 @@ end
 #
 # Indexes
 #
-#  index_organizations_widgets_on_organization_id  (organization_id)
+#  index_cms_data_widgets_on_organization_id  (organization_id)
 #
 # Foreign Keys
 #

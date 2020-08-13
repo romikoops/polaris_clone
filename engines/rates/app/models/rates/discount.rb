@@ -44,7 +44,7 @@ end
 #  operator            :integer
 #  order               :integer          default(0)
 #  percentage          :decimal(, )
-#  rate_basis          :integer          default(NULL), not null
+#  rate_basis          :integer          default("shipment"), not null
 #  stowage_range       :numrange
 #  target_type         :string
 #  unit_range          :numrange

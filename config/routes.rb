@@ -262,8 +262,8 @@ end
 
 # == Route Map
 #
-# D, [2020-07-17T16:17:11.103755 #16245] DEBUG -- : using default configuration
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
+#                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
@@ -272,9 +272,10 @@ end
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
-#                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init
-#                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata
-#                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume
+#                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init {:subdomain=>"api"}
+#                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata {:subdomain=>"api"}
+#                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume {:subdomain=>"api"}
+#                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
 #                                                         user GET    /user(.:format)                                                                                    users#show
 #                                                              POST   /user(.:format)                                                                                    users#create
 #                                 organization_password_resets POST   /organizations/:organization_id/password_resets(.:format)                                          password_resets#create
@@ -422,6 +423,7 @@ end
 #                           organization_admin_search_contacts GET    /organizations/:organization_id/admin/search/contacts(.:format)                                    admin/contacts#search
 #                                 organization_admin_dashboard GET    /organizations/:organization_id/admin/dashboard(.:format)                                          admin/dashboard#index
 #                                   activate_organization_user GET    /organizations/:organization_id/users/:id/activate(.:format)                                       users#activate
+#               passwordless_authentication_organization_users POST   /organizations/:organization_id/users/passwordless_authentication(.:format)                        users#passwordless_authentication
 #                                       organization_user_home GET    /organizations/:organization_id/users/:user_id/home(.:format)                                      users#home
 #                                       organization_user_show GET    /organizations/:organization_id/users/:user_id/show(.:format)                                      users#show
 #                                    organization_user_account GET    /organizations/:organization_id/users/:user_id/account(.:format)                                   users#account
@@ -507,6 +509,11 @@ end
 #                                    update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                                active_storage/disk#update
 #                                         rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                     active_storage/direct_uploads#create
 #
+# Routes for IDP::Engine:
+#     init_saml GET  /saml/:id/init(.:format)     idp/saml#init {:subdomain=>"idp"}
+# metadata_saml GET  /saml/:id/metadata(.:format) idp/saml#metadata {:subdomain=>"idp"}
+#  consume_saml POST /saml/:id/consume(.:format)  idp/saml#consume {:subdomain=>"idp"}
+#
 # Routes for GoogleSignIn::Engine:
 # authorization POST /authorization(.:format) google_sign_in/authorizations#create
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
@@ -583,6 +590,7 @@ end
 # enabled_v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
 #         v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
 #                 v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
+#                     v1_organization_widgets GET    /v1/organizations/:organization_id/widgets(.:format)                                     api/v1/widgets#index
 #                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
 #
 # Routes for AdmiraltyAuth::Engine:
