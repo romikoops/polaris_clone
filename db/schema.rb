@@ -143,6 +143,33 @@ ActiveRecord::Schema.define(version: 2020_08_06_145537) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "booking_queries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "category"
+    t.uuid "company_id"
+    t.datetime "created_at", null: false
+    t.uuid "creator_id"
+    t.uuid "customer_id"
+    t.datetime "desired_start_date"
+    t.uuid "destination_id"
+    t.string "destination_type"
+    t.bigint "legacy_destination_id"
+    t.string "legacy_destination_type"
+    t.bigint "legacy_origin_id"
+    t.string "legacy_origin_type"
+    t.uuid "organization_id"
+    t.uuid "origin_id"
+    t.string "origin_type"
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_booking_queries_on_company_id"
+    t.index ["creator_id"], name: "index_booking_queries_on_creator_id"
+    t.index ["customer_id"], name: "index_booking_queries_on_customer_id"
+    t.index ["destination_type", "destination_id"], name: "index_booking_queries_on_destination_type_and_destination_id"
+    t.index ["legacy_destination_type", "legacy_destination_id"], name: "index_booking_queries_on_legacy_destination"
+    t.index ["legacy_origin_type", "legacy_origin_id"], name: "index_booking_queries_on_legacy_origin"
+    t.index ["organization_id"], name: "index_booking_queries_on_organization_id"
+    t.index ["origin_type", "origin_id"], name: "index_booking_queries_on_origin_type_and_origin_id"
+  end
+
   create_table "cargo_cargos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.uuid "organization_id"
@@ -2698,6 +2725,10 @@ ActiveRecord::Schema.define(version: 2020_08_06_145537) do
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "address_book_contacts", "users_users", column: "user_id"
   add_foreign_key "agencies", "organizations_organizations", column: "organization_id"
+  add_foreign_key "booking_queries", "companies_companies", column: "company_id"
+  add_foreign_key "booking_queries", "organizations_organizations", column: "organization_id"
+  add_foreign_key "booking_queries", "users_users", column: "creator_id"
+  add_foreign_key "booking_queries", "users_users", column: "customer_id"
   add_foreign_key "cargo_cargos", "organizations_organizations", column: "organization_id"
   add_foreign_key "cargo_cargos", "quotations_quotations", column: "quotation_id"
   add_foreign_key "cargo_units", "cargo_cargos", column: "cargo_id"

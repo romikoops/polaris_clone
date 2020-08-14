@@ -184,6 +184,20 @@ PATH
       strong_migrations (~> 0.6)
 
 PATH
+  remote: engines/booking
+  specs:
+    imc-booking (1)
+      activerecord-postgis-adapter (= 5.2.2)
+      config (~> 2.2)
+      imc-companies
+      imc-organizations
+      imc-users
+      paper_trail (~> 10.3)
+      pg (>= 0.18, < 2.0)
+      rails (= 5.2.2)
+      strong_migrations (~> 0.6)
+
+PATH
   remote: engines/cargo
   specs:
     imc-cargo (1)
@@ -1450,6 +1464,7 @@ DEPENDENCIES
   imc-api!
   imc-api_auth!
   imc-authentication!
+  imc-booking!
   imc-cargo!
   imc-cms_data!
   imc-companies!

@@ -34,6 +34,11 @@ digraph G {
     "sequential" -> "core" [color=grey];
     "cms_data" [shape=ellipse];
     "cms_data" -> "organizations" [color=grey];
+    "booking" [shape=ellipse];
+    "booking" -> "companies" [color=grey];
+    "booking" -> "organizations" [color=grey];
+    "booking" -> "users" [color=grey];
+    "booking" -> "legacy" [color=grey];
     "tenant_routing" [shape=ellipse];
     "tenant_routing" -> "core" [color=grey];
     "tenant_routing" -> "routing" [color=grey];
