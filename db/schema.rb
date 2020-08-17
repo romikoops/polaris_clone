@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_12_152430) do
+ActiveRecord::Schema.define(version: 2020_08_17_063118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -141,6 +141,17 @@ ActiveRecord::Schema.define(version: 2020_08_12_152430) do
     t.string "model_id"
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "booking_offers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "organization_id"
+    t.uuid "query_id"
+    t.uuid "shipper_id"
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_booking_offers_on_organization_id"
+    t.index ["query_id"], name: "index_booking_offers_on_query_id"
+    t.index ["shipper_id"], name: "index_booking_offers_on_shipper_id"
   end
 
   create_table "booking_queries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2728,6 +2739,9 @@ ActiveRecord::Schema.define(version: 2020_08_12_152430) do
   add_foreign_key "address_book_contacts", "tenants_sandboxes", column: "sandbox_id"
   add_foreign_key "address_book_contacts", "users_users", column: "user_id"
   add_foreign_key "agencies", "organizations_organizations", column: "organization_id"
+  add_foreign_key "booking_offers", "booking_queries", column: "query_id"
+  add_foreign_key "booking_offers", "organizations_organizations", column: "organization_id"
+  add_foreign_key "booking_offers", "users_users", column: "shipper_id"
   add_foreign_key "booking_queries", "companies_companies", column: "company_id"
   add_foreign_key "booking_queries", "organizations_organizations", column: "organization_id"
   add_foreign_key "booking_queries", "users_users", column: "creator_id"
