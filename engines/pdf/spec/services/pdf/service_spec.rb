@@ -9,7 +9,7 @@ RSpec.describe Pdf::Service do
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
   let(:carrier) { FactoryBot.create(:legacy_carrier, code: 'saco', name: 'SACO') }
   let(:load_type) { 'cargo_item' }
-  let!(:shipment) {
+  let!(:shipment) do
     FactoryBot.create(:complete_legacy_shipment,
       organization: organization,
       user: user,
@@ -18,7 +18,7 @@ RSpec.describe Pdf::Service do
       with_breakdown: true,
       with_tenders: true,
       with_full_breakdown: true)
-  }
+  end
   let(:pdf_service) { described_class.new(organization: organization, user: user) }
   let(:default_args) do
     {
@@ -249,6 +249,49 @@ RSpec.describe Pdf::Service do
         aggregate_failures do
           expect(quotes.length).to eq(1)
           expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by SACO(standard)')
+        end
+      end
+    end
+  end
+
+  describe '.get_note_remarks' do
+    context 'with notes on pricings pricings' do
+      let!(:note) do
+        FactoryBot.create(:legacy_note,
+          organization: organization,
+          remarks: true,
+          pricings_pricing_id: pricing.id)
+      end
+      let(:pricing) do
+        FactoryBot.create(:lcl_pricing,
+          itinerary: trip.itinerary,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle)
+      end
+
+      it 'returns the notes for the pricing' do
+        notes = pdf_service.send(:get_note_remarks, trip.id)
+        aggregate_failures do
+          expect(notes.length).to eq(1)
+          expect(notes.first).to eq(note.body)
+        end
+      end
+    end
+
+    context 'with notes on organization (nil target)' do
+      let!(:note) do
+        FactoryBot.create(:legacy_note,
+          organization: organization,
+          remarks: true,
+          target: nil,
+          pricings_pricing_id: nil)
+      end
+
+      it 'returns the notes for the pricing' do
+        notes = pdf_service.send(:get_note_remarks, trip.id)
+        aggregate_failures do
+          expect(notes.length).to eq(1)
+          expect(notes.first).to eq(note.body)
         end
       end
     end

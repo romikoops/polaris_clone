@@ -11,7 +11,11 @@ module Legacy
     belongs_to :trucking_pricing, optional: true, class_name: 'Legacy::TruckingPricing'
     belongs_to :organization, optional: true, class_name: 'Organizations::Organization'
 
-    validates :target, presence: true, unless: :pricings_pricing_id
+    validates :target, presence: true, unless: :attached_by_uuid
+
+    def attached_by_uuid
+      pricings_pricing_id.present? || organization_id.present?
+    end
   end
 end
 

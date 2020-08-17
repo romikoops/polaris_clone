@@ -228,7 +228,7 @@ module Pdf
       ).for_dates(start_date, end_date).ids
       note_association = Legacy::Note.where(organization: organization, remarks: true)
       note_association.where(pricings_pricing_id: pricing_ids)
-                      .or(note_association.where(target: organization))
+                      .or(note_association.where(target: nil))
                       .distinct
                       .pluck(:body)
     end
