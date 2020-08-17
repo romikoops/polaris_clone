@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :rates_section, class: 'Rates::Section' do
     association :organization, factory: :organizations_organization
+    association :applicable_to, factory: :organizations_user
     association :target, factory: :routing_route_line_service
     ldm_area_divisor { 2.4 }
     truck_height { 2.6 }
@@ -25,6 +26,18 @@ FactoryBot.define do
       after(:build) do |section|
         create :rates_cargo, :container_40, section: section
       end
+    end
+
+    trait :group do
+      association :applicable_to, factory: :groups_group
+    end
+
+    trait :company do
+      association :applicable_to, factory: :companies_company
+    end
+
+    trait :user do
+      association :applicable_to, factory: :organizations_user
     end
 
     factory :section_lcl_rate, traits: %i[with_lcl_cargo_rate]

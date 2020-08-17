@@ -38,7 +38,7 @@ module RateExtractor
     end
 
     def section_rates
-      Section.new(organization: organization, path: tender.path).rates
+      Section.new(organization: organization, user: user, path: tender.path).rates
     end
 
     def cargo_rates

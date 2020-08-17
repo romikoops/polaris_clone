@@ -2,11 +2,12 @@
 
 module RateExtractor
   class Section
-    attr_reader :path, :organization
+    attr_reader :organization, :user, :path
 
-    def initialize(organization:, path:)
+    def initialize(organization:, user:, path:)
       @organization = organization
       @path = path
+      @user = user
     end
 
     def rates
@@ -19,7 +20,8 @@ module RateExtractor
           query = query.or(rates_for_connections(edge_connections(edge_point_a, edge_point_b)))
         end
 
-        query.where(organization: organization)
+        query = query.where(organization: organization)
+        query = query.where(applicable_to: hierarchy)
       end
     end
 
@@ -67,6 +69,10 @@ module RateExtractor
           terminal: route.destination_terminal
         )
       )
+    end
+
+    def hierarchy
+      OrganizationManager::HierarchyService.new(target: user, organization: organization).fetch
     end
   end
 end

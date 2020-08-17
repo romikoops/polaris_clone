@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RateExtractor::TenderFees do
   let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:path) { FactoryBot.create_list(:routing_route_line_service, 3) }
   let(:quotations_tender) { FactoryBot.create(:quotations_tender) }
 
@@ -23,6 +24,7 @@ RSpec.describe RateExtractor::TenderFees do
     path.map do |section|
       FactoryBot.create(:rates_section,
                         target: section,
+                        applicable_to: user,
                         organization: organization)
     end
   end
@@ -43,7 +45,7 @@ RSpec.describe RateExtractor::TenderFees do
     end
   end
 
-  let(:klass) { described_class.new(organization: organization, tender: tender, desired_date: 1.month.from_now, cargo: cargo) }
+  let(:klass) { described_class.new(organization: organization, tender: tender, user: user, desired_date: 1.month.from_now, cargo: cargo) }
 
   let(:decorated_section) { instance_double(RateExtractor::Decorators::SectionRate) }
 

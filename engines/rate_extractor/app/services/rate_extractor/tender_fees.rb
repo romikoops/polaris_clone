@@ -2,12 +2,13 @@
 
 module RateExtractor
   class TenderFees
-    attr_reader :cargo, :organization, :desired_date
+    attr_reader :cargo, :organization, :desired_date, :user
     attr_accessor :tender
 
-    def initialize(organization:, tender:, cargo:, desired_date:)
+    def initialize(organization:, tender:, user:, cargo:, desired_date:)
       @organization = organization
       @tender = tender
+      @user = user
       @cargo = RateExtractor::Decorators::Cargo.new(cargo)
       @desired_date = desired_date
     end
@@ -23,7 +24,7 @@ module RateExtractor
     end
 
     def section_rates
-      Section.new(organization: organization, path: tender.path).rates
+      Section.new(organization: organization, user: user, path: tender.path).rates
     end
 
     def cargo_rates

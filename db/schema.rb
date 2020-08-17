@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_06_145537) do
+ActiveRecord::Schema.define(version: 2020_08_12_152430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1702,6 +1702,8 @@ ActiveRecord::Schema.define(version: 2020_08_06_145537) do
   end
 
   create_table "rates_sections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "applicable_to_id"
+    t.string "applicable_to_type"
     t.bigint "carrier_id"
     t.datetime "created_at", null: false
     t.boolean "disabled"
@@ -1719,6 +1721,7 @@ ActiveRecord::Schema.define(version: 2020_08_06_145537) do
     t.uuid "terminal_id"
     t.decimal "truck_height"
     t.datetime "updated_at", null: false
+    t.index ["applicable_to_type", "applicable_to_id"], name: "index_rates_sections_on_applicable_to_type_and_applicable_to_id"
     t.index ["carrier_id"], name: "index_rates_sections_on_carrier_id"
     t.index ["location_id"], name: "index_rates_sections_on_location_id"
     t.index ["organization_id"], name: "index_rates_sections_on_organization_id"

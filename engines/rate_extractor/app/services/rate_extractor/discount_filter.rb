@@ -31,14 +31,14 @@ module RateExtractor
 
     private
 
-    attr_reader :organization, :cargo, :desired_date, :user, :tender
+    attr_reader :organization, :cargo, :user, :desired_date, :tender
 
     def hierarchy
       OrganizationManager::HierarchyService.new(target: user, organization: organization).fetch
     end
 
     def section_rates
-      Section.new(organization: organization, path: tender.path).rates
+      Section.new(organization: organization, user: user, path: tender.path).rates
     end
 
     def cargo_rates

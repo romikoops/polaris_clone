@@ -21,7 +21,7 @@ RSpec.describe RateExtractor::DiscountFilter do
 
   let!(:section_rates) do
     path.map do |section|
-      FactoryBot.create(:rates_section, target: section, organization: organization)
+      FactoryBot.create(:rates_section, target: section, applicable_to: organization, organization: organization)
     end
   end
 
