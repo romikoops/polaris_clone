@@ -22,6 +22,14 @@ RSpec.describe ExcelDataServices::Restructurers::PricingDynamicFeeColsNoRanges d
         expect(result['Pricing'].first).to match_array(output_data['Pricing'].first)
       end
     end
+
+    context 'when mot is upper_case' do
+      let(:input_data) { build(:excel_data_parsed_upcase_mot_pricings_dynamic_fee_cols_no_ranges).first }
+
+      it 'forces downcase for mot and restructures correctly' do
+        expect(result['Pricing'].first).to match_array(output_data['Pricing'].first)
+      end
+    end
   end
 
   describe '.restructure with remarks' do

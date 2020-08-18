@@ -13,5 +13,13 @@ RSpec.describe ExcelDataServices::Restructurers::Margins do
     it 'restructures the data correctly' do
       expect(described_class.restructure(options)).to eq(output_data)
     end
+
+    context 'when mot is upper_case' do
+      let(:input_data) { build(:excel_data_parsed_upcase_mot_margins).first }
+
+      it 'forces downcase for mot and restructures correctly' do
+        expect(described_class.restructure(options)).to eq(output_data)
+      end
+    end
   end
 end

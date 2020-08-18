@@ -7,7 +7,7 @@ module ExcelDataServices
         sheet_name = data[:sheet_name]
         restructurer_name = data[:restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
-        restructured_data = downcase_values(rows_data: restructured_data, keys: [:load_type])
+        restructured_data = downcase_values(rows_data: restructured_data, keys: %i[load_type mot])
         restructured_data = upcase_values(rows_data: restructured_data, keys: [:rate_basis])
 
         restructured_data = restructured_data.map do |row_data|

@@ -403,6 +403,34 @@ FactoryBot.define do
       end
     end
 
+    trait :up_case_mot_pricings_dynamic_fee_cols_no_ranges do
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data:
+            [
+              { effective_date: Date.parse('Fri, 01 Feb 2019'),
+                expiration_date: Date.parse('Sun, 31 Mar 2019'),
+                customer_email: nil,
+                origin: 'Dalian',
+                country_origin: 'China',
+                destination: 'Gothenburg',
+                country_destination: 'Sweden',
+                mot: 'OCEAN',
+                carrier: 'APL',
+                service_level: 'Standard',
+                load_type: 'FCL_40',
+                rate_basis: 'per_container',
+                transit_time: 42,
+                currency: 'USD',
+                bas: nil,
+                lss: 60,
+                rate: 1550,
+                transshipment: 'ZACPT',
+                row_nr: 2 }
+            ] }]
+      end
+    end
+
     trait :correct_local_charges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
@@ -680,6 +708,44 @@ FactoryBot.define do
       end
     end
 
+    trait :upcase_mot_margins do
+      all_sheets_data do
+        [{ sheet_name: 'Tabelle1',
+           restructurer_name: 'margins',
+           rows_data:
+            [{ effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'OCEAN',
+               carrier: 'Consolidation',
+               service_level: 'standard',
+               margin_type: 'freight',
+               load_type: 'LCL',
+               fee_code: 'BAS',
+               operator: '+',
+               margin: 0.1,
+               row_nr: 2 },
+             { effective_date: Date.parse('Tue, 01 Jan 2019'),
+               expiration_date: Date.parse('Sun, 31 Mar 2019'),
+               origin: 'Dalian',
+               country_origin: 'China',
+               destination: 'Gothenburg',
+               country_destination: 'Sweden',
+               mot: 'OCEAN',
+               carrier: 'Consolidation',
+               service_level: 'standard',
+               margin_type: 'freight',
+               load_type: 'LCL',
+               fee_code: 'BAS',
+               operator: '%',
+               margin: 0.1,
+               row_nr: 3 }] }]
+      end
+    end
+
     trait :default_hubs do
       sheet_name { 'Hubs' }
       restructurer_name { 'hubs' }
@@ -914,9 +980,12 @@ FactoryBot.define do
       traits: %i[local_charges correct_local_charges_with_counterpart_expansion]
     factory :excel_data_parsed_correct_saco_shipping, traits: %i[saco_shipping correct_saco_shipping]
     factory :excel_data_parsed_correct_margins, traits: %i[margins correct_margins]
+    factory :excel_data_parsed_upcase_mot_margins, traits: %i[margins upcase_mot_margins]
     factory :excel_data_parsed_correct_max_dimensions, traits: %i[max_dimensions correct_max_dimensions]
     factory :hubs_missing_address_data, traits: %i[hubs_missing_address]
     factory :excel_data_parsed_lowcase_ratebasis_pricings_dynamic_fee_cols_no_ranges,
       traits: %i[pricing_dynamic_fee_cols_no_ranges low_case_rate_basis_pricings_dynamic_fee_cols_no_ranges]
+    factory :excel_data_parsed_upcase_mot_pricings_dynamic_fee_cols_no_ranges,
+      traits: %i[pricing_dynamic_fee_cols_no_ranges up_case_mot_pricings_dynamic_fee_cols_no_ranges]
   end
 end
