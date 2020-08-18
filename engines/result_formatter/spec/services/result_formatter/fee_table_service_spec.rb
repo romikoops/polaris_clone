@@ -367,6 +367,15 @@ module ResultFormatter
           expect(result[:amount]).to eq(100.0)
         end
       end
+
+      context "with finer values (pdf)" do
+        let(:type) { :pdf }
+        let(:amount) { 123.456789 }
+
+        it "returns the raw value" do
+          expect(result[:amount]).to eq("1.23")
+        end
+      end
     end
   end
 end

@@ -8,6 +8,8 @@ module ResultFormatter
       @tender = tender
       @base_currency = tender.amount.currency
       @charge_breakdown = @tender.charge_breakdown
+      @type = type
+      @scope = scope
       @rows = [
         default_values.merge(
           value: value_with_currency(tender.amount),
@@ -17,8 +19,6 @@ module ResultFormatter
           level: 0
         )
       ]
-      @type = type
-      @scope = scope
     end
 
     def perform
@@ -185,7 +185,7 @@ module ResultFormatter
       return nil if value.nil?
 
       {
-        amount: @type == :table ? value.amount : value.format(symbol: false),
+        amount: @type == :table ? value.amount : value.format(symbol: false, rounded_infinite_precision: true),
         currency: value.currency.iso_code
       }
     end
