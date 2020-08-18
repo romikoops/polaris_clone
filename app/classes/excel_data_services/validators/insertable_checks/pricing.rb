@@ -37,10 +37,6 @@ module ExcelDataServices
         def check_single_data(row)
           check_group(row)
           check_correct_individual_effective_period(row)
-
-          user = get_user(row)
-          check_customer_email(row, user)
-
           origin_hub_with_info = find_hub_by_name_or_locode_with_info(
             name: row.origin,
             country: row.origin_country,
@@ -70,25 +66,7 @@ module ExcelDataServices
             organization: organization
           )
 
-          check_overlapping_effective_periods(row, user, itinerary)
-        end
-
-        def get_user(row)
-          Organizations::User.find_by(organization: organization, email: row.customer_email&.downcase)
-        end
-
-        def check_customer_email(row, user)
-          customer_unknown = row.customer_email.present? && user.nil?
-
-          if customer_unknown # rubocop:disable Style/GuardClause
-            add_to_errors(
-              type: :error,
-              row_nr: row.nr,
-              sheet_name: sheet_name,
-              reason: "A user with email \"#{row.customer_email}\" does not exist.",
-              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
-            )
-          end
+          check_overlapping_effective_periods(row, itinerary)
         end
 
         def check_rate_basis(row)
@@ -104,11 +82,11 @@ module ExcelDataServices
           )
         end
 
-        def check_overlapping_effective_periods(row, user, itinerary)
+        def check_overlapping_effective_periods(row, itinerary)
           return if itinerary.nil?
 
           pricings = itinerary.rates
-                              .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
+                              .where(tenant_vehicle: find_tenant_vehicle(row))
                               .for_cargo_classes([row.load_type])
                               .for_dates(row.effective_date, row.expiration_date)
 

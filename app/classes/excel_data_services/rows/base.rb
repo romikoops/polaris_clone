@@ -25,10 +25,6 @@ module ExcelDataServices
         @currency ||= data[:currency]
       end
 
-      def customer_email
-        @customer_email ||= data[:customer_email]
-      end
-
       def carrier
         @carrier ||= data[:carrier]
       end

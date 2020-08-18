@@ -48,7 +48,6 @@ module ExcelDataServices
         PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
           effective_date
           expiration_date
-          customer_email
           origin
           country_origin
           destination
@@ -75,7 +74,6 @@ module ExcelDataServices
         PRICING_ONE_FEE_COL_AND_RANGES = %i[
           effective_date
           expiration_date
-          customer_email
           origin
           country_origin
           destination

@@ -31,7 +31,6 @@ module ExcelDataServices
         transit_time: :transit_time,
         effective_date: :effective_date,
         expiration_date: :expiration_date,
-        customer_email: :customer_email,
         origin: :origin_hub_name,
         origin_locode: :origin_locode,
         country_origin: :origin_country_name,

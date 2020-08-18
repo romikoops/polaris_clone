@@ -28,7 +28,6 @@ module ExcelDataServices
           :tenant_vehicle_id
         )
 
-        customer_email = pricing.user&.email
         itinerary = pricing.itinerary
         mot = itinerary.mode_of_transport
         origin_hub = itinerary.origin_hub
@@ -46,7 +45,6 @@ module ExcelDataServices
         )&.duration
         group_name = Groups::Group.find_by(id: pricing.group_id)&.name
         pricing_attributes.merge(
-          customer_email: customer_email,
           mot: mot,
           origin_hub_name: origin_hub_name,
           origin_country_name: origin_country_name,

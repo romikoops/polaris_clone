@@ -14,7 +14,6 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
         group_name
         efffffffective_date
         expiration_date
-        customer_email
         origin
         country_origin
         destination
@@ -54,7 +53,7 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
 
           expect(validator.errors_and_warnings).to eq(
             [{ exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker,
-               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EXPIRATION_DATE, CUSTOMER_EMAIL, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\"",
+               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet are: \"EXPIRATION_DATE, ORIGIN, COUNTRY_ORIGIN, DESTINATION, COUNTRY_DESTINATION, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing static headers are               : \"EFFECTIVE_DATE\"",
                row_nr: 1,
                sheet_name: 'Sheet1',
                type: :error }]
