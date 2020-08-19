@@ -15,6 +15,7 @@ module RateExtractor
       @discounts = validity_filtered
       @discounts = applicable_filtered
       @discounts = target_filtered
+      @discounts = range_filtered
     end
 
     def validity_filtered
@@ -27,6 +28,12 @@ module RateExtractor
 
     def target_filtered
       @discounts.where(target: [*section_rates, *cargo_rates]).or(@discounts.where(target: nil))
+    end
+
+    def range_filtered
+      @discounts.where("kg_range @> ?::numeric", cargo.weight.value)
+        .where("cbm_range @> ?::numeric", cargo.volume.value)
+        .where("unit_range @> ?::numeric", cargo.quantity)
     end
 
     private

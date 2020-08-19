@@ -13,7 +13,7 @@ module RateExtractor
 
     def fees
       @fees = Rates::Fee.where(cargo_id: cargo_rate.id)
-      @fees = date_filtered
+      @fees = validity_filtered
       @fees = range_filtered
     end
 
@@ -21,7 +21,7 @@ module RateExtractor
 
     attr_reader :cargo_rate, :section_rate, :desired_date, :cargo
 
-    def date_filtered
+    def validity_filtered
       @fees.where('validity @> ?::date', desired_date)
     end
 

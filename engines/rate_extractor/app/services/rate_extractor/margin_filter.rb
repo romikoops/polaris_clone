@@ -15,6 +15,7 @@ module RateExtractor
       @margins = validity_filtered
       @margins = applicable_filtered
       @margins = target_filtered
+      @margins = range_filtered
     end
 
     def validity_filtered
@@ -27,6 +28,12 @@ module RateExtractor
 
     def target_filtered
       @margins.where(target: [*section_rates, *cargo_rates]).or(@margins.where(target: nil))
+    end
+
+    def range_filtered
+      @margins.where("kg_range @> ?::numeric", cargo.weight.value)
+        .where("cbm_range @> ?::numeric", cargo.volume.value)
+        .where("unit_range @> ?::numeric", cargo.quantity)
     end
 
     private
