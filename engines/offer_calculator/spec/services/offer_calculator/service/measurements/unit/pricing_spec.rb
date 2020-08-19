@@ -26,14 +26,12 @@ RSpec.describe OfferCalculator::Service::Measurements::Unit do
       result: pricing.as_json)
   end
   let(:scope) { {} }
-  let(:km) { 45.06 }
   let(:target_cargo) { cargo.units.first }
   let(:measure) do
     described_class.new(
       cargo: target_cargo,
       scope: scope,
-      object: manipulated_result,
-      km: km
+      object: manipulated_result
     )
   end
 

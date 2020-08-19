@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Trucking::Queries::Availability do
   describe '.perform' do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
+    let(:hub) { FactoryBot.create(:legacy_hub, latitude: latitude, longitude: longitude, organization: organization) }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
     let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
     let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
@@ -22,6 +22,11 @@ RSpec.describe Trucking::Queries::Availability do
       FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
     end
     let(:trucking_results) { described_class.new(args).perform }
+    let(:query_type) { :zipcode }
+
+    before do
+      FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: query_type)
+    end
 
     context 'with missing arguments (organization_id)' do
       let(:args) { { load_type: load_type, zipcode: zipcode, carriage: carriage, country_code: country_code } }
@@ -55,9 +60,7 @@ RSpec.describe Trucking::Queries::Availability do
                           location: trucking_location_zipcode)
       end
 
-      before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
-      end
+      let(:query_type) { :zipcode }
 
       it 'finds the correct trucking_rate with avulsed address filters' do
         trucking_rates = described_class.new(
@@ -113,10 +116,6 @@ RSpec.describe Trucking::Queries::Availability do
           country: FactoryBot.create(:country_nl))
       }
 
-      before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :zipcode)
-      end
-
       it 'finds the correct trucking_rate with avulsed address filters' do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
@@ -137,6 +136,46 @@ RSpec.describe Trucking::Queries::Availability do
       end
     end
 
+    context 'with distance identifier' do
+      let!(:nl_trucking_trucking_distance) do
+        FactoryBot.create(:trucking_trucking,
+                          organization: organization,
+                          hub: hub,
+                          location: distance_location)
+      end
+      let(:query_type) { :distance }
+      let(:nl_address) do
+        FactoryBot.create(:legacy_address,
+          zip_code: '1802 PT',
+          latitude: '57.00001',
+          longitude: '11.10001',
+          country: FactoryBot.create(:country_nl))
+      end
+      let(:distance_service) do
+        described_class.new(
+          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
+          carriage: carriage, country_code: 'NL',
+          address: nl_address, order_by: 'group_id'
+        )
+      end
+      let(:other_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+      let(:distance_location) { FactoryBot.create(:trucking_location, country_code: 'NL', distance: 89) }
+
+      before do
+        FactoryBot.create(:lcl_pre_carriage_availability, hub: other_hub, query_type: query_type)
+        FactoryBot.create(:trucking_trucking,
+                            organization: organization,
+                            hub: other_hub,
+                            location: distance_location)
+        allow(distance_service).to receive(:distance_hubs).and_return([hub])
+        allow(::Trucking::GoogleDirections).to receive(:new).and_return(instance_double('Trucking::GoogleDirections', distance_in_km: 89))
+      end
+
+      it 'finds the correct trucking_rate with address' do
+        expect(distance_service.perform).to match([nl_trucking_trucking_distance])
+      end
+    end
+
     context 'with geometry identifier' do
       let!(:trucking_trucking_geometry) do
         FactoryBot.create(:trucking_trucking,
@@ -144,10 +183,7 @@ RSpec.describe Trucking::Queries::Availability do
                           organization: organization,
                           location: trucking_location_geometry)
       end
-
-      before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :location)
-      end
+      let(:query_type) { :location }
 
       it 'finds the correct trucking_rate with avulsed address filters' do
         trucking_rates = described_class.new(
@@ -203,10 +239,7 @@ RSpec.describe Trucking::Queries::Availability do
                           group: group,
                           location: trucking_location_geometry)
       end
-
-      before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :location)
-      end
+      let(:query_type) { :location }
 
       it 'finds the correct trucking_rate with avulsed address filters' do
         trucking_rates = described_class.new(

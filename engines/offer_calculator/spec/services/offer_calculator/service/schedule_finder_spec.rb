@@ -57,30 +57,26 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
 
   Timecop.freeze(Time.utc(2020, 1, 1, 0, 0, 0)) do
     before do
+      Organizations::Organization.current_id = organization.id
       FactoryBot.create(:lcl_pricing,
         itinerary: itinerary,
         organization: organization,
-        tenant_vehicle: tenant_vehicle
-      )
+        tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_20_pricing,
         itinerary: itinerary,
         organization: organization,
-        tenant_vehicle: tenant_vehicle
-      )
+        tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_40_pricing,
         itinerary: itinerary,
         organization: organization,
-        tenant_vehicle: tenant_vehicle
-      )
+        tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:fcl_40_hq_pricing,
         itinerary: itinerary,
         organization: organization,
-        tenant_vehicle: tenant_vehicle
-      )
+        tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:organizations_scope,
         target: organization,
-        content: {departure_query_type: departure_type}
-      )
+        content: {departure_query_type: departure_type})
     end
 
     describe '.perform' do
@@ -101,8 +97,8 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
       context 'with trucking' do
         before do
           allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-          google_directions = instance_double('OfferCalculator::GoogleDirections')
-          allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
+          google_directions = instance_double('Trucking::GoogleDirections')
+          allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
           allow(google_directions).to receive(:driving_time_in_seconds).and_return(10_000)
           allow(google_directions).to receive(:driving_time_in_seconds_for_trucks).and_return(14_000)
         end
@@ -119,9 +115,9 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
       context 'with no driving time' do
         before do
           allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-          google_directions = instance_double('OfferCalculator::GoogleDirections')
-          allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
-          allow(google_directions).to receive(:driving_time_in_seconds).and_raise(OfferCalculator::Errors::NoDrivingTime)
+          google_directions = instance_double('Trucking::GoogleDirections')
+          allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
+          allow(google_directions).to receive(:driving_time_in_seconds).and_raise(Trucking::GoogleDirections::NoDrivingTime)
         end
 
         it 'return raises an error when no driving time is found' do

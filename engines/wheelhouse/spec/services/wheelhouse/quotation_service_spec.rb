@@ -175,7 +175,6 @@ RSpec.describe Wheelhouse::QuotationService do
                                           'country_code' => 'CN',
                                           'postal_code' => '210001'
                                         ])
-        allow_any_instance_of(OfferCalculator::Service::RateBuilder).to receive(:calc_distance).and_return(10)
         allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
       end
 

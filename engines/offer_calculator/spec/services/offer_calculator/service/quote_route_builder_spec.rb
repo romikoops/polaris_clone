@@ -88,8 +88,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
     context  'with trucking' do
       before do
-        google_directions = instance_double('OfferCalculator::GoogleDirections', driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)
-        allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
+        google_directions = instance_double('Trucking::GoogleDirections', driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)
+        allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
         allow(shipment).to receive(:has_pre_carriage?).and_return(true)
         allow(shipment).to receive(:pickup_address).and_return(pickup_address)
       end

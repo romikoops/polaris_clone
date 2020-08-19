@@ -112,7 +112,6 @@ RSpec.describe OfferCalculator::Calculator do
     allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:origin).and_return(origin_address_params)
     allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:destination).and_return(destination_address_params)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
-    allow_any_instance_of(OfferCalculator::Service::RateBuilder).to receive(:calc_distance).and_return(10)
   end
 
   describe ".perform" do

@@ -32,7 +32,7 @@ module OfferCalculator
         hubs_by_distance = @shipment.pickup_address.furthest_hubs(hubs[:origin])
 
         hubs_by_distance.each do |hub|
-          google_directions = OfferCalculator::GoogleDirections.new(
+          google_directions = Trucking::GoogleDirections.new(
             @shipment.pickup_address.lat_lng_string,
             hub.lat_lng_string,
             @shipment.desired_start_date.to_i
@@ -41,7 +41,7 @@ module OfferCalculator
           driving_time = google_directions.driving_time_in_seconds
           return google_directions.driving_time_in_seconds_for_trucks(driving_time) if driving_time
         end
-      rescue OfferCalculator::Errors::NoDrivingTime => e
+      rescue ::Trucking::GoogleDirections::NoDrivingTime => e
         Raven.capture_exception(e)
         raise OfferCalculator::Errors::NoDirectionsFound
       end

@@ -29,8 +29,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     described_class.new(
       cargo: target_cargo,
       scope: scope.with_indifferent_access,
-      object: manipulated_result,
-      km: km
+      object: manipulated_result
     )
   end
 

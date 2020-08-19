@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe OfferCalculator::GoogleDirections do
+RSpec.describe Trucking::GoogleDirections do
   let(:origin) { '53.5453188,10.000840899999957' }
   let(:destination) { '53.536975,9.918213' }
   let(:departure_time) { 1_576_540_800 }

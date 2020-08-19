@@ -20,9 +20,6 @@ RSpec.describe OfferCalculator::Service::RateBuilder do
 
   before do
     FactoryBot.create(:cloned_cargo, quotation_id: quotation.id)
-    google_directions = instance_double("OfferCalculator::GoogleDirections")
-    allow(OfferCalculator::GoogleDirections).to receive(:new).and_return(google_directions)
-    allow(google_directions).to receive(:distance_in_km).and_return(10)
   end
 
   context "with only freight rates" do

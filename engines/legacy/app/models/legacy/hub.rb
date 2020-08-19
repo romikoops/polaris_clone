@@ -68,7 +68,7 @@ module Legacy
     end
 
     def lat_lng_array
-      [address.latitude, address.longitude]
+      [latitude, longitude]
     end
 
     def lng_lat_array
@@ -76,7 +76,7 @@ module Legacy
     end
 
     def distance_to(loc)
-      Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [address.latitude, address.longitude])
+      Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [latitude, longitude])
     end
 
     def point_wkt

@@ -31,14 +31,14 @@ module OfferCalculator
           @children ||=
             if scope.dig("consolidation", "cargo", "backend").present? && lcl?
               [OfferCalculator::Service::Measurements::Unit.new(
-                cargo: cargo, object: object, scope: scope, km: km.value
+                cargo: cargo, object: object, scope: scope
               )]
             else
               cargo.units
                 .where(cargo_class: ::Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[cargo_class])
                 .map do |cargo_unit|
                 OfferCalculator::Service::Measurements::Unit.new(
-                  cargo: cargo_unit, object: object, scope: scope, km: km.value
+                  cargo: cargo_unit, object: object, scope: scope
                 )
               end
             end

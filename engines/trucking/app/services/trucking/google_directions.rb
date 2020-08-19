@@ -7,9 +7,9 @@ require 'nokogiri'
 require 'openssl'
 require 'base64'
 
-module OfferCalculator
+module Trucking
   class GoogleDirections # rubocop:disable Metrics/ClassLength
-
+    NoDrivingTime = Class.new(StandardError)
     # API Doc: https://developers.google.com/maps/documentation/directions/intro
     BASE_URL  = 'https://maps.googleapis.com'
     BASE_PATH = '/maps/api/directions/xml'
@@ -21,7 +21,7 @@ module OfferCalculator
       traffic_model: 'pessimistic'
     }.freeze
 
-    attr_reader :status, :doc, :xml, :origin, :destination, :departure_time, :options
+    attr_reader :status, :doc, :xml, :origin, :destination, :departure_time, :options, :url
 
     def initialize(origin, destination, departure_time, opts: DEFAULT_OPTIONS)
       @origin = origin
@@ -30,7 +30,7 @@ module OfferCalculator
       @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
       path = BASE_PATH + '?' + querify(@options)
       @url = BASE_URL + path
-      @xml = xml_from_cache(cache_key: @url)
+      @xml = xml_from_cache
       @doc = Nokogiri::XML(@xml)
       @status = @doc.css('status').text
     end
@@ -90,7 +90,7 @@ module OfferCalculator
     def driving_time_in_seconds_for_trucks(seconds)
       # Trucks are slower than normal cars.
       # Trucks have to comply with provisions about resting periods.
-      raise OfferCalculator::Errors::NoDrivingTime if seconds.nil?
+      raise NoDrivingTime if seconds.nil?
 
       slowness_factor = 1.6
       seconds = (seconds * slowness_factor).round.to_i
@@ -130,9 +130,9 @@ module OfferCalculator
       params.join('&')
     end
 
-    def xml_from_cache(cache_key:)
-      Rails.cache.fetch(cache_key) do
-        open(cache_key) { |io| io.read }  # rubocop:disable Security/Open
+    def xml_from_cache
+      Rails.cache.fetch([origin, destination].join) do
+        URI.parse(url).read
       end
     end
   end

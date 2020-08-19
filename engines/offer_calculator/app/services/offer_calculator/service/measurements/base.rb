@@ -14,13 +14,12 @@ module OfferCalculator
         delegate :total_weight, :height, :width, :length, :total_area, :total_volume, :id,
           :consolidated?, :stackable?, :stowage_factor, :lcl?, to: :cargo
         delegate :cargo_class, :load_type, :cbm_ratio, :load_meterage_ratio, :load_meterage_limit,
-          :section, :load_meterage_type, :type, to: :object
+          :section, :load_meterage_type, :type, :km, to: :object
 
-        def initialize(cargo:, scope:, object:, km: 0)
+        def initialize(cargo:, scope:, object:)
           @cargo = cargo
           @scope = scope
           @object = object
-          @km = Measured::Length.new(km, "km")
           @stackability = stackable?
         end
 

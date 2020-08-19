@@ -6,14 +6,21 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
-  let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, organization: organization, load_meterage: load_meterage, cbm_ratio: cbm_ratio) }
+  let(:trucking_location) { FactoryBot.create(:trucking_location, distance: distance) }
+  let(:distance) { 15 }
+  let(:trucking_pricing) do
+    FactoryBot.create(:trucking_trucking,
+      organization: organization,
+      load_meterage: load_meterage,
+      cbm_ratio: cbm_ratio,
+      location: trucking_location)
+  end
   let(:manipulated_result) do
     FactoryBot.build(:manipulator_result,
       original: trucking_pricing,
       result: trucking_pricing.as_json)
   end
   let(:scope) { {} }
-  let(:km) { 45.06 }
   let(:target_cargo) { cargo }
   let(:cbm_ratio) { 250 }
   let(:load_meterage) { {} }
@@ -21,8 +28,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     described_class.new(
       cargo: target_cargo,
       scope: scope.with_indifferent_access,
-      object: manipulated_result,
-      km: km
+      object: manipulated_result
     )
   end
 
@@ -42,6 +48,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         aggregate_failures do
           expect(measure.kg.value).to eq(1000)
           expect(measure.kg.unit.name).to eq("kg")
+          expect(measure.km.value).to eq(15)
         end
       end
     end

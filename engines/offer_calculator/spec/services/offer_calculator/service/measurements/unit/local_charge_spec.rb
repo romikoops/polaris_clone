@@ -26,18 +26,23 @@ RSpec.describe OfferCalculator::Service::Measurements::Unit do
       result: local_charge.as_json)
   end
   let(:scope) { {} }
-  let(:km) { 45.06 }
   let(:target_cargo) { cargo.units.first }
   let(:measure) do
     described_class.new(
       cargo: target_cargo,
       scope: scope,
-      object: manipulated_result,
-      km: km
+      object: manipulated_result
     )
   end
 
   context "when asking for measurement values" do
+    it "returns the fallback km vlaue" do
+      aggregate_failures do
+        expect(measure.km.value).to eq(0)
+        expect(measure.km.unit.name).to eq("km")
+      end
+    end
+
     it "returns the weight in tons" do
       aggregate_failures do
         expect(measure.weight_in_tons.value).to eq(1)

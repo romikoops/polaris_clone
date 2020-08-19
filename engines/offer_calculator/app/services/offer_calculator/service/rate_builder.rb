@@ -26,7 +26,7 @@ module OfferCalculator
 
           rates.map do |rate|
             measures = OfferCalculator::Service::Measurements::Cargo.new(
-              cargo: cargo, object: rate, scope: scope, km: calc_distance(rate: rate)
+              cargo: cargo, object: rate, scope: scope
             )
             klass = "OfferCalculator::Service::RateBuilders::#{section.to_s.camelize}".constantize
             klass.fees(measures: measures, quotation: quotation)
@@ -51,17 +51,6 @@ module OfferCalculator
             result.filter_id
           ]
         end
-      end
-
-      def calc_distance(rate:)
-        return 0 unless rate.section.include?("trucking")
-
-        address = rate.direction == "export" ? quotation.pickup_address : quotation.delivery_address
-        OfferCalculator::GoogleDirections.new(
-          address.lat_lng_string,
-          rate.original.hub.lat_lng_string,
-          @shipment.desired_start_date.to_i
-        ).distance_in_km || 0
       end
     end
   end

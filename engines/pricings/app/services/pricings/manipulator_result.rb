@@ -77,6 +77,11 @@ module Pricings
       result.dig("load_meterage").except("ratio").entries.find { |entry| entry.second.present? }&.first
     end
 
+    def distance
+      km = Trucking::Location.find_by(id: result.dig("location_id"))&.distance || 0
+      Measured::Length.new(km, "km")
+    end
+
     def effective_date
       result.dig("effective_date")
     end
@@ -102,6 +107,8 @@ module Pricings
 
       original.hub_id
     end
+
+    alias km distance
 
     private
 

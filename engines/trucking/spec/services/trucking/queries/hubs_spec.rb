@@ -4,7 +4,13 @@ require 'rails_helper'
 
 RSpec.describe Trucking::Queries::Hubs do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:distance_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Distance', organization: organization) }
+  let(:distance_hub) do
+    FactoryBot.create(:legacy_hub,
+      latitude: latitude,
+      longitude: longitude,
+      name: 'Distance',
+      organization: organization)
+  end
   let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Zipcode', organization: organization) }
   let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Location', organization: organization) }
 
@@ -22,6 +28,14 @@ RSpec.describe Trucking::Queries::Hubs do
 
   let(:address) do
     FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
+  end
+
+  let(:hubs_service) do
+    described_class.new(
+      organization_id: organization.id, load_type: load_type,
+      carriage: carriage, country_code: country_code,
+      address: address, cargo_classes: ['lcl'], order_by: 'group_id'
+    )
   end
 
   before do
@@ -47,31 +61,12 @@ RSpec.describe Trucking::Queries::Hubs do
                           organization: organization,
                           hub: distance_hub,
                           location: trucking_location_distance)
+        allow(hubs_service).to receive(:calc_distance).and_return(55)
       end
 
       it 'return empty collection if cargo_class filter does not match any item in db' do
-        hubs = described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, country_code: country_code,
-          address: address, cargo_classes: ['lcl'], order_by: 'group_id'
-        ).perform
-        
-        expect(hubs).to match_array([distance_hub, zipcode_hub, location_hub])
+        expect(hubs_service.perform).to match_array([distance_hub, zipcode_hub, location_hub])
       end
-    end
-  end
-
-  describe '.trucking_location_where_statement' do
-    let(:klass) do
-      described_class.new(
-        klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-        carriage: carriage, country_code: country_code, distance: 20,
-        address: address, cargo_classes: ['lcl'], order_by: 'group_id'
-      )
-    end
-
-    it 'returns the distance in a hash when it exists' do
-      expect(klass.trucking_location_where_statement).to eq(trucking_locations: { distance: [20] })
     end
   end
 end
