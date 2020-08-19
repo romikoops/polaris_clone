@@ -71,7 +71,7 @@ Api::Engine.routes.draw do
         end
       end
 
-      resources :widgets, only: :index
+      resources :widgets, only: %i[index create update destroy]
     end
   end
 end

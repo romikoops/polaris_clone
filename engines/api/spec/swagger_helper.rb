@@ -221,6 +221,16 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               next: {type: :string, nullable: true},
               last: {type: :string, nullable: true}
             }
+          },
+          widget: {
+            type: :object,
+            properties: {
+              id: {type: :string},
+              organizationId: {type: :string},
+              data: {type: :string},
+              name: {type: :string},
+              order: {type: :number}
+            }
           }
         },
         securitySchemes: {
