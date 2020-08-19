@@ -20,9 +20,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
   let(:shipment_count) { 1 }
   let(:quotation) do
-    create(:legacy_quotation, user: user, shipment_count: shipment_count).tap do |quotation|
-      quotation.original_shipment_id = original_shipment.id
-    end
+    create(:legacy_quotation, user: user, original_shipment_id: original_shipment.id, shipment_count: shipment_count)
   end
   let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
   let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }

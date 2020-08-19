@@ -10,11 +10,9 @@ class QuoteMailer < ApplicationMailer
     return if invalid_records(shipments: [shipment])
 
     @scope = scope_for(record: @user)
-    @quotation = quotation
-    @shipments = Legacy::ShipmentDecorator.decorate_collection(
-      shipments.presence || quotation.shipments.where(trip_id: trip_ids),
-      context: { scope: @scope}
-    )
+    @quotation = Legacy::Quotation.find_by(original_shipment_id: shipment.id)
+    @shipments = shipments.presence || @quotation.shipments.where(trip_id: trip_ids)
+    @shipments = Legacy::ShipmentDecorator.decorate_collection(@shipments, context: { scope: @scope})
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @user = @shipment.user
     @user_profile = Profiles::ProfileService.fetch(user_id: @shipment.user_id)
