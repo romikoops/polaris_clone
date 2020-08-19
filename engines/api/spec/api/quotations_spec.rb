@@ -27,10 +27,16 @@ RSpec.describe "Quotations" do
   }
   let(:quotation) do
     FactoryBot.create(:quotations_quotation, user: user, legacy_shipment_id: shipment.id, tenders:
-      FactoryBot.create_list(:quotations_tender, 5))
+      FactoryBot.create_list(:quotations_tender, 5)).tap do |tapped_quotation|
+        FactoryBot.create(:cargo_cargo, quotation_id: tapped_quotation.id)
+      end
   end
 
-  let(:quotation_2) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id, user: user) }
+  let(:quotation_2) do
+    FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id, user: user).tap do |tapped_quotation|
+      FactoryBot.create(:cargo_cargo, quotation_id: tapped_quotation.id)
+    end
+  end
 
   before do
     ::Organizations.current_id = organization.id

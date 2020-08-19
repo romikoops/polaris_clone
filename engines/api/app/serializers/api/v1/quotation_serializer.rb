@@ -4,11 +4,19 @@ module Api
   module V1
     class QuotationSerializer < Api::V1::QuotationListSerializer
       attribute :containers do |quotation|
-        ContainerSerializer.new(Legacy::Container.where(shipment_id: quotation.legacy_shipment_id))
+        ContainerSerializer.new(
+          Legacy::Container.where(
+            id: quotation.cargo.units.where(legacy_type: "Legacy::Container").select(:legacy_id)
+          )
+        )
       end
 
       attribute :cargo_items do |quotation|
-        CargoItemSerializer.new(Legacy::CargoItem.where(shipment_id: quotation.legacy_shipment_id))
+        CargoItemSerializer.new(
+          Legacy::CargoItem.where(
+            id: quotation.cargo.units.where(legacy_type: "Legacy::CargoItem").select(:legacy_id)
+          )
+        )
       end
 
       attribute :tenders do |quotation, params|

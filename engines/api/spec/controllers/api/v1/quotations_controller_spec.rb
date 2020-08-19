@@ -205,11 +205,14 @@ module Api
     describe 'GET #show' do
       before do
         FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
+        FactoryBot.create(:lcl_unit, cargo: cargo, legacy: cargo_item)
       end
 
-      context 'when origin and destinations are nexuses' do
-        let(:quotation) { Quotations::Quotation.last }
+      let(:quotation) { Quotations::Quotation.last }
+      let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
+      let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
 
+      context 'when origin and destinations are nexuses' do
         it 'renders origin and destination as nexus objects' do
           get :show, params: { organization_id: organization.id, id: quotation.id }
 
@@ -241,7 +244,6 @@ module Api
 
       context 'when cargo is lcl' do
         let(:quotation) { Quotations::Quotation.last }
-        let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
 
         it 'returns the cargo items' do
           get :show, params: { organization_id: organization.id, id: quotation.id }

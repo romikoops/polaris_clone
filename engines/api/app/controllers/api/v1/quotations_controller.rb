@@ -29,7 +29,6 @@ module Api
 
       def show
         decorated_quotation = QuotationDecorator.decorate(quotation)
-
         render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
       end
 
