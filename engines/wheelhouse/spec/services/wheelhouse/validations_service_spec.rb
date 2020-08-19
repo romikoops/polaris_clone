@@ -41,6 +41,8 @@ module Wheelhouse
       validator.errors
     end
 
+    before { Organizations::Organization.current_id = organization.id }
+
     describe '.perform' do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)

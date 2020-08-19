@@ -17,6 +17,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                       organization: organization)
   end
   let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
   let(:routes) do
     [
       OfferCalculator::Route.new(
@@ -47,6 +48,15 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       end
 
       context 'with success' do
+        before do
+          FactoryBot.create(:lcl_unit,
+            width_value: 0.990,
+            height_value: 0.990,
+            length_value: 0.990,
+            weight_value: 2_000,
+            cargo: cargo)
+        end
+
         it 'return the route detail hashes' do
           aggregate_failures do
             expect(results.length).to eq(1)
@@ -57,7 +67,12 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
       context 'with failure' do
         before do
-          shipment.cargo_items.first.update(payload_in_kg: 150_000)
+          FactoryBot.create(:lcl_unit,
+            width_value: 9.90,
+            height_value: 9.90,
+            length_value: 9.90,
+            weight_value: 150_000,
+            cargo: cargo)
         end
 
         it 'raises InvalidRoutes when the routes are invalid' do
@@ -69,7 +84,9 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
       context 'with failure (AggregatedCargo)' do
         before do
-          shipment.aggregated_cargo = FactoryBot.create(:legacy_aggregated_cargo, weight: 25_000)
+          FactoryBot.create(:aggregated_unit,
+            weight_value: 25_000,
+            cargo: cargo)
         end
 
         it 'raises InvalidRoutes when the routes are invalid' do
@@ -81,14 +98,15 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
       context 'with service specfic max dimensions (success)' do
         before do
-          FactoryBot.create(:legacy_cargo_item,
-                            width: 990,
-                            height: 990,
-                            length: 990,
-                            payload_in_kg: 10_000,
-                            chargeable_weight: 10_000,
-                            shipment: shipment)
-          FactoryBot.create(:legacy_max_dimensions_bundle,
+          FactoryBot.create(:lcl_unit,
+                            width_value: 9.90,
+                            height_value: 9.90,
+                            length_value: 9.90,
+                            weight_value: 10_000,
+                            cargo: cargo)
+          [true, false].each do |aggregated|
+            FactoryBot.create(:legacy_max_dimensions_bundle,
+                            aggregate: aggregated,
                             width: 1000,
                             height: 1000,
                             length: 1000,
@@ -98,6 +116,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
                             carrier_id: carrier.id,
                             mode_of_transport: 'ocean',
                             organization: organization)
+          end
         end
 
         it 'returns the valid routes' do
@@ -110,23 +129,25 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
       context 'with carrier specfic max dimensions (success)' do
         before do
-          FactoryBot.create(:legacy_cargo_item,
-                            width: 990,
-                            height: 990,
-                            length: 990,
-                            payload_in_kg: 10_000,
-                            chargeable_weight: 10_000,
-                            shipment: shipment)
-          FactoryBot.create(:legacy_max_dimensions_bundle,
-                            width: 1000,
-                            height: 1000,
-                            length: 1000,
-                            payload_in_kg: 1_000_000,
-                            chargeable_weight: 1_000_000,
-                            tenant_vehicle_id: nil,
-                            carrier_id: carrier.id,
-                            mode_of_transport: 'ocean',
-                            organization: organization)
+          FactoryBot.create(:lcl_unit,
+                            width_value: 9.90,
+                            height_value: 9.90,
+                            length_value: 9.90,
+                            weight_value: 10_000,
+                            cargo: cargo)
+          [true, false].each do |aggregated|
+            FactoryBot.create(:legacy_max_dimensions_bundle,
+              aggregate: aggregated,
+              width: 1000,
+              height: 1000,
+              length: 1000,
+              payload_in_kg: 1_000_000,
+              chargeable_weight: 1_000_000,
+              tenant_vehicle_id: nil,
+              carrier_id: carrier.id,
+              mode_of_transport: 'ocean',
+              organization: organization)
+          end
         end
 
         it 'returns the valid routes' do
@@ -139,24 +160,26 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
 
       context 'with route specfic max dimensions (success)' do
         before do
-          FactoryBot.create(:legacy_cargo_item,
-                            dimension_x: 990,
-                            dimension_z: 990,
-                            dimension_y: 990,
-                            payload_in_kg: 10_000,
-                            chargeable_weight: 10_000,
-                            shipment: shipment)
-          FactoryBot.create(:legacy_max_dimensions_bundle,
-                            dimension_x: 1000,
-                            dimension_z: 1000,
-                            dimension_y: 1000,
-                            payload_in_kg: 1_000_000,
-                            chargeable_weight: 1_000_000,
-                            tenant_vehicle_id: nil,
-                            carrier_id: nil,
-                            itinerary_id: itinerary.id,
-                            mode_of_transport: 'ocean',
-                            organization: organization)
+          FactoryBot.create(:lcl_unit,
+                            width_value: 9.90,
+                            height_value: 9.90,
+                            length_value: 9.90,
+                            weight_value: 10_000,
+                            cargo: cargo)
+          [true, false].each do |aggregated|
+            FactoryBot.create(:legacy_max_dimensions_bundle,
+              aggregate: aggregated,
+              width: 1000,
+              length: 1000,
+              height: 1000,
+              payload_in_kg: 1_000_000,
+              chargeable_weight: 1_000_000,
+              tenant_vehicle_id: nil,
+              carrier_id: nil,
+              itinerary_id: itinerary.id,
+              mode_of_transport: 'ocean',
+              organization: organization)
+          end
         end
 
         it 'returns the valid routes' do
@@ -169,72 +192,21 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
     end
 
     context 'when no max dimensions available' do
-      before { Legacy::MaxDimensionsBundle.destroy_all }
+      before do
+        FactoryBot.create(:lcl_unit,
+          width_value: 9.90,
+          height_value: 9.90,
+          length_value: 9.90,
+          weight_value: 10_000,
+          cargo: cargo)
+        Legacy::MaxDimensionsBundle.destroy_all
+      end
 
       it 'passes when no max dimensions exist' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results).to match_array(routes)
         end
-      end
-    end
-  end
-
-  describe '.target_max_dimension' do
-    let!(:klass) { described_class.new(shipment: shipment, quotation: quotation) }
-    let(:route) { routes.first }
-
-    context 'when non aggregate and mot ' do
-      let!(:target_mdb) {
-        FactoryBot.create(:legacy_max_dimensions_bundle,
-          organization: shipment.organization,
-          aggregate: false,
-          mode_of_transport: route.mode_of_transport)
-      }
-
-      it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: route, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)
-      end
-    end
-
-    context 'when  aggregate and mot ' do
-      let!(:target_mdb) {
-        FactoryBot.create(:legacy_max_dimensions_bundle,
-          organization: shipment.organization,
-          aggregate: true,
-          mode_of_transport: route.mode_of_transport)
-      }
-
-      it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: route, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
-      end
-    end
-
-    context 'when aggregate, mot and tenant_vehicle_id' do
-      let!(:target_mdb) {
-        FactoryBot.create(:legacy_max_dimensions_bundle,
-          organization: shipment.organization,
-          aggregate: true,
-          mode_of_transport: route.mode_of_transport,
-          tenant_vehicle_id: route.tenant_vehicle_id)
-      }
-
-      it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: route, aggregate: true, cargo_class: 'lcl')).to eq(target_mdb)
-      end
-    end
-
-    context 'when non aggregate, mot and tenant_vehicle_id' do
-      let!(:target_mdb) {
-        FactoryBot.create(:legacy_max_dimensions_bundle,
-          organization: shipment.organization,
-          aggregate: false,
-          mode_of_transport: route.mode_of_transport,
-          tenant_vehicle_id: route.tenant_vehicle_id)
-      }
-
-      it 'finds the corrrect max dimension for the mot' do
-        expect(klass.send(:target_max_dimension, route: route, aggregate: false, cargo_class: 'lcl')).to eq(target_mdb)
       end
     end
   end

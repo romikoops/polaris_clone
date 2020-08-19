@@ -74,8 +74,39 @@ RSpec.describe QuotedShipmentsService, type: :service do
       end
     end
 
+    context "with cargo" do
+      let(:shipment) do
+        FactoryBot.create(:complete_legacy_shipment,
+          itinerary: itinerary,
+          trip: trip,
+          organization: organization,
+          cargo_items: [],
+          with_breakdown: true,
+          with_tenders: true,
+          with_aggregated_cargo: true)
+      end
+
+      before do
+        FactoryBot.create(:legacy_cargo_item,
+          payload_in_kg: 600,
+          width: 0.15e3,
+          length: 0.14e3,
+          height: 0.16e3,
+          quantity: 3,
+          shipment: shipment)
+        service.perform
+      end
+
+      it "creates a quotation and shipments" do
+        aggregate_failures do
+          expect(quotation_shipments.length).to eq(shipment.charge_breakdowns.length)
+          expect(quotation_shipments.pluck(:trip_id)).to eq(shipment.charge_breakdowns.pluck(:trip_id))
+        end
+      end
+    end
+
     context "with agg cargo" do
-      let(:shipment) {
+      let(:shipment) do
         FactoryBot.create(:complete_legacy_shipment,
           itinerary: itinerary,
           trip: trip,
@@ -83,7 +114,7 @@ RSpec.describe QuotedShipmentsService, type: :service do
           with_breakdown: true,
           with_tenders: true,
           with_aggregated_cargo: true)
-      }
+      end
 
       before do
         service.perform

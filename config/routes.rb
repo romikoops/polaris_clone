@@ -272,6 +272,7 @@ end
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
+#
 #                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init {:subdomain=>"api"}
 #                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata {:subdomain=>"api"}
 #                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume {:subdomain=>"api"}

@@ -30,16 +30,32 @@ module Wheelhouse
     def cargo_validations
       return [] if cargo.units.empty?
 
-      validation_klass = "Wheelhouse::Validations::#{load_type.camelize}ValidationService".safe_constantize
+      validation_klass =
+        "OfferCalculator::Service::Validations::#{load_type.camelize}ValidationService".safe_constantize
       return [] if validation_klass.nil?
 
-      validation_klass.errors(
-        cargo: cargo,
-        organization: organization,
-        modes_of_transport: modes_of_transport,
-        tenant_vehicle_ids: tenant_vehicle_ids,
-        final: final
+      convert_error_class(
+        errors: validation_klass.errors(
+          cargo: cargo,
+          modes_of_transport: modes_of_transport,
+          itinerary_ids: itinerary_ids,
+          tenant_vehicle_ids: tenant_vehicle_ids,
+          final: final
+        )
       )
+    end
+
+    def convert_error_class(errors:)
+      errors.map do |error|
+        Wheelhouse::Validations::Error.new(
+          id: error.id,
+          message: error.message,
+          attribute: error.attribute,
+          section: error.section,
+          limit: error.limit,
+          code: error.code
+        )
+      end
     end
 
     def pricing_validations
@@ -72,6 +88,10 @@ module Wheelhouse
 
     def tenant_vehicle_ids
       @tenant_vehicle_ids ||= pricings.select(:tenant_vehicle_id)
+    end
+
+    def itinerary_ids
+      @itinerary_ids ||= pricings.select(:itinerary_id).distinct
     end
 
     def pricings
