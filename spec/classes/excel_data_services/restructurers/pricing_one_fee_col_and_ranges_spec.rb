@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
     end
 
     context 'when rate_basis is lower_case' do
-      let(:input_data) { build(:excel_data_parsed_lowcase_ratebasis_pricings_one_fee_col_and_ranges).first }
+      let(:input_data) { build(:excel_data_parsed_to_upcase_pricings_one_fee_col_and_ranges).first }
 
       it 'forces uppercase for rate_basis and restructures correctly' do
         expect(result['Pricing'].first).to match_array(output_data['Pricing'].first)

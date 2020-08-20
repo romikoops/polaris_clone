@@ -82,7 +82,7 @@ module ExcelDataServices
       def downcase_values(rows_data:, keys: [])
         rows_data.each do |row_data|
           keys.each do |key|
-            row_data[key].downcase! if row_data[key].respond_to?(:downcase!)
+            row_data[key] = row_data[key].to_s.downcase
           end
         end
       end
@@ -90,7 +90,7 @@ module ExcelDataServices
       def upcase_values(rows_data:, keys: [])
         rows_data.each do |row_data|
           keys.each do |key|
-            row_data[key].upcase! if row_data[key].respond_to?(:upcase!)
+            row_data[key] = row_data[key].to_s.upcase
           end
         end
       end

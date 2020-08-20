@@ -170,7 +170,7 @@ module ExcelDataServices
         group_of_row_data.map do |row_data| # rubocop:disable Metrics/BlockLength
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, organization: organization)
 
-          fee_code = row.fee_code.upcase
+          fee_code = row.fee_code
 
           pricing_detail_params =
             { organization_id: organization.id,

@@ -241,7 +241,7 @@ FactoryBot.define do
       end
     end
 
-    trait :lowcase_ratebasis_pricings_one_fee_col_and_ranges do
+    trait :to_upcase_pricings_one_fee_col_and_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -258,7 +258,7 @@ FactoryBot.define do
                rate_basis: 'PER_wm',
                range_min: nil,
                range_max: nil,
-               fee_code: 'BAS',
+               fee_code: 'bas',
                fee_name: 'Bas',
                currency: 'USD',
                fee_min: 17,
@@ -361,7 +361,7 @@ FactoryBot.define do
       end
     end
 
-    trait :low_case_rate_basis_pricings_dynamic_fee_cols_no_ranges do
+    trait :to_upcase_pricings_dynamic_fee_cols_no_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -890,7 +890,7 @@ FactoryBot.define do
       end
     end
 
-    trait :lowcase_ratebasis_pricings_one_fee_col_and_ranges do
+    trait :to_upcase_pricings_one_fee_col_and_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -907,7 +907,7 @@ FactoryBot.define do
                rate_basis: 'PER_wm',
                range_min: nil,
                range_max: nil,
-               fee_code: 'BAS',
+               fee_code: 'bas',
                fee_name: 'Bas',
                currency: 'USD',
                fee_min: 17,
@@ -918,7 +918,7 @@ FactoryBot.define do
       end
     end
 
-    trait :low_case_rate_basis_pricings_dynamic_fee_cols_no_ranges do
+    trait :to_upcase_pricings_dynamic_fee_cols_no_ranges do
       all_sheets_data do
         [{ sheet_name: 'Sheet1',
            rows_data:
@@ -950,8 +950,8 @@ FactoryBot.define do
       traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges]
     factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_remarks,
       traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges_with_remarks]
-    factory :excel_data_parsed_lowcase_ratebasis_pricings_one_fee_col_and_ranges,
-      traits: %i[pricing_one_fee_col_and_ranges lowcase_ratebasis_pricings_one_fee_col_and_ranges]
+    factory :excel_data_parsed_to_upcase_pricings_one_fee_col_and_ranges,
+      traits: %i[pricing_one_fee_col_and_ranges to_upcase_pricings_one_fee_col_and_ranges]
     factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges,
       traits: %i[pricing_dynamic_fee_cols_no_ranges correct_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_parsed_correct_pricings_dynamic_fee_cols_no_ranges_with_remarks,
@@ -965,8 +965,8 @@ FactoryBot.define do
     factory :excel_data_parsed_upcase_mot_margins, traits: %i[margins upcase_mot_margins]
     factory :excel_data_parsed_correct_max_dimensions, traits: %i[max_dimensions correct_max_dimensions]
     factory :hubs_missing_address_data, traits: %i[hubs_missing_address]
-    factory :excel_data_parsed_lowcase_ratebasis_pricings_dynamic_fee_cols_no_ranges,
-      traits: %i[pricing_dynamic_fee_cols_no_ranges low_case_rate_basis_pricings_dynamic_fee_cols_no_ranges]
+    factory :excel_data_parsed_to_upcase_pricings_dynamic_fee_cols_no_ranges,
+      traits: %i[pricing_dynamic_fee_cols_no_ranges to_upcase_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_parsed_upcase_mot_pricings_dynamic_fee_cols_no_ranges,
       traits: %i[pricing_dynamic_fee_cols_no_ranges up_case_mot_pricings_dynamic_fee_cols_no_ranges]
   end
