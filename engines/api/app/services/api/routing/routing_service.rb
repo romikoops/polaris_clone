@@ -109,6 +109,7 @@ module Api
         OpenStruct.new(
           latitude: lat.to_f,
           longitude: lng.to_f,
+          lat_lng_string: [lat, lng].join(','),
           get_zip_code: address.postal_code,
           city_name: address.city,
           country: OpenStruct.new(code: address.country_code)

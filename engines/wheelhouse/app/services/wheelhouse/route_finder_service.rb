@@ -69,6 +69,7 @@ module Wheelhouse
       OpenStruct.new(
         latitude: latitude.to_f,
         longitude: longitude.to_f,
+        lat_lng_string: [latitude, longitude].join(','),
         get_zip_code: address.postal_code,
         city_name: address.city,
         country: OpenStruct.new(code: address.country_code)
