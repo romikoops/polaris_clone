@@ -194,7 +194,7 @@ module Trucking
       end
 
       def distance_radius_limit
-        trucking_locations.order(distance: :desc).limit(1).first&.distance || 0
+        trucking_locations.where.not(distance: nil).order(distance: :desc).limit(1).first&.distance || 0
       end
       # Argument Errors
 

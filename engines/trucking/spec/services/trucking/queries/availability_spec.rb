@@ -163,6 +163,7 @@ RSpec.describe Trucking::Queries::Availability do
 
       before do
         FactoryBot.create(:lcl_pre_carriage_availability, hub: other_hub, query_type: query_type)
+        FactoryBot.create(:trucking_location, country_code: 'NL', distance: nil)
         FactoryBot.create(:trucking_trucking,
                             organization: organization,
                             hub: other_hub,
