@@ -50,6 +50,8 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
   end
 
   describe 'POST #upload' do
+    let(:perform_request) { post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id } }
+
     context 'with errors' do
       let(:errors_arr) do
         [{ row_no: 1, reason: 'A' },
@@ -59,20 +61,25 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
       end
       let(:error) { { has_errors: true, errors: errors_arr } }
 
+      let(:complete_email_job) { performed_jobs.find { |j| j[:args][0] == "UploadMailer" } }
+      let(:resulted_errors) { complete_email_job[:args][3]['result']['errors'].map { |err| err.except('_aj_symbol_keys') } }
+
       before do
-        allow(Legacy::File).to receive(:create!)
         excel_service = instance_double('ExcelDataServices::Loaders::Uploader')
         allow(ExcelDataServices::Loaders::Uploader).to receive(:new).and_return(excel_service)
         allow(excel_service).to receive(:perform).and_return(error)
+
+        allow(controller).to receive(:current_organization).and_return(organization)
       end
 
-      it 'returns error with messages when an error is raised' do
-        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id }
-        json_response = JSON.parse(response.body)
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(json_response.dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
+      it_behaves_like 'uploading request async'
+
+      it 'sends an email with the upload errors' do
+        perform_enqueued_jobs do
+          perform_request
         end
+
+        expect(resulted_errors).to eq(JSON.parse(errors_arr.to_json))
       end
     end
   end

@@ -90,30 +90,41 @@ RSpec.describe Admin::SchedulesController, type: :controller do
        { row_no: 4, reason: 'D' }]
     end
     let(:error) { { has_errors: true, errors: errors_arr } }
+    let(:complete_email_job) { performed_jobs.find { |j| j[:args][0] == "UploadMailer" } }
+    let(:resulted_errors) { complete_email_job[:args][3]['result']['errors'].map { |err| err.except('_aj_symbol_keys') } }
 
     before do
-      allow(Legacy::File).to receive(:create!)
       excel_data_service = instance_double('ExcelDataServices::Loaders::Uploader', perform: error)
       allow(ExcelDataServices::Loaders::Uploader).to receive(:new).and_return(excel_data_service)
+
+      allow(controller).to receive(:current_organization).and_return(organization)
     end
 
     describe 'POST #upload' do
-      it 'returns error with messages when an error is raised' do
-        post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, mot: 'ocean', load_type: 'cargo_item' }
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(JSON.parse(response.body).dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
+      let(:perform_request) { post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id } }
+
+      it_behaves_like 'uploading request async'
+
+      it 'sends an email with the upload errors' do
+        perform_enqueued_jobs do
+          perform_request
         end
+
+        expect(resulted_errors).to eq(JSON.parse(errors_arr.to_json))
       end
     end
 
     describe 'POST #generate_schedules_from_sheet' do
-      it 'returns error with messages when an error is raised' do
-        post :generate_schedules_from_sheet, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, mot: 'ocean', load_type: 'cargo_item' }
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(JSON.parse(response.body).dig('data', 'errors')).to eq(JSON.parse(errors_arr.to_json))
+      let(:perform_request) { post :generate_schedules_from_sheet, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, mot: 'ocean', load_type: 'cargo_item' } }
+
+      it_behaves_like 'uploading request async'
+
+      it 'sends an email with the upload errors' do
+        perform_enqueued_jobs do
+          perform_request
         end
+
+        expect(resulted_errors).to eq(JSON.parse(errors_arr.to_json))
       end
     end
   end

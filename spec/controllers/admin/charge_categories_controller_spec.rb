@@ -12,17 +12,9 @@ RSpec.describe Admin::ChargeCategoriesController, type: :controller do
   end
 
   describe 'POST #upload' do
-    before do
-      allow(Legacy::File).to receive(:create!)
-    end
+    let(:perform_request) { post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id } }
 
-    it 'returns error with messages when an error is raised' do
-      post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id }
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(json_response['data']).not_to be_empty
-      end
-    end
+    it_behaves_like 'uploading request async'
   end
 
   describe 'GET #download' do

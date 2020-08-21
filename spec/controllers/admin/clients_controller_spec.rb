@@ -120,27 +120,11 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe 'POST #agents' do
+    let(:perform_request) { post :agents, params: { organization_id: organization, file: file } }
     let(:uploader) { double(perform: nil) }
     let(:file) { fixture_file_upload('spec/fixtures/files/excel/dummy.xlsx') }
 
-    before do
-      allow(ExcelDataServices::Loaders::Uploader).to receive(:new).with(anything).and_return(uploader)
-    end
-
-    context 'with base pricing' do
-      before do
-        scope = ::OrganizationManager::ScopeService.new(target: ::Organizations::User.find_by(id: user), organization: ::Organizations::Organization.find_by(id: organization)).fetch
-        scope[:base_pricing] = true
-
-        allow(controller).to receive(:current_scope).and_return(scope)
-      end
-
-      it 'send the uploaded file to correct uploader' do
-        expect(ExcelDataServices::Loaders::Uploader).to receive(:new).with(anything).and_return(uploader)
-
-        post :agents, params: { organization_id: organization, file: file }
-      end
-    end
+    it_behaves_like 'uploading request async'
   end
 
   describe 'DELETE #destroy' do

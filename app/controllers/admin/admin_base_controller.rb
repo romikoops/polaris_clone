@@ -15,24 +15,13 @@ class Admin::AdminBaseController < ApplicationController
       file: params[:file]
     )
 
-    if params[:async]
-      UploaderJob.perform_later(document_id: document.id, options: {
-        user_id: options[:user]&.id,
-        group_id: options[:group_id],
-        applicable: options[:applicable]
-      })
-      response_handler({has_errors: false, async: true})
-    else
-      file = params[:file].tempfile
-      options = {
-        organization: current_organization,
-        file_or_path: file,
-        options: options.merge(document: document)
-      }
-      uploader = ExcelDataServices::Loaders::Uploader.new(options)
-
-      response_handler(uploader.perform)
-    end
+    ## Async Uploader
+    UploaderJob.perform_later(document_id: document.id, options: {
+      user_id: options[:user]&.id,
+      group_id: options[:group_id],
+      applicable: options[:applicable]
+    })
+    response_handler({has_errors: false, async: true})
   end
 
   def stop_index_json(stop:)
