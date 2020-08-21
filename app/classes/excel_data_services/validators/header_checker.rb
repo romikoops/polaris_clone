@@ -217,6 +217,11 @@ module ExcelDataServices
           alternative_names
         ].freeze
 
+        OPTIONAL_HUBS = %i[
+          terminal
+          terminal_code
+        ].freeze
+
         MAX_DIMENSIONS = %i[
           carrier
           service_level

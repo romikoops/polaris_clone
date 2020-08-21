@@ -32,7 +32,17 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates' },
          nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id },
          mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-         hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi', photo: nil, hub_code: 'AEAUH' } },
+         hub: {
+           organization_id: organization.id,
+           hub_type: 'ocean',
+           latitude: 24.806936,
+           longitude: 54.644405,
+           name: 'Abu Dhabi',
+           photo: nil,
+           terminal: "ABD",
+           terminal_code: "",
+           hub_code: 'AEAUH'
+         } },
        { original:
          { status: 'active',
            type: 'ocean',
@@ -147,6 +157,91 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           expect(stats.dig(:"legacy/addresses", :number_created)).to be(2)
           expect(hubs.where(hub_code: 'AUADL').count).to be(2)
           expect(Nexus.where(organization_id: organization.id, locode: 'AUADL').count).to be(1)
+        end
+      end
+    end
+
+    context "when uploading with terminals present" do
+      let(:data) do
+        [{ original:
+          { status: 'active',
+            type: 'ocean',
+            name: 'Abu Dhabi',
+            locode: 'AEAUH',
+            latitude: 24.806936,
+            longitude: 54.644405,
+            country: 'United Arab Emirates',
+            full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+            photo: nil,
+            free_out: false,
+            import_charges: true,
+            export_charges: false,
+            pre_carriage: false,
+            on_carriage: false,
+            alternative_names: nil,
+            terminal: "ABD",
+            terminal_code: "",
+            row_nr: 2 },
+           address:
+          { name: 'Abu Dhabi',
+            latitude: 24.806936,
+            longitude: 54.644405,
+            country: { name: 'United Arab Emirates' },
+            city: 'Abu Dhabi',
+            geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates' },
+           nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id },
+           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
+           hub: { organization_id: organization.id,
+                  hub_type: 'ocean',
+                  latitude: 24.806936,
+                  longitude: 54.644405,
+                  name: 'Abu Dhabi',
+                  photo: nil,
+                  hub_code: 'AEAUH',
+                  terminal: "ABD",
+                  terminal_code: ""} }]
+      end
+
+      it "creates the hub with name matching the combined terminal and name" do
+        stats = described_class.insert(organization: organization, data: data, options: {})
+        aggregate_failures do
+          expect(stats.dig(:"legacy/hubs", :number_created)).to be(1)
+          expect(Legacy::Hub.exists?(name: "Abu Dhabi - ABD")).to eq(true)
+        end
+      end
+    end
+
+    context "when inserting sheets with existing hubs (terminal/name) combination" do
+      before do
+        create(:hub,
+          name: 'Abu Dhabi - ABD',
+          hub_code: 'AUADL',
+          hub_type: 'ocean',
+          organization: organization,
+          address: create(:address, country: countries.first),
+          nexus: create(:nexus,
+                        name: 'ADL',
+                        organization: organization,
+                        locode: 'AUADL',
+                        country: countries.first))
+        create(:hub,
+          name: 'Abu Dhabi',
+          hub_code: 'AUADL',
+          hub_type: 'ocean',
+          organization: organization,
+          address: create(:address, country: countries.first),
+          nexus: create(:nexus,
+                        name: 'ADL',
+                        organization: organization,
+                        locode: 'AUADL',
+                        country: countries.first))
+      end
+
+      it "updates hub with the terminal/code combination, ignoring hubs with matching names" do
+        stats = described_class.insert(organization: organization, data: data, options: {})
+        aggregate_failures do
+          expect(stats.dig(:"legacy/hubs", :number_updated)).to be(2)
+          expect(Legacy::Hub.find_by(organization_id: organization.id, name: "Abu Dhabi - ABD").hub_code).to eq("AEAUH")
         end
       end
     end

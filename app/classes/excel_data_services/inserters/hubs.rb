@@ -3,6 +3,32 @@
 module ExcelDataServices
   module Inserters
     class Hubs < ExcelDataServices::Inserters::Base
+      NEXUS_ATTRIBUTES = %i[
+        name
+        latitude
+        longitude
+        photo
+        locode
+        country
+        organization_id
+      ].freeze
+
+      HUB_ATTRIBUTES = %i[
+        hub_type
+        latitude
+        longitude
+        hub_code
+        import_charges
+        export_charges
+        pre_carriage
+        on_carriage
+        free_out
+        nexus
+        photo
+        address
+        mandatory_charge
+      ].freeze
+
       def perform
         data.each do |params|
           mandatory_charge = find_mandatory_charge(params: params.dig(:mandatory_charge))
@@ -43,10 +69,20 @@ module ExcelDataServices
       def update_or_create_port_of_call(params:, type:)
         association, code_key = association_and_locode_key(type: type, mot: params[:hub_type])
         assocation = association.where(params.slice(:organization_id))
-        port_of_call = assocation.find_by(params.slice(code_key))
-        port_of_call ||= assocation.find_by(params.slice(:name))
-        port_of_call ||= assocation.new(params.slice(:name, code_key))
-        port_of_call.assign_attributes(params)
+        terminal = params[:terminal]
+        name_without_terminal = params[:name]
+
+        if terminal.present?
+          name = "#{name_without_terminal} - #{terminal}"
+          port_of_call = association.find_by(name: name)
+        else
+          name = name_without_terminal
+        end
+
+        port_of_call ||= assocation.find_by(params.slice(code_key)) ||
+          assocation.find_by(params.slice(:name)) ||
+          assocation.new(name: name)
+        port_of_call.assign_attributes(params.slice(*attributes_for(type: type)))
         add_stats(port_of_call, params[:row_nr])
         port_of_call.save
 
@@ -55,6 +91,15 @@ module ExcelDataServices
 
       def association_and_locode_key(type:, mot:)
         type == :nexus ? [Legacy::Nexus, :locode] : [Legacy::Hub.where(hub_type: mot), :hub_code]
+      end
+
+      def attributes_for(type:)
+        case type
+        when :hub
+          HUB_ATTRIBUTES
+        when :nexus
+          NEXUS_ATTRIBUTES
+        end
       end
     end
   end

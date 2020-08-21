@@ -5,7 +5,9 @@ module ExcelDataServices
     module TypeValidity
       class Hubs < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'locode': :locode
+          'locode': :locode,
+          'terminal': :optional_string,
+          'terminal_code': :optional_string
         }.freeze
       end
     end

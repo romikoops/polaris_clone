@@ -96,7 +96,9 @@ module ExcelDataServices
           latitude: row[:latitude],
           longitude: row[:longitude],
           name: row[:name],
-          hub_code: row[:locode]
+          hub_code: row[:locode],
+          terminal: row[:terminal],
+          terminal_code: row[:terminal_code]
         }
       end
 

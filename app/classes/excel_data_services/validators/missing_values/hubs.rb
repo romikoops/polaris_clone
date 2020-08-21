@@ -20,7 +20,9 @@ module ExcelDataServices
           hub_code: 'LOCODE',
           locode: 'LOCODE',
           geocoded_address: 'FULL ADDRESS',
-          city: 'CITY'
+          city: 'CITY',
+          terminal: 'TERMINAL',
+          terminal_code: 'TERMINAL CODE'
         }.freeze
 
         private

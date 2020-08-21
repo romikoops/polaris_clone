@@ -3004,7 +3004,17 @@ FactoryBot.define do
             geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates' },
           nexus: { name: 'Abu Dhabi', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id },
           mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true },
-          hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Abu Dhabi', photo: nil, hub_code: 'AEAUH' }
+          hub: {
+            organization_id: organization.id,
+            hub_type: 'ocean',
+            latitude: 24.806936,
+            longitude: 54.644405,
+            name: 'Abu Dhabi',
+            photo: nil,
+            terminal: 'ABD',
+            terminal_code: '',
+            hub_code: 'AEAUH'
+          }
         },
          {
            address:
@@ -3016,7 +3026,17 @@ FactoryBot.define do
              geocoded_address: '202 Victoria Square, Adelaide SA 5000, Australia' },
            nexus: { name: 'Adelaide', latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: 'AUADL', country: { name: 'Australia' }, organization_id: organization.id },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { organization_id: organization.id, hub_type: 'ocean', latitude: -34.9284989, longitude: 138.6007456, name: 'Adelaide', photo: nil, hub_code: 'AUADL' }
+           hub: {
+             organization_id: organization.id,
+             hub_type: 'ocean',
+             latitude: -34.9284989,
+             longitude: 138.6007456,
+             name: 'Adelaide',
+             photo: nil,
+             hub_code: 'AUADL',
+             terminal: 'ADL',
+             terminal_code: ''
+           }
          },
          {
            address:
@@ -3028,7 +3048,17 @@ FactoryBot.define do
              geocoded_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates' },
            nexus: { name: 'Sultan Lake', latitude: 24.806936, longitude: 54.644405, photo: nil, locode: 'AEAUH', country: { name: 'United Arab Emirates' }, organization_id: organization.id },
            mandatory_charge: { pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false },
-           hub: { organization_id: organization.id, hub_type: 'ocean', latitude: 24.806936, longitude: 54.644405, name: 'Sultan Lake', photo: nil, hub_code: 'AEAUH' }
+           hub: {
+             organization_id: organization.id,
+             hub_type: 'ocean',
+             latitude: 24.806936,
+             longitude: 54.644405,
+             name: 'Sultan Lake',
+             photo: nil,
+             terminal: 'STL',
+             terminal_code: '',
+             hub_code: 'AEAUH'
+           }
          }]
       end
     end

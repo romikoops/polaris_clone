@@ -749,6 +749,8 @@ FactoryBot.define do
            pre_carriage: nil,
            on_carriage: 'false',
            alternative_names: nil,
+           terminal: 'ABD',
+           terminal_code: '',
            row_nr: 2 },
          { status: 'active',
            type: 'ocean',
@@ -765,6 +767,8 @@ FactoryBot.define do
            pre_carriage: 'false',
            on_carriage: 'false',
            alternative_names: nil,
+           terminal: 'ABD',
+           terminal_code: '',
            row_nr: 3 }]
       end
     end
@@ -774,22 +778,25 @@ FactoryBot.define do
       all_sheets_data do
         [{
           sheet_name: 'Hubs',
-          rows_data:   [{ status: 'active',
-            type: 'OCEAN',
-            name: 'Abu Dhabi',
-            locode: 'AEAUH',
-            latitude: nil,
-            longitude: nil,
-            country: 'United Arab Emirates',
-            full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
-            photo: nil,
-            free_out: false,
-            import_charges: true,
-            export_charges: false,
-            pre_carriage: nil,
-            on_carriage: false,
-            alternative_names: nil,
-            row_nr: 2 }]
+          rows_data: [{ status: 'active',
+                        type: 'OCEAN',
+                        name: 'Abu Dhabi',
+                        locode: 'AEAUH',
+                        latitude: nil,
+                        longitude: nil,
+
+                        country: 'United Arab Emirates',
+                        full_address: 'Khalifa Port - Abu Dhabi - United Arab Emirates',
+                        photo: nil,
+                        free_out: false,
+                        import_charges: true,
+                        export_charges: false,
+                        pre_carriage: nil,
+                        on_carriage: false,
+                        alternative_names: nil,
+                        terminal: 'ABD',
+                        terminal_code: '',
+                        row_nr: 2 }]
         }]
       end
     end
