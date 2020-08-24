@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_17_063118) do
+ActiveRecord::Schema.define(version: 2020_08_20_163636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1229,6 +1229,7 @@ ActiveRecord::Schema.define(version: 2020_08_17_063118) do
     t.string "primary_color"
     t.string "secondary_color"
     t.datetime "updated_at", null: false
+    t.jsonb "websites", default: {}
     t.string "welcome_text"
     t.index ["organization_id"], name: "index_organizations_themes_on_organization_id", unique: true
   end

@@ -30,6 +30,7 @@ end
 #  phones                 :jsonb
 #  primary_color          :string
 #  secondary_color        :string
+#  websites               :jsonb
 #  welcome_text           :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

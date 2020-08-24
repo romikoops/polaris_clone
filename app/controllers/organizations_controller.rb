@@ -43,7 +43,8 @@ class OrganizationsController < ApplicationController
         auth_methods: auth_methods,
         name: theme.name,
         emails: theme.emails,
-        phones: theme.phones
+        phones: theme.phones,
+        websites: theme.websites
       )
       response_handler(tenant: response)
     else
