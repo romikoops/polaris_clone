@@ -32,16 +32,6 @@ RSpec.describe Pricings::Manipulator do
   let(:bas_charge_category) { FactoryBot.create(:bas_charge, organization: organization) }
   let(:baf_charge_category) { FactoryBot.create(:baf_charge, organization: organization) }
   let(:dates) { { start_date: schedules.first.etd, end_date: schedules.last.etd } }
-  let(:args) do
-    {
-      pricing: pricing,
-      dates: dates,
-      cargo_class_count: target_shipment.cargo_classes.count,
-      without_meta: true
-    }
-  end
-  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization) }
-  let(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, organization: organization) }
   let(:target_shipment) { lcl_shipment }
   let(:hub) { itinerary.hubs.first }
   let(:manipulated_results) { klass.perform }

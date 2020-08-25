@@ -14,7 +14,7 @@ module OfferCalculator
         delegate :total_weight, :height, :width, :length, :total_area, :total_volume, :id,
           :consolidated?, :stackable?, :stowage_factor, :lcl?, to: :cargo
         delegate :cargo_class, :load_type, :cbm_ratio, :load_meterage_ratio, :load_meterage_limit,
-          :section, :load_meterage_type, :type, :km, to: :object
+          :section, :load_meterage_type, :type, :km, :load_meterage_hard_limit, to: :object
 
         def initialize(cargo:, scope:, object:)
           @cargo = cargo
@@ -95,15 +95,24 @@ module OfferCalculator
         end
 
         def height_limit_violated
-          load_meterage_type == "height_limit" && cargo.height.value > load_meterage_limit
+          load_meterage_type == "height_limit" && check_load_meter_limit(amount: cargo.height.value)
         end
 
         def area_limit_violated
-          load_meterage_type == "area_limit" && cargo.total_area.value >= load_meterage_limit
+          load_meterage_type == "area_limit" && check_load_meter_limit(amount: cargo.total_area.value)
         end
 
         def consolidated_load_meterage_type
           scope.dig("consolidation", "trucking")&.key(true)
+        end
+
+        def check_load_meter_limit(amount:)
+          return false if load_meterage_limit.blank?
+
+          past_limit = amount >= load_meterage_limit
+          raise OfferCalculator::Errors::LoadMeterageExceeded if load_meterage_hard_limit && past_limit
+
+          past_limit
         end
       end
     end

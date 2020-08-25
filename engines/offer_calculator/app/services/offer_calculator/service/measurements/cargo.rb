@@ -60,7 +60,7 @@ module OfferCalculator
         end
 
         def consolidated_load_meterage
-          if load_meterage_limit && (total_area.value > load_meterage_limit || !stackable)
+          if check_load_meter_limit(amount: total_area.value) || !stackable?
             @stackability = false
 
             return children.sum(Measured::Weight.new(0, "kg"), &:trucking_chargeable_weight_by_area)
@@ -79,7 +79,7 @@ module OfferCalculator
           }
 
           total_load_meters = total_load_meterage_weight.value / load_meterage_ratio
-          if load_meterage_limit.present? && total_load_meters >= load_meterage_limit
+          if check_load_meter_limit(amount: total_load_meters)
             @stackability = false
             [total_load_meterage_weight, volumetric_weight].max
           else

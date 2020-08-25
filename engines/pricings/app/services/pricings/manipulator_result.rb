@@ -71,6 +71,10 @@ module Pricings
       result.dig("load_meterage", load_meterage_type)
     end
 
+    def load_meterage_hard_limit
+      result.dig("load_meterage", "hard_limit")
+    end
+
     def load_meterage_type
       return if result.dig("load_meterage").blank?
 

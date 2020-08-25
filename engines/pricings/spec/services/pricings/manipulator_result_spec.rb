@@ -74,7 +74,13 @@ RSpec.describe Pricings::ManipulatorResult do
 
   context "with trucking rates" do
     let(:hub) { FactoryBot.create(:legacy_hub, hub_type: "air") }
-    let(:original) { FactoryBot.create(:trucking_trucking, organization: organization, hub: hub) }
+    let(:load_meterage) { {ratio: 100, height_limit: 1.5, hard_limit: true} }
+    let(:original) do
+      FactoryBot.create(:trucking_trucking,
+        organization: organization,
+        hub: hub,
+        load_meterage: load_meterage)
+    end
 
     describe ".load_meterage_ratio" do
       it "returns the correct ratio" do
@@ -85,6 +91,12 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".load_meterage_limit" do
       it "returns the correct limit" do
         expect(instance.load_meterage_limit).to eq(original.load_meterage["height_limit"])
+      end
+    end
+
+    describe ".load_meterage_hard_limit" do
+      it "returns the correct hard_limit" do
+        expect(instance.load_meterage_hard_limit).to eq(original.load_meterage["hard_limit"])
       end
     end
 

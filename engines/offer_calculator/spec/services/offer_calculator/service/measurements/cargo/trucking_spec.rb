@@ -254,5 +254,28 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         end
       end
     end
+
+    context "with hard load meterage limit" do
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          quantity: 1,
+          weight_value: 200,
+          height_value: 1.4,
+          width_value: 1.2,
+          length_value: 0.8,
+          stackable: true)
+      end
+
+      let(:scope) { {'consolidation': {'trucking': {'load_meterage_only': true}}} }
+      let(:load_meterage) { {area_limit: 0.005, ratio: 1000, hard_limit: true} }
+      let(:cbm_ratio) { 250 }
+
+      it "returns the correct weight" do
+        aggregate_failures do
+          expect { measure.kg }.to raise_error { OfferCalculator::Errors::LoadMeterageExceeded }
+        end
+      end
+    end
   end
 end
