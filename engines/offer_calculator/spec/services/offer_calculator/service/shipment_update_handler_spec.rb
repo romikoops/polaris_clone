@@ -45,7 +45,7 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
   let(:invalid_cargo_item_attributes) do
     [
       {
-        "payload_in_kg" => 0,
+        "payload_in_kg" => -10,
         "total_volume" => 4.5,
         "total_weight" => 724.0,
         "width" => 0,
@@ -203,6 +203,25 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         )
 
         expect { agg_service.update_cargo_units }.to raise_error(OfferCalculator::Errors::InvalidCargoUnit)
+      end
+
+      context 'when Cargo::Creator fails' do
+        before do
+          cargo_double = instance_double('Cargo::Creator')
+          allow(cargo_double).to receive(:perform).and_raise(Cargo::Creator::InvalidCargo)
+          allow(Cargo::Creator).to receive(:new).and_return(cargo_double)
+        end
+
+        it "raises the proper error when Cargo::Creator fails" do
+          agg_service = described_class.new(
+            shipment: base_shipment,
+            params: port_to_port_params,
+            quotation: quotation,
+            wheelhouse: wheelhouse
+          )
+
+          expect { agg_service.update_cargo_units }.to raise_error(OfferCalculator::Errors::InvalidCargoUnit)
+        end
       end
     end
 

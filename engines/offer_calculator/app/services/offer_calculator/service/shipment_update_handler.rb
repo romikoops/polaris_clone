@@ -81,6 +81,8 @@ module OfferCalculator
         Cargo::Creator.new(legacy_shipment: @shipment, quotation: @quotation).perform if @quotation.save
       rescue ActiveRecord::RecordNotSaved
         raise OfferCalculator::Errors::InvalidCargoUnit
+      rescue Cargo::Creator::Failure
+        raise OfferCalculator::Errors::InvalidCargoUnit
       end
 
       def update_incoterm

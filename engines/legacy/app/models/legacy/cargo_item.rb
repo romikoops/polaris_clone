@@ -24,6 +24,10 @@ module Legacy
     before_validation :set_default_cargo_class!, on: :create
     before_validation :set_chargeable_weight!
 
+    validates :quantity, presence: true, numericality: {greater_than: 0}
+    validates :payload_in_kg, presence: true, numericality: {greater_than: 0}
+    validates :width, :length, :height, presence: true, numericality: {greater_than: 0}
+
     def self.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
       [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
     end

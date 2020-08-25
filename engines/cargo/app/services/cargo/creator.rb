@@ -2,6 +2,10 @@
 
 module Cargo
   class Creator
+    Failure = Class.new(StandardError)
+    InvalidCargo = Class.new(Failure)
+    EmptyCargo = Class.new(Failure)
+
     attr_reader :legacy_shipment, :quotation, :errors, :organization, :cargo
 
     LEGACY_CARGO_MAP = YAML.load_file(File.expand_path("../../../data/cargo.yaml", __dir__)).freeze
@@ -28,12 +32,10 @@ module Cargo
     def perform
       cargo.units = cargo_units
 
-      if cargo.units.empty?
-        @errors << "empty cargo"
-      else
-        cargo.save
-      end
-      self
+      raise EmptyCargo if cargo.units.empty?
+      raise InvalidCargo unless cargo.save
+
+      cargo
     end
 
     def shipment_total_goods_value

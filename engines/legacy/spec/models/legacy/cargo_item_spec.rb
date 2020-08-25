@@ -62,6 +62,14 @@ module Legacy
         expect(cargo.set_chargeable_weight!).to eq(200)
       end
     end
+
+    describe '.valid?' do
+      context 'with negative values' do
+        it 'is invalid' do
+          expect(FactoryBot.build(:legacy_cargo_item, payload_in_kg: -10)).not_to be_valid
+        end
+      end
+    end
   end
 end
 

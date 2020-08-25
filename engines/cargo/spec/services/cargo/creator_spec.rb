@@ -61,14 +61,25 @@ module Cargo
       context "when no cargo units" do
         before do
           allow(creator).to receive(:containers).and_return(Legacy::Container.none)
-          creator.perform
         end
 
         it "does not create cargo" do
           aggregate_failures do
+            expect { creator.perform }.to raise_error(Creator::EmptyCargo)
             expect(::Cargo::Cargo.count).to be_zero
-            expect(creator.errors).to be_present
           end
+        end
+      end
+
+      context "when invalid cargo" do
+        before do
+          shipment.containers.update_all(payload_in_kg: -10)
+        end
+
+        let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
+
+        it "does not create cargo" do
+          expect { creator.perform }.to raise_error(Creator::InvalidCargo)
         end
       end
     end
