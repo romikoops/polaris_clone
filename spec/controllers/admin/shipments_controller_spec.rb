@@ -215,7 +215,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
       it 'returns approves the document and returns it' do
         aggregate_failures do
-          expect(json.dig(:data, :status)).to eq('requested_by_unconfirmed_account')
+          expect(json.dig(:data, :status)).to eq('requested')
         end
       end
     end

@@ -3,6 +3,8 @@
 module Api
   module V1
     class QuotationSerializer < Api::V1::QuotationListSerializer
+      attribute :completed
+
       attribute :containers do |quotation|
         ContainerSerializer.new(
           Legacy::Container.where(

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "../../../../shared_contexts/complete_route_with_trucking.rb"
-require_relative "../../../../shared_contexts/basic_setup.rb"
 
 RSpec.describe OfferCalculator::Service::OfferSorter do
   include_context "complete_route_with_trucking"

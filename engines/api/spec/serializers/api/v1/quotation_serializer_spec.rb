@@ -30,6 +30,7 @@ module Api
 
     before do
       Organizations.current_id = organization.id
+      FactoryBot.create(:quotations_tender, quotation: quotation, load_type: load_type)
     end
 
     context "without a legacy shipment fcl" do

@@ -119,4 +119,23 @@ RSpec.shared_context "complete_route_with_trucking" do # rubocop:disable Metrics
         custom_truck_type: truck_type)
     ]
   end
+
+  before do
+    Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
+      "address_components" => [{"types" => ["premise"]}],
+      "address" => pickup_address.geocoded_address,
+      "city" => pickup_address.city,
+      "country" => pickup_address.country.name,
+      "country_code" => pickup_address.country.code,
+      "postal_code" => pickup_address.zip_code
+    ])
+    Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
+      "address_components" => [{"types" => ["premise"]}],
+      "address" => delivery_address.geocoded_address,
+      "city" => delivery_address.city,
+      "country" => delivery_address.country.name,
+      "country_code" => delivery_address.country.code,
+      "postal_code" => delivery_address.zip_code
+    ])
+  end
 end

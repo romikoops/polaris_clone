@@ -26,6 +26,7 @@ RSpec.describe ShippingTools do
   let(:hidden_args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
   let(:args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
   let(:tenant_vehicle) { create(:tenant_vehicle, organization: organization) }
+  let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let(:shipment) do
     create(:legacy_shipment,
            user: user,
@@ -34,8 +35,11 @@ RSpec.describe ShippingTools do
            origin_hub: origin_hub,
            destination_hub: destination_hub,
            origin_nexus: origin_hub&.nexus,
-           destination_nexus: destination_hub&.nexus)
+           destination_nexus: destination_hub&.nexus,
+           with_tenders: completed,
+           with_breakdown: completed)
   end
+  let(:completed) { false }
   let(:schedules) { [Legacy::Schedule.from_trip(trip)] }
   let(:tender_id) { SecureRandom.uuid }
   let(:params) do
@@ -230,7 +234,8 @@ RSpec.describe ShippingTools do
           quantity: 1,
           payload_in_kg: 12,
           dangerous_goods: false
-        }]
+        }],
+        async: false
       )
     end
     let(:params) do
@@ -272,79 +277,26 @@ RSpec.describe ShippingTools do
     end
 
     describe 'success cases' do
-      let(:mock_offer_calculator) do
-        instance_double('OfferCalculator::Calculator',
-                        shipment: shipment,
-                        detailed_schedules: [
-                          {
-                            quote: {
-                              total: { value: '1220.0', currency: 'USD' },
-                              name: 'Grand Total'
-                            },
-                            schedules: [
-                              {
-                                id: '71ad5e38-5e98-4f54-9007-d4a4a258b998',
-                                origin_hub: { name: origin_hub.name, id: origin_hub.id },
-                                destination_hub: { name: destination_hub.name, id: destination_hub.id },
-                                mode_of_transport: 'ocean',
-                                eta: Time.zone.today + 40,
-                                etd: Time.zone.today,
-                                closing_date: Time.zone.today + 20,
-                                vehicle_name: 'standard',
-                                trip_id: trip.id
-                              }
-                            ],
-                            meta: {
-                              load_type: 'container',
-                              mode_of_transport: 'ocean',
-                              name: 'Gothenburg - Shanghai',
-                              service_level: 'standard',
-                              origin_hub: origin_hub.as_json.with_indifferent_access,
-                              itinerary_id: itinerary.id,
-                              destination_hub: destination_hub.as_json.with_indifferent_access,
-                              service_level_count: 2,
-                              pricing_rate_data: {
-                                fcl_20: {
-                                  BAS: {
-                                    rate: '1220.0',
-                                    rate_basis: 'PER_CONTAINER',
-                                    currency: 'USD',
-                                    min: '1220.0'
-                                  },
-                                  total: {
-                                    value: '1220.0',
-                                    currency: 'USD'
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        ],
-                        hubs: {
-                          origin: [origin_hub],
-                          destination: [destination_hub]
-                        })
+      let(:mock_offer_calculator) { instance_double('OfferCalculator::Calculator') }
+      let(:mock_offer_results) do
+        instance_double('OfferCalculator::Results', shipment: shipment, quotation: quotation)
       end
-      let(:tender) {
-        FactoryBot.create(:quotations_tender,
-          origin_hub: origin_hub,
-          destination_hub: destination_hub)
-      }
+      let(:completed) { true }
       let(:result) { described_class.new.get_offers(params, user) }
 
       before do
-        create(:charge_breakdown, shipment: shipment, trip: trip, tender: tender)
         allow(OfferCalculator::Calculator).to receive(:new).and_return(mock_offer_calculator)
-        allow(mock_offer_calculator).to receive(:perform)
-        allow(QuotedShipmentsJob).to receive(:perform_later)
+        allow(mock_offer_calculator).to receive(:perform).and_return(mock_offer_results)
+        allow(OfferCalculator::QuotedShipmentsJob).to receive(:perform_later)
       end
 
       it 'returns the correct response including the cargo units' do
         aggregate_failures do
-          expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
-          expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
-          expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
-          expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+          expect(result[:shipment]).to eq(mock_offer_results.shipment)
+          expect(result[:quotationId]).to eq(quotation.id)
+          expect(result[:originHubs]).to be_present
+          expect(result[:destinationHubs]).to be_present
+          expect(result[:results]).to be_present
         end
       end
 
@@ -353,10 +305,11 @@ RSpec.describe ShippingTools do
           .update(content: { closed_quotation_tool: true, email_all_quotes: true })
 
         aggregate_failures do
-          expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
-          expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
-          expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
-          expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+          expect(result[:shipment]).to eq(mock_offer_results.shipment)
+          expect(result[:quotationId]).to eq(quotation.id)
+          expect(result[:originHubs]).to be_present
+          expect(result[:destinationHubs]).to be_present
+          expect(result[:results]).to be_present
         end
       end
 
@@ -370,10 +323,11 @@ RSpec.describe ShippingTools do
           Organizations::Scope.find_by(target_id: organization.id).update(content: { closed_quotation_tool: true })
 
           aggregate_failures do
-            expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
-            expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
-            expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
-            expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+            expect(result[:shipment]).to eq(mock_offer_results.shipment)
+            expect(result[:quotationId]).to eq(quotation.id)
+            expect(result[:originHubs]).to be_present
+            expect(result[:destinationHubs]).to be_present
+            expect(result[:results]).to be_present
           end
         end
       end
@@ -385,10 +339,11 @@ RSpec.describe ShippingTools do
 
         it 'returns the correct response including the cargo units for a quote setup with trucking' do
           aggregate_failures do
-            expect(result[:shipment]).to eq(mock_offer_calculator.shipment)
-            expect(result[:originHubs]).to eq(mock_offer_calculator.hubs[:origin])
-            expect(result[:destinationHubs]).to eq(mock_offer_calculator.hubs[:destination])
-            expect(result[:results]).to eq(mock_offer_calculator.detailed_schedules)
+            expect(result[:shipment]).to eq(mock_offer_results.shipment)
+            expect(result[:quotationId]).to eq(quotation.id)
+            expect(result[:originHubs]).to be_present
+            expect(result[:destinationHubs]).to be_present
+            expect(result[:results]).to be_present
           end
         end
       end

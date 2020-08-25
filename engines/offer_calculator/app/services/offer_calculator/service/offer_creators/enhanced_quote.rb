@@ -87,6 +87,8 @@ module OfferCalculator
         end
 
         def rate_info(charge:)
+          return {} if offer.blank?
+
           offer_charge = applicable_offer_charge(charge: charge)
 
           {

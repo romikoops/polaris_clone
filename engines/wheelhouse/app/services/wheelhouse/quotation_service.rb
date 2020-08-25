@@ -9,7 +9,7 @@ module Wheelhouse
     attr_reader :estimated, :organization
     include Wheelhouse::ErrorHandler
 
-    def initialize(organization:, quotation_details:, shipping_info:)
+    def initialize(organization:, quotation_details:, shipping_info:, async: false)
       @user_id = quotation_details[:user_id]
       @creator = quotation_details[:creator]
       @user = Organizations::User.find_by(id: @user_id)
@@ -19,18 +19,12 @@ module Wheelhouse
       @selected_date = quotation_details.fetch(:selected_date)
       @shipping_info = shipping_info.to_h.deep_symbolize_keys
       @organization = organization
+      @async = async
       @shipment = Legacy::Shipment.new(user_id: @user_id, load_type: @load_type, organization_id: @organization.id)
       @estimated = false
     end
 
     def result
-      params = ActionController::Parameters.new(shipment: shipping_params)
-      offer_calculator = OfferCalculator::Calculator.new(
-        shipment: @shipment,
-        params: params,
-        user: @user,
-        wheelhouse: true
-      )
       offer_calculator.perform
       offer_calculator.quotation
     rescue OfferCalculator::Errors::Failure => error
@@ -47,7 +41,17 @@ module Wheelhouse
 
     private
 
-    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination
+    def offer_calculator
+      @params ||= ActionController::Parameters.new(shipment: shipping_params, sandbox: nil, async: async)
+      @offer_calculator ||= OfferCalculator::Calculator.new(
+        shipment: @shipment,
+        params: @params,
+        user: @user,
+        wheelhouse: true
+      )
+    end
+
+    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination, :async
 
     def shipping_params
       {

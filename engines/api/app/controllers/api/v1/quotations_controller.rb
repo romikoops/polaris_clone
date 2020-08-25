@@ -18,18 +18,22 @@ module Api
 
       def create
         if validation.errors.present?
-          render json: ValidationErrorSerializer.new(validation.errors), status: 417
-        else
-          tenders = quotation_service.tenders
-          render json: TenderSerializer.new(tenders, params: { scope: current_scope })
+          return render json: ValidationErrorSerializer.new(validation.errors), status: 417
         end
+
+        decorated_quotation = QuotationDecorator.decorate(quotation_service.result)
+        render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
       rescue Wheelhouse::ApplicationError => e
         render json: { error: e.message }, status: 422
       end
 
       def show
+        handle_async_error if quotation.error_class.present?
+
         decorated_quotation = QuotationDecorator.decorate(quotation)
         render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
+      rescue OfferCalculator::Errors::Failure => e
+        render json: { error: e.message }, status: 422
       end
 
       def download
@@ -83,10 +87,11 @@ module Api
       end
 
       def quotation_service
-        Wheelhouse::QuotationService.new(
+        @quotation_service ||= Wheelhouse::QuotationService.new(
           organization: current_organization,
           quotation_details: quotation_details,
-          shipping_info: modified_shipment_params
+          shipping_info: modified_shipment_params,
+          async: async?
         )
       end
 
@@ -206,6 +211,14 @@ module Api
 
       def user
         Users::User.find_by(id: quotation_params[:user_id]) || current_user
+      end
+
+      def async?
+        params[:async]
+      end
+
+      def handle_async_error
+        raise quotation.error_class.constantize
       end
     end
   end

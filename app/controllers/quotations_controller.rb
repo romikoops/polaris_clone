@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 class QuotationsController < ApplicationController
+  include Wheelhouse::ErrorHandler
+
+  def show
+    quotation = Quotations::Quotation.find(params[:id])
+    raise quotation.error_class.constantize if quotation.error_class
+
+    response_handler(QuotationDecorator.new(quotation, context: {scope: current_scope}).legacy_json)
+  rescue OfferCalculator::Errors::Failure => e
+    handle_error(error: e)
+  end
+
   def download_pdf
     shipment = Shipment.find(params[:id])
     quotation = Quotation.find(shipment.quotation_id)

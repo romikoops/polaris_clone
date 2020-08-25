@@ -1542,6 +1542,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_163636) do
     t.datetime "created_at", null: false
     t.integer "delivery_address_id"
     t.integer "destination_nexus_id"
+    t.string "error_class"
     t.integer "legacy_shipment_id"
     t.bigint "legacy_user_id"
     t.uuid "organization_id"

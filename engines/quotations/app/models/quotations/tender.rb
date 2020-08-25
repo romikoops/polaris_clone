@@ -18,6 +18,7 @@ module Quotations
 
     delegate :mode_of_transport, to: :tenant_vehicle
     delegate :pickup_address, :delivery_address, :cargo, to: :quotation
+    delegate :valid_until, :trip, :cargo, to: :charge_breakdown
 
     validates :tenant_vehicle, uniqueness: {
       scope: %i[quotation_id pickup_tenant_vehicle delivery_tenant_vehicle itinerary_id]

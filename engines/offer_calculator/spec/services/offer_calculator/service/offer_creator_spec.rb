@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "../../../shared_contexts/full_offer.rb"
 
 RSpec.describe OfferCalculator::Service::OfferCreator do
   include_context "full_offer"
@@ -13,7 +12,8 @@ RSpec.describe OfferCalculator::Service::OfferCreator do
       shipment: shipment,
       quotation: quotation,
       offers: offers,
-      wheelhouse: wheelhouse
+      wheelhouse: wheelhouse,
+      async: false
     )
   end
 

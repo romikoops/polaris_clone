@@ -53,10 +53,6 @@ module Wheelhouse
       notes.pluck(:body)
     end
 
-    def uuid
-      SecureRandom.uuid
-    end
-
     def pickup_service
       pickup_tenant_vehicle&.name
     end

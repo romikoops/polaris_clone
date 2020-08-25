@@ -40,6 +40,7 @@ module Api
           ]
         end
       end
+      let(:async) { false }
       let(:cargo_items_attributes) { [] }
       let(:containers_attributes) { [] }
       let(:load_type) { 'container' }
@@ -58,7 +59,8 @@ module Api
             trucking_info: { pre_carriage: :pre },
             cargo_items_attributes: cargo_items_attributes,
             containers_attributes: containers_attributes
-          }
+          },
+          async: async
         }
       end
 
@@ -75,15 +77,15 @@ module Api
 
         context 'when client is provided' do
           it 'returns results successfully' do
-            post :create, params: params
+            post :create, params: params, as: :json
 
             expect(response).to be_successful
           end
 
           it 'returns 2 available tenders' do
-            post :create, params: params
+            post :create, params: params, as: :json
 
-            expect(response_data.count).to eq 2
+            expect(response_data.dig('attributes', 'tenders', 'data').count).to eq 2
           end
         end
 
@@ -95,9 +97,9 @@ module Api
           end
 
           it 'returns prices with default margins' do
-            post :create, params: params
+            post :create, params: params, as: :json
 
-            expect(response_data.count).to eq 2
+            expect(response_data.dig('attributes', 'tenders', 'data').count).to eq 2
           end
         end
 
@@ -184,10 +186,41 @@ module Api
           end
 
           it 'returns prices with default margins' do
+            post :create, params: params, as: :json
+            aggregate_failures do
+              expect(response.code).to eq '200'
+              expect(response_data.dig('attributes', 'tenders', 'data').count).to eq 2
+            end
+          end
+        end
+
+        context 'when async' do
+          let(:load_type) { 'cargo_item' }
+          let(:async) { true }
+          let(:cargo_items_attributes) do
+            [
+              {
+                'id' => SecureRandom.uuid,
+                'payload_in_kg' => 120,
+                'total_volume' => 0,
+                'total_weight' => 0,
+                'width' => 120,
+                'length' => 80,
+                'height' => 120,
+                'quantity' => 1,
+                'cargo_item_type_id' => pallet.id,
+                'dangerous_goods' => false,
+                'stackable' => true
+              }
+            ]
+          end
+          let(:expected_keys) { %w[selectedDate loadType user origin destination containers cargoItems tenders completed] }
+
+          it 'returns prices with default margins' do
             post :create, params: params
             aggregate_failures do
               expect(response.code).to eq '200'
-              expect(response_data.count).to eq 2
+              expect(response_data['attributes'].keys).to match_array(expected_keys)
             end
           end
         end
@@ -195,7 +228,7 @@ module Api
 
       context 'when no available schedules' do
         it 'returns no available schedules error' do
-          post :create, params: params
+          post :create, params: params, as: :json
 
           expect(response_error).to eq 'There are no departures for this timeframe.'
         end
@@ -211,6 +244,18 @@ module Api
       let(:quotation) { Quotations::Quotation.last }
       let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
       let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
+
+      context 'when async error has occurred ' do
+        let(:quotation) { FactoryBot.create(:quotations_quotation, error_class: "OfferCalculator::Errors::LoadMeterageExceeded") }
+
+        it 'renders the errors' do
+          get :show, params: { organization_id: organization.id, id: quotation.id }
+
+          aggregate_failures do
+            expect(response_error).to eq "OfferCalculator::Errors::LoadMeterageExceeded"
+          end
+        end
+      end
 
       context 'when origin and destinations are nexuses' do
         it 'renders origin and destination as nexus objects' do

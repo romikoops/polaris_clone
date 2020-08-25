@@ -93,43 +93,6 @@ RSpec.describe "Quotations" do
       }
 
       response "200", "successful operation" do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: {type: :string},
-                       type: {type: :string},
-                       attributes: {
-                         type: :object,
-                         properties: {
-                           carrier: {
-                             type: :string,
-                             nullable: true
-                           },
-                           destination: {type: :string},
-                           estimated: {type: :boolean},
-                           id: {type: :string},
-                           modeOfTransport: {type: :string},
-                           origin: {type: :string},
-                           quotationId: {type: :string},
-                           serviceLevel: {type: :string},
-                           total: {"$ref" => "#/components/schemas/money"},
-                           transitTime: {type: :number},
-                           transshipment: {type: :string}
-                         },
-                         required: %w[carrier destination estimated id
-                           modeOfTransport origin quotationId serviceLevel
-                           total transitTime transshipment]
-                       }
-                     }
-                   }
-                 }
-               },
-               required: ["data"]
-
         let(:quote) do
           {
             organization_id: organization.id,

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "../../../shared_contexts/complete_route_with_trucking.rb"
 
 RSpec.describe OfferCalculator::Calculator do
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
@@ -105,8 +104,8 @@ RSpec.describe OfferCalculator::Calculator do
       street_number: delivery_address.street_number
     }.with_indifferent_access
   end
-  let(:quotation) { Quotations::Quotation.first }
-  let(:service) { described_class.new(shipment: shipment, params: params, user: user) }
+  let(:quotation) { Quotations::Quotation.last }
+  let(:service) { described_class.new(shipment: shipment, params: params, user: user).perform }
 
   include_context "complete_route_with_trucking"
 
@@ -118,8 +117,37 @@ RSpec.describe OfferCalculator::Calculator do
   end
 
   describe ".perform" do
+    context "with calculator errors" do
+      let(:shipment_update_handler) { instance_double(OfferCalculator::Service::ShipmentUpdateHandler, update_trucking: nil, update_nexuses: nil) }
+
+      before do
+        allow(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:new).and_return(shipment_update_handler)
+        allow(shipment_update_handler).to receive(:update_trucking).and_raise(OfferCalculator::Errors::InvalidPickupAddress)
+      end
+
+      it "set the error class on the quotation" do
+        aggregate_failures do
+          expect { service }.to raise_error(OfferCalculator::Errors::InvalidPickupAddress)
+          expect(quotation.error_class).to eq("OfferCalculator::Errors::InvalidPickupAddress")
+        end
+      end
+    end
+
+    context "with offer creator errors" do
+      before do
+        allow(OfferCalculator::Service::OfferCreator).to receive(:offers).and_raise(OfferCalculator::Errors::OfferBuilder)
+      end
+
+      it "set the error class on the quotation" do
+        aggregate_failures do
+          expect { service }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+          expect(quotation.error_class).to eq("OfferCalculator::Errors::OfferBuilder")
+        end
+      end
+    end
+
     context "with single trucking Availability" do
-      let!(:results) { service.perform }
+      let!(:results) { service.detailed_schedules }
 
       it "perform a booking calulation" do
         aggregate_failures do
@@ -167,11 +195,10 @@ RSpec.describe OfferCalculator::Calculator do
             location: delivery_trucking_location,
             carriage: "on")
         end
-        service.perform
       end
 
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let(:legacy_results) { service.detailed_schedules }
+      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id],

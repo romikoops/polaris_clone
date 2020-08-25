@@ -351,6 +351,7 @@ PATH
   specs:
     imc-legacy (1)
       active_model_serializers
+      activejob-traffic_control
       activerecord-import
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)

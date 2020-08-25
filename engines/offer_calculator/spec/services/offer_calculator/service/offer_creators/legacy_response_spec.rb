@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "../../../../shared_contexts/full_offer.rb"
 
 RSpec.describe OfferCalculator::Service::OfferCreators::LegacyResponse do
   include_context "full_offer"

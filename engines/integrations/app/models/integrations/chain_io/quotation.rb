@@ -16,6 +16,7 @@ end
 #  id                   :uuid             not null, primary key
 #  billing              :integer          default("external")
 #  completed            :boolean          default(FALSE)
+#  error_class          :string
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

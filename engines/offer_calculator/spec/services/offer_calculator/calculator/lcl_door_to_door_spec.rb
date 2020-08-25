@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "../../../shared_contexts/complete_route_with_trucking.rb"
 
 RSpec.describe OfferCalculator::Calculator do
   let(:load_type) { "cargo_item" }
@@ -102,7 +101,7 @@ RSpec.describe OfferCalculator::Calculator do
     }.with_indifferent_access
   end
   let(:quotation) { Quotations::Quotation.first }
-  let(:service) { described_class.new(shipment: shipment, params: params, user: user) }
+  let(:service) { described_class.new(shipment: shipment, params: params, user: user).perform }
 
   include_context "complete_route_with_trucking"
 
@@ -116,9 +115,7 @@ RSpec.describe OfferCalculator::Calculator do
 
   describe ".perform" do
     context "with single trucking Availability" do
-      before { service.perform }
-
-      let(:legacy_results) { service.detailed_schedules }
+      let!(:legacy_results) { service.detailed_schedules }
 
       it "perform a booking calculation" do
         aggregate_failures do
@@ -166,11 +163,10 @@ RSpec.describe OfferCalculator::Calculator do
             location: delivery_trucking_location,
             carriage: "on")
         end
-        service.perform
       end
 
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let(:legacy_results) { service.detailed_schedules }
+      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id],
@@ -242,12 +238,11 @@ RSpec.describe OfferCalculator::Calculator do
               tenant_vehicle: tenant_vehicle_2)
           end
         end
-        service.perform
       end
 
       let!(:itinerary_2) { FactoryBot.create(:default_itinerary, organization: organization) }
       let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let(:legacy_results) { service.detailed_schedules }
+      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id, itinerary.id],

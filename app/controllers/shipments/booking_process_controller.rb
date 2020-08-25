@@ -11,7 +11,7 @@ class Shipments::BookingProcessController < ApplicationController
   def get_offers
     resp = ShippingTools.new.get_offers(params, organization_user)
     Skylight.instrument title: 'Serialize Results' do
-      resp = resp.to_json
+      resp = resp.to_json if params[:async].blank?
     end
     response_handler(resp)
   end

@@ -3,7 +3,6 @@
 module Api
   module V1
     class TenderSerializer < Api::ApplicationSerializer
-      set_id :uuid
       attributes %i[origin
                     destination
                     carrier

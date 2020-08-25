@@ -6,7 +6,7 @@ module Api
       attributes :selected_date
 
       attribute :load_type do |quotation|
-        quotation.tenders.first&.load_type
+        quotation.tenders.first&.load_type || quotation.shipment.load_type
       end
 
       attribute :user do |quotation|

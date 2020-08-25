@@ -30,6 +30,7 @@ FactoryBot.define do
       with_tenders { false }
       with_aggregated_cargo { false }
       custom_cargo_classes {}
+      completed { false }
     end
 
     trait :with_contacts do
@@ -93,6 +94,7 @@ FactoryBot.define do
                                       user: shipment.user,
                                       created_at: shipment.created_at,
                                       legacy_shipment: shipment,
+                                      completed: evaluator.completed,
                                       organization: shipment.organization)
       end
       if evaluator.with_aggregated_cargo
@@ -122,6 +124,7 @@ FactoryBot.define do
         with_full_breakdown { false }
         with_tenders { true }
         with_aggregated_cargo { false }
+        completed { true }
       end
 
       after(:create) do |shipment|

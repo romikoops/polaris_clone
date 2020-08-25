@@ -28,6 +28,21 @@ module OfferCalculator
             organization: shipment.organization
           ).fetch
         end
+
+        def update_shipment_meta(key:, value:)
+          shipment.meta[key] ||= {}
+          shipment.meta[key][tender.id] = value
+          shipment.save!
+        end
+
+        def pricing_ids
+          return shipment.meta.dig("pricing_ids", tender.id) if shipment.meta.dig("pricing_ids", tender.id).present?
+          return [] if offer.blank?
+
+          pricing_id_array = offer.pricing_ids(section_key: "cargo")
+          update_shipment_meta(key: "pricing_ids", value: pricing_id_array)
+          pricing_id_array
+        end
       end
     end
   end

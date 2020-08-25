@@ -3,30 +3,32 @@
 module OfferCalculator
   module Service
     class OfferCreator < Base
-      def self.offers(shipment:, quotation:, offers:, wheelhouse:)
+      def self.offers(shipment:, quotation:, offers:, wheelhouse:, async:)
         new(
           shipment: shipment,
           quotation: quotation,
           offers: offers,
-          wheelhouse: wheelhouse
+          wheelhouse: wheelhouse,
+          async: async
         ).perform
       end
 
-      def initialize(shipment:, quotation:, offers:, wheelhouse:)
+      def initialize(shipment:, quotation:, offers:, wheelhouse:, async:)
         @offers = offers
         @wheelhouse = wheelhouse
+        @async = async
         super(shipment: shipment, quotation: quotation)
       end
 
       def perform
-        offers.map do |offer|
-          handle_offer(offer: offer)
-        end
+        results = offers.map { |offer| handle_offer(offer: offer) }
+        quotation.update(completed: true)
+        results
       end
 
       private
 
-      attr_reader :offers, :shipment, :quotation, :wheelhouse
+      attr_reader :offers, :shipment, :quotation, :wheelhouse, :async
 
       def handle_offer(offer:)
         tender = OfferCalculator::Service::OfferCreators::Tender.tender(
@@ -50,7 +52,8 @@ module OfferCalculator
           offer: offer,
           charge_breakdown: legacy_charge_breakdown,
           meta: legacy_meta,
-          scope: scope
+          scope: scope,
+          async: async
         )
       rescue => e
         Raven.capture_exception(e)

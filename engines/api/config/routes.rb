@@ -18,6 +18,7 @@ Api::Engine.routes.draw do
         resources :charges, only: %i[show]
         resources :schedules, only: %i[show]
       end
+
       resources :tenders, only: :update
       resources :cargo_item_types, only: :index
       resources :trucking_availabilities, only: :index
@@ -41,25 +42,6 @@ Api::Engine.routes.draw do
       end
 
       resources :equipments, only: :index
-
-      resource :dashboard, controller: :dashboard, only: %i[show]
-
-      resources :quotations, only: %i[create show] do
-        post :download
-        resources :charges, only: %i[show]
-        resources :schedules, only: %i[show]
-      end
-
-      resources :tenders, only: :update
-      resources :cargo_item_types, only: :index
-      resources :groups, controller: :organizations_groups, only: :index
-      resources :locations do
-        collection do
-          get 'origins'
-          get 'destinations'
-        end
-      end
-
       resource :validation, only: [:create]
       resources :ports, only: %i[index]
 

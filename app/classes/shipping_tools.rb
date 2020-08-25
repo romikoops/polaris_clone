@@ -73,38 +73,20 @@ class ShippingTools
     shipment = Legacy::Shipment.find(params[:shipment_id]).tap do |tapped_shipment|
       tapped_shipment.update(user: current_user) if tapped_shipment.user_id.nil?
     end
-    offer_calculator = OfferCalculator::Calculator.new(shipment: shipment, params: params, user: current_user)
+    offer_calculator = OfferCalculator::Calculator.new(
+      shipment: shipment,
+      params: params,
+      user: current_user,
+      mailer: QuoteMailer
+    )
 
-    Skylight.instrument title: 'OfferCalculator Perform' do
+    offer_results = Skylight.instrument title: 'OfferCalculator Perform' do
       offer_calculator.perform
     end
 
-    offer_calculator.shipment.save!
-    cargo_units = if offer_calculator.shipment.lcl? && !offer_calculator.shipment.aggregated_cargo
-                    offer_calculator.shipment.cargo_units.map(&:with_cargo_type)
-                  elsif offer_calculator.shipment.lcl? && offer_calculator.shipment.aggregated_cargo
-                    [offer_calculator.shipment.aggregated_cargo]
-                  else
-                    offer_calculator.shipment.cargo_units
-                  end
-
-    quote = if scope['open_quotation_tool'] || scope['closed_quotation_tool']
-              QuotedShipmentsJob.perform_later(
-                shipment: offer_calculator.shipment,
-                send_email: scope.fetch(:email_all_quotes) && offer_calculator.shipment.billing == 'external'
-              )
-            end
-
-    {
-      shipment: offer_calculator.shipment,
-      results: offer_calculator.detailed_schedules,
-      originHubs: offer_calculator.hubs[:origin],
-      destinationHubs: offer_calculator.hubs[:destination],
-      cargoUnits: cargo_units,
-      aggregatedCargo: offer_calculator.shipment.aggregated_cargo
-    }
-  rescue OfferCalculator::Errors::Failure => error
-    handle_error(error: error)
+    QuotationDecorator.new(offer_results.quotation, context: {scope: scope}).legacy_json
+  rescue OfferCalculator::Errors::Failure => e
+    handle_error(error: e)
   rescue ArgumentError
     raise ApplicationError::InternalError
   end

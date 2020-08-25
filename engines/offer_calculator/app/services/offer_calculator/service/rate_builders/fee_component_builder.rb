@@ -49,10 +49,6 @@ module OfferCalculator
           result[:value]
         end
 
-        def value_currency
-          fee.dig("currency")
-        end
-
         def rate_basis
           @rate_basis ||= ::Pricings::RateBasis.get_internal_key(fee.fetch("rate_basis"))
         end

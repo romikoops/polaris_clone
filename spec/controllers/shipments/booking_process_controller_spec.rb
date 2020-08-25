@@ -14,6 +14,7 @@ RSpec.describe Shipments::BookingProcessController do
       with_breakdown: true,
       with_tenders: true)
   }
+  let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let(:shipments_shipment) { Shipment.find(shipment.id) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:trip) { create(:legacy_trip, itinerary: itinerary) }
@@ -45,6 +46,7 @@ RSpec.describe Shipments::BookingProcessController do
 
   context 'when sending admin emails on quote download' do
     let(:charge_breakdown) { shipment.charge_breakdowns.first }
+    let(:quoted_shipments_service) { instance_double(OfferCalculator::QuotedShipmentsService) }
     let(:quotes) do
       [
         {
@@ -60,7 +62,9 @@ RSpec.describe Shipments::BookingProcessController do
 
     before do
       quote_mailer = object_double('Mailer')
-      allow(QuotedShipmentsService).to receive(:initialize).and_return(double(perform: quote))
+      allow(quoted_shipments_service).to receive(:perform).and_return(quote)
+
+      allow(OfferCalculator::QuotedShipmentsService).to receive(:initialize).and_return(quoted_shipments_service)
       allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
       allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
       allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
@@ -105,8 +109,9 @@ RSpec.describe Shipments::BookingProcessController do
       )
     end
     let(:offer_calculator_double) { double(OfferCalculator::Calculator) }
-    let(:mock_offer_calculator) do
+    let(:mock_offer_results) do
       double(shipment: shipment,
+             quotation: quotation,
              detailed_schedules: [
                {
                  quote: {
@@ -157,10 +162,11 @@ RSpec.describe Shipments::BookingProcessController do
                destination: [destination_hub]
              })
     end
+    let(:json_result) { JSON.parse(json[:data]) }
 
     before do
-      allow(OfferCalculator::Calculator).to receive(:new).and_return(mock_offer_calculator)
-      allow(mock_offer_calculator).to receive(:perform)
+      allow(OfferCalculator::Calculator).to receive(:new).and_return(offer_calculator_double)
+      allow(offer_calculator_double).to receive(:perform).and_return(mock_offer_results)
     end
 
     it 'returns an http status of success' do
@@ -168,10 +174,9 @@ RSpec.describe Shipments::BookingProcessController do
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        json_response = JSON.parse(response.body)
-        data = JSON.parse(json_response['data'])
-        expect(data.dig('shipment', 'id')).to eq(shipment.id)
-        expect(data['results'].length).to eq(1)
+        expect(json_result.dig('shipment', 'id')).to eq(shipment.id)
+        expect(json_result.dig('quotationId')).to eq(quotation.id)
+        expect(json_result.dig('completed')).to be_falsy
       end
     end
   end

@@ -3,86 +3,53 @@
 require 'rails_helper'
 
 RSpec.describe Wheelhouse::RouteFinderService, type: :service do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  include_context 'complete_route_with_trucking'
+
+  let(:load_type) { 'cargo_item' }
+  let(:cargo_classes) { %w[lcl] }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let!(:ocean_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:gothenburg_port) { ocean_itinerary.origin_hub }
-  let(:shanghai_port) { ocean_itinerary.destination_hub }
+  let!(:origin_hub) { itinerary.origin_hub }
   let(:air_itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: 'air', organization: organization) }
-  let(:gothenburg_airport) { air_itinerary.origin_hub }
-  let(:shanghai_airport) { air_itinerary.destination_hub }
-  let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
-  let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
-  let(:origin_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: gothenburg_address.latitude, lng: gothenburg_address.longitude, delta: 0.4),
-                      country_code: 'se')
-  end
-  let(:destination_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: shanghai_address.latitude, lng: shanghai_address.longitude, delta: 0.4),
-                      country_code: 'cn')
-  end
-  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'SE') }
-  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
+  let(:destination_airport) { air_itinerary.destination_hub }
   let(:result) do
     described_class.routes(
       organization: organization,
       user: user,
       origin: origin,
       destination: destination,
-      load_type: 'cargo_item'
+      load_type: load_type
     )
   end
 
   before do
-    FactoryBot.create(:lcl_pre_carriage_availability, hub: gothenburg_port, query_type: :location)
-    FactoryBot.create(:lcl_on_carriage_availability, hub: shanghai_port, query_type: :location)
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: gothenburg_port, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: shanghai_port, carriage: 'on', location: destination_trucking_location)
-    Geocoder::Lookup::Test.add_stub([gothenburg_address.latitude, gothenburg_address.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => gothenburg_address.geocoded_address,
-                                      'city' => gothenburg_address.city,
-                                      'country' => gothenburg_address.country.name,
-                                      'country_code' => gothenburg_address.country.code,
-                                      'postal_code' => gothenburg_address.zip_code
-                                    ])
-    Geocoder::Lookup::Test.add_stub([shanghai_address.latitude, shanghai_address.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => shanghai_address.geocoded_address,
-                                      'city' => shanghai_address.city,
-                                      'country' => shanghai_address.country.name,
-                                      'country_code' => shanghai_address.country.code,
-                                      'postal_code' => shanghai_address.zip_code
-                                    ])
+    Organizations.current_id = organization.id
   end
 
   describe '.perform' do
     context 'with origin and destination nexus ids' do
-      let(:origin) { { nexus_id: gothenburg_port.nexus_id } }
-      let(:destination) { { nexus_id: shanghai_airport.nexus_id } }
+      let(:origin) { { nexus_id: origin_hub.nexus_id } }
+      let(:destination) { { nexus_id: destination_airport.nexus_id } }
 
       it 'returns the itineraries between the origin & destination' do
-        expect(result).to match_array([ocean_itinerary, air_itinerary])
+        expect(result).to match_array([itinerary, air_itinerary])
       end
     end
 
     context 'with origin nexus id and destination lat lng' do
-      let(:origin) { { id: gothenburg_port.nexus_id } }
-      let(:destination) { { latitude: shanghai_address.latitude, longitude: shanghai_address.longitude } }
+      let(:origin) { { nexus_id: origin_hub.nexus_id } }
+      let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
 
       it 'returns the itineraries between the origin & destination' do
-        expect(result).to match_array([ocean_itinerary])
+        expect(result).to match_array([itinerary])
       end
     end
 
     context 'with origin and destination lat/lngs' do
-      let(:origin) { { latitude: gothenburg_address.latitude, longitude: gothenburg_address.longitude } }
-      let(:destination) { { latitude: shanghai_address.latitude, longitude: shanghai_address.longitude } }
+      let(:origin) { { latitude: pickup_address.latitude, longitude: pickup_address.longitude } }
+      let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
 
       it 'returns the itineraries between the origin & destination' do
-        expect(result).to match_array([ocean_itinerary])
+        expect(result).to match_array([itinerary])
       end
     end
 

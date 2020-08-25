@@ -177,7 +177,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               attributes: {
                 type: :object,
                 properties: {
-                  slug: {type: :string},
+                  slug: {type: :string}
                 },
                 required: %w[slug]
               }
@@ -197,7 +197,7 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
                   firstName: {type: :string},
                   lastName: {type: :string},
                   phone: {type: :string},
-                  companyName: {type: :string},
+                  companyName: {type: :string}
                 },
                 required: %w[email organizationId firstName lastName phone companyName]
               }
@@ -220,6 +220,38 @@ RSpec.configure do |config| # rubocop:disable Metrics/BlockLength
               prev: {type: :string, nullable: true},
               next: {type: :string, nullable: true},
               last: {type: :string, nullable: true}
+            }
+          },
+          quotationTender: {
+            type: :object,
+            properties: {
+              data: {
+                type: :object,
+                properties: {
+                  id: {type: :string},
+                  type: {type: :string},
+                  attributes: {
+                    type: :object,
+                    properties: {
+                      charges: {
+                        type: :array,
+                        items: {"$ref" => "#/components/schemas/charge"}
+                      },
+                      route: {type: :string},
+                      vessel: {type: :string},
+                      id: {type: :string},
+                      pickupTruckType: {type: :string},
+                      deliveryTruckType: {type: :string},
+                      pickupCarrier: {type: :string},
+                      deliveryCarrier: {type: :string},
+                      pickupService: {type: :string},
+                      deliveryService: {type: :string},
+                      required: %w[id route]
+                    }
+                  }
+                },
+                required: %w[id route]
+              }
             }
           },
           widget: {

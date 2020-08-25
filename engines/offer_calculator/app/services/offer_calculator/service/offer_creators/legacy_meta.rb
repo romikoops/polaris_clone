@@ -3,19 +3,20 @@
 module OfferCalculator
   module Service
     module OfferCreators
-      class LegacyMeta
+      class LegacyMeta < OfferCalculator::Service::OfferCreators::Base
         def self.meta(offer:, shipment:, tender:, scope:)
           new(offer: offer, shipment: shipment, tender: tender, scope: scope).perform
         end
 
         def initialize(offer:, shipment:, tender:, scope:)
           @offer = offer
-          @shipment = shipment
           @tender = tender
           @scope = scope
+          super(shipment: shipment)
         end
 
         def perform
+          set_schedules_result
           {
             shipment_id: shipment.id,
             ocean_chargeable_weight: chargeable_weight,
@@ -59,29 +60,37 @@ module OfferCalculator
         end
 
         def schedule
-          @schedule ||= offer.schedules.first
+          @schedule ||= OfferCalculator::Schedule.from_trip(tender.trip)
         end
 
         def rate_overview
           return {} if scope.dig(:show_rate_overview).blank?
 
-          OfferCalculator::Service::OfferCreators::RateOverview.overview(offer: offer)
+          tender_rate_overview = shipment.meta.dig("rate_overviews", tender.id)
+          return tender_rate_overview if tender_rate_overview.present?
+
+          update_shipment_meta(key: "rate_overviews", value: rate_overview_hash)
+          rate_overview_hash
+        end
+
+        def rate_overview_hash
+          @rate_overview_hash ||= OfferCalculator::Service::OfferCreators::RateOverview.overview(offer: offer)
         end
 
         def itinerary
-          @itinerary ||= offer.itinerary
+          @itinerary ||= tender.itinerary
         end
 
         def freight_tenant_vehicle
-          @freight_tenant_vehicle ||= offer.tenant_vehicle(section_key: "cargo")
+          @freight_tenant_vehicle ||= tender.tenant_vehicle
         end
 
         def pre_carriage_tenant_vehicle
-          @pre_carriage_tenant_vehicle ||= offer.tenant_vehicle(section_key: "trucking_pre")
+          @pre_carriage_tenant_vehicle ||= tender.pickup_tenant_vehicle
         end
 
         def on_carriage_tenant_vehicle
-          @on_carriage_tenant_vehicle ||= offer.tenant_vehicle(section_key: "trucking_on")
+          @on_carriage_tenant_vehicle ||= tender.delivery_tenant_vehicle
         end
 
         def transit_time
@@ -89,16 +98,30 @@ module OfferCalculator
         end
 
         def valid_until
-          offer.valid_until
+          tender.valid_until
         end
 
         def chargeable_weight
-          offer.section(key: "cargo").first.fee.measures.kg.value
+          has_cargo_chargeable_weight = shipment.meta.dig("cargo_chargeable_weight", tender.id).present?
+          return shipment.meta.dig("cargo_chargeable_weight", tender.id) if has_cargo_chargeable_weight
+          return "" if offer.blank?
+
+          weight = offer.section(key: "cargo").first.fee.measures.kg.value
+          update_shipment_meta(key: "cargo_chargeable_weight", value: weight)
+          weight
+        end
+
+        def set_schedules_result
+          return shipment.meta.dig("schedule_ids", tender.id) if shipment.meta.dig("schedule_ids", tender.id).present?
+          return [] if offer.blank?
+
+          trip_ids = offer.schedules.map(&:trip_id)
+          update_shipment_meta(key: "schedule_ids", value: trip_ids)
         end
 
         def remark_notes
           note_association = Legacy::Note.where(organization_id: shipment.organization_id, remarks: true)
-          note_association.where(pricings_pricing_id: offer.pricing_ids(section_key: "cargo"))
+          note_association.where(pricings_pricing_id: pricing_ids)
             .or(note_association.where(target: shipment.organization))
             .pluck(:body)
         end
