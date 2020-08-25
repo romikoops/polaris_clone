@@ -4,7 +4,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   include ExcelTools
 
   def index
-    paginated_pricing_itineraries = handle_search.paginate(pagination_options)
+    paginated_pricing_itineraries = handle_itineraries_search.paginate(pagination_options)
     response_pricing_itineraries = paginated_pricing_itineraries.map do |itinerary|
       for_table_json(itinerary).deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
@@ -71,11 +71,15 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
   end
 
   def group
-    pricings = Pricings::Pricing.current.where(group_id: params[:id])
-
+    group_id = params[:id]
+    pricings = Pricings::Pricing.current.where(group_id: group_id)
+    paginated_pricings = handle_search(pricings).paginate(pagination_options)
     response_handler(
-      pricings: pricings.map(&:for_table_json),
-      group_id: params[:id]
+      pagination_options.merge(
+        pricings: paginated_pricings,
+        group_id: group_id,
+        numPages: paginated_pricings.total_pages
+      )
     )
   end
 
@@ -204,7 +208,19 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     Itinerary.find_by(args).nil?
   end
 
-  def handle_search
+  def handle_search(pricings)
+    relation_modifiers = {
+      expiration_date_desc: ->(query, param) { query.ordered_by(:expiration_date, param) },
+      load_type_desc: ->(query, param) { query.ordered_by(:load_type, param) },
+      effective_date_desc: ->(query, param) { query.ordered_by(:effective_date, param) },
+      cargo_class: ->(query, param) { query.where('cargo_class ILIKE ?', "%#{param}%") },
+      load_type: ->(query, param) { query.where('load_type ILIKE ?', "%#{param}%") }
+    }
+
+    check_modifiers(pricings, relation_modifiers)
+  end
+
+  def handle_itineraries_search
     itinerary_relation = ::Legacy::Itinerary.where(organization_id: current_organization.id)
 
     relation_modifiers = {
@@ -214,11 +230,16 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
       mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) }
     }
 
-    relation_modifiers.each do |key, lambd|
-      itinerary_relation = lambd.call(itinerary_relation, search_params[key]) if search_params[key]
+    check_modifiers(itinerary_relation, relation_modifiers)
+  end
+
+  def check_modifiers(relation, modifiers)
+    modifiers.each do |key, lambd|
+      search_params_key = search_params[key]
+      relation = lambd.call(relation, search_params_key) if search_params_key
     end
 
-    itinerary_relation
+    relation
   end
 
   def pagination_options
@@ -247,7 +268,12 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     params.permit(
       :mot,
       :mot_desc,
+      :load_type,
+      :cargo_class,
       :last_expiry_desc,
+      :expiration_date_desc,
+      :effective_date_desc,
+      :load_type_desc,
       :name,
       :name_desc,
       :page_size,

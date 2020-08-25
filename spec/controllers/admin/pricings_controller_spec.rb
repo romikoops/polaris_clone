@@ -187,26 +187,151 @@ RSpec.describe Admin::PricingsController, type: :controller do
     end
   end
 
+  describe 'GET #index' do
+    let!(:itinerary) do
+      FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id)
+    end
+
+    let!(:itinerary_two) do
+      FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
+    end
+
+    before do
+      FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id)
+      FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary_two.id)
+    end
+
+    context 'with base params' do
+      before do
+        post :index, params: { organization_id: organization.id }
+      end
+
+      it 'returns an http status of success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns the pricing data for the itineraries' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricingData').collect { |m| m['id'] }.sort).to eq(Legacy::Itinerary.pluck(:id).sort)
+      end
+    end
+
+    context 'with name search' do
+      before do
+        post :index, params: { organization_id: organization.id, name: 'gothenburg' }
+      end
+
+      it 'returns the pricing data for the searched itinerary' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricingData', 0, 'id')).to eq(itinerary.id)
+      end
+    end
+
+    context 'with name search with no matches' do
+      before do
+        post :index, params: { organization_id: organization.id, name: '' }
+      end
+
+      it 'returns the pricing data for the searched itinerary' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricingData').length).to eq(0)
+      end
+    end
+  end
+
   describe 'GET #group' do
     let(:group) do
       FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
         FactoryBot.create(:groups_membership, group: tapped_group, member: user)
       end
     end
-    let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, group_id: group.id) }
+    let!(:pricing) {
+      FactoryBot.create(:lcl_pricing,
+                        itinerary: itinerary,
+                        group_id: group.id,
+                        effective_date: DateTime.now - 30.days,
+                        expiration_date: DateTime.now + 30.days)
+    }
+    let!(:pricing_two) {
+      FactoryBot.create(:fcl_20_pricing,
+                        itinerary: itinerary,
+                        group_id: group.id,
+                        effective_date: DateTime.now - 29.days,
+                        expiration_date: DateTime.now + 31.days)
+    }
 
     before do
       FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
-      post :group, params: { id: group.id, organization_id: organization.id }
     end
 
-    it 'returns an http status of success' do
-      expect(response).to have_http_status(:success)
+    context 'with base params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id }
+      end
+
+      it 'returns an http status of success' do
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns the pricings for the group' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings').collect { |m| m['id'] }.sort).to eq(Pricings::Pricing.pluck(:id).sort)
+      end
     end
 
-    it 'returns the pricings for the group' do
-      json = JSON.parse(response.body)
-      expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing.id.to_s)
+    context 'with effective_date params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id, effective_date_desc: true }
+      end
+
+      it 'returns the pricings in descending order of effective date' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing_two.id.to_s)
+      end
+    end
+
+    context 'with expiration params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id, expiration_date_desc: true }
+      end
+
+      it 'returns the pricings in descending order of expiration date' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing_two.id.to_s)
+      end
+    end
+
+    context 'with load type params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id, load_type: 'cargo' }
+      end
+
+      it 'returns the pricings that match the load type query' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing.id.to_s)
+      end
+    end
+
+    context 'with load type desc params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id, load_type_desc: true }
+      end
+
+      it 'returns the pricings in descending order of load type alphabetically' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing_two.id.to_s)
+      end
+    end
+
+    context 'with cargo class params' do
+      before do
+        post :group, params: { id: group.id, organization_id: organization.id, cargo_class: 'fcl' }
+      end
+
+      it 'returns the pricings that match the cargo class query' do
+        json = JSON.parse(response.body)
+        expect(json.dig('data', 'pricings', 0, 'id')).to eq(pricing_two.id.to_s)
+      end
     end
   end
 
