@@ -65,8 +65,12 @@ module OfferCalculator
           ]
         end
 
+        def area_for_load_meters
+          stackable? ? stacked_area.value : total_area.value
+        end
+
         def trucking_chargeable_weight_by_area
-          ldm_value = total_area.value / LOAD_METERAGE_AREA_DIVISOR * load_meterage_ratio
+          ldm_value = area_for_load_meters / LOAD_METERAGE_AREA_DIVISOR * load_meterage_ratio
           Measured::Weight.new(ldm_value, "kg")
         end
 
@@ -79,7 +83,7 @@ module OfferCalculator
 
         def determine_singular_load_meterage_weight
           return volumetric_weight if load_meterage_ratio.blank?
-          return load_meterage_by_area unless stackable?
+          return load_meterage_by_area if !stackable? && area_limit_violated
 
           over_limit = height_limit_violated || area_limit_violated
 
@@ -99,7 +103,7 @@ module OfferCalculator
         end
 
         def area_limit_violated
-          load_meterage_type == "area_limit" && check_load_meter_limit(amount: cargo.total_area.value)
+          load_meterage_type == "area_limit" && check_load_meter_limit(amount: area_for_load_meters)
         end
 
         def consolidated_load_meterage_type
@@ -109,10 +113,20 @@ module OfferCalculator
         def check_load_meter_limit(amount:)
           return false if load_meterage_limit.blank?
 
-          past_limit = amount >= load_meterage_limit
+          past_limit = amount > load_meterage_limit
           raise OfferCalculator::Errors::LoadMeterageExceeded if load_meterage_hard_limit && past_limit
 
           past_limit
+        end
+
+        def cargo_children
+          cargo.units
+            .where(cargo_class: ::Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[cargo_class])
+            .map do |cargo_unit|
+            OfferCalculator::Service::Measurements::Unit.new(
+              cargo: cargo_unit, object: object, scope: scope
+            )
+          end
         end
       end
     end

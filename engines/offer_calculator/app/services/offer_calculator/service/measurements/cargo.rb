@@ -18,6 +18,10 @@ module OfferCalculator
           children.sum(Measured::Weight.new(0, "kg"), &:dynamic_volumetric_weight)
         end
 
+        def stacked_area
+          children.sum(Measured::Area.new(0, "m2"), &:stacked_area)
+        end
+
         def load_meterage_weight
           @load_meterage_weight ||=
             if consolidated?
@@ -30,17 +34,11 @@ module OfferCalculator
         def children
           @children ||=
             if scope.dig("consolidation", "cargo", "backend").present? && lcl?
-              [OfferCalculator::Service::Measurements::Unit.new(
+              [OfferCalculator::Service::Measurements::Consolidated.new(
                 cargo: cargo, object: object, scope: scope
               )]
             else
-              cargo.units
-                .where(cargo_class: ::Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[cargo_class])
-                .map do |cargo_unit|
-                OfferCalculator::Service::Measurements::Unit.new(
-                  cargo: cargo_unit, object: object, scope: scope
-                )
-              end
+              cargo_children
             end
         end
 
@@ -71,11 +69,7 @@ module OfferCalculator
 
         def comparative_load_meterage
           total_load_meterage_weight = children.sum(Measured::Weight.new(0, "kg")) { |child|
-            if child.stackable?
-              child.trucking_chargeable_weight_by_stacked_area
-            else
-              child.trucking_chargeable_weight_by_area
-            end
+            child.trucking_chargeable_weight_by_area
           }
 
           total_load_meters = total_load_meterage_weight.value / load_meterage_ratio

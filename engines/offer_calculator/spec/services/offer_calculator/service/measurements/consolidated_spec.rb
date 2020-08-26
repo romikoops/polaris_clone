@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe OfferCalculator::Service::Measurements::Cargo do
+RSpec.describe OfferCalculator::Service::Measurements::Consolidated do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
@@ -51,6 +51,13 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
           expect(measure.km.value).to eq(15)
         end
       end
+
+      it "calculates the correct dynamic_volumeteric_weight" do
+        aggregate_failures do
+          expect(measure.dynamic_volumetric_weight.value).to eq(1000)
+          expect(measure.dynamic_volumetric_weight.unit.name).to eq("kg")
+        end
+      end
     end
 
     context "with scope consolidation.trucking.calculation" do
@@ -80,6 +87,12 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
           expect(measure.kg.value).to eq(1056)
           expect(measure.kg.unit.name).to eq("kg")
           expect(measure.stackability).to eq(true)
+        end
+      end
+
+      it "returns the consolidation quantity" do
+        aggregate_failures do
+          expect(measure.quantity).to eq(1)
         end
       end
     end
@@ -165,7 +178,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
 
       it "returns the correct weight" do
         aggregate_failures do
-          expect(measure.kg.value.to_i).to eq(1677)
+          expect(measure.kg.value.to_i).to eq(234)
           expect(measure.kg.unit.name).to eq("kg")
           expect(measure.stackability).to eq(false)
         end
@@ -227,7 +240,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
 
       it "returns the correct weight" do
         aggregate_failures do
-          expect(measure.kg.value).to eq(1136)
+          expect(measure.kg.value).to eq(1056)
           expect(measure.kg.unit.name).to eq("kg")
           expect(measure.stackability).to eq(true)
         end
@@ -262,7 +275,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         aggregate_failures do
           expect(measure.kg.value).to eq(1200)
           expect(measure.kg.unit.name).to eq("kg")
-          expect(measure.stackability).to eq(false)
+          expect(measure.stackability).to eq(true)
         end
       end
     end

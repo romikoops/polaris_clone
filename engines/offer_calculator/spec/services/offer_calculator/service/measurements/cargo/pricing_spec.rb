@@ -103,7 +103,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
       it "returns the children for the object cargo class" do
         aggregate_failures do
           expect(children.length).to eq(1)
-          expect(children.first).to be_a(OfferCalculator::Service::Measurements::Unit)
+          expect(children.first).to be_a(OfferCalculator::Service::Measurements::Consolidated)
           expect(children.first.cargo).to eq(cargo)
         end
       end
@@ -127,6 +127,13 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
           expect(children.length).to eq(1)
           expect(children.first).to be_a(OfferCalculator::Service::Measurements::Unit)
           expect(children.first.cargo).to eq(target_cargo.units.first)
+        end
+      end
+
+      it "returns the total weight" do
+        aggregate_failures do
+          expect(measure.chargeable_weight.value).to eq(2000)
+          expect(measure.chargeable_weight.unit.name).to eq("kg")
         end
       end
     end
