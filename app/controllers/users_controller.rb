@@ -66,15 +66,17 @@ class UsersController < ApplicationController
     user = Authentication::User.new(new_user_params).tap do |u|
       u.type = 'Organizations::User'
     end
-    user.save!
-    create_or_update_profile(user: user)
+    ActiveRecord::Base.transaction do
+      user.save!
+      create_or_update_profile(user: user)
+    end
     response = generate_token_for(user: user, scope: 'public')
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
-  rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid => e
     response_handler(
       ApplicationError.new(
         http_code: 422,
-        message: user.errors
+        message: e.message
       )
     )
   end
@@ -89,15 +91,17 @@ class UsersController < ApplicationController
     user ||= Authentication::User.new(passwordless_new_user_params).tap do |org_user|
       org_user.type = 'Organizations::User'
     end
-    user.save!
-    create_or_update_profile(user: user)
-    response = generate_token_for(user: user, scope: 'public')
-    response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
-  rescue ActiveRecord::RecordInvalid
+    ActiveRecord::Base.transaction do
+      user.save!
+      create_or_update_profile(user: user)
+      response = generate_token_for(user: user, scope: 'public')
+      response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
+    end
+  rescue ActiveRecord::RecordInvalid => e
     response_handler(
       ApplicationError.new(
         http_code: 422,
-        message: user&.errors
+        message: e.message
       )
     )
   end

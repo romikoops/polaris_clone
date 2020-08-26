@@ -117,6 +117,21 @@ RSpec.describe Admin::ClientsController do
       post :create, params: { organization_id: organization, new_client: attributes.to_json }
       expect(Users::User.where(organization_id: organization.id).last.email).to eq(attributes['email'])
     end
+
+    context "when profile fails to create" do
+      before do
+        allow(Profiles::Profile).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it 'does not create a user without profile' do
+        post :create, params: { organization_id: organization, new_client: attributes.to_json }
+
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(Users::User.find_by(organization_id: organization.id, email: attributes[:email])).not_to be_present
+        end
+      end
+    end
   end
 
   describe 'POST #agents' do

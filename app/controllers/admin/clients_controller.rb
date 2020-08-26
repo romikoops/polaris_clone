@@ -43,14 +43,23 @@ class Admin::ClientsController < Admin::AdminBaseController
       organization_id: current_organization.id,
       type: 'Organizations::User'
     }
-    user = Authentication::User.create(user_data)
-    profile = Profiles::ProfileService.create_or_update_profile(user: user,
-                                                                first_name: json['firstName'],
-                                                                last_name: json['lastName'],
-                                                                company_name: json['companyName'],
-                                                                phone: json['phone'])
-    user_response = serialized_user(user: user)
-    response_handler(user_response)
+    ActiveRecord::Base.transaction do
+      user = Authentication::User.create!(user_data)
+      Profiles::ProfileService.create_or_update_profile(user: user,
+                                                        first_name: json['firstName'],
+                                                        last_name: json['lastName'],
+                                                        company_name: json['companyName'],
+                                                        phone: json['phone'])
+      user_response = serialized_user(user: user)
+      response_handler(user_response)
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    response_handler(
+      ApplicationError.new(
+        http_code: 422,
+        message: e.message
+      )
+    )
   end
 
   def agents

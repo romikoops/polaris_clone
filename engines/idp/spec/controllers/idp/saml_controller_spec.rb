@@ -127,6 +127,22 @@ RSpec.describe IDP::SamlController, type: :controller do
         end
       end
     end
+
+    context "when profile fails to create" do
+      let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
+      let(:attributes) { {firstName: "Test", lastName: "User", phoneNumber: 123_456_789, groups: [group.name]} }
+
+      before do
+        allow(one_login).to receive(:name_id).and_return(user.email)
+        allow(Profiles::Profile).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it "does not create a user without profile" do
+        post :consume, params: {id: organization.id, SAMLResponse: {}}
+
+        expect(response.location).to eq("https://test.host/login/saml/error")
+      end
+    end
   end
 
   context "with unsuccessful login" do

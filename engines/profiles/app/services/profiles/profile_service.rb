@@ -13,9 +13,9 @@ module Profiles
       }.compact
 
       if Profiles::Profile.with_deleted.exists?(user_id: user.id)
-        Profiles::Profile.with_deleted.find_by(user_id: user.id).update(profile_attributes)
+        Profiles::Profile.with_deleted.find_by(user_id: user.id).update!(profile_attributes)
       else
-        Profiles::Profile.create(profile_attributes.merge(user_id: user.id))
+        Profiles::Profile.create!(profile_attributes.merge(user_id: user.id))
       end
     end
 

@@ -15,15 +15,19 @@ module IDP
 
       user = user_from_saml(response: saml_response, organization_id: organization_id)
 
-      return error_redirect unless user.save
+      ActiveRecord::Base.transaction do
+        user.save!
+        create_or_update_user_profile(user: user, response: saml_response)
+      end
 
       attach_to_groups(user: user, group_names: saml_response.attributes[:groups])
-      create_or_update_user_profile(user: user, response: saml_response)
 
       token = generate_token_for(user: user, scope: "public")
       token_header = Doorkeeper::OAuth::TokenResponse.new(token).body
       response_params = token_header.merge(userId: user.id, organizationId: organization_id)
       redirect_to generate_url(url_string: "https://#{organization_domain}/login/saml/success", params: response_params)
+    rescue ActiveRecord::RecordInvalid
+      error_redirect
     end
 
     private
