@@ -23,8 +23,10 @@ module OfferCalculator
       return if charge_breakdown.destroyed?
 
       shipment.dup.tap do |cloned_shipment|
-        clone_cargo(cloned_shipment: cloned_shipment)
         update_cloned_shipment(cloned_shipment: cloned_shipment, charge_breakdown: charge_breakdown)
+        clone_cargo(cloned_shipment: cloned_shipment)
+        break unless cloned_shipment.valid?
+
         clone_charge_breakdown(cloned_shipment: cloned_shipment, charge_breakdown: charge_breakdown)
         cloned_shipment.save!
       end
