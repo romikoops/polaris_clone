@@ -37,9 +37,11 @@ module Imcr
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Flash
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_imc_platform_session'
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_imc_platform_session"
 
-    config.skylight.environments += ['review']
-    config.skylight.probes += %w(redis active_model_serializers)
+    config.skylight.environments << "review"
+    config.skylight.probes << "active_job"
+    config.skylight.probes << "active_model_serializers"
+    config.skylight.probes << "redis"
   end
 end

@@ -1,6 +1,7 @@
 ---
 # The authentication token for the application.
 authentication: aZ1SJe7hNWg4JWovj-jUmAEjMqituXcdjRdVawuQtpI
+enable_sidekiq: true
 
 # Ignore Heartbeat Endpoints
 ignored_endpoints:
