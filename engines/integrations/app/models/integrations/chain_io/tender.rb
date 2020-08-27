@@ -35,6 +35,7 @@ end
 #  amount_currency            :string
 #  carrier_name               :string
 #  delivery_truck_type        :string
+#  imc_reference              :string
 #  load_type                  :string
 #  name                       :string
 #  original_amount_cents      :integer

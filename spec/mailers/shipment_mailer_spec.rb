@@ -10,6 +10,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
   let!(:shipment) {
     create(:complete_legacy_shipment,
       user: user,
+      imc_reference: nil,
       organization: user.organization,
       with_breakdown: true,
       with_tenders: true,

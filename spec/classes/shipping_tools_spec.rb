@@ -41,7 +41,7 @@ RSpec.describe ShippingTools do
   end
   let(:completed) { false }
   let(:schedules) { [Legacy::Schedule.from_trip(trip)] }
-  let(:tender_id) { SecureRandom.uuid }
+  let(:tender_id) { FactoryBot.create(:quotations_tender).id }
   let(:params) do
     {
       shipment_id: shipment.id,
@@ -103,6 +103,16 @@ RSpec.describe ShippingTools do
     describe '.save_and_send_quotes' do
       it 'successfully calls the mailer and return the quote Document' do
         described_class.new.save_and_send_quotes(shipment, results, user.email)
+      end
+
+      context "when send_email_on_quote_email is set to true" do
+        let!(:scope) { create(:organizations_scope, target: shipment.user, content: { send_email_on_quote_email: true }) }
+
+        it "sends an email to the admin" do
+          expect {
+            described_class.new.save_and_send_quotes(shipment, results, user.email)
+          }.to have_enqueued_job(ActionMailer::DeliveryJob).at_least(2).times
+        end
       end
     end
   end
@@ -579,7 +589,7 @@ RSpec.describe ShippingTools do
         create(:legacy_file, shipment_id: lcl_shipment.id)
         stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
           .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-        FactoryBot.create(:charge_breakdown, shipment: lcl_shipment)
+        FactoryBot.create(:charge_breakdown, shipment: lcl_shipment, tender_id: tender_id)
       end
 
       it 'selects an offer for the shipment and assigns a reference number' do

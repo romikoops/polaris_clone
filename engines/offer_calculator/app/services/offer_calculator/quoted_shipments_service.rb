@@ -19,6 +19,11 @@ module OfferCalculator
       )
     end
 
+    def quotations_quotation
+      tender = shipment.charge_breakdowns.first.tender
+      Quotations::Quotation.find(tender.quotation_id)
+    end
+
     def reset_quotation
       clear_shipments
       quotation.save unless quotation.new_record?
@@ -64,7 +69,9 @@ module OfferCalculator
         tender_id: tender.id,
         quotation_id: quotation.id,
         itinerary_id: trip.itinerary_id,
-        desired_start_date: shipment.desired_start_date
+        desired_start_date: shipment.desired_start_date,
+        booking_placed_at: DateTime.now,
+        imc_reference: tender.imc_reference
       )
       handle_clone_dates(cloned_shipment: cloned_shipment, trip: trip)
     end
@@ -90,7 +97,7 @@ module OfferCalculator
     def send_admin_email
       return if mailer.blank? || send_email.blank?
 
-      mailer.constantize.quotation_admin_email(quotation, shipment).deliver_later
+      mailer.constantize.new_quotation_admin_email(quotation: quotations_quotation, shipment: shipment).deliver_later
     end
   end
 end

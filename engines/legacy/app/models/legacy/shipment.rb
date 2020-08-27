@@ -84,8 +84,7 @@ module Legacy
                 allow_nil: true
     end
 
-    before_validation :generate_imc_reference,
-                      :set_default_trucking,
+    before_validation :set_default_trucking,
                       :set_organization,
                       :set_distinct_id,
                       on: :create
@@ -325,24 +324,6 @@ module Legacy
 
     def set_default_planned_delivery_date
       self.planned_delivery_date ||= planned_eta + 10.days
-    end
-
-    def generate_imc_reference
-      now = DateTime.now
-      day_of_the_year = now.strftime('%d%m')
-      hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
-      year = now.year.to_s[-2..-1]
-      first_part = day_of_the_year + hour_as_letter + year
-      last_shipment_in_this_hour = Legacy::Shipment.with_deleted.where('imc_reference LIKE ?', first_part + '%').last
-      if last_shipment_in_this_hour
-        last_serial_number = last_shipment_in_this_hour.imc_reference[first_part.length..-1].to_i
-        new_serial_number = last_serial_number + 1
-        serial_code = new_serial_number.to_s.rjust(5, '0')
-      else
-        serial_code = '1'.rjust(5, '0')
-      end
-
-      self.imc_reference = first_part + serial_code
     end
 
     def find_contacts(type)

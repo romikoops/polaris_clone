@@ -7,10 +7,12 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:user) { create(:organizations_user, organization: organization) }
   let!(:profile) { FactoryBot.create(:profiles_profile, user: user, external_id: '1234') }
   let(:load_type) { 'container' }
+  let(:billing) { :external }
   let(:original_shipment) do
     create(:complete_legacy_shipment,
       :with_meta,
       user: user,
+      billing: billing,
       load_type: load_type,
       organization: organization,
       with_breakdown: true,
@@ -18,6 +20,7 @@ RSpec.describe QuoteMailer, type: :mailer do
       shipment.trip_id = nil
     end
   end
+  let(:quotations_quotation) { Quotations::Quotation.find_by(legacy_shipment_id: original_shipment.id) }
   let(:shipment_count) { 1 }
   let(:quotation) do
     create(:legacy_quotation, user: user, original_shipment_id: original_shipment.id, shipment_count: shipment_count)
@@ -36,18 +39,16 @@ RSpec.describe QuoteMailer, type: :mailer do
 
   describe 'quotation_email' do
     let(:mail) {
-      described_class.quotation_email(
-        original_shipment,
-        quotation.shipments,
-        user.email,
-        quotation,
-        quotation.shipments.pluck(:trip_id)
+      described_class.new_quotation_email(
+        quotation: quotations_quotation,
+        shipment: original_shipment,
+        email: user.email
       ).deliver_now
     }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq(
-        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference}"
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotations_quotation.tenders.first.imc_reference}"
       )
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@demo.com'])
@@ -56,22 +57,20 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
 
   describe 'quotation_email (internal)' do
+    let(:billing) { :internal }
     let(:quotation) do
-      create(:legacy_quotation, user: user, shipment_count: 1, original_shipment: original_shipment, billing: :internal)
+      create(:legacy_quotation, user: user, shipment_count: 1, original_shipment: original_shipment, billing: billing)
     end
     let(:mail) {
-      described_class.quotation_email(
-        original_shipment,
-        quotation.shipments,
-        user.email,
-        quotation,
-        quotation.shipments.pluck(:trip_id)
+      described_class.new_quotation_email(
+        quotation: quotations_quotation,
+        shipment: original_shipment,
+        email: user.email
       ).deliver_now
     }
-    let(:imc_reference) { quotation.shipments.pluck(:imc_reference).join(',') }
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference}")
+      expect(mail.subject).to eq("FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotations_quotation.tenders.first.imc_reference}")
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@demo.com'])
       expect(mail.to).to eq([Settings.emails.booking])
@@ -80,11 +79,11 @@ RSpec.describe QuoteMailer, type: :mailer do
 
   describe 'quotation_admin_ email for quotation' do
     let(:shipment_count) { 2 }
-    let(:mail) { described_class.quotation_admin_email(quotation).deliver_now }
+    let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq(
-        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference},..."
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotations_quotation.tenders.first.imc_reference}"
       )
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
@@ -94,13 +93,13 @@ RSpec.describe QuoteMailer, type: :mailer do
 
   describe 'quotation_admin_ email for quotation wihtout user' do
     let(:shipment_count) { 2 }
-    let(:mail) { described_class.quotation_admin_email(quotation).deliver_now }
+    let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
 
     before { allow(quotation).to receive(:user_id).and_return(nil) }
 
     it 'renders', :aggregate_failures do
       expect(mail.subject).to eq(
-        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotation.shipments.first.imc_reference},..."
+        "FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotations_quotation.tenders.first.imc_reference}"
       )
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
@@ -108,8 +107,8 @@ RSpec.describe QuoteMailer, type: :mailer do
     end
   end
 
-  describe 'quotation_admin_ email for shipment' do
-    let(:mail) { described_class.quotation_admin_email(nil, original_shipment).deliver_now }
+  describe 'quotation_admin_email for shipment' do
+    let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
 
     before do
       allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
@@ -119,7 +118,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     end
 
     it 'renders', :aggregate_failures do
-      expect(mail.subject).to eq("FCL Quotation: #{pickup_address.city} - #{delivery_address.city}, Refs: #{original_shipment.imc_reference}")
+      expect(mail.subject).to eq("FCL Quotation: #{pickup_address.city} - #{delivery_address.city}, Refs: #{quotations_quotation.tenders.first.imc_reference}")
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
       expect(mail.to).to eq(['sales.general@demo.com'])
@@ -127,7 +126,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   end
 
   describe 'quotation_admin_ email for shipment with liquid template' do
-    let(:mail) { described_class.quotation_admin_email(nil, original_shipment).deliver_now }
+    let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
     let(:load_type) { 'cargo_item' }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
@@ -138,7 +137,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     }
     let(:result) {
       [
-        original_shipment.imc_reference.to_s,
+        quotations_quotation.tenders.first.imc_reference,
         "[#{profile.external_id}]",
         original_shipment.origin_nexus.locode.to_s,
         original_shipment.destination_nexus.locode.to_s,
@@ -149,6 +148,7 @@ RSpec.describe QuoteMailer, type: :mailer do
 
     before do
       FactoryBot.create(:organizations_scope, target: organization, content: {email_subject_template: liquid})
+      original_shipment.update(imc_reference: quotations_quotation.tenders.first.imc_reference)
     end
 
     context 'with escaping' do
@@ -165,7 +165,7 @@ RSpec.describe QuoteMailer, type: :mailer do
       }
       let(:result) {
         [
-          "ItsMyCargo Quotation Tool: #{original_shipment.imc_reference} - from:",
+          "ItsMyCargo Quotation Tool: #{quotations_quotation.tenders.first.imc_reference} - from:",
           "'Gothenburg' \"SEGOT\" - to: 'Shanghai' \"CNS..."
         ].join(' ')
       }

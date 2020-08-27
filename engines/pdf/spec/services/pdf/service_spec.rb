@@ -19,6 +19,7 @@ RSpec.describe Pdf::Service do
       with_tenders: true,
       with_full_breakdown: true)
   end
+  let(:quotations_quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let(:pdf_service) { described_class.new(organization: organization, user: user) }
   let(:default_args) do
     {
@@ -56,7 +57,8 @@ RSpec.describe Pdf::Service do
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
-        pdf = klass.admin_quotation(quotation: nil, shipment: shipment)
+        pdf_tenders = klass.tenders(shipment: shipment, quotation: quotations_quotation, admin: false)
+        pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -105,7 +107,8 @@ RSpec.describe Pdf::Service do
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
-        pdf = klass.admin_quotation(quotation: nil, shipment: shipment)
+        pdf_tenders = klass.tenders(shipment: shipment, quotation: quotations_quotation, admin: false)
+        pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached

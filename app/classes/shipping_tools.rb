@@ -281,10 +281,12 @@ class ShippingTools
     shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
     shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
 
+    selected_tender = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['charge_trip_id']).tender
     shipment.user = current_user
     shipment.customs_credit = params[:customs_credit]
     shipment.trip_id = params[:schedule]['trip_id']
-    shipment.tender_id = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['charge_trip_id']).tender_id
+    shipment.tender_id = selected_tender.id
+    shipment.imc_reference = selected_tender.imc_reference
     shipment.meta['tender_id'] = shipment.tender_id
 
     copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
@@ -482,28 +484,38 @@ class ShippingTools
     tenders = shipment.charge_breakdowns
                       .where(trip_id: trip_ids)
                       .map(&:tender)
+    quotation = tenders.first.quotation
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     send_on_download = ::OrganizationManager::ScopeService.new(
       target: shipment.user
     ).fetch(:send_email_on_quote_download)
-    QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_download
-    Wheelhouse::PdfService.new(quotation_id: tenders.first.quotation_id, tender_ids: tenders.pluck(:id)).download
+    QuoteMailer.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later if send_on_download
+    Wheelhouse::PdfService.new(quotation_id: quotation.id, tender_ids: tenders.pluck(:id)).download
   end
 
   def save_and_send_quotes(shipment, schedules, email)
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
-    QuoteMailer.quotation_email(
-      shipment,
-      [],
-      email,
-      main_quote,
-      trip_ids
+    quotations_quotation = quotations_quotation(shipment: shipment)
+    QuoteMailer.new_quotation_email(
+      shipment: shipment,
+      quotation: quotations_quotation,
+      email: email
     ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
       target: shipment.user
     ).fetch(:send_email_on_quote_email)
-    QuoteMailer.quotation_admin_email(main_quote).deliver_later if send_on_quote
+    if send_on_quote
+      QuoteMailer.new_quotation_admin_email(
+        quotation: quotations_quotation,
+        shipment: shipment
+      ).deliver_later
+    end
+  end
+
+  def quotations_quotation(shipment:)
+    tender = shipment.charge_breakdowns.first.tender
+    Quotations::Quotation.find(tender.quotation_id)
   end
 
   def tenant_notification_email(user, shipment)

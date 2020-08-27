@@ -20,9 +20,35 @@ module Quotations
     delegate :pickup_address, :delivery_address, :cargo, to: :quotation
     delegate :valid_until, :trip, :cargo, to: :charge_breakdown
 
+    before_validation :generate_imc_reference, on: :create
+
     validates :tenant_vehicle, uniqueness: {
       scope: %i[quotation_id pickup_tenant_vehicle delivery_tenant_vehicle itinerary_id]
     }
+
+    private
+
+    def generate_imc_reference
+      first_part = imc_reference_timestamp
+      last_tender_in_this_hour = Quotations::Tender.where('imc_reference LIKE ?', first_part + '%').last
+      if last_tender_in_this_hour
+        last_serial_number = last_tender_in_this_hour.imc_reference[first_part.length..-1].to_i
+        new_serial_number = last_serial_number + 1
+        serial_code = new_serial_number.to_s.rjust(5, '0')
+      else
+        serial_code = '1'.rjust(5, '0')
+      end
+
+      self.imc_reference = first_part + serial_code
+    end
+
+    def imc_reference_timestamp
+      now = DateTime.now
+      day_of_the_year = now.strftime('%d%m')
+      hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
+      year = now.year.to_s[-2..-1]
+      day_of_the_year + hour_as_letter + year
+    end
   end
 end
 
@@ -35,6 +61,7 @@ end
 #  amount_currency            :string
 #  carrier_name               :string
 #  delivery_truck_type        :string
+#  imc_reference              :string
 #  load_type                  :string
 #  name                       :string
 #  original_amount_cents      :integer

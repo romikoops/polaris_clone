@@ -27,7 +27,7 @@ module OfferCalculator
       before do
         mailer = class_double("QuoteMailer").as_stubbed_const(transfer_nested_constants: true)
         message_delivery = instance_double(ActionMailer::MessageDelivery)
-        allow(mailer).to receive(:quotation_admin_email).and_return(message_delivery)
+        allow(mailer).to receive(:new_quotation_admin_email).and_return(message_delivery)
         allow(message_delivery).to receive(:deliver_later)
       end
 

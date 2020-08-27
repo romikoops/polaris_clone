@@ -18,6 +18,7 @@ module Pdf
       selected_offer: nil
     )
       logo = Base64.encode64(@theme.large_logo.download) if @theme.large_logo.attached?
+
       pdf = Pdf::Handler.new(
         layout: 'pdfs/simple.pdf.html.erb',
         margin: { top: 10, bottom: 5, left: 8, right: 8 },
@@ -69,26 +70,21 @@ module Pdf
       )
     end
 
-    def admin_quotation(quotation: nil, shipment: nil)
-      existing_document = existing_document(quotation: quotation, shipment: shipment, type: 'quotation')
+    def admin_quotation(quotation:, shipment:, pdf_tenders:)
+      existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
 
-      object = quotation || shipment
-      shipments = quotation ? quotation.shipments : [shipment]
-      shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
-      quotation = quotation
-      quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
-      note_remarks = get_note_remarks(quotes.first['trip_id'])
+      note_remarks = get_note_remarks(pdf_tenders.first['trip_id'])
       file = generate_quote_pdf(
         shipment: shipment,
-        shipments: shipments,
-        quotes: quotes,
+        shipments: [shipment],
+        quotes: pdf_tenders,
         quotation: quotation,
         note_remarks: note_remarks
       )
       return nil if file.nil?
 
-      create_file(object: object, shipments: shipments, file: file, user: user)
+      create_file(object: shipment, shipments: [shipment], file: file, user: user)
     end
 
     def wheelhouse_quotation(shipment:, tender_ids:)
@@ -165,6 +161,19 @@ module Pdf
       end
     end
 
+    def tenders(shipment:, quotation:, admin: false)
+      quotation.tenders.map do |tender|
+        breakdown = tender.charge_breakdown
+
+        offer_manipulation_block(
+          charge_breakdown: breakdown,
+          shipment: shipment,
+          trip: breakdown.trip,
+          admin: admin
+        )
+      end
+    end
+
     def offer_manipulation_block(charge_breakdown:, shipment:, trip: nil, admin: false)
       tender = charge_breakdown.tender
       offer_merge_data(tender: tender, shipment: shipment).merge(
@@ -190,6 +199,23 @@ module Pdf
       return nil if file.nil?
 
       create_file(object: quotation, file: file, user: user)
+    end
+
+    def tenders_pdf(quotation:, shipment:, pdf_tenders:)
+      existing_document = existing_document(shipment: shipment, type: 'quotation')
+      return existing_document if existing_document
+
+      note_remarks = get_note_remarks(pdf_tenders.first['trip_id'])
+      file = generate_quote_pdf(
+        shipment: shipment,
+        shipments: [shipment],
+        quotes: pdf_tenders,
+        quotation: quotation,
+        note_remarks: note_remarks
+      )
+      return nil if file.nil?
+
+      create_file(object: shipment, file: file, user: user)
     end
 
     def shipment_pdf(shipment:)
@@ -249,6 +275,7 @@ module Pdf
         service_level: tender.tenant_vehicle.name,
         total: tender.amount.format(symbol: tender.amount.currency.to_s + ' '),
         transshipment: tender.itinerary.transshipment,
+        imc_reference: tender.imc_reference,
         transit_time: ::Legacy::TransitTime.find_by(
           tenant_vehicle: tender.tenant_vehicle,
           itinerary: tender.itinerary
@@ -270,7 +297,6 @@ module Pdf
 
     def shipment_merge_data(shipment:)
       {
-        imc_reference: shipment.imc_reference,
         shipment_id: shipment.id
       }
     end
