@@ -80,9 +80,45 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
         FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
       end
 
-      it "returns the one pricing" do
+      it "returns the no pricings" do
         aggregate_failures do
           expect(results).to be_a(ActiveRecord::Relation)
+          expect(results.count).to eq(0)
+        end
+      end
+    end
+
+    context "when only two pricings available on one itinerary (groups & dedicated_only)" do
+      before do
+        FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, group_id: group.id, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+        FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+      end
+
+      it "returns the two pricings" do
+        aggregate_failures do
+          expect(results.count).to eq(2)
+        end
+      end
+    end
+
+    context "when only multiple cargo classes and pricings from differnet groups" do
+      let(:other_group) do
+        FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+          FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+        end
+      end
+      let(:load_type) { "container" }
+
+      before do
+        allow(shipment).to receive(:cargo_classes).and_return(["fcl_20", "fcl_40"])
+        FactoryBot.create(:fcl_20_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+        FactoryBot.create(:fcl_40_pricing, itinerary: itinerary_1, organization: organization, group_id: other_group.id, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+      end
+
+      it "returns no pricings" do
+        aggregate_failures do
           expect(results.count).to eq(0)
         end
       end

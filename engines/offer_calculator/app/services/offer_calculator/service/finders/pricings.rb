@@ -18,7 +18,9 @@ module OfferCalculator
               tenant_vehicle_id: tenant_vehicle_id,
               cargo_class: cargo_classes
             )
-            target_group = hierarchy.find { |group| pricings.where(group_id: group.id).count == cargo_classes.length }
+            target_group = hierarchy.find { |group|
+              pricings.where(group_id: group.id).pluck(:cargo_class).to_set == cargo_classes.to_set
+            }
             next if scope[:dedicated_pricings_only] && target_group.nil?
 
             pricings.where(group_id: target_group&.id).ids

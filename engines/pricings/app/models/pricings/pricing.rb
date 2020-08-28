@@ -36,7 +36,7 @@ module Pricings
 
     before_validation :set_validity
 
-    scope :current, -> { where('expiration_date > ?', 7.days.ago) }
+    scope :current, -> { where('validity @> CURRENT_DATE') }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
     scope :for_load_type, (lambda do |load_type|
