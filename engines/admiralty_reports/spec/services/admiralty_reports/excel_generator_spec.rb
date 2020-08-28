@@ -29,7 +29,7 @@ module AdmiraltyReports
 
       before do
         ::Organizations.current_id = organization.id
-        FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        FactoryBot.create(:companies_company, :with_member, name: 'company', organization: organization, member: user)
       end
 
       context 'when custom fields are not specified' do
@@ -37,9 +37,9 @@ module AdmiraltyReports
 
         let(:expected_headers) { ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status'] }
 
-        let(:expected_shipment) { [shipment.organization.slug, Date.new(2020, 2, 1), 'imc@imc.com', nil, 'accepted'] }
+        let(:expected_shipment) { [shipment.organization.slug, Date.new(2020, 2, 1), 'imc@imc.com', 'company', 'accepted'] }
 
-        let(:expected_quotation) { [quotation.organization.slug , Date.new(2020, 2, 1), 'imc@imc.com', nil, nil] }
+        let(:expected_quotation) { [quotation.organization.slug, Date.new(2020, 2, 1), 'imc@imc.com', 'company', nil] }
 
         let(:generated_file) { Roo::Excelx.new(subject.to_stream) }
 

@@ -15,7 +15,7 @@ module AdmiraltyReports
         ::Organizations.current_id = organization.id
         FactoryBot.create(:quotations_quotation, organization: organization, updated_at: updated_date, created_at: created_date, user: user)
         FactoryBot.create(:organizations_scope, target: organization, content: { open_quotation_tool: true })
-        FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        FactoryBot.create(:companies_company, :with_member, name: 'company', organization: organization, member: user)
       end
 
       let(:expected_stat) do
@@ -23,7 +23,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '2 days',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ company_name: nil,
+          data_per_agent: [{ company_name: 'company',
                              count: 1,
                              email: 'test@test.com' }]
         } }
@@ -45,7 +45,7 @@ module AdmiraltyReports
         ::Organizations.current_id = organization.id
         FactoryBot.create(:legacy_shipment, user: user, organization: organization, updated_at: updated_date, created_at: created_date, status: 'confirmed')
         FactoryBot.create(:organizations_scope, target: organization, content: { open_quotation_tool: false })
-        FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        FactoryBot.create(:companies_company, :with_member, name: 'company', organization: organization, member: user)
       end
 
       let(:expected_stat) do
@@ -53,7 +53,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '2 days',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ company_name: nil,
+          data_per_agent: [{ company_name: 'company',
                              count: 1,
                              email: 'test@test.com' }]
         } }
@@ -76,7 +76,7 @@ module AdmiraltyReports
         legacy_shipment = FactoryBot.create(:legacy_shipment, user: user, organization: organization, updated_at: legacy_quotations_updated_date, created_at: legacy_quotations_created_date, status: 'confirmed')
         FactoryBot.create(:legacy_quotation, user: user, updated_at: legacy_quotations_updated_date, created_at: legacy_quotations_created_date, original_shipment_id: legacy_shipment.id)
         FactoryBot.create(:organizations_scope, target: organization, content: { open_quotation_tool: true })
-        FactoryBot.create(:companies_company, :with_member, organization: organization, member: user)
+        FactoryBot.create(:companies_company, :with_member, name: 'company', organization: organization, member: user)
       end
 
       let(:expected_stat) do
@@ -84,7 +84,7 @@ module AdmiraltyReports
           combined_data: { avg_time_for_booking_process: '1 day',
                            n_individual_agents: 1,
                            n_shipments: 1 },
-          data_per_agent: [{ company_name: nil,
+          data_per_agent: [{ company_name: 'company',
                              count: 1,
                              email: 'test@test.com' }]
         } }

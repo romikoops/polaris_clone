@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :companies_company, class: 'Companies::Company' do
     association :organization, factory: :organizations_organization
+    sequence(:name) { |n| "company#{n}" }
     sequence(:vat_number) { |n| "DE-VATNUMBER#{n}" }
     trait :with_member do
       transient do

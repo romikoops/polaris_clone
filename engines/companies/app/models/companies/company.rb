@@ -9,6 +9,8 @@ module Companies
     has_one :country, through: :address, class_name: "Legacy::Country"
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
 
+    validates :name, uniqueness: {scope: :organization_id}
+
     pg_search_scope :name_search, against: %i[name], using: {
       tsearch: {prefix: true}
     }
