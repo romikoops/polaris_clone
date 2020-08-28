@@ -74,7 +74,7 @@ RSpec.describe Pricings::ManipulatorResult do
 
   context "with trucking rates" do
     let(:hub) { FactoryBot.create(:legacy_hub, hub_type: "air") }
-    let(:load_meterage) { {ratio: 100, height_limit: 1.5, hard_limit: true} }
+    let(:load_meterage) { {ratio: 100, height_limit: 1.5, hard_limit: true, stacking: true} }
     let(:original) do
       FactoryBot.create(:trucking_trucking,
         organization: organization,
@@ -97,6 +97,12 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".load_meterage_hard_limit" do
       it "returns the correct hard_limit" do
         expect(instance.load_meterage_hard_limit).to eq(original.load_meterage["hard_limit"])
+      end
+    end
+
+    describe ".load_meterage_stacking" do
+      it "returns the correct stacking" do
+        expect(instance.load_meterage_stacking).to eq(original.load_meterage["stacking"])
       end
     end
 

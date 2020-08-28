@@ -113,7 +113,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
       end
 
       let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
-      let(:load_meterage) { {ratio: 1000, ldm_limit: 48_000} }
+      let(:load_meterage) { {ratio: 1000, ldm_limit: 48_000, stacking: true} }
       let(:cbm_ratio) { 200 }
 
       it "returns the correct weight" do
@@ -127,6 +127,53 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
       it "calculates the correct area" do
         aggregate_failures do
           expect(measure.area_for_load_meters).to eq(0.4275)
+        end
+      end
+    end
+
+    context "with  scope consolidation.trucking.comparative" do
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          quantity: 45,
+          weight_value: 30.0 / 45.0,
+          height_value: 0.15,
+          width_value: 0.1,
+          length_value: 0.2,
+          stackable: true)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          quantity: 15,
+          weight_value: 36.0 / 15.0,
+          height_value: 0.25,
+          width_value: 0.3,
+          length_value: 0.3,
+          stackable: true)
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          quantity: 32,
+          weight_value: 168.0 / 32.0,
+          height_value: 0.2,
+          width_value: 0.25,
+          length_value: 0.25,
+          stackable: true)
+      end
+
+      let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
+      let(:load_meterage) { {ratio: 1000, ldm_limit: 48_000, stacking: false} }
+      let(:cbm_ratio) { 200 }
+
+      it "returns the correct weight" do
+        aggregate_failures do
+          expect(measure.kg.value).to eq(234.015)
+          expect(measure.kg.unit.name).to eq("kg")
+          expect(measure.stackability).to eq(true)
+        end
+      end
+
+      it "calculates the correct area" do
+        aggregate_failures do
+          expect(measure.area_for_load_meters).to eq(4.25)
         end
       end
     end

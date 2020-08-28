@@ -75,10 +75,14 @@ module Pricings
       result.dig("load_meterage", "hard_limit")
     end
 
+    def load_meterage_stacking
+      result.dig("load_meterage", "stacking")
+    end
+
     def load_meterage_type
       return if result.dig("load_meterage").blank?
 
-      result.dig("load_meterage").except("ratio").entries.find { |entry| entry.second.present? }&.first
+      result.dig("load_meterage").except("ratio", "stacking").entries.find { |entry| entry.second.present? }&.first
     end
 
     def distance

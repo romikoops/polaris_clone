@@ -126,7 +126,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Consolidated do
       end
 
       let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
-      let(:load_meterage) { {ratio: 1000, ldm_limit: 48_000} }
+      let(:load_meterage) { {ratio: 1000, ldm_limit: 48_000, stacking: true} }
       let(:cbm_ratio) { 200 }
 
       it "returns the correct weight" do

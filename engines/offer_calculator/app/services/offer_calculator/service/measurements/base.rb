@@ -14,7 +14,7 @@ module OfferCalculator
         delegate :total_weight, :height, :width, :length, :total_area, :total_volume, :id,
           :consolidated?, :stackable?, :stowage_factor, :lcl?, to: :cargo
         delegate :cargo_class, :load_type, :cbm_ratio, :load_meterage_ratio, :load_meterage_limit,
-          :section, :load_meterage_type, :type, :km, :load_meterage_hard_limit, to: :object
+          :section, :load_meterage_type, :type, :km, :load_meterage_hard_limit, :load_meterage_stacking, to: :object
 
         def initialize(cargo:, scope:, object:)
           @cargo = cargo
@@ -66,7 +66,7 @@ module OfferCalculator
         end
 
         def area_for_load_meters
-          stackable? ? stacked_area.value : total_area.value
+          stackable? && load_meterage_stacking ? stacked_area.value : total_area.value
         end
 
         def trucking_chargeable_weight_by_area
