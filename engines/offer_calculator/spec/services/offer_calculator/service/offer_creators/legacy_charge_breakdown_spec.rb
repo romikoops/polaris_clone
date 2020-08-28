@@ -15,6 +15,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyChargeBreakdown do
         expect(charge_breakdown).to be_a(Legacy::ChargeBreakdown)
         expect(charge_breakdown).to be_valid
         expect(charge_breakdown.charges.where(detail_level: 3).count).to eq(offer.charges.length)
+        expect(charge_breakdown.grand_total.price.money).to eq(tender.amount)
       end
     end
   end

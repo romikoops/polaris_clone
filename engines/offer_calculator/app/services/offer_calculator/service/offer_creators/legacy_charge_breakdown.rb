@@ -48,7 +48,7 @@ module OfferCalculator
             charge_breakdown: charge_breakdown,
             price: Legacy::Price.create(
               currency: currency,
-              value: offer.total.exchange_to(currency).cents / 100.0
+              value: tender.amount
             )
           )
         end
