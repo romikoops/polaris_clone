@@ -4,10 +4,11 @@ module ExcelDataServices
   module Validators
     module TypeValidity
       module TypeValidators
-        class InternalValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
+        class OptionalNumericValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
           def valid_types_with_values
             {
-              String => ->(obj) { ['X', 'x', ''].include?(obj) },
+              Float => ->(_obj) { true },
+              Integer => ->(_obj) { true },
               NilClass => ->(_obj) { true }
             }
           end

@@ -12,9 +12,9 @@ module ExcelDataServices
           'origin_locode': :locode,
           'effective_date': :date,
           'expiration_date': :date,
-          'destination_country': :required_string,
-          'destination_hub': :required_string,
-          'carrier': :required_string,
+          'destination_country': :string,
+          'destination_hub': :string,
+          'carrier': :string,
           'terminal': :optional_string,
           'transshipment_via': :optional_string,
           'internal': :internal

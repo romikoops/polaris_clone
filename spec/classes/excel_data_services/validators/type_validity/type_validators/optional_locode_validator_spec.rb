@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExcelDataServices::Validators::TypeValidity::TypeValidators::LocodeValidator do
+RSpec.describe ExcelDataServices::Validators::TypeValidity::TypeValidators::OptionalLocodeValidator do
   describe ".valid?" do
     it "returns true if locode is valid" do
       expect(described_class.new("abc de")).to be_valid

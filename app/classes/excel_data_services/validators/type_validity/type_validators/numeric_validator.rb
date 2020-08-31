@@ -4,10 +4,11 @@ module ExcelDataServices
   module Validators
     module TypeValidity
       module TypeValidators
-        class LoadTypeValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
+        class NumericValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
           def valid_types_with_values
             {
-              String => ->(obj) { %w[cargo_item container].include?(obj.downcase) }
+              Float => ->(_obj) { true },
+              Integer => ->(_obj) { true }
             }
           end
         end

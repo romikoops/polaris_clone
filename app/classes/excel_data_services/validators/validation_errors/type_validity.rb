@@ -13,16 +13,34 @@ module ExcelDataServices
         class InvalidFee < TypeValidity
         end
 
-        class InvalidLocode < TypeValidity
+        class InvalidOptionalLocode < TypeValidity
         end
 
         class InvalidOptionalString < TypeValidity
         end
 
-        class InvalidInternal < TypeValidity
+        class InvalidOptionalInteger < TypeValidity
+        end
+
+        class InvalidOptionalNumeric < TypeValidity
+        end
+
+        class InvalidNumeric < TypeValidity
+        end
+
+        class InvalidOptionalBoolean < TypeValidity
+        end
+
+        class InvalidInteger < TypeValidity
+        end
+
+        class InvalidOptionalInternal < TypeValidity
         end
 
         class InvalidLoadType < TypeValidity
+        end
+
+        class InvalidCargoClass < TypeValidity
         end
       end
     end

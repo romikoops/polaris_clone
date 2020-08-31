@@ -4,7 +4,7 @@ module ExcelDataServices
   module Validators
     module TypeValidity
       module TypeValidators
-        class LocodeValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
+        class OptionalLocodeValidator < ExcelDataServices::Validators::TypeValidity::TypeValidators::Base
           def valid_types_with_values
             {
               String => ->(obj) { %r{[A-Z]{2} ?[A-Z0-9]{3}}i.match?(obj.delete(' ')) },
