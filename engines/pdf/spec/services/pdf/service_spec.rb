@@ -34,10 +34,13 @@ RSpec.describe Pdf::Service do
 
   before do
     ::Organizations.current_id = organization.id
-    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png')
-      .to_return(status: 200, body: '', headers: {})
     FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
     FactoryBot.create(:organizations_theme, organization: organization)
+    shipment.charge_breakdowns.map(&:tender).each do |tender|
+      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                  to: "USD", rate: 1.3,
+                                  created_at: tender.created_at - 2.hours)
+    end
   end
 
   context 'when it is a FCL 20 shipment' do

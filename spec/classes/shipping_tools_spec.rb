@@ -95,6 +95,14 @@ RSpec.describe ShippingTools do
     end
 
     describe '.save_pdf_quotes' do
+      before do
+        shipment.charge_breakdowns.map(&:tender).each do |tender|
+          Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                      to: "USD", rate: 1.3,
+                                      created_at: tender.created_at - 2.hours)
+        end
+      end
+
       it 'successfully calls the mailer and return the quote Document' do
         described_class.new.save_pdf_quotes(shipment, user.organization, results)
       end

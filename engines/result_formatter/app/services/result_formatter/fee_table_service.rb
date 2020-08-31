@@ -174,11 +174,15 @@ module ResultFormatter
     end
 
     def value(items:, currency: base_currency)
-      items.inject(Money.new(0, currency)) { |sum, item| sum + item.amount }
+      items.inject(Money.new(0, currency, bank)) do |sum, item|
+        sum + Money.new(item.amount_cents, item.amount_currency, bank)
+      end
     end
 
     def original_value(items:, currency: base_currency)
-      items.inject(Money.new(0, currency)) { |sum, item| sum + item.original_amount }
+      items.inject(Money.new(0, currency, bank)) do |sum, item|
+        sum + Money.new(item.original_amount_cents, item.original_amount_currency, bank)
+      end
     end
 
     def value_with_currency(value)
@@ -251,6 +255,17 @@ module ResultFormatter
 
     def organization
       @organization ||= tender.quotation.organization
+    end
+
+    def bank
+      @bank ||= begin
+       store = MoneyCache::Converter.new(
+         klass: Legacy::ExchangeRate,
+         date: tender.created_at,
+         config: {bank_app_id: Settings.open_exchange_rate&.app_id || ""}
+       )
+       Money::Bank::VariableExchange.new(store)
+     end
     end
   end
 end

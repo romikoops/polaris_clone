@@ -40,6 +40,10 @@ module ResultFormatter
           "Trucking Rate"]
       end
 
+      before do
+        Legacy::ExchangeRate.create(from: "EUR", to: "USD", rate: 1.3, created_at: 2.hours.ago)
+      end
+
       context "with container load type" do
         it "returns rows for each level of charge table" do
           results = klass.perform
@@ -235,11 +239,48 @@ module ResultFormatter
             "Trucking Rate"]
         end
 
+        before do
+          Legacy::ExchangeRate.create(from: "USD",
+                                      to: "SEK", rate: 1.2,
+                                      created_at: tender.created_at - 2.hours)
+        end
+
         it "returns rows for each level of charge table" do
           aggregate_failures do
             expect(results.length).to eq(19)
             expect(results.pluck(:description)).to eq(expected_descriptions)
             expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+          end
+        end
+      end
+
+      context "when there are multiple exchange rates" do
+        let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization) }
+        let(:tender) { FactoryBot.create(:quotations_tender, quotation: quotation, created_at: Time.zone.now - 1.day) }
+        let(:usd_sek_rate) { 1.3 }
+        let(:valid_exchange_rate) { {rate: usd_sek_rate, created_at: tender.created_at - 1.day} }
+        let(:rates) { [valid_exchange_rate, {rate: 3.04, created_at: tender.created_at + 2.days}] }
+
+        before do
+          FactoryBot.create(:quotations_line_item,
+            tender: tender,
+            section: :export_section,
+            amount: Money.new(3500, "SEK"),
+            charge_category: FactoryBot.create(:solas_charge, organization: organization, code: :export))
+
+          rates.each do |rate|
+            Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                        to: "SEK", rate: rate[:rate],
+                                        created_at: rate[:created_at])
+          end
+        end
+
+        it "uses the rate valid at time of tender creation for currency conversion" do
+          results = described_class.new(tender: tender, scope: scope, type: type).perform
+          rates = ResultFormatter::ExchangeRateService.new(tender: tender).perform
+          aggregate_failures do
+            expect(results.length).to eq(5)
+            expect(rates.dig("sek")).to eq(usd_sek_rate)
           end
         end
       end

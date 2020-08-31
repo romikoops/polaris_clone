@@ -22,6 +22,14 @@ RSpec.describe QuotationsController, type: :controller do
       )
     end
 
+    before do
+      shipment.charge_breakdowns.map(&:tender).each do |tender|
+        Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                    to: "USD", rate: 1.3,
+                                    created_at: tender.created_at - 2.hours)
+      end
+    end
+
     context 'when successful quotation ' do
       let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
 

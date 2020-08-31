@@ -21,6 +21,14 @@ RSpec.describe "Charges" do
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
+  before do
+    shipment.charge_breakdowns.map(&:tender).each do |tender|
+      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                  to: "USD", rate: 1.3,
+                                  created_at: tender.created_at - 2.hours)
+    end
+  end
+
   path "/v1/organizations/{organization_id}/quotations/{quotation_id}/charges/{id}" do
     let(:quotation_id) { quotation.id }
     let(:id) { tender.id }

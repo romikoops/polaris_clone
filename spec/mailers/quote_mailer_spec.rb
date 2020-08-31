@@ -33,6 +33,11 @@ RSpec.describe QuoteMailer, type: :mailer do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
+    original_shipment.charge_breakdowns.map(&:tender).each do |tender|
+      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                  to: "USD", rate: 1.3,
+                                  created_at: tender.created_at - 2.hours)
+    end
     ::Organizations.current_id = organization.id
     FactoryBot.create(:organizations_theme, organization: organization)
   end

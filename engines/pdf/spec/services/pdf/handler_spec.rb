@@ -11,8 +11,7 @@ RSpec.describe Pdf::Handler do
       user: user,
       load_type: 'cargo_item',
       with_breakdown: true,
-      with_tenders: true
-    )
+      with_tenders: true)
   }
   let!(:agg_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: 'cargo_item', with_aggregated_cargo: true) }
   let(:pdf_service) { Pdf::Service.new(organization: organization, user: user) }
@@ -32,6 +31,11 @@ RSpec.describe Pdf::Handler do
     consolidated_selected_offer = FactoryBot.build(:consolidated_selected_offer, trip_id: shipment.trip_id)
     allow(shipment).to receive(:selected_offer).and_return(dummy_selected_offer)
     allow(agg_shipment).to receive(:selected_offer).and_return(consolidated_selected_offer)
+    shipment.charge_breakdowns.map(&:tender).each do |tender|
+      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                  to: "USD", rate: 1.3,
+                                  created_at: tender.created_at - 2.hours)
+    end
   end
 
   context 'with helper methods' do

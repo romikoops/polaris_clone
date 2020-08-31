@@ -23,8 +23,11 @@ RSpec.describe Shipments::BookingProcessController do
   before do
     ::Organizations.current_id = organization.id
     append_token_header
-
-    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    shipment.charge_breakdowns.map(&:tender).each do |tender|
+      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                  to: "USD", rate: 1.3,
+                                  created_at: tender.created_at - 2.hours)
+    end
     FactoryBot.create(:organizations_theme, organization: organization)
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'consignee')

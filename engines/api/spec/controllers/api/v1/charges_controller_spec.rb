@@ -8,6 +8,11 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
+      shipment.charge_breakdowns.map(&:tender).each do |tender|
+        Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+                                    to: "USD", rate: 1.3,
+                                    created_at: tender.created_at - 2.hours)
+      end
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
