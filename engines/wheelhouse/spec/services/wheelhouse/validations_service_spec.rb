@@ -36,6 +36,11 @@ module Wheelhouse
         final: final
       )
     end
+    let(:group) do
+      FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+        FactoryBot.create(:groups_membership, group: tapped_group, member: user)
+      end
+    end
     let(:result) do
       validator.validate
       validator.errors
@@ -74,6 +79,26 @@ module Wheelhouse
         it 'returns an array of one error' do
           aggregate_failures do
             expect(result.map(&:code)).to match_array(expected_error_codes)
+          end
+        end
+      end
+
+      context 'with dedicated pricings' do
+        before do
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, group: group)
+          FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
+        end
+
+        context 'when port to port complete request ( group pricings)' do
+          let(:expected_error_codes) do
+            [4009]
+          end
+          let(:scope_content) { { dedicated_pricings_only: true } }
+
+          it 'returns an no errors' do
+            aggregate_failures do
+              expect(result).to be_empty
+            end
           end
         end
       end

@@ -13,6 +13,11 @@ module Wheelhouse
       @errors = []
       @final = final
       @scope = OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
+      @groups = OrganizationManager::HierarchyService.new(
+        target: user, organization: organization
+      ).fetch.select { |hier|
+        hier.is_a?(Groups::Group)
+      }
     end
 
     def validate
@@ -25,7 +30,7 @@ module Wheelhouse
 
     private
 
-    attr_reader :user, :organization, :routing, :cargo, :load_type, :scope, :final
+    attr_reader :user, :organization, :routing, :cargo, :load_type, :scope, :final, :groups
 
     def cargo_validations
       return [] if cargo.units.empty?
@@ -97,7 +102,7 @@ module Wheelhouse
     def pricings
       @pricings ||= begin
         pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type)
-        pricing_assocation = pricing_assocation.where(group: user_groups) if scope[:dedicated_pricings_only]
+        pricing_assocation = pricing_assocation.where(group: groups) if scope[:dedicated_pricings_only]
         pricing_assocation
       end
     end
@@ -122,12 +127,6 @@ module Wheelhouse
         load_type: load_type,
         user: user
       )
-    end
-
-    def user_groups
-      companies = Companies::Membership.where(member: user).map(&:company)
-      Groups::Membership.where(member: user)
-                      .or(Groups::Membership.where(member: companies)).select(:group_id)
     end
 
     def includes_trucking?

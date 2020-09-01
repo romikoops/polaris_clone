@@ -18,7 +18,7 @@ module Api
       private
 
       def user
-        Users::User.find_by(id: user_param) || current_user
+        Users::User.find_by(id: user_param[:user_id]) || current_user
       end
 
       def user_param

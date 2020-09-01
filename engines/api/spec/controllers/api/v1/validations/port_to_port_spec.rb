@@ -20,6 +20,11 @@ module Api
     let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:cargo_item_id) { SecureRandom.uuid }
     let(:load_type) { 'cargo_item' }
+    let(:group) do
+      FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+        FactoryBot.create(:groups_membership, group: tapped_group, member: user)
+      end
+    end
     let(:params) do
       {
         organization_id: organization.id,
@@ -159,6 +164,25 @@ module Api
           aggregate_failures do
             expect(response).to be_successful
             expect(response_data.pluck('attributes')).to eq(expected_errors)
+          end
+        end
+      end
+
+      context 'with dedicated pricings' do
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
+
+        before do
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, group: group)
+          request.headers['Authorization'] = token_header
+          post :create, params: params
+        end
+
+        it 'returns an array of one error' do
+          aggregate_failures do
+            expect(response).to be_successful
+            expect(response_data).to be_empty
           end
         end
       end
