@@ -24,7 +24,9 @@ module AdmiraltyTenants
       organization = OrganizationManager::CreatorService.new(params: organization_params).perform
       if organization.persisted?
         Pricings::MarginCreator.create_default_margins(organization)
-        redirect_to organization_path(organization) and return # rubocop:disable Style/AndOr
+        create_default_admin(organization: organization)
+        create_default_shippers(organization: organization)
+        redirect_to(organization_path(organization)) && return
       end
       @organization = ::AdmiraltyTenants::OrganizationDecorator.new(organization)
       @render_scope = Organizations::DEFAULT_SCOPE
@@ -90,6 +92,28 @@ module AdmiraltyTenants
 
     def max_dimensions_params
       params.permit(max_dimensions: {})
+    end
+
+    def create_default_admin(organization:)
+      Organizations::Membership.create(user: Users::User.find_by(email: "shopadmin@itsmycargo.com"),
+                                       organization: organization,
+                                       role: :admin)
+    end
+
+    def create_default_shippers(organization:)
+      %w[shipper@itsmycargo.com agent@itsmycargo.com].each do |email|
+        ActiveRecord::Base.transaction do
+          shipper = Authentication::User.create!(email: email,
+                                                 skip_activation_needed_email: true,
+                                                 organization_id: organization.id,
+                                                 password: Settings.passwords&.default,
+                                                 type: "Organizations::User").tap do |user|
+            user.assign_attributes(activation_state: :active)
+            user.save
+          end
+          Profiles::Profile.create!(user: shipper, company_name: "ItsMyCargo")
+        end
+      end
     end
   end
 end

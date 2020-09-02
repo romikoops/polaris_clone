@@ -6,6 +6,9 @@ aws:
 emails:
   domain: itsmycargo.tech
 
+passwords:
+  default: IMC123456789
+
 open_exchange_rate:
   app_id: <%= ENV.fetch('OXR_APP_ID') { Rails.application.credentials.dig(:development, :open_exchange_rate, :app_id) } %>
 

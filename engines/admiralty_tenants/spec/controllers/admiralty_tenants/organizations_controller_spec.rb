@@ -109,12 +109,21 @@ module AdmiraltyTenants
       let(:organization_params) do
         {
           name: "Test",
-          slug: "tester",
+          slug: "test_organization",
           theme: {
             primary_color: "#000001",
             secondary_color: "#000002",
             bright_primary_color: "#000003",
-            bright_secondary_color: "#000004"
+            bright_secondary_color: "#000004",
+            emails: {
+              support: {
+                general: "noreply@testorganization.com"
+              }
+            },
+            phones: {
+              support: "+23412345678"
+            },
+            addresses: {}
           },
           scope: {
             base_pricing: true
@@ -122,9 +131,33 @@ module AdmiraltyTenants
         }
       end
 
+      before do
+        stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
+          .to_return(status: 200, body: "", headers: {})
+        FactoryBot.create(:users_user, :with_profile, email: "shopadmin@itsmycargo.com")
+      end
+
       it "renders page" do
         post :create, params: {organization: organization_params}
-        expect(::Organizations::Organization.find_by(slug: "tester").scope.content).to eq("base_pricing" => true)
+        expect(::Organizations::Organization.find_by(slug: "test_organization").scope.content).to eq("base_pricing" => true)
+      end
+
+      it "creates the default admin user" do
+        post :create, params: {organization: organization_params.merge(slug: "test_organization_2")}
+        expect(Organizations::Membership.exists?(
+          user: Users::User.find_by(email: "shopadmin@itsmycargo.com")
+        )).to eq(true)
+      end
+
+      it "creates both shipper and agent users for the organization" do
+        post :create, params: {organization: organization_params.merge(slug: "test_organization_3")}
+        organization = Organizations::Organization.find_by(slug: "test_organization_3")
+        agent = Organizations::User.unscoped.find_by(organization: organization, email: "agent@itsmycargo.com")
+        shipper = Organizations::User.unscoped.find_by(organization: organization, email: "shipper@itsmycargo.com")
+        aggregate_failures do
+          expect(Profiles::Profile.exists?(user: agent)).to eq(true)
+          expect(Profiles::Profile.exists?(user: shipper)).to eq(true)
+        end
       end
 
       context "wiith validation errors on create" do

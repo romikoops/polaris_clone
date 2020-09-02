@@ -76,11 +76,14 @@ digraph G {
     "admiralty_tenants" [shape=ellipse];
     "admiralty_tenants" -> "admiralty_assets" [color=grey];
     "admiralty_tenants" -> "admiralty_auth" [color=grey];
+    "admiralty_tenants" -> "authentication" [color=grey];
     "admiralty_tenants" -> "core" [color=grey];
     "admiralty_tenants" -> "legacy" [color=grey];
     "admiralty_tenants" -> "pricings" [color=grey];
+    "admiralty_tenants" -> "profiles" [color=grey];
     "admiralty_tenants" -> "organizations" [color=grey];
     "admiralty_tenants" -> "organization_manager" [color=grey];
+    "admiralty_tenants" -> "users" [color=grey];
     "admiralty" [shape=ellipse];
     app -> "admiralty"
     "admiralty" -> "admiralty_assets" [color=grey];
@@ -140,6 +143,11 @@ digraph G {
     "quotations" -> "core" [color=grey];
     "quotations" -> "legacy" [color=grey];
     "quotations" -> "organizations" [color=grey];
+    "authentication" [shape=ellipse];
+    "authentication" -> "organizations" [color=grey];
+    "authentication" -> "organization_manager" [color=grey];
+    "authentication" -> "users" [color=grey];
+    "authentication" -> "groups" [color=grey];
     "locations" [shape=ellipse];
     "locations" -> "core" [color=grey];
     "trucking" [shape=ellipse];
@@ -171,11 +179,6 @@ digraph G {
     "analytics" -> "pricings" [color=grey];
     "analytics" -> "quotations" [color=grey];
     "analytics" -> "shipments" [color=grey];
-    "authentication" [shape=ellipse];
-    "authentication" -> "organizations" [color=grey];
-    "authentication" -> "organization_manager" [color=grey];
-    "authentication" -> "users" [color=grey];
-    "authentication" -> "groups" [color=grey];
     "result_formatter" [shape=ellipse];
     "result_formatter" -> "legacy" [color=grey];
     "result_formatter" -> "pricings" [color=grey];

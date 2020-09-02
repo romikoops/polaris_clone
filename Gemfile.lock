@@ -71,11 +71,14 @@ PATH
       draper
       imc-admiralty_assets
       imc-admiralty_auth
+      imc-authentication
       imc-core
       imc-legacy
       imc-organization_manager
       imc-organizations
       imc-pricings
+      imc-profiles
+      imc-users
       jsoneditor-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)

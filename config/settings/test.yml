@@ -3,6 +3,9 @@ emails:
   domain: itsmycargo.test
   support: support@itsmycargo.tech
 
+passwords:
+  default: IMC123456789
+
 open_exchange_rate:
   app_id: FAKEKEY
 

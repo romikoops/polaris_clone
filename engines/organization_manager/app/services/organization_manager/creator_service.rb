@@ -23,6 +23,6 @@ module OrganizationManager
       end
     end
 
-    attr_reader :scope, :theme, :organization, :organization_params, :scope_params, :theme_params, :organization
+    attr_reader :scope, :theme, :organization, :organization_params, :scope_params, :theme_params
   end
 end

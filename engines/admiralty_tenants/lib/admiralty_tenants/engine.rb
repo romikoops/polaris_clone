@@ -4,11 +4,14 @@ require 'jsoneditor-rails'
 
 require 'admiralty_assets'
 require 'admiralty_auth'
+require "authentication"
 require 'draper'
 require 'core'
 require 'legacy'
 require 'pricings'
+require "profiles"
 require 'organizations'
+require "users"
 
 module AdmiraltyTenants
   class Engine < ::Rails::Engine

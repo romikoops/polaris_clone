@@ -15,6 +15,9 @@ emails:
   domain:
   support: support@itsmycargo.com
 
+passwords:
+  default: IMC123456789
+
 fixer:
   api_key:
 

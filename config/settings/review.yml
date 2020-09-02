@@ -10,6 +10,9 @@ elasticsearch:
 emails:
   domain: itsmycargo.tech
 
+passwords:
+  default: IMC123456789
+
 open_exchange_rate:
   app_id: <%= Rails.application.credentials.dig(:review, :open_exchange_rate, :app_id) %>
 

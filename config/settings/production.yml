@@ -11,6 +11,9 @@ emails:
   booking: bookingemails@itsmycargo.com
   domain: itsmycargo.shop
 
+passwords:
+  default: IMC123456789
+
 open_exchange_rate:
   app_id: <%= Rails.application.credentials.dig(:production, :open_exchange_rate, :app_id) %>
 
