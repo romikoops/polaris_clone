@@ -401,6 +401,88 @@
             "nullable": true
           }
         }
+      },
+      "quotationTender": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "attributes": {
+                "type": "object",
+                "properties": {
+                  "charges": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/charge"
+                    }
+                  },
+                  "route": {
+                    "type": "string"
+                  },
+                  "vessel": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "pickupTruckType": {
+                    "type": "string"
+                  },
+                  "deliveryTruckType": {
+                    "type": "string"
+                  },
+                  "pickupCarrier": {
+                    "type": "string"
+                  },
+                  "deliveryCarrier": {
+                    "type": "string"
+                  },
+                  "pickupService": {
+                    "type": "string"
+                  },
+                  "deliveryService": {
+                    "type": "string"
+                  },
+                  "required": [
+                    "id",
+                    "route"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "id",
+              "route"
+            ]
+          }
+        }
+      },
+      "widget": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -640,62 +722,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        },
-                        "type": {
-                          "type": "string"
-                        },
-                        "attributes": {
-                          "type": "object",
-                          "properties": {
-                            "charges": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "string"
-                                  },
-                                  "route": {
-                                    "type": "string"
-                                  },
-                                  "vessel": {
-                                    "type": "string"
-                                  },
-                                  "transitTime": {
-                                    "type": "integer"
-                                  },
-                                  "charges": {
-                                    "type": "array",
-                                    "items": {
-                                      "$ref": "#/components/schemas/charge"
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          },
-                          "required": [
-                            "charges"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "type",
-                        "attributes"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
+                  "type": {
+                    "$ref": "#/components/schemas/quotationTender"
+                  }
                 }
               }
             }
@@ -1788,90 +1817,6 @@
           "200": {
             "description": "successful operation",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "type": {
-                            "type": "string"
-                          },
-                          "attributes": {
-                            "type": "object",
-                            "properties": {
-                              "carrier": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "destination": {
-                                "type": "string"
-                              },
-                              "estimated": {
-                                "type": "boolean"
-                              },
-                              "id": {
-                                "type": "string"
-                              },
-                              "modeOfTransport": {
-                                "type": "string"
-                              },
-                              "origin": {
-                                "type": "string"
-                              },
-                              "quotationId": {
-                                "type": "string"
-                              },
-                              "serviceLevel": {
-                                "type": "string"
-                              },
-                              "total": {
-                                "$ref": "#/components/schemas/money"
-                              },
-                              "transitTime": {
-                                "type": "number"
-                              },
-                              "transshipment": {
-                                "type": "string"
-                              },
-                              "exchangeRates": {
-                                "type": "object",
-                                "properties": {
-                                  "base": {
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            },
-                            "required": [
-                              "carrier",
-                              "destination",
-                              "estimated",
-                              "id",
-                              "modeOfTransport",
-                              "origin",
-                              "quotationId",
-                              "serviceLevel",
-                              "total",
-                              "transitTime",
-                              "transshipment"
-                            ]
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "data"
-                  ]
-                }
-              }
             }
           }
         },
@@ -2017,6 +1962,14 @@
             "name": "organization_id",
             "in": "query",
             "type": "string",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The desired download format (pdf/xlsx)",
             "schema": {
               "type": "string"
             }
@@ -2755,6 +2708,206 @@
           },
           "401": {
             "description": "Invalid Credentials",
+            "content": {
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/widgets": {
+      "get": {
+        "summary": "Fetch all widgets for organization",
+        "tags": [
+          "Widgets"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/widget"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new widget",
+        "tags": [
+          "Widget"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "widget": {
+                    "$ref": "#/components/schemas/widget"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/widgets/{id}": {
+      "patch": {
+        "summary": "Update a widget",
+        "tags": [
+          "Widget"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the widget to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "widget": {
+                    "$ref": "#/components/schemas/widget"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a widget",
+        "tags": [
+          "Widget"
+        ],
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the widget to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful deletion",
             "content": {
             }
           }
