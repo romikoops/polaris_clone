@@ -8,11 +8,13 @@ module OfferCalculator
           return ::Trucking::Trucking.none if targets.empty?
 
           first_target = targets.first
-          base_query = carriage_association(carriage: first_target, hub_ids: hub_ids_by_carriage(target: first_target))
+          base_query = carriage_association(carriage: first_target, groups: hierarchy,
+                                            hub_ids: hub_ids_by_carriage(target: first_target))
           return base_query if targets.length == 1
-
+          last_target = targets.last
           base_query.or(
-            carriage_association(carriage: targets.last, hub_ids: hub_ids_by_carriage(target: targets.last))
+            carriage_association(carriage: last_target, groups: hierarchy,
+                                 hub_ids: hub_ids_by_carriage(target: last_target))
           )
         end
 
@@ -29,7 +31,7 @@ module OfferCalculator
           target == "pre" ? schedules.map(&:origin_hub_id) : schedules.map(&:destination_hub_id)
         end
 
-        def carriage_association(carriage:, hub_ids:)
+        def carriage_association(carriage:, hub_ids:, groups:)
           args = {
             address: address_for_carriage(carriage: carriage),
             load_type: shipment.load_type,
@@ -37,7 +39,8 @@ module OfferCalculator
             cargo_classes: cargo_classes,
             carriage: carriage,
             hub_ids: hub_ids,
-            order_by: "group_id"
+            order_by: "group_id",
+            groups: groups
           }
 
           results = ::Trucking::Queries::Availability.new(args).perform

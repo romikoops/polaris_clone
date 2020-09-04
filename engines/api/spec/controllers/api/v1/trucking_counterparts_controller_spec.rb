@@ -32,8 +32,7 @@ module Api
     let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
 
     before do
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+      request.headers['Authorization'] = token_header
       Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                         'address_components' => [{ 'types' => ['premise'] }],
                                         'address' => 'Helsingborg, Sweden',
@@ -61,77 +60,130 @@ module Api
       allow(controller).to receive(:current_organization).at_least(:once).and_return(organization)
     end
 
-    describe 'GET #index' do
-      let(:lat) { origin_hub.latitude }
-      let(:lng) { origin_hub.longitude }
+    context 'without user' do
+      before do
+        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
+        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+      end
 
-      context 'when destination trucking is available with lat lng args' do
-        before do
-          params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: 'origin' }
-          request.headers['Authorization'] = token_header
-          get :index, params: params, as: :json
+      describe 'GET #index' do
+        let(:lat) { origin_hub.latitude }
+        let(:lng) { origin_hub.longitude }
+
+        context 'when destination trucking is available with lat lng args' do
+          before do
+            params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: 'origin' }
+            get :index, params: params, as: :json
+          end
+
+          it 'returns available trucking options and country codes' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq true
+              expect(data['truckTypes']).to match_array([destination_hub_availability.truck_type])
+              expect(data['countryCodes']).to eq(['cn'])
+            end
+          end
         end
 
-        it 'returns available trucking options and country codes' do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(data['truckingAvailable']).to eq true
-            expect(data['truckTypes']).to match_array([destination_hub_availability.truck_type])
-            expect(data['countryCodes']).to eq(['cn'])
+        context 'when destination trucking is available with nexus_id args' do
+          before do
+            params = { id: origin_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :origin }
+            get :index, params: params, as: :json
+          end
+
+          it 'returns available trucking options and country codes' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq true
+              expect(data['truckTypes']).to match_array([destination_hub_availability.truck_type])
+              expect(data['countryCodes']).to eq(['cn'])
+            end
+          end
+        end
+
+        context 'when origin trucking is available with lat lng args' do
+          let(:lat) { destination_hub.latitude }
+          let(:lng) { destination_hub.longitude }
+
+          before do
+            params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
+            get :index, params: params, as: :json
+          end
+
+          it 'returns available trucking options' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq true
+              expect(data['truckTypes']).to eq([origin_hub_availability.truck_type])
+              expect(data['countryCodes']).to eq(['se'])
+            end
+          end
+        end
+
+        context 'when origin trucking is available with nexus_id args' do
+          before do
+            params = { id: destination_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
+            get :index, params: params, as: :json
+          end
+
+          it 'returns available trucking options and country codes' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq true
+              expect(data['truckTypes']).to eq([origin_hub_availability.truck_type])
+              expect(data['countryCodes']).to eq(['se'])
+            end
           end
         end
       end
+    end
 
-      context 'when destination trucking is available with nexus_id args' do
-        before do
-          params = { id: origin_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :origin }
-          request.headers['Authorization'] = token_header
-          get :index, params: params, as: :json
+    context 'with user' do
+      let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:no_group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:group) {
+        FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+          FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
         end
+      }
 
-        it 'returns available trucking options and country codes' do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(data['truckingAvailable']).to eq true
-            expect(data['truckTypes']).to match_array([destination_hub_availability.truck_type])
-            expect(data['countryCodes']).to eq(['cn'])
-          end
-        end
+      before do
+        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location, group: group)
+        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
       end
 
-      context 'when origin trucking is available with lat lng args' do
-        let(:lat) { destination_hub.latitude }
-        let(:lng) { destination_hub.longitude }
+      describe 'GET #index' do
+        let(:lat) { origin_hub.latitude }
+        let(:lng) { origin_hub.longitude }
 
-        before do
-          params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
-          request.headers['Authorization'] = token_header
-          get :index, params: params, as: :json
-        end
+        context 'when trucking is available for the group of that user' do
+          before do
+            params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: 'origin', client: group_client }
+            get :index, params: params, as: :json
+          end
 
-        it 'returns available trucking options' do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(data['truckingAvailable']).to eq true
-            expect(data['truckTypes']).to eq([origin_hub_availability.truck_type])
-            expect(data['countryCodes']).to eq(['se'])
+          it 'returns available trucking options and country codes' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq true
+              expect(data['truckTypes']).to match_array([destination_hub_availability.truck_type])
+              expect(data['countryCodes']).to eq(['cn'])
+            end
           end
         end
-      end
 
-      context 'when origin trucking is available with nexus_id args' do
-        before do
-          params = { id: destination_hub.nexus_id, load_type: 'cargo_item', organization_id: organization.id, target: :destination }
-          request.headers['Authorization'] = token_header
-          get :index, params: params, as: :json
-        end
+        context 'when trucking is unavailable for a given user' do
+          before do
+            params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, target: 'origin', client: no_group_client }
+            get :index, params: params, as: :json
+          end
 
-        it 'returns available trucking options and country codes' do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(data['truckingAvailable']).to eq true
-            expect(data['truckTypes']).to eq([origin_hub_availability.truck_type])
-            expect(data['countryCodes']).to eq(['se'])
+          it 'returns available trucking options and country codes' do
+            aggregate_failures do
+              expect(response).to be_successful
+              expect(data['truckingAvailable']).to eq false
+            end
           end
         end
       end

@@ -14,15 +14,25 @@ module Api
       def counterpart
         Api::Routing::Trucking::CounterpartService.counterpart_availabilities(
           organization: current_organization,
-          load_type: trucking_params[:load_type],
-          coordinates: coordinates,
-          nexus_id: trucking_params[:id],
-          target: target_param
+          user: client,
+          target: target_param,
+          trucking_details: trucking_details
         )
       end
 
+      def trucking_details
+        @trucking_details = Api::Routing::Trucking::DetailsService.new(coordinates: coordinates,
+                                                                       nexus_id: trucking_params[:id],
+                                                                       load_type: trucking_params[:load_type])
+      end
+
       def trucking_params
-        params.permit(:lat, :lng, :id, :load_type)
+        params.permit(:lat, :lng, :id, :load_type, :client)
+      end
+
+      def client
+        client_id = trucking_params[:client]
+        Organizations::User.find(client_id) if client_id
       end
 
       def coordinates

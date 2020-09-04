@@ -101,7 +101,7 @@ module Wheelhouse
 
     def pricings
       @pricings ||= begin
-        pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type)
+        pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type).current
         pricing_assocation = pricing_assocation.where(group: groups) if scope[:dedicated_pricings_only]
         pricing_assocation
       end

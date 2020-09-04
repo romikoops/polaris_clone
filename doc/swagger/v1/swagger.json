@@ -2420,6 +2420,15 @@
             }
           },
           {
+            "name": "client",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The client id of the query"
+          },
+          {
             "name": "target",
             "in": "query",
             "type": "string",
@@ -2511,6 +2520,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "client",
+            "in": "query",
+            "type": "string",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The client id of the query"
           },
           {
             "name": "target",

@@ -4,12 +4,16 @@ module Api
   module Routing
     module Trucking
       class AvailabilityService < Api::Routing::Trucking::Base
-        def self.availability(organization:, coordinates:, load_type:, target:)
-          new(organization: organization, load_type: load_type, target: target, coordinates: coordinates).perform
+        def self.availability(organization:, coordinates:, load_type:, target:, user: nil)
+          new(organization: organization,
+              load_type: load_type,
+              target: target,
+              coordinates: coordinates,
+              user: user).perform
         end
 
-        def initialize(organization:, load_type:, target:, coordinates:)
-          super(organization: organization, query: query, load_type: load_type, target: target)
+        def initialize(organization:, load_type:, target:, coordinates:, user:)
+          super(organization: organization, query: query, load_type: load_type, target: target, user: user)
           @lat = coordinates.fetch(:lat)
           @lng = coordinates.fetch(:lng)
         end

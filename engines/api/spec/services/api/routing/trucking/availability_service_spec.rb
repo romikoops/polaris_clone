@@ -24,11 +24,18 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:wrong_lng) { 60.50 }
   let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
   let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
+  let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group) {
+    FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+      FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
+    end
+  }
   let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target } }
 
   before do
     FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
     FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
+    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'group', group_id: group.id)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -108,6 +115,31 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
         aggregate_failures do
           expect(data[:truckingAvailable]).to eq false
           expect(data[:truckTypes]).to be_empty
+        end
+      end
+    end
+
+    context 'when trucking is available for a group' do
+      let(:group_args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target, user: group_client } }
+      let!(:data) { described_class.availability(group_args) }
+
+      it 'returns available trucking options' do
+        aggregate_failures do
+          expect(data[:truckingAvailable]).to eq true
+          expect(data[:truckTypes]).to include('group')
+        end
+      end
+    end
+
+    context 'when trucking is not available for a group' do
+      let(:no_group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:no_group_args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target, user: no_group_client } }
+      let!(:data) { described_class.availability(no_group_args) }
+
+      it 'returns available trucking options' do
+        aggregate_failures do
+          expect(data[:truckingAvailable]).to eq true
+          expect(data[:truckTypes]).not_to include('group')
         end
       end
     end

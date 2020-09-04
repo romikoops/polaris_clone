@@ -4,21 +4,27 @@ module Api
   module Routing
     module Trucking
       class CounterpartService < Api::Routing::Trucking::Base
-        def self.counterpart_availabilities(organization:, coordinates: nil, nexus_id: nil, load_type: nil, target:)
+        def self.counterpart_availabilities(organization:,
+          trucking_details:,
+          target:,
+          user: nil)
           new(
             organization: organization,
-            load_type: load_type,
+            trucking_details: trucking_details,
             target: target,
-            coordinates: coordinates,
-            nexus_id: nexus_id
+            user: user
           ).perform
         end
 
-        def initialize(organization:, load_type:, target:, coordinates: nil, nexus_id:)
-          super(organization: organization, query: query, load_type: load_type, target: target)
+        def initialize(organization:, trucking_details:, target:, user:)
+          super(organization: organization,
+                query: query,
+                load_type: trucking_details.load_type,
+                target: target, user: user)
+          coordinates = trucking_details.coordinates
           @lat = coordinates&.dig(:lat)
           @lng = coordinates&.dig(:lng)
-          @nexus_id = nexus_id
+          @nexus_id = trucking_details.nexus_id
         end
 
         def perform

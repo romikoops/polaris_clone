@@ -132,7 +132,7 @@ module Trucking
       end
 
       def group_condition
-        groups.present? ? { group_id: groups.ids | [nil] } : {}
+        groups.present? ? { group_id: groups.pluck(:id) | [nil] } : { group_id: nil }
       end
 
       def cargo_class_condition

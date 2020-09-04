@@ -17,21 +17,15 @@ module Wheelhouse
     end
 
     def routes
-      itineraries.where(stops: stops)
+      return Legacy::Itinerary.none unless origin.present? || destination.present?
+
+      itineraries = Legacy::Itinerary.where(organization: organization)
+      itineraries = itineraries.where(origin_hub: hubs_from_target(target: origin)) if origin.present?
+      itineraries = itineraries.where(destination_hub: hubs_from_target(target: destination)) if destination.present?
+      itineraries
     end
 
     private
-
-    def stops
-      stops_from_target(target: origin).or(stops_from_target(target: destination))
-    end
-
-    def stops_from_target(target:)
-      Legacy::Stop.where(
-        hub: hubs_from_target(target: target),
-        index: target == origin ? 0 : 1
-      )
-    end
 
     def hubs_from_target(target:)
       return [] if target.blank?

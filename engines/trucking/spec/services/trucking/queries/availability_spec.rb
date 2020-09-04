@@ -249,7 +249,7 @@ RSpec.describe Trucking::Queries::Availability do
           latitude: latitude,   longitude: longitude, order_by: 'group_id', group_ids: [group.id]
         ).perform
 
-        expect(trucking_rates).to match_array([trucking_trucking_geometry, group_trucking_trucking_geometry])
+        expect(trucking_rates).to match_array([trucking_trucking_geometry])
       end
     end
   end

@@ -23,7 +23,7 @@ module OfferCalculator
 
         private
 
-        attr_reader :schedules, :shipment, :organization, :hierarchy, :scope, :quotation
+        attr_reader :schedules, :shipment, :organization, :hierarchy, :scope, :quotation, :user
 
         def cargo_classes
           @cargo_classes ||= shipment.cargo_classes

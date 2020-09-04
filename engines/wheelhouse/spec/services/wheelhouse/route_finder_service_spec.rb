@@ -61,5 +61,23 @@ RSpec.describe Wheelhouse::RouteFinderService, type: :service do
         expect(result).to match_array([])
       end
     end
+
+    context 'with only origin' do
+      let(:origin) { { latitude: pickup_address.latitude, longitude: pickup_address.longitude } }
+      let(:destination) { {} }
+
+      it 'returns the itineraries for that origin' do
+        expect(result).to match_array([itinerary])
+      end
+    end
+
+    context 'with only destination' do
+      let(:origin) { {} }
+      let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
+
+      it 'returns the itineraries for that destination' do
+        expect(result).to match_array([itinerary])
+      end
+    end
   end
 end
