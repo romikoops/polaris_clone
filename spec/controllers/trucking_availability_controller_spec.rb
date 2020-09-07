@@ -7,7 +7,7 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
                       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -24,14 +24,30 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
   let(:wrong_lng) { 60.50 }
   let(:hub_ids) { origin_hub.id.to_s }
   let(:response_body) { JSON.parse(response.body) }
+  let(:group_id) { nil }
   let(:data) { response_body['data'] }
+  let(:group) do
+    FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+      FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+    end
+  end
 
   before do
+    allow(controller).to receive(:current_user).and_return(user)
     FactoryBot.create(:organizations_scope, target: organization, content: { base_pricing: true })
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:trucking_trucking,
+      organization: organization,
+      hub: origin_hub,
+      location: origin_trucking_location,
+      group_id: group_id)
+    FactoryBot.create(:trucking_trucking,
+      organization: organization,
+      hub: destination_hub,
+      carriage: 'on',
+      location: destination_trucking_location,
+      group_id: group_id)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -63,6 +79,25 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
     let(:lng) { origin_hub.longitude }
 
     context 'when trucking is available' do
+      before do
+        params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, carriage: 'pre', hub_ids: hub_ids }
+        get :index, params: params, as: :json
+      end
+
+      it 'returns available trucking options' do
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data['truckingAvailable']).to eq true
+          expect(data['truckTypeObject']).to eq({ origin_hub.id.to_s => ['default'] })
+          expect(data['nexusIds']).to eq([origin_hub.nexus_id])
+          expect(data['hubIds']).to eq([origin_hub.id])
+        end
+      end
+    end
+
+    context 'when trucking is available and only group truckings are present' do
+      let(:group_id) { group.id }
+
       before do
         params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, carriage: 'pre', hub_ids: hub_ids }
         get :index, params: params, as: :json

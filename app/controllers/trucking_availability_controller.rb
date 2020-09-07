@@ -5,7 +5,6 @@ class TruckingAvailabilityController < ApplicationController
   skip_before_action :doorkeeper_authorize!
 
   def index
-    @base_pricing_enabled = current_scope.fetch(:base_pricing)
     trucking_pricings = find_trucking_pricings
     truck_type_object = Hash.new { |h, k| h[k] = [] }
     hub_ids = []
@@ -41,8 +40,15 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage],
       klass: Trucking::Trucking,
-      order_by: @base_pricing_enabled ? 'group_id' : 'user_id'
+      order_by: 'group_id',
+      groups: user_groups
     }
     Trucking::Queries::Availability.new(args).perform
+  end
+
+  def user_groups
+    OrganizationManager::HierarchyService.new(
+      target: current_user, organization: current_organization
+    ).fetch.select { |hier| hier.is_a?(Groups::Group) }
   end
 end
