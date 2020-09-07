@@ -25,7 +25,6 @@ module OfferCalculator
 
       def trucking_hubs(carriage)
         trucking_details = @shipment.trucking["#{carriage}_carriage"]
-        base_pricing_enabled = scope.fetch(:base_pricing)
         args = {
           address: Legacy::Address.find(trucking_details['address_id']),
           load_type: @shipment.load_type,
@@ -33,10 +32,16 @@ module OfferCalculator
           truck_type: trucking_details['truck_type'],
           carriage: carriage,
           cargo_classes: @shipment.cargo_classes,
-          order_by: base_pricing_enabled ? 'group_id' : 'user_id'
+          order_by: 'group_id',
+          groups: groups
         }
-
         Trucking::Queries::Hubs.new(args).perform
+      end
+
+      def groups
+        OrganizationManager::HierarchyService.new(
+          target: @shipment.user, organization: @shipment.organization
+        ).fetch.select { |hier| hier.is_a?(Groups::Group) }
       end
     end
   end

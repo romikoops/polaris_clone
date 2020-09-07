@@ -9,7 +9,13 @@ RSpec.describe OfferCalculator::Service::HubFinder do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let!(:common_trucking) { FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: trucking_location) }
+  let!(:common_trucking) do
+    FactoryBot.create(:trucking_trucking,
+      organization: organization,
+      hub: origin_hub,
+      location: trucking_location,
+      group_id: group_id)
+  end
   let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
   let(:address) { FactoryBot.create(:gothenburg_address) }
   let(:shipment) do
@@ -33,6 +39,13 @@ RSpec.describe OfferCalculator::Service::HubFinder do
                       itinerary: itinerary,
                       has_pre_carriage: true)
   end
+  let(:group) do
+    FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+      FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+    end
+  end
+  let(:group_id) { nil }
+
   before do
     ::Organizations.current_id = organization.id
 
@@ -41,8 +54,19 @@ RSpec.describe OfferCalculator::Service::HubFinder do
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :zipcode)
   end
 
-  context 'class methods' do
-    describe '.perform', :vcr do
+  describe '.perform', :vcr do
+    context 'with pickup and no delivery' do
+      it 'returns the correct hub ids' do
+        results = described_class.new(shipment: shipment, quotation: quotation).perform
+
+        expect(results[:origin]).to eq([origin_hub])
+        expect(results[:destination]).to eq([destination_hub])
+      end
+    end
+
+    context 'with pickup and no delivery and group only truckings' do
+      let(:group_id) { group.id }
+
       it 'returns the correct hub ids' do
         results = described_class.new(shipment: shipment, quotation: quotation).perform
 
