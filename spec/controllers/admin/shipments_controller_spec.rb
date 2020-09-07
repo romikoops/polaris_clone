@@ -232,6 +232,13 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
         expect(Legacy::File.find_by(id: file.id)).to be_nil
       end
     end
+
+    context "when document does not exist" do
+      it "returns http status not found" do
+        post :document_delete, params: { id: "wrong_id", shipment_id: shipment.id, organization_id: organization.id }
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe 'POST #edit_service_price' do

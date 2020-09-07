@@ -129,7 +129,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def document_delete
-    @document = Legacy::File.find_by(id: params[:id])
+    @document = Legacy::File.find(params[:id])
     @document.destroy
 
     response_handler(id: params[:id])
