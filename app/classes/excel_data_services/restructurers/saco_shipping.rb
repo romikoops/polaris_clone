@@ -75,6 +75,7 @@ module ExcelDataServices
         @restructured_data = remove_data_without_main_freight(restructured_data)
         restructured_data_pricings, restructured_data_local_charges =
           restructured_data.partition { |row_data| row_data.delete(:klass_identifier) == 'Pricing' }
+        restructured_data_pricings = parse_dates(rows_data: restructured_data_pricings)
         restructured_data_pricings = cut_based_on_date_overlaps(
           restructured_data_pricings,
           ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date]

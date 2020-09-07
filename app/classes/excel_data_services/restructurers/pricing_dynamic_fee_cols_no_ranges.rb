@@ -9,6 +9,7 @@ module ExcelDataServices
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
         restructured_data = downcase_values(rows_data: restructured_data, keys: %i[load_type mot])
         restructured_data = upcase_values(rows_data: restructured_data, keys: %i[rate_basis])
+        restructured_data = parse_dates(rows_data: restructured_data)
 
         restructured_data = restructured_data.map do |row_data|
           { sheet_name: sheet_name,

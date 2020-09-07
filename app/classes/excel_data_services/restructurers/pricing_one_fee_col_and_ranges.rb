@@ -16,6 +16,7 @@ module ExcelDataServices
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
         restructured_data = downcase_values(rows_data: restructured_data, keys: [:load_type, :mot])
         restructured_data = upcase_values(rows_data: restructured_data, keys: %i[rate_basis fee_code])
+        restructured_data = parse_dates(rows_data: restructured_data)
         restructured_data.reject! { |row_data| row_data[:fee].blank? }
         restructured_data.each do |row_data|
           row_data.reverse_merge!(sheet_name: sheet_name,

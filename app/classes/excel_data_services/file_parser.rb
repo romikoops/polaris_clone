@@ -42,7 +42,6 @@ module ExcelDataServices
     def build_row_obj(headers, row)
       row_data = headers.zip(row).to_h
       row_data = sanitize_row_data(row_data)
-      parse_dates(row_data)
     end
 
     def sanitize_row_data(row_data)
@@ -53,14 +52,6 @@ module ExcelDataServices
       row_data.each_with_object({}) do |(k, v), hsh|
         hsh[k] = v.respond_to?(:strip) ? v.strip : v
       end
-    end
-
-    def parse_dates(row_data)
-      %i[effective_date expiration_date].each do |date|
-        row_data[date] = Date.parse(row_data[date].to_s) if row_data[date].present?
-      end
-
-      row_data
     end
   end
 end

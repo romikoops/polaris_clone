@@ -38,6 +38,7 @@ module ExcelDataServices
         sanitize_service_level!(rows_data)
         rows_data = expand_fcl_to_all_sizes(rows_data)
         rows_data = expand_non_counterparts_to_counterparts(rows_data) if scope["expand_non_counterpart_local_charges"]
+        rows_data = parse_dates(rows_data: rows_data)
         rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i[effective_date expiration_date])
         rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
         rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map do |rows|

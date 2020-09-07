@@ -66,6 +66,16 @@ module ExcelDataServices
         end
       end
 
+      def parse_dates(rows_data)
+        rows_data[:rows_data].each do |row_data|
+          %i[effective_date expiration_date].each do |date|
+            row_data[date] = Date.parse(row_data[date].to_s) if row_data[date].present?
+          end
+        end
+
+        rows_data[:rows_data]
+      end
+
       def clean_html_format_artifacts(rows_data)
         rows_data.each do |row_data|
           row_data.keys.each do |key|
