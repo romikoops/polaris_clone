@@ -10,6 +10,7 @@ RSpec.describe Quotations::Filter do
     context "when filtering by organization" do
       let(:filter) { described_class.new(organization: organization, start_date: nil, end_date: nil) }
       let(:organization_2) { FactoryBot.create(:organizations_organization) }
+      let(:sorted_quotations) { Quotations::Quotation.where(organization: organization).order(:selected_date) }
 
       before do
         FactoryBot.create_list(:legacy_shipment, 2, with_breakdown: true, with_tenders: true,
@@ -19,7 +20,7 @@ RSpec.describe Quotations::Filter do
       end
 
       it "returns filtered results" do
-        expect(filter.perform).to eq Quotations::Quotation.where(organization: organization)
+        expect(filter.perform).to eq sorted_quotations
       end
     end
 
