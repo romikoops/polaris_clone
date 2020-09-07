@@ -67,6 +67,16 @@ RSpec.describe Pdf::Service do
           expect(pdf.file).to be_attached
         end
       end
+
+      context "with legacy quotation" do
+        it "generates the admin quote pdf" do
+          pdf = klass.admin_quotation(quotation: quotation, shipment: shipment, pdf_tenders: nil)
+          aggregate_failures do
+            expect(pdf).to be_a(Legacy::File)
+            expect(pdf.file).to be_attached
+          end
+        end
+      end
     end
 
     describe '.quotation' do
@@ -115,6 +125,16 @@ RSpec.describe Pdf::Service do
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
+        end
+      end
+
+      context "with legacy quotation" do
+        it "generates the admin quote pdf" do
+          pdf = klass.admin_quotation(quotation: quotation, shipment: shipment, pdf_tenders: nil)
+          aggregate_failures do
+            expect(pdf).to be_a(Legacy::File)
+            expect(pdf.file).to be_attached
+          end
         end
       end
     end

@@ -70,7 +70,9 @@ module Pdf
       )
     end
 
-    def admin_quotation(quotation:, shipment:, pdf_tenders:)
+    def admin_quotation(quotation: nil, shipment:, pdf_tenders: nil)
+      return legacy_admin_quotation(quotation: quotation, shipment: shipment) if quotation.is_a?(Legacy::Quotation)
+
       existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
 
@@ -85,6 +87,27 @@ module Pdf
       return nil if file.nil?
 
       create_file(object: shipment, shipments: [shipment], file: file, user: user)
+    end
+
+    def legacy_admin_quotation(quotation:, shipment:)
+      existing_document = existing_document(quotation: quotation, shipment: shipment, type: "quotation")
+      return existing_document if existing_document
+
+      object = quotation || shipment
+      shipments = quotation ? quotation.shipments : [shipment]
+      shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
+      quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
+      note_remarks = get_note_remarks(quotes.first["trip_id"])
+      file = generate_quote_pdf(
+        shipment: shipment,
+        shipments: shipments,
+        quotes: quotes,
+        quotation: quotation,
+        note_remarks: note_remarks
+      )
+      return nil if file.nil?
+
+      create_file(object: object, shipments: shipments, file: file, user: user)
     end
 
     def wheelhouse_quotation(shipment:, tender_ids:)
