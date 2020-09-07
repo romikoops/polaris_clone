@@ -5,15 +5,15 @@ module ExcelDataServices
     module TypeValidity
       class Employees < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'company_name': :string,
-          'first_name': :string,
-          'last_name': :optional_string,
-          'email': :string,
-          'password': :string,
-          'phone': :optional_string,
-          'vat_number': :optional_string,
-          'external_id': :optional_string,
-          'address': :optional_string
+          'company_name': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'first_name': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'last_name': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'email': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'password': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'phone': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'vat_number': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'external_id': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'address': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType
         }.freeze
       end
     end

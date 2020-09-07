@@ -4,43 +4,33 @@ module ExcelDataServices
   module Validators
     module ValidationErrors
       class TypeValidity < ExcelDataServices::Validators::ValidationErrors::Base
-        class InvalidDate < TypeValidity
+        class CargoClassType < TypeValidity
         end
-
-        class InvalidString < TypeValidity
+        class DateType < TypeValidity
         end
-
-        class InvalidFee < TypeValidity
+        class FeeType < TypeValidity
         end
-
-        class InvalidOptionalLocode < TypeValidity
+        class IntegerType < TypeValidity
         end
-
-        class InvalidOptionalString < TypeValidity
+        class LoadTypeType < TypeValidity
         end
-
-        class InvalidOptionalInteger < TypeValidity
+        class NumericOrMoneyType < TypeValidity
         end
-
-        class InvalidOptionalNumeric < TypeValidity
+        class OptionalBooleanType < TypeValidity
         end
-
-        class InvalidNumeric < TypeValidity
+        class OptionalIntegerLikeType < TypeValidity
         end
-
-        class InvalidOptionalBoolean < TypeValidity
+        class OptionalInternalType < TypeValidity
         end
-
-        class InvalidInteger < TypeValidity
+        class OptionalLocodeType < TypeValidity
         end
-
-        class InvalidOptionalInternal < TypeValidity
+        class OptionalNumericType < TypeValidity
         end
-
-        class InvalidLoadType < TypeValidity
+        class OptionalNumericOrMoneyType < TypeValidity
         end
-
-        class InvalidCargoClass < TypeValidity
+        class OptionalStringType < TypeValidity
+        end
+        class StringType < TypeValidity
         end
       end
     end

@@ -5,20 +5,20 @@ module ExcelDataServices
     module TypeValidity
       class Margins < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'effective_date': :date,
-          'expiration_date': :date,
-          'origin': :string,
-          'country_origin': :string,
-          'destination': :string,
-          'country_destination': :string,
-          'mot': :string,
-          'carrier': :optional_string,
-          'service_level': :optional_string,
-          'margin_type': :string,
-          'load_type': :cargo_class,
-          'fee_code': :string,
-          'operator': :string,
-          'margin': :string
+          'effective_date': ExcelDataServices::Validators::TypeValidity::Types::DateType,
+          'expiration_date': ExcelDataServices::Validators::TypeValidity::Types::DateType,
+          'origin': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'country_origin': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'destination': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'country_destination': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'mot': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'carrier': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'service_level': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'margin_type': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'load_type': ExcelDataServices::Validators::TypeValidity::Types::CargoClassType,
+          'fee_code': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'operator': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'margin': ExcelDataServices::Validators::TypeValidity::Types::StringType
         }.freeze
       end
     end

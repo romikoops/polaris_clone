@@ -5,9 +5,9 @@ module ExcelDataServices
     module TypeValidity
       class Notes < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'country': :string,
-          'unlocode': :locode,
-          'note': :string
+          'country': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'unlocode': ExcelDataServices::Validators::TypeValidity::Types::OptionalLocodeType,
+          'note': ExcelDataServices::Validators::TypeValidity::Types::StringType
         }.freeze
       end
     end

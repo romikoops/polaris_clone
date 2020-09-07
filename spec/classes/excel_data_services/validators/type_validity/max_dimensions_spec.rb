@@ -26,11 +26,11 @@ RSpec.describe ExcelDataServices::Validators::TypeValidity::MaxDimensions do
       type_validator_class = described_class.get(valid_data_sheet[:restructurer_name])
       type_validator = type_validator_class.new(sheet: valid_data_sheet)
       expect(type_validator.type_errors).to eq([{
-        exception_class: ExcelDataServices::Validators::ValidationErrors::TypeValidity::InvalidOptionalLocode,
-        reason: "The value: 0 of the key: origin_locode is not a valid locode.",
+        exception_class: ExcelDataServices::Validators::ValidationErrors::TypeValidity::OptionalLocodeType,
+        reason: "The value: 0 of the key: origin_locode is not a valid optional locode type.",
         row_nr: 3,
         sheet_name: "MaxDimensions",
-        type: :type_error
+        type: :error
       }])
     end
   end

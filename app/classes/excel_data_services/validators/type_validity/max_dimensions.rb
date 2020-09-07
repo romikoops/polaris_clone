@@ -5,8 +5,8 @@ module ExcelDataServices
     module TypeValidity
       class MaxDimensions < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'origin_locode': :locode,
-          'destination_locode': :locode
+          'origin_locode': ExcelDataServices::Validators::TypeValidity::Types::OptionalLocodeType,
+          'destination_locode': ExcelDataServices::Validators::TypeValidity::Types::OptionalLocodeType
         }.freeze
       end
     end

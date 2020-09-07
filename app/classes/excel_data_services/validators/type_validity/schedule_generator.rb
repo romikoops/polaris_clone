@@ -5,14 +5,14 @@ module ExcelDataServices
     module TypeValidity
       class ScheduleGenerator < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'origin': :string,
-          'destination': :string,
-          'carrier': :optional_string,
-          'service_level': :optional_string,
-          'etd_days': :integer,
-          'mot': :string,
-          'transit_time': :optional_integer,
-          'cargo_class': :cargo_class
+          'origin': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'destination': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'carrier': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'service_level': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'etd_days': ExcelDataServices::Validators::TypeValidity::Types::IntegerType,
+          'mot': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'transit_time': ExcelDataServices::Validators::TypeValidity::Types::OptionalIntegerLikeType,
+          'cargo_class': ExcelDataServices::Validators::TypeValidity::Types::CargoClassType
         }.freeze
       end
     end

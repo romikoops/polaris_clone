@@ -5,9 +5,9 @@ module ExcelDataServices
     module TypeValidity
       class ChargeCategories < ExcelDataServices::Validators::TypeValidity::Base
         COLUMN_TO_CLASS_LOOKUP = {
-          'internal_code': :optional_string,
-          'fee_code': :string,
-          'fee_name': :optional_string
+          'internal_code': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+          'fee_code': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'fee_name': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType
         }.freeze
       end
     end
