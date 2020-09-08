@@ -46,5 +46,30 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
         expect(results.count).to eq(0)
       end
     end
+
+    context 'with an incorrect filetype' do
+      let(:header_validator) { instance_double('HeaderChecker') }
+      let(:flavor_based_validator_klass) { instance_double('FlavorBasedValidator') }
+      let(:flavor_based_validator) { instance_double('FlavorBasedValidator') }
+      let(:inserter_klass) { instance_double('Inserter') }
+      let(:type_validator_class) { class_double(ExcelDataServices::Validators::TypeValidity::Base) }
+      let(:type_validator_instance) { instance_double(ExcelDataServices::Validators::TypeValidity::Base) }
+
+      before do
+        allow(MimeMagic).to receive(:by_magic).and_return(nil)
+        allow(MimeMagic).to receive(:by_path).and_return(nil)
+      end
+
+      it 'reads the excel file in and calls the correct methods.' do
+        results = uploader.perform
+        expect(results[:errors]).to eq([{
+          type: :error,
+          row_nr: 1,
+          sheet_name: '',
+          reason: "The file uploaded was of an unsupported file type. Please use .xlsx or .xls filetypes.",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype
+        }])
+      end
+    end
   end
 end

@@ -24,7 +24,10 @@ module ExcelDataServices
         restructurer_names_for_all_sheets = {}
         headers_for_all_sheets = {}
 
-        xlsx = open_spreadsheet_file(file_or_path)
+        path = Pathname(file_or_path).to_s
+        return { has_errors: true, errors: invalid_file_type_error } unless valid_excel_filetype?(path)
+
+        xlsx = open_spreadsheet_file(path)
         # Header validation and data restructurer names
         header_errors = []
         xlsx.each_with_pagename do |sheet_name, sheet_data|
@@ -88,20 +91,25 @@ module ExcelDataServices
 
       attr_reader :file_or_path, :options
 
-      def open_spreadsheet_file(file_or_path)
-        path = Pathname(file_or_path).to_s
-
-        raise ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype unless valid_excel_filetype?(path)
-
+      def open_spreadsheet_file(path)
         Roo::ExcelxMoney.new(path)
+      end
+
+      def invalid_file_type_error
+        [{
+          type: :error,
+          row_nr: 1,
+          sheet_name: '',
+          reason: "The file uploaded was of an unsupported file type. Please use .xlsx or .xls filetypes.",
+          exception_class: ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype
+        }]
       end
 
       def valid_excel_filetype?(path)
         # Try binary first, then file extension
-        mime_subtype = MimeMagic.by_magic(File.open(path))&.subtype
-        mime_subtype = MimeMagic.by_path(path).subtype if mime_subtype == 'zip' || mime_subtype.nil?
-
-        return false unless mime_subtype
+        mime_type = MimeMagic.by_magic(File.open(path)) || MimeMagic.by_path(path)
+        mime_subtype = mime_type.subtype if mime_type.present?
+        return false if mime_subtype.nil?
 
         VALID_EXCEL_MIME_SUBTYPES.any? { |valid_subtype| valid_subtype.include?(mime_subtype) }
       end
