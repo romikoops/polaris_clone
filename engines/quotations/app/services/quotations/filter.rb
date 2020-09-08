@@ -12,6 +12,7 @@ module Quotations
       quotations = Quotations::Quotation.where(organization: organization)
       quotations = quotations.where("selected_date >= ?", start_date) if start_date.present?
       quotations = quotations.where("selected_date <= ?", end_date) if end_date.present?
+      quotations = quotations.where(error_class: nil)
       quotations.order(:selected_date)
     end
 

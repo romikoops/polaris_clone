@@ -20,7 +20,7 @@ RSpec.describe Quotations::Filter do
       end
 
       it "returns filtered results" do
-        expect(filter.perform).to eq sorted_quotations
+        expect(filter.perform.ids).to match sorted_quotations.ids
       end
     end
 
