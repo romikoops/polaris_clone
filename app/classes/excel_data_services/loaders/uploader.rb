@@ -110,6 +110,7 @@ module ExcelDataServices
         header_row.map! do |el|
           next :'' if el.nil?
 
+          el = el.to_s
           el.downcase!
           el.gsub!(%r{[^a-z0-9\/\-\_\(\)]+}, '_') # underscore instead of unwanted characters
           el.to_sym
