@@ -71,9 +71,9 @@ class QuotedShipmentsService
 
     shipment.dup.tap do |cloned_shipment|
       clone_cargo(cloned_shipment: cloned_shipment)
+      update_cloned_shipment(cloned_shipment: cloned_shipment, charge_breakdown: charge_breakdown)
       break unless cloned_shipment.valid?
 
-      update_cloned_shipment(cloned_shipment: cloned_shipment, charge_breakdown: charge_breakdown)
       clone_charge_breakdown(cloned_shipment: cloned_shipment, charge_breakdown: charge_breakdown)
       cloned_shipment.save!
     end
