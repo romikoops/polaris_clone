@@ -112,13 +112,18 @@ module OfferCalculator
       60
     end
 
+    def send_admin_email
+      send_email = scope.fetch(:email_all_quotes) && shipment.billing == "external"
+      return if mailer.blank? || send_email.blank?
+
+      mailer.to_s.constantize.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later
+    end
+
     def handle_quoted_shipments
       return unless scope["open_quotation_tool"] || scope["closed_quotation_tool"]
+      send_admin_email
 
-      OfferCalculator::QuotedShipmentsJob.perform_later(
-        shipment_id: shipment.id, mailer: mailer.to_s,
-        send_email: scope.fetch(:email_all_quotes) && shipment.billing == "external"
-      )
+      OfferCalculator::QuotedShipmentsJob.perform_later(shipment_id: shipment.id)
     end
   end
 end
