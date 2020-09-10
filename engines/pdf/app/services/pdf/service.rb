@@ -71,7 +71,10 @@ module Pdf
     end
 
     def admin_quotation(quotation: nil, shipment:, pdf_tenders: nil)
-      return legacy_admin_quotation(quotation: quotation, shipment: shipment) if quotation.is_a?(Legacy::Quotation)
+      if quotation.is_a?(Legacy::Quotation)
+        quotation = Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
+        pdf_tenders = tenders(quotation: quotation, shipment: shipment)
+      end
 
       existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
@@ -97,6 +100,7 @@ module Pdf
       shipments = quotation ? quotation.shipments : [shipment]
       shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
       quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
+
       note_remarks = get_note_remarks(quotes.first["trip_id"])
       file = generate_quote_pdf(
         shipment: shipment,
