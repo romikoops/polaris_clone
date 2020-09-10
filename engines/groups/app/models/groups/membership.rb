@@ -2,6 +2,7 @@
 
 module Groups
   class Membership < ApplicationRecord
+    acts_as_paranoid
     default_scope { order(:priority) }
 
     belongs_to :member, polymorphic: true
@@ -25,6 +26,7 @@ end
 # Table name: groups_memberships
 #
 #  id          :uuid             not null, primary key
+#  deleted_at  :datetime
 #  member_type :string
 #  priority    :integer
 #  created_at  :datetime         not null
@@ -34,6 +36,7 @@ end
 #
 # Indexes
 #
+#  index_groups_memberships_on_deleted_at                 (deleted_at)
 #  index_groups_memberships_on_group_id                   (group_id)
 #  index_groups_memberships_on_member_type_and_member_id  (member_type,member_id)
 #

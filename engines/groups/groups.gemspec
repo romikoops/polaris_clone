@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'imc-organizations'
   s.add_development_dependency 'imc-companies'
 
+  s.add_dependency "paranoia"
   s.add_dependency 'pg_search', '~> 2.3.0'
 
   Gemhelper.common(s)

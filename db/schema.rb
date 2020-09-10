@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_21_101543) do
+ActiveRecord::Schema.define(version: 2020_09_07_083453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -504,21 +504,25 @@ ActiveRecord::Schema.define(version: 2020_08_21_101543) do
 
   create_table "groups_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.string "name"
     t.uuid "organization_id"
     t.uuid "tenants_group_id"
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_groups_groups_on_deleted_at"
     t.index ["organization_id"], name: "index_groups_groups_on_organization_id"
     t.index ["tenants_group_id"], name: "index_groups_groups_on_tenants_group_id"
   end
 
   create_table "groups_memberships", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.uuid "group_id"
     t.uuid "member_id"
     t.string "member_type"
     t.integer "priority"
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_groups_memberships_on_deleted_at"
     t.index ["group_id"], name: "index_groups_memberships_on_group_id"
     t.index ["member_type", "member_id"], name: "index_groups_memberships_on_member_type_and_member_id"
   end

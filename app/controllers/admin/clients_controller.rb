@@ -76,7 +76,13 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Destroy User account
 
   def destroy
-    Users::User.find_by(id: params[:id]).destroy
+    ActiveRecord::Base.transaction do
+      user = Users::User.find_by(id: params[:id])
+      Groups::Membership.where(member: user).destroy_all
+      Profiles::Profile.find_by(user: user).destroy!
+      user.destroy!
+    end
+
     response_handler(params[:id])
   end
 
