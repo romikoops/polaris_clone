@@ -8,6 +8,7 @@ module ExcelDataServices
 
         def check_single_data(row)
           check_correct_individual_effective_period(row)
+          check_per_unit_ton_cbm_range(row: row)
 
           origin_hub_with_info = find_hub_by_name_or_locode_with_info(
             name: row.hub,
@@ -32,6 +33,26 @@ module ExcelDataServices
           end
 
           check_overlapping_effective_periods(row, origin_hub, counterpart_hub_with_info.try(:hub))
+        end
+
+        def check_per_unit_ton_cbm_range(row:)
+          row.fees.values
+          .select { |fee| fee[:rate_basis] == "PER_UNIT_TON_CBM_RANGE" }
+          .pluck(:range)
+          .flatten
+          .map { |range_content| range_content.slice(:ton, :cbm) }
+          .each do |ton_cbm_slice|
+            next if ton_cbm_slice.count == 1
+
+            add_to_errors(
+              type: :error,
+              row_nr: row.nr,
+              sheet_name: sheet_name,
+              reason: "When the rate basis is \"PER_UNIT_TON_CBM_RANGE\", " \
+                      "there must be exactly one value, either for TON or for CBM.",
+              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
+            )
+          end
         end
 
         def check_overlapping_effective_periods(row, origin_hub, counterpart_hub)

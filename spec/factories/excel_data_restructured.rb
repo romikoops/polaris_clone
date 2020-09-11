@@ -1249,7 +1249,7 @@ FactoryBot.define do
             counterpart_hub: nil,
             direction: 'export',
             fees: {
-              'CMP': {
+              CMP: {
                 'max': nil,
                 'min': nil,
                 'name': 'Compliance Fee',
@@ -1257,7 +1257,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_SHIPMENT'
               },
-              'DOC': {
+              DOC: {
                 'key': 'DOC',
                 'max': nil,
                 'min': nil,
@@ -1266,7 +1266,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_WRONG'
               },
-              'ISP': {
+              ISP: {
                 'key': 'ISP',
                 'max': nil,
                 'min': nil,
@@ -1274,8 +1274,8 @@ FactoryBot.define do
                 'value': nil,
                 'rate_basis': 'PER_SHIPMENT_CONTAINER'
               },
-              'QDF': {
-                'key': 'QDF',
+              BLA: {
+                'key': 'BLA',
                 'max': 125,
                 'min': 55,
                 'ton': 40,
@@ -1283,7 +1283,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_TON'
               },
-              'SOL': {
+              SOL: {
                 'key': nil,
                 'max': nil,
                 'min': nil,
@@ -1292,7 +1292,7 @@ FactoryBot.define do
                 'currency': nil,
                 'rate_basis': 'PER_CBM_KG'
               },
-              'ZAP': {
+              ZAP: {
                 'key': 'ZAP',
                 'max': nil,
                 'min': nil,
@@ -1300,7 +1300,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_BILL'
               },
-              'THC': {
+              THC: {
                 'key': 'THC',
                 'max': nil,
                 'min': nil,
@@ -1308,7 +1308,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_WM_RANGE'
               },
-              'CBM': {
+              CBM: {
                 'key': 'CBM',
                 'max': nil,
                 'min': nil,
@@ -1316,7 +1316,7 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_CBM_TON'
               },
-              'BCL': {
+              BCL: {
                 'key': 'BCL',
                 'max': nil,
                 'min': nil,
@@ -1324,13 +1324,25 @@ FactoryBot.define do
                 'currency': 'EUR',
                 'rate_basis': 'PER_BILL_CONTAINER'
               },
-              'XKG': {
+              XKG: {
                 'key': 'XKG',
                 'max': nil,
                 'min': nil,
                 'name': 'Zapp',
                 'currency': 'EUR',
                 'rate_basis': 'PER_X_KG_FLAT'
+              },
+              QDF: {
+                'currency': "EUR",
+                'key': "QDF",
+                'min': 57,
+                'max': nil,
+                'name': "Wharfage / Quay Dues",
+                'rate_basis': "PER_UNIT_TON_CBM_RANGE",
+                'range': [
+                  {'currency': "EUR", 'min': 0, 'max': 5, 'ton': 41},
+                  {'currency': "EUR", 'min': 6, 'max': 40, 'ton': 123, 'cbm': 8}
+                ]
               }
             },
             dangerous: nil,

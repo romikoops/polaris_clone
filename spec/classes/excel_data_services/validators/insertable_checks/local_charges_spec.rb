@@ -51,6 +51,11 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
 
         expect(validator.results).to eq(
           [{ exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
+             reason: 'When the rate basis is "PER_UNIT_TON_CBM_RANGE", there must be exactly one value, either for TON or for CBM.',
+             row_nr: '2',
+             sheet_name: 'Sheet1',
+             type: :error },
+           { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
              reason: "Overlapping effective period.\n (Old is covered by new: [2019-01-24 00:00 - 2020-01-24 23:59] <-> [2019-01-24 00:00 - 2020-01-24 23:59]).",
              row_nr: '2',
              sheet_name: 'Sheet1',

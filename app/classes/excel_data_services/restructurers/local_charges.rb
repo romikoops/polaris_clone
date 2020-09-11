@@ -182,10 +182,6 @@ module ExcelDataServices
         return { value: single_data[:kg], base: single_data[:base] } if rate_basis == 'PER_X_KG_FLAT'
         return { value: single_data[:ton], base: single_data[:base] } if rate_basis == 'PER_SHIPMENT_TON'
 
-        if rate_basis == 'PER_UNIT_TON_CBM_RANGE' && (single_data[:cbm] && single_data[:ton])
-          raise StandardError, "There should only be one value for rate_basis 'PER_UNIT_TON_CBM_RANGE'."
-        end
-
         keys = rate_basis.downcase.split('_')[1..-1].map(&:to_sym)
         value_obj = {}
         keys.each { |key| value_obj[key] = single_data[key] if single_data[key] }

@@ -7,10 +7,13 @@ module ExcelDataServices
         class UnknownRateBasis < MissingValues
         end
 
-        class MissingValuesForRateBasis < MissingValues
+        class MissingValueForRateBasis < MissingValues
         end
 
         class MissingValuesForHub < MissingValues
+        end
+
+        class MissingValueForFeeComponents < MissingValues
         end
       end
     end
