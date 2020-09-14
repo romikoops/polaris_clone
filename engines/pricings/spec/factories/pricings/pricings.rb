@@ -5,6 +5,7 @@ FactoryBot.define do
     wm_rate { 1000 }
     transient do
       fee_attrs { nil }
+      amount { 250 }
     end
 
     effective_date { Time.zone.today }
@@ -42,13 +43,13 @@ FactoryBot.define do
     trait :fcl_20 do
       cargo_class { 'fcl_20' }
       load_type { 'container' }
-      after :create do |pricing|
+      after :create do |pricing, evaluator|
         create_list(:pricings_fee,
                     1,
                     pricing: pricing,
                     organization_id: pricing.organization_id,
                     rate_basis: FactoryBot.create(:per_container_rate_basis),
-                    rate: 250,
+                    rate: evaluator.amount,
                     charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
       end
     end

@@ -67,12 +67,21 @@ module Api
       context 'with available tenders' do
         before do
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
-            FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
             FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
           end
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization, amount: 170)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, organization: organization, amount: 190)
+
           OfferCalculator::Schedule.from_trips(trips)
-          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization)
           FactoryBot.create(:freight_margin, default_for: 'ocean', organization_id: organization.id, applicable: organization, value: 0)
+        end
+
+        it "returns tenders ordered by amount by default" do
+          post :create, params: params, as: :json
+
+          amounts = response_data.dig('attributes', 'tenders', 'data').map { |i| i.dig('attributes', 'total', 'amount') }
+
+          expect(amounts).to eq([170.0, 190.0])
         end
 
         context 'when client is provided' do

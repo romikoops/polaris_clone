@@ -10,7 +10,7 @@ module Api
       decorates_association :destination_nexus, with: NexusDecorator
 
       def tenders
-        Wheelhouse::TenderDecorator.decorate_collection(object.tenders)
+        Wheelhouse::TenderDecorator.decorate_collection(object.tenders.order(:amount_cents))
       end
 
       def shipment
