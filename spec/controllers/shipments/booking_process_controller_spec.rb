@@ -68,8 +68,8 @@ RSpec.describe Shipments::BookingProcessController do
       allow(quoted_shipments_service).to receive(:perform).and_return(quote)
 
       allow(OfferCalculator::QuotedShipmentsService).to receive(:initialize).and_return(quoted_shipments_service)
-      allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
-      allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
+      allow(QuoteMailer).to receive(:new_quotation_admin_email).at_least(:once).and_return(quote_mailer)
+      allow(QuoteMailer).to receive(:new_quotation_email).at_least(:once).and_return(quote_mailer)
       allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
     end
 

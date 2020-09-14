@@ -88,9 +88,6 @@ RSpec.describe ShippingTools do
       quote_mailer = object_double('Mailer')
       create(:legacy_quotation, original_shipment: shipment)
       FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id)
-      allow(QuoteMailer).to receive(:quotation_admin_email).at_least(:once).and_return(quote_mailer)
-      allow(QuoteMailer).to receive(:quotation_email).at_least(:once).and_return(quote_mailer)
-      allow(quote_mailer).to receive(:deliver_later).at_least(:twice)
       FactoryBot.create(:organizations_theme, organization: organization)
     end
 
