@@ -3,7 +3,15 @@
 module OfferCalculator
   module Service
     module RateBuilders
-      Struct.new("FeeInputs", :charge_category, :rate_basis, :min_value, :max_value, :measures, :target)
+      FeeInputs = Struct.new(
+        :charge_category,
+        :rate_basis,
+        :min_value,
+        :max_value,
+        :measures,
+        :target,
+        keyword_init: true
+      )
 
       class Base
         STANDARD_RATE_BASES = OfferCalculator::Service::RateBuilders::Lookups::STANDARD_RATE_BASES

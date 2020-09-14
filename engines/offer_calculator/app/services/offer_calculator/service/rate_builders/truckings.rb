@@ -16,13 +16,13 @@ module OfferCalculator
             @fee_components = []
             check_limits(target_measure: target_measure)
             create_rates_from_ranges(target_measure: target_measure)
-            @fee_arguments = Struct::FeeInputs.new(
-              charge_category,
-              rate_basis,
-              min_value,
-              max_value,
-              target_measure,
-              target
+            @fee_arguments = FeeInputs.new(
+              charge_category: charge_category,
+              rate_basis: rate_basis,
+              min_value: min_value,
+              max_value: max_value,
+              measures: target_measure,
+              target: target
             )
             fee = OfferCalculator::Service::RateBuilders::Fee.new(inputs: @fee_arguments)
             fee.components = @fee_components

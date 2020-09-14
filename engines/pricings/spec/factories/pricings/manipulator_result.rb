@@ -7,6 +7,7 @@ FactoryBot.define do
     result { {} }
     breakdowns { [] }
     transient do
+      flat_margins { {} }
       margins { [] }
     end
 
@@ -35,7 +36,7 @@ FactoryBot.define do
         result: result,
         original: original,
         breakdowns: breakdowns,
-        flat_margins: []
+        flat_margins: flat_margins
       )
     end
   end

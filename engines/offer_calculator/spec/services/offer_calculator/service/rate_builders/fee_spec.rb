@@ -26,7 +26,8 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
     FactoryBot.build(:manipulator_result,
       original: pricing,
       result: pricing.as_json,
-      margins: [margin])
+      margins: [margin],
+      flat_margins: {charge_category.code => 50})
   end
   let(:measures) do
     OfferCalculator::Service::Measurements::Unit.new(
@@ -84,6 +85,10 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
 
     it "returns the validity" do
       expect(fee.validity).to eq(pricing.validity)
+    end
+
+    it "returns the flat_margin" do
+      expect(fee.flat_margin).to eq(Money.new(5000, max_value.currency))
     end
   end
 end

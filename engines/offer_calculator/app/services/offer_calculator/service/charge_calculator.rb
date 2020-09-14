@@ -49,8 +49,13 @@ module OfferCalculator
         existing_total = standard_charges.sum(&:value)
         input.select { |fee| fee.rate_basis == 'PERCENTAGE' }.map do |fee|
           component = fee.components.first
+          percentage_value = percentage_result_from_component(
+            percentage: component.percentage,
+            total: existing_total,
+            fee: fee
+          )
           OfferCalculator::Service::Calculators::Charge.new(
-            value: percentage_result_from_component(percentage: component.percentage, total: existing_total, fee: fee),
+            value: final_value_with_margin(fee: fee, value: percentage_value),
             fee: fee,
             fee_component: component
           )
@@ -67,10 +72,14 @@ module OfferCalculator
                     .max_by { |calculation| calculation[:value] }
 
         OfferCalculator::Service::Calculators::Charge.new(
-          value: result[:value],
+          value: final_value_with_margin(fee: fee, value: result[:value]),
           fee: fee,
           fee_component: result[:component]
         )
+      end
+
+      def final_value_with_margin(fee:, value:)
+        value + fee.flat_margin
       end
 
       def component_and_value(component:, fee:)

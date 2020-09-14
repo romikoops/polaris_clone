@@ -38,6 +38,11 @@ module OfferCalculator
         def filter_id
           itinerary_id || hub_id
         end
+
+        def flat_margin
+          margin_value = (object.flat_margins.dig(code) || 0) * 100
+          Money.new(margin_value, max_value.currency)
+        end
       end
     end
   end

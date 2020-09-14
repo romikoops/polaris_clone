@@ -18,13 +18,13 @@ module OfferCalculator
         end
 
         def perform
-          fee_inputs = Struct::FeeInputs.new(
-            find_charge_category_from_breakdowns,
-            fee.fetch("rate_basis"),
-            min_value,
-            max_value,
-            measures,
-            determine_target(rate_basis: fee.fetch("rate_basis"))
+          fee_inputs = FeeInputs.new(
+            charge_category: find_charge_category_from_breakdowns,
+            rate_basis: fee.fetch("rate_basis"),
+            min_value: min_value,
+            max_value: max_value,
+            measures: measures,
+            target: determine_target(rate_basis: fee.fetch("rate_basis"))
           )
 
           OfferCalculator::Service::RateBuilders::Fee.new(inputs: fee_inputs)

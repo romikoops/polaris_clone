@@ -26,8 +26,10 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:manipulated_result) do
     FactoryBot.build(:manipulator_result,
                      original: pricing,
-                     result: pricing.as_json)
+                     result: pricing.as_json,
+                     flat_margins: flat_margins)
   end
+  let(:flat_margins) { {} }
   let(:measures) do
     OfferCalculator::Service::Measurements::Unit.new(
       cargo: target_cargo,
@@ -59,6 +61,20 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       aggregate_failures do
         expect(results.length).to eq(1)
         expect(results.first.value).to eq(Money.new(measures.wm.value * fee.rate * 100, fee.currency_name))
+      end
+    end
+  end
+
+  context 'when calculating per_wm fee with flat margin' do
+    let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
+    let(:flat_margins) { { fee.charge_category.code => 50} }
+    let(:expected_value) { measures.wm.value * Money.new(fee.rate * 100, fee.currency_name) }
+    let(:flat_margin_value) { Money.new(5000, 'USD') }
+
+    it 'calculates the per_wm fee correctly' do
+      aggregate_failures do
+        expect(results.length).to eq(1)
+        expect(results.first.value).to eq(expected_value + flat_margin_value)
       end
     end
   end
