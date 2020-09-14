@@ -61,6 +61,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = small_logo.attached? ? small_logo&.download : ''
     attachments.inline['icon.png'] = @mot_icon
     no_reply = Mail::Address.new("no-reply@#{@organization.slug}.itsmycargo.shop")
+
     mail_options = {
       from: no_reply.tap { |a| a.display_name = @org_theme.name }.format,
       reply_to: @org_theme.emails.dig('support', 'general'),

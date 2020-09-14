@@ -2,13 +2,17 @@
 
 class ShipmentMailerPreview < ActionMailer::Preview
   def tenant_notification
-    @shipment = Tenant.find_by(subdomain: 'demo').shipments.requested.last
-    ShipmentMailer.tenant_notification(@shipment.user, @shipment)
+    @organization = Organizations::Organization.find_by(slug: 'demo')
+    @shipment = Legacy::Shipment.where(organization: @organization).requested.last
+    user = Users::User.find(@shipment.user_id)
+    ShipmentMailer.tenant_notification(user, @shipment)
   end
 
   def shipper_notification
-    @shipment = Tenant.find_by(subdomain: 'demo').shipments.requested.last
-    ShipmentMailer.shipper_notification(@shipment.user, @shipment)
+    @organization = Organizations::Organization.find_by(slug: 'demo')
+    @shipment = Legacy::Shipment.where(organization: @organization).requested.last
+    user = Users::User.find(@shipment.user_id)
+    ShipmentMailer.shipper_notification(user, @shipment)
   end
 
   def shipper_confirmation
