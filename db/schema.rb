@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_07_083453) do
+ActiveRecord::Schema.define(version: 2020_09_11_073649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -2458,10 +2458,13 @@ ActiveRecord::Schema.define(version: 2020_09_07_083453) do
 
   create_table "trucking_hub_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.integer "hub_id"
     t.uuid "sandbox_id"
     t.uuid "type_availability_id"
     t.datetime "updated_at", null: false
+    t.index ["deleted_at"], name: "index_trucking_hub_availabilities_on_deleted_at"
+    t.index ["hub_id", "type_availability_id"], name: "trucking_hub_avilabilities_unique_index", unique: true, where: "(deleted_at IS NULL)"
     t.index ["hub_id"], name: "index_trucking_hub_availabilities_on_hub_id"
     t.index ["sandbox_id"], name: "index_trucking_hub_availabilities_on_sandbox_id"
     t.index ["type_availability_id"], name: "index_trucking_hub_availabilities_on_type_availability_id"

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :legacy_itinerary, class: 'Legacy::Itinerary' do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :legacy_itinerary, class: "Legacy::Itinerary" do
     transient do
       num_stops { 2 }
     end
 
-    name { 'Gothenburg - Shanghai' }
-    mode_of_transport { 'ocean' }
+    name { "Gothenburg - Shanghai" }
+    mode_of_transport { "ocean" }
     transshipment { nil }
     association :organization, factory: :organizations_organization
     association :origin_hub, factory: :legacy_hub
@@ -29,13 +29,13 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
         index = 0
         evaluator.num_stops.times do
           itinerary.stops << build(:legacy_stop,
-                                   itinerary: itinerary,
-                                   index: index,
-                                   hub: build(:legacy_hub,
-                                              organization: itinerary.organization,
-                                              hub_type: itinerary.mode_of_transport,
-                                              nexus: build(:legacy_nexus,
-                                                           organization: itinerary.organization)))
+            itinerary: itinerary,
+            index: index,
+            hub: build(:legacy_hub,
+              organization: itinerary.organization,
+              hub_type: itinerary.mode_of_transport,
+              nexus: build(:legacy_nexus,
+                organization: itinerary.organization)))
           index += 1
         end
       end
@@ -46,173 +46,201 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
         trip = create(:legacy_trip, itinerary: itinerary)
         itinerary.trips << trip
         trip.layovers << create(:legacy_layover,
-                               stop_index: 0,
-                               trip: trip,
-                               stop: itinerary.origin_stops.first,
-                               itinerary: itinerary)
+          stop_index: 0,
+          trip: trip,
+          stop: itinerary.origin_stops.first,
+          itinerary: itinerary)
         trip.layovers << create(:legacy_layover,
-                               stop_index: 1,
-                               trip: trip,
-                               stop: itinerary.destination_stops.last,
-                               itinerary: itinerary)
+          stop_index: 1,
+          trip: trip,
+          stop: itinerary.destination_stops.last,
+          itinerary: itinerary)
       end
     end
 
     trait :gothenburg_shanghai do
-      name { 'Gothenburg - Shanghai' }
+      name { "Gothenburg - Shanghai" }
 
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(hub_code: 'CNSHA', name: 'Shanghai', organization: itinerary.organization)
-        gothenburg = Legacy::Hub.find_by(hub_code: 'SEGOT', name: 'Gothenburg', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(hub_code: "CNSHA",
+                                       hub_type: itinerary.mode_of_transport,
+                                       name: "Shanghai",
+                                       organization: itinerary.organization)
+        gothenburg = Legacy::Hub.find_by(hub_code: "SEGOT",
+                                         hub_type: itinerary.mode_of_transport,
+                                         name: "Gothenburg",
+                                         organization: itinerary.organization)
+        shanghai_nexus = Legacy::Nexus.find_by(locode: "CNSHA")
+        gothenburg_nexus = Legacy::Nexus.find_by(locode: "SEGOT")
 
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: gothenburg || build(:gothenburg_hub,
-                                                          organization: itinerary.organization,
-                                                          hub_type: itinerary.mode_of_transport,
-                                                          nexus: build(:gothenburg_nexus,
-                                                                       organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: gothenburg || build(:gothenburg_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: gothenburg_nexus || build(:gothenburg_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: (shanghai || build(:shanghai_hub,
-                                                         organization: itinerary.organization,
-                                                         hub_type: itinerary.mode_of_transport,
-                                                         nexus: build(:shanghai_nexus,
-                                                                      organization: itinerary.organization))))
+          itinerary: itinerary,
+          index: 1,
+          hub: (shanghai || build(:shanghai_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: shanghai_nexus || build(:shanghai_nexus,
+              organization: itinerary.organization))))
       end
     end
 
     trait :shanghai_gothenburg do
-      name { 'Shanghai - Gothenburg' }
+      name { "Shanghai - Gothenburg" }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai', organization: itinerary.organization)
-        gothenburg = Legacy::Hub.find_by(name: 'Gothenburg', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(name: "Shanghai",
+                                       hub_type: itinerary.mode_of_transport,
+                                       organization: itinerary.organization)
+        gothenburg = Legacy::Hub.find_by(name: "Gothenburg",
+                                         hub_type: itinerary.mode_of_transport,
+                                         organization: itinerary.organization)
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: shanghai || build(:shanghai_hub,
-                                                        organization: itinerary.organization,
-                                                        hub_type: itinerary.mode_of_transport,
-                                                        nexus: build(:shanghai_nexus,
-                                                                     organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: shanghai || build(:shanghai_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:shanghai_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: gothenburg || build(:gothenburg_hub,
-                                                          organization: itinerary.organization,
-                                                          hub_type: itinerary.mode_of_transport,
-                                                          nexus: build(:gothenburg_nexus,
-                                                                       organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 1,
+          hub: gothenburg || build(:gothenburg_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:gothenburg_nexus,
+              organization: itinerary.organization)))
       end
     end
 
     trait :felixstowe_shanghai do
-      name { 'Felixstowe - Shanghai' }
+      name { "Felixstowe - Shanghai" }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai', organization: itinerary.organization)
-        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(name: "Shanghai",
+                                       hub_type: itinerary.mode_of_transport,
+                                       organization: itinerary.organization)
+        felixstowe = Legacy::Hub.find_by(name: "Felixstowe",
+                                         hub_type: itinerary.mode_of_transport,
+                                         organization: itinerary.organization)
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: felixstowe || build(:felixstowe_hub,
-                                                          organization: itinerary.organization,
-                                                          hub_type: itinerary.mode_of_transport,
-                                                          nexus: build(:felixstowe_nexus,
-                                                                       organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: felixstowe || build(:felixstowe_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:felixstowe_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: (shanghai || build(:shanghai_hub,
-                                                         organization: itinerary.organization,
-                                                         hub_type: itinerary.mode_of_transport,
-                                                         nexus: build(:shanghai_nexus,
-                                                                      organization: itinerary.organization))))
+          itinerary: itinerary,
+          index: 1,
+          hub: (shanghai || build(:shanghai_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:shanghai_nexus,
+              organization: itinerary.organization))))
       end
     end
 
     trait :shanghai_felixstowe do
-      name { 'Shanghai - Felixstowe' }
+      name { "Shanghai - Felixstowe" }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai', organization: itinerary.organization)
-        felixstowe = Legacy::Hub.find_by(name: 'Felixstowe', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(name: "Shanghai",
+                                       hub_type: itinerary.mode_of_transport,
+                                       organization: itinerary.organization)
+        felixstowe = Legacy::Hub.find_by(name: "Felixstowe",
+                                         hub_type: itinerary.mode_of_transport,
+                                         organization: itinerary.organization)
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: shanghai || build(:shanghai_hub,
-                                                        organization: itinerary.organization,
-                                                        hub_type: itinerary.mode_of_transport,
-                                                        nexus: build(:shanghai_nexus,
-                                                                     organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: shanghai || build(:shanghai_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:shanghai_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: felixstowe || build(:felixstowe_hub,
-                                                          organization: itinerary.organization,
-                                                          hub_type: itinerary.mode_of_transport,
-                                                          nexus: build(:felixstowe_nexus,
-                                                                       organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 1,
+          hub: felixstowe || build(:felixstowe_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:felixstowe_nexus,
+              organization: itinerary.organization)))
       end
     end
 
     trait :hamburg_shanghai do
-      name { 'Hamburg - Shanghai' }
+      name { "Hamburg - Shanghai" }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai', organization: itinerary.organization)
-        hamburg = Legacy::Hub.find_by(name: 'Hamburg', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(name: "Shanghai",
+                                       hub_type: itinerary.mode_of_transport,
+                                       organization: itinerary.organization)
+        hamburg = Legacy::Hub.find_by(name: "Hamburg",
+                                      hub_type: itinerary.mode_of_transport,
+                                      organization: itinerary.organization)
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: hamburg || build(:hamburg_hub,
-                                                       organization: itinerary.organization,
-                                                       hub_type: itinerary.mode_of_transport,
-                                                       nexus: build(:hamburg_nexus,
-                                                                    organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: hamburg || build(:hamburg_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:hamburg_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: (shanghai || build(:shanghai_hub,
-                                                         organization: itinerary.organization,
-                                                         hub_type: itinerary.mode_of_transport,
-                                                         nexus: build(:shanghai_nexus,
-                                                                      organization: itinerary.organization))))
+          itinerary: itinerary,
+          index: 1,
+          hub: (shanghai || build(:shanghai_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:shanghai_nexus,
+              organization: itinerary.organization))))
       end
     end
 
     trait :shanghai_hamburg do
-      name { 'Shanghai - Hamburg' }
+      name { "Shanghai - Hamburg" }
       after(:build) do |itinerary|
         next if itinerary.stops.length >= 2
 
-        shanghai = Legacy::Hub.find_by(name: 'Shanghai', organization: itinerary.organization)
-        hamburg = Legacy::Hub.find_by(name: 'Hamburg', organization: itinerary.organization)
+        shanghai = Legacy::Hub.find_by(name: "Shanghai",
+                                       hub_type: itinerary.mode_of_transport,
+                                       organization: itinerary.organization)
+        hamburg = Legacy::Hub.find_by(name: "Hamburg",
+                                      hub_type: itinerary.mode_of_transport,
+                                      organization: itinerary.organization)
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 0,
-                                 hub: shanghai || build(:shanghai_hub,
-                                                        hub_type: itinerary.mode_of_transport,
-                                                        organization: itinerary.organization,
-                                                        nexus: build(:shanghai_nexus,
-                                                                     organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 0,
+          hub: shanghai || build(:shanghai_hub,
+            hub_type: itinerary.mode_of_transport,
+            organization: itinerary.organization,
+            nexus: build(:shanghai_nexus,
+              organization: itinerary.organization)))
         itinerary.stops << build(:legacy_stop,
-                                 itinerary: itinerary,
-                                 index: 1,
-                                 hub: hamburg || build(:hamburg_hub,
-                                                       organization: itinerary.organization,
-                                                       hub_type: itinerary.mode_of_transport,
-                                                       nexus: build(:hamburg_nexus,
-                                                                    organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: 1,
+          hub: hamburg || build(:hamburg_hub,
+            organization: itinerary.organization,
+            hub_type: itinerary.mode_of_transport,
+            nexus: build(:hamburg_nexus,
+              organization: itinerary.organization)))
       end
     end
 
