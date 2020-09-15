@@ -88,25 +88,28 @@ FactoryBot.define do
           else
             :bas
           end
-
+          child_charge_category = FactoryBot.create(:legacy_charge_categories,
+              trait,
+              organization_id: shipment.organization_id)
+          child_price = FactoryBot.create(:legacy_price)
+          if evaluator.with_tender
+            line_item = FactoryBot.create(:quotations_line_item,
+                              amount: child_price.money,
+                              tender: tender,
+                              cargo: cargo_unit,
+                              charge_category: child_charge_category,
+                              section: "#{section}_section".to_sym)
+          end
           cargo_unit_charge = create(
             :legacy_charge,
             charge_breakdown: charge_breakdown,
             charge_category: cargo_unit_charge_category,
             parent_id: cargo_charge.id,
+            line_item_id: line_item&.id,
+            price: child_price,
             detail_level: 3,
-            children_charge_category: create(:legacy_charge_categories,
-              trait,
-              organization_id: shipment.organization_id)
+            children_charge_category: child_charge_category
           )
-          if evaluator.with_tender
-            FactoryBot.create(:quotations_line_item,
-                              amount: cargo_unit_charge.price.money,
-                              tender: tender,
-                              cargo: cargo_unit,
-                              charge_category: cargo_unit_charge.children_charge_category,
-                              section: "#{section}_section".to_sym)
-          end
 
           charge_breakdown.charges << cargo_charge
           charge_breakdown.charges << cargo_unit_charge

@@ -9,90 +9,6 @@ RSpec.describe Quotations::TenderUpdater do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:level_3_charge) { charge_breakdown.charges.find_by(detail_level: 3) }
 
-    context 'when the charge is of detail level 0' do
-      subject(:updater) do
-        described_class.new(tender: tender,
-                            line_item_id: nil,
-                            charge_category_id: level_0_charge.children_charge_category_id,
-                            value: 50,
-                            section: 'cargo')
-      end
-
-      let(:level_0_charge) { charge_breakdown.charges.find_by(detail_level: 0) }
-
-      before do
-        updater.perform
-      end
-
-      it 'updates the edited price of the charge' do
-        expect(updater.charge.edited_price.money).to eq Money.new(5000.0, level_0_charge.price.currency)
-      end
-
-      it 'updates grand total of the breakdown' do
-        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_0_charge.price.currency)
-      end
-
-      it 'updates the tender amount' do
-        expect(tender.amount).to eq Money.new(5000.0, level_0_charge.price.currency)
-      end
-    end
-
-    context 'when the charge is of detail level 1' do
-      subject(:updater) do
-        described_class.new(tender: tender,
-                            line_item_id: nil,
-                            charge_category_id: level_1_charge.children_charge_category_id,
-                            value: 50,
-                            section: 'cargo')
-      end
-
-      let(:level_1_charge) { charge_breakdown.charges.find_by(detail_level: 1) }
-
-      before do
-        updater.perform
-      end
-
-      it 'updates the edited price of the charge' do
-        expect(updater.charge.edited_price.money).to eq Money.new(5000.0, level_1_charge.price.currency)
-      end
-
-      it 'updates grand total of the breakdown' do
-        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_1_charge.price.currency)
-      end
-
-      it 'updates the tender amount' do
-        expect(tender.amount).to eq Money.new(5000.0, level_1_charge.price.currency)
-      end
-    end
-
-    context 'when the charge is of detail level 2' do
-      subject(:updater) do
-        described_class.new(tender: tender,
-                            line_item_id: nil,
-                            charge_category_id: level_2_charge.children_charge_category_id,
-                            value: 50,
-                            section: 'cargo')
-      end
-
-      let(:level_2_charge) { charge_breakdown.charges.find_by(detail_level: 2) }
-
-      before do
-        updater.perform
-      end
-
-      it 'updates the edited price of the charge' do
-        expect(updater.charge.edited_price.money).to eq Money.new(5000.0, level_2_charge.price.currency)
-      end
-
-      it 'updates grand total of the breakdown' do
-        expect(charge_breakdown.grand_total.edited_price.money).to eq Money.new(5000.0, level_2_charge.price.currency)
-      end
-
-      it 'updates the tender amount' do
-        expect(tender.amount).to eq Money.new(5000.0, level_2_charge.price.currency)
-      end
-    end
-
     context 'when the charge is of detail level 3' do
       subject(:updater) do
         described_class.new(tender: line_item.tender,
@@ -114,6 +30,7 @@ RSpec.describe Quotations::TenderUpdater do
 
       before do
         level_3_charge.price.update(currency: 'USD')
+        level_3_charge.update(line_item_id: line_item.id)
         updater.perform
       end
 
@@ -158,6 +75,7 @@ RSpec.describe Quotations::TenderUpdater do
       end
 
       before do
+        level_3_charge.update(line_item_id: line_item.id)
         breakdown.update(tender_id: tender.id)
         updater.perform
       end
@@ -194,6 +112,7 @@ RSpec.describe Quotations::TenderUpdater do
       end
 
       before do
+        level_3_charge.update(line_item_id: line_item.id)
         charge_breakdown.charge_categories.where(code: 'container').update_all(cargo_unit_id: nil)
         updater.perform
       end

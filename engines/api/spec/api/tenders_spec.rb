@@ -10,22 +10,18 @@ RSpec.describe "Tenders" do
   let(:destination_hub) { itinerary.destination_hub }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, user: user) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, organization: organization, user: user) }
+  let(:quotation) { Quotations::Quotation.find_by(legacy_shipment: shipment) }
+  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization: organization, user: user) }
   let(:charge_category) { shipment.charge_breakdowns.first.charges.first.children_charge_category }
-  let(:tender) do
-    FactoryBot.create(:quotations_tender,
-      quotation: quotation,
-      origin_hub: origin_hub,
-      destination_hub: destination_hub,
-      tenant_vehicle: tenant_vehicle)
-  end
+  let(:tender) { quotation.tenders.first }
+  let(:line_item) { tender.line_items.first }
 
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
-    shipment.charge_breakdowns.update(tender_id: tender.id)
+    Legacy::ExchangeRate.create(from: "EUR", to: "USD", rate: 1.5)
+    Legacy::ExchangeRate.create(from: "USD", to: "EUR", rate: 1.5)
   end
 
   path "/v1/organizations/{organization_id}/tenders/{id}" do
@@ -55,7 +51,7 @@ RSpec.describe "Tenders" do
           charge_category_id: charge_category.id,
           value: 100,
           section: charge_category.code,
-          line_item_id: nil
+          line_item_id: tender.line_items.first.id
         }
       end
 
@@ -79,7 +75,7 @@ RSpec.describe "Tenders" do
                                description: {type: :string, nullable: true},
                                id: {type: :string},
                                level: {type: :integer},
-                               lineItemId: {type: :integer, nullable: true},
+                               lineItemId: {type: :uuid},
                                order: {type: :integer},
                                originalValue: {"$ref" => "#/components/schemas/money"},
                                section: {type: :string, nullable: true},
