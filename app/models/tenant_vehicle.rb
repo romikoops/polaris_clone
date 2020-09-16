@@ -25,6 +25,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  carrier_lock      :boolean          default(FALSE)
+#  deleted_at        :datetime
 #  is_default        :boolean
 #  mode_of_transport :string
 #  name              :string

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_11_073649) do
+ActiveRecord::Schema.define(version: 2020_09_14_091732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -275,6 +275,7 @@ ActiveRecord::Schema.define(version: 2020_09_11_073649) do
 
   create_table "charge_breakdowns", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.integer "delivery_tenant_vehicle_id"
     t.integer "freight_tenant_vehicle_id"
     t.integer "pickup_tenant_vehicle_id"
@@ -284,6 +285,7 @@ ActiveRecord::Schema.define(version: 2020_09_11_073649) do
     t.integer "trip_id"
     t.datetime "updated_at", null: false
     t.datetime "valid_until"
+    t.index ["deleted_at"], name: "index_charge_breakdowns_on_deleted_at"
     t.index ["sandbox_id"], name: "index_charge_breakdowns_on_sandbox_id"
   end
 
@@ -308,6 +310,7 @@ ActiveRecord::Schema.define(version: 2020_09_11_073649) do
     t.integer "charge_category_id"
     t.integer "children_charge_category_id"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.integer "detail_level"
     t.integer "edited_price_id"
     t.uuid "line_item_id"
@@ -317,6 +320,7 @@ ActiveRecord::Schema.define(version: 2020_09_11_073649) do
     t.datetime "updated_at", null: false
     t.index ["charge_category_id"], name: "index_charges_on_charge_category_id"
     t.index ["children_charge_category_id"], name: "index_charges_on_children_charge_category_id"
+    t.index ["deleted_at"], name: "index_charges_on_deleted_at"
     t.index ["parent_id"], name: "index_charges_on_parent_id"
     t.index ["sandbox_id"], name: "index_charges_on_sandbox_id"
   end

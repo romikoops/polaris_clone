@@ -10,6 +10,7 @@ end
 # Table name: charges
 #
 #  id                          :bigint           not null, primary key
+#  deleted_at                  :datetime
 #  detail_level                :integer
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
@@ -26,6 +27,7 @@ end
 #
 #  index_charges_on_charge_category_id           (charge_category_id)
 #  index_charges_on_children_charge_category_id  (children_charge_category_id)
+#  index_charges_on_deleted_at                   (deleted_at)
 #  index_charges_on_parent_id                    (parent_id)
 #  index_charges_on_sandbox_id                   (sandbox_id)
 #

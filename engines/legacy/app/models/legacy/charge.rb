@@ -9,12 +9,14 @@ module Legacy
     belongs_to :charge_category
     belongs_to :children_charge_category,
                foreign_key: 'children_charge_category_id', class_name: 'Legacy::ChargeCategory'
-    belongs_to :charge_breakdown, optional: true
-    belongs_to :parent, class_name: 'Legacy::Charge', optional: true
-    has_many :children, foreign_key: 'parent_id', class_name: 'Legacy::Charge', dependent: :destroy
+    belongs_to :charge_breakdown, -> { with_deleted }, optional: true
+    belongs_to :parent, -> { with_deleted }, class_name: 'Legacy::Charge', optional: true
+    has_many :children, -> { with_deleted }, foreign_key: 'parent_id', class_name: 'Legacy::Charge', dependent: :destroy
     before_validation :set_detail_level, on: :create
 
     validates :detail_level, presence: true
+
+    acts_as_paranoid
 
     def deconstruct_tree_into_schedule_charge(args,
                                               sub_total_charge: false)
@@ -95,6 +97,7 @@ end
 # Table name: charges
 #
 #  id                          :bigint           not null, primary key
+#  deleted_at                  :datetime
 #  detail_level                :integer
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
@@ -111,6 +114,7 @@ end
 #
 #  index_charges_on_charge_category_id           (charge_category_id)
 #  index_charges_on_children_charge_category_id  (children_charge_category_id)
+#  index_charges_on_deleted_at                   (deleted_at)
 #  index_charges_on_parent_id                    (parent_id)
 #  index_charges_on_sandbox_id                   (sandbox_id)
 #

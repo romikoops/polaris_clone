@@ -9,7 +9,7 @@ module Quotations
     belongs_to :pickup_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :delivery_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
     belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    has_one :charge_breakdown, class_name: 'Legacy::ChargeBreakdown'
+    has_one :charge_breakdown, -> { with_deleted }, class_name: 'Legacy::ChargeBreakdown'
 
     has_many :line_items, inverse_of: :tender
 

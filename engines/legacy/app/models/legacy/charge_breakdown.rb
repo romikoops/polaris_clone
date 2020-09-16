@@ -15,7 +15,7 @@ module Legacy
       scope: %i[trip_id shipment_id pickup_tenant_vehicle delivery_tenant_vehicle]
     }
 
-    has_many :charges, dependent: :destroy do
+    has_many :charges, -> { with_deleted }, dependent: :destroy do
       def from_category(charge_category)
         where(charge_category: ChargeCategory.where(code: charge_category))
       end
@@ -31,8 +31,10 @@ module Legacy
       joins(:shipment).where('charge_breakdowns.trip_id = shipments.trip_id').first
     }
 
+    acts_as_paranoid
+
     def charge(charge_category)
-      charges.where(children_charge_category: ChargeCategory.where(code: charge_category)).first
+      charges.with_deleted.where(children_charge_category: Legacy::ChargeCategory.where(code: charge_category)).first
     end
 
     def grand_total
@@ -66,6 +68,7 @@ end
 # Table name: charge_breakdowns
 #
 #  id                         :bigint           not null, primary key
+#  deleted_at                 :datetime
 #  valid_until                :datetime
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
@@ -79,6 +82,7 @@ end
 #
 # Indexes
 #
+#  index_charge_breakdowns_on_deleted_at  (deleted_at)
 #  index_charge_breakdowns_on_sandbox_id  (sandbox_id)
 #
 # Foreign Keys

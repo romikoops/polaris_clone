@@ -40,4 +40,20 @@ RSpec.describe QuotationDecorator do
       end
     end
   end
+
+  describe ".results" do
+    let(:results) { decorated_quotation.results }
+    let(:charge_breakdown) { FactoryBot.create(:legacy_charge_breakdown, shipment: shipment) }
+
+    context "when a charge breakdown is deleted" do
+      before do
+        FactoryBot.create(:quotations_tender, quotation: quotation, charge_breakdown: charge_breakdown)
+        charge_breakdown.destroy
+      end
+
+      it "returns the tenders, including the one with a deleted deleted charge breakdown" do
+        expect(results.count).to eq(2)
+      end
+    end
+  end
 end
