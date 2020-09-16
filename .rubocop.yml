@@ -20,6 +20,7 @@ Layout/LineLength:
     - '**/*_spec.rb'
     - '.lefthook/**/*'
     - 'config/routes.rb'
+  IgnoredPatterns: ['\A#']
 
 Metrics/AbcSize:
   Max: 25

@@ -32,7 +32,7 @@ end
 #
 # Indexes
 #
-#  index_groups_groups_on_deleted_at       (deleted_at)
+#  index_groups_groups_on_deleted_at        (deleted_at)
 #  index_groups_groups_on_organization_id   (organization_id)
 #  index_groups_groups_on_tenants_group_id  (tenants_group_id)
 #

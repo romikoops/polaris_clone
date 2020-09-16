@@ -2499,16 +2499,25 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
   create_table "trucking_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "city_name"
     t.string "country_code"
+    t.bigint "country_id"
     t.datetime "created_at", null: false
+    t.string "data"
+    t.datetime "deleted_at"
     t.integer "distance"
     t.uuid "location_id"
+    t.integer "query"
     t.uuid "sandbox_id"
     t.datetime "updated_at", null: false
     t.string "zipcode"
     t.index ["city_name"], name: "index_trucking_locations_on_city_name"
     t.index ["country_code"], name: "index_trucking_locations_on_country_code"
+    t.index ["country_id"], name: "index_trucking_locations_on_country_id"
+    t.index ["data", "query", "country_id", "deleted_at"], name: "trucking_locations_upsert", unique: true
+    t.index ["data"], name: "index_trucking_locations_on_data"
+    t.index ["deleted_at"], name: "index_trucking_locations_on_deleted_at"
     t.index ["distance"], name: "index_trucking_locations_on_distance"
     t.index ["location_id"], name: "index_trucking_locations_on_location_id"
+    t.index ["query"], name: "index_trucking_locations_on_query"
     t.index ["sandbox_id"], name: "index_trucking_locations_on_sandbox_id"
     t.index ["zipcode"], name: "index_trucking_locations_on_zipcode"
   end
@@ -2609,12 +2618,15 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
     t.string "carriage"
     t.bigint "country_id"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.string "load_type"
     t.integer "query_method"
     t.uuid "sandbox_id"
     t.string "truck_type"
     t.datetime "updated_at", null: false
+    t.index ["carriage", "load_type", "country_id", "truck_type", "query_method"], name: "trucking_type_availabilities_unique_index", unique: true, where: "(deleted_at IS NULL)"
     t.index ["country_id"], name: "index_trucking_type_availabilities_on_country_id"
+    t.index ["deleted_at"], name: "index_trucking_type_availabilities_on_deleted_at"
     t.index ["load_type"], name: "index_trucking_type_availabilities_on_load_type"
     t.index ["query_method"], name: "index_trucking_type_availabilities_on_query_method"
     t.index ["sandbox_id"], name: "index_trucking_type_availabilities_on_sandbox_id"
