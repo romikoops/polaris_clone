@@ -4,6 +4,8 @@ module Legacy
   class Carrier < ApplicationRecord
     self.table_name = 'carriers'
 
+    acts_as_paranoid
+
     has_many :tenant_vehicles
     validates_uniqueness_of :code
 
@@ -26,6 +28,7 @@ end
 #
 #  id         :bigint           not null, primary key
 #  code       :string
+#  deleted_at :datetime
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

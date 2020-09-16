@@ -3,6 +3,9 @@
 module Legacy
   class TenantVehicle < ApplicationRecord
     self.table_name = 'tenant_vehicles'
+
+    acts_as_paranoid
+
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :vehicle, optional: true
     belongs_to :carrier, optional: true
@@ -24,6 +27,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  carrier_lock      :boolean          default(FALSE)
+#  deleted_at        :datetime
 #  is_default        :boolean
 #  mode_of_transport :string
 #  name              :string

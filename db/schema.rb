@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
   create_table "carriers", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.string "name"
     t.uuid "sandbox_id"
     t.datetime "updated_at", null: false
@@ -1066,6 +1067,26 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
     t.index ["user_id"], name: "index_migrator_syncs_on_user_id"
     t.index ["users_user_id", "user_id"], name: "index_migrator_syncs_on_users_user_id_and_user_id", unique: true
     t.index ["users_user_id"], name: "index_migrator_syncs_on_users_user_id"
+  end
+
+  create_table "migrator_unique_carrier_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "duplicate_carrier_id"
+    t.bigint "unique_carrier_id"
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_carrier_id"], name: "index_migrator_unique_carrier_syncs_on_duplicate_carrier_id"
+    t.index ["unique_carrier_id", "duplicate_carrier_id"], name: "index_carriers_syncs_on_unique_id_and_duplicate_id", unique: true
+    t.index ["unique_carrier_id"], name: "index_migrator_unique_carrier_syncs_on_unique_carrier_id"
+  end
+
+  create_table "migrator_unique_tenant_vehicles_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "duplicate_tenant_vehicle_id"
+    t.bigint "unique_tenant_vehicle_id"
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_duplicate_tenant_vehicle_id"
+    t.index ["unique_tenant_vehicle_id", "duplicate_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_unique_id_and_duplicate_id", unique: true
+    t.index ["unique_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_unique_tenant_vehicle_id"
   end
 
   create_table "mot_scopes_20200504", force: :cascade do |t|
@@ -2228,6 +2249,7 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
     t.integer "carrier_id"
     t.boolean "carrier_lock", default: false
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.boolean "is_default"
     t.string "mode_of_transport"
     t.string "name"
@@ -2793,6 +2815,10 @@ ActiveRecord::Schema.define(version: 2020_09_14_091732) do
   add_foreign_key "max_dimensions_bundles", "organizations_organizations", column: "organization_id"
   add_foreign_key "migrator_syncs", "organizations_organizations"
   add_foreign_key "migrator_syncs", "users_users"
+  add_foreign_key "migrator_unique_carrier_syncs", "carriers", column: "duplicate_carrier_id"
+  add_foreign_key "migrator_unique_carrier_syncs", "carriers", column: "unique_carrier_id"
+  add_foreign_key "migrator_unique_tenant_vehicles_syncs", "tenant_vehicles", column: "duplicate_tenant_vehicle_id"
+  add_foreign_key "migrator_unique_tenant_vehicles_syncs", "tenant_vehicles", column: "unique_tenant_vehicle_id"
   add_foreign_key "nexuses", "organizations_organizations", column: "organization_id"
   add_foreign_key "notes", "organizations_organizations", column: "organization_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
