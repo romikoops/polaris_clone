@@ -111,8 +111,6 @@ RSpec.describe ShippingTools do
       end
 
       context "when send_email_on_quote_email is set to true" do
-        let!(:scope) { create(:organizations_scope, target: shipment.user, content: { send_email_on_quote_email: true }) }
-
         it "sends an email to the admin" do
           expect {
             described_class.new.save_and_send_quotes(shipment, results, user.email)

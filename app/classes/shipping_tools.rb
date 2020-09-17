@@ -487,7 +487,8 @@ class ShippingTools
     quotation = tenders.first.quotation
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     send_on_download = ::OrganizationManager::ScopeService.new(
-      target: shipment.user
+      target: shipment.user,
+      organization: shipment.organization
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later if send_on_download
     Wheelhouse::PdfService.new(quotation_id: quotation.id, tender_ids: tenders.pluck(:id)).download
@@ -503,7 +504,8 @@ class ShippingTools
       email: email
     ).deliver_later
     send_on_quote = ::OrganizationManager::ScopeService.new(
-      target: shipment.user
+      target: shipment.user,
+      organization: shipment.organization
     ).fetch(:send_email_on_quote_email)
     if send_on_quote
       QuoteMailer.new_quotation_admin_email(
