@@ -22,7 +22,7 @@ module Roo
       private
 
       def extract_currency(cell_format)
-        cell_format&.match(/\[\$([^\+\-\d]+)\]/)&.captures&.first
+        cell_format&.match(/\[\$([^+\-\d]+)\]/)&.captures&.first
       end
 
       def parse_to_money(currency_descr, cell_value)

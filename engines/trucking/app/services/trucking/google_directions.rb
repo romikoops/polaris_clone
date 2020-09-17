@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require 'cgi'
-require 'net/http'
-require 'open-uri'
-require 'nokogiri'
-require 'openssl'
-require 'base64'
+require "cgi"
+require "net/http"
+require "open-uri"
+require "nokogiri"
+require "openssl"
+require "base64"
 
 module Trucking
-  class GoogleDirections # rubocop:disable Metrics/ClassLength
+  class GoogleDirections
     NoDrivingTime = Class.new(StandardError)
     # API Doc: https://developers.google.com/maps/documentation/directions/intro
-    BASE_URL  = 'https://maps.googleapis.com'
-    BASE_PATH = '/maps/api/directions/xml'
+    BASE_URL = "https://maps.googleapis.com"
+    BASE_PATH = "/maps/api/directions/xml"
     DEFAULT_OPTIONS = {
       key: Settings.google&.api_key,
-      language: 'en',
-      alternative: 'false',
-      mode: 'driving',
-      traffic_model: 'pessimistic'
+      language: "en",
+      alternative: "false",
+      mode: "driving",
+      traffic_model: "pessimistic"
     }.freeze
 
     attr_reader :status, :doc, :xml, :origin, :destination, :departure_time, :options, :url
@@ -28,43 +28,43 @@ module Trucking
       @destination = destination
       @departure_time = set_departure_time(departure_time)
       @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
-      path = BASE_PATH + '?' + querify(@options)
+      path = BASE_PATH + "?" + querify(@options)
       @url = BASE_URL + path
       @xml = xml_from_cache
       @doc = Nokogiri::XML(@xml)
-      @status = @doc.css('status').text
+      @status = @doc.css("status").text
     end
 
-    def set_departure_time(departure_time) # rubocop:disable Naming/AccessorMethodName
+    def set_departure_time(departure_time)
       if departure_time < Time.now.to_i + 3600
-        'now'
+        "now"
       else
         departure_time
       end
     end
 
     def successful?
-      @status == 'OK'
+      @status == "OK"
     end
 
     def geocoded_start_address
-      @doc.css('start_address').text if successful?
+      @doc.css("start_address").text if successful?
     end
 
     def geocoded_end_address
-      @doc.css('end_address').text if successful?
+      @doc.css("end_address").text if successful?
     end
 
     def reverse_geocoded_start_address
-      [@doc.css('start_location lat').last.text.to_f, @doc.css('start_location lng').last.text.to_f] if successful?
+      [@doc.css("start_location lat").last.text.to_f, @doc.css("start_location lng").last.text.to_f] if successful?
     end
 
     def reverse_geocoded_end_address
-      [@doc.css('end_location lat').last.text.to_f, @doc.css('end_location lng').last.text.to_f] if successful?
+      [@doc.css("end_location lat").last.text.to_f, @doc.css("end_location lng").last.text.to_f] if successful?
     end
 
     def distance_in_meters
-      @doc.css('distance value').last.text if successful?
+      @doc.css("distance value").last.text if successful?
     end
 
     def distance_in_km
@@ -84,7 +84,7 @@ module Trucking
     end
 
     def driving_time_in_seconds
-      @doc.css('duration value').last.text.to_i if successful?
+      @doc.css("duration value").last.text.to_i if successful?
     end
 
     def driving_time_in_seconds_for_trucks(seconds)
@@ -127,7 +127,7 @@ module Trucking
         params << "#{transcribe(k.to_s)}=#{transcribe(v.to_s)}" unless k == :private_key
       end
 
-      params.join('&')
+      params.join("&")
     end
 
     def xml_from_cache

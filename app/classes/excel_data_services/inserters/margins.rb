@@ -39,7 +39,7 @@ module ExcelDataServices
         )
       end
 
-      def create_margin_with_margin_details(group_of_row_data, row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize
+      def create_margin_with_margin_details(group_of_row_data, row, tenant_vehicle, itinerary)
         margin_applies_to_all_fees = margin_applies_to_all_fees?(group_of_row_data.size, row.fee_code)
         margin_params =
           { organization: organization,

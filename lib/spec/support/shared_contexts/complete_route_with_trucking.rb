@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_context "complete_route_with_trucking" do # rubocop:disable Metrics/BlockLength
+RSpec.shared_context "complete_route_with_trucking" do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }

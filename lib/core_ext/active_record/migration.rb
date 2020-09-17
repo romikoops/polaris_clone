@@ -2,7 +2,7 @@
 
 module CoreExt
   module SchemaMigrationDetails
-    def exec_migration(conn, direction) # rubocop:disable Metrics/MethodLength Style/NumericLiterals
+    def exec_migration(conn, direction)
       rval = nil
 
       time = Benchmark.measure do

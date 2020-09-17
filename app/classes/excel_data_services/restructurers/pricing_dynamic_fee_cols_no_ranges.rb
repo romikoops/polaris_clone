@@ -3,7 +3,7 @@
 module ExcelDataServices
   module Restructurers
     class PricingDynamicFeeColsNoRanges < ExcelDataServices::Restructurers::Base
-      def perform # rubocop:disable Metrics/AbcSize
+      def perform
         sheet_name = data[:sheet_name]
         restructurer_name = data[:restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])

@@ -96,7 +96,7 @@ class Nexus < Legacy::Nexus
   end
 
   def self.update_country
-    Nexus.all.each do |nexus|
+    Nexus.all.find_each do |nexus|
       old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus.name, 'nexus').first
       nexus.country_id = old_nexus.country_id
       nexus.save!
@@ -122,7 +122,7 @@ class Nexus < Legacy::Nexus
     return nexus unless nexus.nil?
 
     country_to_save = country || temp_address.country
-    nexus = Nexus.create!(
+    Nexus.create!(
       name: city,
       latitude: temp_address.latitude,
       longitude: temp_address.longitude,
@@ -130,8 +130,6 @@ class Nexus < Legacy::Nexus
       country_id: country_to_save.id,
       organization_id: organization_id
     )
-
-    nexus
   end
 end
 

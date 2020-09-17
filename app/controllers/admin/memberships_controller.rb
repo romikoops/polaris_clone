@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::MembershipsController < Admin::AdminBaseController
-  def bulk_edit # rubocop:disable Metrics/AbcSize
+  def bulk_edit
     active_memberships = Groups::Membership.where(member: target_member)
 
     active_memberships.each do |m|
@@ -76,7 +76,7 @@ class Admin::MembershipsController < Admin::AdminBaseController
         member_email: membership.member.email,
         original_member_id: membership.member_id
       }
-    when  'Groups::Group'
+    when 'Groups::Group'
       {
         member_name: membership.member.name,
         human_type: 'group',

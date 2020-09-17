@@ -52,7 +52,7 @@ module SetupHelper
                                          latitude: args[:destination_latitude], longitude: args[:destination_longitude],
                                          mandatory_charge: _mandatory_charge_type, address: destination, tenant: _user.tenant)
 
-      _shipment = shipment(cargo_items: [cargo_item], user: _user, shipment_status: args[:shipment_status], # rubocop:disable Lint/UnderscorePrefixedVariableName
+      _shipment = shipment(cargo_items: [cargo_item], user: _user, shipment_status: args[:shipment_status],
                            trip: _trip, load_type: args[:load_type], direction: args[:direction], origin_hub: _origin_hub,
                            origin_nexus: _origin_nexus, destination_hub: _destination_hub, destination_nexus:  _destination_nexus,
                            trucking: args[:trucking], eta: args[:eta], etd: args[:etd], closing_date: args[:closing_date])

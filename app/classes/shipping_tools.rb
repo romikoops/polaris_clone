@@ -560,7 +560,7 @@ class ShippingTools
     new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
   end
 
-  def handle_extra_charges(shipment:, shipment_data:) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def handle_extra_charges(shipment:, shipment_data:)
     charge_breakdown = shipment.charge_breakdowns.selected
     tender = charge_breakdown.tender
     existing_insurance_charge = charge_breakdown.charge('insurance')

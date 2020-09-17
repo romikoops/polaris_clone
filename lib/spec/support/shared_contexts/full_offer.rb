@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "./basic_setup.rb"
-require_relative "./complete_route_with_trucking.rb"
+require_relative "./basic_setup"
+require_relative "./complete_route_with_trucking"
 
 RSpec.shared_context "full_offer" do
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }

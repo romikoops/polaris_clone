@@ -2,7 +2,7 @@
 
 require 'bigdecimal'
 
-class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
+class OfferCalculator::PricingTools
   attr_accessor :scope, :user, :shipment, :metadata
   attr_reader :currency
 
@@ -22,7 +22,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
 
   DEFAULT_MAX = Float::INFINITY
 
-  def calc_addon_charges(charge:, cargos:, user:, mode_of_transport:) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def calc_addon_charges(charge:, cargos:, user:, mode_of_transport:)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       quantity = cargo_unit.try(:quantity) || 1
       weight = if cargo_unit.is_a?(Legacy::CargoItem) || cargo_unit.is_a?(Legacy::AggregatedCargo)
@@ -60,7 +60,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     totals
   end
 
-  def handle_range_fee(fee:, cargo:, metadata_id:) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
+  def handle_range_fee(fee:, cargo:, metadata_id:)
     measures = { kg: cargo.fetch(:weight),
                  cbm: cargo.fetch(:volume),
                  ton: cargo.fetch(:raw_weight, cargo.fetch(:weight)) / 1000.0,
@@ -105,7 +105,7 @@ class OfferCalculator::PricingTools # rubocop:disable Metrics/ClassLength
     target || (max ? ranges.max_by { |x| x['max'] } : { 'rate' => 0 })
   end
 
-  def fee_value(fee:, cargo:, rounding: false, metadata_id: nil) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def fee_value(fee:, cargo:, rounding: false, metadata_id: nil)
     rate_basis = Legacy::RateBasis.get_internal_key(fee['rate_basis'])
     value = (fee['value'] || fee['rate'] || 0).to_d
     max = (fee['max'] || DEFAULT_MAX).to_d

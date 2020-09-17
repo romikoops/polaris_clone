@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Legacy
-  class Itinerary < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  class Itinerary < ApplicationRecord
     self.table_name = 'itineraries'
 
     include PgSearch::Model
@@ -38,7 +38,7 @@ module Legacy
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
     validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id organization_id transshipment mode_of_transport] }
 
-    def generate_schedules_from_sheet(stops:, # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+    def generate_schedules_from_sheet(stops:,
                                       start_date:,
                                       end_date:,
                                       tenant_vehicle_id:,
@@ -96,7 +96,7 @@ module Legacy
       end
     end
 
-    def default_generate_schedules(end_date:, base_pricing: true) # rubocop:disable Metrics/AbcSize
+    def default_generate_schedules(end_date:, base_pricing: true)
       finish_date = end_date || DateTime.now + 21.days
       association = base_pricing ? rates : pricings
       tenant_vehicle_ids = association.pluck(:tenant_vehicle_id).uniq
@@ -123,14 +123,13 @@ module Legacy
       end
     end
 
-    def generate_weekly_schedules(stops_in_order:, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def generate_weekly_schedules(stops_in_order:,
                                   steps_in_order:,
                                   start_date:,
                                   end_date:,
                                   ordinal_array:,
                                   tenant_vehicle_id:,
-                                  closing_date_buffer: 4,
-                                  load_type:)
+                                  load_type:, closing_date_buffer: 4)
       results = {
         layovers: [],
         trips: []
@@ -197,7 +196,7 @@ module Legacy
       results[:trips]
     end
 
-    def prep_schedules(limit) # rubocop:disable Metrics/AbcSize
+    def prep_schedules(limit)
       schedules = []
       trip_layovers = trips.order(:start_date).map(&:layovers)
       trip_layovers = trip_layovers[0...limit] if limit
@@ -305,7 +304,7 @@ module Legacy
       rates.count
     end
 
-    def routes # rubocop:disable Metrics/AbcSize
+    def routes
       stops.order(:index).to_a.combination(2).map do |stop_array|
         if !stop_array[0].hub || !stop_array[1].hub
           stop_array[0].itinerary.destroy
@@ -323,7 +322,7 @@ module Legacy
       end
     end
 
-    def detailed_hash(stop_array, options = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def detailed_hash(stop_array, options = {})
       origin = stop_array[0]
       destination = stop_array[1]
       return_h = attributes
@@ -374,7 +373,7 @@ module Legacy
       ", origin_hub_ids, destination_hub_ids)
     end
 
-    def self.for_addresses(shipment, trucking_data) # rubocop:disable Metrics/AbcSize
+    def self.for_addresses(shipment, trucking_data)
       if trucking_data && trucking_data['pre_carriage']
         start_hub_ids = trucking_data['pre_carriage'].keys
         start_hubs = Hub.where(id: start_hub_ids)

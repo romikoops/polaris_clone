@@ -74,10 +74,10 @@ module OfferCalculator
           Measured::Weight.new(ldm_value, "kg")
         end
 
-        alias wm weight_measure
-        alias kg chargeable_weight
-        alias ton chargeable_weight_in_tons
-        alias cbm total_volume
+        alias_method :wm, :weight_measure
+        alias_method :kg, :chargeable_weight
+        alias_method :ton, :chargeable_weight_in_tons
+        alias_method :cbm, :total_volume
 
         private
 

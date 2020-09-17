@@ -11,7 +11,7 @@ module ChargeCalculator
 
       attr_reader :data
 
-      alias hash data
+      alias_method :hash, :data
     end
   end
 end

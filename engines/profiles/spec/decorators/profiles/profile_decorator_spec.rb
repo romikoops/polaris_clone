@@ -10,8 +10,7 @@ module Profiles
                        first_name: 'Guest',
                        last_name: 'User',
                        company_name: 'IMC',
-                       user: user
-                      )
+                       user: user)
     end
 
     describe 'base methods' do

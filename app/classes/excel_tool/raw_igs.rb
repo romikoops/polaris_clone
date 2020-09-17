@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ExcelTool
-  class RawIgs < ExcelTool::BaseTool # rubocop:disable Metrics/ClassLength
+  class RawIgs < ExcelTool::BaseTool
     include WritingTool
     attr_reader :user
     def post_initialize(_args)
@@ -34,7 +34,7 @@ module ExcelTool
       @row_data.compact!
     end
 
-    def row_to_data(sheet, row_nr, hide_name = false) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def row_to_data(sheet, row_nr, hide_name = false)
       row = sheet.row(row_nr)
       return nil unless row[3].include?('HH')
 
@@ -65,7 +65,7 @@ sheet_name: sheet_name,
       }
     end
 
-    def sort_data # rubocop:disable Metrics/AbcSize
+    def sort_data
       name_only_row_nrs = []
       rejected_row_nrs = []
       name_only_data = @row_data.group_by { |row| row[:place_name] }

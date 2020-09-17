@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class Base < ExcelDataServices::Base # rubocop:disable Metrics/ClassLength
+    class Base < ExcelDataServices::Base
       # Expected data structure:
       # {
       #   Sheet1: [
@@ -77,7 +77,7 @@ module ExcelDataServices
         @xlsx = nil
       end
 
-      def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def perform
         sheets_data = load_and_prepare_data
 
         tempfile = Tempfile.new('excel')

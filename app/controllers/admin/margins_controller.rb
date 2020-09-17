@@ -19,7 +19,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     response_handler(true)
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     args = {
       itinerary_ids: params[:itinerary_ids],
       hub_ids: params[:hub_ids],
@@ -43,7 +43,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     response_handler(margins.map { |m| for_list_json(m) })
   end
 
-  def update_multiple # rubocop:disable Metrics/AbcSize
+  def update_multiple
     updated_margins = []
     params[:margins].each do |param_margin|
       margin = Pricings::Margin.find(param_margin[:id])
@@ -67,7 +67,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     response_handler(updated_margins)
   end
 
-  def form_data # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def form_data
     hash = {
       carriers: [],
       service_levels: [],
@@ -189,7 +189,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     end
   end
 
-  def pricing_fees # rubocop:disable Metrics/AbcSize
+  def pricing_fees
     if params[:pricing_id] && params[:pricing_id] != 'null'
       pricing = Pricings::Pricing.find_by(organization: current_organization, id: params[:pricing_id])
       pricing&.fees&.map(&:fee_name_and_code)
@@ -257,7 +257,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     params[:page]&.to_i || 1
   end
 
-  def handle_search(params) # rubocop:disable Metrics/CyclomaticComplexity
+  def handle_search(params)
     query = margins
     if params[:target_id]
       case params[:target_type]

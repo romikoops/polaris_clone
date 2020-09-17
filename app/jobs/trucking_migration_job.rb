@@ -2,7 +2,7 @@ class TruckingMigrationJob < ApplicationJob
   concurrency 1, drop: false
   queue_as :default
 
-  def perform(organization_id:) # rubocop:disable Metrics/MethodLength
+  def perform(organization_id:)
     ActiveRecord::Base.connection.execute(
       <<-SQL
         INSERT INTO carriers (name, code, created_at, updated_at)

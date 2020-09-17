@@ -19,7 +19,7 @@ module ExcelDataServices
         @options = options
       end
 
-      def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def perform
         result_insertion_stats = {}
         restructurer_names_for_all_sheets = {}
         headers_for_all_sheets = {}
@@ -120,7 +120,7 @@ module ExcelDataServices
 
           el = el.to_s
           el.downcase!
-          el.gsub!(%r{[^a-z0-9\/\-\_\(\)]+}, '_') # underscore instead of unwanted characters
+          el.gsub!(%r{[^a-z0-9/\-_()]+}, '_') # underscore instead of unwanted characters
           el.to_sym
         end
       end

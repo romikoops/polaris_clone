@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength
+class Admin::GroupsController < Admin::AdminBaseController
   def index
     paginated_groups = handle_search(params).paginate(pagination_options)
     response_groups = paginated_groups.map do |group|
@@ -24,7 +24,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     response_handler(group)
   end
 
-  def edit_members # rubocop:disable Metrics/AbcSize
+  def edit_members
     group = ::Groups::Group.find_by(id: params[:id])
 
     params[:addedMembers].keys.each do |type|
@@ -73,7 +73,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     ::Groups::Group.find_by(id: params[:id])
   end
 
-  def create_member_from_type(group:, type:, member:) # rubocop:disable Metrics/CyclomaticComplexity
+  def create_member_from_type(group:, type:, member:)
     case type
     when 'clients'
       user = ::Organizations::User.find_by(id: member[:id])
@@ -108,7 +108,7 @@ class Admin::GroupsController < Admin::AdminBaseController # rubocop:disable Met
     params[:page]&.to_i || 1
   end
 
-  def handle_search(_params) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
+  def handle_search(_params)
     query = groups
     if search_params[:target_type] && search_params[:target_id]
       case search_params[:target_type]

@@ -34,9 +34,9 @@ module Cargo
       units.all?(&:cargo_type_AGR?)
     end
 
-    alias area total_area
-    alias weight total_weight
-    alias volume total_volume
+    alias_method :area, :total_area
+    alias_method :weight, :total_weight
+    alias_method :volume, :total_volume
   end
 end
 

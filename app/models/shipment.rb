@@ -196,11 +196,11 @@ class Shipment < Legacy::Shipment
 
   def self.create_all_empty_charge_breakdowns!
     where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
-         .each(&:create_charge_breakdowns_from_schedules_charges!)
+         .find_each(&:create_charge_breakdowns_from_schedules_charges!)
   end
 
   def self.update_refactor_shipments
-    Shipment.where.not(itinerary: nil).each do |s|
+    Shipment.where.not(itinerary: nil).find_each do |s|
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus

@@ -98,7 +98,7 @@ class ShipmentsController < ApplicationController
     Shipment.find(update_user_params[:id]).update(user: organization_user)
   end
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     @shipment = Shipment.find_by(id: params[:id])
     cargo_item_types = @shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
@@ -128,8 +128,8 @@ class ShipmentsController < ApplicationController
     )
   end
 
-  def get_booking_index # rubocop:disable Metrics/AbcSize, Naming/AccessorMethodName, Metrics/MethodLength
-    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do # rubocop:disable Metrics/BlockLength
+  def get_booking_index
+    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
       r_shipments = requested_shipments
                     .order(booking_placed_at: :desc)

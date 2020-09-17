@@ -7,10 +7,9 @@ namespace :cleanup do
       Legacy::Itinerary.find(combination.second).dup.tap do |itinerary|
         itinerary.transshipment = combination.first
         itinerary.save
-        # rubocop:disable Rails/SkipsModelValidations
+
         Pricings::Pricing.where(transshipment: combination.first, itinerary_id: combination.second)
                          .update_all(itinerary_id: itinerary.id)
-        # rubocop:enable Rails/SkipsModelValidations
       end
     end
   end

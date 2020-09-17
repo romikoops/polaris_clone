@@ -1,6 +1,6 @@
 require "aws-sdk-s3"
 
-class DatabaseReloader # rubocop:disable Rails/Output
+class DatabaseReloader
   APP_ROOT = Pathname.new(File.expand_path("../", __dir__))
   BACKUPS_BUCKET = "itsmycargo-backups"
   RESOURCES_BUCKET = "itsmycargo-datahub"

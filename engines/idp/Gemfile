@@ -6,7 +6,7 @@ gemspec
 
 # Enable access to another engines
 Gem::Specification.load(Dir[File.expand_path("*.gemspec", __dir__)].first).dependencies.each do |dep|
-  next unless File.directory?(File.join("..", dep.name.gsub(/\Aimc-/, "")))
+  next unless File.directory?(File.join("..", dep.name.delete_prefix("imc-")))
 
   gem dep.name, path: ".."
 end

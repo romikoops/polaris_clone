@@ -35,7 +35,7 @@ RSpec.describe "Users" do
                          firstName: {type: :string},
                          lastName: {type: :string},
                          phone: {type: :string},
-                         companyName: {type: :string},
+                         companyName: {type: :string}
                        },
                        required: %w[email organizationId firstName lastName phone companyName]
                      }

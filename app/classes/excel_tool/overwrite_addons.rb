@@ -444,12 +444,12 @@ module ExcelTool
       }
     end
 
-    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
+    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id)
       existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]]
       if existing_charge && existing_charge[:range]
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]][:range] << pushable_charg(charge) # rubocop:disable Layout/LineLength
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]][:range] << pushable_charg(charge)
       else
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = expanded_charge(charge) # rubocop:disable Layout/LineLength
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = expanded_charge(charge)
       end
       all_charges
     end

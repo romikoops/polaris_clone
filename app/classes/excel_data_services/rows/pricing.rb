@@ -3,7 +3,6 @@
 module ExcelDataServices
   module Rows
     class Pricing < ExcelDataServices::Rows::Base
-
       def destination_country
         @destination_country ||= data[:country_destination]
       end

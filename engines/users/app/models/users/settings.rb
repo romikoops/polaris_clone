@@ -2,7 +2,7 @@
 
 module Users
   class Settings < ApplicationRecord
-    belongs_to :user, class_name: 'Users::User'
+    belongs_to :user, class_name: "Users::User"
     validates :user, uniqueness: true
 
     acts_as_paranoid

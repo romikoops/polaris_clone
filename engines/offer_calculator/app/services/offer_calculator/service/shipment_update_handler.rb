@@ -2,7 +2,7 @@
 
 module OfferCalculator
   module Service
-    class ShipmentUpdateHandler < Base # rubocop:disable Metrics/ClassLength
+    class ShipmentUpdateHandler < Base
       InvalidPickupAddress = Class.new(StandardError)
       InvalidDeliveryAddress = Class.new(StandardError)
 

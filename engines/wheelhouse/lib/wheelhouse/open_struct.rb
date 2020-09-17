@@ -2,6 +2,6 @@
 
 module Wheelhouse
   class OpenStruct < ::OpenStruct
-    alias read_attribute_for_serialization send
+    alias_method :read_attribute_for_serialization, :send
   end
 end

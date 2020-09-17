@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'groups'
 require 'legacy'
 require 'pricings'

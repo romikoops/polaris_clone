@@ -12,7 +12,6 @@ module Organizations
     has_one_attached :wide_logo
     has_one_attached :booking_process_image
     has_one_attached :welcome_email_image
-
   end
 end
 

@@ -2,7 +2,7 @@
 
 module OfferCalculator
   module Queries
-    class ValidRoutes # rubocop:disable Metrics/ClassLength
+    class ValidRoutes
       def initialize(args = {})
         args = args.with_indifferent_access
         @itinerary_ids = args.dig(:query, :itinerary_ids)

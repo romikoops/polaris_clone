@@ -3,7 +3,7 @@
 module ExcelDataServices
   module Loaders
     class Downloader < ExcelDataServices::Loaders::Base
-      def initialize(organization:, category_identifier: nil, file_name:, user: nil, options: {})
+      def initialize(organization:, file_name:, category_identifier: nil, user: nil, options: {})
         super(organization: organization)
         @category_identifier = category_identifier
         @file_name = file_name

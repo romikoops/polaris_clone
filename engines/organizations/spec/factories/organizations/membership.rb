@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :organizations_membership, class: 'Organizations::Membership' do
+  factory :organizations_membership, class: "Organizations::Membership" do
     role { :user }
 
     association :user, factory: :organizations_user

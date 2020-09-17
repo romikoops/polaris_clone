@@ -9,9 +9,7 @@ module TenderCalculator
         discount_node = TenderCalculator::Value.new(value: cargo_discount.amount, rate: discount)
         with_flat_discounts_node << discount_node
         with_flat_discounts_node << branch
-        branch = with_flat_discounts_node
-
-        branch
+        with_flat_discounts_node
       end
     end
   end

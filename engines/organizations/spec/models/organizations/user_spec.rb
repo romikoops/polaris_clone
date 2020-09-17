@@ -3,7 +3,7 @@ require "rails_helper"
 module Organizations
   RSpec.describe User, type: :model do
     let(:user) { FactoryBot.build(:organizations_user) }
-    
+
     it "builds a valid user" do
       expect(user).to be_valid
     end

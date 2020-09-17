@@ -16,7 +16,7 @@ class Layover < Legacy::Layover
   end
 
   def self.update_closing_date
-    Layover.all.each do |l|
+    Layover.all.find_each do |l|
       unless l.itinerary
         l.destroy
         next

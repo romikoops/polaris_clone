@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Legacy
-  class Schedule # rubocop:disable Metrics/ClassLength
+  class Schedule
     include ActiveModel::Model
 
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
@@ -56,7 +56,7 @@ module Legacy
       }
     end
 
-    def self.from_trip(trip) # rubocop:disable Metrics/AbcSize
+    def self.from_trip(trip)
       new(
         id: SecureRandom.uuid,
         mode_of_transport: trip.itinerary.mode_of_transport,

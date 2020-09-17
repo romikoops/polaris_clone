@@ -20,7 +20,7 @@ module RmsExport
         @book = RmsData::Book.find_by(organization: @organization, sheet_type: sheet_type)
       end
 
-      def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def perform
         load_book
         return nil unless @book
 

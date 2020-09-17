@@ -15,7 +15,6 @@ module Api
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', organization_id: organization.id) }
 
-
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
     let(:origin_hub) { itinerary.origin_hub }

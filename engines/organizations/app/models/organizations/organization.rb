@@ -5,7 +5,7 @@ module Organizations
     has_many :domains, dependent: :destroy
     has_many :memberships, dependent: :destroy
     has_one :theme, dependent: :destroy
-    has_one :scope, as: :target, class_name: 'Organizations::Scope'
+    has_one :scope, as: :target, class_name: "Organizations::Scope"
 
     validates :slug, presence: true, uniqueness: true, format: { with: /[a-z-]{1,63}/ }
 

@@ -15,7 +15,6 @@ module Quotations
     context 'Validity' do
       it { is_expected.to be_valid }
     end
-
   end
 end
 

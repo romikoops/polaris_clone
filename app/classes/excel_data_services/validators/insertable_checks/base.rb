@@ -4,7 +4,7 @@ module ExcelDataServices
   module Validators
     module InsertableChecks
       class Base < ExcelDataServices::Validators::Base
-        alias chunked_data data
+        alias_method :chunked_data, :data
 
         def perform
           flattened_data = chunked_data.flatten

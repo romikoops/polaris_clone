@@ -7,7 +7,7 @@ module Pricings
     context 'instance methods' do
       let!(:organization) { FactoryBot.create(:organizations_organization) }
       let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
-      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)}
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
       let(:pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary) }
       let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization) }
 

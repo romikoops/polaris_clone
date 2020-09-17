@@ -39,7 +39,7 @@ module Analytics
           if quotation_tool?
             quotations.joins(profile_join(reference: 'quotations_quotations'))
           else
-             shipment_requests.joins(profile_join(reference: 'shipments_shipment_requests'))
+            shipment_requests.joins(profile_join(reference: 'shipments_shipment_requests'))
           end
         end
     end

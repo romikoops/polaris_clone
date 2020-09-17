@@ -29,7 +29,7 @@ module OfferCalculator
           Legacy::TenantVehicle.find(tenant_vehicle_id)
         end
 
-        alias cargo target
+        alias_method :cargo, :target
       end
     end
   end

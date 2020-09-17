@@ -13,7 +13,7 @@ module ExcelDataServices
         end
 
         def check_dates_are_valid(row)
-          return if Range.new(row.closing_date, row.eta).cover?(row.etd) # rubocop:disable Style/GuardClause
+          return if Range.new(row.closing_date, row.eta).cover?(row.etd)
 
           add_to_errors(
             type: :error,
@@ -29,7 +29,7 @@ module ExcelDataServices
 
           carrier = Legacy::Carrier.find_by(code: row.carrier.downcase)
 
-          if carrier.blank?# rubocop:disable Style/GuardClause
+          if carrier.blank?
             add_to_errors(
               type: :error,
               row_nr: row.nr,
@@ -44,7 +44,7 @@ module ExcelDataServices
 
         def check_service_level_exists(row, carrier)
           tenant_vehicle = TenantVehicle.find_by(name: row.service_level, carrier: carrier, organization_id: @organization.id)
-          if tenant_vehicle.blank? # rubocop:disable Style/GuardClause
+          if tenant_vehicle.blank?
             error_string = "There exists no service level called '#{row.service_level}'"
             error_string += row.carrier.present? ? " for carrier '#{row.carrier}'" : "."
 

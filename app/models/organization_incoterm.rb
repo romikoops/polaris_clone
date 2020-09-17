@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class OrganizationIncoterm < ApplicationRecord
-  self.table_name = 'tenant_incoterms'
-  belongs_to :organization, class_name: 'Organizations::Organization'
+  self.table_name = "tenant_incoterms"
+  belongs_to :organization, class_name: "Organizations::Organization"
   belongs_to :incoterm
 end
 

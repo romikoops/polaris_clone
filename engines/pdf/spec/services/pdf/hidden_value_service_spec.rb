@@ -20,6 +20,7 @@ RSpec.describe Pdf::HiddenValueService, type: :service do
 
   context 'with hidden sub totals' do
     let(:klass) { described_class.new(user: nil) }
+
     before do
       scope.update(content: { hide_sub_totals: true })
     end

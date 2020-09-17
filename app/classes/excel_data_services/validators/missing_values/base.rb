@@ -4,7 +4,7 @@ module ExcelDataServices
   module Validators
     module MissingValues
       class Base < ExcelDataServices::Validators::Base
-        alias chunked_data data
+        alias_method :chunked_data, :data
 
         def perform
           chunked_data.flatten.each do |single_data|

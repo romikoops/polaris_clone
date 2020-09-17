@@ -20,7 +20,7 @@ class Trip < Legacy::Trip
   end
 
   def self.clear_dupes
-    Trip.all.each do |trip|
+    Trip.all.find_each do |trip|
       t = trip.as_json
       t.delete('id')
       dupes = Trip.where(t)

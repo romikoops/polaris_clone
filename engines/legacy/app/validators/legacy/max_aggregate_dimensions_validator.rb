@@ -17,7 +17,7 @@ module Legacy
         max_aggregate_dimensions[mode_of_transport] ||
         max_aggregate_dimensions[:general]
       return true if max_dimensions.blank?
-      
+
       sums = if record.aggregated_cargo.present?
                obj = { payload_in_kg: record.aggregated_cargo.weight }
                obj[:chargeable_weight] = (record.aggregated_cargo.chargeable_weight ||

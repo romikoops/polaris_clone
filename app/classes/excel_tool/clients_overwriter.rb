@@ -51,7 +51,7 @@ module ExcelTool
     def update_client
       @client.update_attributes(
         organization_id: @user.organization_id,
-        email: @client_row[:email],
+        email: @client_row[:email]
       )
     end
 

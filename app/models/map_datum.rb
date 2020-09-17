@@ -5,7 +5,7 @@ class MapDatum < ApplicationRecord
   belongs_to :organization, class_name: 'Organizations::Organization'
 
   def self.create_all_from_itineraries
-    Itinerary.all.each do |itinerary|
+    Itinerary.all.find_each do |itinerary|
       routes_data = itinerary.routes
       routes_data.each do |route_data|
         route_data[:organization_id] = itinerary.organization_id

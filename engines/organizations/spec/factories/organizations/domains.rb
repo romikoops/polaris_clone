@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :organizations_domain, class: 'Organizations::Domain' do
+  factory :organizations_domain, class: "Organizations::Domain" do
     domain { "MyString" }
     organization { nil }
     default { false }

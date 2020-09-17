@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module RequestSpecHelpers
-
   module FormatHelpers
     def json
       JSON.parse(response.body).deep_symbolize_keys
@@ -10,9 +9,9 @@ module RequestSpecHelpers
 
   module TokenHelper
     def append_token_header
-      access_token = Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public')
+      access_token = Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public")
       token_header = "Bearer #{access_token.token}"
-      request.headers['Authorization'] = token_header
+      request.headers["Authorization"] = token_header
     end
   end
 end

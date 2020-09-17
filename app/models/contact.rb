@@ -39,7 +39,7 @@ class Contact < Legacy::Contact
     # replace "*" with "%" for wildcard searches,
     # prepend and append '%', remove duplicate '%'s
     terms = terms.map do |e|
-      ('%' + e.tr('*', '%') + '%').gsub(/%+/, '%')
+      ('%' + e.tr('*', '%') + '%').squeeze('%')
     end
 
     # configure number of OR conditions for provision

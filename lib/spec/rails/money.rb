@@ -21,5 +21,5 @@ begin
     Money.infinite_precision = true
     config.rounding_mode = BigDecimal::ROUND_HALF_UP
   end
-rescue LoadError # rubocop:disable Lint/SuppressedException
+rescue LoadError
 end

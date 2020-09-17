@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'organizations/engine'
+require "organizations/engine"
 
 module Organizations
-  DEFAULT_SCOPE = YAML.load_file(File.expand_path('../data/default_scope.yaml', __dir__)).freeze
+  DEFAULT_SCOPE = YAML.load_file(File.expand_path("../data/default_scope.yaml", __dir__)).freeze
 
   class << self
     def current_id=(id)

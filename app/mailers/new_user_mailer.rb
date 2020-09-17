@@ -5,7 +5,7 @@ class NewUserMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def new_user_email(user:) # rubocop:disable Metrics/AbcSize
+  def new_user_email(user:)
     @user = user
     set_current_id(organization_id: user.organization_id)
     @user_profile = Profiles::ProfileService.fetch(user_id: @user.id)

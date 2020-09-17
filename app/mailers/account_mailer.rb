@@ -6,7 +6,7 @@ class AccountMailer < Devise::Mailer
   helper :application
   include Devise::Controllers::UrlHelpers
 
-  def confirmation_instructions(record, token, opts = {}) # rubocop:disable Metrics/AbcSize
+  def confirmation_instructions(record, token, opts = {})
     set_current_id(organization_id: record.organization_id)
     @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
     @theme = @org_theme.legacy_format

@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe ContentsController do
-
   describe 'GET #component' do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:content) { create(:legacy_content, organization_id: organization.id) }

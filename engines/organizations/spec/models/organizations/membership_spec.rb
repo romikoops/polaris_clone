@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 module Organizations
   RSpec.describe Organizations::Membership, type: :model do

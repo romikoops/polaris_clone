@@ -170,7 +170,7 @@ RSpec.describe Validator::Itinerary do
         end
 
         it 'returns the expected result for one tenant vehicle chain  with invalid Local Charges and no Trips' do
-          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, organization: organization,)
+          tenant_vehicle_2 = FactoryBot.create(:legacy_tenant_vehicle, organization: organization)
           pricing_4 = FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle_id: tenant_vehicle_2.id, itinerary: itinerary, group_id: group_1.id, expiration_date: 10.days.from_now.beginning_of_minute)
           results = described_class.new(user: user, itinerary: itinerary).perform
 

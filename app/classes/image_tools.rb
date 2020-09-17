@@ -36,8 +36,6 @@ module ImageTools
     File.open(filepath, 'rb') do |file|
       client.put_object(bucket: Settings.aws.bucket, key: key, body: file, acl: 'public-read')
     end
-    awsurl = 'https://assets.itsmycargo.com/' + key
-
-    awsurl
+    'https://assets.itsmycargo.com/' + key
   end
 end

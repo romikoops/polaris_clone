@@ -3,7 +3,7 @@
 class CustomsFee < ApplicationRecord
   has_paper_trail
   belongs_to :hub
-  belongs_to :organization, class_name: 'Organizations::Organization'
+  belongs_to :organization, class_name: "Organizations::Organization"
 end
 
 # == Schema Information

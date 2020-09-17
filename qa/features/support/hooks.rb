@@ -27,12 +27,10 @@ Before do |scenario|
 end
 
 Around do |_scenario, block|
-  begin # rubocop:disable Style/RedundantBegin
-    block.call
-  rescue StandardError
-    cbt_score('fail')
-    raise
-  end
+  block.call
+rescue StandardError
+  cbt_score('fail')
+  raise
 end
 
 AfterStep do

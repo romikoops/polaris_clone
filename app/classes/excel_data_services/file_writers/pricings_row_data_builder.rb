@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class PricingsRowDataBuilder < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
+    class PricingsRowDataBuilder < ExcelDataServices::FileWriters::Base
       def self.build_raw_pricing_rows(pricings)
         raw_pricing_rows = []
         pricings.each do |pricing|
@@ -16,7 +16,7 @@ module ExcelDataServices
         raw_pricing_rows
       end
 
-      def self.build_pricing_only_row_data(pricing) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def self.build_pricing_only_row_data(pricing)
         pricing_attributes = pricing.attributes.with_indifferent_access.except(
           :id,
           :created_at,
@@ -93,7 +93,7 @@ module ExcelDataServices
         result_rows_data
       end
 
-      def self.sort!(data) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def self.sort!(data)
         data.sort_by! do |h|
           [
             h[:destination_country_name] || '',

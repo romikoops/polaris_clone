@@ -2,9 +2,9 @@
 
 module ExcelDataServices
   module Inserters
-    class Pricing < ExcelDataServices::Inserters::Base # rubocop:disable Metrics/ClassLength
-      def perform # rubocop:disable Metrics/AbcSize
-        data.each do |group_of_row_data| # rubocop:disable Metrics/BlockLength
+    class Pricing < ExcelDataServices::Inserters::Base
+      def perform
+        data.each do |group_of_row_data|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
             row_data: group_of_row_data.first, organization: organization
           )
@@ -90,7 +90,7 @@ module ExcelDataServices
         ) # returns a `TenantVehicle`!
       end
 
-      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary, notes) # rubocop:disable Metrics/AbcSize
+      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary, notes)
         load_type = row.load_type == 'lcl' ? 'cargo_item' : 'container'
         pricing_params =
           { organization: organization,
@@ -129,7 +129,7 @@ module ExcelDataServices
         end
       end
 
-      def act_on_overlapping_pricings(pricings_with_actions, notes, row_nr) # rubocop:disable Metrics/AbcSize
+      def act_on_overlapping_pricings(pricings_with_actions, notes, row_nr)
         new_pricings = []
         pricings_with_actions.slice(:destroy).values.each do |pricings|
           pricings.each do |pricing|
@@ -166,8 +166,8 @@ module ExcelDataServices
         end
       end
 
-      def build_pricing_detail_params_for_pricing(group_of_row_data) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
-        group_of_row_data.map do |row_data| # rubocop:disable Metrics/BlockLength
+      def build_pricing_detail_params_for_pricing(group_of_row_data)
+        group_of_row_data.map do |row_data|
           row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: row_data, organization: organization)
 
           fee_code = row.fee_code

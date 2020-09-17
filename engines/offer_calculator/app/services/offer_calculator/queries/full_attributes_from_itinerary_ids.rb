@@ -2,7 +2,7 @@
 
 module OfferCalculator
   module Queries
-    class FullAttributesFromItineraryIds # rubocop:disable Metrics/ClassLength
+    class FullAttributesFromItineraryIds
       def initialize(args = {})
         @itinerary_ids = args[:itinerary_ids] || args['itinerary_ids']
         @options       = args[:options]       || args['options']

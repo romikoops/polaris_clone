@@ -5,7 +5,7 @@ module OfferCalculator
     class Base
       CARRIAGE_MAP = {'export' => 'pre', 'import' => 'on'}.freeze
 
-      def initialize(shipment: false, quotation:)
+      def initialize(quotation:, shipment: false)
         @shipment = shipment
         @quotation = quotation
         @organization = Organizations::Organization.find(@shipment.organization_id)

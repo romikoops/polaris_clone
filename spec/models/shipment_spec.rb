@@ -10,6 +10,7 @@ RSpec.describe Shipment, type: :model do
            valid_until: 10.days.from_now.beginning_of_day,
            charge_category_name: 'Cargo1')
   end
+
   let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:organization) { create(:organizations_organization) }
   let(:shipment) { create(:shipment, organization: organization, with_breakdown: true) }

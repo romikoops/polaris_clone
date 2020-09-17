@@ -20,7 +20,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
 
   describe ".insert with two identical names" do
     let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_pricing) }
-     
+
     it "attaches the pricing to the correct itinerary" do
       aggregate_failures do
         expect(stats).to eq(expected_stats)
@@ -52,10 +52,10 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     let(:input_data) { FactoryBot.build(:excel_data_restructured_same_locode_pricing) }
     let(:faux_origin_country) { FactoryBot.create(:country_se)}
     let(:faux_destination_country) { FactoryBot.create(:country_cn)}
-    let(:faux_origin_name) { 'Gothenburg - Key 4' }
-    let(:faux_destination_name) { 'Shanghai' }
-    let(:faux_origin_locode) { 'SEGOT' }
-    let(:faux_destination_locode) { 'CNSHA' }
+    let(:faux_origin_name) { "Gothenburg - Key 4" }
+    let(:faux_destination_name) { "Shanghai" }
+    let(:faux_origin_locode) { "SEGOT" }
+    let(:faux_destination_locode) { "CNSHA" }
 
     it "attaches the pricing to the correct itinerary" do
       aggregate_failures do

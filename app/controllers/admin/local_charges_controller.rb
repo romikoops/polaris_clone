@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class Admin::LocalChargesController < Admin::AdminBaseController # rubocop:disable Style/ClassAndModuleChildren
+class Admin::LocalChargesController < Admin::AdminBaseController
   include ExcelTools
 
-  def hub_charges # rubocop:disable Metrics/AbcSize
+  def hub_charges
     hub = Hub.find_by(id: params[:id])
     charges = hub.local_charges
     service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|

@@ -20,7 +20,7 @@ pr_title = github.pr_title.gsub(/imc-(\d+)/, 'IMC-\1')
 # Check title has all issues
 unless (pr_title_issues - jira_issues).empty?
   missing_issues = (pr_title_issues - jira_issues)
-  pr_title = "#{missing_issues.join(' ')} #{pr_title}"
+  pr_title = "#{missing_issues.join(" ")} #{pr_title}"
 end
 
 # Check title for chore

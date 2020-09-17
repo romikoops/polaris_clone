@@ -43,7 +43,7 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
     before do
       Quotations::Tender.find_each do |tender|
         FactoryBot.create(:shipments_shipment_request,
-                          user: Organizations::User.unscoped.find(tender.quotation.user_id),  # Find a better way for this
+                          user: Organizations::User.unscoped.find(tender.quotation.user_id), # Find a better way for this
                           organization: organization,
                           tender: tender,
                           created_at: tender.quotation.created_at)

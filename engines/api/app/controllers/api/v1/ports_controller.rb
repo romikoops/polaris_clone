@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'api/api_controller'
+require_dependency "api/api_controller"
 
 module Api
   module V1
@@ -12,11 +12,11 @@ module Api
 
       def index
         hub_ids = Legacy::Stop.select(:hub_id)
-                              .where(itinerary_id: ports_itineraries,
-                                     index: stop_index_if_location_selected)
+          .where(itinerary_id: ports_itineraries,
+                 index: stop_index_if_location_selected)
 
         hubs = Legacy::Hub.where(id: hub_ids)
-                          .order(:name)
+          .order(:name)
 
         hubs = hubs.name_search(ports_params[:query]) unless ports_params[:query].empty?
 
@@ -33,20 +33,20 @@ module Api
       end
 
       def default_stop_index
-        ports_params[:location_type] == 'origin' ? ORIGIN_INDEX : DESTINATION_INDEX
+        ports_params[:location_type] == "origin" ? ORIGIN_INDEX : DESTINATION_INDEX
       end
 
       def stop_index_if_location_selected
         return default_stop_index unless ports_params[:location_id]
 
-        ports_params[:location_type] == 'origin' ? DESTINATION_INDEX : ORIGIN_INDEX
+        ports_params[:location_type] == "origin" ? DESTINATION_INDEX : ORIGIN_INDEX
       end
 
       def ports_itineraries
         itineraries = Legacy::Itinerary.joins(:stops)
-                                       .where(organization_id: current_organization.id,
-                                              mode_of_transport: 'ocean',
-                                              stops: { index: default_stop_index })
+          .where(organization_id: current_organization.id,
+                 mode_of_transport: "ocean",
+                 stops: { index: default_stop_index })
 
         hub_id = ports_params[:location_id]
         itineraries = itineraries.where(stops: { hub_id: hub_id }) if hub_id.present?

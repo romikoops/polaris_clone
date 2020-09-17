@@ -110,6 +110,6 @@ class QuoteMailer < ApplicationMailer
 
   def from(display_name:)
     Mail::Address.new("no-reply@#{current_organization.slug}.itsmycargo.shop")
-                         .tap { |a| a.display_name = display_name }.format
+      .tap { |a| a.display_name = display_name }.format
   end
 end

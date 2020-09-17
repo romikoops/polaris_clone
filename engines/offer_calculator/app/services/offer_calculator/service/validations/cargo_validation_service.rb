@@ -73,7 +73,7 @@ module OfferCalculator
           ).perform
         end
 
-        def initialize(modes_of_transport:, cargo:, itinerary_ids: [], tenant_vehicle_ids:, final: false)
+        def initialize(modes_of_transport:, cargo:, tenant_vehicle_ids:, itinerary_ids: [], final: false)
           @modes_of_transport = modes_of_transport
           @cargo = cargo
           @max_dimensions_bundles = ::Legacy::MaxDimensionsBundle.where(organization_id: organization.id)

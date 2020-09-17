@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Restructurers
-    class SacoShipping < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
+    class SacoShipping < ExcelDataServices::Restructurers::Base
       TREAT_AS_NOTE_COLUMNS = %i[
         remarks
       ].freeze

@@ -7,7 +7,7 @@ module Analytics
         @data = clients
                 .where(last_login_at: (start_date...end_date))
                 .joins(companies_join)
-                .select('companies_memberships.company_id')
+                .select("companies_memberships.company_id")
                 .distinct
                 .count
       end

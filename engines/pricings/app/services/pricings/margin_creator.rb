@@ -25,7 +25,7 @@ module Pricings
     def create_from_iterations
       effective_date = (Date.parse(@args[:effective_date]) || pricing&.effective_date).beginning_of_day
       expiration_date = (Date.parse(@args[:expiration_date]) || pricing&.expiration_date).end_of_day
-      @iterations.map do |iteration| # rubocop:disable Metrics/BlockLength
+      @iterations.map do |iteration|
         margin = Pricings::Margin.create!(
           operator: @args[:operand][:value],
           value: get_margin_value(@args[:operand][:value], @args[:marginValue]),

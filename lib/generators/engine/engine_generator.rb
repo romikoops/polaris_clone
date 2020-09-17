@@ -7,7 +7,7 @@ class EngineGenerator < Rails::Generators::NamedBase
   class_option :type, aliases: ['-t'], type: :string, required: true,
                       desc: 'Engine type (options: view/service/data)'
 
-  def create_engine # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def create_engine
     @engine_name = name.downcase
     @engine_type = options['type']
     @engine_dest = "engines/#{@engine_name}"

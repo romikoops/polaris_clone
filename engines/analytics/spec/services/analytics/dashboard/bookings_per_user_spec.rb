@@ -55,7 +55,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
                         with_breakdown: true,
                         with_tenders: true)
     ]
-        FactoryBot.create(:profiles_profile, user: user)
+    FactoryBot.create(:profiles_profile, user: user)
   end
 
   context 'when a quote shop' do

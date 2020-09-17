@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Users
   RSpec.describe User, type: :model do
@@ -8,7 +8,7 @@ module Users
 
     it { is_expected.to be_valid }
 
-    context 'with activation' do
+    context "with activation" do
       subject { FactoryBot.build(:users_user, activate: true) }
 
       it { is_expected.to be_valid }

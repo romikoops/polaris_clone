@@ -14,9 +14,7 @@ module TenderCalculator
         percentage_node << branch
         addition_node << percentage_node
         addition_node << branch
-        branch = addition_node
-
-        branch
+        addition_node
       end
     end
   end

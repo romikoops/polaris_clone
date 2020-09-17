@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module OfferCalculator
-  class Schedule # rubocop:disable Metrics/ClassLength
+  class Schedule
     include ActiveModel::Model
 
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
@@ -53,7 +53,7 @@ module OfferCalculator
                                                 destination_hub: detailed_hash_hub_data_for(:destination))
     end
 
-    def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type, date_type) # rubocop:disable Metrics/MethodLength
+    def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type, date_type)
       grouped_data_from_routes = OfferCalculator::Route.group_data_by_attribute(routes)
       date_attr = date_type == 'closing_date' ? 'closing_date' : 'etd'
       raw_query = "
@@ -121,7 +121,7 @@ module OfferCalculator
       end
     end
 
-    def self.from_trip(trip) # rubocop:disable Metrics/AbcSize
+    def self.from_trip(trip)
       new(
         id: SecureRandom.uuid,
         mode_of_transport: trip.itinerary.mode_of_transport,

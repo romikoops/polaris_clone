@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Restructurers
-    class Hubs < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
+    class Hubs < ExcelDataServices::Restructurers::Base
       COLS_TO_DOWNCASE = %i[
         type
       ].freeze

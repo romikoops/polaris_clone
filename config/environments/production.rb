@@ -75,7 +75,7 @@ Rails.application.configure do
   # config.log_formatter = ::Logger::Formatter.new
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    config.logger = ActiveSupport::Logger.new(STDOUT)
+    config.logger = ActiveSupport::Logger.new($stdout)
   end
 
   # Do not dump schema after migrations.

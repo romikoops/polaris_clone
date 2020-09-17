@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileWriters
-    class LocalCharges < ExcelDataServices::FileWriters::Base # rubocop:disable Metrics/ClassLength
+    class LocalCharges < ExcelDataServices::FileWriters::Base
       private
 
       def load_and_prepare_data
@@ -42,7 +42,7 @@ module ExcelDataServices
         end
       end
 
-      def build_row_data(hub, local_charge, fee, range = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def build_row_data(hub, local_charge, fee, range = {})
         rate_basis = fee['rate_basis'].upcase
         effective_date = Date.parse(local_charge.effective_date.to_s) if local_charge.effective_date
         expiration_date = Date.parse(local_charge.expiration_date.to_s) if local_charge.expiration_date

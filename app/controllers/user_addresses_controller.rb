@@ -71,6 +71,6 @@ class UserAddressesController < ApplicationController
   end
 
   def addresses_for_user(user:)
-     Legacy::UserAddress.where(user_id: user.id)
+    Legacy::UserAddress.where(user_id: user.id)
   end
 end

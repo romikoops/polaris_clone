@@ -116,7 +116,7 @@ module Pricings
       original.hub_id
     end
 
-    alias km distance
+    alias_method :km, :distance
 
     private
 

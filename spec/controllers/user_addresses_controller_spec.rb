@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe UserAddressesController do
-  describe 'GET #index' do
+  describe "GET #index" do
     let(:org_user) { FactoryBot.create(:organizations_user) }
     let(:organization) { org_user.organization }
     let(:user) { org_user.becomes(Authentication::User) }
@@ -17,10 +17,10 @@ RSpec.describe UserAddressesController do
       end
     end
 
-    it 'returns http success' do
+    it "returns http success" do
       get :index, params: { organization_id: organization.id, user_id: user.id }
 
-      expect(JSON.parse(response.body).dig('data').count).to eq addresses.count
+      expect(JSON.parse(response.body).dig("data").count).to eq addresses.count
     end
   end
 end

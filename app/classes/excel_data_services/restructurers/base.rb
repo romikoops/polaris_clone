@@ -81,8 +81,8 @@ module ExcelDataServices
           row_data.keys.each do |key|
             new_key = key.to_s.remove('html')
                          .remove(/(?<=[^a-z])[a-z](?=[^a-z])/)
-                         .remove(%r{(?<![a-z0-9\(])(_|/)})
-                         .remove(%r{(_|/)(?![a-z0-9\(])})
+                         .remove(%r{(?<![a-z0-9(])(_|/)})
+                         .remove(%r{(_|/)(?![a-z0-9(])})
                          .to_sym
             row_data[new_key] = row_data.delete(key)
           end

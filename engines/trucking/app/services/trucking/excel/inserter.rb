@@ -4,7 +4,7 @@ require 'bigdecimal'
 
 module Trucking
   module Excel
-    class Inserter < ::Trucking::Excel::Base # rubocop:disable Metrics/ClassLength
+    class Inserter < ::Trucking::Excel::Base
       attr_reader :defaults, :trucking_rate_by_zone, :sheets, :zone_sheet,
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations, :valid_postal_codes, :xlsx
@@ -108,8 +108,8 @@ module Trucking
         end
       end
 
-      def overwrite_zonal_trucking_rates_by_hub # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
-        sheets.slice(2, sheets.length - 1).each do |sheet| # rubocop:disable Metrics/BlockLength
+      def overwrite_zonal_trucking_rates_by_hub
+        sheets.slice(2, sheets.length - 1).each do |sheet|
           rates_sheet = xlsx.sheet(sheet)
           meta = generate_meta_from_sheet(rates_sheet)
           row_truck_type = !meta[:truck_type] || meta[:truck_type] == '' ? 'default' : meta[:truck_type]
@@ -158,7 +158,7 @@ module Trucking
         end
       end
 
-      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def insert_or_update_truckings(trucking_rate, single_ident_values_and_country)
         @all_trucking_locations = []
         @all_trucking_truckings = []
         single_ident_values_and_country.each do |ident_and_country|
@@ -207,8 +207,8 @@ module Trucking
         )
       end
 
-      def load_zones # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
-        (2..num_rows).each do |line| # rubocop:disable Metrics/BlockLength
+      def load_zones
+        (2..num_rows).each do |line|
           row_data = zone_sheet.row(line)
           zone_name = row_data[0]
           zones[zone_name] = [] if zones[zone_name].nil?
@@ -363,8 +363,8 @@ module Trucking
         )
       end
 
-      def load_fees_and_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
-        parse_fees_sheet.each do |row| # rubocop:disable Metrics/BlockLength
+      def load_fees_and_charges
+        parse_fees_sheet.each do |row|
           fee_row_key = "#{row[:fee_code]}_#{row[:truck_type]}_#{row[:direction]}"
           minimum = row[:minimum] || 0
           case row[:rate_basis]
@@ -536,7 +536,7 @@ module Trucking
         modifier_position_objs
       end
 
-      def create_trucking(meta:, sheet_name:, row_number:) # rubocop:disable Metrics/AbcSize
+      def create_trucking(meta:, sheet_name:, row_number:)
         user_id = meta[:user_email] ? User.find_by(organization_id: @organization.id, email: meta[:user_email])&.id : nil
         carrier = meta[:carrier] || meta[:courier]
         service = meta[:service] || 'standard'
@@ -583,7 +583,7 @@ module Trucking
         meta_data
       end
 
-      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key) # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists, Metrics/CyclomaticComplexity
+      def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key)
         val *= 2 if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         w_min = weight_min_row[m_index] || 0
         r_min = row_min_value || 0
@@ -668,7 +668,7 @@ module Trucking
         end
       end
 
-      def determine_identifier_type_and_modifier(identifier_type) # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+      def determine_identifier_type_and_modifier(identifier_type)
         if identifier_type == 'CITY'
           'location_id'
         elsif identifier_type == 'POSTAL_CODE'
@@ -696,7 +696,7 @@ module Trucking
         meta.deep_symbolize_keys!
       end
 
-      def find_geometry(idents_and_country) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+      def find_geometry(idents_and_country)
         geometry = if @identifier_modifier == 'postal_code'
                      Locations::Location.find_by(
                        name: idents_and_country[:ident].upcase,

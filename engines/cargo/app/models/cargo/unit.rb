@@ -49,7 +49,7 @@ module Cargo
       Measured::StowageFactor.new(factor.round(6), 'm3/t')
     end
 
-    alias consolidated? cargo_type_AGR?
+    alias_method :consolidated?, :cargo_type_AGR?
 
     private
 

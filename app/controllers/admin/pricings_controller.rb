@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength, Style/ClassAndModuleChildren
+class Admin::PricingsController < Admin::AdminBaseController
   include ExcelTools
 
   def index
@@ -24,7 +24,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     response_handler(userPricings: @pricings, client: @client)
   end
 
-  def search # rubocop:disable Metrics/AbcSize
+  def search
     query = {
       organization_id: current_organization.id
     }

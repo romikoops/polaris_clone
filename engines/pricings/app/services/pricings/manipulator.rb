@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Pricings
-  class Manipulator # rubocop:disable Metrics/ClassLength
+  class Manipulator
     MissingArgument = Class.new(StandardError)
     TRUCKING_QUERY_DAYS = 10
 
@@ -337,7 +337,7 @@ module Pricings
 
     def manipulate_json_hash_fees(fee_hash:, data:)
       fee_count = fee_hash.keys.count
-      result = fee_hash.each_with_object({}) { |(key, fee), hash|
+      fee_hash.each_with_object({}) { |(key, fee), hash|
         adjusted_key = key.downcase
         charge_category = charge_category_lookup(fee_code: adjusted_key)
 
@@ -351,7 +351,6 @@ module Pricings
           )
         end
       }
-      result
     end
 
     def manipulate_dates(pricing, date_keys)

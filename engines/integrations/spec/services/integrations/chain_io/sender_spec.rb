@@ -10,14 +10,14 @@ module Integrations
 
         let!(:scope) {
           FactoryBot.create(:organizations_scope, target: organization,
-                                            content: {
-                                              integrations: {
-                                                chainio: {
-                                                  flow_id: 'test_flow_id',
-                                                  api_key: 'test_api_key'
-                                                }
-                                              }
-                                            })
+                                                  content: {
+                                                    integrations: {
+                                                      chainio: {
+                                                        flow_id: 'test_flow_id',
+                                                        api_key: 'test_api_key'
+                                                      }
+                                                    }
+                                                  })
         }
         let(:data) {
           { shipments:

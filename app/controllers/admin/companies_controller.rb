@@ -28,7 +28,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
     response_handler(groups: groups, employees: employees, data: company)
   end
 
-  def create # rubocop:disable Metrics/AbcSize
+  def create
     new_company = ::Companies::Company.find_or_create_by(
       name: create_params[:name],
       email: create_params[:email],

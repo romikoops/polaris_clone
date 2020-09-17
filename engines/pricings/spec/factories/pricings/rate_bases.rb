@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :pricings_rate_basis, class: 'Pricings::RateBasis' do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :pricings_rate_basis, class: 'Pricings::RateBasis' do
     internal_code { 'PER_CONTAINER' }
     external_code { 'PER_CONTAINER' }
 

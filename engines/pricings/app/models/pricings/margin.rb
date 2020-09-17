@@ -30,7 +30,7 @@ module Pricings
       (tenant_vehicle&.name || pricing&.tenant_vehicle&.name) || 'All'
     end
 
-    def itinerary_name # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def itinerary_name
       if itinerary
         itinerary.name
       elsif pricing
@@ -50,7 +50,7 @@ module Pricings
       (itinerary&.mode_of_transport || pricing&.itinerary&.mode_of_transport) || (default_for || 'ALL')
     end
 
-    def get_pricing # rubocop:disable Naming/AccessorMethodName
+    def get_pricing
       return pricing if pricing
 
       Pricings::Pricing.where(organization_id: organization_id).find_by(

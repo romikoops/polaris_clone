@@ -91,8 +91,7 @@ module Legacy
     def set_geocoded_address_from_fields!
       raw_address = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country&.name}"
       self.geocoded_address = raw_address.gsub(/\s+/, ' ').gsub(/\s+,/, ',').strip
-                                         .gsub(/^,/, '').gsub(/,\z/, '').strip
-                                         .gsub(/,+/, ',')
+                                         .gsub(/^,/, '').delete_suffix(',').strip.squeeze(',')
     end
 
     def primary_for?(user)

@@ -7,7 +7,8 @@ module AdmiraltyReports
     routes { Engine.routes }
     render_views
     let(:organization_1) { FactoryBot.create(:organizations_organization, slug: 'demo1') }
-    let(:organization_2) { FactoryBot.create(:organizations_organization, slug: 'demo2')}
+    let(:organization_2) { FactoryBot.create(:organizations_organization, slug: 'demo2') }
+
     before do
       allow_any_instance_of(AdmiraltyAuth::AuthorizedController).to receive(:authenticate!).and_return(true)
       FactoryBot.create(:organizations_scope, target: organization_1, content: { 'open_quotation_tool' => true })

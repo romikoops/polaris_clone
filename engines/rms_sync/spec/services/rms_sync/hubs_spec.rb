@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe RmsSync::Hubs do
-
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:shanghai) { FactoryBot.create(:shanghai_hub, organization: organization) }
   let!(:gothenburg) { FactoryBot.create(:legacy_hub, organization: organization) }

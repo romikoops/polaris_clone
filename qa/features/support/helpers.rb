@@ -32,7 +32,7 @@ module Helpers
       time: Time.now.strftime('%H%M%S')
     )
 
-    save_screenshot("#{path}.png") # rubocop:disable Lint/Debugger
+    save_screenshot("#{path}.png")
     save_page("#{path}.html")
 
     puts "\n"

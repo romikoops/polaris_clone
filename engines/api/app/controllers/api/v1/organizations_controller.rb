@@ -7,7 +7,7 @@ module Api
 
       def index
         organizations = Organizations::Organization.joins(:memberships)
-                                                   .where(organizations_memberships: {user_id: current_user})
+          .where(organizations_memberships: {user_id: current_user})
         decorated_organizations = OrganizationDecorator.decorate_collection(organizations)
         render json: OrganizationSerializer.new(decorated_organizations)
       end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :organizations_organization, class: 'Organizations::Organization' do
+  factory :organizations_organization, class: "Organizations::Organization" do
     sequence(:slug) { |n| "test_#{n}" }
 
     trait :with_max_dimensions do

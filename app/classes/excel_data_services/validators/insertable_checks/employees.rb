@@ -18,7 +18,7 @@ module ExcelDataServices
           )
           company_unknown = row[:company_name].present? && company.nil?
 
-          if company_unknown # rubocop:disable Style/GuardClause
+          if company_unknown
             add_to_errors(
               type: :error,
               row_nr: row.nr,
@@ -30,7 +30,7 @@ module ExcelDataServices
         end
 
         def check_customer_password(row)
-          if row[:password]&.length&.< 8 # rubocop:disable Style/GuardClause
+          if row[:password]&.length&.< 8
             add_to_errors(
               type: :error,
               row_nr: row.nr,

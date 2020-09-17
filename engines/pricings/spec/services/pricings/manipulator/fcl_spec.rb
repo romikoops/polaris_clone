@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Pricings::Manipulator do
-
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }

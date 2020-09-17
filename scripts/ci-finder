@@ -64,15 +64,15 @@ class BuildFinder
       end
 
       names = gemspecs.each_with_object({}) do |gemspec, hash|
-        hash[gemspec.name.gsub(/\Aimc-/, '')] = []
+        hash[gemspec.name.delete_prefix('imc-')] = []
       end
 
       gemspecs.each_with_object(names) do |gemspec, hash|
         deps = Set.new(gemspec.dependencies.map(&:name)) + Set.new(gemspec.development_dependencies.map(&:name))
         local_deps = deps & Set.new(names.keys)
         local_deps.each do |local_dep|
-          name = local_dep.gsub(/\Aimc-/, '')
-          hash[name] << gemspec.name.gsub(/\Aimc-/, '')
+          name = local_dep.delete_prefix('imc-')
+          hash[name] << gemspec.name.delete_prefix('imc-')
         end
       end
     end

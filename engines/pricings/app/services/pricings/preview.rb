@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Pricings
-  class Preview # rubocop:disable Metrics/ClassLength
+  class Preview
     attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :organization, :truckings
 
     def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
@@ -243,7 +243,7 @@ module Pricings
             schedules: default_schedules(tenant_vehicle_id: nil),
             trucking_pricing: trucking,
             date: Date.today,
-            cargo_class_count: 1,
+            cargo_class_count: 1
           }
         ).perform
 

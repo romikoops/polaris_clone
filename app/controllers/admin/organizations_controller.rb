@@ -16,8 +16,8 @@ module Admin
     def organization_params
       params.require(:tenant).permit(
         emails: {
-          sales: %i(ocean rail air general),
-          support: %i(ocean rail air general)
+          sales: %i[ocean rail air general],
+          support: %i[ocean rail air general]
         }
       )
     end

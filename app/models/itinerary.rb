@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
+class Itinerary < Legacy::Itinerary
 
   belongs_to :organization, class_name: 'Organizations::Organization'
   has_many :stops,     dependent: :destroy
@@ -12,7 +12,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
 
   self.per_page = 12
 
-  def generate_schedules_from_sheet( # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+  def generate_schedules_from_sheet(
     stops:,
     start_date:,
     end_date:,
@@ -72,14 +72,13 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def generate_weekly_schedules(stops_in_order:, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/ParameterLists, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def generate_weekly_schedules(stops_in_order:,
                                 steps_in_order:,
                                 start_date:,
                                 end_date:,
                                 ordinal_array:,
                                 tenant_vehicle_id:,
-                                closing_date_buffer: 4,
-                                load_type:)
+                                load_type:, closing_date_buffer: 4)
     results = {
       layovers: [],
       trips: []
@@ -146,7 +145,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     results[:trips]
   end
 
-  def prep_schedules(limit) # rubocop:disable Metrics/AbcSize
+  def prep_schedules(limit)
     schedules = []
     trip_layovers = trips.order(:start_date).map(&:layovers)
     trip_layovers = trip_layovers[0...limit] if limit
@@ -252,7 +251,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     }
   end
 
-  def routes # rubocop:disable Metrics/AbcSize
+  def routes
     stops.order(:index).to_a.combination(2).map do |stop_array|
       if !stop_array[0].hub || !stop_array[1].hub
         stop_array[0].itinerary.destroy
@@ -270,7 +269,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def detailed_hash(stop_array, options = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def detailed_hash(stop_array, options = {})
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
@@ -345,7 +344,7 @@ class Itinerary < Legacy::Itinerary # rubocop:disable Metrics/ClassLength
     ", origin_hub_ids, destination_hub_ids)
   end
 
-  def self.for_addresses(shipment, trucking_data) # rubocop:disable Metrics/AbcSize
+  def self.for_addresses(shipment, trucking_data)
     if trucking_data && trucking_data['pre_carriage']
       start_hub_ids = trucking_data['pre_carriage'].keys
       start_hubs = Hub.where(id: start_hub_ids)

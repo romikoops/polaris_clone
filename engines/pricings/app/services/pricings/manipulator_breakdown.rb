@@ -8,7 +8,7 @@ module Pricings
     delegate :cargo_class, to: :cargo
     delegate :code, to: :charge_category
 
-    def initialize(charge_category:, data:, delta:, source: nil, cargo: nil, metadata: {}) # rubocop:disable Metrics/ParameterLists
+    def initialize(charge_category:, data:, delta:, source: nil, cargo: nil, metadata: {})
       @source = source
       @charge_category = charge_category
       @cargo = cargo

@@ -12,8 +12,7 @@ module Api
     let(:domain) {
       FactoryBot.create(:organizations_domain,
         domain: "itsmycargo.example",
-        organization: user.organization
-      ).domain
+        organization: user.organization).domain
     }
 
     before do

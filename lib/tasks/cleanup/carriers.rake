@@ -9,7 +9,7 @@ namespace :cleanup do
           flagship_service = flagship.tenant_vehicles
                                      .find_by(name: service.name, organization_id: service.organization_id)
           if flagship_service.exists?
-            # rubocop:disable Rails/SkipsModelValidations
+
             Legacy::LocalCharge.where(tenant_vehicle_id: service.id)
                                .update_all(tenant_vehicle_id: flagship_service.id)
             Legacy::Trip.where(tenant_vehicle_id: service.id)
@@ -26,7 +26,7 @@ namespace :cleanup do
                             .update_all(tenant_vehicle_id: flagship_service.id)
             Quotations::Tender.where(tenant_vehicle_id: service.id)
                               .update_all(tenant_vehicle_id: flagship_service.id)
-            # rubocop:enable Rails/SkipsModelValidations
+
             service.destroy
           else
             service.update(carrier: flagship)

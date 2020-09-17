@@ -6,6 +6,7 @@ RSpec.describe "Ahoy API" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+
   before { FactoryBot.create(:organizations_domain, organization: organization, default: true) }
 
   path "/v1/organizations/{organization_id}/ahoy" do

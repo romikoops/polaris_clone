@@ -24,8 +24,8 @@ module AdmiraltyReports
       end
 
       let(:raw_request_data) do
-         [shipment, quotation]
-       end
+        [shipment, quotation]
+      end
 
       before do
         ::Organizations.current_id = organization.id

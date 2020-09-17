@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :pricings_margin, class: 'Pricings::Margin' do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :pricings_margin, class: 'Pricings::Margin' do
     value { 0.10 }
     operator { '%' }
     margin_type { :freight_margin }

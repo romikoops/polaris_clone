@@ -45,7 +45,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
   before  do
     ::Organizations.current_id = organization.id
     ::Organizations::Scope.find_or_create_by(target: organization,
-                                       content: { 'base_pricing' => true })
+                                             content: { 'base_pricing' => true })
   end
   describe '.insert' do
     let(:input_data) { build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges) }

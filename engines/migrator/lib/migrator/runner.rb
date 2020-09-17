@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Migrator
-  def self.run # rubocop:disable Rails/Output
+  def self.run
     puts "Running data migrations:"
     puts Dependency.list.map { |dep| "  #{dep}" }.join("\n")
 

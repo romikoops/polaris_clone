@@ -55,7 +55,7 @@ module OfferCalculator
           decimal_value > last_rate
         end
 
-        def add_fee_to_arguments(rate:, rate_key: modifier, target_measure:)
+        def add_fee_to_arguments(rate:, target_measure:, rate_key: modifier)
           @min_value, @max_value = min_max_values(rate: rate)
           @rate_basis = rate.dig("rate_basis")
           @target = determine_target(rate_basis: rate.dig("rate_basis"), target_measure: target_measure)
@@ -90,7 +90,7 @@ module OfferCalculator
         end
 
         def check_limits(target_measure:)
-          exceeded = sorted_ranges.all? do |modifier_key, range|
+          exceeded = sorted_ranges.all? { |modifier_key, range|
             exceeded_hard_limit?(
               rates: range,
               key: "max_#{modifier_key}",
@@ -100,7 +100,7 @@ module OfferCalculator
                 rate_basis: range.first.dig("rate", "rate_basis")
               )
             )
-          end
+          }
 
           raise OfferCalculator::Errors::LoadMeterageExceeded if exceeded && scope["hard_trucking_limit"]
         end

@@ -3,12 +3,12 @@
 require 'pdfkit'
 require 'open-uri'
 module Pdf
-  class Handler < Pdf::Base # rubocop:disable Metrics/ClassLength
+  class Handler < Pdf::Base
     FEE_DETAIL_LEVEL = 3
 
     attr_reader :name, :full_name, :pdf, :url, :path
 
-    def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def initialize(args = {})
       super(organization: args[:organization], user: args[:shipment].user)
 
       args.symbolize_keys!

@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module Restructurers
-    class LocalCharges < ExcelDataServices::Restructurers::Base # rubocop:disable Metrics/ClassLength
+    class LocalCharges < ExcelDataServices::Restructurers::Base
       COLS_CONTAINING_ALL = %i[
         service_level
         carrier
@@ -178,7 +178,7 @@ module ExcelDataServices
           rate_basis: charge_data[:rate_basis].upcase }
       end
 
-      def specific_charge_params(rate_basis, single_data) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def specific_charge_params(rate_basis, single_data)
         return { value: single_data[:kg], base: single_data[:base] } if rate_basis == 'PER_X_KG_FLAT'
         return { value: single_data[:ton], base: single_data[:base] } if rate_basis == 'PER_SHIPMENT_TON'
 

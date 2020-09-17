@@ -2,7 +2,7 @@
 
 module Companies
   class Membership < ApplicationRecord
-    belongs_to :company, class_name: 'Companies::Company'
+    belongs_to :company, class_name: "Companies::Company"
     belongs_to :member, polymorphic: true
 
     validates :member_id, uniqueness: { scope: :company }

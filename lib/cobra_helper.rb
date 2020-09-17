@@ -15,7 +15,7 @@ class CobraHelper
       system("dot -Tpdf -o#{output.join("graph.pdf")} #{output_file}")
   end
 
-  def graphviz # rubocop:disable Metrics/AbcSize
+  def graphviz
     dot = []
 
     dot << "digraph G {"
@@ -30,7 +30,7 @@ class CobraHelper
       dot << "    label = \"#{type}\";"
 
       group.each do |_, s|
-        name = s.name.gsub(/\Aimc-/, "")
+        name = s.name.delete_prefix("imc-")
 
         dot << "    \"#{name}\" [shape=ellipse];"
 
@@ -39,7 +39,7 @@ class CobraHelper
 
         # Dependencies
         s.dependencies.select { |d| specs.key?(d.name) }.each do |d|
-          dot << "    \"#{name}\" -> \"#{d.name.gsub(/\Aimc-/, "")}\" [color=grey];"
+          dot << "    \"#{name}\" -> \"#{d.name.delete_prefix("imc-")}\" [color=grey];"
         end
       end
 

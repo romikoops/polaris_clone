@@ -70,7 +70,7 @@ module Pdf
       )
     end
 
-    def admin_quotation(quotation: nil, shipment:, pdf_tenders: nil)
+    def admin_quotation(shipment:, quotation: nil, pdf_tenders: nil)
       if quotation.is_a?(Legacy::Quotation)
         quotation = Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
         pdf_tenders = tenders(quotation: quotation, shipment: shipment)
@@ -136,7 +136,7 @@ module Pdf
       create_file(object: object, shipments: shipments, file: file, user: user)
     end
 
-    def existing_document(quotation: nil, shipment: nil, type:)
+    def existing_document(type:, quotation: nil, shipment: nil)
       object = quotation || shipment
       document = if quotation.present?
                    Legacy::File.find_by(

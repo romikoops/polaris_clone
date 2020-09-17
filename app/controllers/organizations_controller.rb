@@ -8,10 +8,10 @@ class OrganizationsController < ApplicationController
 
   def index
     organizations = if Rails.env.production?
-                []
-              else
-                Organizations::Organization.order(:slug).map { |t| { label: t.slug, value: t } }
-              end
+      []
+    else
+      Organizations::Organization.order(:slug).map { |t| {label: t.slug, value: t} }
+    end
 
     response_handler(organizations)
   end
@@ -25,7 +25,7 @@ class OrganizationsController < ApplicationController
     end
   end
 
-  deprecate :get_tenant, deprecator: ActiveSupport::Deprecation.new('', Rails.application.railtie_name)
+  deprecate :get_tenant, deprecator: ActiveSupport::Deprecation.new("", Rails.application.railtie_name)
 
   def fetch_scope
     response_handler(current_scope)
@@ -34,7 +34,7 @@ class OrganizationsController < ApplicationController
   def show
     if organization
       theme = ::Organizations::Theme.find_by(organization_id: organization)
-      auth_methods = ['password'].tap { |methods| methods << 'saml' if saml_enabled? }
+      auth_methods = ["password"].tap { |methods| methods << "saml" if saml_enabled? }
       response = organization.as_json.merge(
         theme: ::Organizations::ThemeDecorator.new(theme).legacy_format,
         scope: current_scope,

@@ -135,13 +135,13 @@ module RmsSync
       dir_fees.deep_symbolize_keys!
     end
 
-    def write_fees_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def write_fees_to_sheet 
       @fees_sheet = @books[hub.id][load_type].sheets.create(organization_id: @organization.id, sheet_index: 1)
       row = 1
       FEE_HEADERS.each_with_index { |hv, i| write_cell(fees_sheet, 0, i, hv) }
-      dir_fees.each do |carriage_dir, truck_type_and_fees| # rubocop:disable Metrics/BlockLength
-        truck_type_and_fees.each do |truck_type, fees| # rubocop:disable Metrics/BlockLength
-          fees.each do |key, fee| # rubocop:disable Metrics/BlockLength
+      dir_fees.each do |carriage_dir, truck_type_and_fees| 
+        truck_type_and_fees.each do |truck_type, fees| 
+          fees.each do |key, fee| 
             write_cell(fees_sheet, row, 0, fee[:name])
             write_cell(fees_sheet, row, 1, hub.hub_type)
             write_cell(fees_sheet, row, 2, key)
@@ -177,8 +177,8 @@ module RmsSync
       end
     end
 
-    def write_rates_to_sheet # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      pages.values.each_with_index do |page, i| # rubocop:disable Metrics/BlockLength
+    def write_rates_to_sheet 
+      pages.values.each_with_index do |page, i| 
         @rates_sheet = @books[hub.id][load_type].sheets.create(organization_id: @organization.id, sheet_index: i + 2)
         write_cell(rates_sheet, 3, 0, 'ZONE')
         write_cell(rates_sheet, 3, 1, 'MIN')
@@ -225,7 +225,7 @@ module RmsSync
       end
     end
 
-    def prep_results # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def prep_results 
       page_groupings = @data.group_by do |trucking_result|
         [
           trucking_result.dig('truckingPricing', 'truck_type'),
@@ -283,7 +283,7 @@ module RmsSync
       end
     end
 
-    def build_meta(trucking_result) # rubocop:disable Metrics/AbcSize
+    def build_meta(trucking_result) 
       {
         city: hub.nexus.name,
         currency: trucking_result.dig('truckingPricing', 'rates',0, 1, 0, 'rate', 'currency'),

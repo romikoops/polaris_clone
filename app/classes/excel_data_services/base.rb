@@ -40,7 +40,7 @@ module ExcelDataServices
     def find_nexus_by_locode_or_name(locode:, name:, country:)
       safe_locode = locode.delete(' ').upcase
       nexuses = ::Legacy::Nexus.where(organization: organization)
-      
+
       nexuses = nexuses.joins(:country).where(countries: { name: country }) if country.present?
       nexus = nexuses.find_by(name: name, locode: safe_locode)
       nexus || nexuses.find_by(locode: safe_locode)

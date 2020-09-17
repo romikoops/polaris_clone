@@ -47,17 +47,15 @@ module DocumentService
       # variables hardcoded until params are sent from front end
       if options[:mode_of_transport] && !options[:itinerary_id]
         Trip
-          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id 
-            AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' 
-            AND itineraries.organization_id = '#{options[:organization_id]}'"
-          )
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id
+            AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}'
+            AND itineraries.organization_id = '#{options[:organization_id]}'")
           .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       else
         Trip
-          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id 
-            AND itineraries.organization_id = '#{options[:organization_id]}'"
-          )
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id
+            AND itineraries.organization_id = '#{options[:organization_id]}'")
           .where('start_date > ? AND end_date < ?', start_date, end_date)
           .order(:start_date)
       end

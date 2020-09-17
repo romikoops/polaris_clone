@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 module Groups
   RSpec.describe Membership, type: :model do

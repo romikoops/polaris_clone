@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :organizations_saml_metadatum, class: 'Organizations::SamlMetadatum' do
+  factory :organizations_saml_metadatum, class: "Organizations::SamlMetadatum" do
     association :organization, factory: :organizations_organization
     content do
       <<-METADATA

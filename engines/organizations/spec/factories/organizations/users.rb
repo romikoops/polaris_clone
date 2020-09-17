@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :organizations_user, class: 'Organizations::User', parent: :users_user do
+  factory :organizations_user, class: "Organizations::User", parent: :users_user do
     association :organization, factory: :organizations_organization
 
     trait :with_profile do

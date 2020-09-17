@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :organizations_scope, class: 'Organizations::Scope' do
-    content { { 'quote_notes' => 'Quote Notes from the FactoryBot Factory' } }
+  factory :organizations_scope, class: "Organizations::Scope" do
+    content { { "quote_notes" => "Quote Notes from the FactoryBot Factory" } }
 
     trait :default do
       content { Organizations::DEFAULT_SCOPE }

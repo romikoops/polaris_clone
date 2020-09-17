@@ -22,15 +22,15 @@ FactoryBot.define do
 
     addresses do
       {
-        main: 'Brooktorkai 7, 20457 Hamburg, Germany',
+        main: "Brooktorkai 7, 20457 Hamburg, Germany",
         components: []
       }
     end
 
     phones do
       {
-        main: '+46 31-85 32 00',
-        support: '0173042031020'
+        main: "+46 31-85 32 00",
+        support: "0173042031020"
       }
     end
 

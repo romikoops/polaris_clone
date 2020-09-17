@@ -5,14 +5,14 @@ namespace :deploy do
   end
 
   task :backend do
-    require 'aws-sdk-elasticbeanstalk'
+    require "aws-sdk-elasticbeanstalk"
 
     client = Aws::ElasticBeanstalk::Client.new
 
     # Find current application version
     app_dir = File.expand_path("../../../", __dir__)
     git = Git.open(app_dir)
-    current_head = git.object('HEAD').sha
+    current_head = git.object("HEAD").sha
 
     response = client.describe_application_versions({
       application_name: "imcr-staging",

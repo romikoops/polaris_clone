@@ -4,7 +4,7 @@ class WelcomeMailer < ApplicationMailer
   layout 'mailer.html.mjml'
   add_template_helper(ApplicationHelper)
 
-  def welcome_email(user) # rubocop:disable Metrics/AbcSize
+  def welcome_email(user)
     set_current_id(organization_id: user.organization_id)
     return unless Legacy::Content.exists?(organization_id: user.organization_id, component: 'WelcomeMail')
 

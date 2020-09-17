@@ -5,7 +5,7 @@ module ChargeCalculator
     class Rate
       attr_reader :kind, :category, :min_price, :currency, :reducer
 
-      def initialize(kind: nil, category:, min_price: nil, currency:, reducer: nil, prices: [])
+      def initialize(category:, currency:, kind: nil, min_price: nil, reducer: nil, prices: [])
         @kind        = kind
         @category    = category
         @min_price   = BigDecimal(min_price)

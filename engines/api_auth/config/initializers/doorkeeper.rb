@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'api_auth/resource_helper.rb'
+require 'api_auth/resource_helper'
 
 ::Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)

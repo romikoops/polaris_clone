@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::HubsController < Admin::AdminBaseController # rubocop:disable Metrics/ClassLength
+class Admin::HubsController < Admin::AdminBaseController
   include ExcelTools
   include Response
   include AwsConfig

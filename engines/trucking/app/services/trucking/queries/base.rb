@@ -9,7 +9,7 @@ module Trucking
         :organization_id, :load_type, :carriage, :truck_type, :cargo_classes, :nexus_ids,
         :hub_ids, :distance, :groups
 
-      def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def initialize(args = {})
         argument_errors(args)
         @address = args[:address]
         @latitude = args[:latitude] || args[:address].try(:latitude) || 0
