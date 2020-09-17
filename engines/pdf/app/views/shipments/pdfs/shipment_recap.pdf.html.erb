@@ -470,16 +470,22 @@
           <% unless notes.empty? %>
            <div class="remarks">
             <h4>Notes: </h4>
-            <ul> <% notes[shipment.id].each do |note| %>
-              <li class="note-header"> <%= note.header %></li>
+            <ul>
               <li>
                 <p class="hyphens">
-                  <%= simple_format(note.body) %>
+                  <%= simple_format(shipment.notes) %>
                 </p>
               </li>
+              <% notes[shipment.id].each do |note| %>
+                <li class="note-header"> <%= note.header %></li>
+                <li>
+                  <p class="hyphens">
+                    <%= simple_format(note.body) %>
+                  </p>
+                </li>
               <% end %>
             </ul>
-          </div>
+           </div>
           <% end %>
 
           <% unless remarks.empty? %>
