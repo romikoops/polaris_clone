@@ -44,6 +44,8 @@ class Admin::ClientsController < Admin::AdminBaseController
       type: 'Organizations::User'
     }
     ActiveRecord::Base.transaction do
+      return restore_client(user_data: user_data) if client_restore_necessary?(email: json["email"])
+
       user = Authentication::User.create!(user_data)
       Profiles::ProfileService.create_or_update_profile(user: user,
                                                         first_name: json['firstName'],
@@ -204,6 +206,20 @@ class Admin::ClientsController < Admin::AdminBaseController
     profiles.joins(:user).map do |profile|
       profile = profile.as_json.merge!(profile.user.as_json)
       profile.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    end
+  end
+
+  def client_restore_necessary?(email:)
+    Organizations::User.only_deleted.exists?(email: email)
+  end
+
+  def restore_client(user_data:)
+    client = Authentication::User.only_deleted.find_by(email: user_data.dig(:email)).tap do |user|
+      user.restore
+      user.update(user_data.slice(:password, :password_confirmation))
+    end
+    [Profiles::Profile, Users::Settings].each do |relation|
+      relation.with_deleted.find_by(user_id: client.id).restore
     end
   end
 end

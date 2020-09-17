@@ -21,6 +21,8 @@ module Api
 
     before do
       ::Organizations.current_id = organization.id
+      stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
+        .to_return(status: 200, body: "", headers: {})
     end
 
     describe 'GET #index' do
@@ -197,6 +199,25 @@ module Api
         it 'returns list of errors' do
           json = JSON.parse(perform_request.body)
           expect(json['error']).to include("Validation failed: Email can't be blank, Email is invalid")
+        end
+      end
+
+      context "when creating client with email belonging to a soft deleted user" do
+        let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: "email123@demo.com") }
+        let(:client_params) { { **user_info, **profile_info, **address_info, email: 'email123@demo.com' } }
+        let(:request_object) do
+          post :create, params: { organization_id: organization.id, client: client_params }, as: :json
+        end
+
+        before { user.destroy }
+
+        it "restores the user and restores corresponding relationships" do
+          perform_request
+          restored_user = Organizations::User.find_by(email: 'email123@demo.com')
+          aggregate_failures do
+            expect(Users::Settings.exists?(user_id: restored_user.id)).to eq(true)
+            expect(Profiles::Profile.exists?(user_id: restored_user.id)).to eq(true)
+          end
         end
       end
     end

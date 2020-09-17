@@ -132,6 +132,28 @@ RSpec.describe Admin::ClientsController do
         end
       end
     end
+
+    context "when creating client with email belonging to a soft deleted user" do
+      let(:user) do
+        FactoryBot.create(:authentication_user,
+                          :organizations_user,
+                          :with_profile,
+                          email: "email123@demo.com",
+                          organization_id: organization.id)
+      end
+
+      before { user.destroy }
+
+      it "restores the user and restores corresponding relationships" do
+        post :create, params: { organization_id: organization, new_client: attributes.to_json }
+
+        restored_user = Organizations::User.find_by(email: 'email123@demo.com')
+        aggregate_failures do
+          expect(Users::Settings.exists?(user_id: restored_user.id)).to eq(true)
+          expect(Profiles::Profile.exists?(user_id: restored_user.id)).to eq(true)
+        end
+      end
+    end
   end
 
   describe 'POST #agents' do

@@ -23,11 +23,8 @@ module Api
 
       def create
         ActiveRecord::Base.transaction do
-          client = Organizations::User.create!(email: client_params[:email], organization_id: current_organization.id).tap do |user|
-            create_user_profile(user: user)
-            create_user_group(user: user)
-            Legacy::UserAddress.create(user: user, address: address)
-          end
+          client = restored_client || new_client
+          create_user_associations(user: client)
           decorated_user = UserDecorator.decorate(client)
           render json: UserSerializer.new(decorated_user), status: :created
         end
@@ -111,7 +108,7 @@ module Api
       end
 
       def address
-        address = Legacy::Address.find_or_create_by!(address_from_params)
+        @address ||= Legacy::Address.find_or_create_by!(address_from_params)
       end
 
       def create_user_group(user:)
@@ -154,6 +151,31 @@ module Api
         Organizations::User
           .where(organization_id: current_organization.id)
           .ids
+      end
+
+      def restored_client
+        user_params = { email: client_params[:email], organization_id: current_organization }
+        user = Organizations::User.with_deleted.find_by(user_params)
+        restore_user_associations(user: user) if user
+
+        user
+      end
+
+      def new_client
+        Organizations::User.create!(email: client_params[:email], organization_id: current_organization.id)
+      end
+
+      def create_user_associations(user:)
+        create_user_profile(user: user)
+        create_user_group(user: user)
+        Legacy::UserAddress.create(user: user, address: address)
+      end
+
+      def restore_user_associations(user:)
+        user.restore
+        [Profiles::Profile, Users::Settings].each do |relation|
+          relation.with_deleted.find_by(user_id: user.id).restore
+        end
       end
     end
   end
