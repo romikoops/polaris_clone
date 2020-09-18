@@ -54,8 +54,16 @@ class ContactsController < ApplicationController
     edited_contact_data[:address_id] = loc.id
     edited_contact_data[:user_id] = organization_user.id
     contact.update_attributes(edited_contact_data)
-    contact.save!
-    response_handler(contact.as_options_json)
+    if contact.save
+      response_handler(contact.as_options_json)
+    else
+      error_handler(
+        ApplicationError.new(
+          http_code: 422,
+          message: contact.errors.full_messages.join("\n")
+        )
+      )
+    end
   end
 
   def search_contacts

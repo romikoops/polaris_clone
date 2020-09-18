@@ -108,4 +108,73 @@ RSpec.describe ContactsController do
       end
     end
   end
+
+  describe 'update' do
+    let(:contact) { contacts.first }
+    let(:contact_two) { contacts.last }
+    let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
+
+    before do
+      Geocoder::Lookup::Test.add_stub([hamburg_address.latitude, hamburg_address.longitude], [
+        'address_components' => [{ 'types' => ['premise'] }],
+        'address' => 'Brooktorkai 7, Hamburg, 20457, Germany',
+        'city' => 'Hamburg',
+        'country' => 'Germany',
+        'country_code' => 'DE',
+        'postal_code' => '20457'
+      ])
+    end
+
+    let(:invalid_params) {
+      {
+        organization_id: organization.id,
+        id: contact.id,
+        update: JSON.generate({
+          'firstName': contact_two.first_name,
+          'lastName': contact_two.last_name,
+          'phone': contact_two.phone,
+          'email': contact_two.email,
+          "street": "brooktorkai",
+          "number": "brooktorkai",
+          "zipCode": "20457",
+          "city": "Hamburg",
+          "country": "Germany"
+        })
+      }
+    }
+
+    let(:valid_params) {
+      {
+        organization_id: organization.id,
+        id: contact.id,
+        update: JSON.generate({
+          'firstName': contact.first_name,
+          'lastName': contact.last_name,
+          'phone': contact.phone,
+          'email': 'newemail@itsmycargo.com',
+          "street": "brooktorkai",
+          "number": "brooktorkai",
+          "zipCode": "20457",
+          "city": "Hamburg",
+          "country": "Germany"
+        })
+      }
+    }
+
+    it 'when updated with valid params' do
+      post :update, params: valid_params
+
+      aggregate_failures do
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    it 'when updated with unique contact' do
+      post :update, params: invalid_params
+
+      aggregate_failures do
+        expect(JSON.parse(response.body)["message"]).to eq("User Contact must be unique to add.")
+      end
+    end
+  end
 end
