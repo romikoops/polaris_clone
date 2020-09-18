@@ -32,7 +32,9 @@ module OfferCalculator
         end
 
         def total
-          charges.sum(&:value).exchange_to(currency_for_user)
+          @total ||= charges.inject(Money.new(0, currency_for_user)) { |sum, item|
+            sum + item.value
+          }.round
         end
 
         def sections

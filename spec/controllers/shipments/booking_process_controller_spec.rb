@@ -26,7 +26,7 @@ RSpec.describe Shipments::BookingProcessController do
     shipment.charge_breakdowns.map(&:tender).each do |tender|
       Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
                                   to: "USD", rate: 1.3,
-                                  created_at: tender.created_at - 2.hours)
+                                  created_at: tender.created_at - 30.seconds)
     end
     FactoryBot.create(:organizations_theme, organization: organization)
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: 'shipper')

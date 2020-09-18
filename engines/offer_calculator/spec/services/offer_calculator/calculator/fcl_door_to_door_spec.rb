@@ -176,7 +176,6 @@ RSpec.describe OfferCalculator::Calculator do
       before do
         cargo_classes.each do |cargo_class|
           FactoryBot.create(:trucking_with_unit_rates,
-            :with_fees,
             hub: origin_hub,
             organization: organization,
             cargo_class: cargo_class,
@@ -185,7 +184,6 @@ RSpec.describe OfferCalculator::Calculator do
             tenant_vehicle: trucking_tenant_vehicle_2,
             location: pickup_trucking_location)
           FactoryBot.create(:trucking_with_unit_rates,
-            :with_fees,
             hub: destination_hub,
             organization: organization,
             cargo_class: cargo_class,

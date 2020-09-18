@@ -28,7 +28,7 @@ module ResultFormatter
     end
 
     def bank
-      return Money.default_bank if (5.minutes.ago...Time.zone.now).cover?(tender.created_at)
+      return Money.default_bank if (1.minute.ago...Time.zone.now).cover?(tender.created_at)
 
       app_id = Settings.open_exchange_rate&.app_id || ""
       @bank ||= MoneyCache::Converter.new(

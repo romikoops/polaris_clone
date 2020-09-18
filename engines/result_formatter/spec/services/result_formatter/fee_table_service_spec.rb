@@ -41,7 +41,7 @@ module ResultFormatter
       end
 
       before do
-        Legacy::ExchangeRate.create(from: "EUR", to: "USD", rate: 1.3, created_at: 2.hours.ago)
+        Legacy::ExchangeRate.create(from: "EUR", to: "USD", rate: 1.3, created_at: 30.seconds.ago)
       end
 
       context "with container load type" do
@@ -242,7 +242,7 @@ module ResultFormatter
         before do
           Legacy::ExchangeRate.create(from: "USD",
                                       to: "SEK", rate: 1.2,
-                                      created_at: tender.created_at - 2.hours)
+                                      created_at: tender.created_at - 30.seconds)
         end
 
         it "returns rows for each level of charge table" do

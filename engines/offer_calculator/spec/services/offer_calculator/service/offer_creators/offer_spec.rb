@@ -7,10 +7,21 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
 
   let(:valid_from) { offer.charges.map { |charge_section| charge_section.validity.first }.max }
   let(:valid_until) { offer.charges.map { |charge_section| charge_section.validity.last }.min }
+  let(:total) do
+    offer.charges.inject(Money.new(0, "EUR")) { |sum, item|
+      sum + item.value
+    }.round
+  end
 
   describe ".valid_from" do
     it "returns a the valid from date" do
       expect(offer.valid_from).to eq(valid_from)
+    end
+  end
+
+  describe ".total" do
+    it "returns the total rounded up to the nearest cent" do
+      expect(offer.total).to eq(total)
     end
   end
 

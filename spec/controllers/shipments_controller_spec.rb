@@ -27,6 +27,7 @@ RSpec.describe ShipmentsController do
     let(:rate) { 1.24 }
 
     before do
+      FactoryBot.create(:legacy_exchange_rate)
       Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code, to: "USD", rate: rate, created_at: 16.minutes.ago)
       shipment.charge_breakdowns.update_all(tender_id: tender.id)
       FactoryBot.create_list(:quotations_line_item, 5, tender: tender)

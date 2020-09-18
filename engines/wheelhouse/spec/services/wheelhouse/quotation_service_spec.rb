@@ -190,7 +190,7 @@ RSpec.describe Wheelhouse::QuotationService do
         results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(37131)
+          expect(results.first.amount_cents).to eq(206851)
         end
       end
     end

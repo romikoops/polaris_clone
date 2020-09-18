@@ -20,7 +20,7 @@ module Api
       FactoryBot.create(:quotations_line_item, charge_category: charge_category, tender: tender)
       Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
                                   to: "USD", rate: 1.3,
-                                  created_at: tender.created_at - 2.hours)
+                                  created_at: tender.created_at - 30.seconds)
     end
 
     it 'returns the correct route for the object passed' do
