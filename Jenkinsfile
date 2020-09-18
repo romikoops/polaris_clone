@@ -4,6 +4,7 @@ defaultBuild()
 
 pipeline {
   options {
+    disableConcurrentBuilds()
     podTemplate(inheritFrom: "default")
     preserveStashes()
     skipDefaultCheckout()
@@ -124,14 +125,12 @@ pipeline {
       }
 
       steps {
-        checkpoint(10) {
-          dockerBuild(
-            dir: ".",
-            image: "polaris",
-            memory: 1500,
-            pre_script: "scripts/docker-prepare.sh"
-          )
-        }
+        dockerBuild(
+          dir: ".",
+          image: "polaris",
+          memory: 1500,
+          pre_script: "scripts/docker-prepare.sh"
+        )
       }
     }
 
@@ -139,7 +138,7 @@ pipeline {
       when { branch "master" }
 
       steps {
-        checkpoint(20) { sentryRelease(projects: ["polaris"]) }
+        sentryRelease(projects: ["polaris"])
       }
     }
   }
