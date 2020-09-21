@@ -9,10 +9,10 @@ module ExcelDataServices
           'destination': ExcelDataServices::Validators::TypeValidity::Types::StringType,
           'carrier': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
           'service_level': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
-          'etd_days': ExcelDataServices::Validators::TypeValidity::Types::IntegerType,
+          'etd_days': ExcelDataServices::Validators::TypeValidity::Types::StringType,
           'mot': ExcelDataServices::Validators::TypeValidity::Types::StringType,
           'transit_time': ExcelDataServices::Validators::TypeValidity::Types::OptionalIntegerLikeType,
-          'cargo_class': ExcelDataServices::Validators::TypeValidity::Types::CargoClassType
+          'cargo_class': ExcelDataServices::Validators::TypeValidity::Types::LoadTypeType
         }.freeze
       end
     end

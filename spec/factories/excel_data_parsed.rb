@@ -952,6 +952,47 @@ FactoryBot.define do
       end
     end
 
+    trait :schedule_generator do
+      restructurer_name { { restructurer_name: 'schedule_generator' } }
+      all_sheets_data do
+        [{ sheet_name: 'Sheet1',
+           rows_data: [
+             {
+               origin: 'DALIAN',
+               destination: 'FELIXSTOWE',
+               etd_days: 'THURSDAY',
+               transit_time: 38,
+               cargo_class: 'container',
+               row_nr: 2
+             },
+            {
+              origin: 'DALIAN',
+              destination: 'SOUTHAMPTON',
+              etd_days: 'WEDNESDAY',
+              transit_time: 34,
+              cargo_class: 'container',
+              row_nr: 3
+            },
+            {
+              origin: 'YANTIAN',
+              destination: 'FELIXSTOWE',
+              etd_days: 'FRIDAY',
+              transit_time: 29,
+              cargo_class: 'cargo_item',
+              row_nr: 47
+            },
+            {
+              origin: 'YANTIAN',
+              destination: 'SOUTHAMPTON',
+              etd_days: 'MONDAY',
+              transit_time: 29,
+              cargo_class: 'cargo_item',
+              row_nr: 48
+            }
+           ]}]
+      end
+    end
+
     factory :default_hubs_row_data, traits: %i[default_hubs]
     factory :excel_data_parsed_correct_pricings_one_fee_col_and_ranges,
       traits: %i[pricing_one_fee_col_and_ranges correct_pricings_one_fee_col_and_ranges]
@@ -976,5 +1017,6 @@ FactoryBot.define do
       traits: %i[pricing_dynamic_fee_cols_no_ranges to_upcase_pricings_dynamic_fee_cols_no_ranges]
     factory :excel_data_parsed_upcase_mot_pricings_dynamic_fee_cols_no_ranges,
       traits: %i[pricing_dynamic_fee_cols_no_ranges up_case_mot_pricings_dynamic_fee_cols_no_ranges]
+    factory :schedule_generator_data, traits: %i[schedule_generator]
   end
 end
