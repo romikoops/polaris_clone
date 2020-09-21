@@ -22,27 +22,22 @@ module OfferCalculator
 
         def selected_local_charge_ids
           (selected_origin_local_charge_ids(target: "export") |
-            selected_origin_local_charge_ids(target: "import")).compact
+            selected_origin_local_charge_ids(target: "import")).compact.uniq
         end
 
         def selected_origin_local_charge_ids(target:)
           return [] unless local_charges_required(target: target)
 
-          hub_pairings.map do |cargo_class, origin, destination|
+          hub_pairings.map do |cargo_class, origin, destination, tenant_vehicle_id|
             hub = target == "export" ? origin : destination
             counterpart = target == "export" ? destination : origin
             charges = association_for_target(target: target).where(
               hub_id: hub,
               load_type: cargo_class,
-              counterpart_hub_id: counterpart
+              tenant_vehicle_id: tenant_vehicle_id
             )
-            if charges.empty?
-              charges = charges.rewhere(
-                hub_id: hub,
-                load_type: cargo_class,
-                counterpart_hub_id: nil
-              )
-            end
+            charges = charges.where(counterpart_hub_id: counterpart)
+            charges = charges.rewhere(counterpart_hub_id: nil) if charges.empty?
 
             next if charges.blank?
 
@@ -81,13 +76,24 @@ module OfferCalculator
         def hub_pairings
           @hub_pairings ||= uniq_route_schedules.flat_map { |schedule|
             shipment.cargo_classes.map do |cargo_class|
-              [cargo_class, schedule.origin_hub_id, schedule.destination_hub_id]
+              [
+                cargo_class,
+                schedule.origin_hub_id,
+                schedule.destination_hub_id,
+                schedule.tenant_vehicle_id
+              ]
             end
           }
         end
 
         def uniq_route_schedules
-          schedules.uniq { |schedule| [schedule.origin_hub_id, schedule.destination_hub_id] }
+          schedules.uniq do |schedule|
+            [
+              schedule.origin_hub_id,
+              schedule.destination_hub_id,
+              schedule.tenant_vehicle_id
+            ]
+          end
         end
 
         def origin_hubs

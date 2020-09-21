@@ -53,6 +53,27 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       end
     end
 
+    context "when only origin local charge required, multiple tenant vehicles available" do
+      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:local_charge_2) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let(:trips) do
+        [
+          FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
+          FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_2)
+        ]
+      end
+
+      before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
+
+      it "returns the one pricing" do
+        aggregate_failures do
+          expect(results).to be_a(ActiveRecord::Relation)
+          expect(results.count).to eq(2)
+          expect(results.pluck(:id)).to match_array([local_charge, local_charge_2].map(&:id))
+        end
+      end
+    end
+
     context "when both local charge required on one itinerary" do
       let!(:export) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
       let!(:import) { FactoryBot.create(:legacy_local_charge, direction: "import", hub: destination_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
