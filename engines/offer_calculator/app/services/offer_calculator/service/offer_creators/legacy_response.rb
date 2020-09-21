@@ -46,14 +46,7 @@ module OfferCalculator
         end
 
         def grab_notes
-          tender = charge_breakdown.tender
-          hubs = [tender.origin_hub, tender.destination_hub]
-          nexii = ::Legacy::Nexus.where(id: hubs.pluck(:nexus_id))
-          countries = ::Legacy::Country.where(id: nexii.select(:country_id))
-          pricings = ::Pricings::Pricing.where(id: pricing_ids)
-          regular_notes = ::Legacy::Note.where(transshipment: false, organization_id: charge_breakdown.shipment.organization_id)
-          regular_notes.where(target: hubs | nexii | countries)
-            .or(regular_notes.where(pricings_pricing_id: pricings.ids))
+          Notes::Service.new(tender: tender, remarks: false).fetch.entries
         end
 
         def quote

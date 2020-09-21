@@ -46,6 +46,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) {
       described_class.new_quotation_email(
         quotation: quotations_quotation,
+        tender_ids: quotations_quotation.tenders.ids,
         shipment: original_shipment,
         email: user.email
       ).deliver_now
@@ -69,6 +70,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) {
       described_class.new_quotation_email(
         quotation: quotations_quotation,
+        tender_ids: quotations_quotation.tenders.ids,
         shipment: original_shipment,
         email: user.email
       ).deliver_now

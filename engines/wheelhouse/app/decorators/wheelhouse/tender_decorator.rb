@@ -47,9 +47,7 @@ module Wheelhouse
     end
 
     def remarks
-      notes = Legacy::Note.where(organization: organization, remarks: true)
-      notes = notes.where(pricings_pricing_id: pricings.ids)
-        .or(notes.where(target: [organization, origin_hub, destination_hub, itinerary]))
+      notes = Notes::Service.new(tender: object, remarks: true).fetch.entries
       notes.pluck(:body)
     end
 

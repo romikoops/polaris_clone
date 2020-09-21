@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-legacy'
+  s.add_dependency 'imc-notes'
   s.add_dependency 'imc-pricings'
   s.add_dependency 'imc-profiles'
   s.add_dependency 'imc-quotations'

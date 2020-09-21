@@ -10,6 +10,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyMeta do
   let(:expected_keys) do
     %i[
       itinerary_id
+      tender_id
       destination_hub
       charge_trip_id
       transit_time

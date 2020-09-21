@@ -498,8 +498,10 @@ class ShippingTools
     trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
     main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     quotations_quotation = quotations_quotation(shipment: shipment)
+    tender_ids = schedules.map { |sched| sched.dig('meta', 'tender_id') }
     QuoteMailer.new_quotation_email(
       shipment: shipment,
+      tender_ids: tender_ids,
       quotation: quotations_quotation,
       email: email
     ).deliver_later

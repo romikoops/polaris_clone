@@ -2,6 +2,7 @@
 
 require 'core'
 require 'legacy'
+require 'notes'
 require 'organizations'
 require 'pricings'
 require 'quotations'

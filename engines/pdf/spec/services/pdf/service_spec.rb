@@ -30,6 +30,9 @@ RSpec.describe Pdf::Service do
   end
   let(:scope_content) { { show_chargeable_weight: true } }
   let(:quotation) { FactoryBot.create(:legacy_quotation, user: user, load_type: load_type, original_shipment: shipment) }
+  let(:tender_ids) do
+    [shipment.charge_breakdowns.first.tender_id]
+  end
   let(:klass) { described_class.new(organization: organization, user: user) }
 
   before do
@@ -60,7 +63,10 @@ RSpec.describe Pdf::Service do
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
-        pdf_tenders = klass.tenders(shipment: shipment, quotation: quotations_quotation, admin: false)
+        pdf_tenders = klass.tenders(shipment: shipment,
+                                    quotation: quotations_quotation,
+                                    tender_ids: quotations_quotation.tenders.ids,
+                                    admin: false)
         pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
@@ -120,7 +126,10 @@ RSpec.describe Pdf::Service do
 
     describe '.admin_quotation (booking shop)' do
       it 'generates the admin quote pdf' do
-        pdf_tenders = klass.tenders(shipment: shipment, quotation: quotations_quotation, admin: false)
+        pdf_tenders = klass.tenders(shipment: shipment,
+                                    quotation: quotations_quotation,
+                                    tender_ids: quotations_quotation.tenders.ids,
+                                    admin: false)
         pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
@@ -229,10 +238,6 @@ RSpec.describe Pdf::Service do
   end
 
   describe '.quotes_with_trip_id' do
-    let(:tender_ids) do
-      [shipment.charge_breakdowns.first.tender_id]
-    end
-
     context 'with default settings' do
       it 'limits the quotes returned when tender ids are provided' do
         quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
@@ -288,15 +293,16 @@ RSpec.describe Pdf::Service do
           remarks: true,
           pricings_pricing_id: pricing.id)
       end
+      let(:tender) { Quotations::Tender.last }
       let(:pricing) do
         FactoryBot.create(:lcl_pricing,
-          itinerary: trip.itinerary,
+          itinerary: tender.itinerary,
           organization: organization,
           tenant_vehicle: tenant_vehicle)
       end
 
       it 'returns the notes for the pricing' do
-        notes = pdf_service.send(:get_note_remarks, trip.id)
+        notes = pdf_service.send(:get_note_remarks, tender_ids)
         aggregate_failures do
           expect(notes.length).to eq(1)
           expect(notes.first).to eq(note.body)
@@ -314,7 +320,7 @@ RSpec.describe Pdf::Service do
       end
 
       it 'returns the notes for the pricing' do
-        notes = pdf_service.send(:get_note_remarks, trip.id)
+        notes = pdf_service.send(:get_note_remarks, tender_ids)
         aggregate_failures do
           expect(notes.length).to eq(1)
           expect(notes.first).to eq(note.body)

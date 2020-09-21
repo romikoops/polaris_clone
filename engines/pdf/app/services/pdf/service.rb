@@ -73,13 +73,14 @@ module Pdf
     def admin_quotation(shipment:, quotation: nil, pdf_tenders: nil)
       if quotation.is_a?(Legacy::Quotation)
         quotation = Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
-        pdf_tenders = tenders(quotation: quotation, shipment: shipment)
+        tender_ids = quotation.tenders.ids
+        pdf_tenders = tenders(quotation: quotation, shipment: shipment, tender_ids: tender_ids)
       end
 
       existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
 
-      note_remarks = get_note_remarks(pdf_tenders.first['trip_id'])
+      note_remarks = get_note_remarks(pdf_tenders.pluck('tender_id'))
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: [shipment],
@@ -101,7 +102,6 @@ module Pdf
       shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
       quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
 
-      note_remarks = get_note_remarks(quotes.first["trip_id"])
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: shipments,
@@ -123,7 +123,8 @@ module Pdf
         admin: true,
         tender_ids: tender_ids
       )
-      note_remarks = get_note_remarks(quotes.dig(0, 'trip_id'))
+
+      note_remarks = get_note_remarks(quotes.pluck('tender_id'))
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: shipments,
@@ -179,7 +180,7 @@ module Pdf
           .flatten
           .map { |charge_breakdown|
           offer_manipulation_block(
-            charge_breakdown: charge_breakdown,
+            tender: charge_breakdown.tender,
             shipment: shipment,
             trip: trip,
             admin: admin
@@ -188,21 +189,19 @@ module Pdf
       end
     end
 
-    def tenders(shipment:, quotation:, admin: false)
-      quotation.tenders.map do |tender|
-        breakdown = tender.charge_breakdown
-
+    def tenders(shipment:, quotation:, tender_ids:, admin: false)
+      tender_ids.map do |tender_id|
+        tender = Quotations::Tender.find(tender_id)
         offer_manipulation_block(
-          charge_breakdown: breakdown,
+          tender: tender,
           shipment: shipment,
-          trip: breakdown.trip,
+          trip: tender.trip.id,
           admin: admin
         )
       end
     end
 
-    def offer_manipulation_block(charge_breakdown:, shipment:, trip: nil, admin: false)
-      tender = charge_breakdown.tender
+    def offer_manipulation_block(tender:, shipment:, trip: nil, admin: false)
       offer_merge_data(tender: tender, shipment: shipment).merge(
         fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope, type: :pdf).perform,
         currency: tender.amount_currency
@@ -215,7 +214,8 @@ module Pdf
 
       quotes = quotes_with_trip_id(quotation: quotation, shipments: quotation.shipments)
       shipment = Legacy::Shipment.find(quotation.original_shipment_id)
-      note_remarks = get_note_remarks(quotes.first['trip_id'])
+
+      note_remarks = get_note_remarks(quotes.pluck('tender_id'))
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: quotation.shipments,
@@ -232,7 +232,7 @@ module Pdf
       existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
 
-      note_remarks = get_note_remarks(pdf_tenders.first['trip_id'])
+      note_remarks = get_note_remarks(pdf_tenders.pluck('tender_id'))
       file = generate_quote_pdf(
         shipment: shipment,
         shipments: [shipment],
@@ -269,21 +269,12 @@ module Pdf
 
     private
 
-    def get_note_remarks(trip_id)
-      return [] if trip_id.nil?
+    def get_note_remarks(tender_ids)
+      all_notes = Quotations::Tender.where(id: tender_ids).reduce(Legacy::Note.none) { |notes, tender|
+        notes.or(Notes::Service.new(tender: tender, remarks: true).fetch)
+      }
 
-      trip = Legacy::Trip.find(trip_id)
-      start_date = trip.start_date || OfferCalculator::Schedule.quote_trip_start_date
-      end_date = trip.end_date || OfferCalculator::Schedule.quote_trip_end_date
-      pricing_ids = Pricings::Pricing.where(
-        itinerary_id: trip.itinerary_id,
-        tenant_vehicle_id: trip.tenant_vehicle_id
-      ).for_dates(start_date, end_date).ids
-      note_association = Legacy::Note.where(organization: organization, remarks: true)
-      note_association.where(pricings_pricing_id: pricing_ids)
-                      .or(note_association.where(target: nil))
-                      .distinct
-                      .pluck(:body)
+      all_notes.uniq.pluck(:body)
     end
 
     def offer_merge_data(tender:, shipment:)
@@ -295,6 +286,7 @@ module Pdf
 
     def tender_merge_data(tender:)
       {
+        tender_id: tender.id,
         mode_of_transport: tender.mode_of_transport,
         valid_until: tender.charge_breakdown.valid_until,
         load_type: tender.load_type,

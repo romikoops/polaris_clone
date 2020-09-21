@@ -5,42 +5,33 @@ class QuoteMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def new_quotation_email(quotation:, shipment:, email:)
+  def new_quotation_email(quotation:, tender_ids:, shipment:, email:)
     set_current_id(organization_id: quotation.organization_id)
     return if invalid_records(shipments: [shipment])
 
     @quotation = quotation
-    @scope = scope_for(record: @user)
+    @shipment = shipment
 
-    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
-
-    @user = @quotation.user
-    @user_profile = Profiles::ProfileService.fetch(user_id: @user.id)
-
-    pdf_service = Pdf::Service.new(user: @user, organization: current_organization)
-    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment)
+    @user_profile = Profiles::ProfileService.fetch(user_id: user.id)
+    @scope = scope_for(record: user)
+    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment, tender_ids: tender_ids)
 
     return if @quotes.empty?
 
     @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
     @email = email[/[^@]+/]
     @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
-    mot = @quotes.dig(0, 'mode_of_transport') || 'ocean'
-    @mot_icon = URI.open(
-      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{mot}.png"
-    ).read
-
-    document = pdf_service.tenders_pdf(quotation: @quotation, shipment: shipment, pdf_tenders: @quotes)&.attachment
-    attachments[pdf_name] = document if document.present?
     email_logo = @org_theme.email_logo
-    attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
-    attachments.inline['icon.png'] = @mot_icon
+
+    attachments[pdf_name] = pdf_document if pdf_document.present?
+    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? email_logo.download : ''
+    attachments.inline['icon.png'] = mot_icon(mot)
 
     mail(
       from: from(display_name: @org_theme.name),
       reply_to: @org_theme.emails.dig('support', 'general'),
       to: mail_target_interceptor(shipment.billing, email),
-      subject: subject_line(shipment: @shipment, type: :quotation, references: tender_references)
+      subject: subject_line(shipment: decorated_shipment, type: :quotation, references: tender_references)
     ) do |format|
       format.html { render 'quotation_email' }
       format.mjml { render 'quotation_email' }
@@ -59,7 +50,7 @@ class QuoteMailer < ApplicationMailer
     @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
     pdf_service = Pdf::Service.new(user: @user, organization: current_organization)
-    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment)
+    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment, tender_ids: @quotation.tenders.ids)
     @content = Legacy::Content.get_component('QuotePdf', current_organization.id)
     document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment, pdf_tenders: @quotes)&.attachment
     attachments[pdf_name] = document if document.present?
@@ -78,6 +69,33 @@ class QuoteMailer < ApplicationMailer
   end
 
   private
+
+  def pdf_service
+    @pdf_service ||= Pdf::Service.new(user: @user, organization: current_organization)
+  end
+
+  def pdf_document
+    @pdf_document ||=
+      pdf_service.tenders_pdf(quotation: @quotation, shipment: @shipment, pdf_tenders: @quotes)&.attachment
+  end
+
+  def mot_icon(mot)
+    URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{mot}.png"
+    ).read
+  end
+
+  def user
+    @user ||= @quotation.user
+  end
+
+  def mot
+    @quotes.dig(0, 'mode_of_transport') || 'ocean'
+  end
+
+  def decorated_shipment
+    @decorated_shipment ||= Legacy::ShipmentDecorator.new(@shipment, context: { scope: @scope})
+  end
 
   def tender_references
     @quotation.tenders.pluck(:imc_reference)

@@ -68,20 +68,10 @@ module Pdf
 
     def prep_notes(charge_breakdown:)
       tender = charge_breakdown.tender
-      shipment = charge_breakdown.shipment
-      hubs = [tender.origin_hub, tender.destination_hub]
 
-      nexii = hubs.map(&:nexus)
-      countries = nexii.map(&:country)
-      pricings = tender.itinerary&.rates&.for_cargo_classes(shipment.cargo_classes)
-      notes_association = Legacy::Note.where(
-        organization_id: shipment.organization_id,
-        transshipment: false,
-        remarks: false
-      )
-      @notes[shipment.id] = notes_association
-                            .where(target: hubs | nexii | countries)
-                            .or(notes_association.where(pricings_pricing_id: pricings.ids))
+      notes = Notes::Service.new(tender: tender, remarks: false).fetch.entries
+
+      @notes[charge_breakdown.shipment_id] = notes
     end
 
     def calculate_cargo_data(shipment)

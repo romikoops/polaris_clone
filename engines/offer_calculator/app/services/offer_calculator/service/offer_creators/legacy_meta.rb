@@ -25,6 +25,7 @@ module OfferCalculator
             remarkNotes: remark_notes,
             pricing_rate_data: rate_overview,
             charge_trip_id: schedule.trip_id,
+            tender_id: tender.id,
             exchange_rates: ResultFormatter::ExchangeRateService.new(tender: tender).perform
           }.merge(routing_info)
         end
@@ -68,6 +69,7 @@ module OfferCalculator
 
           tender_rate_overview = shipment.meta.dig("rate_overviews", tender.id)
           return tender_rate_overview if tender_rate_overview.present?
+          return {} if offer.blank?
 
           update_shipment_meta(key: "rate_overviews", value: rate_overview_hash)
           rate_overview_hash
@@ -120,10 +122,7 @@ module OfferCalculator
         end
 
         def remark_notes
-          note_association = Legacy::Note.where(organization_id: shipment.organization_id, remarks: true)
-          note_association.where(pricings_pricing_id: pricing_ids)
-            .or(note_association.where(target: shipment.organization))
-            .pluck(:body)
+          Notes::Service.new(tender: tender, remarks: true).fetch.entries.pluck(:body)
         end
       end
     end

@@ -183,9 +183,15 @@ digraph G {
     "result_formatter" -> "legacy" [color=grey];
     "result_formatter" -> "pricings" [color=grey];
     "result_formatter" -> "quotations" [color=grey];
+    "notes" [shape=ellipse];
+    "notes" -> "legacy" [color=grey];
+    "notes" -> "organizations" [color=grey];
+    "notes" -> "pricings" [color=grey];
+    "notes" -> "quotations" [color=grey];
     "offer_calculator" [shape=ellipse];
     "offer_calculator" -> "core" [color=grey];
     "offer_calculator" -> "legacy" [color=grey];
+    "offer_calculator" -> "notes" [color=grey];
     "offer_calculator" -> "organizations" [color=grey];
     "offer_calculator" -> "organization_manager" [color=grey];
     "offer_calculator" -> "pricings" [color=grey];
@@ -195,6 +201,7 @@ digraph G {
     "pdf" [shape=ellipse];
     "pdf" -> "core" [color=grey];
     "pdf" -> "legacy" [color=grey];
+    "pdf" -> "notes" [color=grey];
     "pdf" -> "pricings" [color=grey];
     "pdf" -> "profiles" [color=grey];
     "pdf" -> "quotations" [color=grey];
