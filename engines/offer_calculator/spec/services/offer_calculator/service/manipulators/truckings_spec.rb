@@ -57,7 +57,7 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
         aggregate_failures do
           expect(results.first).to be_a(Pricings::ManipulatorResult)
           expect(results.count).to eq(2)
-          expect(results.map(&:id)).to eq([trucking_1, trucking_2].map(&:id))
+          expect(results.map(&:id)).to match_array([trucking_1, trucking_2].map(&:id))
         end
       end
     end

@@ -33,6 +33,8 @@ module Trucking
                 }
               }
 
+    acts_as_paranoid
+
     def self.delete_existing_truckings(hub)
       where(hub_id: hub.id).destroy_all
     end
@@ -84,6 +86,7 @@ end
 #  cargo_class         :string
 #  carriage            :string
 #  cbm_ratio           :integer
+#  deleted_at          :datetime
 #  fees                :jsonb
 #  identifier_modifier :string
 #  load_meterage       :jsonb
@@ -92,6 +95,7 @@ end
 #  modifier            :string
 #  rates               :jsonb
 #  truck_type          :string
+#  validity            :daterange
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  courier_id          :uuid
@@ -111,6 +115,7 @@ end
 #
 #  index_trucking_truckings_on_cargo_class        (cargo_class)
 #  index_trucking_truckings_on_carriage           (carriage)
+#  index_trucking_truckings_on_deleted_at         (deleted_at)
 #  index_trucking_truckings_on_group_id           (group_id)
 #  index_trucking_truckings_on_hub_id             (hub_id)
 #  index_trucking_truckings_on_load_type          (load_type)
@@ -120,6 +125,7 @@ end
 #  index_trucking_truckings_on_tenant_id          (tenant_id)
 #  index_trucking_truckings_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_trucking_truckings_on_user_id            (user_id)
+#  index_trucking_truckings_on_validity           (validity) USING gist
 #  trucking_foreign_keys                          (rate_id,location_id,hub_id) UNIQUE
 #
 # Foreign Keys

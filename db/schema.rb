@@ -1099,6 +1099,16 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.index ["unique_trucking_location_id"], name: "index_trucking_locations_syncs_on_unique_id"
   end
 
+  create_table "migrator_unique_trucking_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "duplicate_trucking_id"
+    t.uuid "unique_trucking_id"
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_trucking_id"], name: "index_truckings_syncs_on_duplicate_trucking_id", unique: true
+    t.index ["unique_trucking_id", "duplicate_trucking_id"], name: "index_truckings_syncs_on_unique_id_and_duplicate_id", unique: true
+    t.index ["unique_trucking_id"], name: "index_truckings_syncs_on_unique_trucking_id"
+  end
+
   create_table "mot_scopes_20200504", force: :cascade do |t|
     t.boolean "air_cargo_item"
     t.boolean "air_container"
@@ -2589,6 +2599,7 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.integer "cbm_ratio"
     t.uuid "courier_id"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.jsonb "fees"
     t.uuid "group_id"
     t.integer "hub_id"
@@ -2609,8 +2620,10 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.string "truck_type"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
+    t.daterange "validity"
     t.index ["cargo_class"], name: "index_trucking_truckings_on_cargo_class"
     t.index ["carriage"], name: "index_trucking_truckings_on_carriage"
+    t.index ["deleted_at"], name: "index_trucking_truckings_on_deleted_at"
     t.index ["group_id"], name: "index_trucking_truckings_on_group_id"
     t.index ["hub_id"], name: "index_trucking_truckings_on_hub_id"
     t.index ["load_type"], name: "index_trucking_truckings_on_load_type"
@@ -2621,6 +2634,7 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.index ["tenant_id"], name: "index_trucking_truckings_on_tenant_id"
     t.index ["tenant_vehicle_id"], name: "index_trucking_truckings_on_tenant_vehicle_id"
     t.index ["user_id"], name: "index_trucking_truckings_on_user_id"
+    t.index ["validity"], name: "index_trucking_truckings_on_validity", using: :gist
   end
 
   create_table "trucking_type_availabilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -2844,6 +2858,8 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
   add_foreign_key "migrator_unique_tenant_vehicles_syncs", "tenant_vehicles", column: "unique_tenant_vehicle_id"
   add_foreign_key "migrator_unique_trucking_location_syncs", "trucking_locations", column: "duplicate_trucking_location_id"
   add_foreign_key "migrator_unique_trucking_location_syncs", "trucking_locations", column: "unique_trucking_location_id"
+  add_foreign_key "migrator_unique_trucking_syncs", "trucking_truckings", column: "duplicate_trucking_id"
+  add_foreign_key "migrator_unique_trucking_syncs", "trucking_truckings", column: "unique_trucking_id"
   add_foreign_key "nexuses", "organizations_organizations", column: "organization_id"
   add_foreign_key "notes", "organizations_organizations", column: "organization_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
