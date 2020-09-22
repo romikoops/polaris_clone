@@ -37,7 +37,8 @@ module OfferCalculator
 
         raise OfferCalculator::Errors::NoValidOffers if schedules_and_results.compact.empty?
 
-        group_schedules_and_results(schedules_and_results: schedules_and_results)
+        offers = group_schedules_and_results(schedules_and_results: schedules_and_results)
+        offers.sort_by(&:total)
       end
 
       private

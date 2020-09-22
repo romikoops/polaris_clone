@@ -18,6 +18,7 @@ module OfferCalculator
         def perform
           set_schedules_result
           {
+            tender_id: tender.id,
             shipment_id: shipment.id,
             ocean_chargeable_weight: chargeable_weight,
             transshipmentVia: itinerary.transshipment,

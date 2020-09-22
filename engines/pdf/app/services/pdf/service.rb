@@ -170,39 +170,33 @@ module Pdf
     end
 
     def quotes_with_trip_id(quotation:, shipments:, admin: false, tender_ids: [])
-      shipments.flat_map do |shipment|
-        trip = shipment.trip
-        charge_breakdowns = quotation.present? ? [shipment.charge_breakdowns.selected] : shipment.charge_breakdowns.to_a
-        if tender_ids.present?
-          charge_breakdowns = charge_breakdowns.select { |c_breakdown| tender_ids.include?(c_breakdown.tender_id) }
-        end
-        charge_breakdowns
-          .flatten
-          .map { |charge_breakdown|
-          offer_manipulation_block(
-            tender: charge_breakdown.tender,
-            shipment: shipment,
-            trip: trip,
-            admin: admin
-          )
-        }
-      end
-    end
-
-    def tenders(shipment:, quotation:, tender_ids:, admin: false)
-      tender_ids.map do |tender_id|
-        tender = Quotations::Tender.find(tender_id)
+      tenders = sorted_tenders(shipments: shipments, tender_ids: tender_ids)
+      tenders.map { |tender|
         offer_manipulation_block(
           tender: tender,
-          shipment: shipment,
-          trip: tender.trip.id,
+          admin: admin
+        )
+      }
+    end
+
+    def sorted_tenders(shipments:, tender_ids: [])
+      tenders = Quotations::Tender.joins(:quotation)
+        .where(quotations_quotations: { legacy_shipment_id: shipments.map(&:id)})
+      tenders = tenders.where(id: tender_ids) if tender_ids.present?
+      tenders.order(:amount_cents)
+    end
+
+    def tenders(shipment:, quotation:, admin: false, tender_ids: [])
+      sorted_tenders(shipments: [shipment], tender_ids: tender_ids).map do |tender|
+        offer_manipulation_block(
+          tender: tender,
           admin: admin
         )
       end
     end
 
-    def offer_manipulation_block(tender:, shipment:, trip: nil, admin: false)
-      offer_merge_data(tender: tender, shipment: shipment).merge(
+    def offer_manipulation_block(tender:, admin: false)
+      offer_merge_data(tender: tender).merge(
         fees: ResultFormatter::FeeTableService.new(tender: tender, scope: scope, type: :pdf).perform,
         currency: tender.amount_currency
       ).deep_stringify_keys
@@ -277,9 +271,9 @@ module Pdf
       all_notes.uniq.pluck(:body)
     end
 
-    def offer_merge_data(tender:, shipment:)
+    def offer_merge_data(tender:)
       tender_merge_data(tender: tender)
-        .merge(shipment_merge_data(shipment: shipment))
+        .merge(shipment_merge_data(tender: tender))
         .merge(trucking_information(tender: tender))
         .merge(routing_merge_data(tender: tender))
     end
@@ -314,9 +308,9 @@ module Pdf
       }
     end
 
-    def shipment_merge_data(shipment:)
+    def shipment_merge_data(tender:)
       {
-        shipment_id: shipment.id
+        shipment_id: tender.charge_breakdown.shipment_id
       }
     end
 

@@ -209,6 +209,7 @@ RSpec.describe OfferCalculator::Calculator do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(legacy_results.length).to eq(4)
+          expect(legacy_results.map { |result| result.dig(:meta, :tender_id) }).to eq(Quotations::Tender.order(:amount_cents).ids)
           expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
         end
       end
