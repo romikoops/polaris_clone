@@ -11,6 +11,7 @@ module Trucking
     belongs_to :location, optional: true, class_name: 'Locations::Location'
     has_many :truckings, class_name: 'Trucking::Trucking'
     has_many :hubs, through: :truckings
+    acts_as_paranoid
   end
 end
 
@@ -44,5 +45,4 @@ end
 #  index_trucking_locations_on_query         (query)
 #  index_trucking_locations_on_sandbox_id    (sandbox_id)
 #  index_trucking_locations_on_zipcode       (zipcode)
-#  trucking_locations_upsert                 (data,query,country_id,deleted_at) UNIQUE
 #

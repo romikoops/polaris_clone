@@ -1089,6 +1089,16 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.index ["unique_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_unique_tenant_vehicle_id"
   end
 
+  create_table "migrator_unique_trucking_location_syncs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "duplicate_trucking_location_id"
+    t.uuid "unique_trucking_location_id"
+    t.datetime "updated_at", null: false
+    t.index ["duplicate_trucking_location_id"], name: "index_trucking_locations_syncs_on_duplicate_id", unique: true
+    t.index ["unique_trucking_location_id", "duplicate_trucking_location_id"], name: "index_trucking_locations_syncs_on_unique_id_and_duplicate_id", unique: true
+    t.index ["unique_trucking_location_id"], name: "index_trucking_locations_syncs_on_unique_id"
+  end
+
   create_table "mot_scopes_20200504", force: :cascade do |t|
     t.boolean "air_cargo_item"
     t.boolean "air_container"
@@ -2512,7 +2522,6 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.index ["city_name"], name: "index_trucking_locations_on_city_name"
     t.index ["country_code"], name: "index_trucking_locations_on_country_code"
     t.index ["country_id"], name: "index_trucking_locations_on_country_id"
-    t.index ["data", "query", "country_id", "deleted_at"], name: "trucking_locations_upsert", unique: true
     t.index ["data"], name: "index_trucking_locations_on_data"
     t.index ["deleted_at"], name: "index_trucking_locations_on_deleted_at"
     t.index ["distance"], name: "index_trucking_locations_on_distance"
@@ -2833,6 +2842,8 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
   add_foreign_key "migrator_unique_carrier_syncs", "carriers", column: "unique_carrier_id"
   add_foreign_key "migrator_unique_tenant_vehicles_syncs", "tenant_vehicles", column: "duplicate_tenant_vehicle_id"
   add_foreign_key "migrator_unique_tenant_vehicles_syncs", "tenant_vehicles", column: "unique_tenant_vehicle_id"
+  add_foreign_key "migrator_unique_trucking_location_syncs", "trucking_locations", column: "duplicate_trucking_location_id"
+  add_foreign_key "migrator_unique_trucking_location_syncs", "trucking_locations", column: "unique_trucking_location_id"
   add_foreign_key "nexuses", "organizations_organizations", column: "organization_id"
   add_foreign_key "notes", "organizations_organizations", column: "organization_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

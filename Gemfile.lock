@@ -723,6 +723,7 @@ PATH
       imc-locations
       imc-organizations
       paper_trail (~> 10.3)
+      paranoia
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
       roo
