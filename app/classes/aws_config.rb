@@ -4,19 +4,11 @@ module AwsConfig
   # class methods
   module ClassMethods
     def aws_signer
-      Aws::S3::Presigner.new(
-        access_key_id: Settings.aws.access_key_id,
-        secret_access_key: Settings.aws.secret_access_key,
-        region: Settings.aws.region
-      )
+      Aws::S3::Presigner.new
     end
 
     def aws_client
-      Aws::S3::Client.new(
-        access_key_id: Settings.aws.access_key_id,
-        secret_access_key: Settings.aws.secret_access_key,
-        region: Settings.aws.region
-      )
+      Aws::S3::Client.new
     end
 
     def awsurl

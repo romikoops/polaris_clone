@@ -26,11 +26,7 @@ module ImageTools
   end
 
   def upload_image(filepath)
-    client = Aws::S3::Client.new(
-      access_key_id: Settings.aws.access_key_id,
-      secret_access_key: Settings.aws.secret_access_key,
-      region: Settings.aws.region
-    )
+    client = Aws::S3::Client.new
     filename = filepath[2..-1]
     key = 'assets/default_images/' + filename
     File.open(filepath, 'rb') do |file|

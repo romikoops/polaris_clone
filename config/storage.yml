@@ -5,9 +5,6 @@ disk:
 
 amazon:
   service: S3
-  access_key_id: <%= Settings.aws.access_key_id %>
-  secret_access_key: <%= Settings.aws.secret_access_key %>
-  region: <%= Settings.aws.region %>
   bucket: <%= Settings.aws.bucket %>
 
 # Configuration
