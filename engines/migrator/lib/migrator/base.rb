@@ -12,7 +12,6 @@ module Migrator
 
     def perform
       old_count = Array(count_required)
-
       updated = [*data].map { |sql| execute(sql, "#{self.class}#data") } if data
       [*sync].each { |sql| execute(sql, "#{self.class}#sync") } if sync
 

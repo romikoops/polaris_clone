@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_16_105843) do
+ActiveRecord::Schema.define(version: 2020_09_22_094226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -1084,7 +1084,7 @@ ActiveRecord::Schema.define(version: 2020_09_16_105843) do
     t.bigint "duplicate_tenant_vehicle_id"
     t.bigint "unique_tenant_vehicle_id"
     t.datetime "updated_at", null: false
-    t.index ["duplicate_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_duplicate_tenant_vehicle_id"
+    t.index ["duplicate_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_duplicate_tenant_vehicle_id", unique: true
     t.index ["unique_tenant_vehicle_id", "duplicate_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_unique_id_and_duplicate_id", unique: true
     t.index ["unique_tenant_vehicle_id"], name: "index_tenant_vehicles_syncs_on_unique_tenant_vehicle_id"
   end
