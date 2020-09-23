@@ -33,7 +33,7 @@ RSpec.describe MoneyCache::Converter do
 
     it "uses the inverse rate for conversion" do
       rate = money_cache.get_rate("CNY", "EUR")
-      expected_rate = 1.0 / eur_cny_rate
+      expected_rate = (1.0 / eur_cny_rate).round(6)
       expect(rate).to eq(expected_rate)
     end
   end
@@ -51,7 +51,8 @@ RSpec.describe MoneyCache::Converter do
     it "performs conversion using base currency for ABC conversion" do
       rate = money_cache.get_rate("GBP", "CNY")
       expected_rate = (BigDecimal(to_usd_rate.to_s) / from_usd_rate).to_f
-      expect(rate.to_f).to eq(expected_rate)
+      rounded = expected_rate.round(6)
+      expect(rate.to_f).to eq(rounded)
     end
   end
 end

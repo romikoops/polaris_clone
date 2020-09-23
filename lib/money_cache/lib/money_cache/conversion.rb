@@ -16,7 +16,7 @@ module MoneyCache
     end
 
     def perform
-      get_stored_rate || get_inverse_rate || get_calcluated_rate
+      (get_stored_rate || get_inverse_rate || get_calcluated_rate).round(6)
     end
 
     private
