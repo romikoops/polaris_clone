@@ -47,7 +47,7 @@
   </mj-section>
 
 
-  <% if @user.present? %>
+  <% if @quotation.user %>
     <%= render "user_summary", user: @user %>
   <%else%>
     <%= render "guest_user_summary" %>

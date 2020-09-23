@@ -41,15 +41,14 @@ class QuoteMailer < ApplicationMailer
   def new_quotation_admin_email(quotation:, shipment:)
     set_current_id(organization_id: quotation.organization_id)
 
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
-    @user = @quotation.user
-    @user_profile = Profiles::ProfileService.fetch(user_id: @user.id)
+    @user_profile = Profiles::ProfileService.fetch(user_id: user.id)
     return if invalid_records(shipments: [shipment])
 
-    @scope = scope_for(record: @user)
-    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
+    @scope = scope_for(record: user)
     @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
-    pdf_service = Pdf::Service.new(user: @user, organization: current_organization)
+    pdf_service = Pdf::Service.new(user: user, organization: current_organization)
     @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment, tender_ids: @quotation.tenders.ids)
     @content = Legacy::Content.get_component('QuotePdf', current_organization.id)
     document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment, pdf_tenders: @quotes)&.attachment
@@ -71,7 +70,7 @@ class QuoteMailer < ApplicationMailer
   private
 
   def pdf_service
-    @pdf_service ||= Pdf::Service.new(user: @user, organization: current_organization)
+    @pdf_service ||= Pdf::Service.new(user: user, organization: current_organization)
   end
 
   def pdf_document
@@ -86,7 +85,7 @@ class QuoteMailer < ApplicationMailer
   end
 
   def user
-    @user ||= @quotation.user
+    @user ||= @quotation.user || default_user
   end
 
   def mot
@@ -117,7 +116,7 @@ class QuoteMailer < ApplicationMailer
       color: @theme['colors']['primary'],
       name: 'quotation',
       remarks: Legacy::Remark.where(organization_id: @organization.id).order(order: :asc),
-      scope: scope_for(record: @user)
+      scope: scope_for(record: user)
     )
     quotation.generate
   end
@@ -129,5 +128,9 @@ class QuoteMailer < ApplicationMailer
   def from(display_name:)
     Mail::Address.new("no-reply@#{current_organization.slug}.itsmycargo.shop")
       .tap { |a| a.display_name = display_name }.format
+  end
+
+  def default_user
+    @default_user ||= Organizations::User.new(organization: current_organization)
   end
 end
