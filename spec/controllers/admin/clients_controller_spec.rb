@@ -100,7 +100,8 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe 'post #create' do
-    let(:user_attributes) { attributes_for(:organizations_user, email: 'email123@demo.com').deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:email) { "email123@demo.com" }
+    let(:user_attributes) { attributes_for(:organizations_user, email: email).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:profile_attributes) { attributes_for(:profiles_profile).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
 
@@ -134,23 +135,59 @@ RSpec.describe Admin::ClientsController do
     end
 
     context "when creating client with email belonging to a soft deleted user" do
+      let(:organization_2) { FactoryBot.create(:organizations_organization) }
       let(:user) do
-        FactoryBot.create(:authentication_user,
-                          :organizations_user,
+        FactoryBot.create(:organizations_user,
                           :with_profile,
                           email: "email123@demo.com",
-                          organization_id: organization.id)
+                          organization: organization)
+      end
+      let(:user_2) do
+        FactoryBot.create(:organizations_user,
+          :with_profile,
+          email: "email123@demo.com",
+          organization: organization_2)
       end
 
-      before { user.destroy }
+      before do
+        user.destroy
+        user_2.destroy
+      end
 
       it "restores the user and restores corresponding relationships" do
         post :create, params: { organization_id: organization, new_client: attributes.to_json }
 
-        restored_user = Organizations::User.find_by(email: 'email123@demo.com')
+        restored_user = Organizations::User.find_by(email: 'email123@demo.com', organization: organization)
         aggregate_failures do
-          expect(Users::Settings.exists?(user_id: restored_user.id)).to eq(true)
-          expect(Profiles::Profile.exists?(user_id: restored_user.id)).to eq(true)
+          expect(user_2.deleted?).to eq(true)
+          expect(Users::Settings.where(user_id: restored_user.id)).to exist
+          expect(Profiles::Profile.where(user_id: restored_user.id)).to exist
+        end
+      end
+    end
+
+    context "when user is restored and the associations are permanently deleted" do
+      let(:email) { "email1234@demo.com" }
+      let(:user) do
+        FactoryBot.create(:organizations_user,
+                          :with_profile,
+                          email: "email1234@demo.com",
+                          organization: organization)
+      end
+
+      before do
+        user.destroy
+        Profiles::Profile.find_by(user_id: user).really_delete
+        Users::Settings.find_by(user_id: user).really_delete
+      end
+
+      it "creates new associations with defaults" do
+        post :create, params: { organization_id: organization, new_client: attributes.to_json }
+
+        restored_user = Organizations::User.find_by(email: email, organization: organization)
+        aggregate_failures do
+          expect(Users::Settings.where(user_id: restored_user.id)).to exist
+          expect(Profiles::Profile.where(user_id: restored_user.id)).to exist
         end
       end
     end

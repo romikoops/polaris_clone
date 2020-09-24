@@ -44,14 +44,7 @@ class Admin::ClientsController < Admin::AdminBaseController
       type: 'Organizations::User'
     }
     ActiveRecord::Base.transaction do
-      return restore_client(user_data: user_data) if client_restore_necessary?(email: json["email"])
-
-      user = Authentication::User.create!(user_data)
-      Profiles::ProfileService.create_or_update_profile(user: user,
-                                                        first_name: json['firstName'],
-                                                        last_name: json['lastName'],
-                                                        company_name: json['companyName'],
-                                                        phone: json['phone'])
+      user = restorable_client ? restore_client(user_data: user_data) : create_client(user_data: user_data)
       user_response = serialized_user(user: user)
       response_handler(user_response)
     end
@@ -209,17 +202,38 @@ class Admin::ClientsController < Admin::AdminBaseController
     end
   end
 
-  def client_restore_necessary?(email:)
-    Organizations::User.only_deleted.exists?(email: email)
+  def create_client(user_data:)
+    Authentication::User.create!(user_data).tap do |user|
+      create_user_profile(user: user, params: JSON.parse(params[:new_client]))
+    end
+  end
+
+  def restorable_client
+    @restorable_client ||= begin
+      email = JSON.parse(params[:new_client]).dig('email')
+      Organizations::User.only_deleted.find_by(email: email)
+    end
   end
 
   def restore_client(user_data:)
-    client = Authentication::User.only_deleted.find_by(email: user_data.dig(:email)).tap do |user|
-      user.restore
-      user.update(user_data.slice(:password, :password_confirmation))
+    restoration_params = {user_id: restorable_client.id,
+                          organization_id: current_organization.id,
+                          params: profile_params}
+    Api::UserRestorationService.new(**restoration_params).restore.tap do |user|
+      Authentication::User.find(user.id).update(user_data.slice(:password, :password_confirmation))
     end
-    [Profiles::Profile, Users::Settings].each do |relation|
-      relation.with_deleted.find_by(user_id: client.id).restore
-    end
+  end
+
+  def create_user_profile(user:, params:)
+    Profiles::ProfileService.create_or_update_profile(profile_params.merge(user: user))
+  end
+
+  def profile_params
+    @profile_params ||= {
+      first_name: params["firstName"],
+      last_name: params["lastName"],
+      company_name: params["companyName"],
+      phone: params["phone"]
+    }
   end
 end
