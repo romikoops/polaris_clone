@@ -74,6 +74,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     ActiveRecord::Base.transaction do
       user = Users::User.find_by(id: params[:id])
       Groups::Membership.where(member: user).destroy_all
+      Companies::Membership.where(member: user).destroy_all
       Profiles::Profile.find_by(user: user).destroy!
       user.destroy!
     end

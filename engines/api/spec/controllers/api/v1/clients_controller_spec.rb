@@ -232,7 +232,7 @@ module Api
       }
       let(:profile) { Profiles::Profile.with_deleted.find_by(user_id: client.id) }
       let(:organization_user) { Organizations::User.with_deleted.find_by(id: client.id) }
-
+      let(:company) { FactoryBot.create(:companies_company, organization: organization) }
       let(:request_object) {
         delete :destroy,
         params: { organization_id: organization.id,
@@ -242,6 +242,7 @@ module Api
 
       before do
         FactoryBot.create(:groups_membership, group: organization_group, member: client)
+        FactoryBot.create(:companies_membership, company: company, member: client)
       end
 
       context 'when request is successful' do
@@ -258,6 +259,11 @@ module Api
         it "deletes the users group membership" do
           perform_request
           expect(Groups::Membership.exists?(member: client)).to be false
+        end
+
+        it "deletes the user's company membership" do
+          perform_request
+          expect(Companies::Membership.where(member: client)).to_not exist
         end
 
         it 'deletes the authentication user successfully' do

@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "imc-organizations"
   s.add_dependency "imc-legacy"
 
+  s.add_dependency "paranoia"
   s.add_dependency "pg_search"
 
   s.add_development_dependency "imc-groups"

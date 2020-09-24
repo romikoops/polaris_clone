@@ -3,6 +3,7 @@
 require "activerecord-postgis-adapter"
 require "config"
 require "pg_search"
+require "paranoia"
 require "paper_trail"
 require "rails"
 require "strong_migrations"

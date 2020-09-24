@@ -2,6 +2,7 @@
 
 module Companies
   class Company < ApplicationRecord
+    acts_as_paranoid
     include PgSearch::Model
 
     belongs_to :address, class_name: "Legacy::Address", optional: true

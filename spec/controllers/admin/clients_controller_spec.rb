@@ -204,9 +204,11 @@ RSpec.describe Admin::ClientsController do
   describe 'DELETE #destroy' do
     let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
+    let(:company) { FactoryBot.create(:companies_company, organization: organization) }
 
     before do
       FactoryBot.create(:groups_membership, group: group, member: user)
+      FactoryBot.create(:companies_membership, company: company, member: user)
     end
 
     it 'returns an http status of success' do
@@ -217,6 +219,11 @@ RSpec.describe Admin::ClientsController do
     it "deletes the users group membership" do
       delete :destroy, params: { organization_id: organization, id: user.id }
       expect(Groups::Membership.exists?(member: user)).to be false
+    end
+
+    it "deletes the users company memberships" do
+      delete :destroy, params: { organization_id: organization, id: user.id }
+      expect(Companies::Membership.where(member: user)).to_not exist
     end
 
     it 'deletes the user' do
