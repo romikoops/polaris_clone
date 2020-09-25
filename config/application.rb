@@ -34,6 +34,9 @@ module Imcr
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    config.active_record.schema_format = :sql
+    config.active_record.dump_schemas = :all
+
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Flash

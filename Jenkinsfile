@@ -167,6 +167,7 @@ void appPrepare() {
         """)
 
         withEnv(["RAILS_ENV=test"]) {
+          sh(label: "Install Postgres Client", script: "apt-get install -y postgresql-client")
           sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
         }
       }
