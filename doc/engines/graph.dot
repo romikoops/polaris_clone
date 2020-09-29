@@ -130,9 +130,10 @@ digraph G {
     "profiles" -> "users" [color=grey];
     "profiles" -> "organizations" [color=grey];
     "organization_manager" [shape=ellipse];
-    "organization_manager" -> "organizations" [color=grey];
-    "organization_manager" -> "groups" [color=grey];
     "organization_manager" -> "companies" [color=grey];
+    "organization_manager" -> "groups" [color=grey];
+    "organization_manager" -> "legacy" [color=grey];
+    "organization_manager" -> "organizations" [color=grey];
     "cargo" [shape=ellipse];
     "cargo" -> "core" [color=grey];
     "cargo" -> "organizations" [color=grey];

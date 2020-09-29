@@ -15,9 +15,10 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "Rakefile"]
 
-  s.add_dependency "imc-organizations"
-  s.add_dependency "imc-groups"
   s.add_dependency "imc-companies"
+  s.add_dependency "imc-groups"
+  s.add_dependency "imc-legacy"
+  s.add_dependency "imc-organizations"
 
   Gemhelper.common(s)
 end

@@ -6,8 +6,9 @@ require "paper_trail"
 require "rails"
 require "strong_migrations"
 
-require "groups"
 require "companies"
+require "groups"
+require "legacy"
 
 module OrganizationManager
   class Engine < ::Rails::Engine
