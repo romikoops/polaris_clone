@@ -1,18 +1,52 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe TenantVehicle, type: :model do
-    let(:carrier) { FactoryBot.create(:legacy_carrier, name: 'TEST') }
-    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
+    let(:carrier) { FactoryBot.create(:legacy_carrier, name: "TEST") }
+    let!(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
 
-    describe '.with_carrier' do
-      it 'returns the tenant vehicle with carrier info' do
+    context "with valid data" do
+      it "Creates a valid tenant vehicle" do
+        expect(tenant_vehicle).to be_valid
+      end
+    end
+
+    context "with duplicate data" do
+      let(:duplicate) do
+        FactoryBot.create(:legacy_tenant_vehicle,
+          organization_id: tenant_vehicle.organization_id,
+          mode_of_transport: tenant_vehicle.mode_of_transport,
+          carrier_id: carrier.id,
+          name: tenant_vehicle.name)
+      end
+
+      it "violates the uniqueness constraint" do
+        expect { duplicate }.to raise_error { ActiveRecord::RecordInvalid }
+      end
+    end
+
+    context "with a mix of duplicate and nil data" do
+      let(:duplicate) do
+        FactoryBot.create(:legacy_tenant_vehicle,
+          organization_id: tenant_vehicle.organization_id,
+          mode_of_transport: nil,
+          carrier_id: carrier.id,
+          name: tenant_vehicle.name)
+      end
+
+      it "Creates a valid tenant vehicle" do
+        expect(duplicate).to be_valid
+      end
+    end
+
+    describe ".with_carrier" do
+      it "returns the tenant vehicle with carrier info" do
         target = tenant_vehicle.with_carrier
         aggregate_failures do
-          expect(target.dig('carrier', 'name')).to eq(carrier.name)
-          expect(target.dig('carrier', 'id')).to eq(carrier.id)
+          expect(target.dig("carrier", "name")).to eq(carrier.name)
+          expect(target.dig("carrier", "id")).to eq(carrier.id)
         end
       end
     end

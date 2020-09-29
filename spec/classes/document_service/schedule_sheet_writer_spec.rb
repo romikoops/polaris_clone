@@ -28,7 +28,7 @@ RSpec.describe DocumentService::ScheduleSheetWriter do
         trip.layovers.last.eta.to_s,
         14,
         "standard",
-        nil,
+        trip.tenant_vehicle.carrier.name,
         "ocean",
         nil,
         nil,

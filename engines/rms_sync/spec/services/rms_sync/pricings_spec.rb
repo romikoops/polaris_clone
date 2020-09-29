@@ -5,13 +5,14 @@ require 'rails_helper'
 RSpec.describe RmsSync::Pricings do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:carrier) { FactoryBot.create(:legacy_carrier) }
   let(:tenant_vehicles) do
     [
       FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly', organization: organization),
       FactoryBot.create(:legacy_tenant_vehicle,
                         name: 'faster',
                         organization: organization,
-                        carrier: FactoryBot.build(:legacy_carrier, name: 'MSC'))
+                        carrier: carrier)
     ]
   end
   let!(:currency) { FactoryBot.create(:legacy_currency) }
@@ -58,7 +59,7 @@ RSpec.describe RmsSync::Pricings do
                                'Shanghai',
                                'China',
                                'ocean',
-                               nil,
+                               carrier.name,
                                'slowly',
                                'lcl',
                                'PER_WM',
@@ -103,7 +104,7 @@ RSpec.describe RmsSync::Pricings do
                                         'Shanghai',
                                         'China',
                                         'ocean',
-                                        nil,
+                                        carrier.name,
                                         'slowly',
                                         'lcl',
                                         'PER_KG_RANGE',
@@ -121,7 +122,7 @@ RSpec.describe RmsSync::Pricings do
                                         'Shanghai',
                                         'China',
                                         'ocean',
-                                        nil,
+                                        carrier.name,
                                         'slowly',
                                         'lcl',
                                         'PER_KG_RANGE',
@@ -139,7 +140,7 @@ RSpec.describe RmsSync::Pricings do
                                         'Shanghai',
                                         'China',
                                         'ocean',
-                                        nil,
+                                        carrier.name,
                                         'slowly',
                                         'lcl',
                                         'PER_KG_RANGE',
@@ -157,7 +158,7 @@ RSpec.describe RmsSync::Pricings do
                                         'Shanghai',
                                         'China',
                                         'ocean',
-                                        nil,
+                                        carrier.name,
                                         'slowly',
                                         'lcl',
                                         'PER_KG_RANGE',

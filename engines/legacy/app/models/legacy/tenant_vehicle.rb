@@ -44,6 +44,7 @@ end
 #  index_tenant_vehicles_on_organization_id  (organization_id)
 #  index_tenant_vehicles_on_sandbox_id       (sandbox_id)
 #  index_tenant_vehicles_on_tenant_id        (tenant_id)
+#  tenant_vehicles_upsert                    (organization_id,name,mode_of_transport,carrier_id) WHERE (deleted_at IS NULL)
 #
 # Foreign Keys
 #

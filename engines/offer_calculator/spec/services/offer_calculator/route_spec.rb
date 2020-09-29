@@ -59,7 +59,7 @@ RSpec.describe OfferCalculator::Route do
     context 'with single route and service level' do
       it 'return the route detail hashes' do
         results = described_class.attributes_from_hub_and_itinerary_ids(args)
-        expect(results).to match_array([{ 'tenant_vehicle_id' => tenant_vehicle.id, 'itinerary_id' => itinerary.id, 'mode_of_transport' => 'ocean', 'origin_stop_id' => itinerary.stops.first.id, 'destination_stop_id' => itinerary.stops.last.id, 'carrier_id' => nil }])
+        expect(results).to match_array([{ 'tenant_vehicle_id' => tenant_vehicle.id, 'itinerary_id' => itinerary.id, 'mode_of_transport' => 'ocean', 'origin_stop_id' => itinerary.stops.first.id, 'destination_stop_id' => itinerary.stops.last.id, 'carrier_id' => tenant_vehicle.carrier_id }])
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe OfferCalculator::Route do
         results = described_class.attributes_from_hub_and_itinerary_ids(args)
 
         expect(results).to match_array([
-                                         { 'tenant_vehicle_id' => tenant_vehicle.id, 'itinerary_id' => itinerary.id, 'mode_of_transport' => 'ocean', 'origin_stop_id' => itinerary.stops.first.id, 'destination_stop_id' => itinerary.stops.last.id, 'carrier_id' => nil },
+                                         { 'tenant_vehicle_id' => tenant_vehicle.id, 'itinerary_id' => itinerary.id, 'mode_of_transport' => 'ocean', 'origin_stop_id' => itinerary.stops.first.id, 'destination_stop_id' => itinerary.stops.last.id, 'carrier_id' => tenant_vehicle.carrier_id },
                                          { 'tenant_vehicle_id' => other_tenant_vehicle.id, 'itinerary_id' => itinerary.id, 'mode_of_transport' => 'ocean', 'origin_stop_id' => itinerary.stops.first.id, 'destination_stop_id' => itinerary.stops.last.id, 'carrier_id' => carrier.id }
                                        ])
       end

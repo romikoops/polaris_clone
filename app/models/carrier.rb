@@ -29,5 +29,6 @@ end
 #
 # Indexes
 #
+#  index_carriers_on_code        (code) UNIQUE WHERE (deleted_at IS NULL)
 #  index_carriers_on_sandbox_id  (sandbox_id)
 #

@@ -6917,6 +6917,14 @@ ALTER TABLE ONLY public.tenant_vehicles
 
 
 --
+-- Name: tenant_vehicles tenant_vehicles_upsert; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tenant_vehicles
+    ADD CONSTRAINT tenant_vehicles_upsert EXCLUDE USING btree (organization_id WITH =, name WITH =, mode_of_transport WITH =, carrier_id WITH =) WHERE ((deleted_at IS NULL));
+
+
+--
 -- Name: tenants_companies tenants_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7424,6 +7432,13 @@ CREATE INDEX index_cargo_units_on_organization_id ON public.cargo_units USING bt
 --
 
 CREATE INDEX index_cargo_units_on_tenant_id ON public.cargo_units USING btree (tenant_id);
+
+
+--
+-- Name: index_carriers_on_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_carriers_on_code ON public.carriers USING btree (code) WHERE (deleted_at IS NULL);
 
 
 --
@@ -12320,6 +12335,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200921095406'),
 ('20200922094143'),
 ('20200922094226'),
+('20200923124503'),
+('20200923124711'),
 ('20200924084322'),
 ('20200924084551');
 

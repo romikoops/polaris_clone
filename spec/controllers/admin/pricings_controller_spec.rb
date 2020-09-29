@@ -42,7 +42,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
           'data' => {},
           'load_type' => 'cargo_item',
           'cargo_class' => 'lcl',
-          'carrier' => nil,
+          'carrier' => pricings.first.tenant_vehicle.carrier.name,
           'service_level' => 'standard',
           'itinerary_name' => 'Gothenburg - Shanghai',
           'mode_of_transport' => 'ocean' }

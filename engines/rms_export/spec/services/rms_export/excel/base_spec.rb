@@ -27,7 +27,7 @@ RSpec.describe ::RmsExport::Excel::Base do
       'Shanghai',
       'China',
       'ocean',
-      nil,
+      tenant_vehicle.carrier.name,
       'slowest',
       'lcl',
       'PER_WM',
