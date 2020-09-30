@@ -7,10 +7,6 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
 
-    let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
-    let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
-    let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, :distance) }
-
     let(:zipcode)      { '15211' }
     let(:latitude)     { '57.000000' }
     let(:longitude)    { '11.100000' }
@@ -21,13 +17,14 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     let(:address) do
       FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
     end
+    let(:query) { described_class.new(hub_ids: [hub.id], klass: ::Trucking::Trucking, filters: filters).perform }
 
     describe '.find_by_hub_id' do
       let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
       let(:tenant_vehicle_name) { 'Test Courier' }
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: tenant_vehicle_name, organization: organization) }
 
-      context 'when basic tests' do
+      context 'invalid data' do
         it 'raises an ArgumentError if no hub_id are provided' do
           expect { described_class.new(hub_ids: [], klass: ::Trucking::Trucking) }.to raise_error(ArgumentError)
         end
@@ -40,40 +37,29 @@ RSpec.describe Trucking::Queries::FindByHubIds do
         end
       end
 
-      context 'when zipcode identifier' do
+      context 'with service name filter' do
         let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '30001') }
         let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, tenant_vehicle: tenant_vehicle, organization: organization) }
-        let(:filters) { {courier_name: tenant_vehicle_name} }
+        let(:filters) { {courier_name: tenant_vehicle.name} }
 
-        it 'finds the correct pricing and destinations' do
-          query = described_class.new(hub_ids: [hub.id], klass: ::Trucking::Trucking, filters: filters)
-          truckings = query.perform.map(&:as_index_result)
-          aggregate_failures do
-            expect(truckings.first['zipCode']).to eq('30001')
-            expect(truckings.first['countryCode']).to eq('SE')
-            expect(truckings.first['courier']).to eq(tenant_vehicle_name)
-            expect(truckings.first['truckingPricing'].except('created_at', 'updated_at')).to include(target.as_json.except('created_at', 'updated_at'))
-          end
+        before { FactoryBot.create(:trucking_trucking, hub: hub) }
+
+        it 'finds the correct pricing and destinations', :aggregate_failures do
+          expect(query.first).to eq(target)
+          expect(query.count).to eq(1)
         end
       end
 
-      context 'when geometry identifier' do
-        let!(:target) do
-          FactoryBot.create(:trucking_trucking,
-                            hub: hub,
-                            location: FactoryBot.create(:trucking_location, :with_location))
-        end
-        let(:query) { described_class.new(hub_ids: [hub.id], klass: ::Trucking::Trucking) }
+      context 'with place name filter' do
+        let(:trucking_location) { FactoryBot.create(:trucking_location, city_name: 'Shanghai') }
+        let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, tenant_vehicle: tenant_vehicle, organization: organization) }
+        let(:filters) { {destination: 'Shanghai'} }
 
-        it 'finds the correct pricing and destinations' do
-          Timecop.freeze(Time.zone.now) do
-            truckings = query.perform.map(&:as_index_result)
-            aggregate_failures do
-              expect(truckings.first['city']).to eq('Gothenburg')
-              expect(truckings.first['countryCode']).to eq('SE')
-              expect(truckings.first['truckingPricing'].except('created_at', 'updated_at')).to include(target.as_json.except('created_at', 'updated_at'))
-            end
-          end
+        before { FactoryBot.create(:trucking_trucking, hub: hub) }
+
+        it 'finds the correct pricing and destinations', :aggregate_failures do
+          expect(query.first).to eq(target)
+          expect(query.count).to eq(1)
         end
       end
     end

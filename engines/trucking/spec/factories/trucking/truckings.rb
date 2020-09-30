@@ -6,6 +6,7 @@ FactoryBot.define do
     association :location, factory: :zipcode_location
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     cbm_ratio { 460 }
+    validity { (1.day.ago...1.year.from_now) }
     modifier { 'kg' }
     load_meterage { { 'ratio' => 1850.0, 'height_limit' => 130 }.freeze }
     rates do

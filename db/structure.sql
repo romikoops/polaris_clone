@@ -17,6 +17,20 @@ CREATE SCHEMA apg_plan_mgmt;
 
 
 --
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
+
+
+--
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -2577,6 +2591,42 @@ CREATE SEQUENCE public.mot_scopes_20200504_id_seq
 --
 
 ALTER SEQUENCE public.mot_scopes_20200504_id_seq OWNED BY public.mot_scopes_20200504.id;
+
+
+--
+-- Name: new_trucking_truckings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.new_trucking_truckings (
+    id uuid,
+    hub_id integer,
+    location_id uuid,
+    rate_id uuid,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    load_meterage jsonb,
+    cbm_ratio integer,
+    modifier character varying,
+    tenant_id integer,
+    rates jsonb,
+    fees jsonb,
+    identifier_modifier character varying,
+    load_type character varying,
+    cargo_class character varying,
+    carriage character varying,
+    courier_id uuid,
+    truck_type character varying,
+    legacy_user_id integer,
+    parent_id uuid,
+    group_id uuid,
+    sandbox_id uuid,
+    metadata jsonb,
+    organization_id uuid,
+    user_id uuid,
+    tenant_vehicle_id integer,
+    deleted_at timestamp without time zone,
+    validity daterange
+);
 
 
 --
@@ -7130,6 +7180,14 @@ ALTER TABLE ONLY public.trucking_truckings
 
 ALTER TABLE ONLY public.trucking_type_availabilities
     ADD CONSTRAINT trucking_type_availabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: new_trucking_truckings trucking_upsert; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.new_trucking_truckings
+    ADD CONSTRAINT trucking_upsert EXCLUDE USING gist (hub_id WITH =, carriage WITH =, load_type WITH =, cargo_class WITH =, location_id WITH =, organization_id WITH =, truck_type WITH =, group_id WITH =, tenant_vehicle_id WITH =, validity WITH &&) WHERE ((deleted_at IS NULL));
 
 
 --
@@ -12329,6 +12387,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200914091732'),
 ('20200915102722'),
 ('20200915103043'),
+('20200915125523'),
+('20200915125645'),
 ('20200915151658'),
 ('20200916105620'),
 ('20200916105843'),
