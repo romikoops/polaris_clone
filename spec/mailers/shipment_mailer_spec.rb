@@ -16,7 +16,9 @@ RSpec.describe ShipmentMailer, type: :mailer do
       with_tenders: true,
       billing: billing)
   }
+  let(:quotations_quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let!(:profile) { FactoryBot.create(:profiles_profile, user: user, external_id: '1234') }
+  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotations_quotation.id) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
@@ -28,6 +30,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:cargo_unit, organization: organization, cargo: cargo, weight_value: 100)
     FactoryBot.create(:organizations_theme, organization: organization, name: 'Demo')
   end
 

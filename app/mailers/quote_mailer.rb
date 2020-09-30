@@ -31,7 +31,7 @@ class QuoteMailer < ApplicationMailer
       from: from(display_name: @org_theme.name),
       reply_to: @org_theme.emails.dig('support', 'general'),
       to: mail_target_interceptor(shipment.billing, email),
-      subject: subject_line(shipment: decorated_shipment, type: :quotation, references: tender_references)
+      subject: subject_line(type: :quotation, references: tender_references, quotation: decorated_quotation)
     ) do |format|
       format.html { render 'quotation_email' }
       format.mjml { render 'quotation_email' }
@@ -60,7 +60,7 @@ class QuoteMailer < ApplicationMailer
       from: from(display_name: 'ItsMyCargo Quotation Tool'),
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
-      subject: subject_line(shipment: @shipment, type: :quotation, references: tender_references)
+      subject: subject_line(type: :quotation, references: tender_references, quotation: decorated_quotation)
     ) do |format|
       format.html { render 'quotation_admin_email' }
       format.mjml { render 'quotation_admin_email' }
@@ -94,6 +94,10 @@ class QuoteMailer < ApplicationMailer
 
   def decorated_shipment
     @decorated_shipment ||= Legacy::ShipmentDecorator.new(@shipment, context: { scope: @scope})
+  end
+
+  def decorated_quotation
+    @decorated_quotation ||= QuotationDecorator.new(@quotation)
   end
 
   def tender_references

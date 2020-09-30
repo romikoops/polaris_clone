@@ -30,15 +30,15 @@ class ApplicationMailer < ActionMailer::Base
     current_organization.domains.find_by(default: true)&.domain
   end
 
-  def subject_line(shipment:, type:, references:)
-    template = scope_for(record: shipment.user).dig(:email_subject_template)
+  def subject_line(type:, references:, quotation:)
+    template = scope_for(record: quotation.user).dig(:email_subject_template)
     liquid = Liquid::Template.parse(template)
     noun = type == :quotation ? 'Quotation' : 'Booking'
     liquid_string = liquid.render(
       context(
-        shipment: ::Legacy::ShipmentDecorator.new(shipment),
         references: references,
-        noun: noun
+        noun: noun,
+        quotation: quotation
       )
     )
     grapheme_clusters = liquid_string.each_grapheme_cluster
@@ -47,22 +47,22 @@ class ApplicationMailer < ActionMailer::Base
     grapheme_clusters.take(CHARACTER_COUNT).join + '...'
   end
 
-  def context(shipment:, references:, noun:)
+  def context(references:, noun:, quotation:)
     {
-      imc_reference: shipment.imc_reference,
-      external_id: shipment.external_id,
-      origin_locode: shipment.origin_locode,
-      origin_city: shipment.origin_city,
-      origin: shipment.origin,
-      destination_locode: shipment.destination_locode,
-      destination_city: shipment.destination_city,
-      destination: shipment.destination,
-      total_weight: shipment.total_weight,
-      total_volume: shipment.total_volume,
-      client_name: shipment.client_name,
-      load_type: shipment.load_type,
+      imc_reference: quotation.imc_reference,
+      external_id: quotation.external_id,
+      origin_locode: quotation.origin_locode,
+      origin_city: quotation.origin_city,
+      origin: quotation.origin,
+      destination_locode: quotation.destination_locode,
+      destination_city: quotation.destination_city,
+      destination: quotation.destination,
+      total_weight: quotation.total_weight,
+      total_volume: quotation.total_volume,
+      client_name: quotation.client_name,
+      load_type: quotation.load_type,
       references: truncate("Refs: #{references.join(", ")}", length: 23, separator: ' '),
-      routing: shipment.routing,
+      routing: quotation.routing,
       noun: noun
     }.deep_stringify_keys
   end

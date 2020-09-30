@@ -34,7 +34,7 @@ class ShipmentMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@shipment.billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
-      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
+      subject: subject_line(type: :shipment, references: [@shipment.imc_reference], quotation: decorated_quotation)
     }
 
     mail(mail_options, &:html)
@@ -67,7 +67,7 @@ class ShipmentMailer < ApplicationMailer
       reply_to: @org_theme.emails.dig('support', 'general'),
       to: mail_target_interceptor(@shipment.billing, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
-      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
+      subject: subject_line(type: :shipment, references: [@shipment.imc_reference], quotation: decorated_quotation)
     }
 
     mail(mail_options, &:html)
@@ -99,7 +99,7 @@ class ShipmentMailer < ApplicationMailer
       reply_to: @org_theme.emails.dig('support', 'general'),
       to: mail_target_interceptor(@shipment.billing, user.email.presence || 'itsmycargodev@gmail.com'),
       bcc: [Settings.emails.booking],
-      subject: subject_line(shipment: @shipment, type: :shipment, references: [@shipment.imc_reference])
+      subject: subject_line(quotation: decorated_quotation, type: :shipment, references: [@shipment.imc_reference])
     }
 
     mail(mail_options, &:html)
@@ -140,6 +140,13 @@ class ShipmentMailer < ApplicationMailer
     when 'review'      then ENV['REVIEW_URL']
     when 'development' then 'http://localhost:8080/'
     when 'test'        then 'http://localhost:8080/'
+    end
+  end
+
+  def decorated_quotation
+    @decorated_quotation ||= begin
+      quotation = Quotations::Quotation.find_by(legacy_shipment_id: @shipment.id)
+      QuotationDecorator.new(quotation)
     end
   end
 end

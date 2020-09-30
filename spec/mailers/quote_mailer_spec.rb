@@ -28,6 +28,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
   let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }
   let(:delivery_address) { FactoryBot.create(:hamburg_address) }
+  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotations_quotation.id) }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
@@ -39,6 +40,7 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:cargo_unit, organization: organization, cargo: cargo, weight_value: 100)
     FactoryBot.create(:organizations_theme, organization: organization)
   end
 
@@ -118,10 +120,8 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
 
     before do
-      allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
-      allow(original_shipment).to receive(:has_on_carriage?).and_return(true)
-      allow(original_shipment).to receive(:pickup_address).and_return(pickup_address)
-      allow(original_shipment).to receive(:delivery_address).and_return(delivery_address)
+      allow(quotations_quotation).to receive(:pickup_address).and_return(pickup_address)
+      allow(quotations_quotation).to receive(:delivery_address).and_return(delivery_address)
     end
 
     it 'renders', :aggregate_failures do
@@ -146,10 +146,10 @@ RSpec.describe QuoteMailer, type: :mailer do
       [
         quotations_quotation.tenders.first.imc_reference,
         "[#{profile.external_id}]",
-        original_shipment.origin_nexus.locode.to_s,
-        original_shipment.destination_nexus.locode.to_s,
-        decorated_shipment.total_weight.to_s,
-        decorated_shipment.total_volume.to_s
+        quotations_quotation.origin_nexus.locode.to_s,
+        quotations_quotation.destination_nexus.locode.to_s,
+        cargo.total_weight.format(".1%<value>f"),
+        cargo.total_volume.format(".1%<value>f")
       ].join('/')
     }
 
@@ -160,8 +160,8 @@ RSpec.describe QuoteMailer, type: :mailer do
 
     context 'with escaping' do
       before do
-        allow(original_shipment).to receive(:origin_nexus).and_return(origin_hub.nexus)
-        allow(original_shipment).to receive(:destination_nexus).and_return(destination_hub.nexus)
+        allow(quotations_quotation).to receive(:origin_nexus).and_return(origin_hub.nexus)
+        allow(quotations_quotation).to receive(:destination_nexus).and_return(destination_hub.nexus)
       end
 
       let(:liquid) {
@@ -187,8 +187,8 @@ RSpec.describe QuoteMailer, type: :mailer do
 
     context 'without trucking' do
       before do
-        allow(original_shipment).to receive(:origin_nexus).and_return(origin_hub.nexus)
-        allow(original_shipment).to receive(:destination_nexus).and_return(destination_hub.nexus)
+        allow(quotations_quotation).to receive(:origin_nexus).and_return(origin_hub.nexus)
+        allow(quotations_quotation).to receive(:destination_nexus).and_return(destination_hub.nexus)
       end
 
       it 'renders', :aggregate_failures do
@@ -201,10 +201,8 @@ RSpec.describe QuoteMailer, type: :mailer do
 
     context 'with trucking' do
       before do
-        allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(original_shipment).to receive(:has_on_carriage?).and_return(true)
-        allow(original_shipment).to receive(:pickup_address).and_return(pickup_address)
-        allow(original_shipment).to receive(:delivery_address).and_return(delivery_address)
+        allow(quotations_quotation).to receive(:pickup_address).and_return(pickup_address)
+        allow(quotations_quotation).to receive(:delivery_address).and_return(delivery_address)
       end
 
       let(:result) {
@@ -213,8 +211,8 @@ RSpec.describe QuoteMailer, type: :mailer do
           "[#{profile.external_id}]",
           "#{pickup_address.country.code}-#{pickup_address.zip_code}",
           "#{delivery_address.country.code}-#{delivery_address.zip_code}",
-          decorated_shipment.total_weight.to_s,
-          decorated_shipment.total_volume.to_s
+          cargo.total_weight.format(".1%<value>f"),
+          cargo.total_volume.format(".1%<value>f")
         ].join('/')
       }
 
@@ -228,10 +226,8 @@ RSpec.describe QuoteMailer, type: :mailer do
 
     context 'with trucking with umlaut' do
       before do
-        allow(original_shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(original_shipment).to receive(:has_on_carriage?).and_return(true)
-        allow(original_shipment).to receive(:pickup_address).and_return(umlaut_address)
-        allow(original_shipment).to receive(:delivery_address).and_return(delivery_address)
+        allow(quotations_quotation).to receive(:pickup_address).and_return(umlaut_address)
+        allow(quotations_quotation).to receive(:delivery_address).and_return(delivery_address)
       end
 
       let(:email_subject) do
@@ -239,8 +235,8 @@ RSpec.describe QuoteMailer, type: :mailer do
           original_shipment.imc_reference.to_s,
           "[#{profile.external_id}]",
           "#{umlaut_address.city} - #{delivery_address.city}",
-          decorated_shipment.total_weight.to_s,
-          decorated_shipment.total_volume.to_s
+          cargo.total_weight.format(".1%<value>f"),
+          cargo.total_volume.format(".1%<value>f")
         ].join('/')
       end
 
