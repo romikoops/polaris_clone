@@ -32,6 +32,7 @@ module Trucking
                   "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
               }
+
     acts_as_paranoid
 
     def self.delete_existing_truckings(hub)
