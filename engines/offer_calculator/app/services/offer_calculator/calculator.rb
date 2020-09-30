@@ -4,17 +4,17 @@ module OfferCalculator
   class Calculator
     attr_reader :shipment, :quotation
 
-    def initialize(shipment:, params:, user:, wheelhouse: false, mailer: nil)
+    def initialize(shipment:, params:, user:, creator:, wheelhouse: false)
       @user           = user
       @shipment       = shipment
-      @delay          = params['delay']
+      @creator = creator
+      @params = params
+      @delay = params['delay']
       @isQuote = params['shipment'].delete('isQuote')
-      @wheelhouse = wheelhouse
       @organization = @shipment.organization
       @quotation = create_quotations_quotations
-      @params = params
       @async = params[:async] || false
-      @mailer = mailer
+      @wheelhouse = wheelhouse
     end
 
     def perform
@@ -32,11 +32,16 @@ module OfferCalculator
 
     private
 
-    attr_reader :wheelhouse, :organization, :params, :async, :user, :mailer
+    attr_reader :wheelhouse, :organization, :params, :async, :user, :creator
 
     def results_service
       @results_service ||= OfferCalculator::Results.new(
-        shipment: shipment, quotation: quotation, user: user, wheelhouse: wheelhouse, async: async, mailer: mailer
+        shipment: shipment,
+        quotation: quotation,
+        user: user,
+        wheelhouse: wheelhouse,
+        async: async,
+        mailer: mailer
       )
     end
 
@@ -45,15 +50,19 @@ module OfferCalculator
         shipment_id: shipment.id,
         quotation_id: quotation.id,
         user_id: user&.id,
-        wheelhouse: wheelhouse,
-        mailer: mailer.to_s
+        wheelhouse: wheelhouse
       )
       results_service
+    end
+
+    def mailer
+      'QuoteMailer' unless wheelhouse
     end
 
     def create_quotations_quotations
       Quotations::Quotation.new(organization: organization,
                                 user: user,
+                                creator: creator,
                                 completed: false,
                                 legacy_shipment_id: shipment.id)
     end

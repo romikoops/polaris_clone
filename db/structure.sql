@@ -3327,7 +3327,8 @@ CREATE TABLE public.quotations_quotations (
     organization_id uuid,
     user_id uuid,
     completed boolean DEFAULT false,
-    error_class character varying
+    error_class character varying,
+    creator_id uuid
 );
 
 
@@ -11702,6 +11703,14 @@ ALTER TABLE ONLY public.quotations
 
 
 --
+-- Name: quotations_quotations fk_rails_f83422e04e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quotations_quotations
+    ADD CONSTRAINT fk_rails_f83422e04e FOREIGN KEY (creator_id) REFERENCES public.users_users(id) NOT VALID;
+
+
+--
 -- Name: charge_breakdowns fk_rails_fae196182a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12332,7 +12341,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200915151658'),
 ('20200916105620'),
 ('20200916105843'),
+('20200921093106'),
 ('20200921095406'),
+('20200921132558'),
+('20200921133109'),
 ('20200922094143'),
 ('20200922094226'),
 ('20200923124503'),

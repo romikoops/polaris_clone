@@ -105,7 +105,10 @@ RSpec.describe OfferCalculator::Calculator do
     }.with_indifferent_access
   end
   let(:quotation) { Quotations::Quotation.last }
-  let(:service) { described_class.new(shipment: shipment, params: params, user: user).perform }
+  let(:creator) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:service) do
+    described_class.new(shipment: shipment, params: params, user: user, creator: creator).perform
+  end
 
   include_context "complete_route_with_trucking"
 
@@ -219,6 +222,7 @@ RSpec.describe OfferCalculator::Calculator do
           expect(Quotations::Quotation.count).to be(1)
           expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
           expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
+          expect(quotation.creator).to eq(creator)
         end
       end
 

@@ -11,7 +11,7 @@ module Wheelhouse
 
     def initialize(organization:, quotation_details:, shipping_info:, async: false)
       @user_id = quotation_details[:user_id]
-      @creator = quotation_details[:creator]
+      @creator = Users::User.find(quotation_details[:creator_id])
       @user = Organizations::User.find_by(id: @user_id)
       @origin = quotation_details.fetch(:origin)
       @destination = quotation_details.fetch(:destination)
@@ -44,14 +44,15 @@ module Wheelhouse
     def offer_calculator
       @params ||= ActionController::Parameters.new(shipment: shipping_params, sandbox: nil, async: async)
       @offer_calculator ||= OfferCalculator::Calculator.new(
-        shipment: @shipment,
+        shipment: shipment,
         params: @params,
-        user: @user,
+        user: user,
+        creator: creator,
         wheelhouse: true
       )
     end
 
-    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination, :async
+    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination, :async, :creator
 
     def shipping_params
       {
@@ -59,8 +60,7 @@ module Wheelhouse
         selected_day: selected_date.to_s,
         origin: @origin,
         destination: @destination,
-        trucking: trucking_info,
-        creator: @creator
+        trucking: trucking_info
       }
     end
 
@@ -150,7 +150,8 @@ module Wheelhouse
     end
 
     def dedicated_pricings_only
-      OrganizationManager::ScopeService.new(target: user || @creator, organization: organization).fetch(:dedicated_pricings_only)
+      OrganizationManager::ScopeService.new(target: user,
+                                            organization: organization).fetch(:dedicated_pricings_only)
     end
   end
 end

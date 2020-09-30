@@ -12,7 +12,9 @@ module OfferCalculator
       def perform(associations:, schedules:)
         associations.each_with_object({}) do |(key, association), results|
           klass = "OfferCalculator::Service::Manipulators::#{key.to_s.camelize}".constantize
-          results[key] = klass.results(association: association, shipment: shipment, schedules: schedules)
+          results[key] = klass.results(association: association,
+                                       shipment: shipment,
+                                       schedules: schedules)
           check_for_fee_type(type: key, results: results[key])
         end
       end

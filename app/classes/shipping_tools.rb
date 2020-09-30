@@ -73,11 +73,13 @@ class ShippingTools
     shipment = Legacy::Shipment.find(params[:shipment_id]).tap do |tapped_shipment|
       tapped_shipment.update(user: current_user) if tapped_shipment.user_id.nil?
     end
+
     offer_calculator = OfferCalculator::Calculator.new(
       shipment: shipment,
       params: params,
       user: current_user,
-      mailer: QuoteMailer
+      creator: current_user,
+      wheelhouse: false
     )
 
     offer_results = Skylight.instrument title: 'OfferCalculator Perform' do

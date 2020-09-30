@@ -144,6 +144,7 @@ digraph G {
     "quotations" -> "core" [color=grey];
     "quotations" -> "legacy" [color=grey];
     "quotations" -> "organizations" [color=grey];
+    "quotations" -> "users" [color=grey];
     "authentication" [shape=ellipse];
     "authentication" -> "organizations" [color=grey];
     "authentication" -> "organization_manager" [color=grey];

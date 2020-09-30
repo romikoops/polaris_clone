@@ -50,6 +50,7 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:input) do
     { organization_id: organization.id,
       user_id: user.id,
+      creator_id: user.id,
       direction: direction,
       load_type: load_type,
       selected_date: Time.zone.today }

@@ -67,7 +67,8 @@ class Addon < Legacy::Addon
 
   def self.condense_addons(addons, cargos, user, mot)
     condensed_addons = []
-    pricing_tools = OfferCalculator::PricingTools.new(shipment: cargos.first.shipment, user: user)
+    shipment = cargos.first.shipment
+    pricing_tools = OfferCalculator::PricingTools.new(shipment: shipment, user: user)
     addons[:origin].each do |oao|
       matching_ao = addons[:destination].select { |dao| dao.addon_type === oao.addon_type }
 

@@ -535,6 +535,7 @@ PATH
       imc-core
       imc-legacy
       imc-organizations
+      imc-users
       money-rails
       paper_trail (~> 10.3)
       pg (>= 0.18, < 2.0)

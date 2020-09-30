@@ -110,6 +110,12 @@ module Api
 
             expect(response_data.dig('attributes', 'tenders', 'data').count).to eq 2
           end
+
+          it 'creates a quotation with user nil but with creator set to current user' do
+            post :create, params: params, as: :json
+
+            expect(response).to be_successful
+          end
         end
 
         context 'when cargo items are invalid' do

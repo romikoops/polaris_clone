@@ -92,6 +92,7 @@ RSpec.describe OfferCalculator::Calculator do
       shipment: shipment,
       params: params,
       user: user,
+      creator: user,
       wheelhouse: wheelhouse
     )
   end

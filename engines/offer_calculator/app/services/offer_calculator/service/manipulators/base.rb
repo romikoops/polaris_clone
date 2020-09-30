@@ -15,7 +15,8 @@ module OfferCalculator
           @shipment = shipment
           @user = shipment.user
           @organization = shipment.organization
-          @scope = ::OrganizationManager::ScopeService.new(target: @user, organization: @organization).fetch
+          @scope = ::OrganizationManager::ScopeService.new(target: @user,
+                                                           organization: @organization).fetch
         end
 
         def perform

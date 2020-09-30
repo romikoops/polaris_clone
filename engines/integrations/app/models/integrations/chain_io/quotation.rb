@@ -20,6 +20,7 @@ end
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  creator_id           :uuid
 #  delivery_address_id  :integer
 #  destination_nexus_id :integer
 #  legacy_shipment_id   :integer
@@ -45,6 +46,7 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (creator_id => users_users.id)
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (user_id => users_users.id)
 #

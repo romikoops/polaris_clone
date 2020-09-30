@@ -4,6 +4,7 @@ module Quotations
   class Quotation < ApplicationRecord
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :user, optional: true, class_name: 'Organizations::User'
+    belongs_to :creator, class_name: 'Users::User', optional: true
     belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
     belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
     has_many :tenders, inverse_of: :quotation
@@ -27,6 +28,7 @@ end
 #  selected_date        :datetime
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  creator_id           :uuid
 #  delivery_address_id  :integer
 #  destination_nexus_id :integer
 #  legacy_shipment_id   :integer
@@ -52,6 +54,7 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (creator_id => users_users.id)
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (user_id => users_users.id)
 #

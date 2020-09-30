@@ -45,4 +45,5 @@ end
 #  index_trucking_locations_on_query         (query)
 #  index_trucking_locations_on_sandbox_id    (sandbox_id)
 #  index_trucking_locations_on_zipcode       (zipcode)
+#  trucking_locations_upsert                 (data,query,country_id,deleted_at) UNIQUE
 #

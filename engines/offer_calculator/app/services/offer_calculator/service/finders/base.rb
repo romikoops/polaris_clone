@@ -14,7 +14,8 @@ module OfferCalculator
           @quotation = quotation
           @schedules = schedules
           @shipment = shipment
-          @scope = ::OrganizationManager::ScopeService.new(target: @user, organization: @organization).fetch
+          @scope = ::OrganizationManager::ScopeService.new(target: @user,
+                                                           organization: @organization).fetch
           @hierarchy = ::OrganizationManager::HierarchyService.new(target: @user).fetch.select { |target|
             target.is_a?(Groups::Group)
           }

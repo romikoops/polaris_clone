@@ -4,6 +4,7 @@ require 'cargo'
 require 'core'
 require 'legacy'
 require 'organizations'
+require 'users'
 
 require 'draper'
 require 'money-rails'

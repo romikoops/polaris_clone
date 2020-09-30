@@ -89,7 +89,7 @@ module OfferCalculator
 
     def scope
       @scope ||= ::OrganizationManager::ScopeService.new(
-        target: @user || @creator, organization: shipment.organization
+        target: @user, organization: shipment.organization
       ).fetch
     end
 

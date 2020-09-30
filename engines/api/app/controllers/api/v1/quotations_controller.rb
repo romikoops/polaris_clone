@@ -105,9 +105,7 @@ module Api
       end
 
       def quotation_details
-        details = quotation_params.to_h
-        details[:creator] = current_user if details[:user_id].blank?
-        details
+        @quotation_details ||= quotation_params.to_h.merge(creator_id: current_user.id)
       end
 
       def quotation_params

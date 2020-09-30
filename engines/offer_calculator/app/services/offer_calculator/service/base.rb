@@ -11,7 +11,7 @@ module OfferCalculator
         @organization = Organizations::Organization.find(@shipment.organization_id)
         @creator = @params&.dig(:shipment, :creator)
         @scope = OrganizationManager::ScopeService.new(
-          target: Users::User.find_by(id: @shipment.user_id) || @creator,
+          target: Users::User.find_by(id: @shipment.user_id),
           organization: organization
         ).fetch
       end

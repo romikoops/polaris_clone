@@ -7,6 +7,7 @@ FactoryBot.define do
     association :origin_nexus, factory: :legacy_nexus
     association :destination_nexus, factory: :legacy_nexus
     association :user, factory: :organizations_user
+    association :creator, factory: :users_user
     association :organization, factory: :organizations_organization
     billing { :external }
   end
