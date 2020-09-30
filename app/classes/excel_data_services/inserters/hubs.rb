@@ -4,20 +4,16 @@ module ExcelDataServices
   module Inserters
     class Hubs < ExcelDataServices::Inserters::Base
       NEXUS_ATTRIBUTES = %i[
-        name
         latitude
         longitude
         photo
-        locode
         country
         organization_id
       ].freeze
 
       HUB_ATTRIBUTES = %i[
-        hub_type
         latitude
         longitude
-        hub_code
         import_charges
         export_charges
         pre_carriage
@@ -34,14 +30,13 @@ module ExcelDataServices
           mandatory_charge = find_mandatory_charge(params: params.dig(:mandatory_charge))
           country = find_country(params: params.dig(:address, :country))
           address = update_or_create_address(params: params[:address].merge(country: country))
-          nexus = update_or_create_port_of_call(params: params[:nexus].merge(country: country), type: :nexus)
-          update_or_create_port_of_call(
+          nexus = update_or_create_nexus(params: params[:nexus].merge(country: country))
+          update_or_create_hub(
             params: params[:hub].merge(
               nexus: nexus,
               address: address,
               mandatory_charge: mandatory_charge
-            ),
-            type: :hub
+            )
           )
         end
 
@@ -66,40 +61,39 @@ module ExcelDataServices
         address
       end
 
-      def update_or_create_port_of_call(params:, type:)
-        association, code_key = association_and_locode_key(type: type, mot: params[:hub_type])
-        assocation = association.where(params.slice(:organization_id))
+      def update_or_create_nexus(params:)
+        nexuses = Legacy::Nexus.where(params.slice(:organization_id))
+        nexus = nexuses.find_or_initialize_by(params.slice(:locode))
+        nexus.assign_attributes(params.slice(*NEXUS_ATTRIBUTES, :name))
+        add_stats(nexus, params[:row_nr])
+        nexus.save
+
+        nexus
+      end
+
+      def update_or_create_hub(params:)
+        hubs = Legacy::Hub.where(params.slice(:organization_id))
         terminal = params[:terminal]
         name_without_terminal = params[:name]
 
         if terminal.present?
           name = "#{name_without_terminal} - #{terminal}"
-          port_of_call = association.find_by(name: name)
+          hub = hubs.find_or_initialize_by(
+            name: name,
+            hub_type: params[:hub_type]
+          )
+          hub.hub_code = params[:hub_code]
         else
-          name = name_without_terminal
+          hubs = hubs.where.not("name LIKE '% - %'") # cater for terminal/name hack
+          hub = hubs.find_or_initialize_by(params.slice(:hub_code, :hub_type))
+          hub.name = name_without_terminal
         end
 
-        port_of_call ||= assocation.find_by(params.slice(code_key)) ||
-          assocation.find_by(params.slice(:name)) ||
-          assocation.new(name: name)
-        port_of_call.assign_attributes(params.slice(*attributes_for(type: type)))
-        add_stats(port_of_call, params[:row_nr])
-        port_of_call.save
+        hub.assign_attributes(params.slice(*HUB_ATTRIBUTES))
+        add_stats(hub, params[:row_nr])
+        hub.save
 
-        port_of_call
-      end
-
-      def association_and_locode_key(type:, mot:)
-        type == :nexus ? [Legacy::Nexus, :locode] : [Legacy::Hub.where(hub_type: mot), :hub_code]
-      end
-
-      def attributes_for(type:)
-        case type
-        when :hub
-          HUB_ATTRIBUTES
-        when :nexus
-          NEXUS_ATTRIBUTES
-        end
+        hub
       end
     end
   end
