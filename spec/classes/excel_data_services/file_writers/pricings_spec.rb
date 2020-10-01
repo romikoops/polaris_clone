@@ -6,6 +6,7 @@ require 'roo'
 RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:itinerary) { create(:gothenburg_shanghai_itinerary) }
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:static_pricing_headers) do
@@ -101,8 +102,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         [
           itinerary.origin_hub.locode,
           itinerary.destination_hub.locode,
-          nil,
-          nil,
+          default_group.id,
+          default_group.name,
           nil,
           transit_time.duration,
           nil,
@@ -151,8 +152,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         [
           itinerary.origin_hub.locode,
           itinerary.destination_hub.locode,
-          nil,
-          nil,
+          default_group.id,
+          default_group.name,
           nil,
           transit_time.duration,
           nil,

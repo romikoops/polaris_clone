@@ -8,6 +8,7 @@ RSpec.describe Admin::SchedulesController, type: :controller do
   let(:organizations_membership) { FactoryBot.create(:organizations_membership, role: :admin, organization: organization, member: user) }
 
   before do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
   end
 

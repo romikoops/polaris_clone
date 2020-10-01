@@ -13,11 +13,9 @@ module Wheelhouse
       @errors = []
       @final = final
       @scope = OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
-      @groups = OrganizationManager::HierarchyService.new(
-        target: user, organization: organization
-      ).fetch.select { |hier|
-        hier.is_a?(Groups::Group)
-      }
+      @groups = OrganizationManager::GroupsService.new(
+        target: user, organization: organization, exclude_default: scope[:dedicated_pricings_only]
+      ).fetch
     end
 
     def validate
@@ -100,11 +98,9 @@ module Wheelhouse
     end
 
     def pricings
-      @pricings ||= begin
-        pricing_assocation = Pricings::Pricing.where(itinerary: routes, load_type: load_type).current
-        pricing_assocation = pricing_assocation.where(group: groups) if scope[:dedicated_pricings_only]
-        pricing_assocation
-      end
+      @pricings ||= Pricings::Pricing.where(
+        itinerary: routes, load_type: load_type, group: groups
+      ).current
     end
 
     def routing_info_errors

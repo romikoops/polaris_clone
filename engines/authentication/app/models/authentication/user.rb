@@ -12,8 +12,6 @@ module Authentication
     validates :password, confirmation: true, if: -> { new_record? || changes[:crypted_password] }
     validates :type, presence: true
 
-    after_create :assign_default_group
-
     def self.authentication_scope
       where(id: memberships_ids).or(User.where(organization_id: organization_id))
     end
@@ -28,16 +26,6 @@ module Authentication
 
     def self.memberships_ids
       Organizations::Membership.select(:user_id).where(organization_id: organization_id)
-    end
-
-    def assign_default_group
-      default_group = Groups::Group.find_by(organization_id: organization_id, name: "default")
-      return unless default_group
-
-      Groups::Membership.find_or_create_by(
-        member: self,
-        group: default_group
-      )
     end
   end
 end

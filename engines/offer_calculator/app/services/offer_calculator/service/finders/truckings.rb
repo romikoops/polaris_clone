@@ -53,7 +53,7 @@ module OfferCalculator
           filter_combos(results: results, carriage: carriage).map { |filters|
             cargo_class, hub_id, truck_type, tenant_vehicle_id = filters
             target_trucking = nil
-            hierarchy_with_nil.each do |group|
+            hierarchy.each do |group|
               next if target_trucking.present?
 
               target_trucking = results.find_by(
@@ -64,6 +64,13 @@ module OfferCalculator
                 cargo_class: cargo_class
               )
             end
+            target_trucking ||= results.find_by(
+              group_id: nil,
+              hub_id: hub_id,
+              truck_type: truck_type,
+              tenant_vehicle_id: tenant_vehicle_id,
+              cargo_class: cargo_class
+            )
 
             target_trucking&.id
           }.compact
@@ -75,10 +82,6 @@ module OfferCalculator
             truck_types(carriage: carriage),
             results.pluck(:tenant_vehicle_id).uniq
           )
-        end
-
-        def hierarchy_with_nil
-          hierarchy | [nil]
         end
 
         def cargo_classes
@@ -119,6 +122,10 @@ module OfferCalculator
           return if assigned_truck_type.blank?
 
           [assigned_truck_type]
+        end
+
+        def exclude_default
+          false
         end
       end
     end

@@ -120,7 +120,7 @@ module Pricings
         organization_id: @organization.id,
         truck_type: @cargo_class == 'lcl' ? 'default' : 'chassis',
         cargo_classes: [@cargo_class],
-        order_by: 'group_id'
+        groups: groups
       }
       @params.slice(:selectedOriginTrucking, :selectedDestinationTrucking).each do |key, target|
         next if target.empty?
@@ -283,10 +283,14 @@ module Pricings
     end
 
     def group_ids
-      if @target.is_a?(Organizations::User)
-        @hierarchy.select { |hier| hier.is_a?(Groups::Group) }.map(&:id)
-      elsif @target.is_a?(Groups::Group)
-        [@target.id]
+      groups.map(&:id)
+    end
+
+    def groups
+      @groups ||= if @target.is_a?(Groups::Group)
+        [@target]
+      else
+        @hierarchy.select { |hier| hier.is_a?(Groups::Group) }
       end
     end
 

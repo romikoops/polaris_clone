@@ -11,7 +11,7 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
     describe '.find_by_hub_id' do
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
-
+      let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
       let(:courier) { FactoryBot.create(:trucking_courier) }
       let(:trucking_rate) { FactoryBot.create(:trucking_trucking, organization: organization) }
 
@@ -34,9 +34,9 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
       context 'zipcode identifier' do
         it 'finds the correct pricing and destinations' do
           trucking_location = FactoryBot.create(:trucking_location, zipcode: '30001')
-          target = FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location)
+          target = FactoryBot.create(:trucking_trucking, organization: organization, hub: hub, location: trucking_location)
 
-          truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id).map(&:as_index_result)
+          truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id, options: {group_id: default_group.id}).map(&:as_index_result)
 
           expect(truckings.first['zipCode']).to eq('30001')
           expect(truckings.first['countryCode']).to eq('SE')
@@ -49,9 +49,10 @@ RSpec.describe Trucking::Trucking, class: 'Trucking::Trucking', type: :model do
           Timecop.freeze(Time.now) do
             target = FactoryBot.create(:trucking_trucking,
                                        hub: hub,
+                                       organization: organization,
                                        location: FactoryBot.create(:trucking_location, :with_location))
 
-            truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id).map(&:as_index_result)
+            truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id, options: {group_id: default_group.id}).map(&:as_index_result)
 
             expect(truckings.first['city']).to eq('Gothenburg')
             expect(truckings.first['countryCode']).to eq('SE')

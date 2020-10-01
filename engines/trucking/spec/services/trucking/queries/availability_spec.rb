@@ -23,6 +23,8 @@ RSpec.describe Trucking::Queries::Availability do
     end
     let(:trucking_results) { described_class.new(args).perform }
     let(:query_type) { :zipcode }
+    let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
+    let(:groups) { [default_group] }
 
     before do
       FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: query_type)
@@ -66,7 +68,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          zipcode: zipcode, order_by: 'user_id'
+          zipcode: zipcode, groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -76,7 +78,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, order_by: 'user_id'
+          address: address, groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -86,7 +88,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, cargo_classes: ['lcl'], order_by: 'user_id'
+          address: address, cargo_classes: ['lcl'], groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_zipcode])
@@ -96,7 +98,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, cargo_classes: ['some_string'], order_by: 'user_id'
+          address: address, cargo_classes: ['some_string'], groups: groups
         ).perform
 
         expect(trucking_rates).to match([])
@@ -120,7 +122,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: 'NL',
-          zipcode: '1802 PT', order_by: 'group_id'
+          zipcode: '1802 PT', groups: groups
         ).perform
 
         expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
@@ -129,7 +131,7 @@ RSpec.describe Trucking::Queries::Availability do
       it 'finds the correct trucking_rate with address' do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, address: nl_address, order_by: 'group_id'
+          carriage: carriage, address: nl_address, groups: groups
         ).perform
 
         expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
@@ -155,7 +157,7 @@ RSpec.describe Trucking::Queries::Availability do
         described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: 'NL',
-          address: nl_address, order_by: 'group_id'
+          address: nl_address, groups: groups
         )
       end
       let(:other_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
@@ -190,7 +192,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage,   country_code: country_code,
-          latitude: latitude,   longitude: longitude, order_by: 'user_id'
+          latitude: latitude,   longitude: longitude, groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -200,7 +202,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, order_by: 'user_id'
+          address: address, groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -210,7 +212,7 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, cargo_classes: ['lcl'], order_by: 'user_id'
+          address: address, cargo_classes: ['lcl'], groups: groups
         ).perform
 
         expect(trucking_rates).to match([trucking_trucking_geometry])
@@ -220,36 +222,10 @@ RSpec.describe Trucking::Queries::Availability do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, country_code: country_code,
-          address: address, cargo_classes: ['some_string'], order_by: 'user_id'
+          address: address, cargo_classes: ['some_string'], groups: groups
         ).perform
 
         expect(trucking_rates).to match([])
-      end
-    end
-    context 'with group_ids geometry identifier' do
-      let!(:trucking_trucking_geometry) do
-        FactoryBot.create(:trucking_trucking,
-                          hub: hub,
-                          organization: organization,
-                          location: trucking_location_geometry)
-      end
-      let!(:group_trucking_trucking_geometry) do
-        FactoryBot.create(:trucking_trucking,
-                          hub: hub,
-                          organization: organization,
-                          group: group,
-                          location: trucking_location_geometry)
-      end
-      let(:query_type) { :location }
-
-      it 'finds the correct trucking_rate with avulsed address filters' do
-        trucking_rates = described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage,   country_code: country_code,
-          latitude: latitude,   longitude: longitude, order_by: 'group_id', group_ids: [group.id]
-        ).perform
-
-        expect(trucking_rates).to match_array([trucking_trucking_geometry])
       end
     end
   end

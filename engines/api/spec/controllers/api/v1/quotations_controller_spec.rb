@@ -101,7 +101,6 @@ module Api
         context 'when no client is provided' do
           before do
             params[:quote][:user_id] = nil
-            FactoryBot.create(:groups_group, organization: organization, name: 'default')
             FactoryBot.create(:organizations_scope, target: organization, content: { default_currency: 'usd' })
           end
 

@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module OrganizationManager
-  class HierarchyService
-    def initialize(target: nil, organization: nil)
-      @target = target
-      @organization = organization
+  class GroupsService < OrganizationManager::HierarchyService
+    def initialize(target: nil, organization: nil, exclude_default: false)
+      super(target: target, organization: organization)
+
+      @exclude_default = exclude_default
     end
 
     def fetch
@@ -13,29 +14,27 @@ module OrganizationManager
 
     private
 
-    attr_reader :target, :organization
+    attr_reader :target, :organization, :exclude_default
 
     def target_hierarchy
-      return [organization] unless target
+      return [default_group] unless target
 
       target_groups = groups_for(members: [target])
       groups_groups = groups_for(members: [target_groups])
 
-      [organization, default_group, company_hierachy, groups_groups, target_groups, target]
-    end
-
-    def groups_for(members:)
-      Groups::Membership.where(member: members).map(&:group)
+      [target_groups, groups_groups, company_hierachy, default_group]
     end
 
     def company_hierachy
       membership = ::Companies::Membership.find_by(member: target)
       return [] unless membership
 
-      [groups_for(members: [membership.company]), membership.company]
+      groups_for(members: [membership.company])
     end
 
     def default_group
+      return if exclude_default
+
       @default_group ||= Groups::Group.find_by(name: "default", organization: organization)
     end
   end

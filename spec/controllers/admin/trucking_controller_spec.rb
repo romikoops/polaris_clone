@@ -9,6 +9,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
   let(:json_response) { JSON.parse(response.body) }
 
   before do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
   end
 

@@ -18,6 +18,7 @@ RSpec.describe Admin::ItinerariesController, type: :controller do
   end
 
   before do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
   end
 

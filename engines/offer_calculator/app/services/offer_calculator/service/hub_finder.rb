@@ -39,9 +39,9 @@ module OfferCalculator
       end
 
       def groups
-        OrganizationManager::HierarchyService.new(
+        OrganizationManager::GroupsService.new(
           target: @shipment.user, organization: @shipment.organization
-        ).fetch.select { |hier| hier.is_a?(Groups::Group) }
+        ).fetch
       end
     end
   end

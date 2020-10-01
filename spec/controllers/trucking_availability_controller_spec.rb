@@ -24,7 +24,8 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
   let(:wrong_lng) { 60.50 }
   let(:hub_ids) { origin_hub.id.to_s }
   let(:response_body) { JSON.parse(response.body) }
-  let(:group_id) { nil }
+  let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
+  let(:group_id) { default_group.id }
   let(:data) { response_body['data'] }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|

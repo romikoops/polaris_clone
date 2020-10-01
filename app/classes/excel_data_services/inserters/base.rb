@@ -43,11 +43,13 @@ module ExcelDataServices
       end
 
       def find_group_id(row)
-        return @group_id if @group_id.present?
-
-        return row.group_id if row.group_id.present?
-
-        Groups::Group.find_by(organization: organization, name: row.group_name).id if row.group_name
+        @group_id ||= if row.group_id.present?
+          row.group_id
+        elsif row.group_name.present?
+          Groups::Group.find_by(organization: organization, name: row.group_name).id
+        else
+          default_group.id
+        end
       end
 
       def carrier_from_code(name:)
@@ -96,6 +98,10 @@ module ExcelDataServices
         }
 
         @stats[:has_errors] = true if @stats[:has_errors].blank?
+      end
+
+      def default_group
+        @default_group ||= Groups::Group.find_by(name: 'default', organization: organization)
       end
     end
   end

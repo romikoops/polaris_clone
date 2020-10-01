@@ -62,8 +62,8 @@ module Api
 
     context 'without user' do
       before do
-        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
       end
 
       describe 'GET #index' do
@@ -149,8 +149,8 @@ module Api
       }
 
       before do
-        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location, group: group)
-        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location, group: group)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
       end
 
       describe 'GET #index' do

@@ -626,6 +626,7 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
       imc-core
+      imc-groups
       imc-legacy
       imc-organizations
       imc-pricings

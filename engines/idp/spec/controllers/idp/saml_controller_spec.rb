@@ -8,8 +8,8 @@ RSpec.describe IDP::SamlController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:saml_response) { FactoryBot.build(:idp_saml_response) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:default_group) { Groups::Group.find_by(name: "default", organization: organization) }
   let!(:organizations_domain) { FactoryBot.create(:organizations_domain, domain: "test.host", organization: organization, default: true) }
-  let!(:default_group) { FactoryBot.create(:groups_group, organization: organization, name: "default") }
   let(:forwarded_host) { organizations_domain.domain }
   let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
   let(:user_groups) {
@@ -18,6 +18,7 @@ RSpec.describe IDP::SamlController, type: :controller do
   }
 
   before do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     FactoryBot.create(:organizations_saml_metadatum, organization: organization)
     request.headers["Host"] = "idp.itsmycargo.test"
   end
@@ -87,7 +88,7 @@ RSpec.describe IDP::SamlController, type: :controller do
 
       it "attaches the user to the target group" do
         aggregate_failures do
-          expect(user_groups).to match_array([group])
+          expect(user_groups).to match_array([group, default_group])
         end
       end
     end
@@ -123,7 +124,7 @@ RSpec.describe IDP::SamlController, type: :controller do
 
       it "attaches the user to the target group" do
         aggregate_failures do
-          expect(user_groups).to match_array([group, group_2])
+          expect(user_groups).to match_array([group, group_2, default_group])
         end
       end
     end

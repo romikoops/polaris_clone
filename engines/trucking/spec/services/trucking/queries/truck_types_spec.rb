@@ -24,6 +24,9 @@ RSpec.describe Trucking::Queries::TruckTypes do
     FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
   end
 
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
+  let(:groups) { [default_group] }
+
   before do
     %i[distance location zipcode].each do |query_method|
       FactoryBot.create(:trucking_hub_availability,
@@ -52,7 +55,7 @@ RSpec.describe Trucking::Queries::TruckTypes do
       it 'return empty collection if cargo_class filter does not match any item in db' do
         hubs = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, country_code: country_code,
+          carriage: carriage, country_code: country_code, groups: groups,
           address: address, cargo_classes: ['lcl'], order_by: 'group_id'
         ).perform
 

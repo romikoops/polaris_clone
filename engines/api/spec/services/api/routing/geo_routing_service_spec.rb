@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:origin_location) do
@@ -34,12 +34,12 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   end
 
   before do
-    FactoryBot.create(:felixstowe_shanghai_itinerary, organization_id: organization.id)
-    FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
+    FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
+    FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
-    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Göteborg, Sweden',
@@ -87,7 +87,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
       }
 
       before do
-        FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location, group: group)
+        FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location, group: group)
       end
 
       it 'Renders a json of origins for given a destination lat lng' do

@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ::RmsSync::Trucking do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:hub) { FactoryBot.create(:hamburg_hub, organization: organization) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'TEST', organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "TEST", organization: organization) }
   let(:zip_trucking_locations) do
     [
       {
         parent_id: SecureRandom.uuid,
         locations: [
-          FactoryBot.create(:trucking_location, zipcode: '12344'),
-          FactoryBot.create(:trucking_location, zipcode: '12345'),
-          FactoryBot.create(:trucking_location, zipcode: '12346')
+          FactoryBot.create(:trucking_location, zipcode: "12344"),
+          FactoryBot.create(:trucking_location, zipcode: "12345"),
+          FactoryBot.create(:trucking_location, zipcode: "12346")
         ]
       },
       {
         parent_id: SecureRandom.uuid,
         locations: [
-          FactoryBot.create(:trucking_location, zipcode: '13344'),
-          FactoryBot.create(:trucking_location, zipcode: '14345'),
-          FactoryBot.create(:trucking_location, zipcode: '15346')
+          FactoryBot.create(:trucking_location, zipcode: "13344"),
+          FactoryBot.create(:trucking_location, zipcode: "14345"),
+          FactoryBot.create(:trucking_location, zipcode: "15346")
         ]
       }
     ]
@@ -65,8 +65,7 @@ RSpec.describe ::RmsSync::Trucking do
           organization: organization,
           hub: hub,
           tenant_vehicle: tenant_vehicle,
-          parent_id: tl_obj[:parent_id]
-        )
+          parent_id: tl_obj[:parent_id])
       end
     end
   end
@@ -76,12 +75,11 @@ RSpec.describe ::RmsSync::Trucking do
         FactoryBot.create(:trucking_with_return,
           location: tl,
           organization: organization,
-          cargo_class: 'fcl_20',
-          load_type: 'container',
+          cargo_class: "fcl_20",
+          load_type: "container",
           hub: hub,
           tenant_vehicle: tenant_vehicle,
-          parent_id: tl_obj[:parent_id]
-        )
+          parent_id: tl_obj[:parent_id])
       end
     end
   end
@@ -92,13 +90,22 @@ RSpec.describe ::RmsSync::Trucking do
     ]
   end
 
-  describe '.perform' do
-    it 'creates the Trucking' do
-      RmsSync::Trucking.new(organization_id: organization.id).perform
-      books = RmsData::Book.where(organization_id: organization.id, sheet_type: :trucking, target: hub)
+  let(:default_group) { Groups::Group.find_by(name: "default", organization: organization) }
+
+  describe ".perform" do
+    before do
+      RmsSync::Trucking.new(organization_id: organization.id, group_id: default_group.id).perform
+    end
+
+    let(:books) do
+      RmsData::Book.where(organization_id: organization.id,
+                          sheet_type: :trucking,
+                          target: hub)
+    end
+
+    it "creates the Trucking", :aggregate_failures do
       expect(books.length).to eq(2)
       expect(RmsData::Sheet.where(book_id: books.ids).length).to eq(7)
     end
-
   end
 end

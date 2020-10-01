@@ -27,7 +27,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
   before do
     ::Organizations.current_id = organization.id
     append_token_header
-
+    FactoryBot.create(:groups_group, :default, organization: organization)
     FactoryBot.create(:organizations_scope, content: {}, target: organization)
     %w[ocean air rail truck trucking local_charge].map do |mot|
       [
@@ -166,7 +166,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
         aggregate_failures do
           expect(json_response.dig('data', 'service_levels').count).to eq(3)
           expect(json_response.dig('data', 'pricings').count).to eq(3)
-          expect(json_response.dig('data', 'groups').count).to eq(1)
+          expect(json_response.dig('data', 'groups').count).to eq(2)
         end
       end
     end

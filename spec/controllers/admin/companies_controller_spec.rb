@@ -8,6 +8,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
 
   before do
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
   end
 

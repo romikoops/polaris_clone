@@ -22,6 +22,14 @@ FactoryBot.define do
         }
       }
     end
+    group_id { default_group.id }
+
+    transient do
+      default_group do
+        Groups::Group.find_by(organization: organization, name: 'default') ||
+          FactoryBot.create(:groups_group, organization: organization, name: 'default')
+      end
+    end
 
     trait :range do
       fees do

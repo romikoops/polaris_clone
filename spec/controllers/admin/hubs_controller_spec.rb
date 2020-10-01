@@ -9,6 +9,7 @@ RSpec.describe Admin::HubsController, type: :controller do
   let!(:felixstowe) { create(:felixstowe_hub, organization: organization) }
   let!(:shanghai) { create(:shanghai_hub, organization: organization) }
   before(:each) do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     expect_any_instance_of(described_class).to receive(:doorkeeper_authorize!).and_return(true)
     expect_any_instance_of(described_class).to receive(:current_organization).at_least(:once).and_return(organization)
     expect_any_instance_of(described_class).to receive(:current_user).at_least(:once).and_return(user)

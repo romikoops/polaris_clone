@@ -6,6 +6,7 @@ require 'roo'
 RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let!(:hub) { create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
   let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: {}) }
   let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
@@ -88,8 +89,8 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
       let(:local_charge_data_with_ranges) do
         local_charge_with_ranges = ::Legacy::LocalCharge.first
 
-        { 'GROUP_ID' => nil,
-          'GROUP_NAME' => nil,
+        { 'GROUP_ID' => default_group.id,
+          'GROUP_NAME' => default_group.name,
           'HUB' => 'Gothenburg',
           'COUNTRY' => 'Sweden',
           'EFFECTIVE_DATE' => local_charge_with_ranges.effective_date.strftime('%F'),

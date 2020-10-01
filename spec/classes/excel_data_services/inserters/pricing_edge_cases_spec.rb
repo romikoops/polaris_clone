@@ -18,61 +18,90 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
      errors: []}
   end
 
-  describe ".insert with two identical names" do
-    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_pricing) }
+  before { FactoryBot.create(:groups_group, :default, organization: organization) }
 
-    it "attaches the pricing to the correct itinerary" do
-      aggregate_failures do
-        expect(stats).to eq(expected_stats)
-        expect(itinerary.rates.count).to eq(1)
-        expect(faux_itinerary.rates).to be_empty
-      end
-    end
-  end
+  describe ".insert" do
+    context "with two identical names" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_pricing) }
 
-  describe ".insert with two identical names, different  locode" do
-    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_locode_pricing) }
-
-    before do
-      FactoryBot.create(:gothenburg_nexus, locode: nil).tap do |tapped_nexus|
-        FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil)
+      it "attaches the pricing to the correct itinerary" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+          expect(itinerary.rates.count).to eq(1)
+          expect(faux_itinerary.rates).to be_empty
+        end
       end
     end
 
-    it "attaches the pricing to the correct itinerary" do
-      aggregate_failures do
-        expect(stats).to eq(expected_stats)
-        expect(itinerary.rates.count).to eq(1)
-        expect(faux_itinerary.rates).to be_empty
+    context "with two identical names, different  locode" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_locode_pricing) }
+
+      before do
+        FactoryBot.create(:gothenburg_nexus, locode: nil).tap do |tapped_nexus|
+          FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil)
+        end
+      end
+
+      it "attaches the pricing to the correct itinerary" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+          expect(itinerary.rates.count).to eq(1)
+          expect(faux_itinerary.rates).to be_empty
+        end
       end
     end
-  end
 
-  describe ".insert with two identical locodes, different  names" do
-    let(:input_data) { FactoryBot.build(:excel_data_restructured_same_locode_pricing) }
-    let(:faux_origin_country) { FactoryBot.create(:country_se)}
-    let(:faux_destination_country) { FactoryBot.create(:country_cn)}
-    let(:faux_origin_name) { "Gothenburg - Key 4" }
-    let(:faux_destination_name) { "Shanghai" }
-    let(:faux_origin_locode) { "SEGOT" }
-    let(:faux_destination_locode) { "CNSHA" }
+    context "with two identical locodes, different  names" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_same_locode_pricing) }
+      let(:faux_origin_country) { FactoryBot.create(:country_se) }
+      let(:faux_destination_country) { FactoryBot.create(:country_cn) }
+      let(:faux_origin_name) { "Gothenburg - Key 4" }
+      let(:faux_destination_name) { "Shanghai" }
+      let(:faux_origin_locode) { "SEGOT" }
+      let(:faux_destination_locode) { "CNSHA" }
 
-    it "attaches the pricing to the correct itinerary" do
-      aggregate_failures do
-        expect(stats).to eq(expected_stats)
-        expect(faux_itinerary.rates.count).to eq(1)
-        expect(itinerary.rates).to be_empty
+      it "attaches the pricing to the correct itinerary" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+          expect(faux_itinerary.rates.count).to eq(1)
+          expect(itinerary.rates).to be_empty
+        end
       end
     end
-  end
 
-  describe ".insert notes" do
-    let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_notes) }
+    context "with notes" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_notes) }
 
-    it "creates notes attached to the pricings" do
-      aggregate_failures do
-        expect(stats).to eq(expected_stats)
-        expect(Legacy::Note.where.not(pricings_pricing_id: nil).count).to eq(2)
+      it "creates notes attached to the pricings" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+          expect(Legacy::Note.where.not(pricings_pricing_id: nil).count).to eq(2)
+        end
+      end
+    end
+
+    context "with group name" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_group_name) }
+
+      before { FactoryBot.create(:groups_group, name: "Test", organization: organization) }
+
+      it "creates notes attached to the pricings" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+        end
+      end
+    end
+
+    context "with group id" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_group_name) }
+      let(:group) { FactoryBot.create(:groups_group, name: "Test", organization: organization) }
+
+      before { input_data.each { |data| data.first[:group_id] = group.id } }
+
+      it "creates notes attached to the pricings" do
+        aggregate_failures do
+          expect(stats).to eq(expected_stats)
+        end
       end
     end
   end

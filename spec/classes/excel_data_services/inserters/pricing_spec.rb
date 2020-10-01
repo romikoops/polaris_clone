@@ -43,6 +43,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
   end
   let(:options) { { organization: organization, data: input_data, options: {} } }
   before  do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     ::Organizations.current_id = organization.id
     ::Organizations::Scope.find_or_create_by(target: organization,
                                              content: { 'base_pricing' => true })

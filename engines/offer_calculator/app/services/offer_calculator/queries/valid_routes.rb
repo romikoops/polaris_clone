@@ -13,10 +13,11 @@ module OfferCalculator
         @cargo_classes = @shipment.cargo_classes
         @user = Organizations::User.find_by(id: @shipment.user_id)
         @date_range = args[:date_range] || (Time.zone.today..1.month.from_now)
-        @user_groups = OrganizationManager::HierarchyService.new(
+        @user_groups = OrganizationManager::GroupsService.new(
           organization: @shipment.organization,
-          target: @user
-        ).fetch.select { |target| target.is_a?(Groups::Group) }
+          target: @user,
+          exclude_default: @scope[:dedicated_pricings_only]
+        ).fetch
       end
 
       def perform
@@ -65,28 +66,22 @@ module OfferCalculator
           JOIN stops AS destination_stops
             ON destination_stops.hub_id = destination_hubs.id
             AND destination_stops.itinerary_id = itineraries.id
-          #{pricings_section}
+          JOIN pricings_pricings
+            ON itineraries.id = pricings_pricings.itinerary_id
           JOIN tenant_vehicles AS tenant_vehicles
             ON tenant_vehicles.id = pricings_pricings.tenant_vehicle_id
+          JOIN groups_groups
+            ON groups_groups.id = pricings_pricings.group_id
           #{origin_local_charges}
           #{destination_local_charges}
           #{trip_restriction}
           WHERE itineraries.organization_id  = :organization_id
+          AND pricings_pricings.group_id IN (:group_ids)
           AND origin_stops.index < destination_stops.index
+          AND pricings_pricings.cargo_class IN (:cargo_classes)
+          AND pricings_pricings.internal = false
+          AND pricings_pricings.validity && daterange(:start::date, :end::date)
         SQL
-      end
-
-      def pricings_section
-          "JOIN pricings_pricings
-            ON itineraries.id = pricings_pricings.itinerary_id
-            AND pricings_pricings.cargo_class IN (:cargo_classes)
-            AND pricings_pricings.internal = false
-            AND pricings_pricings.validity && daterange(:start::date, :end::date)
-            #{group_restriction}"
-      end
-
-      def group_restriction
-        return 'AND pricings_pricings.group_id IN (:group_ids)' if @scope[:dedicated_pricings_only]
       end
 
       def trip_restriction

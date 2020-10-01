@@ -7,7 +7,7 @@ module Wheelhouse
       @organization = organization
       @origin_nexus_ids = nexus_ids(target: 'origin', location: origin)
       @destination_nexus_ids = nexus_ids(target: 'destination', location: destination)
-      @group_ids = user_groups
+      @group_ids = user_groups.map(&:id)
       @dedicated_pricings_only = dedicated_pricings_only
     end
 
@@ -38,9 +38,12 @@ module Wheelhouse
         #{destination_condition}
         JOIN itineraries
           ON itineraries.organization_id = :organization_id
+        JOIN groups_groups
+          ON groups_groups.id = pricings_pricings.group_id
         #{itinerary_condition}
         WHERE pricings_pricings.itinerary_id = itineraries.id
         AND pricings_pricings.load_type = 'container'
+        AND pricings_pricings.group_id IN (:group_ids)
         #{group_condition}
       SQL
     end
@@ -48,7 +51,7 @@ module Wheelhouse
     def group_condition
       return if dedicated_pricings_only.blank?
 
-      'AND pricings_pricings.group_id IN (:group_ids)'
+      "AND groups_groups.name != 'default'"
     end
 
     def origin_condition
@@ -93,7 +96,8 @@ module Wheelhouse
         address: address(latitude: location[:latitude], longitude: location[:longitude]),
         carriage: target == 'origin' ? 'pre' : 'on',
         order_by: 'group_id',
-        load_type: 'container'
+        load_type: 'container',
+        groups: user_groups
       ).perform.select(:nexus_id).distinct.pluck(:nexus_id)
     end
 
@@ -112,13 +116,10 @@ module Wheelhouse
     end
 
     def user_groups
-      return [] if user.blank?
-
-      company_ids = Companies::Membership.where(member: user).select(:company_id)
-      query = Groups::Group.joins(:memberships)
-      query.where(groups_memberships: {member_type: 'Users::User', member_id: user.id}).or(
-        query.where(groups_memberships: {member_type: 'Companies::Companies', member_id: company_ids})
-      ).ids
+      @user_groups ||= OrganizationManager::GroupsService.new(
+        organization: organization,
+        target: user
+      ).fetch
     end
   end
 end

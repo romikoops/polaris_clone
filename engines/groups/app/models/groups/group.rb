@@ -8,6 +8,8 @@ module Groups
     belongs_to :organization, class_name: "Organizations::Organization"
     has_many :memberships, dependent: :destroy
 
+    validates :name, uniqueness: {scope: %i[organization_id]}
+
     pg_search_scope :search, against: %i[name], using: {
       tsearch: {prefix: true}
     }

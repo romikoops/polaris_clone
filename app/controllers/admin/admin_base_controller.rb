@@ -18,7 +18,7 @@ class Admin::AdminBaseController < ApplicationController
     ## Async Uploader
     UploaderJob.perform_later(document_id: document.id, options: {
       user_id: options[:user]&.id,
-      group_id: options[:group_id],
+      group_id: options[:group_id] || default_group.id,
       applicable: options[:applicable]
     })
     response_handler({has_errors: false, async: true})

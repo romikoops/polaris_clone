@@ -5,7 +5,7 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
-    let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
+    let!(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
     let(:organizations_user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
     let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
@@ -69,8 +69,8 @@ module Api
     before do
       FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: pre_carriage_type_availability)
       FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: on_carriage_type_availability)
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
       Geocoder::Lookup::Test.add_stub([gothenburg_address.latitude, gothenburg_address.longitude], [
                                         'address_components' => [{ 'types' => ['premise'] }],
                                         'address' => gothenburg_address.geocoded_address,
@@ -241,8 +241,8 @@ module Api
         before do
           FactoryBot.create(:trucking_hub_availability, hub: origin_airport, type_availability: pre_carriage_type_availability)
           FactoryBot.create(:trucking_hub_availability, hub: destination_airport, type_availability: on_carriage_type_availability)
-          FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_airport, location: origin_trucking_location)
-          FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_airport, carriage: 'on', location: destination_trucking_location)
+          FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_airport, location: origin_trucking_location)
+          FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_airport, carriage: 'on', location: destination_trucking_location)
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params

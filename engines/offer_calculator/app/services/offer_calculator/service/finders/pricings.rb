@@ -21,7 +21,7 @@ module OfferCalculator
             target_group = hierarchy.find { |group|
               pricings.where(group_id: group.id).pluck(:cargo_class).to_set == cargo_classes.to_set
             }
-            next if scope[:dedicated_pricings_only] && target_group.nil?
+            next if target_group.nil?
 
             pricings.where(group_id: target_group&.id).ids
           end
@@ -50,6 +50,10 @@ module OfferCalculator
             itinerary: itineraries,
             organization_id: shipment.organization_id
           ).for_dates(start_date, end_date)
+        end
+
+        def exclude_default
+          scope[:dedicated_pricings_only]
         end
       end
     end

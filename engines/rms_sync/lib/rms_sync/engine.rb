@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'activerecord-import'
 require 'legacy'
+require 'groups'
 require 'pricings'
 require 'rms_data'
 require 'routing'

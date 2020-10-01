@@ -8,7 +8,7 @@ module Api
 
     before do
       request.headers['Authorization'] = token_header
-      FactoryBot.create(:fcl_20_pricing, organization_id: organization.id, itinerary: itinerary)
+      FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fcl_40_pricing, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fcl_40_hq_pricing, organization: organization, itinerary: fcl_40_hq_itinerary)
       FactoryBot.create(:fcl_20_trucking, organization: organization, hub: shanghai, carriage: 'pre', location: origin_trucking_location)
@@ -28,8 +28,8 @@ module Api
     let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', organization: organization) }
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:itinerary) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization_id: organization.id) }
-    let!(:fcl_40_hq_itinerary) { FactoryBot.create(:shanghai_hamburg_itinerary, organization_id: organization.id) }
+    let!(:itinerary) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
+    let!(:fcl_40_hq_itinerary) { FactoryBot.create(:shanghai_hamburg_itinerary, organization: organization) }
     let(:gothenburg) { itinerary.hubs.find_by(name: 'Gothenburg') }
     let(:shanghai) { itinerary.hubs.find_by(name: 'Shanghai') }
     let(:hamburg) { fcl_40_hq_itinerary.hubs.find_by(name: 'Hamburg') }

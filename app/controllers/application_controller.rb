@@ -112,4 +112,8 @@ class ApplicationController < Api::ApiController
       context: {scope: current_scope}
     )
   end
+
+  def default_group
+    @default_group ||= Groups::Group.find_by(name: 'default', organization: current_organization)
+  end
 end

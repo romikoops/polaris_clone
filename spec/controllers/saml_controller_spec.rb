@@ -6,8 +6,8 @@ RSpec.describe SamlController, type: :controller do
   let(:organization) { create(:organizations_organization, slug: 'test') }
   let(:saml_response) { FactoryBot.build(:idp_saml_response) }
   let(:user) { create(:organizations_user, organization: organization) }
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let!(:organizations_domain) { create(:organizations_domain, domain: 'test.host', organization: organization, default: true) }
-  let!(:default_group) { create(:groups_group, organization: organization, name: 'default') }
   let(:forwarded_host) { organizations_domain.domain }
   let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
   let(:user_groups) {
@@ -100,7 +100,7 @@ RSpec.describe SamlController, type: :controller do
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(user_groups).to match_array([group])
+          expect(user_groups).to match_array([group, default_group])
         end
       end
     end
@@ -136,7 +136,7 @@ RSpec.describe SamlController, type: :controller do
 
       it 'attaches the user to the target group' do
         aggregate_failures do
-          expect(user_groups).to match_array([group, group_2])
+          expect(user_groups).to match_array([group, group_2, default_group])
         end
       end
     end

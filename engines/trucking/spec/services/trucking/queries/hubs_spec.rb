@@ -18,6 +18,9 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
   let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, distance: distance) }
 
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
+  let(:groups) { [default_group] }
+
   let(:zipcode)      { '15211' }
   let(:latitude)     { '57.000000' }
   let(:longitude)    { '11.100000' }
@@ -33,7 +36,7 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:hubs_service) do
     described_class.new(
       organization_id: organization.id, load_type: load_type,
-      carriage: carriage, country_code: country_code,
+      carriage: carriage, country_code: country_code, groups: groups,
       address: address, cargo_classes: ['lcl'], order_by: 'group_id'
     )
   end

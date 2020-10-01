@@ -255,6 +255,7 @@ digraph G {
     "rms_sync" [shape=ellipse];
     "rms_sync" -> "core" [color=grey];
     "rms_sync" -> "legacy" [color=grey];
+    "rms_sync" -> "groups" [color=grey];
     "rms_sync" -> "pricings" [color=grey];
     "rms_sync" -> "rms_data" [color=grey];
     "rms_sync" -> "routing" [color=grey];

@@ -93,7 +93,7 @@ RSpec.describe OfferCalculator::Queries:: ValidRoutes do
 
       context 'with dedicated_pricings_only' do
         let(:scope) do
-          { base_pricing: true, dedicated_pricings_only: true }.with_indifferent_access
+          { dedicated_pricings_only: true }.with_indifferent_access
         end
         let(:group) do
           FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|

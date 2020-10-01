@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', organization: organization) }
@@ -66,8 +66,8 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
 
   context 'when not limited to groups' do
     before do
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
     end
 
     describe '.counterpart_availabilities (origin)' do
@@ -137,8 +137,8 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
 
   context 'when limited by groups' do
     before do
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location, group: group)
-      FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location, group: group)
+      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
     end
 
     describe '.counterpart_availabilities (dest)' do

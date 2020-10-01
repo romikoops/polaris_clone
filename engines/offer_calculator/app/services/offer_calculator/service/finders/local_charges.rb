@@ -131,6 +131,10 @@ module OfferCalculator
         def import_mandatory_charges
           ::Legacy::MandatoryCharge.where(import_charges: true)
         end
+
+        def exclude_default
+          false
+        end
       end
     end
   end

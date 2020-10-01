@@ -2,7 +2,11 @@ FactoryBot.define do
   factory :groups_group, class: "Groups::Group" do
     association :organization, factory: :organizations_organization
 
-    name { "MyString" }
+    sequence(:name) { |n| "Group#{n}" }
+
+    trait :default do
+      name { "default" }
+    end
   end
 end
 

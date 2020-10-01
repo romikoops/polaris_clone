@@ -112,7 +112,7 @@ module ExcelDataServices
           expiration_date: Date.parse(params[:expiration_date].to_s).end_of_day.change(usec: 0),
           mode_of_transport: params[:mot],
           tenant_vehicle_id: tenant_vehicle_id,
-          group_id: @group_id.presence || params[:group_id],
+          group_id: @group_id.presence || params[:group_id] || default_group.id,
           metadata: metadata(row: params)
         )
       end

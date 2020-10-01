@@ -20,6 +20,7 @@ module Api
     let(:perform_request) { subject }
 
     before do
+      FactoryBot.create(:groups_group, :default, organization: organization)
       ::Organizations.current_id = organization.id
       stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
         .to_return(status: 200, body: "", headers: {})
@@ -175,10 +176,6 @@ module Api
 
       context 'when creating clients without group_id params' do
         let(:user_info) { FactoryBot.attributes_for(:organizations_user, organization_id: organization.id) }
-
-        before do
-          FactoryBot.create(:groups_group, organization: organization, name: 'default')
-        end
 
         it 'assigns the default group of the organization to the new user membership' do
           perform_request

@@ -71,9 +71,9 @@ module Wheelhouse
     end
 
     def user_groups
-      companies = Companies::Membership.where(member: user).map(&:company)
-      Groups::Membership.where(member: user)
-        .or(Groups::Membership.where(member: companies)).select(:group_id)
+      @user_groups ||= OrganizationManager::GroupsService.new(
+        target: user, organization: organization
+      ).fetch
     end
   end
 end

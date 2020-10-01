@@ -23,7 +23,7 @@ class Admin::TruckingController < Admin::AdminBaseController
         page: params[:page] || 1,
         filters: filters,
         per_page: params[:page_size],
-        group_id: params[:group] == 'all' ? nil : params[:group]
+        group_id: params[:group] == 'all' ? default_group.id : params[:group]
       }
     )
 

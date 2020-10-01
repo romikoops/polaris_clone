@@ -14,11 +14,10 @@ module OfferCalculator
           @quotation = quotation
           @schedules = schedules
           @shipment = shipment
-          @scope = ::OrganizationManager::ScopeService.new(target: @user,
-                                                           organization: @organization).fetch
-          @hierarchy = ::OrganizationManager::HierarchyService.new(target: @user).fetch.select { |target|
-            target.is_a?(Groups::Group)
-          }
+          @scope = ::OrganizationManager::ScopeService.new(target: @user, organization: @organization).fetch
+          @hierarchy = OrganizationManager::GroupsService.new(
+            target: @user, organization: @organization, exclude_default: exclude_default
+          ).fetch
           raise OfferCalculator::Errors::NoValidSchedules if schedules.empty?
         end
 

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::PricingsController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization, slug: 'demo') }
+  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:user) { FactoryBot.create(:users_user) }
   let(:itinerary) do
     FactoryBot.create(:itinerary, organization_id: organization.id)
@@ -21,8 +22,8 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     let!(:pricings) do
       [
-        FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id),
-        FactoryBot.create(:pricings_pricing, organization_id: organization.id,
+        FactoryBot.create(:pricings_pricing, organization: organization, itinerary_id: itinerary.id),
+        FactoryBot.create(:pricings_pricing, organization: organization,
                                              itinerary_id: itinerary.id,
                                              effective_date: DateTime.new(2019, 1, 1),
                                              expiration_date: DateTime.new(2019, 1, 31))
@@ -33,7 +34,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
         { 'id' => pricings.first.id,
           'effective_date' => pricings.first.effective_date,
           'expiration_date' => pricings.first.expiration_date,
-          'group_id' => nil,
+          'group_id' => default_group.id,
           'internal' => false,
           'itinerary_id' => itinerary.id,
           'organization_id' => organization.id,

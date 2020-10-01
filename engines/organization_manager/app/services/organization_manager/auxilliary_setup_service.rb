@@ -9,6 +9,7 @@ module OrganizationManager
     def perform
       max_dimensions
       cargo_item_type
+      default_group
     end
 
     private
@@ -41,6 +42,10 @@ module OrganizationManager
 
     def pallet_type
       @pallet_type ||= Legacy::CargoItemType.find_by(description: "Pallet")
+    end
+
+    def default_group
+      Groups::Group.create(name: "default", organization: organization)
     end
   end
 end

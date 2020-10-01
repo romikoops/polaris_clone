@@ -33,9 +33,9 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target } }
 
   before do
-    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
-    FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'group', group_id: group.id)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'group', group_id: group.id)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',

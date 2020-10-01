@@ -7,6 +7,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
   let(:user) { FactoryBot.create(:users_user) }
 
   before do
+    FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
   end
 

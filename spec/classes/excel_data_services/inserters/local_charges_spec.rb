@@ -24,7 +24,7 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     end
     let!(:exising_overlapping_local_charge) do
       create(
-        :local_charge,
+        :legacy_local_charge,
         mode_of_transport: 'ocean',
         load_type: 'lcl',
         hub: hubs.first,

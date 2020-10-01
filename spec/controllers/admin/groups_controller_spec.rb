@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) { create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
+  let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
     create(:groups_group, organization: organization, name: "Test").tap do |grp|
       FactoryBot.create(:groups_membership, group: grp, member: user)
@@ -17,7 +18,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
   end
 
   describe "GET #index" do
-    let!(:groups) { create_list(:groups_group, 5, organization: organization) }
+    let!(:groups) { create_list(:groups_group, 5, organization: organization) + [default_group] }
 
     context "without sorting" do
       it "returns http success" do
@@ -182,7 +183,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
       delete :destroy, params: edit_params
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        expect(Groups::Group.find_by(edit_params[:id])).to be_falsy
+        expect(Groups::Group.find_by(id: edit_params["id"])).to be_falsy
       end
     end
   end

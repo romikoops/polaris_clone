@@ -117,13 +117,10 @@ module Api
       end
 
       def user_groups
-        return default_group if user.blank?
-
-        company_ids = Companies::Membership.where(member: user).select(:company_id)
-        query = Groups::Group.joins(:memberships)
-        query.where(groups_memberships: {member_type: 'Users::User', member_id: user.id}).or(
-          query.where(groups_memberships: {member_type: 'Companies::Companies', member_id: company_ids})
-        )
+        @user_groups ||= OrganizationManager::GroupsService.new(
+          organization: organization,
+          target: user
+        ).fetch
       end
 
       def default_group

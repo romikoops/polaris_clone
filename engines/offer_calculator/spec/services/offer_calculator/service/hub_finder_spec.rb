@@ -44,7 +44,8 @@ RSpec.describe OfferCalculator::Service::HubFinder do
       FactoryBot.create(:groups_membership, member: user, group: tapped_group)
     end
   end
-  let(:group_id) { nil }
+  let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
+  let(:group_id) { default_group.id }
 
   before do
     ::Organizations.current_id = organization.id

@@ -6,12 +6,17 @@ FactoryBot.define do
     transient do
       fee_attrs { nil }
       amount { 250 }
+      default_group do
+        Groups::Group.find_by(organization: organization, name: 'default') ||
+          FactoryBot.create(:groups_group, organization: organization, name: 'default')
+      end
     end
 
     effective_date { Time.zone.today }
     expiration_date { 6.months.from_now }
     cargo_class { 'lcl' }
     load_type { 'cargo_item' }
+    group_id { default_group.id }
 
     association :organization, factory: :organizations_organization
     association :itinerary, :default, factory: :legacy_itinerary
