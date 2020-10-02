@@ -13,6 +13,7 @@ RSpec.describe QuotationDecorator do
 
   before do
     FactoryBot.create(:cargo_cargo, quotation_id: quotation.id)
+    FactoryBot.create(:cargo_unit, :lcl, cargo: cargo)
   end
 
   describe ".legacy_json" do
@@ -182,9 +183,11 @@ RSpec.describe QuotationDecorator do
   end
 
   describe "total_weight" do
+    let(:cargo_weight) { "500.00" }
+
     context "when lcl" do
       it "returns the total weight of the cargo items" do
-        expect(decorated_quotation.total_weight).to eq(cargo.total_weight.format(".1%<value>f"))
+        expect(decorated_quotation.total_weight).to eq(cargo_weight)
       end
     end
 
@@ -192,7 +195,7 @@ RSpec.describe QuotationDecorator do
       let(:aggregated) { true }
 
       it "returns the total weight of the aggregated cargo" do
-        expect(decorated_quotation.total_weight).to eq(cargo.total_weight.format(".1%<value>f"))
+        expect(decorated_quotation.total_weight).to eq(cargo_weight)
       end
     end
 
@@ -200,15 +203,17 @@ RSpec.describe QuotationDecorator do
       let(:load_type) { "container" }
 
       it "returns the total weight of the containers" do
-        expect(decorated_quotation.total_weight).to eq(cargo.total_weight.format(".1%<value>f"))
+        expect(decorated_quotation.total_weight).to eq(cargo_weight)
       end
     end
   end
 
   describe "total_volume" do
+    let(:cargo_volume) { "1.34" }
+
     context "when lcl" do
       it "returns the total weight of the cargo items" do
-        expect(decorated_quotation.total_volume).to eq(cargo.total_volume.format(".1%<value>f"))
+        expect(decorated_quotation.total_volume).to eq(cargo_volume)
       end
     end
 
@@ -216,7 +221,7 @@ RSpec.describe QuotationDecorator do
       let(:aggregated) { true }
 
       it "returns the total weight of the aggregated cargo" do
-        expect(decorated_quotation.total_volume).to eq(cargo.total_volume.format(".1%<value>f"))
+        expect(decorated_quotation.total_volume).to eq(cargo_volume)
       end
     end
   end

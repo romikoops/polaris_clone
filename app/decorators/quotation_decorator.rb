@@ -75,11 +75,11 @@ class QuotationDecorator < Draper::Decorator
   end
 
   def total_weight
-    cargo.total_weight.format(".1%<value>f")
+    format_dimension(dimension: cargo.total_weight)
   end
 
   def total_volume
-    cargo.total_volume.format(".1%<value>f")
+    format_dimension(dimension: cargo.total_volume)
   end
 
   def origin_city
@@ -127,5 +127,11 @@ class QuotationDecorator < Draper::Decorator
       profile = Profiles::Profile.find_or_initialize_by(user_id: quotation.user_id)
       Profiles::ProfileDecorator.new(profile)
     end
+  end
+
+  private
+
+  def format_dimension(dimension:)
+    dimension.format("%.2<value>f").strip
   end
 end

@@ -29,6 +29,8 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }
   let(:delivery_address) { FactoryBot.create(:hamburg_address) }
   let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotations_quotation.id) }
+  let(:cargo_total_weight) { "500.00" }
+  let(:cargo_total_volume) { "1.34" }
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
@@ -40,7 +42,7 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:cargo_unit, organization: organization, cargo: cargo, weight_value: 100)
+    FactoryBot.create(:cargo_unit, :lcl, cargo: cargo)
     FactoryBot.create(:organizations_theme, organization: organization)
   end
 
@@ -148,8 +150,8 @@ RSpec.describe QuoteMailer, type: :mailer do
         "[#{profile.external_id}]",
         quotations_quotation.origin_nexus.locode.to_s,
         quotations_quotation.destination_nexus.locode.to_s,
-        cargo.total_weight.format(".1%<value>f"),
-        cargo.total_volume.format(".1%<value>f")
+        cargo_total_weight,
+        cargo_total_volume
       ].join('/')
     }
 
@@ -211,8 +213,8 @@ RSpec.describe QuoteMailer, type: :mailer do
           "[#{profile.external_id}]",
           "#{pickup_address.country.code}-#{pickup_address.zip_code}",
           "#{delivery_address.country.code}-#{delivery_address.zip_code}",
-          cargo.total_weight.format(".1%<value>f"),
-          cargo.total_volume.format(".1%<value>f")
+          cargo_total_weight,
+          cargo_total_volume
         ].join('/')
       }
 
@@ -235,8 +237,8 @@ RSpec.describe QuoteMailer, type: :mailer do
           original_shipment.imc_reference.to_s,
           "[#{profile.external_id}]",
           "#{umlaut_address.city} - #{delivery_address.city}",
-          cargo.total_weight.format(".1%<value>f"),
-          cargo.total_volume.format(".1%<value>f")
+          cargo_total_weight,
+          cargo_total_volume
         ].join('/')
       end
 
