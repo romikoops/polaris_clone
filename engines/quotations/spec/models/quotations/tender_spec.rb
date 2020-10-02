@@ -16,6 +16,22 @@ module Quotations
       it { is_expected.to be_valid }
     end
 
+    context 'with multiple tenders' do
+      before do
+        Timecop.freeze(Time.zone.parse('01/10/2020')) do
+          FactoryBot.create_list(:quotations_tender, 2)
+        end
+      end
+
+      let(:quotations_tender) { Quotations::Tender.order(:created_at) }
+
+      it 'matches reference numbers to dates', :aggregate_failures do
+        expect(quotations_tender.pluck(:imc_reference).first[0..3]).to eq('0110')
+        expect(quotations_tender.pluck(:imc_reference).last[0..3]).to eq('0110')
+        expect(quotations_tender.pluck(:imc_reference).first[5..11]).to eq('2000001')
+        expect(quotations_tender.pluck(:imc_reference).last[5..11]).to eq('2000002')
+      end
+    end
   end
 end
 

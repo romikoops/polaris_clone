@@ -30,7 +30,8 @@ module Quotations
 
     def generate_imc_reference
       first_part = imc_reference_timestamp
-      last_tender_in_this_hour = Quotations::Tender.where('imc_reference LIKE ?', first_part + '%').last
+      last_tender_in_this_hour = Quotations::Tender.where('imc_reference LIKE ?', first_part + '%')
+        .order(:created_at).last
       if last_tender_in_this_hour
         last_serial_number = last_tender_in_this_hour.imc_reference[first_part.length..-1].to_i
         new_serial_number = last_serial_number + 1
