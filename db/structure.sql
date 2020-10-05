@@ -17,6 +17,20 @@ CREATE SCHEMA apg_plan_mgmt;
 
 
 --
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
+
+
+--
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -2577,6 +2591,42 @@ CREATE SEQUENCE public.mot_scopes_20200504_id_seq
 --
 
 ALTER SEQUENCE public.mot_scopes_20200504_id_seq OWNED BY public.mot_scopes_20200504.id;
+
+
+--
+-- Name: new_trucking_truckings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.new_trucking_truckings (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    hub_id integer,
+    location_id uuid,
+    rate_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    load_meterage jsonb,
+    cbm_ratio integer,
+    modifier character varying,
+    tenant_id integer,
+    rates jsonb,
+    fees jsonb,
+    identifier_modifier character varying,
+    load_type character varying,
+    cargo_class character varying,
+    carriage character varying,
+    courier_id uuid,
+    truck_type character varying,
+    legacy_user_id integer,
+    parent_id uuid,
+    group_id uuid,
+    sandbox_id uuid,
+    metadata jsonb DEFAULT '{}'::jsonb,
+    organization_id uuid,
+    user_id uuid,
+    tenant_vehicle_id integer,
+    deleted_at timestamp without time zone,
+    validity daterange
+);
 
 
 --
@@ -7134,6 +7184,22 @@ ALTER TABLE ONLY public.trucking_type_availabilities
 
 
 --
+-- Name: new_trucking_truckings trucking_upsert; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.new_trucking_truckings
+    ADD CONSTRAINT trucking_upsert EXCLUDE USING gist (hub_id WITH =, carriage WITH =, load_type WITH =, cargo_class WITH =, location_id WITH =, organization_id WITH =, truck_type WITH =, group_id WITH =, tenant_vehicle_id WITH =, validity WITH &&) WHERE ((deleted_at IS NULL));
+
+
+--
+-- Name: new_trucking_truckings truckings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.new_trucking_truckings
+    ADD CONSTRAINT truckings_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_addresses user_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10320,6 +10386,76 @@ CREATE INDEX index_trucking_type_availabilities_on_truck_type ON public.trucking
 
 
 --
+-- Name: index_truckings_on_cargo_class; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_cargo_class ON public.new_trucking_truckings USING btree (cargo_class);
+
+
+--
+-- Name: index_truckings_on_carriage; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_carriage ON public.new_trucking_truckings USING btree (carriage);
+
+
+--
+-- Name: index_truckings_on_deleted_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_deleted_at ON public.new_trucking_truckings USING btree (deleted_at);
+
+
+--
+-- Name: index_truckings_on_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_group_id ON public.new_trucking_truckings USING btree (group_id);
+
+
+--
+-- Name: index_truckings_on_hub_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_hub_id ON public.new_trucking_truckings USING btree (hub_id);
+
+
+--
+-- Name: index_truckings_on_load_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_load_type ON public.new_trucking_truckings USING btree (load_type);
+
+
+--
+-- Name: index_truckings_on_location_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_location_id ON public.new_trucking_truckings USING btree (location_id);
+
+
+--
+-- Name: index_truckings_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_organization_id ON public.new_trucking_truckings USING btree (organization_id);
+
+
+--
+-- Name: index_truckings_on_tenant_vehicle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_tenant_vehicle_id ON public.new_trucking_truckings USING btree (tenant_vehicle_id);
+
+
+--
+-- Name: index_truckings_on_validity; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_truckings_on_validity ON public.new_trucking_truckings USING gist (validity);
+
+
+--
 -- Name: index_truckings_syncs_on_duplicate_trucking_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10859,6 +10995,14 @@ ALTER TABLE ONLY public.shipments_contacts
 --
 
 ALTER TABLE ONLY public.trucking_truckings
+    ADD CONSTRAINT fk_rails_299447a288 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+
+
+--
+-- Name: new_trucking_truckings fk_rails_299447a288; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.new_trucking_truckings
     ADD CONSTRAINT fk_rails_299447a288 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
@@ -11555,6 +11699,14 @@ ALTER TABLE ONLY public.legacy_files
 --
 
 ALTER TABLE ONLY public.trucking_truckings
+    ADD CONSTRAINT fk_rails_c9b2b3a658 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: new_trucking_truckings fk_rails_c9b2b3a658; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.new_trucking_truckings
     ADD CONSTRAINT fk_rails_c9b2b3a658 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
@@ -12350,6 +12502,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200923124503'),
 ('20200923124711'),
 ('20200924084322'),
-('20200924084551');
+('20200924084551'),
+('20200930111524'),
+('20200930111636');
 
 
