@@ -151,10 +151,7 @@ RSpec.describe "Quotations" do
           tenders: {
             type: :array,
             items: {
-              type: :object,
-              properties: {
-                id: {type: :string}
-              }
+              type: :string
             }
           }
         }
@@ -167,7 +164,7 @@ RSpec.describe "Quotations" do
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
         let(:id) { quotation.id }
-        let(:params) { {tenders: [{id: quotation.tenders.first.id}], format: format} }
+        let(:params) { {tenders: [quotation.tenders.first.id], format: format} }
         let(:format) { "pdf" }
 
         run_test!

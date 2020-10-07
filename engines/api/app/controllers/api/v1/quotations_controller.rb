@@ -51,12 +51,7 @@ module Api
       private
 
       def safe_tender_ids
-        # Backwards compatibility while we clean up original request
-        return download_params[:tender_ids] if download_params[:tender_ids].present?
-
-        return [] if download_params[:tenders].blank?
-
-        download_params[:tenders].pluck(:id)
+        download_params[:tender_ids] || download_params[:tenders]
       end
 
       def validation
@@ -156,7 +151,7 @@ module Api
       end
 
       def download_params
-        params.permit(:quotation_id, :format, tenders: %i[id], tender_ids: [])
+        params.permit(:quotation_id, :format, tenders: [], tender_ids: [])
       end
 
       def routing

@@ -1991,12 +1991,7 @@
                   "tenders": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string"
-                        }
-                      }
+                      "type": "string"
                     }
                   }
                 }
@@ -2271,8 +2266,7 @@
                                     "type": "integer"
                                   },
                                   "lineItemId": {
-                                    "type": "integer",
-                                    "nullable": true
+                                    "type": "uuid"
                                   },
                                   "order": {
                                     "type": "integer"

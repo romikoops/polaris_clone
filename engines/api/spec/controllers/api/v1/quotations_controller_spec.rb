@@ -368,29 +368,12 @@ module Api
         context 'with tender ids' do
           let(:quotation) { Quotations::Quotation.last }
 
-          it 'returns the url of the generated document for the specified tenders' do
-            post :download, params: {
-              organization_id: organization.id,
-              format: format,
-              quotation_id: quotation.id,
-              tender_ids: quotation.tenders.ids
-            }
-
-            aggregate_failures do
-              expect(response_data.dig('attributes', 'url')).to include('test.host')
-            end
-          end
-        end
-
-        context 'with legacy tender ids' do
-          let(:quotation) { Quotations::Quotation.last }
-
           it 'renders origin and destination as nexus objects' do
             post :download, params: {
               organization_id: organization.id,
               quotation_id: quotation.id,
               format: format,
-              tenders: [{id: quotation.tenders.first.id }]
+              tenders: [quotation.tenders.first.id]
             }
 
             aggregate_failures do
