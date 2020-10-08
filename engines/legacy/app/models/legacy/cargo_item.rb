@@ -4,6 +4,8 @@ module Legacy
   class CargoItem < ApplicationRecord
     self.table_name = 'cargo_items'
 
+    acts_as_paranoid
+
     EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
       air: 0.167,
       rail: 0.500,
@@ -87,6 +89,7 @@ end
 #  contents           :string
 #  customs_text       :string
 #  dangerous_goods    :boolean
+#  deleted_at         :datetime
 #  dimension_x        :decimal(, )
 #  dimension_y        :decimal(, )
 #  dimension_z        :decimal(, )

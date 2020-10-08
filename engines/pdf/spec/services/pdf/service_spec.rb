@@ -50,10 +50,10 @@ RSpec.describe Pdf::Service do
     let(:load_type) { 'container' }
 
     describe '.wheelhouse_quotation (booking shop)' do
-      let(:tenders) { shipment.charge_breakdowns.map(&:tender_id) }
+      let(:tender_ids) { shipment.charge_breakdowns.map(&:tender_id) }
 
       it 'generates the wheelhouse quote pdf' do
-        pdf = klass.wheelhouse_quotation(shipment: shipment, tender_ids: tenders)
+        pdf = klass.wheelhouse_quotation(shipment: shipment, tender_ids: tender_ids)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -67,7 +67,7 @@ RSpec.describe Pdf::Service do
                                     quotation: quotations_quotation,
                                     tender_ids: quotations_quotation.tenders.ids,
                                     admin: false)
-        pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
+        pdf = klass.admin_quotation(quotation: quotations_quotation, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -87,7 +87,7 @@ RSpec.describe Pdf::Service do
 
     describe '.quotation' do
       it 'generates the quote pdf' do
-        pdf = klass.quotation_pdf(quotation: quotation)
+        pdf = klass.quotation_pdf(shipment: shipment, tender_ids: quotations_quotation.tenders.ids)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -97,12 +97,12 @@ RSpec.describe Pdf::Service do
 
     describe '.quotation with existing docuemnt' do
       before do
-        klass.quotation_pdf(quotation: quotation)
+        klass.quotation_pdf(shipment: shipment, tender_ids: quotations_quotation.tenders.ids)
         quotation.update(target_email: 'test@itsmycargo.com')
       end
 
       it 'generates the quote pdf' do
-        pdf = klass.quotation_pdf(quotation: quotation)
+        pdf = klass.quotation_pdf(shipment: shipment, tender_ids: quotations_quotation.tenders.ids)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -130,7 +130,7 @@ RSpec.describe Pdf::Service do
                                     quotation: quotations_quotation,
                                     tender_ids: quotations_quotation.tenders.ids,
                                     admin: false)
-        pdf = klass.admin_quotation(quotation: nil, shipment: shipment, pdf_tenders: pdf_tenders)
+        pdf = klass.admin_quotation(quotation: quotations_quotation, shipment: shipment, pdf_tenders: pdf_tenders)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -150,7 +150,7 @@ RSpec.describe Pdf::Service do
 
     describe '.quotation' do
       it 'generates the quote pdf' do
-        pdf = klass.quotation_pdf(quotation: quotation)
+        pdf = klass.quotation_pdf(shipment: shipment, tender_ids: quotations_quotation.tenders.ids)
         aggregate_failures do
           expect(pdf).to be_a(Legacy::File)
           expect(pdf.file).to be_attached
@@ -159,11 +159,13 @@ RSpec.describe Pdf::Service do
     end
 
     describe '.shipment_pdf' do
-      it 'generates the shipment pdf' do
-        pdf = klass.shipment_pdf(shipment: shipment)
-        aggregate_failures do
-          expect(pdf).to be_a(Legacy::File)
-          expect(pdf.file).to be_attached
+      context 'when lcl cargo' do
+        it 'generates the shipment pdf' do
+          pdf = klass.shipment_pdf(shipment: shipment)
+          aggregate_failures do
+            expect(pdf).to be_a(Legacy::File)
+            expect(pdf.file).to be_attached
+          end
         end
       end
     end
@@ -240,7 +242,7 @@ RSpec.describe Pdf::Service do
   describe '.quotes_with_trip_id' do
     context 'with default settings' do
       it 'limits the quotes returned when tender ids are provided' do
-        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        quotes = pdf_service.quotes_with_trip_id(shipments: [shipment], admin: true, tender_ids: tender_ids)
         aggregate_failures do
           expect(quotes.length).to eq(1)
           expect(quotes.dig(0, 'pre_carriage_service')).to eq('')
@@ -252,7 +254,7 @@ RSpec.describe Pdf::Service do
       let(:scope_content) { { voyage_info: { pre_carriage_carrier: true } } }
 
       it 'returns the carrier info in the correct format' do
-        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        quotes = pdf_service.quotes_with_trip_id(shipments: [shipment], admin: true, tender_ids: tender_ids)
         aggregate_failures do
           expect(quotes.length).to eq(1)
           expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by SACO')
@@ -264,7 +266,7 @@ RSpec.describe Pdf::Service do
       let(:scope_content) { { voyage_info: { pre_carriage_service: true } } }
 
       it 'returns the carrier info in the correct format' do
-        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        quotes = pdf_service.quotes_with_trip_id(shipments: [shipment], admin: true, tender_ids: tender_ids)
         aggregate_failures do
           expect(quotes.length).to eq(1)
           expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by standard')
@@ -276,7 +278,7 @@ RSpec.describe Pdf::Service do
       let(:scope_content) { { voyage_info: { pre_carriage_service: true, pre_carriage_carrier: true } } }
 
       it 'returns the carrier info in the correct format' do
-        quotes = pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment], admin: true, tender_ids: tender_ids)
+        quotes = pdf_service.quotes_with_trip_id(shipments: [shipment], admin: true, tender_ids: tender_ids)
         aggregate_failures do
           expect(quotes.length).to eq(1)
           expect(quotes.dig(0, 'pre_carriage_service')).to eq('operated by SACO(standard)')

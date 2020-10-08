@@ -1,0 +1,31 @@
+<div class="no_page_break item-group">
+  <div class="title_row">
+    <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_item_type_description %></p>
+  </div>
+  <table class="data-table">
+    <tr>
+      <td class="table-title">
+        <%= cargo.dimensions_format %>
+      </td>
+      <td class="table-value"><span><%= cargo.total_volume_format %>&nbsp;m<sup>3</span></sup></td>
+    </tr>
+    <%= cargo.gross_weight_per_item %>
+    <tr>
+      <td class="table-title"><p>Quantity</p></td>
+      <td class="table-value"><span><%= cargo.quantity %></span></td>
+    </tr>
+    <tr>
+      <td class="table-title"><p>Total Volume</p></td>
+      <td class="table-value"><span><%= cargo.total_volume_format %>&nbsp;m<sup>3</span></sup></td>
+    </tr>
+    <tr>
+      <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+      <td class="table-value">
+        <span><%= cargo.total_weight_humanize %></span>
+      </td>
+    </tr>
+    <tr>
+      <%= cargo.determine_chargeable_weight_row %>
+    </tr>
+  </table>
+</div>

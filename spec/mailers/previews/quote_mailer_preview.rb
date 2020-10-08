@@ -9,8 +9,10 @@ class QuoteMailerPreview < ActionMailer::Preview
     @shipment = Legacy::Shipment.find(quotation.original_shipment_id)
     quotations_quotation = Quotations::Quotation.find_by(legacy_shipment_id: @shipment.id)
     @email = 'demo@itsmycargo.com'
+    tender_ids = quotations_quotation.tenders.ids
 
-    QuoteMailer.new_quotation_email(quotation: quotations_quotation, shipment: @shipment, email: @email)
+    QuoteMailer.new_quotation_email(quotation: quotations_quotation,
+                                    tender_ids: tender_ids, shipment: @shipment, email: @email)
   end
 
   def quotation_admin_email

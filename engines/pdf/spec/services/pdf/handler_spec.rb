@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Pdf::Handler do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:quotation) { FactoryBot.create(:quotations_quotation, :cargo_item) }
   let!(:shipment) {
     FactoryBot.create(:completed_legacy_shipment,
       organization: organization,
@@ -20,9 +21,10 @@ RSpec.describe Pdf::Handler do
       shipment: shipment,
       organization: organization,
       cargo_units: shipment.cargo_units,
-      quotes: pdf_service.quotes_with_trip_id(quotation: nil, shipments: [shipment])
+      quotes: pdf_service.quotes_with_trip_id(shipments: [shipment])
     }
   end
+  let(:tender) { Quotations::Tender.last }
   let(:klass) { described_class.new(default_args) }
 
   before do
@@ -46,42 +48,6 @@ RSpec.describe Pdf::Handler do
                chargeable_weight_view: 'weight'
              })
     end
-
-    describe '.calculate_cargo_data' do
-      it 'returns a hash displaying chargeable weight in kg' do
-        result = klass.calculate_cargo_data(shipment)
-        expect(result).to eq(200)
-      end
-
-      it 'returns a hash displaying chargeable weight in volume' do
-        scope.update(content: scope.content.merge(chargeable_weight_view: 'volume'))
-        result = klass.calculate_cargo_data(shipment)
-        expect(result).to eq(200)
-      end
-
-      it 'returns a hash displaying chargeable weight in kg (dynamic)' do
-        scope.update(content: scope.content.merge(chargeable_weight_view: 'dynamic'))
-        result = klass.calculate_cargo_data(shipment)
-        expect(result).to eq(200)
-      end
-
-      it 'returns a hash displaying chargeable weight in vol (dynamic)' do
-        scope.update(content: scope.content.merge(chargeable_weight_view: 'dynamic'))
-        result = klass.calculate_cargo_data(agg_shipment)
-        expect(result).to eq(200)
-      end
-
-      it 'returns a hash displaying chargeable weight in kg and vol' do
-        scope.update(content: scope.content.merge(chargeable_weight_view: 'both'))
-        result = klass.calculate_cargo_data(shipment)
-        expect(result).to eq(200)
-      end
-
-      it 'returns a hash displaying chargeable weight in kg with no chargeable_weight_view value' do
-        scope.update(content: scope.content.merge(chargeable_weight_view: ''))
-        result = klass.calculate_cargo_data(agg_shipment)
-        expect(result).to eq(200)
-      end
-    end
+    let(:tender) { Quotations::Tender.last }
   end
 end

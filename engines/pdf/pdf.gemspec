@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'draper', '~> 4.0'
   s.add_dependency 'pdfkit'
   s.add_dependency 'wkhtmltopdf-binary'
 

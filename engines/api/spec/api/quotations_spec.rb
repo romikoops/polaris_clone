@@ -26,10 +26,7 @@ RSpec.describe "Quotations" do
       with_breakdown: true, with_tenders: true, organization: organization, user: user)
   }
   let(:quotation) do
-    FactoryBot.create(:quotations_quotation, user: user, legacy_shipment_id: shipment.id, tenders:
-      FactoryBot.create_list(:quotations_tender, 5)).tap do |tapped_quotation|
-        FactoryBot.create(:cargo_cargo, quotation_id: tapped_quotation.id)
-      end
+    Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
   end
 
   let(:quotation_2) do
@@ -51,6 +48,7 @@ RSpec.describe "Quotations" do
     shipment.charge_breakdowns.update(tender_id: quotation.tenders.first.id)
 
     FactoryBot.create(:legacy_charge_breakdown, with_tender: true, quotation: quotation_2)
+    FactoryBot.create(:legacy_exchange_rate, from: "EUR", to: "USD", created_at: quotation.created_at)
   end
 
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }

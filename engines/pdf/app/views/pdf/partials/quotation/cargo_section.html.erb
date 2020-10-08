@@ -1,0 +1,8 @@
+<div class="sub-prices">
+  <div class="total-price-single">
+    <h4>Cargo Details</h4>
+  </div>
+  <%= render template: 'pdf/partials/quotation/cargo/cargo_items', locals: { quote: quote } %>
+  <%= render template: 'pdf/partials/quotation/cargo/containers', locals: { quote: quote } %>
+  <%= render template: 'pdf/partials/quotation/cargo/aggregated_cargo', locals: { cargo: quote["aggregated"].first } %>
+</div>

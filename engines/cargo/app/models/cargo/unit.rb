@@ -7,7 +7,7 @@ module Cargo
     measured_length :width, :length, :height
     belongs_to :organization, class_name: 'Organizations::Organization'
     belongs_to :cargo, class_name: 'Cargo::Cargo'
-    belongs_to :legacy, polymorphic: true, optional: true
+    belongs_to :legacy, -> { with_deleted }, polymorphic: true, optional: true
 
     enum cargo_class: Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: Specification::TYPE_ENUM, _prefix: true

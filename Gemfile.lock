@@ -475,6 +475,7 @@ PATH
     imc-pdf (1)
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 2.2)
+      draper (~> 4.0)
       imc-core
       imc-legacy
       imc-notes

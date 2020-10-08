@@ -653,7 +653,8 @@ CREATE TABLE public.aggregated_cargos (
     shipment_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    sandbox_id uuid
+    sandbox_id uuid,
+    deleted_at timestamp without time zone
 );
 
 
@@ -840,7 +841,8 @@ CREATE TABLE public.cargo_items (
     contents character varying,
     width numeric,
     length numeric,
-    height numeric
+    height numeric,
+    deleted_at timestamp without time zone
 );
 
 
@@ -1155,7 +1157,8 @@ CREATE TABLE public.containers (
     quantity integer,
     unit_price jsonb,
     sandbox_id uuid,
-    contents character varying
+    contents character varying,
+    deleted_at timestamp without time zone
 );
 
 
@@ -12504,6 +12507,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200924084322'),
 ('20200924084551'),
 ('20200930111524'),
-('20200930111636');
+('20200930111636'),
+('20201007192043'),
+('20201007192136'),
+('20201007192212');
 
 

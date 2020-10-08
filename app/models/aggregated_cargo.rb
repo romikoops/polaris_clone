@@ -25,6 +25,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  chargeable_weight :decimal(, )
+#  deleted_at        :datetime
 #  volume            :decimal(, )
 #  weight            :decimal(, )
 #  created_at        :datetime         not null

@@ -75,13 +75,12 @@
             <% end %>
             <p class="voyage-info">
               <strong>Weight:</strong>
-              <% w_value = weight_units['unit'] == 'kg' ? cargo_data[:kg][quote['shipment_id']] : cargo_data[:kg][quote['shipment_id']] / 1000 %>
-              <%="#{"%.#{weight_units['decimals']}f" % w_value} #{weight_units['unit']}" %>&nbsp;
+              <%= quote["cargo"].total_weight_humanize %>
             </p>
             <% if quote['load_type'] != 'container'%>
               <p class="voyage-info">
                 <strong>Volume:</strong>
-                <%= '%.3f' % cargo_data[:vol][quote['shipment_id']] %>&nbsp;m<sup>3</sup>
+                <%= quote["cargo"].total_volume_format %>&nbsp;m<sup>3
               </p>
             <% end %>
             <% if shipment.vessel_name %>
@@ -137,133 +136,7 @@
           </div>
         <% end %>
       </div>
-      <div class="no-padding">
-        <div class="sub-prices">
-          <div class="total-price-single">
-            <h4>Cargo Details</h4>
-          </div>
-          <% cargo_units[quote['shipment_id']]&.select {|cargo| cargo.is_a?(Legacy::CargoItem) }.each_with_index do |cargo, i| %>
-            <div class="no_page_break item-group">
-              <div class="title_row">
-                <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_item_type.description %></p>
-              </div>
-              <table class="data-table">
-                <tr>
-                  <td class="table-title">
-                    <p >
-                      <%=
-                        [cargo.length, cargo.width, cargo.height]
-                          .map{|v| "#{format('%.2f',v)} cm"}.join(' x ')
-                      %>
-                    </p>
-                  </td>
-                  <td class="table-value"><span><%= '%.3f' % cargo.volume %>&nbsp;m<sup>3</span></sup></td>
-                </tr>
-                <% unless scope['cargo_overview_only'] %>
-                  <tr>
-                    <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Item</p></td>
-                    <td class="table-value">
-                      <% gw_value = weight_units['unit'] == 'kg' ? cargo.payload_in_kg : (cargo.payload_in_kg / 1000) %>
-                      <span><%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %></span>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td class="table-title"><p>Quantity</p></td>
-                  <td class="table-value"><span><%= cargo.quantity %></span></td>
-                </tr>
-                <tr>
-                  <td class="table-title"><p>Total Volume</p></td>
-                  <td class="table-value"><span><%= '%.3f' % (cargo.volume * cargo.quantity) %>&nbsp;m<sup>3</span></sup></td>
-                </tr>
-                <tr>
-                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
-                  <td class="table-value">
-                    <% tgw_value = weight_units['unit'] == 'kg' ? cargo.payload_in_kg * cargo.quantity : (cargo.payload_in_kg * cargo.quantity / 1000) %>
-                    <span><%="#{"%.#{weight_units['decimals']}f" % tgw_value} #{weight_units['unit']}" %></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-title"><p><%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo.id.to_s][:total_title] %></p></td>
-                  <td class="table-value"><span><%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo.id.to_s][:total_value] %></span></td>
-                </tr>
-              </table>
-            </div>
-
-          <% end %>
-          <% cargo_units[quote['shipment_id']]&.select {|cargo| cargo.is_a?(Legacy::Container) }.each_with_index do |container, i| %>
-            <div class="no_page_break item-group">
-              <div class="title_row">
-                <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= container.size_class.humanize.upcase %></p>
-              </div>
-              <table class="data-table">
-                <tr>
-                  <td class="table-title"><p>Quantity</p></td>
-                  <td class="table-value"><span><%= container.quantity %></span></td>
-                </tr>
-
-                <tr>
-                  <td class="table-title"><p>Cargo Type</p></td>
-                  <td class="table-value"><span><%= container.size_class.humanize.upcase %></span></sup></td>
-                </tr>
-                <% unless scope['cargo_overview_only'] %>
-                  <tr>
-                    <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Container</p></td>
-                    <td class="table-value">
-                      <% gw_value = weight_units['unit'] == 'kg' ? container.payload_in_kg : (container.payload_in_kg / 1000) %>
-                      <span>
-                        <%="#{"%.#{weight_units['decimals']}f" % gw_value} #{weight_units['unit']}" %>
-                      </span>
-                    </td>
-                  </tr>
-                <% end %>
-                <tr>
-                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
-                  <td class="table-value">
-                    <% tgw_value = weight_units['unit'] == 'kg' ? container.payload_in_kg * container.quantity : (container.payload_in_kg * container.quantity / 1000) %>
-                    <span><%="#{"%.#{weight_units['decimals']}f" % tgw_value} #{weight_units['unit']}" %></span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-          <% end %>
-          <% if  cargo_units.all? {|cargo| cargo.is_a?(Legacy::AggregatedCargo) } %>
-            <div class="no_page_break item-group">
-              <div class="title_row">
-                <p class=""><strong>Aggregated Cargo</strong></p>
-              </div>
-              <table class="data-table">
-                <tr>
-                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
-                  <td class="table-value">
-                    <span>
-                    <%="#{"%.#{weight_units['decimals']}f" % weight_units['unit'] == 'kg' ? cargo_units.first.weight : cargo_units.first.weight / 1000 }
-                     #{weight_units['unit']}" %></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-title"><p>Total Volume</p></td>
-                  <td class="table-value"><span><%= '%.3f' % (cargo_units.first.volume) %>&nbsp;m<sup>3</span></sup></td>
-                </tr>
-                <tr>
-                  <td class="table-title">
-                    <p>
-                      <%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo_units.first.id.to_s][:total_title] %>
-                    </p>
-                  </td>
-                  <td class="table-value">
-                    <span>
-                      <%== cargo_data[:chargeable_weight][quote['shipment_id']][cargo_units.first.id.to_s][:total_value] %>
-                    </span>
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-          <% end %>
-        </div>
-      </div>
+      <%= render template: "pdf/partials/quotation/cargo_section", locals: { quote: quote } %>
       <table class="data-table">
         <% quote['fees'].each do |fee| %>
           <% next if fee['level'].zero? %>
@@ -305,10 +178,10 @@
         </div>
       <% end %>
     </div>
-    <% if notes[quote['shipment_id']].present? %>
+    <% if notes[quote['tender_id']].present? %>
       <div class="remarks">
         <h4>Notes: </h4>
-        <ul> <% notes[quote['shipment_id']].each do |note| %>
+        <ul> <% notes[quote['tender_id']].each do |note| %>
           <li class="note-header"> <%= note.header %></li>
           <li class="note-body">
             <% if note.contains_html %>

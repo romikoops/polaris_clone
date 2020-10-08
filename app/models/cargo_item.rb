@@ -13,6 +13,7 @@ end
 #  contents           :string
 #  customs_text       :string
 #  dangerous_goods    :boolean
+#  deleted_at         :datetime
 #  dimension_x        :decimal(, )
 #  dimension_y        :decimal(, )
 #  dimension_z        :decimal(, )

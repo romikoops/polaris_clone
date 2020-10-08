@@ -28,7 +28,6 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
   let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }
   let(:delivery_address) { FactoryBot.create(:hamburg_address) }
-  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotations_quotation.id) }
   let(:cargo_total_weight) { "500.00" }
   let(:cargo_total_volume) { "1.34" }
 
@@ -42,7 +41,6 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:cargo_unit, :lcl, cargo: cargo)
     FactoryBot.create(:organizations_theme, organization: organization)
   end
 

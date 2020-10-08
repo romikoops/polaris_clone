@@ -13,6 +13,10 @@ module Shipments
       units.map(&:total_area).sum(Measured::Area.new(0, :m2))
     end
 
+    def quantity
+      units.sum(:quantity)
+    end
+
     def weight
       units.map(&:total_weight).sum(Measured::Weight.new(0, :kg))
     end

@@ -89,6 +89,7 @@ FactoryBot.define do
       shipment.destination_nexus = shipment.destination_hub.nexus if shipment.destination_hub.present?
       if evaluator.with_tenders
         quotation = FactoryBot.create(:quotations_quotation,
+                                      shipment.load_type.to_sym,
                                       origin_nexus: shipment.origin_nexus,
                                       destination_nexus: shipment.destination_nexus,
                                       user: shipment.user,
@@ -109,12 +110,15 @@ FactoryBot.define do
 
       if evaluator.with_breakdown || evaluator.with_full_breakdown
         sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ['cargo']
-        shipment.charge_breakdowns << create(:legacy_charge_breakdown,
-                                             trip: shipment.trip || create(:legacy_trip, itinerary: shipment.itinerary),
-                                             shipment: shipment,
-                                             with_tender: evaluator.with_tenders,
-                                             sections: sections,
-                                             quotation: quotation)
+        breakdown = create(:legacy_charge_breakdown,
+          trip: shipment.trip || create(:legacy_trip, itinerary: shipment.itinerary),
+          shipment: shipment,
+          with_tender: evaluator.with_tenders,
+          sections: sections,
+          quotation: quotation)
+
+        shipment.charge_breakdowns << breakdown
+        shipment.tender_id = breakdown.tender_id
       end
     end
 

@@ -1,0 +1,3 @@
+<% quote["cargo_items"].each_with_index do |cargo, i| %>
+  <%= render template: 'pdf/partials/quotation/cargo/cargo_item', locals: { cargo: cargo } %>
+<% end %>

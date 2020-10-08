@@ -4,6 +4,8 @@ module Legacy
   class Container < ApplicationRecord
     self.table_name = 'containers'
 
+    acts_as_paranoid
+
     TARE_WEIGHTS = {
       fcl_10: 1300,
       fcl_20: 2370,
@@ -86,6 +88,7 @@ end
 #  contents        :string
 #  customs_text    :string
 #  dangerous_goods :boolean
+#  deleted_at      :datetime
 #  gross_weight    :decimal(, )
 #  hs_codes        :string           default([]), is an Array
 #  payload_in_kg   :decimal(, )

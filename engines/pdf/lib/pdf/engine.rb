@@ -2,6 +2,7 @@
 
 require 'activerecord-postgis-adapter'
 require 'config'
+require 'draper'
 require 'paper_trail'
 require 'pdfkit'
 require 'rails'

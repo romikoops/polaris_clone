@@ -42,16 +42,15 @@ module Pdf
       nil
     end
 
-    def generate_shipment_pdf(shipment:, load_type:)
+    def generate_shipment_pdf(shipment:, quotation:, load_type:)
       generate_pdf(
         template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
         shipment: shipment,
         shipments: [shipment],
         selected_offer: shipment.selected_offer(Pdf::HiddenValueService.new(user: shipment.user).hide_total_args),
         load_type: load_type,
-        quotes: quotes_with_trip_id(quotation: nil, shipments: [shipment]),
-        name: 'shipment_recap',
-        cargo_units: { shipment.id => shipment.cargo_units }
+        quotes: quotes_with_trip_id(shipments: [shipment]),
+        name: 'shipment_recap'
       )
     end
 
@@ -64,8 +63,8 @@ module Pdf
         quotation: quotation,
         name: 'quotation',
         note_remarks: note_remarks,
-        cargo_units: shipments.each_with_object({}) do |ship, hash|
-          hash[ship.id] = ship.cargo_units
+        cargo_units: quotation.tenders.each_with_object({}) do |tender, hash|
+          hash[tender.id] = tender.cargo.units
         end
       )
     end
@@ -93,32 +92,12 @@ module Pdf
       create_file(object: shipment, shipments: [shipment], file: file, user: user)
     end
 
-    def legacy_admin_quotation(quotation:, shipment:)
-      existing_document = existing_document(quotation: quotation, shipment: shipment, type: "quotation")
-      return existing_document if existing_document
-
-      object = quotation || shipment
-      shipments = quotation ? quotation.shipments : [shipment]
-      shipment = quotation ? Legacy::Shipment.find(quotation.original_shipment_id) : shipment
-      quotes = quotes_with_trip_id(quotation: quotation, shipments: shipments, admin: true)
-
-      file = generate_quote_pdf(
-        shipment: shipment,
-        shipments: shipments,
-        quotes: quotes,
-        quotation: quotation,
-        note_remarks: note_remarks
-      )
-      return nil if file.nil?
-
-      create_file(object: object, shipments: shipments, file: file, user: user)
-    end
-
     def wheelhouse_quotation(shipment:, tender_ids:)
       object = shipment
       shipments = [shipment]
+      quotations_quotation = Quotations::Tender.find(tender_ids.first).quotation
+
       quotes = quotes_with_trip_id(
-        quotation: nil,
         shipments: shipments,
         admin: true,
         tender_ids: tender_ids
@@ -129,7 +108,7 @@ module Pdf
         shipment: shipment,
         shipments: shipments,
         quotes: quotes,
-        quotation: nil,
+        quotation: quotations_quotation,
         note_remarks: note_remarks
       )
       return nil if file.nil?
@@ -169,7 +148,7 @@ module Pdf
       end
     end
 
-    def quotes_with_trip_id(quotation:, shipments:, admin: false, tender_ids: [])
+    def quotes_with_trip_id(shipments:, admin: false, tender_ids: [])
       tenders = sorted_tenders(shipments: shipments, tender_ids: tender_ids)
       tenders.map { |tender|
         offer_manipulation_block(
@@ -202,24 +181,24 @@ module Pdf
       ).deep_stringify_keys
     end
 
-    def quotation_pdf(quotation:)
-      existing_document = existing_document(quotation: quotation, type: 'quotation')
+    def quotation_pdf(tender_ids:, shipment:)
+      existing_document = existing_document(shipment: shipment, type: 'quotation')
       return existing_document if existing_document
 
-      quotes = quotes_with_trip_id(quotation: quotation, shipments: quotation.shipments)
-      shipment = Legacy::Shipment.find(quotation.original_shipment_id)
+      quotes = quotes_with_trip_id(shipments: [shipment], tender_ids: tender_ids)
+      quotations_quotation = Quotations::Tender.find(tender_ids.first).quotation
 
       note_remarks = get_note_remarks(quotes.pluck('tender_id'))
       file = generate_quote_pdf(
         shipment: shipment,
-        shipments: quotation.shipments,
+        shipments: [shipment],
         quotes: quotes,
-        quotation: quotation,
+        quotation: quotations_quotation,
         note_remarks: note_remarks
       )
       return nil if file.nil?
 
-      create_file(object: quotation, file: file, user: user)
+      create_file(object: shipment, file: file, user: user)
     end
 
     def tenders_pdf(quotation:, shipment:, pdf_tenders:)
@@ -243,8 +222,11 @@ module Pdf
       existing_document = existing_document(shipment: shipment, type: 'shipment_recap')
       return existing_document if existing_document
 
+      quotation = Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
+
       file = generate_shipment_pdf(
         shipment: shipment,
+        quotation: quotation,
         load_type: load_type_plural(shipment: shipment)
       )
       return nil if file.nil?
@@ -276,6 +258,7 @@ module Pdf
         .merge(shipment_merge_data(tender: tender))
         .merge(trucking_information(tender: tender))
         .merge(routing_merge_data(tender: tender))
+        .merge(cargo_merge_data(tender: tender))
     end
 
     def tender_merge_data(tender:)
@@ -311,6 +294,21 @@ module Pdf
     def shipment_merge_data(tender:)
       {
         shipment_id: tender.charge_breakdown.shipment_id
+      }
+    end
+
+    def cargo_merge_data(tender:)
+      units = tender.cargo.units
+      context = { scope: scope, tender: tender }
+      lcl_units = units.select { |unit| unit.cargo_class_00? && !unit.cargo_type_AGR? }
+      fcl_units = units.select { |unit| !unit.cargo_class_00? }
+      aggr_units = units.select { |unit| unit.cargo_type_AGR? }
+
+      {
+        cargo_items: Pdf::CargoDecorator.decorate_collection(lcl_units, context: context),
+        containers: Pdf::CargoDecorator.decorate_collection(fcl_units, context: context),
+        aggregated: Pdf::CargoDecorator.decorate_collection(aggr_units, context: context),
+        cargo: Pdf::CargoDecorator.decorate(tender.cargo, context: context)
       }
     end
 

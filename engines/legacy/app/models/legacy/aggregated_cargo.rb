@@ -3,6 +3,9 @@
 module Legacy
   class AggregatedCargo < ApplicationRecord
     self.table_name = 'aggregated_cargos'
+
+    acts_as_paranoid
+
     belongs_to :shipment, class_name: 'Legacy::Shipment'
     before_validation :set_chargeable_weight!
     DEFAULT_HEIGHT = 130
@@ -40,6 +43,7 @@ end
 #
 #  id                :bigint           not null, primary key
 #  chargeable_weight :decimal(, )
+#  deleted_at        :datetime
 #  volume            :decimal(, )
 #  weight            :decimal(, )
 #  created_at        :datetime         not null

@@ -1,0 +1,23 @@
+<% if cargo.present? %>
+  <div class="no_page_break item-group">
+    <div class="title_row">
+      <p class=""><strong>Aggregated Cargo</strong></p>
+    </div>
+    <table class="data-table">
+      <tr>
+        <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+        <td class="table-value">
+          <span>
+          <%= cargo.total_weight_humanize %></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-title"><p>Total Volume</p></td>
+        <td class="table-value"><span><%= cargo.total_volume_format %>&nbsp;m<sup>3</span></sup></td>
+      </tr>
+      <tr>
+        <%= cargo.determine_chargeable_weight_row %>
+      </tr>
+    </table>
+  </div>
+<% end %>

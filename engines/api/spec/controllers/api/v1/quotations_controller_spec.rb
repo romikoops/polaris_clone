@@ -251,13 +251,17 @@ module Api
 
     describe 'GET #show' do
       before do
-        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
-        FactoryBot.create(:lcl_unit, cargo: cargo, legacy: cargo_item)
+        shipment = FactoryBot.create(:legacy_shipment,
+                           with_breakdown: true,
+                           with_tenders: true,
+                           organization_id: organization.id,
+                           user: user,
+                           load_type: 'cargo_item')
+        Cargo::Unit.last.update(legacy: shipment.cargo_items.last)
       end
 
       let(:quotation) { Quotations::Quotation.last }
-      let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
-      let!(:cargo_item) { FactoryBot.create(:legacy_cargo_item, shipment: Legacy::Shipment.last) }
+      let(:cargo_item) { Legacy::CargoItem.last }
 
       context 'when async error has occurred ' do
         let(:quotation) { FactoryBot.create(:quotations_quotation, error_class: "OfferCalculator::Errors::LoadMeterageExceeded") }

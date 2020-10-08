@@ -10,6 +10,20 @@ FactoryBot.define do
     association :creator, factory: :users_user
     association :organization, factory: :organizations_organization
     billing { :external }
+
+    trait :container do
+      after(:create) do |quotation|
+        cargo = FactoryBot.create(:cargo_cargo, quotation_id: quotation.id)
+        FactoryBot.create(:fcl_20_unit, cargo: cargo)
+      end
+    end
+
+    trait :cargo_item do
+      after(:create) do |quotation|
+        cargo = FactoryBot.create(:cargo_cargo, quotation_id: quotation.id)
+        FactoryBot.create(:lcl_unit, cargo: cargo)
+      end
+    end
   end
 end
 

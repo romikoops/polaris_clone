@@ -14,9 +14,8 @@ class QuotationsController < ApplicationController
 
   def download_pdf
     shipment = Shipment.find(params[:id])
-    quotation = Quotation.find(shipment.quotation_id)
     document = Pdf::Service.new(user: shipment.user, organization: shipment.organization)
-                         .quotation_pdf(quotation: quotation)
+                         .quotation_pdf(tender_ids: [shipment.tender_id], shipment: shipment)
     response = Rails.application.routes.url_helpers.rails_blob_url(document&.file, disposition: 'attachment') if document&.file
     response_handler(key: 'quote', url: response)
   end

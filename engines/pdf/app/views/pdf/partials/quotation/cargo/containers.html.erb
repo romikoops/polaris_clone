@@ -1,0 +1,26 @@
+<% quote["containers"].each_with_index do |container, i| %>
+  <div class="no_page_break item-group">
+    <div class="title_row">
+      <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= container.size_class.humanize.upcase %></p>
+    </div>
+    <table class="data-table">
+      <tr>
+        <td class="table-title"><p>Quantity</p></td>
+        <td class="table-value"><span><%= container.quantity %></span></td>
+      </tr>
+
+      <tr>
+        <td class="table-title"><p>Cargo Type</p></td>
+        <td class="table-value"><span><%= container.size_class.humanize.upcase %></span></sup></td>
+      </tr>
+      <%= container.gross_weight_per_item %>
+      <tr>
+        <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+        <td class="table-value">
+          <span><%= container.total_weight_humanize %></span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+<% end %>

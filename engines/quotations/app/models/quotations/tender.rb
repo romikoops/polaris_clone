@@ -18,7 +18,7 @@ module Quotations
 
     delegate :mode_of_transport, to: :tenant_vehicle
     delegate :pickup_address, :delivery_address, :cargo, to: :quotation
-    delegate :valid_until, :trip, :cargo, to: :charge_breakdown
+    delegate :valid_until, :trip, to: :charge_breakdown
 
     before_validation :generate_imc_reference, on: :create
 

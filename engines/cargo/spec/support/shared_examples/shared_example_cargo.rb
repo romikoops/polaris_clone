@@ -58,6 +58,12 @@ module Cargo
           expect(subject.stowage_factor).to eq(Measured::StowageFactor.new(expected_stowage_factor, 'm3/t'))
         end
       end
+
+      describe '.quantity' do
+        it 'return the quantities sum of the units' do
+          expect(subject.quantity).to eq(subject.units.sum(:quantity))
+        end
+      end
     end
 
     RSpec.shared_examples 'updatable weight and volume' do

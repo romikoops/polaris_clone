@@ -12,6 +12,7 @@ end
 #  contents        :string
 #  customs_text    :string
 #  dangerous_goods :boolean
+#  deleted_at      :datetime
 #  gross_weight    :decimal(, )
 #  hs_codes        :string           default([]), is an Array
 #  payload_in_kg   :decimal(, )
