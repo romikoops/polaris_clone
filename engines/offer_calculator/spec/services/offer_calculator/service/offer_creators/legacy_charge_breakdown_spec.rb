@@ -7,7 +7,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyChargeBreakdown do
   let(:tender) { OfferCalculator::Service::OfferCreators::Tender.tender(offer: offer, shipment: shipment, quotation: quotation) }
   let(:charge_breakdown) { described_class.charge_breakdown(offer: offer, shipment: shipment, tender: tender) }
 
-  before { OfferCalculator::Service::OfferCreators::LineItems.line_items(offer: offer, shipment: shipment, tender: tender) }
+  before { OfferCalculator::Service::OfferCreators::TenderLineItems.tender(offer: offer, shipment: shipment, tender: tender) }
 
   context "when it returns a valid charge breakdown" do
     it "returns a valid charge breakdown" do

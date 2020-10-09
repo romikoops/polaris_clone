@@ -34,9 +34,6 @@ module OfferCalculator
         tender = OfferCalculator::Service::OfferCreators::Tender.tender(
           offer: offer, shipment: shipment, quotation: quotation
         )
-        OfferCalculator::Service::OfferCreators::LineItems.line_items(
-          offer: offer, shipment: shipment, tender: tender
-        )
         legacy_charge_breakdown = OfferCalculator::Service::OfferCreators::LegacyChargeBreakdown.charge_breakdown(
           offer: offer, shipment: shipment, tender: tender
         )

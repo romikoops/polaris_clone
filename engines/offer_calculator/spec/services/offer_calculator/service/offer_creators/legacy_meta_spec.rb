@@ -45,7 +45,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyMeta do
     end
 
     before do
-      OfferCalculator::Service::OfferCreators::LineItems.line_items(
+      OfferCalculator::Service::OfferCreators::TenderLineItems.tender(
         offer: offer, shipment: shipment, tender: tender
       )
 

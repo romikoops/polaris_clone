@@ -14,6 +14,7 @@ RSpec.describe MoneyCache::Converter do
     file_response = File.read(fixture_path)
     stub_request(:get, /openexchangerates/)
       .to_return(status: 200, body: file_response, headers: {})
+    allow(klass).to receive(:where).and_return(double(exists?: false))
   end
 
   context "with rates in store" do

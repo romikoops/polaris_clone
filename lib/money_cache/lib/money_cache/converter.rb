@@ -76,7 +76,7 @@ module MoneyCache
     end
 
     def should_refresh_rates?
-      date.blank? || !klass.where("created_at > ?", 1.minute.ago).exists?
+      date.blank? && !klass.where("created_at > ?", 1.minute.ago).exists?
     end
   end
 end

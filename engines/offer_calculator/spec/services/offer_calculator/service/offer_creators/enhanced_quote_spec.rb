@@ -15,7 +15,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::EnhancedQuote do
     )
   end
 
-  before { OfferCalculator::Service::OfferCreators::LineItems.line_items(offer: offer, shipment: shipment, tender: tender) }
+  before { OfferCalculator::Service::OfferCreators::TenderLineItems.tender(offer: offer, shipment: shipment, tender: tender) }
 
   context "when it returns a complete quote" do
     it "returns a complete quote with rate data" do

@@ -19,8 +19,7 @@ module OfferCalculator
         def perform
           assign_routing_attributes
           assign_trucking_attributes
-          tender.save!
-          tender
+          tender_with_line_items
         end
 
         private
@@ -51,6 +50,12 @@ module OfferCalculator
             delivery_tenant_vehicle: offer.tenant_vehicle(section_key: "trucking_on"),
             pickup_truck_type: offer.truck_type(carriage: "pre"),
             delivery_truck_type: offer.truck_type(carriage: "on")
+          )
+        end
+
+        def tender_with_line_items
+          OfferCalculator::Service::OfferCreators::TenderLineItems.tender(
+            offer: offer, shipment: shipment, tender: tender
           )
         end
 
