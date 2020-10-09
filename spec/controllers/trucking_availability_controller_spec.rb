@@ -96,6 +96,24 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
       end
     end
 
+    context 'when trucking is available and user is guest' do
+      before do
+        allow(controller).to receive(:current_user).and_return(nil)
+        params = { lat: lat, lng: lng, load_type: 'cargo_item', organization_id: organization.id, carriage: 'pre', hub_ids: hub_ids }
+        get :index, params: params, as: :json
+      end
+
+      it 'returns available trucking options' do
+        aggregate_failures do
+          expect(response).to be_successful
+          expect(data['truckingAvailable']).to eq true
+          expect(data['truckTypeObject']).to eq({ origin_hub.id.to_s => ['default'] })
+          expect(data['nexusIds']).to eq([origin_hub.nexus_id])
+          expect(data['hubIds']).to eq([origin_hub.id])
+        end
+      end
+    end
+
     context 'when trucking is available and only group truckings are present' do
       let(:group_id) { group.id }
 

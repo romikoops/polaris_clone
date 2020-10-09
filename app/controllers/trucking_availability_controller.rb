@@ -47,8 +47,8 @@ class TruckingAvailabilityController < ApplicationController
   end
 
   def user_groups
-    OrganizationManager::HierarchyService.new(
+    OrganizationManager::GroupsService.new(
       target: current_user, organization: current_organization
-    ).fetch.select { |hier| hier.is_a?(Groups::Group) }
+    ).fetch
   end
 end

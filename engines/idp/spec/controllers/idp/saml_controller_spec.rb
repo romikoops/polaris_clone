@@ -13,8 +13,7 @@ RSpec.describe IDP::SamlController, type: :controller do
   let(:forwarded_host) { organizations_domain.domain }
   let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
   let(:user_groups) {
-    OrganizationManager::HierarchyService.new(target: user, organization: organization).fetch
-      .select { |hier| hier.is_a?(Groups::Group) }
+    OrganizationManager::GroupsService.new(target: user, organization: organization).fetch
   }
 
   before do

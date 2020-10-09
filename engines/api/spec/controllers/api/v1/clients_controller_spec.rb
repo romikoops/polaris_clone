@@ -145,8 +145,7 @@ module Api
         post :create, params: { organization_id: organization.id, client: { **user_info, **profile_info, **address_info } }, as: :json
       end
       let(:user_groups) {
-        OrganizationManager::HierarchyService.new(target: client, organization: organization).fetch
-          .select { |hier| hier.is_a?(Groups::Group) }
+        OrganizationManager::GroupsService.new(target: client, organization: organization).fetch
       }
       let(:client) { Organizations::User.find_by(email: user_info[:email]) }
 

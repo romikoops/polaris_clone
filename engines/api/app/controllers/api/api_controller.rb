@@ -106,8 +106,7 @@ module Api
     end
 
     def target_groups(target:)
-      OrganizationManager::HierarchyService.new(target: target, organization: current_organization).fetch
-        .select { |hier| hier.is_a?(Groups::Group) }
+      OrganizationManager::GroupsService.new(target: target, organization: current_organization).fetch
     end
   end
 end
