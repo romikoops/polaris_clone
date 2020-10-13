@@ -6,7 +6,7 @@ RSpec.describe Shipments::BookingProcessController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { create(:organizations_user, :with_profile, organization: organization) }
   let(:shipment) {
-    create(:legacy_shipment,
+    create(:completed_legacy_shipment,
       organization: organization,
       trip: trip,
       user: user,
@@ -42,7 +42,7 @@ RSpec.describe Shipments::BookingProcessController do
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
         expect(json_response.dig('data', 'key')).to eq('shipment_recap')
-        expect(json_response.dig('data', 'url')).to include("shipment_#{shipment.imc_reference}.pdf?disposition=attachment")
+        expect(json_response.dig('data', 'url')).to include("shipment_#{shipment.imc_reference}.pdf")
       end
     end
   end
@@ -81,6 +81,15 @@ RSpec.describe Shipments::BookingProcessController do
   end
 
   describe 'POST #get_offers' do
+    let(:shipment) {
+      create(:complete_legacy_shipment,
+        organization: organization,
+        trip: trip,
+        user: user,
+        itinerary: itinerary,
+        with_breakdown: true,
+        with_tenders: true)
+    }
     let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:trip) { create(:trip, itinerary_id: itinerary.id) }
     let(:origin_hub) { itinerary.origin_hub }

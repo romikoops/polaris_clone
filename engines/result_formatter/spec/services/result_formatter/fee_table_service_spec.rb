@@ -9,7 +9,7 @@ module ResultFormatter
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:load_type) { "container" }
     let(:shipment) {
-      FactoryBot.create(:legacy_shipment,
+      FactoryBot.create(:completed_legacy_shipment,
         with_full_breakdown: true,
         with_tenders: true,
         load_type: load_type,
@@ -17,7 +17,8 @@ module ResultFormatter
     }
     let(:type) { :table }
     let(:tender) { shipment.charge_breakdowns.first.tender }
-    let(:line_item) { tender.line_items.find { |li| li.code == "bas" } }
+    let(:line_item) { line_items.find { |li| li.code == "bas" } }
+    let(:line_items) { Quotations::LineItem.where(tender: tender) }
     let(:klass) { described_class.new(tender: tender, scope: scope, type: type) }
 
     describe ".perform" do
@@ -50,7 +51,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(16)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -81,7 +82,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(16)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -124,7 +125,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(19)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -159,7 +160,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(16)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -202,7 +203,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(11)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -249,7 +250,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(19)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end
@@ -334,7 +335,7 @@ module ResultFormatter
           aggregate_failures do
             expect(results.length).to eq(16)
             expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(tender.line_items.ids)
+            expect(results.pluck(:lineItemId).compact).to match_array(line_items.ids)
           end
         end
       end

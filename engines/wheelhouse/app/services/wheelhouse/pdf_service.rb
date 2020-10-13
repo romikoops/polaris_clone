@@ -8,8 +8,7 @@ module Wheelhouse
     end
 
     def download
-      ::Pdf::Service.new(user: shipment.user, organization: shipment.organization)
-                    .wheelhouse_quotation(shipment: shipment, tender_ids: tender_ids_for_download)
+      ::Pdf::Quotation::Client.new(quotation: quotation, tender_ids: tender_ids_for_download).file
     end
 
     private

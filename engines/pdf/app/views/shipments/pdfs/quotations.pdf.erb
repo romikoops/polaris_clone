@@ -2,8 +2,8 @@
   <% primary_color = theme.primary_color %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + organization["slug"] + ".png" %>
-  <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
-  <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
+  <% precarriage_color = quotation.pickup_address.present? ? primary_color : neutral_color %>
+  <% oncarriage_color = quotation.delivery_address.present? ? primary_color : neutral_color %>
   <% weight_units = scope['values']['weight'] %>
 
   <div class="title display-flex">
@@ -16,27 +16,27 @@
       <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
     </div>
     <div class="agent-info">
-        <p><strong><%= shipper_profile.first_name %> <%= shipper_profile.last_name %></strong></p>
-        <p><%= shipper_profile.email %></p>
-        <p><%= shipper_profile.phone %></p>
+        <p><strong><%= quotation.user_profile.first_name %> <%= quotation.user_profile.last_name %></strong></p>
+        <p><%= quotation.user_profile.email %></p>
+        <p><%= quotation.user_profile.phone %></p>
     </div>
   </div>
 
-  <% quotes.each do |quote| %>
-    <% origin_fee_color = quote["export"] ? primary_color : neutral_color %>
-    <% destination_fee_color = quote["import"] ? primary_color : neutral_color %>
+  <% tenders.each do |tender| %>
+    <% origin_fee_color = tender.export? ? primary_color : neutral_color %>
+    <% destination_fee_color = tender.import? ? primary_color : neutral_color %>
     <div class="all-row">
       <div class="main-container">
-        <% if quote['valid_until'].present? %>
+        <% if tender.valid_until.present? %>
           <div class="validity">
             <p><b>Price valid until:</b></p>
-            <p class="text-right"><%= quote['valid_until']&.strftime('%d.%m.%Y') %></p>
+            <p class="text-right"><%= tender.valid_until&.strftime('%d.%m.%Y') %></p>
           </div>
         <% end %>
         <div class="info">
-          <% if quote['mode_of_transport'] == "ocean" %>
+          <% if tender.mode_of_transport == "ocean" %>
             <% mot = "anchor" %>
-          <% elsif quote['mode_of_transport'] == "air" %>
+          <% elsif tender.mode_of_transport == "air" %>
             <% mot = "plane" %>
           <% else %>
             <% mot = "truck" %>
@@ -46,8 +46,8 @@
             <p>
               From:&nbsp;
               <span>
-                <%= quote['origin'] %>
-                <% if quote['origin_free_out'] %>
+                <%= tender.origin %>
+                <% if tender.origin_free_out %>
                   (Free Out)
                 <% end %>
               </span>
@@ -55,16 +55,16 @@
             <p>
               To:&nbsp;
               <span>
-                <%= quote['destination'] %>
-                <% if quote['destination_free_out'] %>
+                <%= tender.destination %>
+                <% if tender.destination_free_out %>
                   (Free Out)
                 <% end %>
               </span>
             </p>
-            <p>Ref:&nbsp;<span><%= quote['imc_reference'] %></span></p>
+            <p>Ref:&nbsp;<span><%= tender.imc_reference %></span></p>
           </div>
           <div class="text-right cargo-info">
-            <% if scope.dig('quote_card', 'sections', 'charge_icons') %>
+            <% if scope.dig('tender_card', 'sections', 'charge_icons') %>
               <div class="charge-icons">
                 <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
                 <i class="fa fa-file" style="color: <%= origin_fee_color %>"></i>
@@ -75,80 +75,73 @@
             <% end %>
             <p class="voyage-info">
               <strong>Weight:</strong>
-              <%= quote["cargo"].total_weight_humanize %>
+              <%= tender.cargo.total_weight_humanize %>
             </p>
-            <% if quote['load_type'] != 'container'%>
+            <% if tender.load_type != 'container'%>
               <p class="voyage-info">
                 <strong>Volume:</strong>
-                <%= quote["cargo"].total_volume_format %>&nbsp;m<sup>3
+                <%= tender.cargo.total_volume.value.round(3) %>&nbsp;m<sup>3
               </p>
             <% end %>
-            <% if shipment.vessel_name %>
+            <% if tender.vessel_name %>
               <p class="voyage-info">
                 <strong>Vessel:</strong>
-                <%= shipment.vessel_name %>
+                <%= tender.vessel_name %>
               </p>
             <% end %>
-            <% if quote['transshipment'].present? %>
+            <% if tender.transshipment.present? %>
               <p class="voyage-info">
                 <strong>Transshipment Via:</strong>
-                <%= quote['transshipment'] %>
+                <%= tender.transshipment %>
               </p>
             <% end %>
-            <% if quote['carrier'].present? && scope.dig('voyage_info', 'carrier').present? %>
+            <% if tender.carrier.present? && scope.dig('voyage_info', 'carrier').present? %>
               <p class="voyage-info">
                 <strong>Carrier:</strong>
-                <%= quote['carrier'] %>
+                <%= tender.carrier %>
               </p>
             <% end %>
-            <% if quote['service_level'].present? && scope.dig('voyage_info', 'service_level').present? %>
+            <% if tender.service_level.present? && scope.dig('voyage_info', 'service_level').present? %>
               <p class="voyage-info">
                 <strong>Service:</strong>
-                <%= quote['service_level'].capitalize %>
+                <%= tender.service_level.capitalize %>
               </p>
             <% end %>
-            <% if quote['transit_time'].present? && scope.dig('voyage_info', 'transit_time').present?%>
+            <% if tender.transit_time.present? && scope.dig('voyage_info', 'transit_time').present?%>
               <p class="voyage-info">
                 <strong>Estimated T/T:</strong>
-                <%= "#{quote['transit_time']} days" %>
+                <%= "#{tender.transit_time} days" %>
               </p>
             <% end %>
           </div>
         </div>
-        <% if quote['pickup_address'] || quote['delivery_address'] %>
+        <% if tender.pickup_address || tender.delivery_address %>
           <div class="delivery-info">
- 
-              <% if quote['pickup_address'].present? %>
-                <p> 
-                  <b> Pickup from</b>: 
-                  <%=  quote['pickup_address'] %>
-                  <%= quote['pre_carriage_service'] %>
-                </p>
-              <% end %>
-              <% if quote['delivery_address'].present? %>
-                <p> 
-                  <b> Delivery to</b>: 
-                  <%=  quote['delivery_address']  %>
-                  <%=  quote['on_carriage_service']  %>
-                </p>
-              <% end %>
- 
+            <% if tender.pickup_address.present? %>
+              <p> 
+                <b> Pickup from</b>: 
+                <%=  tender.full_pickup_address %>
+                <%= tender.pre_carriage_service %>
+              </p>
+            <% end %>
+            <% if tender.delivery_address.present? %>
+              <p> 
+                <b> Delivery to</b>: 
+                <%=  tender.full_delivery_address  %>
+                <%=  tender.on_carriage_service  %>
+              </p>
+            <% end %>
           </div>
         <% end %>
       </div>
-      <%= render template: "pdf/partials/quotation/cargo_section", locals: { quote: quote } %>
+      <%= render template: "pdf/partials/quotation/cargo_section", locals: { tender: tender } %>
       <table class="data-table">
-        <% quote['fees'].each do |fee| %>
-          <% next if fee['level'].zero? %>
-          <%= render template: "pdf/partials/breakdowns/level_x_fee", locals: { fee: fee, quote: quote, scope: scope, cargo_data: cargo_data } %>
+        <% tender.fees.each do |fee| %>
+          <% next if fee[:level].zero? %>
+          <%= render template: "pdf/partials/breakdowns/level_x_fee", locals: { fee: fee, tender: tender, scope: scope } %>
         <% end %>
       </table>
-      <% unless quote['total'].nil? %>
-        <div class="total-row">
-          <h4>Total</h4>
-          <p class="quote"><%= quote.dig('total')%></p>
-        </div>
-      <% end %>
+      <%= tender.grand_total_section %>
       <div class="exchange-row">
         <table class="exchange-table">
           <tr class="exchange-table-row">
@@ -156,32 +149,32 @@
               <p> Exchange Rates: </p> 
             </td>
           </tr>
-          <% exchange_rates.each do |currency, rate| %>
+          <% tender.exchange_rates.each do |currency, rate| %>
             <% next if currency == 'base' %>
-            <%= render template: "pdf/partials/breakdowns/exchange_rate_row", locals: { rate: rate, base: quote['currency'], currency: currency } %>
+            <%= render template: "pdf/partials/breakdowns/exchange_rate_row", locals: { rate: rate, base: tender.currency, currency: currency } %>
           <% end %>
         </table>
       </div>
       <div class="note-remarks-row">
-        <% note_remarks.each do |note_remark| %>
+        <% quotation.note_remarks.each do |note_remark| %>
           <p class="note-remark-text"><%= note_remark %></p>
           <br>
         <% end %>
       </div>
-      <% if scope["quote_notes"].present? %>
+      <% if quotation.scope_notes.present? %>
         <div class="tenant-notes-row">
-          <% (scope["quote_notes"] || []).each do |quote_note| %>
+          <% quotation.scope_notes.each do |tender_note| %>
             <p class="">
-              <%= quote_note %>
+              <%= tender_note %>
             </p>
           <% end %>
         </div>
       <% end %>
     </div>
-    <% if notes[quote['tender_id']].present? %>
+    <% if tender.notes.present? %>
       <div class="remarks">
         <h4>Notes: </h4>
-        <ul> <% notes[quote['tender_id']].each do |note| %>
+        <ul> <% tender.notes.each do |note| %>
           <li class="note-header"> <%= note.header %></li>
           <li class="note-body">
             <% if note.contains_html %>
@@ -197,11 +190,11 @@
       </div>
     <% end %>
 
-    <% unless remarks.empty? %>
+    <% unless quotation.remarks.empty? %>
       <div class="remarks">
         <h4>Remarks:</h4>
         <ul>
-          <% remarks.each do  |remark|%>
+          <% quotation.remarks.each do  |remark|%>
             <li>
               <p class="hyphens">
                 <%= simple_format(remark.body) %>
@@ -212,9 +205,9 @@
       </div>
     <% end %>
 
-    <% unless content['disclaimer'].nil? %>
+    <% unless quotation.content['disclaimer'].nil? %>
       <div class="remarks">
-        <ul> <% content['disclaimer'].each do |section| %>
+        <ul> <% quotation.content['disclaimer'].each do |section| %>
           <li class="note-header"> <%= section['text'].html_safe %></li>
           <% end %>
         </ul>

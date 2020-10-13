@@ -7,25 +7,16 @@ class QuoteMailer < ApplicationMailer
 
   def new_quotation_email(quotation:, tender_ids:, shipment:, email:)
     set_current_id(organization_id: quotation.organization_id)
-    return if invalid_records(shipments: [shipment])
 
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
-    @shipment = shipment
-
-    @user_profile = Profiles::ProfileService.fetch(user_id: user.id)
-    @scope = scope_for(record: user)
-    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment, tender_ids: tender_ids)
-
-    return if @quotes.empty?
-
-    @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
+    organization_variables
+    @pdf_service = Pdf::Quotation::Client.new(quotation: quotation, tender_ids: tender_ids)
+    @quotes = @pdf_service.decorated_tenders
     @email = email[/[^@]+/]
     @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
-    email_logo = @org_theme.email_logo
 
-    attachments[pdf_name] = pdf_document if pdf_document.present?
-    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? email_logo.download : ''
-    attachments.inline['icon.png'] = mot_icon(mot)
+    add_attachments
 
     mail(
       from: from(display_name: @org_theme.name),
@@ -41,25 +32,17 @@ class QuoteMailer < ApplicationMailer
   def new_quotation_admin_email(quotation:, shipment:)
     set_current_id(organization_id: quotation.organization_id)
 
-    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
     @quotation = quotation
-    @user_profile = Profiles::ProfileService.fetch(user_id: user.id)
-    return if invalid_records(shipments: [shipment])
-
-    @scope = scope_for(record: user)
-    @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
-    pdf_service = Pdf::Service.new(user: user, organization: current_organization)
-    @quotes = pdf_service.tenders(quotation: @quotation, shipment: shipment, tender_ids: @quotation.tenders.ids)
+    organization_variables
+    @pdf_service = Pdf::Quotation::Admin.new(quotation: @quotation)
+    @quotes = @pdf_service.decorated_tenders
     @content = Legacy::Content.get_component('QuotePdf', current_organization.id)
-    document = pdf_service.admin_quotation(quotation: @quotation, shipment: shipment, pdf_tenders: @quotes)&.attachment
-    attachments[pdf_name] = document if document.present?
-    email_logo = @org_theme.email_logo
-    billing = @quotation&.billing
-    attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
+    add_attachments
+
     mail(
       from: from(display_name: 'ItsMyCargo Quotation Tool'),
       reply_to: Settings.emails.support,
-      to: mail_target_interceptor(billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
+      to: mail_target_interceptor(@quotation.billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
       subject: subject_line(type: :quotation, references: tender_references, quotation: decorated_quotation)
     ) do |format|
       format.html { render 'quotation_admin_email' }
@@ -69,13 +52,20 @@ class QuoteMailer < ApplicationMailer
 
   private
 
-  def pdf_service
-    @pdf_service ||= Pdf::Service.new(user: user, organization: current_organization)
+  def organization_variables
+    @user_profile = Profiles::ProfileService.fetch(user_id: user.id)
+    @scope = scope_for(record: user)
+    @org_theme = ::Organizations::ThemeDecorator.new(current_organization.theme)
+  end
+
+  def add_attachments
+    attachments[pdf_name] = pdf_document if pdf_document.present?
+    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? email_logo.download : ''
+    attachments.inline['icon.png'] = mot_icon(mot)
   end
 
   def pdf_document
-    @pdf_document ||=
-      pdf_service.tenders_pdf(quotation: @quotation, shipment: @shipment, pdf_tenders: @quotes)&.attachment
+    @pdf_document ||= @pdf_service.attachment
   end
 
   def mot_icon(mot)
@@ -89,7 +79,7 @@ class QuoteMailer < ApplicationMailer
   end
 
   def mot
-    @quotes.dig(0, 'mode_of_transport') || 'ocean'
+    @quotes.first.mode_of_transport || 'ocean'
   end
 
   def decorated_shipment
@@ -106,27 +96,6 @@ class QuoteMailer < ApplicationMailer
 
   def pdf_name
     "quotation_#{tender_references.join(',')}.pdf"
-  end
-
-  def generate_and_upload_quotation(quotes)
-    quotation = Pdf::Handler.new(
-      layout: 'pdfs/simple.pdf.html.erb',
-      template: 'shipments/pdfs/quotations.pdf.erb',
-      margin: { top: 15, bottom: 5, left: 8, right: 8 },
-      shipment: @shipment,
-      shipments: @shipments,
-      quotation: @quotation,
-      quotes: quotes,
-      color: @theme['colors']['primary'],
-      name: 'quotation',
-      remarks: Legacy::Remark.where(organization_id: @organization.id).order(order: :asc),
-      scope: scope_for(record: user)
-    )
-    quotation.generate
-  end
-
-  def invalid_records(shipments:)
-    shipments.any?(&:deleted?) || shipments.any?(&:destroyed?)
   end
 
   def from(display_name:)

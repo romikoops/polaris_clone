@@ -93,11 +93,6 @@ class ShippingTools
     raise ApplicationError::InternalError
   end
 
-  def generate_shipment_pdf(shipment:)
-    document = Pdf::Service.new(user: shipment.user, organization: shipment.organization).shipment_pdf(shipment: shipment)
-    document.attachment
-  end
-
   def update_shipment(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
@@ -482,18 +477,18 @@ class ShippingTools
   end
 
   def save_pdf_quotes(shipment, organization, schedules)
-    trip_ids = schedules.map { |sched| sched.dig('meta', 'charge_trip_id') }
-    tenders = shipment.charge_breakdowns
-                      .where(trip_id: trip_ids)
-                      .map(&:tender)
+    tender_ids = schedules.map { |sched| sched.dig('meta', 'tender_id') }
+    tenders = Quotations::Tender.where(id: tender_ids)
     quotation = tenders.first.quotation
-    main_quote = Legacy::Quotation.find_by(original_shipment_id: shipment)
     send_on_download = ::OrganizationManager::ScopeService.new(
       target: shipment.user,
       organization: shipment.organization
     ).fetch(:send_email_on_quote_download)
     QuoteMailer.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later if send_on_download
-    Wheelhouse::PdfService.new(quotation_id: quotation.id, tender_ids: tenders.pluck(:id)).download
+    Pdf::Quotation::Client.new(
+      quotation: quotation,
+      tender_ids: tenders.ids
+    ).file
   end
 
   def save_and_send_quotes(shipment, schedules, email)

@@ -4,6 +4,7 @@ module Cargo
   class Cargo < ApplicationRecord
     belongs_to :organization, class_name: 'Organizations::Organization'
     has_many :units, class_name: 'Cargo::Unit'
+    monetize :total_goods_value_cents
 
     def total_area
       units.map(&:total_area).sum(Measured::Area.new(0, :m2))

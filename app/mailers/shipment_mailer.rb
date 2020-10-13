@@ -107,22 +107,10 @@ class ShipmentMailer < ApplicationMailer
 
   private
 
-  def generate_and_upload_bill_of_lading
-    bill_of_lading = Pdf::Handler.new(
-      layout: 'pdfs/simple.pdf.html.erb',
-      template: 'shipments/pdfs/bill_of_lading.pdf.html.erb',
-      margin: { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: @shipment,
-      name: 'bill_of_lading'
-    )
-
-    bill_of_lading.generate
-    bill_of_lading.upload
-  end
-
   def create_pdf_attachment(shipment)
-    pdf = ShippingTools.new.generate_shipment_pdf(shipment: shipment)
-    attachments["shipment_#{shipment.imc_reference}.pdf"] = pdf
+    shipment_tender = Quotations::Tender.find(shipment.tender_id)
+    pdf = Pdf::Shipment::Recap.new(quotation: shipment_tender.quotation, shipment: shipment).file
+    attachments["shipment_#{shipment.imc_reference}.pdf"] = pdf.attachment
   end
 
   def base_server_url

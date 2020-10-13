@@ -4,17 +4,20 @@ require "rails_helper"
 
 RSpec.describe QuotationDecorator do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
-  let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true) }
+  let(:shipment) do
+    FactoryBot.create(:completed_legacy_shipment,
+      with_breakdown: true,
+      with_tenders: true,
+      load_type: load_type,
+      with_aggregated_cargo: aggregated)
+  end
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment: shipment) }
   let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
   let(:address) { FactoryBot.create(:gothenburg_address) }
   let(:decorated_quotation) { described_class.new(quotation, context: {scope: scope}) }
   let(:cargo) { quotation.cargo }
-
-  before do
-    FactoryBot.create(:cargo_cargo, quotation_id: quotation.id)
-    FactoryBot.create(:cargo_unit, :lcl, cargo: cargo)
-  end
+  let(:load_type) { "cargo_item" }
+  let(:aggregated) { false }
 
   describe ".legacy_json" do
     let(:result) { decorated_quotation.legacy_json }
@@ -30,8 +33,6 @@ RSpec.describe QuotationDecorator do
 
   describe ".cargo_units" do
     context "when lcl" do
-      let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true, load_type: "cargo_item") }
-
       it "returns the legacy response format" do
         cargo_units = decorated_quotation.cargo_units
         expect(cargo_units).to eq shipment.cargo_units.map(&:with_cargo_type)
@@ -39,7 +40,7 @@ RSpec.describe QuotationDecorator do
     end
 
     context "when aggregated lcl cargo" do
-      let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true, with_aggregated_cargo: true, load_type: "cargo_item") }
+      let(:aggregated) { true }
 
       it "returns the legacy response format" do
         cargo_units = decorated_quotation.cargo_units
@@ -184,6 +185,7 @@ RSpec.describe QuotationDecorator do
 
   describe "total_weight" do
     let(:cargo_weight) { "500.00" }
+    let(:load_type) { "cargo_item" }
 
     context "when lcl" do
       it "returns the total weight of the cargo items" do
@@ -201,6 +203,7 @@ RSpec.describe QuotationDecorator do
 
     context "when fcl" do
       let(:load_type) { "container" }
+      let(:cargo_weight) { "6000.00" }
 
       it "returns the total weight of the containers" do
         expect(decorated_quotation.total_weight).to eq(cargo_weight)

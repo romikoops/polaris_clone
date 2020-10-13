@@ -8,7 +8,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
 
   let(:billing) { :external }
   let!(:shipment) {
-    create(:complete_legacy_shipment,
+    create(:completed_legacy_shipment,
       user: user,
       imc_reference: nil,
       organization: user.organization,

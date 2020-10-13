@@ -5,14 +5,7 @@ module Pdf
     delegate_all
     delegate :humanize, to: :total_weight, prefix: true
     delegate :humanize, to: :unit_weight, prefix: true
-    delegate :mode_of_transport, to: :tender
-
-    # Define methods for all decorated objects.
-    # Helpers are accessed through `helpers` (aka `h`). For example:
-    #
-    #   def percent_amount
-    #     h.number_to_percentage object.amount, precision: 2
-    #   end
+    delegate :mode_of_transport, :shipment, to: :tender
 
     def chargeable_weight
       @chargeable_weight ||=
@@ -48,18 +41,22 @@ module Pdf
     end
 
     def determine_chargeable_weight_row
-      row, value = case scope["chargeable_weight_view"]
-                   when "weight"
-                     ["weight", total_chargeable_weight]
-                   when "volume"
-                     ["volume", total_chargeable_volume]
-                   when "dynamic"
-                     if show_volume
-                       ["volume", total_chargeable_volume]
-                     else
-                       ["weight", total_chargeable_weight]
-                     end
+      case scope["chargeable_weight_view"]
+      when "weight"
+        ["weight", total_chargeable_weight]
+      when "volume"
+        ["volume", total_chargeable_volume]
+      when "dynamic"
+        if show_volume
+          ["volume", total_chargeable_volume]
+        else
+          ["weight", total_chargeable_weight]
+        end
       end
+    end
+
+    def render_chargeable_weight_row
+      row, value = determine_chargeable_weight_row
       h.render template: "pdf/partials/quotation/cargo/chargeable_weight_rows/#{row}", locals: {value: value}
     end
 

@@ -34,12 +34,12 @@ RSpec.describe Pdf::CargoDecorator do
     end
   end
 
-  describe ".determine_chargeable_weight_row" do
+  describe ".render_chargeable_weight_row" do
     context "when chargeable_weight_view is volume" do
       let(:chargeable_weight_view) { "volume" }
 
       it "generates the quote pdf" do
-        expect(klass.determine_chargeable_weight_row).to include tender.cargo.volume.value.to_s
+        expect(klass.render_chargeable_weight_row).to include tender.cargo.volume.value.to_s
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe Pdf::CargoDecorator do
       let(:chargeable_weight_view) { "weight" }
 
       it "generates the quote pdf" do
-        expect(klass.determine_chargeable_weight_row).to include "1344.0 kg"
+        expect(klass.render_chargeable_weight_row).to include "1344.0 kg"
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe Pdf::CargoDecorator do
       end
 
       it "generates the quote pdf" do
-        expect(klass.determine_chargeable_weight_row).to include "500.0 kg"
+        expect(klass.render_chargeable_weight_row).to include "500.0 kg"
       end
     end
   end

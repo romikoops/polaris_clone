@@ -2077,7 +2077,9 @@ CREATE TABLE public.legacy_files (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     user_id uuid,
-    organization_id uuid
+    organization_id uuid,
+    target_type character varying,
+    target_id uuid
 );
 
 
@@ -8079,6 +8081,13 @@ CREATE INDEX index_legacy_files_on_shipment_id ON public.legacy_files USING btre
 
 
 --
+-- Name: index_legacy_files_on_target_type_and_target_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_legacy_files_on_target_type_and_target_id ON public.legacy_files USING btree (target_type, target_id);
+
+
+--
 -- Name: index_legacy_files_on_tenant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12508,6 +12517,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200924084551'),
 ('20200930111524'),
 ('20200930111636'),
+('20201007095311'),
 ('20201007192043'),
 ('20201007192136'),
 ('20201007192212');

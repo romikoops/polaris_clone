@@ -47,4 +47,12 @@ RSpec.describe Pdf::HiddenValueService, type: :service do
       expect(class_with_nil_user.hide_total_args).to eq(expected_value)
     end
   end
+
+  context 'when user is admin' do
+    let(:expected_value) { { hidden_grand_total: false, hidden_sub_total: false, hide_converted_grand_total: false } }
+
+    it 'returns true for all hidden values' do
+      expect(klass.admin_args).to eq(expected_value)
+    end
+  end
 end

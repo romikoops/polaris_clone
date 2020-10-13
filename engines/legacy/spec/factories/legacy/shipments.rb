@@ -31,6 +31,7 @@ FactoryBot.define do
       with_aggregated_cargo { false }
       custom_cargo_classes {}
       completed { false }
+      breakdown_count { 1 }
     end
 
     trait :with_contacts do
@@ -110,15 +111,15 @@ FactoryBot.define do
 
       if evaluator.with_breakdown || evaluator.with_full_breakdown
         sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ['cargo']
-        breakdown = create(:legacy_charge_breakdown,
+        breakdowns = create_list(:legacy_charge_breakdown,
+          evaluator.breakdown_count,
           trip: shipment.trip || create(:legacy_trip, itinerary: shipment.itinerary),
           shipment: shipment,
           with_tender: evaluator.with_tenders,
           sections: sections,
           quotation: quotation)
 
-        shipment.charge_breakdowns << breakdown
-        shipment.tender_id = breakdown.tender_id
+        shipment.charge_breakdowns = breakdowns
       end
     end
 
@@ -132,7 +133,13 @@ FactoryBot.define do
       end
 
       after(:create) do |shipment|
-        shipment.update(trip: shipment.charge_breakdowns.first.trip)
+        chosen_breakdown = shipment.charge_breakdowns.first
+        chosen_tender = chosen_breakdown.tender
+        shipment.update(
+          trip: shipment.charge_breakdowns.first.trip,
+          tender_id: chosen_tender.id,
+          imc_reference: chosen_tender.imc_reference
+        )
       end
     end
 

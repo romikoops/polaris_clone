@@ -68,9 +68,9 @@
       <mj-column width="84%">
         <mj-text line-height="16px" padding="0" font-size="18px">
           <p>From: <strong>
-              <%= @quotes.dig(0, 'origin') %></strong></p>
+              <%= @quotes.first.origin %></strong></p>
           <p>To: <strong>
-              <%=  @quotes.dig(0, 'destination') %></strong> </p>
+              <%=  @quotes.first.destination %></strong> </p>
         </mj-text>
       </mj-column>
     </mj-group>

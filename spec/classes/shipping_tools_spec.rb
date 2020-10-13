@@ -56,7 +56,7 @@ RSpec.describe ShippingTools do
 
   context 'when sending admin emails on quote download' do
     let(:shipment) do
-      create(:legacy_shipment,
+      create(:complete_legacy_shipment,
              user: user,
              trip: trip,
              organization: organization,
@@ -74,12 +74,12 @@ RSpec.describe ShippingTools do
           quote: charge_breakdown.to_nested_hash(args, sub_total_charge: false),
           schedules: [
             {
-              'trip_id' => charge_breakdown.trip_id, charge_trip_id: charge_breakdown.trip_id,
+              'trip_id' => charge_breakdown.trip_id,
               'origin_hub': origin_hub,
               'destination_hub': destination_hub
             }
           ],
-          meta: { charge_trip_id: trip.id }
+          meta: { charge_trip_id: trip.id, 'tender_id' => charge_breakdown.tender_id }
         }.with_indifferent_access
       ]
     end

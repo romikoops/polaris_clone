@@ -51,7 +51,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_shipment
-    document = Pdf::Service.new(organization: current_organization, user: shipment.user).shipment_pdf(shipment: shipment)
+    document = Pdf::Shipment::Recap.new(quotation: quotations_quotation, shipment: shipment).file
 
     response_handler(
       key: 'shipment_recap',
@@ -77,6 +77,14 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   private
+
+  def quotations_quotation
+    @quotations_quotation ||= shipment_tender.quotation
+  end
+
+  def shipment_tender
+    @shipment_tender ||= Quotations::Tender.find(shipment.tender_id)
+  end
 
   def result_params
     params.require(:options).permit(quotes:

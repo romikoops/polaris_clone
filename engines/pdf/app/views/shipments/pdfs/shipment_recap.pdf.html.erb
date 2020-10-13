@@ -1,19 +1,17 @@
-<% shipper = shipment.shipper %>
-<% consignee = shipment.consignee %>
-<% notifyees = shipment.notifyees %>
+<% shipper = quotation.shipper %>
+<% consignee = quotation.consignee %>
+<% notifyees = quotation.notifyees %>
 <% primary_color = theme.primary_color %>
 <% neutral_color = '#C4C4C4' %>
-<% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
-<% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
-<% origin_fee_color = selected_offer.dig("export") ? primary_color : neutral_color %>
-<% destination_fee_color = selected_offer.dig("import") ? primary_color : neutral_color %>
-<% weight_units = scope['values']['weight'] %>
-<% quote = quotes.first %>
+<% precarriage_color = quotation.pickup_address ? primary_color : neutral_color %>
+<% oncarriage_color = quotation.delivery_address ? primary_color : neutral_color %>
+<% origin_fee_color = tender.export? ? primary_color : neutral_color %>
+<% destination_fee_color = tender.import? ? primary_color : neutral_color %>
 
 <div class="wrapper-quotations">
   <div class="main-title-shipment">
     <div class="title-shipments" style="text-align: left;">
-      <h1>Shipment <%= shipment.imc_reference %></h1>
+      <h1>Shipment <%= tender.imc_reference %></h1>
 
     </div>
     <div class="text-right tenant-shipments">
@@ -22,14 +20,14 @@
   </div>
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
   <div class="refrow">
-    <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
-    <p class="ref text-right"><b>Price valid until:</b> <%= shipment.valid_until(shipment.trip)&.strftime('%d.%m.%Y') %></p>
+    <p class="ref">Placed on&nbsp;<span><%= tender.updated_at.strftime("%d/%m/%Y") %></span></p>
+    <p class="ref text-right"><b>Price valid until:</b> <%= tender.valid_until&.strftime('%d.%m.%Y') %></p>
   </div>
   <div class="overview">
       <div class="info overview-child border-none">
-          <% if shipment.mode_of_transport == "ocean" %>
+          <% if tender.mode_of_transport == "ocean" %>
             <% mot = "anchor" %>
-          <% elsif shipment.mode_of_transport == "air" %>
+          <% elsif tender.mode_of_transport == "air" %>
             <% mot = "plane" %>
           <% else %>
             <% mot = "truck" %>
@@ -39,19 +37,13 @@
              <p>
               From:&nbsp;
               <span>
-                <%= shipment.origin_hub&.name %>
-                <% if shipment.origin_hub&.free_out %>
-                  (Free Out)
-                <% end %>
+                <%= tender.origin %>
               </span>
             </p>
             <p>
               To:&nbsp;
               <span>
-                <%= shipment.destination_hub&.name%>
-                <% if shipment.destination_hub&.free_out %>
-                  (Free Out)
-                <% end %>
+                <%= tender.destination %>
               </span>
             </p>
           </div>
@@ -65,18 +57,18 @@
             </div>
             <p>
               <strong>Weight:</strong>
-              <%= quote["cargo"].total_weight_humanize %>
+              <%= tender.cargo.total_weight_humanize %>
             </p>
-            <% if shipment.lcl? %>
+            <% if tender.load_type == 'cargo_item' %>
               <p>
                 <strong>Volume:</strong>
-                <%= quote["cargo"].total_volume_format %>
+                <%= tender.cargo.total_volume_format %>
               </p>
             <% end %>
-            <% if shipment.vessel_name %>
+            <% if tender.vessel_name %>
               <p>
                 <strong>Vessel:</strong>
-                <%= shipment.vessel_name %>
+                <%= tender.vessel_name %>
               </p>
             <% end %>
           </div>
@@ -84,37 +76,37 @@
 
   </div>
 
-  <% if shipment.has_on_carriage || shipment.has_pre_carriage && (shipment.pickup_address || shipment.delivery_address) %>
+  <% if quotation.pickup_address.present? || quotation.delivery_address.present? %>
     <div class="carriage-row border-bottom">
 
-      <% if shipment.pickup_address && shipment.has_pre_carriage %>
+      <% if quotation.pickup_address %>
         <div>
           <div class="display-flex">
             <i class=" fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
             <h4>
-              Pick-up estimated on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
+              Pick-up estimated on <%= quotation.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
 
           <div>
-            <% if shipment.pickup_address %>
-              <p><%= shipment.pickup_address.geocoded_address %></p>
+            <% if quotation.pickup_address %>
+              <p><%= quotation.pickup_address.geocoded_address %></p>
             <% end %>
           </div>
         </div>
       <% end %>
 
-      <% if shipment.delivery_address && shipment.has_on_carriage %>
+      <% if quotation.delivery_address && quotation.delivery_address %>
         <div>
           <div class="display-flex">
             <i class=" fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
             <h4>
-              Delivery estimated at <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
+              Delivery estimated at <%= quotation.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
           <div>
-            <% if shipment.delivery_address %>
-              <p><%= shipment.delivery_address.geocoded_address %></p>
+            <% if quotation.delivery_address %>
+              <p><%= quotation.delivery_address.geocoded_address %></p>
             <% end %>
           </div>
         </div>
@@ -123,30 +115,30 @@
   <% end %>
 
   <div class="dates margin-bottom">
-    <% if !shipment.has_pre_carriage %>
+    <% if !tender.pickup_address %>
       <div>
         <h4 class="date-title">Closing Date</h4>
         <p class="sched-elem">
-          <%= shipment.closing_date.strftime("%d/%m/%Y") %>
+          <%= tender.closing_date.strftime("%d/%m/%Y") %>
         </p>
       </div>
     <% end %>
     <div>
       <h4 class="date-title">ETD</h4>
       <p class="sched-elem">
-        <%= shipment.etd.strftime("%d/%m/%Y") %>
+        <%= tender.start_date.strftime("%d/%m/%Y") %>
       </p>
     </div>
     <div>
       <h4 class="date-title">ETA</h4>
       <p class="sched-elem">
-        <%= shipment.eta.strftime("%d/%m/%Y") %>
+        <%= tender.end_date.strftime("%d/%m/%Y") %>
       </p>
     </div>
     <div>
       <h4 class="date-title"> Estimated T/T <sup>*</sup></h4>
       <p class="sched-elem">
-        <%= ((shipment.eta - shipment.etd) / 1.day).ceil %>
+        <%= tender.transit_time %>
         Days
       </p>
     </div>
@@ -222,51 +214,49 @@
       <div class="<%= service_css %>">
         <div>
           <h3>Freight, Duties & Carriage:</h3>
-            <div>
-
-              <div class="display-flex-center whole">
-                <div class="display-flex half margin-bottom">
-                  <i class="fa fa-truck" style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"></i>
-                  <p>Pick-up</p>
-                </div>
-                <div class="display-flex half margin-bottom">
-                  <i
-                    class="fa fa-truck flip"
-                    style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>"
-                  ></i>
-                  <p>Delivery</p>
-                </div>
+          <div>
+            <div class="display-flex-center whole">
+              <div class="display-flex half margin-bottom">
+                <i class="fa fa-truck" style="color: <%= tender.pickup_address ? primary_color : '#E0E0E0' %>"></i>
+                <p>Pick-up</p>
               </div>
-
-              <div class="display-flex-center whole">
-                <div class="display-flex half margin-bottom">
-                  <i
-                    class="fa fa-file-o"
-                    style="color: <%= selected_offer.dig("export") ? primary_color : '#E0E0E0' %>"
-                  ></i>
-                  <p>
-                Origin<br />
-                Local Charges
-                  </p>
-                </div>
-                <div class="display-flex half margin-bottom">
-                  <i
-                    class="fa fa-file"
-                    style="color: <%= selected_offer.dig("import") ? primary_color : '#E0E0E0' %>">
-                  </i>
-                  <p>
-                Destination<br />
-                Local Charges
-                  </p>
-                </div>
+              <div class="display-flex half margin-bottom">
+                <i
+                  class="fa fa-truck flip"
+                  style="color: <%= tender.delivery_address ? primary_color : '#E0E0E0' %>"
+                ></i>
+                <p>Delivery</p>
               </div>
+            </div>
 
-              <div class="display-flex margin-bottom whole">
-                  <i
-                    class="fa fa-ship" style="color: <%= primary_color %>"></i>
-                <p><%="#{shipment.mode_of_transport.capitalize} Freight" %></p>
+            <div class="display-flex-center whole">
+              <div class="display-flex half margin-bottom">
+                <i
+                  class="fa fa-file-o"
+                  style="color: <%= tender.export? ? primary_color : '#E0E0E0' %>"
+                ></i>
+                <p>
+              Origin<br />
+              Local Charges
+                </p>
               </div>
+              <div class="display-flex half margin-bottom">
+                <i
+                  class="fa fa-file"
+                  style="color: <%= tender.import? ? primary_color : '#E0E0E0' %>">
+                </i>
+                <p>
+              Destination<br />
+              Local Charges
+                </p>
+              </div>
+            </div>
 
+            <div class="display-flex margin-bottom whole">
+                <i
+                  class="fa fa-ship" style="color: <%= primary_color %>"></i>
+              <p><%="#{tender.mode_of_transport.capitalize} Freight" %></p>
+            </div>
           </div>
         </div>
       </div>
@@ -278,27 +268,21 @@
           <div>
 
             <div class="display-flex margin-bottom">
-              <i class="fa fa-user" style="color: <%= selected_offer.dig("customs") ? primary_color : '#E0E0E0' %>"></i>
+              <i class="fa fa-user" style="color: <%= tender.customs? ? primary_color : '#E0E0E0' %>"></i>
               <p>Customs</p>
             </div>
 
             <div class="display-flex margin-bottom">
-              <i class="fa fa-umbrella" style="color: <%= selected_offer.dig("insurance") ? primary_color : '#E0E0E0' %>"></i>
+              <i class="fa fa-umbrella" style="color: <%= tender.insurance? ? primary_color : '#E0E0E0' %>"></i>
               <p>Insurance</p>
             </div>
           </div>
         </div>
       <% end %>
       <div class="total-section">
-        <p><span>x<%= shipment.aggregated_cargo ? '1' : shipment.cargo_units.pluck(:quantity).sum %>&nbsp;</span><%= load_type %></p>
+        <p><span>x<%= tender.cargo.quantity %>&nbsp;</span><%= tender.load_type.humanize %></p>
         <h2>
-          <% if selected_offer.dig("edited_total", "value") %>
-            <%= '%.2f' % selected_offer.dig("edited_total", "value") %>
-            <%= selected_offer.dig("edited_total", "currency") %>
-          <% elsif selected_offer.dig("total", "value")%>
-            <%= '%.2f' % selected_offer.dig("total", "value") %>
-            <%= selected_offer.dig("total", "currency") %>
-          <% end %>
+          <% tender.amount.format %>
         </h2>
       </div>
     </div>
@@ -310,7 +294,7 @@
         <h1>Cargo Details</h1>
       </div>
 
-      <% quote["cargo_items"].each_with_index do |cargo, i| %>
+      <% tender.cargo_items.each_with_index do |cargo, i| %>
             <div class="no_page_break">
               <div class="title_row">
                 <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_type %> Unit</p>
@@ -350,16 +334,16 @@
                   </td>
                 </tr>
                 <tr>
-                   <%= cargo.determine_chargeable_weight_row %>
+                   <%= cargo.render_chargeable_weight_row %>
                 </tr>
               </table>
             </div>
 
           <% end %>
-          <% quote["containers"].each_with_index do |container, i| %>
+          <% tender.containers.each_with_index do |container, i| %>
             <div class="no_page_break">
               <div class="title_row">
-                <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= load_type %></p>
+                <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= tender.load_type %></p>
               </div>
               <table class="data-table">
                 <tr>
@@ -391,7 +375,7 @@
             </div>
 
           <% end %>
-          <% quote["aggregated"].each do |agg_cargo| %>
+          <% tender.aggregated.each do |agg_cargo| %>
             <div class="no_page_break">
               <div class="title_row">
                 <p class=""><strong>Aggregated Cargo</strong></p>
@@ -413,7 +397,7 @@
                   <td class="table-title"><p>Chargeable Weight</p></td>
                   <td class="table-value">
                     <span>
-                      <%= cargo.determine_chargeable_weight_row %>
+                      <%= cargo.render_chargeable_weight_row %>
                     </span>
                   </td>
                 </tr>
@@ -427,21 +411,15 @@
           <div class="display-flex third">
             <span>Total Value of Goods:</span>
             <p class="info-values">
-                <% if shipment.total_goods_value.is_a? Integer %>
-                  <%= '%.2f' % shipment.total_goods_value %>
-                  <%= selected_offer["total"]["currency"] %>
-                <% else %>
-                  <%= '%.2f' % shipment.total_goods_value["value"] %>
-                  <%= shipment.total_goods_value["currency"] %>
-                <% end %>
+              <% tender.cargo.total_goods_value.format %>
             </p>
           </div>
 
           <div class="display-flex third">
             <span>EORI number:</span>
             <p class="info-values">
-              <% if shipment.eori %>
-                <%= shipment.eori %>
+              <% if quotation.eori %>
+                <%= quotation.eori %>
               <% else %>
                 -
               <% end %>
@@ -451,8 +429,8 @@
           <div class="display-flex third">
             <span>Incoterm:</span>
             <p class="hyphens">
-              <% if shipment.incoterm_text %>
-                <%= shipment.incoterm_text %>
+              <% if quotation.incoterm_text %>
+                <%= quotation.incoterm_text %>
               <% else %>
                 -
               <% end %>
@@ -463,20 +441,20 @@
           <div class="border-bottom display-flex">
             <span>Description of Goods: </span>
             <p class="hyphens">
-              <%= shipment.cargo_notes %>
+              <%= quotation.cargo_notes %>
             </p>
           </div>
 
-          <% unless notes.empty? %>
+          <% unless tender.notes.empty? %>
            <div class="remarks">
             <h4>Notes: </h4>
             <ul>
               <li>
                 <p class="hyphens">
-                  <%= simple_format(shipment.notes) %>
+                  <%= simple_format(quotation.notes) %>
                 </p>
               </li>
-              <% notes[shipment.tender_id].each do |note| %>
+              <% tender.notes.each do |note| %>
                 <li class="note-header"> <%= note.header %></li>
                 <li>
                   <p class="hyphens">
@@ -488,11 +466,11 @@
            </div>
           <% end %>
 
-          <% unless remarks.empty? %>
+          <% unless quotation.remarks.empty? %>
             <div class="remarks">
               <h4>Remarks:</h4>
               <ul>
-                <% remarks.each do |remark|%>
+                <% quotation.remarks.each do |remark|%>
                     <% unless remark.body.empty? %>
                     <li>
                       <p class="hyphens">
