@@ -41,7 +41,7 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, organization: organization)
+    FactoryBot.create(:organizations_theme, :with_email_logo, organization: organization)
   end
 
   describe 'quotation_email' do

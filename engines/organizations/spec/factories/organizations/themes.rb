@@ -35,6 +35,15 @@ FactoryBot.define do
     end
 
     email_links { {} }
+
+    trait :with_email_logo do
+      after(:build) do |theme|
+        theme.email_logo.attach(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "images", "test.jpg")),
+          filename: "test.jpeg", content_type: "image/jpeg"
+        )
+      end
+    end
   end
 end
 

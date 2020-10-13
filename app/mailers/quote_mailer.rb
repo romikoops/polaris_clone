@@ -15,7 +15,6 @@ class QuoteMailer < ApplicationMailer
     @quotes = @pdf_service.decorated_tenders
     @email = email[/[^@]+/]
     @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
-
     add_attachments
 
     mail(
@@ -60,7 +59,7 @@ class QuoteMailer < ApplicationMailer
 
   def add_attachments
     attachments[pdf_name] = pdf_document if pdf_document.present?
-    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? email_logo.download : ''
+    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? @org_theme.email_logo.download : ''
     attachments.inline['icon.png'] = mot_icon(mot)
   end
 

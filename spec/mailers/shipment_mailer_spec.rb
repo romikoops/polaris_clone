@@ -31,7 +31,7 @@ RSpec.describe ShipmentMailer, type: :mailer do
     end
     ::Organizations.current_id = organization.id
     FactoryBot.create(:cargo_unit, organization: organization, cargo: cargo, weight_value: 100)
-    FactoryBot.create(:organizations_theme, organization: organization, name: 'Demo')
+    FactoryBot.create(:organizations_theme, :with_email_logo, organization: organization, name: 'Demo')
   end
 
   describe 'tenant_notification' do
