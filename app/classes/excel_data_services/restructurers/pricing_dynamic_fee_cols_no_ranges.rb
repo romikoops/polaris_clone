@@ -3,6 +3,8 @@
 module ExcelDataServices
   module Restructurers
     class PricingDynamicFeeColsNoRanges < ExcelDataServices::Restructurers::Base
+      HEADER_KLASS = ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers
+
       def perform
         sheet_name = data[:sheet_name]
         restructurer_name = data[:restructurer_name]
@@ -46,9 +48,7 @@ module ExcelDataServices
       private
 
       def standard_keys
-        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
-          ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
-          IGNORED_KEYS
+        HEADER_KLASS::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys + IGNORED_KEYS
       end
 
       def expand_dynamic_fees_to_individual_fees(standard_part, fee_part, row_nr)

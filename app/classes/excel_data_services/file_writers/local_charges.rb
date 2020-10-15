@@ -46,19 +46,20 @@ module ExcelDataServices
         rate_basis = fee['rate_basis'].upcase
         effective_date = Date.parse(local_charge.effective_date.to_s) if local_charge.effective_date
         expiration_date = Date.parse(local_charge.expiration_date.to_s) if local_charge.expiration_date
-        counterpart_hub = Legacy::Hub.where(organization: organization).find_by(id: local_charge.counterpart_hub_id)
-        counterpart_hub_name = remove_hub_suffix(counterpart_hub.name, counterpart_hub.hub_type) if counterpart_hub
-        counterpart_country_name = counterpart_hub.address.country.name if counterpart_hub
+        counterpart_hub = local_charge.counterpart_hub
+        counterpart_country = counterpart_hub.address.country if counterpart_hub
         tenant_vehicle = local_charge.tenant_vehicle
 
         { group_id: local_charge.group_id,
           group_name: Groups::Group.find_by(id: local_charge.group_id)&.name,
-          hub: remove_hub_suffix(hub.name, hub.hub_type),
+          locode: hub.nexus.locode,
+          hub: hub.name,
           country: hub.address.country.name,
           effective_date: effective_date,
           expiration_date: expiration_date,
-          counterpart_hub: counterpart_hub_name,
-          counterpart_country: counterpart_country_name,
+          counterpart_locode: counterpart_hub&.nexus&.locode,
+          counterpart_hub: counterpart_hub&.name,
+          counterpart_country: counterpart_country&.name,
           service_level: tenant_vehicle.name,
           carrier: tenant_vehicle&.carrier&.name,
           fee_code: fee['key'],
@@ -157,8 +158,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::OPTIONAL_LOCAL_CHARGES +
-          ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES
+        ExcelDataServices::Validators::HeaderChecker::StaticHeadersForRestructurers::LOCAL_CHARGES.keys
       end
     end
   end

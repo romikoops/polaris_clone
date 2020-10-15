@@ -8,241 +8,222 @@ module ExcelDataServices
       module StaticHeadersForRestructurers
         # The names of the constants here must exactly match the names of the data restructurers (upcased).
 
-        LOCAL_CHARGES = %i[
-          hub
-          country
-          effective_date
-          expiration_date
-          counterpart_hub
-          counterpart_country
-          service_level
-          carrier
-          fee_code
-          fee
-          mot
-          load_type
-          direction
-          currency
-          rate_basis
-          minimum
-          maximum
-          base
-          ton
-          cbm
-          kg
-          item
-          shipment
-          bill
-          container
-          wm
-          range_min
-          range_max
-          dangerous
-        ].freeze
+        LOCAL_CHARGES = {
+          group_id: :optional,
+          group_name: :optional,
+          effective_date: :required,
+          expiration_date: :required,
+          locode: :optional,
+          hub: :optional,
+          country: :optional,
+          counterpart_locode: :optional,
+          counterpart_hub: :optional,
+          counterpart_country: :optional,
+          service_level: :required,
+          carrier: :required,
+          fee_code: :required,
+          fee: :required,
+          mot: :required,
+          load_type: :required,
+          direction: :required,
+          currency: :required,
+          rate_basis: :required,
+          minimum: :required,
+          maximum: :required,
+          base: :required,
+          ton: :required,
+          cbm: :required,
+          kg: :required,
+          item: :required,
+          shipment: :required,
+          bill: :required,
+          container: :required,
+          wm: :required,
+          range_min: :required,
+          range_max: :required,
+          dangerous: :required
+        }.freeze
 
-        OPTIONAL_LOCAL_CHARGES = %i[
-          group_id
-          group_name
-        ].freeze
+        PRICING_DYNAMIC_FEE_COLS_NO_RANGES = {
+          group_id: :optional,
+          group_name: :optional,
+          effective_date: :required,
+          expiration_date: :required,
+          origin_locode: :optional,
+          origin: :optional,
+          country_origin: :optional,
+          destination_locode: :optional,
+          destination: :optional,
+          country_destination: :optional,
+          mot: :required,
+          carrier: :required,
+          service_level: :required,
+          load_type: :required,
+          rate_basis: :required,
+          transshipment: :optional,
+          transit_time: :optional,
+          remarks: :optional,
+          wm_ratio: :optional,
+          currency: :required
+        }.freeze
 
-        PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
-          effective_date
-          expiration_date
-          origin
-          country_origin
-          destination
-          country_destination
-          mot
-          carrier
-          service_level
-          load_type
-          rate_basis
-          currency
-        ].freeze
+        PRICING_ONE_FEE_COL_AND_RANGES = {
+          group_id: :optional,
+          group_name: :optional,
+          effective_date: :required,
+          expiration_date: :required,
+          origin_locode: :optional,
+          origin: :optional,
+          country_origin: :optional,
+          destination_locode: :optional,
+          destination: :optional,
+          country_destination: :optional,
+          mot: :required,
+          carrier: :required,
+          service_level: :required,
+          load_type: :required,
+          rate_basis: :required,
+          transshipment: :optional,
+          transit_time: :optional,
+          remarks: :optional,
+          wm_ratio: :optional,
+          fee_code: :required,
+          fee_name: :required,
+          currency: :required,
+          fee_min: :required,
+          fee: :required,
+          range_min: :required,
+          range_max: :required
+        }.freeze
 
-        OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES = %i[
-          origin_locode
-          destination_locode
-          group_id
-          group_name
-          transshipment
-          transit_time
-          remarks
-          wm_ratio
-        ].freeze
+        SACO_SHIPPING = {
+          internal: :required,
+          destination_country: :required,
+          destination_locode: :required,
+          destination_hub: :required,
+          terminal: :required,
+          transshipment_via: :required,
+          carrier: :required,
+          origin_locode: :required,
+          effective_date: :required,
+          expiration_date: :required
+        }.freeze
 
-        PRICING_ONE_FEE_COL_AND_RANGES = %i[
-          effective_date
-          expiration_date
-          origin
-          country_origin
-          destination
-          country_destination
-          mot
-          carrier
-          service_level
-          load_type
-          rate_basis
-          range_min
-          range_max
-          fee_code
-          fee_name
-          currency
-          fee_min
-          fee
-        ].freeze
+        MARGINS = {
+          effective_date: :required,
+          expiration_date: :required,
+          origin: :required,
+          country_origin: :required,
+          destination: :required,
+          country_destination: :required,
+          mot: :required,
+          carrier: :required,
+          service_level: :required,
+          margin_type: :required,
+          load_type: :required,
+          fee_code: :required,
+          operator: :required,
+          margin: :required
+        }.freeze
 
-        OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES = %i[
-          origin_locode
-          destination_locode
-          group_id
-          group_name
-          transshipment
-          transit_time
-          remarks
-          wm_ratio
-        ].freeze
+        SCHEDULE_GENERATOR = {
+          origin: :required,
+          destination: :required,
+          carrier: :required,
+          service_level: :required,
+          etd_days: :required,
+          mot: :required,
+          transit_time: :required,
+          cargo_class: :required,
+          transshipment: :optional
+        }.freeze
 
-        SACO_SHIPPING = %i[
-          internal
-          destination_country
-          destination_locode
-          destination_hub
-          terminal
-          transshipment_via
-          carrier
-          origin_locode
-          effective_date
-          expiration_date
-        ].freeze
+        SCHEDULES = {
+          from: :required,
+          to: :required,
+          closing_date: :required,
+          etd: :required,
+          eta: :required,
+          transit_time: :required,
+          service_level: :required,
+          carrier: :required,
+          mode_of_transport: :required,
+          vessel: :required,
+          voyage_code: :required,
+          load_type: :required,
+          transshipment: :optional
+        }.freeze
 
-        MARGINS = %i[
-          effective_date
-          expiration_date
-          origin
-          country_origin
-          destination
-          country_destination
-          mot
-          carrier
-          service_level
-          margin_type
-          load_type
-          fee_code
-          operator
-          margin
-        ].freeze
+        CHARGE_CATEGORIES = {
+          fee_code: :required,
+          fee_name: :required,
+          internal_code: :required
+        }.freeze
 
-        SCHEDULE_GENERATOR = %i[
-          origin
-          destination
-          carrier
-          service_level
-          etd_days
-          mot
-          transit_time
-          cargo_class
-        ].freeze
+        COMPANIES = {
+          name: :required,
+          email: :required,
+          phone: :required,
+          vat_number: :required,
+          external_id: :required,
+          address: :required
+        }.freeze
 
-        OPTIONAL_SCHEDULE_GENERATOR = %i[
-          transshipment
-        ].freeze
+        EMPLOYEES = {
+          company_name: :required,
+          first_name: :required,
+          last_name: :required,
+          email: :required,
+          password: :required,
+          phone: :required,
+          vat_number: :required,
+          external_id: :required,
+          address: :required
+        }.freeze
 
-        SCHEDULES = %i[
-          from
-          to
-          closing_date
-          etd
-          eta
-          transit_time
-          service_level
-          carrier
-          mode_of_transport
-          vessel
-          voyage_code
-          load_type
-        ].freeze
+        NOTES = {
+          country: :required,
+          unlocode: :required,
+          note: :required
+        }.freeze
 
-        OPTIONAL_SCHEDULES = %i[
-          transshipment
-        ].freeze
+        HUBS = {
+          status: :required,
+          type: :required,
+          name: :required,
+          locode: :required,
+          terminal: :optional,
+          terminal_code: :optional,
+          latitude: :required,
+          longitude: :required,
+          country: :required,
+          full_address: :required,
+          free_out: :required,
+          import_charges: :required,
+          export_charges: :required,
+          pre_carriage: :required,
+          on_carriage: :required,
+          alternative_names: :required
+        }.freeze
 
-        CHARGE_CATEGORIES = %i[
-          internal_code
-          fee_code
-          fee_name
-        ].freeze
-
-        COMPANIES = %i[
-          name
-          email
-          phone
-          vat_number
-          external_id
-          address
-        ].freeze
-
-        EMPLOYEES = %i[
-          company_name
-          first_name
-          last_name
-          email
-          password
-          phone
-          vat_number
-          external_id
-          address
-        ].freeze
-
-        NOTES = %i[
-          country
-          unlocode
-          note
-        ].freeze
-
-        HUBS = %i[
-          status
-          type
-          name
-          locode
-          latitude
-          longitude
-          country
-          full_address
-          free_out
-          import_charges
-          export_charges
-          pre_carriage
-          on_carriage
-          alternative_names
-        ].freeze
-
-        OPTIONAL_HUBS = %i[
-          terminal
-          terminal_code
-        ].freeze
-
-        MAX_DIMENSIONS = %i[
-          carrier
-          service_level
-          mode_of_transport
-          payload_in_kg
-          chargeable_weight
-          aggregate
-          load_type
-        ].freeze
+        MAX_DIMENSIONS = {
+          origin_locode: :optional,
+          destination_locode: :optional,
+          carrier: :required,
+          service_level: :required,
+          mode_of_transport: :required,
+          payload_in_kg: :required,
+          chargeable_weight: :required,
+          aggregate: :required,
+          load_type: :required,
+          width: :optional,
+          length: :optional,
+          height: :optional,
+          dimension_x: :optional,
+          dimension_y: :optional,
+          dimension_z: :optional
+        }.freeze
       end
-
-      OPTIONAL_MAX_DIMENSIONS = %i[
-        origin_locode
-        destination_locode
-        width
-        length
-        height
-        dimension_x
-        dimension_y
-        dimension_z
-      ].freeze
 
       attr_reader :restructurer_name, :errors
 
@@ -255,7 +236,7 @@ module ExcelDataServices
 
       def perform
         @restructurer_name = restructurer_with_largest_overlap
-        mandatory_headers = headers_for_restructurer(restructurer_name: restructurer_name, header_type: :mandatory)
+        mandatory_headers = headers_for_restructurer(restructurer_name: restructurer_name, header_type: :required)
         matching_headers = mandatory_headers & parsed_headers
         missing_headers = mandatory_headers - matching_headers
         if below_threshold?(matching_size: matching_headers.size, mandatory_size: mandatory_headers.size)
@@ -312,15 +293,15 @@ module ExcelDataServices
       end
 
       def all_headers_for_restructurer(restructurer_name:)
-        headers_for_restructurer(restructurer_name: restructurer_name, header_type: :mandatory) +
+        headers_for_restructurer(restructurer_name: restructurer_name, header_type: :required) +
           headers_for_restructurer(restructurer_name: restructurer_name, header_type: :optional)
       end
 
       def headers_for_restructurer(restructurer_name:, header_type:)
-        name_part = { mandatory: '', optional: 'OPTIONAL_' }[header_type]
-        const_name = name_part + restructurer_name.upcase
+        const_name = restructurer_name.upcase
         const_module = self.class::StaticHeadersForRestructurers
-        const_module.const_defined?(const_name) ? const_module.const_get(const_name) : []
+        headers = const_module.const_defined?(const_name) ? const_module.const_get(const_name) : {}
+        headers.keys.select { |key| headers[key] == header_type }
       end
 
       def below_threshold?(mandatory_size:, matching_size:)

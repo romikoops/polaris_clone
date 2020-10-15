@@ -10,8 +10,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:static_pricing_headers) do
-    (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
-       described_class::HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES)
+    described_class::HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys
       .map { |header| header.to_s.upcase }
   end
   let!(:transit_time) { FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
@@ -26,18 +25,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
     let(:pricing_row) do
       [
-        itinerary.origin_hub.locode,
-        itinerary.destination_hub.locode,
         pricing.group_id,
         Groups::Group.find_by(id: pricing.group_id)&.name,
-        pricing.transshipment,
-        transit_time.duration,
-        nil,
-        pricing.wm_rate,
         pricing.effective_date.to_date,
         pricing.expiration_date.to_date,
+        itinerary.origin_hub.locode,
         'Gothenburg',
         'Sweden',
+        itinerary.destination_hub.locode,
         'Shanghai',
         'China',
         'ocean',
@@ -45,6 +40,10 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         'standard',
         'FCL_20',
         'PER_CONTAINER',
+        pricing.transshipment,
+        transit_time.duration,
+        nil,
+        pricing.wm_rate,
         'EUR',
         250
       ]
@@ -100,18 +99,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     context 'when all pricings are valid' do
       let(:pricing_row) do
         [
-          itinerary.origin_hub.locode,
-          itinerary.destination_hub.locode,
           default_group.id,
           default_group.name,
-          nil,
-          transit_time.duration,
-          nil,
-          pricing.wm_rate,
           pricing.effective_date.to_date,
           pricing.expiration_date.to_date,
+          itinerary.origin_hub.locode,
           'Gothenburg',
           'Sweden',
+          itinerary.destination_hub.locode,
           'Shanghai',
           'China',
           'ocean',
@@ -119,6 +114,10 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           'standard',
           'LCL',
           'PER_WM',
+          nil,
+          transit_time.duration,
+          nil,
+          pricing.wm_rate,
           'EUR',
           25
         ]
@@ -150,18 +149,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
       let(:pricing_row) do
         [
-          itinerary.origin_hub.locode,
-          itinerary.destination_hub.locode,
           default_group.id,
           default_group.name,
-          nil,
-          transit_time.duration,
-          nil,
-          pricing.wm_rate,
           pricing.effective_date.to_date,
           pricing.expiration_date.to_date,
+          itinerary.origin_hub.locode,
           'Gothenburg',
           'Sweden',
+          itinerary.destination_hub.locode,
           'Shanghai',
           'China',
           'ocean',
@@ -169,6 +164,10 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           'standard',
           'LCL',
           'PER_WM',
+          nil,
+          transit_time.duration,
+          nil,
+          pricing.wm_rate,
           'EUR',
           25
         ]
@@ -190,25 +189,20 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context 'when all pricings are valid with attached group' do
       let(:pricing_headers) do
-        (described_class::HEADER_COLLECTION::OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES +
-           described_class::HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES).map { |header| header.to_s.upcase }
+        described_class::HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES.keys.map { |header| header.to_s.upcase }
       end
       let(:group_id) { create(:groups_group, organization: organization, name: 'TEST').id }
       let(:pricing) { create(:pricings_pricing, organization: organization, group_id: group_id, tenant_vehicle: tenant_vehicle, itinerary: itinerary, transshipment: 'ZACPT') }
       let(:pricing_row) do
         [
-          itinerary.origin_hub.locode,
-          itinerary.destination_hub.locode,
           pricing.group_id,
           Groups::Group.find_by(id: pricing.group_id).name,
-          pricing.transshipment,
-          transit_time.duration,
-          nil,
-          pricing.wm_rate,
           pricing.effective_date.to_date,
           pricing.expiration_date.to_date,
+          itinerary.origin_hub.locode,
           'Gothenburg',
           'Sweden',
+          itinerary.destination_hub.locode,
           'Shanghai',
           'China',
           'ocean',
@@ -216,13 +210,17 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           'standard',
           'LCL',
           'PER_WM',
-          0,
-          4.9,
+          pricing.transshipment,
+          transit_time.duration,
+          nil,
+          pricing.wm_rate,
           'BAS',
           'Basic Ocean Freight',
           'EUR',
           1,
-          8
+          8,
+          0,
+          4.9
         ]
       end
       let(:result) { described_class.write_document(organization: organization, user: user, file_name: 'test.xlsx', options: { mode_of_transport: 'ocean', group_id: group_id }) }

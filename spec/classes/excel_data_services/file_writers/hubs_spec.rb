@@ -12,6 +12,8 @@ RSpec.describe ExcelDataServices::FileWriters::Hubs do
        type
        name
        locode
+       terminal
+       terminal_code
        latitude
        longitude
        country
@@ -29,6 +31,8 @@ RSpec.describe ExcelDataServices::FileWriters::Hubs do
       'ocean',
       'Gothenburg',
       'SEGOT',
+      nil,
+      nil,
       57.694253,
       11.854048,
       'Sweden',

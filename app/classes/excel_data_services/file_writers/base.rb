@@ -159,15 +159,6 @@ module ExcelDataServices
         end
       end
 
-      def remove_hub_suffix(name, mot)
-        str_to_remove = { 'ocean' => 'Port',
-                          'air' => 'Airport',
-                          'rail' => 'Railyard',
-                          'truck' => 'Depot' }[mot]
-
-        name.remove(/ #{str_to_remove}$/)
-      end
-
       def build_dynamic_headers(raw_pricing_rows)
         raw_pricing_rows.map { |row| row[:shipping_type]&.downcase&.to_sym }.uniq.compact.sort
       end
@@ -221,15 +212,12 @@ module ExcelDataServices
         when 'No Ranges'
           dynamic_headers =
             rows_data.flat_map(&:keys).compact.uniq -
-            HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES -
-            HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES
+            HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys
 
-          HEADER_COLLECTION::OPTIONAL_PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
-            HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES +
+          HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys +
             dynamic_headers
         when 'With Ranges'
-          HEADER_COLLECTION::OPTIONAL_PRICING_ONE_FEE_COL_AND_RANGES +
-            HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES
+          HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES.keys
         else
           raise ExcelDataServices::Validators::ValidationErrors::WritingError::UnknownSheetNameError,
                 "Unknown sheet name \"#{sheet_name}\"!"

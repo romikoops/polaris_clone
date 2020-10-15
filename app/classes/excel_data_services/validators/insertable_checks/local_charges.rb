@@ -16,6 +16,7 @@ module ExcelDataServices
             mot: row.mot,
             locode: row.hub_locode
           )
+
           check_hub_existence(origin_hub_with_info, row)
 
           origin_hub = origin_hub_with_info[:hub]

@@ -37,7 +37,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        HEADER_COLLECTION::HUBS
+        HEADER_COLLECTION::HUBS.keys
       end
     end
   end

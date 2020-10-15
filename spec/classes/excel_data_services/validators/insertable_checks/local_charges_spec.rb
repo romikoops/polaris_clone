@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
   let(:organization) { create(:organizations_organization) }
   let(:options) { { organization: organization, sheet_name: 'Sheet1', data: input_data } }
-  let!(:hubs) { [create(:hub, name: 'Bremerhaven', organization: organization)] }
+  let!(:hubs) { [create(:legacy_hub, name: 'Bremerhaven', organization: organization, address: german_address)] }
+  let(:german_address) { FactoryBot.create(:hamburg_address) }
   let!(:local_charges) do
     [
       create(
@@ -61,7 +62,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
              sheet_name: 'Sheet1',
              type: :warning },
            { exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
-             reason: 'Hub "BremerERRORhaven" (Ocean) not found!',
+             reason: 'Hub "BremerERRORhaven, Germany" (Ocean) not found!',
              row_nr: '3',
              sheet_name: 'Sheet1',
              type: :error }]

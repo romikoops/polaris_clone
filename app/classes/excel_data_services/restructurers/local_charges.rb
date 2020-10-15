@@ -17,10 +17,12 @@ module ExcelDataServices
       ROW_IDENTIFIERS = %i[
         hub
         country
+        locode
         effective_date
         expiration_date
         counterpart_hub
         counterpart_country
+        counterpart_locode
         service_level
         carrier
         mot
@@ -45,7 +47,6 @@ module ExcelDataServices
           rows_chunked_by_ranges = rows.group_by { |row| range_identifier(row) }.values
           sort_chunks_by_range_min(rows_chunked_by_ranges)
         end
-
         charges_data = build_charges_data(rows_chunked_by_identifier_and_sorted_ranges)
         add_hub_names(charges_data)
 
@@ -91,23 +92,29 @@ module ExcelDataServices
               expiration_date
               counterpart_hub
               counterpart_country
+              counterpart_locode
             ])
           )
         end
 
         grouped.values.flat_map do |per_group_rows_data|
-          without_counterpart, with_counterpart = per_group_rows_data.partition do |row_data|
-            row_data[:counterpart_hub].blank?
-          end
+          per_group_rows_data + expanded_for_counterparts(per_group_rows_data: per_group_rows_data)
+        end
+      end
 
-          counterpart_names_and_countries = with_counterpart.pluck(:counterpart_hub, :counterpart_country).uniq
-
-          per_group_rows_data + counterpart_names_and_countries.flat_map do |counterpart_hub, counterpart_country|
-            without_counterpart.map do |row_data_without_counterpart|
-              row_data_without_counterpart.dup.tap do |row_data|
-                row_data[:counterpart_hub] = counterpart_hub
-                row_data[:counterpart_country] = counterpart_country
-              end
+      def expanded_for_counterparts(per_group_rows_data:)
+        without_counterpart, with_counterpart = per_group_rows_data.partition do |row_data|
+          row_data.values_at(:counterpart_hub, :counterpart_locode).all?(&:blank?)
+        end
+        counterpart_identifiers = with_counterpart.pluck(
+          :counterpart_hub, :counterpart_country, :counterpart_locode
+        ).uniq
+        counterpart_identifiers.flat_map do |counterpart_hub, counterpart_country, counterpart_locode|
+          without_counterpart.map do |row_data_without_counterpart|
+            row_data_without_counterpart.dup.tap do |row_data|
+              row_data[:counterpart_hub] = counterpart_hub
+              row_data[:counterpart_country] = counterpart_country
+              row_data[:counterpart_locode] = counterpart_locode
             end
           end
         end

@@ -40,6 +40,7 @@ module ExcelDataServices
             mot: row.mot,
             locode: row.hub_locode
           )
+
           params[:hub_id] = origin_hub_with_info[:hub].id
           next params[:counterpart_hub_id] = nil unless row.counterpart_hub
 

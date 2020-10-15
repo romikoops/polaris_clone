@@ -4,12 +4,14 @@ require 'rails_helper'
 
 RSpec.describe ExcelDataServices::Inserters::LocalCharges do
   let(:organization) { create(:organizations_organization) }
+  let(:german_address) { FactoryBot.create(:hamburg_address) }
   let!(:hubs) do
-    [create(:legacy_hub, organization: organization, name: 'Bremerhaven', hub_type: 'ocean'),
+    [create(:legacy_hub, organization: organization, name: 'Bremerhaven', hub_type: 'ocean', address: german_address),
      create(:legacy_hub, organization: organization, name: 'Antwerp', hub_type: 'ocean',
                          address: create(:legacy_address,
                            country: create(:legacy_country, code: 'BE', name: 'Belgium'))),
-     create(:legacy_hub, organization: organization, name: 'Le Havre', hub_type: 'ocean')]
+     create(:legacy_hub, organization: organization, name: 'Le Havre', hub_type: 'ocean',
+                         address: create(:legacy_address, country: create(:legacy_country, code: 'FR', name: 'France')))]
   end
   let(:options) { { organization: organization, data: input_data, options: {} } }
 
