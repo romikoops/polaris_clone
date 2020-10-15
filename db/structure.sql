@@ -3383,7 +3383,8 @@ CREATE TABLE public.quotations_quotations (
     user_id uuid,
     completed boolean DEFAULT false,
     error_class character varying,
-    creator_id uuid
+    creator_id uuid,
+    estimated boolean
 );
 
 
@@ -12520,6 +12521,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201007095311'),
 ('20201007192043'),
 ('20201007192136'),
-('20201007192212');
+('20201007192212'),
+('20201014100229');
 
 

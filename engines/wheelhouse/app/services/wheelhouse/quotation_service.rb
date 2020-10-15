@@ -42,7 +42,9 @@ module Wheelhouse
     private
 
     def offer_calculator
-      @params ||= ActionController::Parameters.new(shipment: shipping_params, sandbox: nil, async: async)
+      @params ||= ActionController::Parameters.new(
+        shipment: shipping_params, estimated: @estimated, async: async
+      )
       @offer_calculator ||= OfferCalculator::Calculator.new(
         shipment: shipment,
         params: @params,

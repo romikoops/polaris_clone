@@ -19,7 +19,13 @@ module Api
         user: user)
     end
     let(:load_type) { "container" }
-    let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, legacy_shipment_id: nil) }
+    let(:quotation) do
+      FactoryBot.create(:quotations_quotation,
+        organization: organization,
+        legacy_shipment_id: nil,
+        estimated: estimated)
+    end
+    let(:estimated) { false }
     let(:default_scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
     let(:decorated_quotation) { Api::V1::QuotationDecorator.new(quotation, context: {scope: default_scope}) }
     let(:serialized_quotation) { described_class.new(decorated_quotation, params: {scope: default_scope}).serializable_hash }
@@ -61,6 +67,24 @@ module Api
       it "return an array of serialized cargo_items", :aggregate_failures do
         expect(target[:cargoItems]).to be_a(Api::V1::CargoItemSerializer)
         expect(serialized_cargo_items.dig("data").pluck("id")).to match_array([shipment.cargo_items.first.id.to_s])
+      end
+    end
+
+    context "estimated" do
+      let(:load_type) { "cargo_item" }
+      let(:estimated) { true }
+
+      before do
+        FactoryBot.create(:lcl_unit,
+          cargo: cargo,
+          legacy: shipment.cargo_items.first)
+        FactoryBot.create(:legacy_cargo_item)
+        allow(quotation)
+      end
+
+      it "return an empty array of serialized cargo_items", :aggregate_failures do
+        expect(target[:cargoItems]).to be_a(Api::V1::CargoItemSerializer)
+        expect(serialized_cargo_items.dig("data")).to be_empty
       end
     end
   end

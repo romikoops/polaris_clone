@@ -84,7 +84,7 @@ module OfferCalculator
     end
 
     def quotation_tool?
-      @isQuote || scope["open_quotation_tool"] || scope["closed_quotation_tool"]
+      scope["open_quotation_tool"] || scope["closed_quotation_tool"]
     end
 
     def scope

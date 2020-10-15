@@ -10,7 +10,7 @@ module OfferCalculator
       @creator = creator
       @params = params
       @delay = params['delay']
-      @isQuote = params['shipment'].delete('isQuote')
+      @estimated = params['estimated']
       @organization = @shipment.organization
       @quotation = create_quotations_quotations
       @async = params[:async] || false
@@ -64,6 +64,7 @@ module OfferCalculator
                                 user: user,
                                 creator: creator,
                                 completed: false,
+                                estimated: @estimated,
                                 legacy_shipment_id: shipment.id)
     end
 

@@ -15,7 +15,7 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
   let(:load_type) { 'cargo_item' }
   let(:direction) { 'export' }
-  let(:shipping_info) do
+  let(:base_shipping_info) do
     {
       trucking_info: { pre_carriage: { truck_type: '' }, on_carriage: { truck_type: '' } }
     }
@@ -96,6 +96,11 @@ RSpec.describe Wheelhouse::QuotationService do
   end
   let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'DE') }
   let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
+  let(:quotation_details) { port_to_port_input }
+  let(:shipping_info) { base_shipping_info }
+  let(:service) { described_class.new(organization: organization, quotation_details: quotation_details.with_indifferent_access, shipping_info: shipping_info) }
+  let(:results) { service.tenders }
+  let(:quotation) { service.result }
 
   before do
     [itinerary, air_itinerary].product(%w[container cargo_item]).each do |it, load|
@@ -127,10 +132,7 @@ RSpec.describe Wheelhouse::QuotationService do
 
   describe '.perform' do
     context 'when port to port (defaults)' do
-      let(:service) { described_class.new(organization: organization, quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
-
       it 'perform a booking calulation' do
-        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(100)
@@ -139,12 +141,10 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context 'when port to port (containers provided)' do
-      let(:fcl_shipping_info) { shipping_info.merge(containers_attributes: containers_attributes) }
+      let(:shipping_info) { base_shipping_info.merge(containers_attributes: containers_attributes) }
       let(:load_type) { 'container' }
-      let(:service) { described_class.new(organization: organization, quotation_details: port_to_port_input.with_indifferent_access, shipping_info: fcl_shipping_info) }
 
       it 'perform a booking calulation' do
-        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(25_000)
@@ -185,13 +185,13 @@ RSpec.describe Wheelhouse::QuotationService do
           trucking_info: { pre_carriage: { truck_type: 'chassis' }, on_carriage: { truck_type: 'chassis' } }
         }
       end
-      let(:service) { described_class.new(organization: organization, quotation_details: door_to_door_input.with_indifferent_access, shipping_info: shipping_info) }
+      let(:quotation_details) { door_to_door_input }
 
       it 'perform a booking calulation' do
-        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(206851)
+          expect(service.result.estimated).to be_truthy
         end
       end
     end
@@ -200,10 +200,8 @@ RSpec.describe Wheelhouse::QuotationService do
       before { scope.update(content: { base_pricing: true, closed_quotation_tool: true }) }
 
       let(:load_type) { 'container' }
-      let(:service) { described_class.new(organization: organization, quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
       it 'perform a quote calulation' do
-        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(25_000)
@@ -217,10 +215,8 @@ RSpec.describe Wheelhouse::QuotationService do
           cargo_items_attributes: cargo_item_attributes
         }
       end
-      let(:service) { described_class.new(organization: organization, quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
 
       it 'perform a booking calulation' do
-        results = service.tenders
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.amount_cents).to eq(2880)
@@ -241,7 +237,6 @@ RSpec.describe Wheelhouse::QuotationService do
         }
       end
 
-      let(:service) { described_class.new(organization: organization, quotation_details: port_to_port_input.with_indifferent_access, shipping_info: shipping_info) }
       let(:offer_calculator_double) { instance_double(::OfferCalculator::Calculator) }
 
       before do
