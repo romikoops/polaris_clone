@@ -46,6 +46,8 @@ module Pdf
         ["weight", total_chargeable_weight]
       when "volume"
         ["volume", total_chargeable_volume]
+      when "both"
+        ["both", total_chargeable_volume]
       when "dynamic"
         if show_volume
           ["volume", total_chargeable_volume]

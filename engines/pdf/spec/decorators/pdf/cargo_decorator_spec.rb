@@ -62,6 +62,18 @@ RSpec.describe Pdf::CargoDecorator do
         expect(klass.render_chargeable_weight_row).to include "500.0 kg"
       end
     end
+
+    context "when chargeable_weight_view is both" do
+      let(:chargeable_weight_view) { "both" }
+
+      before do
+        allow(cargo).to receive(:volume).and_return(Measured::Volume.new(0.4, :m3))
+      end
+
+      it "generates the quote pdf" do
+        expect(klass.render_chargeable_weight_row).to include "0.5  t|m"
+      end
+    end
   end
 
   describe ".cargo_item_type_description" do
