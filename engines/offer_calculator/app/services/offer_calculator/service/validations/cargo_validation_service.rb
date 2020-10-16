@@ -198,7 +198,7 @@ module OfferCalculator
             id: id,
             message: message,
             attribute: attribute,
-            limit: limit,
+            limit: dynamic_limit(limit: limit, attribute: attribute),
             section: "cargo_item",
             code: code
           )
@@ -212,6 +212,12 @@ module OfferCalculator
           else
             errors << error
           end
+        end
+
+        def dynamic_limit(limit:, attribute:)
+          return "Chargeable Weight Exceeded" if attribute == :chargeable_weight
+
+          limit
         end
 
         def trucking_limit(attribute:)

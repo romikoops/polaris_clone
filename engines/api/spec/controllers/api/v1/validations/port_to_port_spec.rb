@@ -146,7 +146,7 @@ module Api
             {
               'id' => cargo_item_id,
               'message' => 'Chargeable Weight exceeds the limit of 10000 kg',
-              'limit' => '10000 kg',
+              'limit' => 'Chargeable Weight Exceeded',
               'attribute' => 'chargeable_weight',
               'section' => 'cargo_item',
               'code' => 4005
@@ -220,7 +220,7 @@ module Api
             {
               'id' => cargo_item_id,
               'message' => 'Chargeable Weight exceeds the limit of 10000 kg',
-              'limit' => '10000 kg',
+              'limit' => 'Chargeable Weight Exceeded',
               'attribute' => 'chargeable_weight',
               'section' => 'cargo_item',
               'code' => 4005
