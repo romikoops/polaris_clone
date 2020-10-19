@@ -20,7 +20,7 @@ module Pdf
     def gross_weight_per_item
       return if scope["cargo_overview_only"]
 
-      locals = {weight: "#{unit_weight_humanize} #{weight_unit}"}
+      locals = {weight: unit_weight_humanize}
       h.render template: "pdf/partials/quotation/cargo/gross_weight_per_item", locals: locals
     end
 

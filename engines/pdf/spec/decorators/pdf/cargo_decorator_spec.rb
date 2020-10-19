@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Pdf::CargoDecorator do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  include_context "organization"
   let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
 
   let(:load_type) { "cargo_item" }
@@ -17,16 +17,14 @@ RSpec.describe Pdf::CargoDecorator do
       with_full_breakdown: true)
   end
   let(:chargeable_weight_view) { "volume" }
-  let(:scope) { {"show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view} }
+  let(:scope_content) { {"show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view} }
   let(:tender) { Quotations::Tender.last }
   let(:cargo) { tender.cargo }
+  let(:scope) { OrganizationManager::ScopeService.new(target: user, organization: organization).fetch }
   let(:klass) { described_class.decorate(cargo, context: {scope: scope, tender: tender}) }
 
   before do
     Draper::ViewContext.controller = Pdf::ApplicationController.new
-
-    ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, organization: organization)
     shipment.charge_breakdowns.map(&:tender).each do |tender|
       Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
                                   to: "USD", rate: 1.3,
@@ -34,11 +32,19 @@ RSpec.describe Pdf::CargoDecorator do
     end
   end
 
+  describe ".gross_weight_per_item" do
+    let(:cargo) { Cargo::Unit.last }
+
+    it "renders the correct gross weight per item" do
+      expect(klass.gross_weight_per_item).to include cargo.weight.convert_to("kg").humanize
+    end
+  end
+
   describe ".render_chargeable_weight_row" do
     context "when chargeable_weight_view is volume" do
       let(:chargeable_weight_view) { "volume" }
 
-      it "generates the quote pdf" do
+      it "renders the correct chargeable weight" do
         expect(klass.render_chargeable_weight_row).to include tender.cargo.volume.value.to_s
       end
     end
@@ -46,7 +52,7 @@ RSpec.describe Pdf::CargoDecorator do
     context "when chargeable_weight_view is weight" do
       let(:chargeable_weight_view) { "weight" }
 
-      it "generates the quote pdf" do
+      it "renders the correct chargeable weight" do
         expect(klass.render_chargeable_weight_row).to include "1344.0 kg"
       end
     end
@@ -58,7 +64,7 @@ RSpec.describe Pdf::CargoDecorator do
         allow(cargo).to receive(:volume).and_return(Measured::Volume.new(0.4, :m3))
       end
 
-      it "generates the quote pdf" do
+      it "renders the correct chargeable weight" do
         expect(klass.render_chargeable_weight_row).to include "500.0 kg"
       end
     end
@@ -70,7 +76,7 @@ RSpec.describe Pdf::CargoDecorator do
         allow(cargo).to receive(:volume).and_return(Measured::Volume.new(0.4, :m3))
       end
 
-      it "generates the quote pdf" do
+      it "renders the correct chargeable weight" do
         expect(klass.render_chargeable_weight_row).to include "0.5  t|m"
       end
     end
