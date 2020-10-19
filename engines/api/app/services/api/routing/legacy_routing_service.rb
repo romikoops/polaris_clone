@@ -48,7 +48,7 @@ module Api
       def pricings
         @pricings ||= Pricings::Pricing
           .where(organization: organization)
-          .where("validity @> ?::date", Time.zone.tomorrow)
+          .where("validity @> ?::date", Time.zone.today)
       end
 
       def dedicated_pricings

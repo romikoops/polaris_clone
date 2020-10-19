@@ -32,19 +32,21 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
       )
     ]
   end
+  let(:scope_content) { {} }
   let(:results) { described_class.new(shipment: shipment, quotation: quotation).perform(routes, hubs) }
 
   before do
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
   end
 
   describe '.perform' do
     context 'without trucking' do
-      it 'return the route detail hashes' do
+      it 'returns the generated Schedule for available routes' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
           expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
         end
       end
@@ -55,19 +57,56 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
         FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle_id: tenant_vehicle.id, duration: 35)
       end
 
-      let(:desired_end_date) { OfferCalculator::Schedule.quote_trip_start_date + 35.days }
+      let(:desired_end_date) { 35.days.from_now.beginning_of_day }
 
-      it 'return the route detail hashes' do
+      it 'returns the generated Schedule for available routes' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
           expect(results.first.eta).to eq(desired_end_date)
         end
       end
     end
 
-    context  'with trucking' do
+    context 'with search_buffer' do
+      let(:scope_content) { {search_buffer: 15} }
+      let(:desired_start_date) { 15.days.from_now.beginning_of_day }
+
+      it 'returns the generated Schedule for available routes' do
+        aggregate_failures do
+          expect(results.first).to be_a(OfferCalculator::Schedule)
+          expect(results.first.closing_date).to eq(desired_start_date)
+          expect(results.first.etd).to eq(desired_start_date)
+        end
+      end
+    end
+
+    context 'with search_buffer & closing_date_buffer' do
+      let(:scope_content) { {search_buffer: 15, closing_date_buffer: 5} }
+      let(:desired_start_date) { 15.days.from_now.beginning_of_day }
+
+      it 'returns the generated Schedule for available routes' do
+        aggregate_failures do
+          expect(results.first.closing_date).to eq(desired_start_date - 5.days)
+          expect(results.first.etd).to eq(desired_start_date)
+        end
+      end
+    end
+
+    context 'with closing_date_buffer before today' do
+      let(:scope_content) { {search_buffer: 0, closing_date_buffer: 5} }
+      let(:desired_start_date) { Time.zone.now.beginning_of_day }
+
+      it 'returns the generated Schedule for available routes' do
+        aggregate_failures do
+          expect(results.first.closing_date).to eq(desired_start_date)
+          expect(results.first.etd).to eq(desired_start_date)
+        end
+      end
+    end
+
+    context 'with trucking' do
       before do
         google_directions = instance_double('Trucking::GoogleDirections', driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)
         allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
@@ -77,11 +116,11 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
       let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
 
-      it 'return the route detail hashes' do
+      it 'returns the generated Schedule for available routes' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(OfferCalculator::Schedule.quote_trip_start_date)
+          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
           expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
         end
       end

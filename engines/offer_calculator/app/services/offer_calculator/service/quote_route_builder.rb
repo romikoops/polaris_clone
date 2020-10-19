@@ -33,23 +33,29 @@ module OfferCalculator
 
       def end_date(transit_time:)
         if transit_time
-          OfferCalculator::Schedule.quote_trip_start_date + transit_time.duration.days
+          start_date + transit_time.duration.days
         else
           OfferCalculator::Schedule.quote_trip_end_date
         end
       end
 
       def start_date
-        buffer = scope.dig(:search_buffer)
-        return OfferCalculator::Schedule.quote_trip_start_date if buffer.blank?
-
-        buffer.to_i.days.from_now.beginning_of_day
+        @start_date ||= buffer.to_i.days.from_now.beginning_of_day
       end
 
       def closing_date
-        return Time.zone.today.beginning_of_day if scope.dig(:search_buffer).present?
+        @closing_date ||= [
+          Time.zone.today.beginning_of_day,
+          (buffer - closing_date_buffer).days.from_now.beginning_of_day
+        ].max
+      end
 
-        OfferCalculator::Schedule.quote_trip_closing_date
+      def buffer
+        scope[:search_buffer]
+      end
+
+      def closing_date_buffer
+        scope[:closing_date_buffer]
       end
     end
   end

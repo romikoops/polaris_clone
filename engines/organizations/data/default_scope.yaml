@@ -196,4 +196,5 @@ hub_suffixes:
   rail: 'Railway Station'
   truck: 'Depot'
 expand_non_counterpart_local_charges: false
-search_buffer: false
+search_buffer: 0
+closing_date_buffer: 0
