@@ -1,0 +1,10 @@
+<%if address.present? %>
+  <div class="agent-info" >
+    <strong>Company Address</strong>
+    <address>
+      <p><%= address.address_lines %></p>
+      <p><%= address.street_info %></p>
+      <p><%= address.city_info %></p>
+    </address>
+  </div>
+<%end%>

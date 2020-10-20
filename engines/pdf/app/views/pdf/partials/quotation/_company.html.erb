@@ -1,0 +1,9 @@
+<%if company.present? %>
+  <div class="agent-info">
+    <strong>Company</strong>
+    <address>
+      <p><strong><%= company.name %></strong></p>
+      <p><%= company.external_id %></p>
+    </address>
+  </div>
+<%end%>

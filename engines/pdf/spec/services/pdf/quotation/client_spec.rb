@@ -64,4 +64,20 @@ RSpec.describe Pdf::Quotation::Client do
       end
     end
   end
+
+  context "with company for the user" do
+    let(:address) { FactoryBot.create(:legacy_address) }
+    let(:company) { FactoryBot.create(:companies_company, organization: organization, address: address) }
+
+    before do
+      FactoryBot.create(:companies_membership, member: user, company: company)
+    end
+
+    it "generates the quote pdf" do
+      aggregate_failures do
+        expect(pdf).to be_a(Legacy::File)
+        expect(pdf.file).to be_attached
+      end
+    end
+  end
 end

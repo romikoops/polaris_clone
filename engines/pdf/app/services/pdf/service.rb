@@ -15,6 +15,10 @@ module Pdf
       @decorated_quotation = Pdf::QuotationDecorator.decorate(quotation, context: {scope: scope})
     end
 
+    def decorated_company
+      Pdf::CompanyDecorator.decorate(decorated_quotation.company)
+    end
+
     def decorated_tenders
       @decorated_tenders ||= Pdf::TenderDecorator.decorate_collection(tenders, context: {scope: scope})
     end
@@ -39,6 +43,8 @@ module Pdf
       {
         quotation: decorated_quotation,
         tenders: decorated_tenders,
+        company: decorated_company,
+        address: decorated_company.object.present? ? decorated_company.address : nil,
         logo: logo,
         organization: organization,
         theme: theme,

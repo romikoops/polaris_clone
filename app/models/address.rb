@@ -129,6 +129,9 @@ end
 # Table name: addresses
 #
 #  id               :bigint           not null, primary key
+#  address_line_1   :string
+#  address_line_2   :string
+#  address_line_3   :string
 #  city             :string
 #  geocoded_address :string
 #  latitude         :float

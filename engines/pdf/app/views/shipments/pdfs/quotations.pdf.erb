@@ -6,19 +6,16 @@
   <% oncarriage_color = quotation.delivery_address.present? ? primary_color : neutral_color %>
   <% weight_units = scope['values']['weight'] %>
 
-  <div class="title display-flex">
+  <div class="title">
     <div class="title-left">
-      <h1>QUOTATIONS</h1>
-      <hr style="border-color: <%= primary_color %>">
-      <p><%= organization.slug %></p>
+      <div class="title-logo">
+        <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
+      </div>
     </div>
-    <div class="title-logo">
-      <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
-    </div>
-    <div class="agent-info">
-        <p><strong><%= quotation.user_profile.first_name %> <%= quotation.user_profile.last_name %></strong></p>
-        <p><%= quotation.user_profile.email %></p>
-        <p><%= quotation.user_profile.phone %></p>
+    <div class="title-info">
+      <%= render "pdf/partials/quotation/client", user_profile: quotation.user_profile %>
+      <%= render "pdf/partials/quotation/company", company: company %>
+      <%= render "pdf/partials/quotation/address", address: address %>
     </div>
   </div>
 

@@ -13,19 +13,14 @@ module IDP
     def consume
       return error_redirect unless saml_response.present? && saml_response.is_valid?
 
-      user = user_from_saml(response: saml_response, organization_id: organization_id)
-
       ActiveRecord::Base.transaction do
-        user.save!
-        create_or_update_user_profile(user: user, response: saml_response)
+        @response_params = SamlDataBuilder.new(saml_response: decorated_saml,
+                                               organization_id: organization_id)
+          .perform
       end
 
-      attach_to_groups(user: user, group_names: saml_response.attributes[:groups])
-
-      token = generate_token_for(user: user, scope: "public")
-      token_header = Doorkeeper::OAuth::TokenResponse.new(token).body
-      response_params = token_header.merge(userId: user.id, organizationId: organization_id)
-      redirect_to generate_url(url_string: "https://#{organization_domain}/login/saml/success", params: response_params)
+      redirect_to generate_url(url_string: "https://#{organization_domain}/login/saml/success",
+                               params: @response_params)
     rescue ActiveRecord::RecordInvalid
       error_redirect
     end
@@ -75,49 +70,12 @@ module IDP
       @saml_response ||= OneLogin::RubySaml::Response.new(saml_params, settings: saml_settings)
     end
 
+    def decorated_saml
+      @decorated_saml ||= IDP::SamlResponseDecorator.new(saml_response)
+    end
+
     def saml_params
       params.require(:SAMLResponse)
-    end
-
-    def user_from_saml(response:, organization_id:)
-      Authentication::User.find_or_initialize_by(
-        type: "Organizations::User",
-        organization_id: organization_id,
-        email: response.attributes[:email] || response.name_id
-      )
-    end
-
-    def create_or_update_user_profile(user:, response:)
-      Profiles::ProfileService.create_or_update_profile(
-        user: user,
-        first_name: response.attributes[:firstName],
-        last_name: response.attributes[:lastName],
-        phone: response.attributes[:phone]
-      )
-    end
-
-    def attach_to_groups(user:, group_names:)
-      return if group_names.blank?
-
-      groups = Groups::Group.where(name: group_names, organization_id: organization_id)
-      return if groups.empty?
-
-      Groups::Membership.where(member: user).where.not(group: groups)&.destroy_all
-      groups.each { |group| Groups::Membership.find_or_create_by(member: user, group: group) }
-    end
-
-    def generate_token_for(user:, scope:)
-      Doorkeeper::AccessToken.create(resource_owner_id: user.id,
-                                     refresh_token: generate_refresh_token,
-                                     expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
-                                     scopes: scope)
-    end
-
-    def generate_refresh_token
-      loop do
-        token = SecureRandom.hex(32)
-        break token unless Doorkeeper::AccessToken.exists?(refresh_token: token)
-      end
     end
   end
 end

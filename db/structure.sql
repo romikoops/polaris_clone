@@ -584,7 +584,10 @@ CREATE TABLE public.addresses (
     photo character varying,
     premise character varying,
     country_id integer,
-    sandbox_id uuid
+    sandbox_id uuid,
+    address_line_1 character varying,
+    address_line_2 character varying,
+    address_line_3 character varying
 );
 
 
@@ -1077,7 +1080,8 @@ CREATE TABLE public.companies_companies (
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tenants_company_id uuid
+    tenants_company_id uuid,
+    external_id character varying
 );
 
 
@@ -12522,6 +12526,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201007192043'),
 ('20201007192136'),
 ('20201007192212'),
+('20201012094238'),
+('20201013122604'),
 ('20201014100229');
 
 

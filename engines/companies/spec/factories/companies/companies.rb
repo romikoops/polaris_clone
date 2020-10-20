@@ -5,6 +5,8 @@ FactoryBot.define do
     association :organization, factory: :organizations_organization
     sequence(:name) { |n| "company#{n}" }
     sequence(:vat_number) { |n| "DE-VATNUMBER#{n}" }
+    sequence(:external_id) { |n| "DE-External#{n}" }
+
     trait :with_member do
       transient do
         member { nil }

@@ -23,6 +23,15 @@ module Pdf
       @user_profile ||= Profiles::ProfileService.fetch(user_id: user_id)
     end
 
+    def company
+      Companies::Company.joins(:memberships)
+        .find_by(organization: organization,
+                 companies_memberships: {
+                   member_id: user_id,
+                   member_type: "Users::User"
+                 })
+    end
+
     def shipment
       @shipment ||= Legacy::Shipment.with_deleted.find_by(id: legacy_shipment_id)
     end
