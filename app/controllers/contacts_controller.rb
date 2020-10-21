@@ -13,6 +13,22 @@ class ContactsController < ApplicationController
     )
   end
 
+  def create
+    contact = Contact.new(create_contact_params)
+    contact.address = Address.create!(create_contact_address_params)
+
+    if contact.save
+      response_handler(contact.as_options_json)
+    else
+      error_handler(
+        ApplicationError.new(
+          http_code: 422,
+          message: contact.errors.full_messages.join("\n")
+        )
+      )
+    end
+  end
+
   def show
     contact = Legacy::Contact.find(params[:id])
     shipments = Legacy::ShipmentDecorator.decorate_collection(
@@ -106,15 +122,6 @@ class ContactsController < ApplicationController
     loc = Address.find_by(id: params[:id])
     loc.destroy!
     response_handler({})
-  end
-
-  def create
-    contact = Contact.new(create_contact_params)
-    contact.address = Address.create!(create_contact_address_params)
-
-    contact.save!
-
-    response_handler(contact.as_options_json)
   end
 
   def is_valid

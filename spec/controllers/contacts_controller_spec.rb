@@ -25,6 +25,51 @@ RSpec.describe ContactsController do
     end
   end
 
+  describe 'POST #create' do
+    let(:contact_params) {
+      {
+        organization_id: user.organization_id,
+        new_contact: JSON.generate({
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "companyName": "Company",
+          "phone": "123456789",
+          "email": "email@itsmytest.com",
+          "street": "brooktorkai",
+          "number": "brooktorkai",
+          "zipCode": "20457",
+          "city": "Hamburg",
+          "country": "Germany"
+        })
+      }
+    }
+
+    context 'when params are valid' do
+      it 'returns http success' do
+        post :create, params: contact_params
+
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'when params are not unique' do
+      before do
+        FactoryBot.create(:legacy_contact,
+          user: user,
+          first_name: "First Name",
+          last_name: "Last Name",
+          email: "email@itsmytest.com",
+          phone: "123456789")
+      end
+
+      it 'returns 422' do
+        post :create, params: contact_params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
   context 'when searching' do
     let!(:target_contact) { create(:contact, user: user, first_name: 'Bobert') }
 
@@ -54,32 +99,6 @@ RSpec.describe ContactsController do
           expect(json.dig('data', 'contacts', 0, 'contact', 'id')).to eq target_contact.id
         end
       end
-    end
-  end
-
-  describe 'POST #create' do
-    let(:contact_params) {
-      {
-        organization_id: user.organization_id,
-        new_contact: JSON.generate({
-          "firstName": "First Name",
-          "lastName": "Last Name",
-          "companyName": "Company",
-          "phone": "123456789",
-          "email": "email@itsmytest.com",
-          "street": "brooktorkai",
-          "number": "brooktorkai",
-          "zipCode": "20457",
-          "city": "Hamburg",
-          "country": "Germany"
-        })
-      }
-    }
-
-    it 'returns http success' do
-      post :create, params: contact_params
-
-      expect(response).to have_http_status(:success)
     end
   end
 
