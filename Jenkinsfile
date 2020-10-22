@@ -34,7 +34,7 @@ pipeline {
                       [ name: "ELASTICSEARCH_URL", value: "localhost:9200"]
                     ]
                   ],
-                  [ name: "postgis", image: "postgis/postgis:11-2.5-alpine",
+                  [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",
                     requests: [ memory: "500Mi", cpu: "250m" ],
                     env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
                   ],
@@ -74,7 +74,7 @@ pipeline {
                       [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
                     ]
                   ],
-                  [ name: "postgis", image: "postgis/postgis:11-2.5-alpine",
+                  [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",
                     requests: [ memory: "500Mi", cpu: "250m" ],
                     env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
                   ],
@@ -167,7 +167,13 @@ void appPrepare() {
         """)
 
         withEnv(["RAILS_ENV=test"]) {
-          sh(label: "Install Postgres Client", script: "apt-get install -y postgresql-client")
+          sh(label: "Install Postgres 12 Client", script: """
+                apt-get install curl ca-certificates gnupg \
+                && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+                && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
+                && apt-get update \
+                && apt install -y postgresql-client-12
+          """)
           sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
         }
       }

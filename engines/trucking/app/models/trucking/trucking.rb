@@ -113,20 +113,17 @@ end
 #
 # Indexes
 #
-#  index_trucking_truckings_on_cargo_class        (cargo_class)
-#  index_trucking_truckings_on_carriage           (carriage)
-#  index_trucking_truckings_on_deleted_at         (deleted_at)
-#  index_trucking_truckings_on_group_id           (group_id)
-#  index_trucking_truckings_on_hub_id             (hub_id)
-#  index_trucking_truckings_on_load_type          (load_type)
-#  index_trucking_truckings_on_location_id        (location_id)
-#  index_trucking_truckings_on_organization_id    (organization_id)
-#  index_trucking_truckings_on_sandbox_id         (sandbox_id)
-#  index_trucking_truckings_on_tenant_id          (tenant_id)
-#  index_trucking_truckings_on_tenant_vehicle_id  (tenant_vehicle_id)
-#  index_trucking_truckings_on_user_id            (user_id)
-#  index_trucking_truckings_on_validity           (validity) USING gist
-#  trucking_foreign_keys                          (rate_id,location_id,hub_id) UNIQUE
+#  index_truckings_on_cargo_class        (cargo_class)
+#  index_truckings_on_carriage           (carriage)
+#  index_truckings_on_deleted_at         (deleted_at)
+#  index_truckings_on_group_id           (group_id)
+#  index_truckings_on_hub_id             (hub_id)
+#  index_truckings_on_load_type          (load_type)
+#  index_truckings_on_location_id        (location_id)
+#  index_truckings_on_organization_id    (organization_id)
+#  index_truckings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_truckings_on_validity           (validity) USING gist
+#  trucking_upsert                       (hub_id,carriage,load_type,cargo_class,location_id,organization_id,truck_type,group_id,tenant_vehicle_id,validity) WHERE (deleted_at IS NULL) USING gist
 #
 # Foreign Keys
 #
