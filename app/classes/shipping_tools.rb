@@ -268,164 +268,203 @@ class ShippingTools
             .merge(address_id: address_id)
   end
 
-  def choose_offer(params, current_user)
-    raise ApplicationError::NotLoggedIn if current_user.blank?
-
-    shipment = Shipment.find_by(id: params[:shipment_id] || params[:id])
-
-    raise ApplicationError::ShipmentNotFound if shipment.blank?
-
-    shipment.meta['pricing_rate_data'] = params[:meta][:pricing_rate_data]
-    shipment.meta['pricing_breakdown'] = params[:meta][:pricing_breakdown]
-
+  def update_shipment_for_chosen_offer(shipment:, params:, current_user:)
     selected_tender = shipment.charge_breakdowns.find_by(trip_id: params[:schedule]['charge_trip_id']).tender
-    shipment.user = current_user
-    shipment.customs_credit = params[:customs_credit]
-    shipment.trip_id = params[:schedule]['trip_id']
-    shipment.tender_id = selected_tender.id
-    shipment.imc_reference = selected_tender.imc_reference
-    shipment.meta['tender_id'] = shipment.tender_id
+    new_meta = shipment.meta
+      .merge(tender_id: shipment.tender_id)
+      .merge(params[:meta].slice(%i[pricing_rate_data pricing_breakdown]))
+    shipment = update_shipment_routing(shipment: shipment,  params: params)
+    shipment.update(
+      user: current_user,
+      customs_credit: params[:customs_credit],
+      trip_id: params[:schedule]['trip_id'],
+      tender_id: selected_tender.id,
+      imc_reference: selected_tender.imc_reference,
+      meta: new_meta
+    )
+    update_quotation_owner(shipment: shipment, user: current_user)
+    shipment
+  end
 
-    copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
+  def update_shipment_routing(shipment:,  params:)
+    schedule = params[:schedule].as_json
+    shipment.itinerary = Trip.find_by(id: schedule['trip_id'])&.itinerary
+    origin_hub = Hub.find_by(id: schedule['origin_hub']['id'])
+    destination_hub = Hub.find_by(id: schedule['destination_hub']['id'])
+    shipment = update_shipment_trucking_info(shipment: shipment)
+    shipment.assign_attributes(
+      origin_hub: origin_hub,
+      destination_hub: destination_hub,
+      origin_nexus: origin_hub.nexus,
+      destination_nexus: destination_hub.nexus,
+      closing_date: schedule['closing_date'],
+      planned_etd: schedule['etd'],
+      planned_eta: schedule['eta']
+    )
+    shipment
+  end
 
-    @schedule = params[:schedule].as_json
-
-    shipment.itinerary = Trip.find_by(id: @schedule['trip_id'])&.itinerary
-    case shipment.load_type
-    when 'cargo_item'
-      @dangerous = false
-      res = shipment.cargo_items.where(dangerous_goods: true)
-      @dangerous = true unless res.empty?
-    when 'container'
-      @dangerous = false
-      res = shipment.containers.where(dangerous_goods: true)
-      @dangerous = true unless res.empty?
-    end
-    @origin_hub = Hub.find_by(id: @schedule['origin_hub']['id'])
-    @destination_hub = Hub.find_by(id: @schedule['destination_hub']['id'])
+  def update_shipment_trucking_info(shipment:)
     if shipment.has_pre_carriage?
       trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - trucking_seconds
     else
       shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
     end
-    shipment.origin_hub        = @origin_hub
-    shipment.destination_hub   = @destination_hub
-    shipment.origin_nexus      = @origin_hub.nexus
-    shipment.destination_nexus = @destination_hub.nexus
-    shipment.closing_date      = @schedule['closing_date']
-    shipment.planned_etd       = @schedule['etd']
-    shipment.planned_eta       = @schedule['eta']
+    shipment
+  end
+
+  def update_quotation_owner(shipment:, user:)
+    ::Quotations::Quotation.where(legacy_shipment_id: shipment.id).update_all(
+      user_id: user&.id,
+      creator_id: user&.id
+    )
+  end
+
+  def shipment_documents(shipment:)
     documents = Hash.new { |h, k| h[k] = [] }
     shipment.files.each do |doc|
       documents[doc.doc_type] << doc
     end
+  end
 
-    @user_addresses = UserAddress.where(user: current_user).map do |uloc|
+  def user_addresses(user:)
+    UserAddress.where(user: user).map do |uloc|
       {
         address: uloc.address.to_custom_hash,
-        contact: current_user.attributes
+        contact: user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
+  end
 
-    cargo_items = shipment.cargo_items
-    containers = shipment.containers
-    aggregated_cargo = shipment.aggregated_cargo
-    if containers.present?
-      cargoKey = containers.first.size_class.dup
-      customsKey = cargoKey.dup
-      cargos = containers
-    else
-      cargoKey = 'lcl'
-      customsKey = 'lcl'
-      cargos = cargo_items.presence || [aggregated_cargo]
-    end
-    shipment.save!
-
-    origin_customs_fee = @origin_hub.get_customs(
-      customsKey,
+  def fetch_customs_fee(direction:, shipment:)
+    hub = direction == 'export' ? shipment.origin_hub : shipment.destination_hub
+    hub.get_customs(
+      cargo_key(shipment: shipment),
       shipment.mode_of_transport,
-      'export',
+      direction,
       shipment.trip.tenant_vehicle_id,
       shipment.destination_hub_id
     )
-    destination_customs_fee = @destination_hub.get_customs(
-      customsKey,
-      shipment.mode_of_transport,
-      'import',
-      shipment.trip.tenant_vehicle_id,
-      shipment.origin_hub_id
+  end
+
+  def customs_fee_result(shipment:)
+    pricing_tools = OfferCalculator::PricingTools.new(shipment: shipment, user: shipment.user)
+    currency = Users::Settings.find_by(user: shipment.user)&.currency || default_currency(user: shipment.user)
+    total_fees = { total: { value: 0, currency: currency } }
+    customs_fee = { total: total_fees }
+    customs_fee = customs_fee_direction(
+      customs_fee: customs_fee,
+      direction: "export",
+      pricing_tools: pricing_tools,
+      shipment: shipment
     )
-    addons = Addon.prepare_addons(
-      @origin_hub,
-      @destination_hub,
-      cargoKey,
-      shipment.trip.tenant_vehicle_id,
-      shipment.mode_of_transport,
-      cargos,
-      current_user
+    customs_fee_direction(
+      customs_fee: customs_fee,
+      direction: "import",
+      pricing_tools: pricing_tools,
+      shipment: shipment
     )
-    @pricing_tools = OfferCalculator::PricingTools.new(shipment: shipment, user: current_user)
-    import_fees = if destination_customs_fee
-                    @pricing_tools.calc_addon_charges(
-                      charge: destination_customs_fee['fees'],
-                      cargos: cargos,
-                      user: current_user,
-                      mode_of_transport: shipment.mode_of_transport
-                    )
-                  end
-    export_fees = if origin_customs_fee
-                    @pricing_tools.calc_addon_charges(
-                      charge: origin_customs_fee['fees'],
-                      cargos: cargos,
-                      user: current_user,
-                      mode_of_transport: shipment.mode_of_transport
-                    )
-                  end
-    default_currency = OrganizationManager::ScopeService.new(
-      target: current_user,
+  end
+
+  def customs_fee_direction(shipment:, customs_fee:, direction:, pricing_tools:)
+    fees = build_customs_fee_direction(pricing_tools: pricing_tools, shipment: shipment, direction: direction)
+    customs_fee[:total][:total][:value] += fees.dig('total', 'value') if fees.present?
+
+    customs_fee[direction] = fees if fees.present?
+    customs_fee
+  end
+
+  def default_currency(user:)
+    OrganizationManager::ScopeService.new(
+      target: user,
       organization: current_organization
     ).fetch(:default_currency)
-    currency = Users::Settings.find_by(user: current_user)&.currency || default_currency
-    total_fees = { total: { value: 0, currency: currency } }
-    total_fees[:total][:value] += import_fees.dig('total', 'value') if import_fees
-    total_fees[:total][:value] += export_fees.dig('total', 'value') if export_fees
+  end
 
-    customs_fee = { total: total_fees }
-    customs_fee[:import] = import_fees if import_fees.present?
-    customs_fee[:export] = export_fees if export_fees.present?
+  def build_customs_fee_direction(pricing_tools:, shipment:, direction:)
+    customs_fee = fetch_customs_fee(direction: direction, shipment: shipment)
+    return {} if customs_fee.blank?
 
-    hubs = {
-      startHub: { data: @origin_hub, address: @origin_hub.nexus },
-      endHub: { data: @destination_hub, address: @destination_hub.nexus }
+    pricing_tools.calc_addon_charges(
+      charge: customs_fee['fees'],
+      cargos: shipment.cargo_units.presence || [shipment.aggregated_cargo],
+      user: shipment.user,
+      mode_of_transport: shipment.mode_of_transport
+    )
+  end
+
+  def cargo_key(shipment:)
+    shipment.cargo_classes.first
+  end
+
+  def shipment_addons(shipment:)
+    Addon.prepare_addons(
+      shipment.origin_hub,
+      shipment.destination_hub,
+      cargo_key(shipment: shipment),
+      shipment.trip.tenant_vehicle_id,
+      shipment.mode_of_transport,
+      shipment.cargo_units.presence || [shipment.aggregated_cargo],
+      shipment.user
+    )
+  end
+
+  def shipment_hubs_response(shipment:)
+    {
+      startHub: { data: shipment.origin_hub, address: shipment.origin_hub.nexus },
+      endHub: { data: shipment.destination_hub, address: shipment.destination_hub.nexus }
     }
+  end
+
+  def choose_offer(params, current_user)
+    raise ApplicationError::NotLoggedIn if current_user.blank?
+
+    shipment = shipment_from_params(params: params)
+    shipment = update_shipment_for_chosen_offer(shipment: shipment, params: params, current_user: current_user)
+    copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
+
+    {
+      shipment: choose_offer_shipment_response(shipment: shipment),
+      hubs: shipment_hubs_response(shipment: shipment),
+      userLocations: user_addresses(user: current_user),
+      schedule: params[:schedule].as_json,
+      dangerousGoods: shipment.cargo_units.exists?(dangerous_goods: true),
+      documents: shipment_documents(shipment: shipment),
+      containers: shipment.containers,
+      cargoItems: shipment.cargo_items,
+      customs: customs_fee_result(shipment: shipment),
+      addons: shipment_addons(shipment: shipment),
+      addresses: choose_offer_address_response(shipment: shipment)
+    }
+  end
+
+  def shipment_from_params(params:)
+    shipment = Shipment.find_by(id: params[:shipment_id] || params[:id])
+    raise ApplicationError::ShipmentNotFound if shipment.blank?
+
+    shipment
+  end
+
+  def choose_offer_address_response(shipment:)
+    origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
+    destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
+    {
+      origin: origin.try(:to_custom_hash),
+      destination: destination.try(:to_custom_hash)
+    }
+  end
+
+  def choose_offer_shipment_response(shipment:)
     options = {
       methods: %i[mode_of_transport service_level vessel_name carrier voyage_code],
       include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
     }
-    origin = shipment.has_pre_carriage ? shipment.pickup_address : shipment.origin_nexus
-    destination = shipment.has_on_carriage ? shipment.delivery_address : shipment.destination_nexus
-    shipment_as_json = shipment.as_json(options).merge(
+    shipment.as_json(options).merge(
       selected_offer: shipment.selected_offer(Pdf::HiddenValueService.new(user: shipment.user).hide_total_args),
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
-    {
-      shipment: shipment_as_json,
-      hubs: hubs,
-      userLocations: @user_addresses,
-      schedule: @schedule,
-      dangerousGoods: @dangerous,
-      documents: documents,
-      containers: containers,
-      cargoItems: cargo_items,
-      customs: customs_fee,
-      addons: addons,
-      addresses: {
-        origin: origin.try(:to_custom_hash),
-        destination: destination.try(:to_custom_hash)
-      }
-    }
   end
 
   def search_contacts(contact_params, current_user)

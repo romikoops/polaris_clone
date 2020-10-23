@@ -41,11 +41,11 @@ RSpec.describe ShippingTools do
   end
   let(:completed) { false }
   let(:schedules) { [Legacy::Schedule.from_trip(trip)] }
-  let(:tender_id) { FactoryBot.create(:quotations_tender).id }
+  let(:tender) { Quotations::Tender.find(shipment.charge_breakdowns.first.tender_id) }
   let(:params) do
     {
       shipment_id: shipment.id,
-      meta: { tender_id: tender_id },
+      meta: { tender_id: tender.id },
       schedule: {
         'trip_id' => trip.id, charge_trip_id: trip.id,
         'origin_hub': origin_hub,
@@ -121,6 +121,8 @@ RSpec.describe ShippingTools do
   end
 
   describe '.request_shipment' do
+    let(:completed) { true }
+
     before do
       shipment_request_creator = instance_double('Shipments::ShipmentRequestCreator', errors: [])
       shipment_request = instance_double('Shipments::ShipmentRequest', id: 1, organization_id: 123)
@@ -376,7 +378,7 @@ RSpec.describe ShippingTools do
       }
     end
     let(:shipment) do
-      create(:legacy_shipment,
+      create(:complete_legacy_shipment,
              user: user,
              trip: trip,
              organization: organization,
@@ -470,11 +472,14 @@ RSpec.describe ShippingTools do
   describe '.choose_offer' do
     let(:params) { {} }
     let(:current_user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { current_user }
+    let(:completed) { true }
 
     context 'when failing with a guest user' do
+      let(:current_user) { nil }
+
       before do
         Organizations::Scope.find_by(target_id: organization.id).update(content: { closed_after_map: true })
-        current_user = nil
       end
 
       it 'throws an ApplicationError::NotLoggedIn with a guest user' do
@@ -503,18 +508,21 @@ RSpec.describe ShippingTools do
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {},
-            tender_id: nil
+            tender_id: tender.id
           }
         }
       end
+      let(:quotation) { tender.quotation }
+      let(:result) { described_class.new.choose_offer(params, user) }
 
-      before { FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender_id) }
+      before { FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender.id) }
 
       it 'selects an offer for the shipment and assigns a reference number' do
-        result = described_class.new.choose_offer(params, user)
         aggregate_failures do
           expect(result[:shipment]['trip_id']).to eq(trip.id)
-          expect(result[:shipment]['tender_id']).to eq(tender_id)
+          expect(result[:shipment]['tender_id']).to eq(tender.id)
+          expect(quotation.user).to eq(current_user)
+          expect(quotation.creator).to eq(current_user)
         end
       end
     end
@@ -534,21 +542,21 @@ RSpec.describe ShippingTools do
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {},
-            tender_id: nil
+            tender_id: tender.id
           }
         }
       end
 
       before do
         Users::Settings.find_by(user_id: user.id).destroy
-        FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender_id)
+        FactoryBot.create(:charge_breakdown, shipment: shipment, tender_id: tender.id)
       end
 
       it 'selects an offer for the shipment and assigns a reference number' do
         result = described_class.new.choose_offer(params, user)
         aggregate_failures do
           expect(result[:shipment]['trip_id']).to eq(trip.id)
-          expect(result[:shipment]['tender_id']).to eq(tender_id)
+          expect(result[:shipment]['tender_id']).to eq(tender.id)
         end
       end
     end
@@ -580,7 +588,7 @@ RSpec.describe ShippingTools do
           meta: {
             pricing_rate_data: {},
             pricing_breakdown: {},
-            tender_id: nil
+            tender_id: tender.id
           }
         }
       end
@@ -592,7 +600,7 @@ RSpec.describe ShippingTools do
         create(:legacy_file, shipment_id: lcl_shipment.id)
         stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
           .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
-        FactoryBot.create(:charge_breakdown, shipment: lcl_shipment, tender_id: tender_id)
+        FactoryBot.create(:charge_breakdown, shipment: lcl_shipment, tender_id: tender.id)
       end
 
       it 'selects an offer for the shipment and assigns a reference number' do
