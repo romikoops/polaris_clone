@@ -15,7 +15,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def mail_target_interceptor(billing, email)
-    billing == 'external' ? email : Settings.emails.booking
+    billing == 'external' && email.present? ? email : Settings.emails.booking
   end
 
   def set_current_id(organization_id:)

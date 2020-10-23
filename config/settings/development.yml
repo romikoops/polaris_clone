@@ -3,6 +3,9 @@ aws:
 
 emails:
   domain: itsmycargo.tech
+  booking: test@itsmycargo.tech
+  domain: itsmycargo.test
+  support: support@itsmycargo.tech
 
 passwords:
   default: IMC123456789

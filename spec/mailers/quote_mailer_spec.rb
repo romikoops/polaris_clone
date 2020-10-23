@@ -30,6 +30,16 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:delivery_address) { FactoryBot.create(:hamburg_address) }
   let(:cargo_total_weight) { "500.00" }
   let(:cargo_total_volume) { "1.34" }
+  let(:emails) do
+    {
+      sales: {
+        general: "sales.general@demo.com"
+      },
+      support: {
+        general: "support@demo.com"
+      }
+    }
+  end
 
   before do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
@@ -41,7 +51,7 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, :with_email_logo, organization: organization)
+    FactoryBot.create(:organizations_theme, :with_email_logo, emails: emails, organization: organization)
   end
 
   describe 'quotation_email' do
@@ -82,7 +92,7 @@ RSpec.describe QuoteMailer, type: :mailer do
       expect(mail.subject).to eq("FCL Quotation: Gothenburg - Gothenburg, Refs: #{quotations_quotation.tenders.first.imc_reference}")
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@demo.com'])
-      expect(mail.to).to eq([Settings.emails.booking])
+      expect(mail.to).to eq(["itsmycargodev@gmail.com"])
     end
   end
 
@@ -129,6 +139,15 @@ RSpec.describe QuoteMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@#{organization.slug}.itsmycargo.shop"])
       expect(mail.reply_to).to eq(['support@itsmycargo.tech'])
       expect(mail.to).to eq(['sales.general@demo.com'])
+    end
+  end
+
+  describe 'quotation_admin_email for misconfigured Organization' do
+    let(:mail) { described_class.new_quotation_admin_email(quotation: quotations_quotation, shipment: original_shipment).deliver_now }
+    let(:emails) { {sales: {general: ""}} }
+
+    it 'corrects to the default email', :aggregate_failures do
+      expect(mail.to).to eq(["itsmycargodev@gmail.com"])
     end
   end
 
