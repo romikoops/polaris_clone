@@ -64,7 +64,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
     Companies::Membership.where(company: company).where.not(member_id: params[:addedMembers].pluck(:id)).destroy_all
     unless params[:addedMembers].nil? || params[:addedMembers].empty?
       params[:addedMembers].each do |user|
-        Companies::Membership.create(company: company, member: ::Organizations::User.find(user[:id]))
+        Companies::Membership.find_or_create_by(company: company, member: ::Organizations::User.find(user[:id]))
       end
     end
     response_handler(company)
