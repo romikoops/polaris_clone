@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  polaris:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    ports:
+      - 3000:3000
+    command: ["/bin/sh", "-c", "rm -f tmp/pids/server.pid; exec bin/rails server -b 0.0.0.0 -p 3000"]
+    init: true
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgis://postgres:@postgres:5432
+      ELASTICSEARCH_URL: https://elasticsearch:9200
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_SESSION_TOKEN:
+      AWS_REGION: eu-central-1
+    volumes:
+      - ./:/app
+      - bundle:/usr/local/bundle
+    depends_on:
+      - elasticsearch
+      - postgres
+      - redis
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  postgres:
+    image: postgis/postgis:12-2.5-alpine
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: amazon/opendistro-for-elasticsearch:1.4.0
+    ports:
+      - 9200:9200
+    environment:
+      - node.name=imc-docker
+      - cluster.name=imc
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+volumes:
+  bundle:
+  elasticsearch:
+  postgres:

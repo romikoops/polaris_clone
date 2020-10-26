@@ -14,12 +14,12 @@ pipeline {
   agent none
 
   stages {
-    stage("Wolfhound") {
-      steps { wolfhound(required: ["rubocop"]) }
-    }
-
     stage("Test") {
       parallel {
+        stage("Wolfhound") {
+          steps { wolfhound(required: ["rubocop"]) }
+        }
+
         stage("App") {
           agent {
             kubernetes {
@@ -124,22 +124,13 @@ pipeline {
         }
       }
 
-      steps {
-        dockerBuild(
-          dir: ".",
-          image: "polaris",
-          memory: 1500,
-          pre_script: "scripts/docker-prepare.sh"
-        )
-      }
+      steps { buildDocker("polaris") }
     }
 
     stage("Sentry") {
       when { branch "master" }
 
-      steps {
-        sentryRelease(projects: ["polaris"])
-      }
+      steps { sentryRelease(projects: ["polaris"]) }
     }
   }
 
@@ -154,8 +145,6 @@ pipeline {
 void appPrepare() {
   withSecrets {
     withEnv([
-      "BUNDLE_BUILD__SASSC=--disable-march-tune-native",
-      "BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}",
       "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby",
       "LC_ALL=C.UTF-8",
     ]) {
@@ -182,7 +171,7 @@ void appPrepare() {
 }
 
 void appRunner(String name) {
-  withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}", "LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
+  withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
     sh(label: "Test", script: "scripts/ci-test ${name}")
   }
 }

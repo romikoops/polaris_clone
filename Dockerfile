@@ -1,30 +1,52 @@
-FROM ruby:2.6-alpine@sha256:d0344b44c927c253718f96b4e5b5fc07f6467127a82ca931cba41cf14e7aa49d AS builder
+FROM ruby:2.6-slim AS base
 
-ARG BUNDLE_WITHOUT="development test"
-
-ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
+# Upgrade bundler
+RUN gem install bundler -v1.17.3
 
 # Minimal requirements to run a Rails app
-RUN apk add --no-cache \
-  automake \
-  build-base \
+RUN apt-get update \
+  && apt-get install -y \
+  awscli \
+  build-essential \
   cmake \
-  geos-dev \
+  curl \
   git \
+  gnupg2 \
+  graphicsmagick \
+  libgeos-dev \
   nodejs \
   npm \
-  postgresql-dev \
-  tzdata
+  pv \
+  tzdata \
+  wkhtmltopdf
+
+# Install Postgresql 12
+RUN \
+  curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | \
+    tee /etc/apt/sources.list.d/pgdg.list \
+  && apt-get update \
+  && apt-get install -y libpq-dev postgresql-client-12
+
 # Install MJML
 RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock .build/docker/ .
+# Collect all internal gems and engines
+FROM busybox AS dependencies
+
+COPY . /app
+RUN find /app -type f ! -name "Gemfile*" ! -name "*.gemspec" ! -name "gemhelper.rb" -delete
+
+# Build production image
+FROM base AS builder
+
+COPY --from=dependencies /app ./
 
 RUN \
-  bundle config --local build.sassc --disable-march-tune-native \
-  && bundle install --frozen --without=development test --retry 3 \
+  bundle config set frozen 'true' \
+  && bundle install --without=development test --retry 3 \
   && rm -rf /usr/local/bundle/cache/*.gem \
   && find /usr/local/bundle/gems/ -name "*.c" -delete \
   && find /usr/local/bundle/gems/ -name "*.o" -delete
@@ -39,21 +61,32 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 #
 #
-FROM ruby:2.6-alpine@sha256:d0344b44c927c253718f96b4e5b5fc07f6467127a82ca931cba41cf14e7aa49d AS app
+FROM ruby:2.6-slim AS app
 
-ENV MALLOC_ARENA_MAX 2
+RUN gem install bundler -v1.17.3
 
 # Minimal requirements to run a Rails app
-RUN apk add --no-cache \
-  font-noto \
-  geos \
-  graphicsmagick \
-  less \
-  libpq \
-  nodejs \
-  npm \
-  tzdata \
-  wkhtmltopdf
+RUN apt-get update \
+  && apt-get install -y \
+    curl \
+    fonts-noto \
+    gnupg2 \
+    graphicsmagick \
+    less \
+    libgeos-3.7.1 \
+    libgeos-dev \
+    nodejs \
+    npm \
+    tzdata \
+    wkhtmltopdf
+
+# Install Postgresql 12
+RUN \
+  curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | \
+    tee /etc/apt/sources.list.d/pgdg.list \
+  && apt-get update \
+  && apt-get install -y libpq5
 
 # Install MJML
 RUN npm install -g 'mjml@4.3.1'
@@ -61,7 +94,13 @@ RUN npm install -g 'mjml@4.3.1'
 WORKDIR /app
 
 # Add user
-RUN addgroup -g 1000 app && adduser -D -h /app/tmp -s /sbin/nologin -G app -u 1000 app
+RUN addgroup --gid 1000 app \
+  && adduser --home /app/tmp \
+    --shell /sbin/nologin \
+    --no-create-home \
+    --uid 1000 \
+    --gid 1000 \
+    app
 USER app
 
 # Copy app with gems from former build stage
@@ -72,6 +111,7 @@ COPY --from=builder --chown=app:app /app /app
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV review
+ENV MALLOC_ARENA_MAX 2
 
 EXPOSE 3000
 

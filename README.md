@@ -1,13 +1,11 @@
-    _____ _       ___  ___      _____
-    |_   _| |      |  \/  |     /  __ \
-     | | | |_ ___ | .  . |_   _| /  \/ __ _ _ __ __ _  ___
-     | | | __/ __|| |\/| | | | | |    / _` | '__/ _` |/ _ \
-    _| |_| |_\__ \| |  | | |_| | \__/\ (_| | | | (_| | (_) |
-    \___/ \__|___/\_|  |_/\__, |\____/\__,_|_|  \__, |\___/
-                           __/ |                 __/ |
-                          |___/                 |___/
-
-# Development Setup
+```
+             .        ___  ___  _      _   ___ ___ ___
+             ;       | _ \/ _ \| |    /_\ | _ |_ _/ __|
+         - --+- -    |  _| (_) | |__ / _ \|   /| |\__ \
+  .          !       |_|  \___/|____/_/ \_|_|_|___|___/
+.            .      
+ +
+```
 
 ## Git hooks
 
@@ -27,11 +25,32 @@ set up your own Amazon AWS Access Keys properly.
 
 After this, simply run rake task:
 
-    # Download and seed slim version of database (only demo organization)
     $ bin/rake db:reload
 
-    # Download and seed full version of database (all organizations)
-    $ bin/rake db:reload:full
+## Docker Based Development
+
+As our backend system grows more complicated with more dependencies,
+we have prepared simple Docker Compose based development system.
+To use it, always wrap necessary docker-compose commands with `bin/docker-compose`. This
+is simple wrapper script that automatically ensures that docker environment has correct
+AWS Access keys defined.
+
+To begin, make sure you have build required base image first for docker-compose:
+
+    bin/docker-compose build --pull
+
+After this you can do easily following operations (and much more):
+* Install gems: `bin/docker-compose run polaris bundle`
+* Reload database from development seed: `bin/docker-compose run polaris bundle exec rails db:reload`
+* Migrate database: `bin/docker-compose run polaris bundle exec rails db:migrate`
+* Rails console: `bin/docker-compose run polaris bundle exec rails c`
+
+* Setup development server: `bin/docker-compose up`
+
+* Stop development server: `bin/docker-compose stop`
+* Start development server: `bin/docker-compose start` (after stop)
+
+* Tear down development server: `bin/docker-compose down -v`
 
 ## Commit Message
 
@@ -64,20 +83,3 @@ All prefixes are case insensitive.
 When developing you may run into an error saying `client_secret is missing` on
 certain parts of the site, for example at `localhost:3000/admiralty`.
 Ask another member of dev team to get the master key.
-
-# :ship: Deployments
-
-## Backend (Polaris)
-
-We currently deploy API layer via AWS Elastic Beanstalk. Backend can be deployed
-with Rake task:
-
-    $ rails deploy:backend
-
-## Frontend (Dipper)
-
-Frontend is deployed with Helm chart:
-
-    # Ensure you are in correct cluster:
-    $ kubectx armada
-    $ helm upgrade --atomic --namespace dipper dipper ../charts/stable/dipper --set image.tag=$(git rev-parse HEAD)

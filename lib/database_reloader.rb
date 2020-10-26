@@ -175,10 +175,10 @@ class DatabaseReloader
 
       cmd = if pv_cmd.present?
         "#{pv_cmd} -ptabi 1 #{seed_file} " \
-          "| #{pg_restore_cmd} --dbname=#{database_name} --no-owner --no-privileges"
+          "| #{pg_restore_cmd} --dbname=#{database_url} --no-owner --no-privileges"
       else
         puts "NOTE: To get progress bar, install pv (brew install pv)"
-        "#{pg_restore_cmd} --dbname=#{database_name} --no-owner --no-privileges #{seed_file}"
+        "#{pg_restore_cmd} --dbname=#{database_url} --no-owner --no-privileges #{seed_file}"
       end
 
       system(cmd) || exit(1)
@@ -186,6 +186,11 @@ class DatabaseReloader
 
     def database_name
       @database_name ||= ENV.fetch("DATABASE_NAME") { ActiveRecord::Base.configurations[Rails.env]["database"] }
+    end
+
+    def database_url
+      "postgres://%s:%s@%s:%s/%s" % ActiveRecord::Base.configurations[Rails.env]
+        .values_at("username", "password", "host", "port", "database")
     end
   end
 end
