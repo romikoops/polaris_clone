@@ -12,12 +12,6 @@ commit-msg:
   scripts:
     template-checker:
       tags: default
-    jira-update:
-      tags: default
-post-commit:
-  scripts:
-    jira-update:
-      runner: ruby
 pre-push:
   scripts:
     verify:
@@ -27,6 +21,4 @@ post-checkout:
     ensure-branch-name:
       tags: default
     01-bundle-checkinstall:
-      tags: default
-    jira-update:
       tags: default

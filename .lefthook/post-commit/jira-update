@@ -1,4 +1,0 @@
-#!/usr/bin/env ruby
-
-require_relative "../jira_service"
-JiraService.update_tickets(issue_source: :commit)

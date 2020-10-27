@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-_, _, branch_change = ARGV
-
-exit 0 if branch_change == "0"
-
-require_relative "../jira_service"
-JiraService.update_tickets(issue_source: :branch)
