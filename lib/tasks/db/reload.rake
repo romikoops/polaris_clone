@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 if Rails.env.development?
-  require "database_reloader"
+  require "database_util"
 
   namespace :db do
     desc "Reloads full database (truncate and pull latest dump)"
@@ -10,21 +10,34 @@ if Rails.env.development?
     end
 
     namespace :reload do
-      desc "Reloads slim database (truncate and pull latest dump)"
-      task :slim, [:date] => [:environment] do |_, args|
-        DatabaseReloader.perform(profile: "slim", date: args[:date])
-        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
-      end
-
       desc "Reloads full database (truncate and pull latest dump)"
-      task :full, [:date] => [:environment] do |_, args|
-        DatabaseReloader.perform(profile: "full", date: args[:date])
+      task full: :environment do
+        DatabaseUtil.reload(profile: "full")
         Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
       end
 
       desc "Reloads production database (AUTHORIZED ONLY)"
-      task :production, [:date] => [:environment] do |_, args|
-        DatabaseReloader.perform(profile: "production", date: args[:date])
+      task production: :environment do
+        DatabaseUtil.reload(profile: "production")
+        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
+      end
+    end
+
+    desc "Restore full database (restore from template)"
+    task restore: :environment do
+      Rake::Task["db:reload:full"].invoke
+    end
+
+    namespace :restore do
+      desc "Restores full database from template"
+      task full: :environment do
+        DatabaseUtil.restore(profile: "full")
+        Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
+      end
+
+      desc "Restores production database from template"
+      task production: :environment do
+        DatabaseUtil.restore(profile: "production")
         Rake::Task["db:migrate"] unless ENV["SKIP_MIGRATE"]
       end
     end

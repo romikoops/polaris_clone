@@ -3,7 +3,7 @@ default: &default
   encoding: unicode
   schema_search_path: public
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
-  url: <%= ENV['DATABASE_URL'] %>
+  url: <%= ENV.fetch("DATABASE_URL") { "postgis://localhost" } %>
 
 development:
   <<: *default
