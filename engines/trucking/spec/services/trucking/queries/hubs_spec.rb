@@ -14,9 +14,15 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Zipcode', organization: organization) }
   let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: 'Location', organization: organization) }
 
-  let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, zipcode: zipcode) }
-  let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
-  let(:trucking_location_distance)  { FactoryBot.create(:trucking_location, distance: distance) }
+  let(:trucking_location_zipcode) {
+    FactoryBot.create(:trucking_location, :zipcode, country: country, data: zipcode)
+  }
+  let(:trucking_location_geometry)  {
+    FactoryBot.create(:trucking_location, :with_location, country: country)
+  }
+  let(:trucking_location_distance)  {
+    FactoryBot.create(:trucking_location, :distance, country: country, data: distance)
+  }
 
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:groups) { [default_group] }
@@ -28,6 +34,7 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:carriage)     { 'pre' }
   let(:distance)     { 55 }
   let(:country_code) { 'SE' }
+  let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
 
   let(:address) do
     FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)

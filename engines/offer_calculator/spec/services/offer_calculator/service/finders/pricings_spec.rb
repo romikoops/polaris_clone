@@ -7,7 +7,7 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
+  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
   let(:load_type) { "cargo_item" }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|

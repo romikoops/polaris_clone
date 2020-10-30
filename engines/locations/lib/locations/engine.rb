@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+require 'legacy'
+
 require 'elasticsearch'
+require 'geocoder'
 require 'searchkick'
 require 'rgeo'
 require 'rgeo-geojson'

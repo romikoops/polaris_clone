@@ -6,7 +6,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
-  let(:trucking_location) { FactoryBot.create(:trucking_location, distance: distance) }
+  let(:trucking_location) { FactoryBot.create(:trucking_location, :distance, data: distance) }
   let(:distance) { 15 }
   let(:trucking_pricing) do
     FactoryBot.create(:trucking_trucking,

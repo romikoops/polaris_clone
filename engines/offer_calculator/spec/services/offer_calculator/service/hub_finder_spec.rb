@@ -16,7 +16,7 @@ RSpec.describe OfferCalculator::Service::HubFinder do
       location: trucking_location,
       group_id: group_id)
   end
-  let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '43813') }
+  let(:trucking_location) { FactoryBot.create(:trucking_location, :zipcode, data: '43813', country: address.country) }
   let(:address) { FactoryBot.create(:gothenburg_address) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,

@@ -6,8 +6,8 @@ class UploadMailer < ApplicationMailer
     @user = Users::User.find(params[:user_id])
     @organization = params[:organization]
     @result = params[:result]
+    @result["errors"] ||= []
     @file = params[:file]
-
     @notification_type = @result.fetch("errors", []).empty? ? "good" : "bad"
     @has_errors = @result["errors"].present?
 

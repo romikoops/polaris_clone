@@ -49,6 +49,20 @@ class Admin::TruckingController < Admin::AdminBaseController
     response_handler(truckingHubId: truckingHubId)
   end
 
+  def upload
+    hub = Legacy::Hub.find(params[:id])
+    handle_upload(
+      params: upload_params,
+      text: "group_id:#{params[:group_id] || "all"},hub_id: #{hub.id}",
+      type: 'trucking',
+      options: {
+        group_id: upload_params[:group_id],
+        applicable: hub,
+        user: current_user
+      }
+    )
+  end
+
   def overwrite_zonal_trucking_by_hub
     if upload_params[:file]
       document = Legacy::File.create!(

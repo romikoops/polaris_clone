@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe TruckingCounterpartsController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:location_1) { FactoryBot.create(:zipcode_location, zipcode: "00001", country_code: "SE") }
-  let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "SE") }
+  let(:location_1) { FactoryBot.create(:zipcode_location, :zipcode, data: "00001", country: origin_hub.country) }
+  let(:location_2) { FactoryBot.create(:zipcode_location, :zipcode, data: "00002", country: origin_hub.country) }
   let(:response_body) { JSON.parse(response.body) }
   let(:data) { response_body["data"] }
 
@@ -33,7 +33,7 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
     end
 
     context "with cross country trucking" do
-      let(:location_2) { FactoryBot.create(:zipcode_location, zipcode: "00002", country_code: "DE") }
+      let(:location_2) { FactoryBot.create(:zipcode_location, :zipcode, data: "00002", country: country) }
       let(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
       before do

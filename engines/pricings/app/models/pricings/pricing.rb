@@ -19,7 +19,7 @@ module Pricings
     has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
     has_many :margins, class_name: 'Pricings::Margin'
     belongs_to :group, class_name: 'Groups::Group', optional: true
-    has_many :notes, foreign_key: 'pricings_pricing_id', dependent: :destroy
+    has_many :notes, class_name: 'Legacy::Note', foreign_key: 'pricings_pricing_id', dependent: :destroy
 
     validates :itinerary_id, uniqueness: {
       scope: %i[ organization_id

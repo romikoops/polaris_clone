@@ -27,11 +27,13 @@ module Trucking
                   truck_type
                   group_id
                   tenant_vehicle_id
+                  validity
                 ),
                 message: lambda { |obj, _msg|
                   "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
               }
+    MODIFIERS = %w[cbm_kg unit km unit_in_kg unit cbm wm kg].freeze
 
     acts_as_paranoid
 
@@ -59,8 +61,8 @@ module Trucking
     def as_index_result
       {
         'truckingPricing' => as_json,
-        'countryCode' => location&.country_code,
-        'courier' => tenant_vehicle&.name
+        'countryCode' => location.country.code,
+        'courier' => tenant_vehicle.name
       }.merge(location_info)
     end
 
@@ -72,7 +74,7 @@ module Trucking
       elsif location&.distance
         { 'distance' => location.distance }
       else
-        { 'city' => location.city_name || location&.location&.name }
+        { 'city' => location.city_name || location.location&.name }
       end
     end
   end

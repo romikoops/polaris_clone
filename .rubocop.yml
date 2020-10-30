@@ -53,7 +53,7 @@ Metrics/ParameterLists:
   Exclude:
     - qa/features/**/*_steps.rb
 
-RSpec/VariableName:
+Naming/VariableName:
   Exclude:
     - 'engines/*/spec/api/*_spec.rb'
 

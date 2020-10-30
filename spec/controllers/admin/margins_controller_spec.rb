@@ -175,7 +175,8 @@ RSpec.describe Admin::MarginsController, type: :controller do
       let(:organization_3) { FactoryBot.create(:organizations_organization) }
 
       before do
-        FactoryBot.create_list(:tenant_vehicle, 2, organization: organization_3)
+        FactoryBot.create(:tenant_vehicle, name: "1", organization: organization_3)
+        FactoryBot.create(:tenant_vehicle, name: "2", organization: organization_3)
         FactoryBot.create_list(:groups_group, 2, organization: organization_3)
         ::Organizations.current_id = organization_3.id
       end

@@ -3,19 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe Pricings::Preview do
+  include_context "complete_route_with_trucking"
+
+  let(:load_type) { "cargo_item" }
+  let(:cargo_classes) { ['lcl'] }
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
+  let(:lcl_pricing) { pricings.first }
   let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary) }
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
   let(:args) do
     {
-      selectedOriginHub: itinerary.hubs.first.id,
-      selectedDestinationHub: itinerary.hubs.last.id,
+      selectedOriginHub: origin_hub.id,
+      selectedDestinationHub: destination_hub.id,
       selectedCargoClass: 'lcl',
       target_id: user.id,
       target_type: 'user'
@@ -54,7 +53,7 @@ RSpec.describe Pricings::Preview do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin.id)
-          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(275)
         end
       end
 
@@ -65,7 +64,7 @@ RSpec.describe Pricings::Preview do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(group_margin.id)
-          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(275)
         end
       end
 
@@ -76,7 +75,7 @@ RSpec.describe Pricings::Preview do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(company_margin.id)
-          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(275)
         end
       end
 
@@ -87,7 +86,7 @@ RSpec.describe Pricings::Preview do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(company_margin.id)
-          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(275)
         end
       end
 
@@ -100,53 +99,16 @@ RSpec.describe Pricings::Preview do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(user_margin_1.id)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :data, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :data, 'rate')).to eq(275)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :source_id)).to eq(user_margin_2.id)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :data, 'rate')).to eq(30.25)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 1, :data, 'rate')).to eq(302.5)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :source_id)).to eq(user_margin_3.id)
-          expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :data, 'rate')).to eq(33.275)
+          expect(results.dig(0, :freight, :fees, :bas, :margins, 2, :data, 'rate')).to eq(332.75)
         end
       end
     end
 
     context ' with trucking' do
-      before do
-        FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: zipcode_pre_availability)
-        FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: location_on_availability)
-        Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Göteborg, Sweden',
-                                          'city' => pickup_address.city,
-                                          'country' => pickup_address.country.name,
-                                          'country_code' => pickup_address.country.code,
-                                          'postal_code' => pickup_address.zip_code
-                                        ])
-        Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Shanghai, China',
-                                          'city' => delivery_address.city,
-                                          'country' => delivery_address.country.name,
-                                          'country_code' => delivery_address.country.code,
-                                          'postal_code' => delivery_address.zip_code
-                                        ])
-      end
-
-      let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
-      let(:delivery_address) { FactoryBot.create(:shanghai_address) }
-      let(:pickup_location) { FactoryBot.create(:trucking_location, zipcode: pickup_address.zip_code, country_code: 'SE') }
-      let(:delivery_location) do
-        FactoryBot.create(:trucking_location,
-                          country_code: 'CN',
-                          location: FactoryBot.create(:locations_location,
-                                                      bounds: FactoryBot.build(:legacy_bounds,
-                                                                               lat: delivery_address.latitude,
-                                                                               lng: delivery_address.longitude)))
-      end
-      let!(:pickup_trucking) { FactoryBot.create(:trucking_with_wm_rates, organization: organization, location: pickup_location, hub: origin_hub) }
-      let!(:delivery_trucking) { FactoryBot.create(:trucking_with_cbm_kg_rates, organization: organization, location: delivery_location, hub: destination_hub, carriage: 'on') }
-      let!(:origin_local_charges) { FactoryBot.create(:legacy_local_charge, tenant_vehicle: tenant_vehicle_1, organization: organization, hub: origin_hub) }
-      let!(:destination_local_charges) { FactoryBot.create(:legacy_local_charge, tenant_vehicle: tenant_vehicle_1, organization: organization, hub: destination_hub, direction: 'import') }
-
       let(:trucking_args) do
         {
           selectedCargoClass: 'lcl',
@@ -167,15 +129,13 @@ RSpec.describe Pricings::Preview do
       let!(:import_margin) { FactoryBot.create(:import_margin, destination_hub: destination_hub, organization: organization, applicable: user) }
       let!(:trucking_pre_margin) { FactoryBot.create(:trucking_pre_margin, destination_hub: origin_hub, organization: organization, applicable: user) }
       let!(:trucking_on_margin) { FactoryBot.create(:trucking_on_margin, origin_hub: destination_hub, organization: organization, applicable: user) }
-      let(:zipcode_pre_availability) { FactoryBot.create(:trucking_type_availability, query_method: :zipcode, carriage: 'pre', load_type: 'cargo_item') }
-      let(:location_on_availability) { FactoryBot.create(:trucking_type_availability, query_method: :location, carriage: 'on', load_type: 'cargo_item') }
       let!(:results) { described_class.new(target: user, organization: organization, params: trucking_args).perform }
 
       it 'generates the preview for freight with one pricing available' do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(freight_margin.id)
-          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(27.5)
+          expect(results.dig(0, :freight, :fees, :bas, :final, 'rate')).to eq(275)
         end
       end
 
@@ -194,7 +154,7 @@ RSpec.describe Pricings::Preview do
           expect(results.dig(0, :trucking_pre, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
           expect(results.dig(0, :trucking_pre, :fees, :puf, :final, 'value')).to eq(275.0)
           expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_pre_margin.id)
-          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'wm', 0, 'rate', 'value')).to eq(110.0)
+          expect(results.dig(0, :trucking_pre, :fees, :trucking_lcl, :final, 'unit', 0, 'rate', 'value')).to eq(110.0)
         end
       end
 
@@ -203,7 +163,7 @@ RSpec.describe Pricings::Preview do
           expect(results.dig(0, :trucking_on, :fees, :puf, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
           expect(results.dig(0, :trucking_on, :fees, :puf, :final, 'value')).to eq(275.0)
           expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :margins, 0, :source_id)).to eq(trucking_on_margin.id)
-          expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :final, 'cbm', 0, 'rate', 'value')).to eq(261.25)
+          expect(results.dig(0, :trucking_on, :fees, :trucking_lcl, :final, 'unit', 0, 'rate', 'value')).to eq(110)
         end
       end
     end
@@ -223,7 +183,7 @@ RSpec.describe Pricings::Preview do
       context 'with valid rates' do
         let(:group_lcl_pricing) do
           FactoryBot.create(:lcl_pricing,
-                            tenant_vehicle: tenant_vehicle_1,
+                            tenant_vehicle: tenant_vehicle,
                             itinerary: itinerary,
                             group_id: group.id,
                             fee_attrs: {

@@ -14,6 +14,9 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency "measured-rails"
+  s.add_dependency 'geocoder'
+
   s.add_dependency 'imc-companies'
   s.add_dependency 'imc-core'
   s.add_dependency 'imc-groups'
@@ -21,8 +24,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'imc-organizations'
   s.add_dependency 'imc-organization_manager'
   s.add_dependency 'imc-trucking'
-
-  s.add_dependency 'geocoder'
 
   Gemhelper.common(s)
 end

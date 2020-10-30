@@ -21,7 +21,7 @@ module Trucking
         query = query.where(truck_type: filters[:truck_type]) if filters[:truck_type]
         query = query.where(carriage: filters[:carriage]) if filters[:carriage]
         if filters[:destination]
-          query = query.joins(:location).where('trucking_locations.city_name ILIKE ?', "#{filters[:destination]}%")
+          query = query.joins(:location).where('trucking_locations.data ILIKE ?', "#{filters[:destination]}%")
         end
         if filters[:courier_name]
           query = query.joins(:tenant_vehicle).where('tenant_vehicles.name ILIKE ?', "#{filters[:courier_name]}%")

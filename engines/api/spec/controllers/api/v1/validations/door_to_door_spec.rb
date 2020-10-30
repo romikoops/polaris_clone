@@ -5,41 +5,22 @@ require 'rails_helper'
 module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
-    let!(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
+    include_context 'complete_route_with_trucking'
+    let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
     let(:organizations_user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
-    let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
-    let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
-    let(:origin_hub) { itinerary.origin_hub }
-    let(:destination_hub) { itinerary.destination_hub }
-    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: 'slowly') }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: organizations_user.id, scopes: 'public') }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
-    let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
+    let(:load_type) { 'cargo_item' }
+    let(:cargo_classes) { ['lcl'] }
     let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
-    let(:origin_location) do
-      FactoryBot.create(:locations_location,
-                        bounds: FactoryBot.build(:legacy_bounds, lat: gothenburg_address.latitude, lng: gothenburg_address.longitude, delta: 0.4),
-                        country_code: gothenburg_address.country.code.downcase)
-    end
-    let(:destination_location) do
-      FactoryBot.create(:locations_location,
-                        bounds: FactoryBot.build(:legacy_bounds, lat: shanghai_address.latitude, lng: shanghai_address.longitude, delta: 0.4),
-                        country_code: shanghai_address.country.code.downcase)
-    end
-    let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: gothenburg_address.country.code.upcase) }
-    let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: shanghai_address.country.code.upcase) }
-    let(:pre_carriage_type_availability) { FactoryBot.create(:trucking_type_availability, truck_type: 'default', carriage: 'pre', query_method: :location) }
-    let(:on_carriage_type_availability) { FactoryBot.create(:trucking_type_availability, truck_type: 'default', carriage: 'on', query_method: :location) }
     let(:params) do
       {
         organization_id: organization.id,
         quote: {
           organization_id: organization.id,
           user_id: organizations_user.id,
-          load_type: 'cargo_item',
+          load_type: load_type,
           origin: origin,
           destination: destination
         },
@@ -62,32 +43,9 @@ module Api
         }
       ]
     end
-    let(:origin) { { latitude: gothenburg_address.latitude, longitude: gothenburg_address.longitude } }
-    let(:destination) { { latitude: shanghai_address.latitude, longitude: shanghai_address.longitude } }
+    let(:origin) { { latitude: pickup_address.latitude, longitude: pickup_address.longitude } }
+    let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
     let(:cargo_item_id) { SecureRandom.uuid }
-
-    before do
-      FactoryBot.create(:trucking_hub_availability, hub: origin_hub, type_availability: pre_carriage_type_availability)
-      FactoryBot.create(:trucking_hub_availability, hub: destination_hub, type_availability: on_carriage_type_availability)
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
-      Geocoder::Lookup::Test.add_stub([gothenburg_address.latitude, gothenburg_address.longitude], [
-                                        'address_components' => [{ 'types' => ['premise'] }],
-                                        'address' => gothenburg_address.geocoded_address,
-                                        'city' => gothenburg_address.city,
-                                        'country' => gothenburg_address.country.name,
-                                        'country_code' => gothenburg_address.country.code,
-                                        'postal_code' => gothenburg_address.zip_code
-                                      ])
-      Geocoder::Lookup::Test.add_stub([shanghai_address.latitude, shanghai_address.longitude], [
-                                        'address_components' => [{ 'types' => ['premise'] }],
-                                        'address' => shanghai_address.geocoded_address,
-                                        'city' => shanghai_address.city,
-                                        'country' => shanghai_address.country.name,
-                                        'country_code' => shanghai_address.country.code,
-                                        'postal_code' => shanghai_address.zip_code
-                                      ])
-    end
 
     describe 'post #create' do
       context 'when door to door complete request (no pricings)' do
@@ -104,6 +62,7 @@ module Api
         end
 
         before do
+          Pricings::Pricing.destroy_all
           request.headers['Authorization'] = token_header
           post :create, params: params
         end
@@ -183,7 +142,6 @@ module Api
         end
 
         before do
-          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params
         end
@@ -239,10 +197,10 @@ module Api
         let(:destination_airport) { air_itinerary.destination_hub }
 
         before do
-          FactoryBot.create(:trucking_hub_availability, hub: origin_airport, type_availability: pre_carriage_type_availability)
-          FactoryBot.create(:trucking_hub_availability, hub: destination_airport, type_availability: on_carriage_type_availability)
-          FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_airport, location: origin_trucking_location)
-          FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_airport, carriage: 'on', location: destination_trucking_location)
+          FactoryBot.create(:trucking_hub_availability, hub: origin_airport, type_availability: trucking_availbilities.first.type_availability)
+          FactoryBot.create(:trucking_hub_availability, hub: destination_airport, type_availability: trucking_availbilities.last.type_availability)
+          FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: origin_airport, location: pickup_trucking_location)
+          FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: destination_airport, carriage: 'on', location: delivery_trucking_location)
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers['Authorization'] = token_header
           post :create, params: params

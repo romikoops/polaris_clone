@@ -2,7 +2,14 @@ require "rails_helper"
 
 module Groups
   RSpec.describe Membership, type: :model do
-    pending "add some examples to (or delete) #{__FILE__}"
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:group) { FactoryBot.create(:groups_group, organization: organization) }
+    let!(:membership) { FactoryBot.create(:groups_membership, group: group, member: user) }
+
+    it "raises and error" do
+      expect(FactoryBot.create(:groups_membership, group: group, member: user)).to be_valid
+    end
   end
 end
 

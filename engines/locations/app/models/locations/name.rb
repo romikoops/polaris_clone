@@ -3,7 +3,7 @@
 module Locations
   class Name < ApplicationRecord
     searchkick word_middle: %i(name display_name alternative_names city postal_code country_code),
-               locations: [:location],
+               geo_shape: [:point],
                settings: {blocks: {read_only: false}}
     belongs_to :location, optional: true
 

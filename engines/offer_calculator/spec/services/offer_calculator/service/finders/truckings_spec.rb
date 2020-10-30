@@ -40,8 +40,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
   end
   let(:gothenburg_address) { FactoryBot.create(:gothenburg_address) }
   let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
-  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: "SE") }
-  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: "CN") }
+  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, :with_location, location: origin_location, country: gothenburg_address.country) }
+  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, :with_location, location: destination_location, country: shanghai_address.country) }
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
   let(:finder) { described_class.new(shipment: shipment, quotation: quotation, schedules: schedules) }
   let(:results) { finder.perform }

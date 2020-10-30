@@ -3,28 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
+  include_context "complete_route_with_trucking"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
-  let(:user) { FactoryBot.create(:organizations_user, email: 'test@example.com', password: 'veryspeciallysecurehorseradish', organization: organization) }
-  let(:origin_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
-                      country_code: 'se')
-  end
-  let(:destination_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: destination_hub.latitude, lng: destination_hub.longitude, delta: 0.4),
-                      country_code: 'cn')
-  end
-  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'SE') }
-  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
+  let(:cargo_classes) { ['lcl'] }
+  let(:load_type) { "cargo_item" }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
-  let(:trucking_service) { described_class.new(organization: organization, arguments: params, target: target) }
-  let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
-  let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
+  let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group) {
+    FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+      FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
+    end
+  }
+  let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target } }
   let(:coordinates) { { lat: lat, lng: lng } }
   let(:coordinate_trucking_details) { Api::Routing::Trucking::DetailsService.new(coordinates: coordinates, nexus_id: nil, load_type: 'cargo_item') }
   let(:destination_nexus_trucking_details) { Api::Routing::Trucking::DetailsService.new(coordinates: nil, nexus_id: destination_hub.nexus_id, load_type: 'cargo_item') }
@@ -46,33 +38,12 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
                                       'country_code' => 'SE',
                                       'postal_code' => '43822'
                                     ])
-    Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => 'Göteborg, Sweden',
-                                      'city' => 'Gothenburg',
-                                      'country' => 'Sweden',
-                                      'country_code' => 'SE',
-                                      'postal_code' => '43813'
-                                    ])
-    Geocoder::Lookup::Test.add_stub([destination_hub.latitude, destination_hub.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => 'Shanghai, China',
-                                      'city' => 'Shanghai',
-                                      'country' => 'China',
-                                      'country_code' => 'CN',
-                                      'postal_code' => '210001'
-                                    ])
   end
 
   context 'when not limited to groups' do
-    before do
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
-    end
-
     describe '.counterpart_availabilities (origin)' do
-      let(:lat) { origin_hub.latitude }
-      let(:lng) { origin_hub.longitude }
+      let(:lat) { pickup_address.latitude }
+      let(:lng) { pickup_address.longitude }
       let(:target) { :origin }
 
       context 'when trucking is available with lat lng args' do
@@ -82,7 +53,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options and country codes' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to match_array([destination_hub_availability.truck_type])
+            expect(data[:truckTypes]).to match_array([trucking_availbilities.second.truck_type])
             expect(data[:countryCodes]).to eq(['cn'])
           end
         end
@@ -95,7 +66,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options and country codes' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to match_array([destination_hub_availability.truck_type])
+            expect(data[:truckTypes]).to match_array([trucking_availbilities.second.truck_type])
             expect(data[:countryCodes]).to eq(['cn'])
           end
         end
@@ -103,8 +74,8 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
     end
 
     describe '.counterpart_availabilities (dest)' do
-      let(:lat) { destination_hub.latitude }
-      let(:lng) { destination_hub.longitude }
+      let(:lat) { delivery_address.latitude }
+      let(:lng) { delivery_address.longitude }
       let(:target) { :destination }
 
       context 'when trucking is available with lat lng args' do
@@ -114,7 +85,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to eq([origin_hub_availability.truck_type])
+            expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
             expect(data[:countryCodes]).to eq(['se'])
           end
         end
@@ -127,7 +98,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options and country codes' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to eq([origin_hub_availability.truck_type])
+            expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
             expect(data[:countryCodes]).to eq(['se'])
           end
         end
@@ -137,13 +108,12 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
 
   context 'when limited by groups' do
     before do
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location, group: group)
-      FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, group: group)
+      Trucking::Trucking.update_all(group_id: group.id)
     end
 
     describe '.counterpart_availabilities (dest)' do
-      let(:lat) { destination_hub.latitude }
-      let(:lng) { destination_hub.longitude }
+      let(:lat) { delivery_address.latitude }
+      let(:lng) { delivery_address.longitude }
       let(:target) { :destination }
 
       context 'when trucking is available for a group' do
@@ -153,7 +123,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to eq([origin_hub_availability.truck_type])
+            expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
           end
         end
       end
@@ -172,8 +142,8 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
     end
 
     describe '.counterpart_availabilities (origin)' do
-      let(:lat) { origin_hub.latitude }
-      let(:lng) { origin_hub.longitude }
+      let(:lat) { pickup_address.latitude }
+      let(:lng) { pickup_address.longitude }
       let(:target) { :origin }
 
       context 'when trucking is available for a group' do
@@ -183,7 +153,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
         it 'returns available trucking options' do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
-            expect(data[:truckTypes]).to eq([destination_hub_availability.truck_type])
+            expect(data[:truckTypes]).to eq([trucking_availbilities.second.truck_type])
           end
         end
       end

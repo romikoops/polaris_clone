@@ -106,16 +106,17 @@ RSpec.describe Trucking::Queries::Availability do
     end
 
     context 'with NL postal code identifier' do
+      let(:country) { FactoryBot.create(:country_nl) }
       let!(:nl_trucking_trucking_zipcode) do
         FactoryBot.create(:trucking_trucking,
                           organization: organization,
                           hub: hub,
-                          location: FactoryBot.create(:trucking_location, country_code: 'NL', zipcode: '1802'))
+                          location: FactoryBot.create(:trucking_location, :zipcode, country: country, data: '1802'))
       end
       let(:nl_address) {
         FactoryBot.create(:legacy_address,
           zip_code: '1802 PT',
-          country: FactoryBot.create(:country_nl))
+          country: country)
       }
 
       it 'finds the correct trucking_rate with avulsed address filters' do
@@ -146,12 +147,13 @@ RSpec.describe Trucking::Queries::Availability do
                           location: distance_location)
       end
       let(:query_type) { :distance }
+      let(:country) { FactoryBot.create(:country_nl) }
       let(:nl_address) do
         FactoryBot.create(:legacy_address,
           zip_code: '1802 PT',
           latitude: '57.00001',
           longitude: '11.10001',
-          country: FactoryBot.create(:country_nl))
+          country: country)
       end
       let(:distance_service) do
         described_class.new(
@@ -161,11 +163,11 @@ RSpec.describe Trucking::Queries::Availability do
         )
       end
       let(:other_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
-      let(:distance_location) { FactoryBot.create(:trucking_location, country_code: 'NL', distance: 89) }
+      let(:distance_location) { FactoryBot.create(:trucking_location, :distance, country: country, data: 89) }
 
       before do
         FactoryBot.create(:lcl_pre_carriage_availability, hub: other_hub, query_type: query_type)
-        FactoryBot.create(:trucking_location, country_code: 'NL', distance: nil)
+        FactoryBot.create(:trucking_location, country: country, distance: nil)
         FactoryBot.create(:trucking_trucking,
                             organization: organization,
                             hub: other_hub,

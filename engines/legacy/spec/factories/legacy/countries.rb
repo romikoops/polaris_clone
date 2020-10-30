@@ -36,6 +36,16 @@ FactoryBot.define do
       flag { 'https://restcountries.eu/data/nl.svg' }
     end
 
+    to_create do |instance|
+      instance.attributes = Legacy::Country.create_with(code: instance.code)
+        .find_or_create_by(
+          name: instance.name,
+          flag: instance.flag
+        )
+        .attributes
+      instance.reload
+    end
+
     factory :country_cn, traits: [:cn]
     factory :country_uk, traits: [:uk]
     factory :country_de, traits: [:de]

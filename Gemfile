@@ -68,6 +68,7 @@ gem "rgeo-geojson"
 # Full Text Search
 gem "pg_search", "~> 2.3.0"
 gem "faraday_middleware-aws-sigv4"
+gem "searchkick", "~> 4.4.1"
 
 # Refactoring critical components
 gem "scientist"
@@ -180,7 +181,7 @@ group :development, :test do
   gem "debase"
   gem "ruby-debug-ide"
 
-  gem "rubocop-itsmycargo"
+  gem "rubocop-itsmycargo", "~> 20.10.11"
 
   gem "lefthook"
 end

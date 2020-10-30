@@ -1,18 +1,6 @@
 # frozen_string_literal: true
 
-class MapDatum < ApplicationRecord
-  belongs_to :itinerary
-  belongs_to :organization, class_name: 'Organizations::Organization'
-
-  def self.create_all_from_itineraries
-    Itinerary.all.find_each do |itinerary|
-      routes_data = itinerary.routes
-      routes_data.each do |route_data|
-        route_data[:organization_id] = itinerary.organization_id
-        itinerary.map_data.find_or_create_by!(route_data)
-      end
-    end
-  end
+class MapDatum < Legacy::MapDatum
 end
 
 # == Schema Information

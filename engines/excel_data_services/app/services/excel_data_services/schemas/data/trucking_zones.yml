@@ -1,0 +1,36 @@
+headers:
+  rows: '1:1'
+  cols: 'A:D'
+  required: true
+zones:
+  rows: '2:?'
+  cols: 'A:A'
+  required: true
+zone_data:
+  rows: '2:zones.last_row'
+  cols: 'B|C,D'
+  required: true
+zone_rows:
+  rows: '2:zones.last_row'
+  cols: 'A:D'
+  required: false
+identifier:
+  rows: '1:1'
+  cols: 'B:B'
+  required: true
+secondary_identifier:
+  rows: '1:1'
+  cols: 'C:C'
+  required: true
+primary:
+  rows: '2:zones.last_row'
+  cols: 'B'
+  required: false
+secondary:
+  rows: '2:zones.last_row'
+  cols: 'C'
+  required: false
+country:
+  rows: '2:zones.last_row'
+  cols: 'D'
+  required: false

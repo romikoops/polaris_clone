@@ -61,7 +61,7 @@ Rails.application.routes.draw do
       post "trucking/trucking_zip_pricings", to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       post "trucking/trucking_zip_pricings/:id", to: "trucking#overwrite_zip_trucking_by_hub"
-      post "trucking/trucking_pricings/:id", to: "trucking#overwrite_zonal_trucking_by_hub"
+      post "trucking/trucking_pricings/:id", to: "trucking#upload"
       post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
       post "trucking/:id/edit", to: "trucking#edit"
       post "clients/agents", to: "clients#agents"
@@ -306,7 +306,7 @@ end
 #            organization_admin_trucking_trucking_zip_pricings POST   /organizations/:organization_id/admin/trucking/trucking_zip_pricings(.:format)                     admin/trucking#overwrite_zip_trucking
 #           organization_admin_trucking_trucking_city_pricings POST   /organizations/:organization_id/admin/trucking/trucking_city_pricings(.:format)                    admin/trucking#overwrite_city_trucking
 #                                                              POST   /organizations/:organization_id/admin/trucking/trucking_zip_pricings/:id(.:format)                 admin/trucking#overwrite_zip_trucking_by_hub
-#                                                              POST   /organizations/:organization_id/admin/trucking/trucking_pricings/:id(.:format)                     admin/trucking#overwrite_zonal_trucking_by_hub
+#                                                              POST   /organizations/:organization_id/admin/trucking/trucking_pricings/:id(.:format)                     admin/trucking#upload
 #                                                              POST   /organizations/:organization_id/admin/trucking/trucking_city_pricings/:id(.:format)                admin/trucking#overwrite_city_trucking_by_hub
 #                                                              POST   /organizations/:organization_id/admin/trucking/:id/edit(.:format)                                  admin/trucking#edit
 #                            organization_admin_clients_agents POST   /organizations/:organization_id/admin/clients/agents(.:format)                                     admin/clients#agents
@@ -632,6 +632,7 @@ end
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
+#                                                                     /coverage                                                                                          #<Coverband::Reporters::Web:0x00007ff0dd43fed8 @static=#<Rack::Static:0x00007ff0dad8d560 @app=#<Coverband::Reporters::Web:0x00007ff0dd43fed8 ...>, @urls=[/.*\.css/, /.*\.js/, /.*\.gif/, /.*\.png/], @index=nil, @gzip=nil, @cascade=nil, @header_rules=[], @file_server=#<Rack::Files:0x00007ff0dad8d510 @root="/Users/wbeamish/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/coverband-5.0.3/public", @headers={}, @default_mime="text/plain", @head=#<Rack::Head:0x00007ff0dad8d420 @app=#<Proc:0x00007ff0dad8d448@/Users/wbeamish/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/rack-2.2.3/lib/rack/files.rb:33 (lambda)>>>>>
 #                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init {:subdomain=>"api"}
 #                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata {:subdomain=>"api"}
 #                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume {:subdomain=>"api"}
@@ -665,7 +666,7 @@ end
 #            organization_admin_trucking_trucking_zip_pricings POST   /organizations/:organization_id/admin/trucking/trucking_zip_pricings(.:format)                     admin/trucking#overwrite_zip_trucking
 #           organization_admin_trucking_trucking_city_pricings POST   /organizations/:organization_id/admin/trucking/trucking_city_pricings(.:format)                    admin/trucking#overwrite_city_trucking
 #                                                              POST   /organizations/:organization_id/admin/trucking/trucking_zip_pricings/:id(.:format)                 admin/trucking#overwrite_zip_trucking_by_hub
-#                                                              POST   /organizations/:organization_id/admin/trucking/trucking_pricings/:id(.:format)                     admin/trucking#overwrite_zonal_trucking_by_hub
+#                                                              POST   /organizations/:organization_id/admin/trucking/trucking_pricings/:id(.:format)                     admin/trucking#upload
 #                                                              POST   /organizations/:organization_id/admin/trucking/trucking_city_pricings/:id(.:format)                admin/trucking#overwrite_city_trucking_by_hub
 #                                                              POST   /organizations/:organization_id/admin/trucking/:id/edit(.:format)                                  admin/trucking#edit
 #                            organization_admin_clients_agents POST   /organizations/:organization_id/admin/clients/agents(.:format)                                     admin/clients#agents

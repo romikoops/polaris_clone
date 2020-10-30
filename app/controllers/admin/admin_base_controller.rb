@@ -16,7 +16,7 @@ class Admin::AdminBaseController < ApplicationController
     )
 
     ## Async Uploader
-    UploaderJob.perform_later(document_id: document.id, options: {
+    ExcelDataServices::UploaderJob.perform_later(document_id: document.id, options: {
       user_id: options[:user]&.id,
       group_id: options[:group_id] || default_group.id,
       applicable: options[:applicable]

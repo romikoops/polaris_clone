@@ -7,7 +7,7 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
+  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
   let(:load_type) { "cargo_item" }
   let(:origin_hub) { itinerary_1.origin_hub }
   let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: load_type) }
@@ -45,7 +45,13 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
 
     context "when only two truckings w/o margins" do
       let!(:trucking_1) { FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:trucking_2) { FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let!(:trucking_2) do
+        FactoryBot.create(:trucking_trucking,
+          hub: origin_hub,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle_2,
+          location: FactoryBot.create(:trucking_location, :with_location))
+      end
       let(:trips) do
         [
           FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),

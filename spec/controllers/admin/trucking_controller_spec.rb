@@ -15,10 +15,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
 
   describe 'POST #overwrite_zonal_trucking_by_hub' do
     before do
-      allow(Legacy::File).to receive(:create!)
-      inserter_double = instance_double('Trucking::Excel::Inserter', perform: true)
-      allow(Trucking::Excel::Inserter).to receive(:new).and_return(inserter_double)
-      post :overwrite_zonal_trucking_by_hub, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, group: 'all', id: hub.id }
+      post :upload, params: { 'file' => Rack::Test::UploadedFile.new(File.expand_path('../../test_sheets/spec_sheet.xlsx', __dir__)), organization_id: organization.id, group: 'all', id: hub.id }
     end
 
     it 'returns error with messages when an error is raised' do

@@ -11894,7 +11894,7 @@ ALTER TABLE ONLY public.charge_breakdowns
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO public, extensions;
+SET search_path TO public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20171109083404'),

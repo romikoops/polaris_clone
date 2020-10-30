@@ -15,11 +15,13 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'imc-core'
+  s.add_dependency 'imc-legacy'
 
   s.add_dependency 'elasticsearch', '~> 7.3.0'
+  s.add_dependency 'geocoder'
   s.add_dependency 'rgeo'
   s.add_dependency 'rgeo-geojson'
-  s.add_dependency 'searchkick', '~> 4.1.0'
+  s.add_dependency 'searchkick', '~> 4.4.1'
 
   Gemhelper.common(s)
 end

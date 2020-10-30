@@ -3,27 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
+  include_context "complete_route_with_trucking"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
+  let(:cargo_classes) { ['lcl'] }
+  let(:load_type) { "cargo_item" }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let(:origin_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
-                      country_code: 'se')
-  end
-  let(:destination_location) do
-    FactoryBot.create(:locations_location,
-                      bounds: FactoryBot.build(:legacy_bounds, lat: destination_hub.latitude, lng: destination_hub.longitude, delta: 0.4),
-                      country_code: 'cn')
-  end
-  let(:origin_trucking_location) { FactoryBot.create(:trucking_location, location: origin_location, country_code: 'SE') }
-  let(:destination_trucking_location) { FactoryBot.create(:trucking_location, location: destination_location, country_code: 'CN') }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
-  let!(:origin_hub_availability) { FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location) }
-  let!(:destination_hub_availability) { FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, custom_truck_type: 'default2', query_type: :location) }
   let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:group) {
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
@@ -33,9 +19,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:args) { { coordinates: { lat: lat, lng: lng }, load_type: 'cargo_item', organization: organization, target: target } }
 
   before do
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'default2')
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location, truck_type: 'group', group_id: group.id)
+    FactoryBot.create(:trucking_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: delivery_trucking_location, truck_type: 'group', group_id: group.id)
     Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
                                       'address_components' => [{ 'types' => ['premise'] }],
                                       'address' => 'Helsingborg, Sweden',
@@ -44,27 +28,11 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
                                       'country_code' => 'SE',
                                       'postal_code' => '43822'
                                     ])
-    Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => 'Göteborg, Sweden',
-                                      'city' => 'Gothenburg',
-                                      'country' => 'Sweden',
-                                      'country_code' => 'SE',
-                                      'postal_code' => '43813'
-                                    ])
-    Geocoder::Lookup::Test.add_stub([destination_hub.latitude, destination_hub.longitude], [
-                                      'address_components' => [{ 'types' => ['premise'] }],
-                                      'address' => 'Shanghai, China',
-                                      'city' => 'Shanghai',
-                                      'country' => 'China',
-                                      'country_code' => 'CN',
-                                      'postal_code' => '210001'
-                                    ])
   end
 
   describe '.availability (origin)' do
-    let(:lat) { origin_hub.latitude }
-    let(:lng) { origin_hub.longitude }
+    let(:lat) { pickup_address.latitude }
+    let(:lng) { pickup_address.longitude }
     let(:target) { :origin }
 
     context 'when trucking is available' do
@@ -73,7 +41,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
       it 'returns available trucking options' do
         aggregate_failures do
           expect(data[:truckingAvailable]).to eq true
-          expect(data[:truckTypes]).to eq([origin_hub_availability.truck_type])
+          expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
         end
       end
     end
@@ -92,8 +60,8 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   end
 
   describe '.availability (destination)' do
-    let(:lat) { destination_hub.latitude }
-    let(:lng) { destination_hub.longitude }
+    let(:lat) { delivery_address.latitude }
+    let(:lng) { delivery_address.longitude }
     let(:target) { :destination }
 
     context 'when trucking is available' do
@@ -102,7 +70,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
       it 'returns available trucking options' do
         aggregate_failures do
           expect(data[:truckingAvailable]).to eq true
-          expect(data[:truckTypes]).to eq([destination_hub_availability.truck_type])
+          expect(data[:truckTypes]).to eq([trucking_availbilities.second.truck_type])
         end
       end
     end

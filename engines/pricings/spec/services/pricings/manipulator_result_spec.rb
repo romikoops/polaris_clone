@@ -74,11 +74,13 @@ RSpec.describe Pricings::ManipulatorResult do
 
   context "with trucking rates" do
     let(:hub) { FactoryBot.create(:legacy_hub, hub_type: "air") }
+    let(:trucking_location) { FactoryBot.create(:trucking_location, :distance, data: 55) }
     let(:load_meterage) { {ratio: 100, height_limit: 1.5, hard_limit: true, stacking: true} }
     let(:original) do
       FactoryBot.create(:trucking_trucking,
         organization: organization,
         hub: hub,
+        location: trucking_location,
         load_meterage: load_meterage)
     end
 
@@ -145,6 +147,12 @@ RSpec.describe Pricings::ManipulatorResult do
     describe ".type" do
       it "returns the correct type" do
         expect(instance.send(:type)).to eq "Trucking::Trucking"
+      end
+    end
+
+    describe ".distance" do
+      it "returns the correct distance" do
+        expect(instance.distance).to eq (Measured::Length.new(55, "km"))
       end
     end
   end

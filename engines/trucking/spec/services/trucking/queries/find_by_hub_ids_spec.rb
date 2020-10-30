@@ -13,6 +13,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     let(:load_type)    { 'cargo_item' }
     let(:carriage)     { 'pre' }
     let(:country_code) { 'SE' }
+    let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
     let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
     let(:address) do
       FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
@@ -38,7 +39,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
       end
 
       context 'with service name filter' do
-        let(:trucking_location) { FactoryBot.create(:trucking_location, zipcode: '30001') }
+        let(:trucking_location) { FactoryBot.create(:trucking_location, :zipcode, country: country, data: '30001') }
         let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, tenant_vehicle: tenant_vehicle, organization: organization) }
         let(:filters) { {courier_name: tenant_vehicle.name} }
 
@@ -51,7 +52,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
       end
 
       context 'with place name filter' do
-        let(:trucking_location) { FactoryBot.create(:trucking_location, city_name: 'Shanghai') }
+        let(:trucking_location) { FactoryBot.create(:trucking_location, :with_location, data: 'Shanghai') }
         let!(:target) { FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location, tenant_vehicle: tenant_vehicle, organization: organization) }
         let(:filters) { {destination: 'Shanghai'} }
 

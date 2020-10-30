@@ -86,7 +86,8 @@ module Pricings
     end
 
     def distance
-      km = Trucking::Location.find_by(id: result.dig("location_id"))&.distance || 0
+      location = Trucking::Location.find_by(id: result.dig("location_id"))
+      km = location&.query == "distance" ? location.data : 0
       Measured::Length.new(km, "km")
     end
 

@@ -66,7 +66,7 @@ module Wheelhouse
         lat_lng_string: [latitude, longitude].join(','),
         get_zip_code: address.postal_code,
         city_name: address.city,
-        country: OpenStruct.new(code: address.country_code)
+        country: Legacy::Country.find_by(code: address.country_code)
       )
     end
 

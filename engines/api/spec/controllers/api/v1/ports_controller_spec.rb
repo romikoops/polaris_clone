@@ -19,7 +19,7 @@ module Api
 
       it "returns a list of origin locations belonging to the organization" do
         query = first_hub[:name]
-        get :index, params: { organization_id: organization.id, location_type: "origin", query: query }
+        get :index, params: {organization_id: organization.id, location_type: "origin", query: query}
         data = JSON.parse(response.body)["data"]
         aggregate_failures do
           expect(response).to be_successful
@@ -30,7 +30,7 @@ module Api
 
       it "returns filter related locations to origin" do
         query = last_hub[:name]
-        get :index, as: :json, params: { organization_id: organization.id, location_type: "origin", location_id: first_hub[:id], query: query }
+        get :index, as: :json, params: {organization_id: organization.id, location_type: "origin", location_id: first_hub[:id], query: query}
         data = JSON.parse(response.body)["data"]
 
         aggregate_failures do
@@ -42,7 +42,7 @@ module Api
 
       it "returns filter related locations to destination" do
         query = first_hub[:name]
-        get :index, as: :json, params: { organization_id: organization.id, location_type: "destination", location_id: last_hub[:id], query: query }
+        get :index, as: :json, params: {organization_id: organization.id, location_type: "destination", location_id: last_hub[:id], query: query}
         data = JSON.parse(response.body)["data"]
 
         aggregate_failures do
@@ -53,7 +53,7 @@ module Api
       end
 
       it "filters locations by organization" do
-        get :index, as: :json, params: { organization_id: second_organization.id, location_type: "origin", query: first_hub[:name] }
+        get :index, as: :json, params: {organization_id: second_organization.id, location_type: "origin", query: first_hub[:name]}
         data = JSON.parse(response.body)["data"]
         aggregate_failures do
           expect(response).to be_successful
@@ -64,20 +64,20 @@ module Api
       it "returns empty if there are no locations for the organization" do
         target = FactoryBot.create(:organizations_organization)
 
-        get :index, as: :json, params: { organization_id: target.id, location_type: "origin", query: first_hub[:name] }
+        get :index, as: :json, params: {organization_id: target.id, location_type: "origin", query: first_hub[:name]}
 
         data = JSON.parse(response.body)["data"]
         expect(data.length).to eq(0)
       end
 
       it "returns :not_found if organization does not exist" do
-        get :index, as: :json, params: { organization_id: "invalid_id", location_type: "origin", query: "aaa" }
+        get :index, as: :json, params: {organization_id: "invalid_id", location_type: "origin", query: "aaa"}
 
         expect(response).to have_http_status(:not_found)
       end
 
       it "returns :bad_request if some of the params (:organization_id and :location_type) are missing" do
-        params = { organization_id: organization.id, location_type: "origin", query: "aaa" }
+        params = {organization_id: organization.id, location_type: "origin", query: "aaa"}
 
         get :index, as: :json, params: params.except(:location_type)
         expect(response).to have_http_status(:bad_request)

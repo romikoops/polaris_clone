@@ -2,20 +2,25 @@
 
 FactoryBot.define do
   factory :trucking_location, class: 'Trucking::Location' do
+    association :country, factory: :legacy_country
     trait :zipcode do
-      zipcode { '15211' }
+      query { 'postal_code' }
+      data { '15211' }
     end
 
     trait :with_location do
+      query { 'location' }
       association :location, factory: :swedish_location
     end
 
     trait :with_chinese_location do
+      query { 'location' }
       association :location, factory: :chinese_location
     end
 
     trait :distance do
-      distance { 55 }
+      query { 'distance' }
+      data { 55 }
     end
 
     trait :zipcode_sequence do
@@ -32,11 +37,13 @@ FactoryBot.define do
       end
     end
 
-    country_code { 'SE' }
+    trait :postal_code do
+      query { 'postal_code' }
+    end
 
     factory :city_location, traits: [:with_location]
     factory :chinese_trucking_location, traits: [:with_chinese_location]
-    factory :zipcode_location, traits: [:zipcode_sequence]
+    factory :zipcode_location, traits: [:postal_code, :zipcode_sequence]
   end
 end
 

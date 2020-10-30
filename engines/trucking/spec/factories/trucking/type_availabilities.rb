@@ -18,6 +18,18 @@ FactoryBot.define do
       availability.query_method = evaluator.custom_query_method if evaluator.custom_query_method.present?
     end
 
+    to_create do |instance|
+      instance.attributes = Trucking::TypeAvailability.find_or_create_by(
+        load_type: instance.load_type,
+        carriage: instance.carriage,
+        truck_type: instance.truck_type,
+        query_method: instance.query_method,
+        country: instance.country
+      )
+        .attributes
+      instance.reload
+    end
+
     trait :pre_carriage do
       carriage   { 'pre' }
     end

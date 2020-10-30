@@ -20,7 +20,7 @@ module Api
 
     describe 'GET #index' do
       it 'renders the list of cargo_item_types successfully' do
-        get :index, params: { organization_id: organization.id }
+        get :index, params: {organization_id: organization.id}
 
         aggregate_failures do
           expect(response).to be_successful

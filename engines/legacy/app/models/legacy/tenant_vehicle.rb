@@ -11,6 +11,8 @@ module Legacy
     belongs_to :carrier, optional: true
     has_many :pricings, class_name: 'Pricings::Pricing'
 
+    validates_uniqueness_of :name, scope: [:organization_id, :carrier_id, :mode_of_transport]
+
     def full_name
       carrier_id ? "#{carrier&.name} - #{name}" : name
     end

@@ -8,7 +8,7 @@ module Groups
     belongs_to :member, polymorphic: true
     belongs_to :group
 
-    validates :member_id, uniqueness: { scope: [:group_id] }
+    # validates :member_id, uniqueness: { scope: [:group_id] }
 
     before_validation :set_priority
 

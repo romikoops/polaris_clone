@@ -27,7 +27,7 @@ module Trucking
       @origin = origin
       @destination = destination
       @departure_time = set_departure_time(departure_time)
-      @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
+      @options = opts.merge({origin: @origin, destination: @destination, departure_time: @departure_time}.compact)
       path = BASE_PATH + "?" + querify(@options)
       @url = BASE_URL + path
       @xml = xml_from_cache

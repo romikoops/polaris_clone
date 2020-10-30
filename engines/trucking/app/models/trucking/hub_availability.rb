@@ -6,6 +6,7 @@ module Trucking
     belongs_to :type_availability, class_name: 'Trucking::TypeAvailability'
 
     delegate :truck_type, to: :type_availability
+    validates :hub_id, uniqueness: {scope: %i[type_availability_id]}
     acts_as_paranoid
   end
 end

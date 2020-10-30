@@ -37,11 +37,15 @@ module Trucking
       end
 
       def zipcode_based_locations
-        @zipcode_based_locations ||= trucking_locations.where(zipcode: @zipcode)
+        @zipcode_based_locations ||= trucking_locations.where(query: :postal_code, data: @zipcode)
+      end
+
+      def distance_based_locations
+        @distance_based_locations ||= trucking_locations.where(query: :distance)
       end
 
       def trucking_locations
-        @trucking_locations ||= ::Trucking::Location.where(country_code: @country_code)
+        @trucking_locations ||= ::Trucking::Location.where(country: country)
       end
 
       def non_distance_query_types
@@ -98,7 +102,8 @@ module Trucking
 
       def distance_hubs_arguments
         distances_with_hubs.map do |hub_and_distance|
-          "(#{hub_and_distance[:hub_id]}, #{hub_and_distance[:distance].to_i})"
+          distance_location = distance_based_locations.find_by(data: hub_and_distance[:distance])
+          "(#{hub_and_distance[:hub_id]}, '#{distance_location.id}')"
         end
       end
 
@@ -112,8 +117,11 @@ module Trucking
 
       def append_distance_truckings(query:)
         return query if distances_with_hubs.empty?
-
-        query.or(validated_truckings.where("(hub_id, distance) IN (#{distance_hubs_arguments.join(", ")})"))
+        query.or(
+          validated_truckings.where(
+            "(hub_id, trucking_truckings.location_id) IN (#{distance_hubs_arguments.join(", ")})"
+          )
+        )
       end
 
       def validated_truckings
@@ -173,6 +181,10 @@ module Trucking
 
       def tenant_hubs
         @tenant_hubs ||= Legacy::Hub.where(hubs_condition)
+      end
+
+      def country
+        @country ||= address.present? ? address.country : Legacy::Country.find_by(code:  @country_code)
       end
 
       def cache_key

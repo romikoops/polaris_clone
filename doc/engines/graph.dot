@@ -54,9 +54,6 @@ digraph G {
     "rates" -> "cargo" [color=grey];
     "rates" -> "organizations" [color=grey];
     "rates" -> "routing" [color=grey];
-    "rms_data" [shape=ellipse];
-    "rms_data" -> "core" [color=grey];
-    "rms_data" -> "organizations" [color=grey];
   };
   subgraph cluster3 {
     label = "view";
@@ -152,6 +149,7 @@ digraph G {
     "authentication" -> "groups" [color=grey];
     "locations" [shape=ellipse];
     "locations" -> "core" [color=grey];
+    "locations" -> "legacy" [color=grey];
     "trucking" [shape=ellipse];
     "trucking" -> "core" [color=grey];
     "trucking" -> "legacy" [color=grey];
@@ -217,6 +215,17 @@ digraph G {
     "wheelhouse" -> "pdf" [color=grey];
     "wheelhouse" -> "organizations" [color=grey];
     "wheelhouse" -> "organization_manager" [color=grey];
+    "excel_data_services" [shape=ellipse];
+    "excel_data_services" -> "authentication" [color=grey];
+    "excel_data_services" -> "companies" [color=grey];
+    "excel_data_services" -> "groups" [color=grey];
+    "excel_data_services" -> "legacy" [color=grey];
+    "excel_data_services" -> "locations" [color=grey];
+    "excel_data_services" -> "pricings" [color=grey];
+    "excel_data_services" -> "organizations" [color=grey];
+    "excel_data_services" -> "organization_manager" [color=grey];
+    "excel_data_services" -> "trucking" [color=grey];
+    "excel_data_services" -> "users" [color=grey];
     "federation" [shape=ellipse];
     "federation" -> "core" [color=grey];
     "federation" -> "organizations" [color=grey];
@@ -247,19 +256,6 @@ digraph G {
     "rate_extractor" -> "rates" [color=grey];
     "rate_extractor" -> "routing" [color=grey];
     "rate_extractor" -> "tenant_routing" [color=grey];
-    "rms_export" [shape=ellipse];
-    "rms_export" -> "core" [color=grey];
-    "rms_export" -> "organizations" [color=grey];
-    "rms_export" -> "organization_manager" [color=grey];
-    "rms_export" -> "routing" [color=grey];
-    "rms_sync" [shape=ellipse];
-    "rms_sync" -> "core" [color=grey];
-    "rms_sync" -> "legacy" [color=grey];
-    "rms_sync" -> "groups" [color=grey];
-    "rms_sync" -> "pricings" [color=grey];
-    "rms_sync" -> "rms_data" [color=grey];
-    "rms_sync" -> "routing" [color=grey];
-    "rms_sync" -> "organizations" [color=grey];
     "tender_calculator" [shape=ellipse];
     "tender_calculator" -> "cargo" [color=grey];
     "tender_calculator" -> "rate_extractor" [color=grey];

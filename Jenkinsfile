@@ -30,8 +30,7 @@ pipeline {
                     name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
                     requests: [ memory: "1500Mi", cpu: "1000m" ],
                     env: [
-                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
-                      [ name: "ELASTICSEARCH_URL", value: "localhost:9200"]
+                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ]
                     ]
                   ],
                   [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",

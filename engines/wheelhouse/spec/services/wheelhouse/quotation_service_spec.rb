@@ -125,8 +125,6 @@ RSpec.describe Wheelhouse::QuotationService do
         FactoryBot.create(:export_margin, default_for: mot, organization: organization, applicable: organization, value: 0)
       ]
     end
-    FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
-    FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
     ::Organizations.current_id = organization.id
   end
 
@@ -153,33 +151,13 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context 'when door to door (defaults & container)' do
+      include_context "complete_route_with_trucking"
       before do
-        FactoryBot.create(:fcl_20_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
-        FactoryBot.create(:fcl_20_trucking, organization: organization, hub: destination_hub, carriage: 'on', location: destination_trucking_location)
-        FactoryBot.create(:legacy_local_charge, hub: origin_hub, direction: 'export', load_type: 'fcl_20', tenant_vehicle: tenant_vehicle, organization: organization)
-        FactoryBot.create(:legacy_local_charge, hub: destination_hub, direction: 'import', load_type: 'fcl_20', tenant_vehicle: tenant_vehicle, organization: organization)
-        FactoryBot.create(:fcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
-        FactoryBot.create(:fcl_on_carriage_availability, hub: destination_hub, query_type: :location)
-        Geocoder::Lookup::Test.add_stub([hamburg_address.latitude, hamburg_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Brooktorkai 7, Hamburg, 20457, Germany',
-                                          'city' => 'Hamburg',
-                                          'country' => 'Germany',
-                                          'country_code' => 'DE',
-                                          'postal_code' => '20457'
-                                        ])
-        Geocoder::Lookup::Test.add_stub([shanghai_address.latitude, shanghai_address.longitude], [
-                                          'address_components' => [{ 'types' => ['premise'] }],
-                                          'address' => 'Shanghai, China',
-                                          'city' => 'Shanghai',
-                                          'country' => 'China',
-                                          'country_code' => 'CN',
-                                          'postal_code' => '210001'
-                                        ])
         allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
       end
 
       let(:load_type) { 'container' }
+      let(:cargo_classes) { ['fcl_20'] }
       let(:shipping_info) do
         {
           trucking_info: { pre_carriage: { truck_type: 'chassis' }, on_carriage: { truck_type: 'chassis' } }
@@ -190,7 +168,7 @@ RSpec.describe Wheelhouse::QuotationService do
       it 'perform a booking calulation' do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(206851)
+          expect(results.first.amount_cents).to eq(203414)
           expect(service.result.estimated).to be_truthy
         end
       end

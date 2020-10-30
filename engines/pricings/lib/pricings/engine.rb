@@ -5,6 +5,7 @@ require 'core'
 require 'geocoder'
 require 'groups'
 require 'legacy'
+require "measured-rails"
 require 'organizations'
 require 'trucking'
 
