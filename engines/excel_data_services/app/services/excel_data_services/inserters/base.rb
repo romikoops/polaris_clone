@@ -30,7 +30,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :organization, :data, :klass_identifier, :options, :stats, :scope
+      attr_reader :organization, :data, :klass_identifier, :options, :stats, :scope, :group_id
 
       def metadata(row:)
         document = options[:document]
@@ -43,9 +43,11 @@ module ExcelDataServices
       end
 
       def find_group_id(row)
-        @group_id ||= if row.group_id.present?
+        if group_id.present?
+          group_id
+        elsif row.group_id.present?
           row.group_id
-        elsif row.group_name.present?
+        elsif Groups::Group.exists?(organization: organization, name: row.group_name)
           Groups::Group.find_by(organization: organization, name: row.group_name).id
         else
           default_group.id
