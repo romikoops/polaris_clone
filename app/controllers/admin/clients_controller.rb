@@ -35,11 +35,10 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   # Api end point to create a new User through the Admin Dashboard
   def create
-    json = JSON.parse(params[:new_client])
     user_data = {
-      email: json['email'],
-      password: json['password'],
-      password_confirmation: json['password_confirmation'],
+      email: new_client_params['email'],
+      password: new_client_params['password'],
+      password_confirmation: new_client_params['password_confirmation'],
       organization_id: current_organization.id,
       type: 'Organizations::User'
     }
@@ -205,13 +204,13 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def create_client(user_data:)
     Authentication::User.create!(user_data).tap do |user|
-      create_user_profile(user: user, params: JSON.parse(params[:new_client]))
+      create_user_profile(user: user)
     end
   end
 
   def restorable_client
     @restorable_client ||= begin
-      email = JSON.parse(params[:new_client]).dig('email')
+      email = new_client_params.dig('email')
       Organizations::User.only_deleted.find_by(email: email)
     end
   end
@@ -225,16 +224,20 @@ class Admin::ClientsController < Admin::AdminBaseController
     end
   end
 
-  def create_user_profile(user:, params:)
+  def create_user_profile(user:)
     Profiles::ProfileService.create_or_update_profile(profile_params.merge(user: user))
   end
 
+  def new_client_params
+    JSON.parse(params[:new_client])
+  end
+
   def profile_params
-    @profile_params ||= {
-      first_name: params["firstName"],
-      last_name: params["lastName"],
-      company_name: params["companyName"],
-      phone: params["phone"]
+    {
+      first_name: new_client_params["firstName"],
+      last_name: new_client_params["lastName"],
+      company_name: new_client_params["companyName"],
+      phone: new_client_params["phone"]
     }
   end
 end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::ClientsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:authentication_user, :users_user, :with_profile) }
+  let(:user) { FactoryBot.create(:authentication_user, :users_user) }
 
   before do
     FactoryBot.create(:groups_group, :default, organization: organization)
@@ -103,8 +103,10 @@ RSpec.describe Admin::ClientsController do
   describe 'post #create' do
     let(:email) { "email123@demo.com" }
     let(:user_attributes) { attributes_for(:organizations_user, email: email).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
-    let(:profile_attributes) { attributes_for(:profiles_profile).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:profile_params) { attributes_for(:profiles_profile) }
+    let(:profile_attributes) { profile_params.deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
+    let(:created_profile_attrs) { Profiles::Profile.last.attributes }
 
     before do
       FactoryBot.create(:organizations_theme, organization: organization)
@@ -118,6 +120,12 @@ RSpec.describe Admin::ClientsController do
     it 'creates the user' do
       post :create, params: { organization_id: organization, new_client: attributes.to_json }
       expect(Users::User.where(organization_id: organization.id).last.email).to eq(attributes['email'])
+    end
+
+    it 'assigns profile the correct params' do
+      post :create, params: { organization_id: organization, new_client: attributes.to_json }
+
+      expect(Profiles::Profile.last.attributes.symbolize_keys).to include(profile_params)
     end
 
     context "when profile fails to create" do
