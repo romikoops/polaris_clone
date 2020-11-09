@@ -101,10 +101,12 @@ module Trucking
       end
 
       def distance_hubs_arguments
-        distances_with_hubs.map do |hub_and_distance|
-          distance_location = distance_based_locations.find_by(data: hub_and_distance[:distance])
+        distances_with_hubs.map { |hub_and_distance|
+          distance_location = distance_based_locations.find_by(data: hub_and_distance[:distance].to_i)
+          next if distance_location.blank?
+
           "(#{hub_and_distance[:hub_id]}, '#{distance_location.id}')"
-        end
+        }.compact
       end
 
       def truckings_for_query

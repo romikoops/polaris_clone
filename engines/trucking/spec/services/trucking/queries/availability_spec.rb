@@ -176,8 +176,16 @@ RSpec.describe Trucking::Queries::Availability do
         allow(::Trucking::GoogleDirections).to receive(:new).and_return(instance_double('Trucking::GoogleDirections', distance_in_km: 89))
       end
 
-      it 'finds the correct trucking_rate with address' do
+      it 'finds the correct trucking_rate by distance' do
         expect(distance_service.perform).to match([nl_trucking_trucking_distance])
+      end
+
+      context "with no distance based locations" do
+        let(:nl_trucking_trucking_distance) { nil }
+
+        it 'finds no truckings' do
+          expect(distance_service.perform).to be_empty
+        end
       end
     end
 
