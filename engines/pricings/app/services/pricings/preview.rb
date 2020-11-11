@@ -2,7 +2,7 @@
 
 module Pricings
   class Preview
-    attr_accessor :itinerary, :tenant_vehicle_id, :cargo_class, :target, :date, :organization, :truckings
+    attr_accessor :tenant_vehicle_id, :cargo_class, :target, :date, :organization, :truckings
 
     def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
       @params = params
@@ -30,7 +30,6 @@ module Pricings
 
     def perform
       handle_trucking
-      determine_itineraries
       prepare_trips
       determine_service_levels
       determine_local_charges
@@ -43,7 +42,9 @@ module Pricings
 
     def determine_route_combinations
       @route_results = @manipulated_pricings.map do |pricing|
-        origin_hub, destination_hub = ::Legacy::Itinerary.find(pricing.itinerary_id).stops.map(&:hub)
+        itinerary = ::Legacy::Itinerary.find(pricing.itinerary_id)
+        origin_hub = itinerary.origin_hub
+        destination_hub = itinerary.destination_hub
         pre_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == origin_hub.id }
         on_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == destination_hub.id }
         origin_charges_mandatory = origin_hub.mandatory_charge&.export_charges || pre_carriage.present?
@@ -92,7 +93,7 @@ module Pricings
       adjusted_breakdown[:data] = breakdown.data
       adjusted_breakdown[:margin_value] = breakdown.delta
       adjusted_breakdown[:operator] = breakdown.operator
-      adjusted_breakdown[:target_name] = breakdown.target_name
+      adjusted_breakdown[:target_name] = breakdown.target_name.to_s
       adjusted_breakdown[:source_id] = breakdown.source&.id
       adjusted_breakdown[:source_type] = breakdown.source&.class&.to_s
       adjusted_breakdown[:target_id] = breakdown.applicable&.id
@@ -151,10 +152,8 @@ module Pricings
       end
     end
 
-    def determine_itineraries
-      origin_stop_itinerary_ids = ::Legacy::Stop.where(hub_id: origin_hub_ids, index: 0).pluck(:itinerary_id)
-      destination_stop_itinerary_ids = ::Legacy::Stop.where(hub_id: destination_hub_ids, index: 1).pluck(:itinerary_id)
-      @itineraries = ::Legacy::Itinerary.where(id: origin_stop_itinerary_ids | destination_stop_itinerary_ids)
+    def itineraries
+      @itineraries ||= ::Legacy::Itinerary.where(origin_hub_id: origin_hub_ids, destination_hub_id: destination_hub_ids)
     end
 
     def tenant_vehicles
@@ -299,11 +298,11 @@ module Pricings
     end
 
     def pricings
-      association = Pricings::Pricing.where(itinerary_id: @itineraries, cargo_class: @cargo_class)
+      association = Pricings::Pricing.where(itinerary: itineraries, cargo_class: @cargo_class)
       if @scope.slice(:display_itineraries_with_rates, :dedicated_pricings_only).values.any?(&:present?)
         association = association.where(group_id: group_ids)
       else
-        Pricings::Pricing.where(itinerary_id: @itineraries, cargo_class: @cargo_class)
+        Pricings::Pricing.where(itinerary: itineraries, cargo_class: @cargo_class)
       end
       association.for_dates(date, date + 15.days)
     end
