@@ -2,6 +2,9 @@ headers:
   rows: '1:1'
   cols: 'A:D'
   required: true
+  content: 
+    - 'ZONE'
+    - 'COUNTRY_CODE'
 zones:
   rows: '2:?'
   cols: 'A:A'

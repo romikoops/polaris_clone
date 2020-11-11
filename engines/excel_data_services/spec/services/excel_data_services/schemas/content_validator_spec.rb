@@ -2,14 +2,20 @@
 
 require "rails_helper"
 
-RSpec.describe ExcelDataServices::Schemas::Validator do
+RSpec.describe ExcelDataServices::Schemas::ContentValidator do
   include_context "with real trucking_sheet"
-  let(:source) { FactoryBot.build(:schemas_sheets_trucking_rates, file: xlsx, sheet_name: "Sheet3") }
+
+  let(:result) { described_class.valid?(source: source, section: section) }
 
   describe ".valid?" do
+    let(:section) { "headers" }
+
     context "with a valid rates sheet" do
+      let(:section) { "metadata_headers" }
+      let(:source) { FactoryBot.build(:schemas_sheets_trucking_rates, file: xlsx, sheet_name: "Sheet3") }
+
       it "returns successfully" do
-        expect(described_class.valid?(source: source)).to eq(true)
+        expect(result).to be_truthy
       end
     end
 
@@ -17,7 +23,7 @@ RSpec.describe ExcelDataServices::Schemas::Validator do
       let(:source) { FactoryBot.build(:schemas_sheets_trucking_zones, file: xlsx, sheet_name: "Zones") }
 
       it "returns successfully" do
-        expect(described_class.valid?(source: source)).to eq(true)
+        expect(result).to be_truthy
       end
     end
 
@@ -25,7 +31,7 @@ RSpec.describe ExcelDataServices::Schemas::Validator do
       let(:source) { FactoryBot.build(:schemas_sheets_trucking_fees, file: xlsx, sheet_name: "Fees") }
 
       it "returns successfully" do
-        expect(described_class.valid?(source: source)).to eq(true)
+        expect(result).to be_truthy
       end
     end
 
@@ -34,7 +40,7 @@ RSpec.describe ExcelDataServices::Schemas::Validator do
       let(:source) { FactoryBot.build(:schemas_sheets_trucking_fees, file: xlsx, sheet_name: xlsx.sheets.first) }
 
       it "returns successfully" do
-        expect(described_class.valid?(source: source)).to eq(false)
+        expect(result).not_to be_truthy
       end
     end
   end

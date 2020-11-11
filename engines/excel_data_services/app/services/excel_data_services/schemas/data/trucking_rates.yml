@@ -2,6 +2,10 @@ metadata_headers:
   rows: '1:1'
   cols: A:K
   required: true
+  content: 
+    - "CITY"
+    - "RATE_BASIS"
+    - "LOAD_TYPE"
 optional_metadata_headers:
   rows: '1:1'
   cols: A:?

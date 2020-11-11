@@ -16,10 +16,7 @@ module ExcelDataServices
       end
 
       def perform
-        schema.each do |section, coordinates|
-          return false unless section_valid?(section: section)
-        end
-        true
+        schema.reject { |section| section_valid?(section: section) }.empty?
       end
 
       def section_valid?(section:)
@@ -28,7 +25,11 @@ module ExcelDataServices
         conditions = section_conditions(section: section)
         return false if conditions.empty?
 
-        conditions.all?(&:valid?)
+        conditions.all?(&:valid?) && content_valid?(section: section)
+      end
+
+      def content_valid?(section:)
+        ExcelDataServices::Schemas::ContentValidator.valid?(source: source, section: section)
       end
 
       def section_conditions(section:)
