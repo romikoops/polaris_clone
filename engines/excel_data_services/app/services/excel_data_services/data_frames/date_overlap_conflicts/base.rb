@@ -24,7 +24,6 @@ module ExcelDataServices
 
         def handle_overlaps(conflicts:, arguments:)
           conflicts.keys.select { |key| conflicts[key].present? }.each do |conflict_type|
-            
             overlap_class(conflict_type: conflict_type).new(model: model, arguments: arguments).perform
           end
         end

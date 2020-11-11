@@ -12,6 +12,7 @@ module ExcelDataServices
             :values_state,
             :zone_minimums_state,
             :zone_rows_state,
+            :metadata_state,
             keyword_init: true
           )
 
@@ -23,7 +24,8 @@ module ExcelDataServices
                 modifiers_state: modifiers_schema_state(schema: schema),
                 values_state: values_schema_state(schema: schema),
                 zone_minimums_state: zone_minimums_schema_state(schema: schema),
-                zone_rows_state: zone_rows_schema_state(schema: schema)
+                zone_rows_state: zone_rows_schema_state(schema: schema),
+                metadata_state: metadata_schema_state(schema: schema)
               )
             }
           end
@@ -37,6 +39,7 @@ module ExcelDataServices
               .inner_join(iteration.brackets_state.frame, on: {"value_col" => "bracket_col"})
               .left_join(iteration.zone_minimums_state.frame, on: {"value_row" => "zone_minimum_col"})
               .inner_join(iteration.bracket_minimums_state.frame, on: {"value_col" => "bracket_minimum_col"})
+              .inner_join(iteration.metadata_state.frame, on: {"sheet_name" => "sheet_name"})
           end
 
           def combined_state_errors(iteration:)
@@ -72,6 +75,10 @@ module ExcelDataServices
 
           def zone_rows_schema_state(schema:)
             ExcelDataServices::DataFrames::Processors::Trucking::ZoneRow.state(state: schema_state(schema: schema))
+          end
+
+          def metadata_schema_state(schema:)
+            ExcelDataServices::DataFrames::Processors::Trucking::Metadata.state(state: schema_state(schema: schema))
           end
         end
       end

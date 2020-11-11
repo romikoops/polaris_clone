@@ -29,6 +29,7 @@ module ExcelDataServices
 
           def build_modifier_section_from_row(sub_frame:, modifier:)
             modifier_rows = modifier_results(sub_frame: sub_frame, modifier: modifier)
+
             {modifier.to_s => modifier_rows.map { |row| build_rate_hash(row: row) }.uniq}
           end
 

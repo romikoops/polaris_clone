@@ -5,8 +5,8 @@ default: &default
 
 development:
   <<: *default
-  database: imcr_development
+  database: polaris_development
 
 test:
   <<: *default
-  database: imcr_test
+  database: polaris_test
