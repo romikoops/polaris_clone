@@ -349,6 +349,35 @@ module Api
           end
         end
       end
+
+      context "with sorting params" do
+        let!(:older_quotation) {
+          FactoryBot.create(:quotations_quotation,
+            :cargo_item,
+            organization: organization,
+            selected_date: DateTime.now - 1.day)
+        }
+
+        let!(:newer_quotation) {
+          FactoryBot.create(:quotations_quotation,
+            :cargo_item,
+            organization: organization,
+            selected_date: DateTime.now)
+        }
+
+        before do
+          FactoryBot.create(:quotations_tender, quotation: older_quotation)
+          FactoryBot.create(:quotations_tender, quotation: newer_quotation)
+        end
+
+        it "sorts by selected date desc" do
+          get :index, params: { organization_id: organization.id, sort_by: "selected_date", direction: "desc"}
+          aggregate_failures do
+            expect(response_data.first['id']).to eq newer_quotation.id
+            expect(response_data.last['id']).to eq older_quotation.id
+          end
+        end
+      end
     end
 
     describe 'POST #download' do

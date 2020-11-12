@@ -5,8 +5,11 @@ require_dependency 'api/api_controller'
 module Api
   module V1
     class QuotationsController < ApiController
+      SORTING_ATTRIBUTES = ['selected_date', 'load_type', 'last_name', 'origin', 'destination']
       def index
-        quotations = quotations_filter.perform
+        sort_by = SORTING_ATTRIBUTES.include?(index_params[:sort_by]) ? index_params[:sort_by] : 'selected_date'
+        quotations = quotations_filter.perform.sorted(sort_by: sort_by,
+                                                      direction: sanitize_direction(index_params[:direction]))
 
         paginated = paginate(quotations)
 
@@ -68,7 +71,7 @@ module Api
       end
 
       def index_params
-        params.permit(:start_date, :end_date)
+        params.permit(:start_date, :end_date, :sort_by, :direction)
       end
 
       def quotations_filter
@@ -163,6 +166,10 @@ module Api
 
       def load_type
         quotation_params[:load_type]
+      end
+
+      def sanitize_direction(direction)
+        direction.to_s.upcase == "DESC" ? "DESC" : "ASC"
       end
 
       def cargo
