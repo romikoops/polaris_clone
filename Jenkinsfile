@@ -1,5 +1,7 @@
 #!groovy
 
+@Library('common@wolfhound') _
+
 defaultBuild()
 
 pipeline {
@@ -17,7 +19,8 @@ pipeline {
     stage("Test") {
       parallel {
         stage("Wolfhound") {
-          steps { wolfhound(required: ["rubocop"]) }
+          options { timeout(15) }
+          steps { wolfhound() }
         }
 
         stage("App") {
