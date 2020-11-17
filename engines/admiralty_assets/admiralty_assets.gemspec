@@ -1,23 +1,21 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-admiralty_assets'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Provides common assets for admiralty views.'
+Gem::Specification.new do |spec|
+  spec.name = "admiralty_assets"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Provides common assets for admiralty views."
 
-  s.metadata = { 'type' => 'view' }
+  spec.metadata["type"] = "api"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,lib}/**/*"]
 
-  s.add_dependency 'imc-core'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'bootstrap', '~> 4.4.1'
-  s.add_dependency 'jquery-rails'
+  spec.add_dependency "bootstrap", "~> 4.4.1"
+  spec.add_dependency "jquery-rails"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

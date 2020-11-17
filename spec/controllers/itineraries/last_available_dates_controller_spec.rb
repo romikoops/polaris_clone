@@ -5,20 +5,20 @@ require 'rails_helper'
 RSpec.describe Itineraries::LastAvailableDatesController do
   describe 'GET #show' do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { create(:organizations_user, organization: organization) }
-    let!(:country) { create(:legacy_country, code: 'DE', name: 'Germany') }
-    let(:tenant_vehicle) { create(:legacy_tenant_vehicle, organization: organization) }
+    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let!(:country) { FactoryBot.create(:legacy_country, code: 'DE', name: 'Germany') }
+    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
     let(:itineraries) do
       [
-        create(:gothenburg_shanghai_itinerary, organization: organization),
-        create(:shanghai_gothenburg_itinerary, organization: organization)
+        FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization),
+        FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization)
       ]
     end
     let!(:trips) do
       itineraries.flat_map do |itinerary|
         (1...10).map do |i|
           closing = Date.today + (2 * i).days
-          create(:legacy_trip,
+          FactoryBot.create(:legacy_trip,
                  itinerary: itinerary,
                  tenant_vehicle: tenant_vehicle,
                  closing_date: closing,

@@ -1,36 +1,38 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-legacy'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Dumpster for old legacy code that is needed in other engines.'
+Gem::Specification.new do |spec|
+  spec.name = "legacy"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Dumpster for old legacy code that is needed in other engines."
 
-  s.metadata = { 'type' => 'data' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-profiles'
-  s.add_dependency 'imc-organizations'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'active_model_serializers'
-  s.add_dependency 'activerecord-import'
-  s.add_dependency 'activejob-traffic_control'
-  s.add_dependency 'devise_token_auth', '~> 0.1.43'
-  s.add_dependency 'draper'
-  s.add_dependency 'fixer_currency', '~> 3.4'
-  s.add_dependency 'geocoder'
-  s.add_dependency 'mobility'
-  s.add_dependency 'money-rails'
-  s.add_dependency 'paranoia'
-  s.add_dependency 'pg_search', '~> 2.3.0'
+  spec.add_dependency "organizations"
+  spec.add_dependency "profiles"
 
-  s.add_development_dependency 'imc-quotations'
+  spec.add_dependency "active_model_serializers"
+  spec.add_dependency "activerecord-import"
+  spec.add_dependency "activejob-traffic_control"
+  spec.add_dependency "draper"
+  spec.add_dependency "fixer_currency", "~> 3.4"
+  spec.add_dependency "geocoder"
+  spec.add_dependency "mobility"
+  spec.add_dependency "money-rails"
+  spec.add_dependency "paranoia"
+  spec.add_dependency "pg_search", "~> 2.3.0"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "cargo"
+  spec.add_development_dependency "companies"
+  spec.add_development_dependency "organization_manager"
+  spec.add_development_dependency "quotations"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

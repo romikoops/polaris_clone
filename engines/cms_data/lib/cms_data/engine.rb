@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-require "organizations"
-
-require "activerecord-postgis-adapter"
-require "config"
-require "paper_trail"
-require "rails"
-require "strong_migrations"
-
 module CmsData
   class Engine < ::Rails::Engine
     isolate_namespace CmsData
@@ -34,10 +26,8 @@ module CmsData
       end
     end
 
-    if defined?(FactoryBot)
-      initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-        FactoryBot.definition_file_paths << Pathname.new(File.expand_path("../../spec/factories", __dir__))
-      end
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
     end
   end
 end

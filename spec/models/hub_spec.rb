@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Hub, type: :model do
   it 'builds  a valid hub' do
-    expect(build(:hub)).to be_valid
+    expect(FactoryBot.build(:hub)).to be_valid
   end
 end
 

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ContentsController do
   describe 'GET #component' do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:content) { create(:legacy_content, organization_id: organization.id) }
+    let!(:content) { FactoryBot.create(:legacy_content, organization_id: organization.id) }
 
     it 'returns http success' do
       get :component, params: { organization_id: organization.id, component: content.component }

@@ -40,7 +40,7 @@ RSpec.describe Country, type: :model do
     end
 
     it 'returns the correct country' do
-      country = create(:country)
+      country = FactoryBot.create(:country)
       expect(described_class.geo_find_by_name('sweden')).to eq(country)
     end
   end

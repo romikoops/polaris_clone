@@ -1,0 +1,11 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+gem "money_cache", path: "../../gems/money_cache"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "pricings", path: "../pricings"
+eval_gemfile "../pricings/Gemfile.runtime"
+
+gem "quotations", path: "../quotations"
+eval_gemfile "../quotations/Gemfile.runtime"

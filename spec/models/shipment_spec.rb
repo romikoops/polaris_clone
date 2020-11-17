@@ -4,17 +4,17 @@ require 'rails_helper'
 
 RSpec.describe Shipment, type: :model do
   before do
-    create(:charge_breakdown,
+    FactoryBot.create(:charge_breakdown,
            shipment: shipment,
            trip: other_trip,
            valid_until: 10.days.from_now.beginning_of_day,
            charge_category_name: 'Cargo1')
   end
 
-  let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:organization) { create(:organizations_organization) }
-  let(:shipment) { create(:shipment, organization: organization, with_breakdown: true) }
-  let(:other_trip) { create(:trip) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:shipment) { FactoryBot.create(:shipment, organization: organization, with_breakdown: true) }
+  let(:other_trip) { FactoryBot.create(:trip) }
   let(:hidden_value_service) { instance_double(Pdf::HiddenValueService) }
 
   before do

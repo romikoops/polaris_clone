@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("lib", __dir__)
-require File.expand_path("../../lib/engines/gemhelper.rb", __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name = "imc-organization_manager"
-  s.version = "1"
-  s.authors = ["ItsMyCargo ApS"]
-  s.summary = <<~SUMMARY
-  SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "organization_manager"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = ""
 
-  s.metadata = {"type" => "service"}
+  spec.metadata["type"] = "service"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "Rakefile"]
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency "imc-companies"
-  s.add_dependency "imc-groups"
-  s.add_dependency "imc-legacy"
-  s.add_dependency "imc-organizations"
+  spec.add_dependency "shared-runtime"
 
-  Gemhelper.common(s)
+  spec.add_dependency "companies"
+  spec.add_dependency "groups"
+  spec.add_dependency "legacy"
+  spec.add_dependency "organizations"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

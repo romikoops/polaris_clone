@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "combustion"
+begin
+  Combustion.initialize!<% if @engine_type == "data" %> :active_record, database_reset: false, load_schema: false<% end %>
+rescue => e
+  # Fail fast if application couldn't be loaded
+  $stdout.puts "Failed to load the app: #{e.message}\n#{e.backtrace.take(5).join("\n")}"
+  exit(1)
+end
+require "rails/commands"

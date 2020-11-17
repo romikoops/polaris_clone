@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe ShipmentMailer, type: :mailer do
-  let(:organization) { create(:organizations_organization, slug: 'demo') }
-  let(:user) { create(:organizations_user, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, slug: 'demo') }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
 
   let(:billing) { :external }
   let!(:shipment) {
-    create(:completed_legacy_shipment,
+    FactoryBot.create(:completed_legacy_shipment,
       user: user,
       imc_reference: nil,
       organization: user.organization,

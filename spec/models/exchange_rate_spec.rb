@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ExchangeRate, type: :model do
   it 'creates a valid object' do
-    expect(build(:exchange_rate)).to be_valid
+    expect(FactoryBot.build(:exchange_rate)).to be_valid
   end
 
   context 'class methods' do

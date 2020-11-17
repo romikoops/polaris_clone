@@ -2,38 +2,20 @@
 
 require "activerecord-postgis-adapter"
 require "config"
+require "mimemagic"
 require "paper_trail"
 require "rails"
-require "mimemagic"
 require "roo"
 require "roo-xls"
-require "write_xlsx"
 require "rover-df"
 require "sentry-raven"
-require "strong_migrations"
-
-require "authentication"
-require "companies"
-require "groups"
-require "legacy"
-require "locations"
-require "organizations"
-require "organization_manager"
-require "pricings"
-require "trucking"
-require "users"
+require "write_xlsx"
 
 module ExcelDataServices
   class Engine < ::Rails::Engine
     isolate_namespace ExcelDataServices
 
-    config.autoload_paths << File.expand_path("../../app", __dir__)
-
-    config.active_record.primary_key = :uuid
-
     config.generators do |g|
-      g.orm :active_record, primary_key_type: :uuid
-      g.fixture_replacement :factory_bot, dir: "spec/factories"
       g.test_framework :rspec
       g.assets false
       g.helper false
@@ -43,16 +25,8 @@ module ExcelDataServices
       g.view_specs false
     end
 
-    initializer :append_migrations do |app|
-      config.paths["db/migrate"].expanded.each do |expanded_path|
-        app.config.paths["db/migrate"] << expanded_path
-      end
-    end
-
-    if defined?(FactoryBot)
-      initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-        FactoryBot.definition_file_paths << Pathname.new(File.expand_path("../../spec/factories", __dir__))
-      end
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
     end
   end
 end

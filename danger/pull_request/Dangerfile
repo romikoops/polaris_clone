@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-# Ensure PR Body follows template
-failure(':grey_question: Missing Summary - This pull request needs a description.') if github.pr_body.length < 50
+unless github.pr_labels.include?("dependencies")
+  # Ensure PR Body follows template
+  failure(':grey_question: Missing Summary - This pull request needs a description.') if github.pr_body.length < 50
 
-unless /## summary/i.match?(github.pr_body)
-  warn(':clipboard: Missing Summary - Please explain the motivation for making this change.')
-end
+  unless /## summary/i.match?(github.pr_body)
+    warn(':clipboard: Missing Summary - Please explain the motivation for making this change.')
+  end
 
-# Ensure PR has test plan
-unless /## test plan/i.match?(github.pr_body)
-  warn(':clipboard: Missing Test Plan - A Test Plan lets us know how these changes were tested.')
+  # Ensure PR has test plan
+  unless /## test plan/i.match?(github.pr_body)
+    warn(':clipboard: Missing Test Plan - A Test Plan lets us know how these changes were tested.')
+  end
 end

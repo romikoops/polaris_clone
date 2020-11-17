@@ -1,27 +1,14 @@
 #!/usr/bin/env ruby
-# frozen_string_literal: true
 
-# This command will automatically be run when you run "rails" with Rails gems
-# installed from the root of your application.
-
-ENGINE_ROOT = File.expand_path('..', __dir__)
-ENGINE_PATH = File.expand_path('../lib/offer_calculator/engine', __dir__)
-APP_PATH = File.expand_path('../spec/dummy/config/application', __dir__)
-
-# Set up gems listed in the Gemfile.
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
-require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
-
-require 'rails'
-# Pick the frameworks you want:
-require 'active_model/railtie'
-require 'active_job/railtie'
-require 'active_record/railtie'
-require 'active_storage/engine'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'action_view/railtie'
-require 'action_cable/engine'
-require 'sprockets/railtie'
-# require "rails/test_unit/railtie"
-require 'rails/engine/commands'
+require "bundler/setup"
+require "combustion"
+begin
+  # Add another Rails part, e.g.
+  # Combustion.initialize! :active_record, :active_job, :active_storage, :action_mailer, :action_controller
+  Combustion.initialize!
+rescue => e
+  # Fail fast if application couldn't be loaded
+  $stdout.puts "Failed to load the app: #{e.message}\n#{e.backtrace.take(5).join("\n")}"
+  exit(1)
+end
+require "rails/commands"

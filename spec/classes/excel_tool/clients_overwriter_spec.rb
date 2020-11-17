@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ExcelTool::ClientsOverwriter do
-  let(:organization) { create(:organizations_organization) }
-  let(:user) { create(:organizations_user, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let(:xlsx) { instance_double('xlsx') }
 
   describe '.parse' do

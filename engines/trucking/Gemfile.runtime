@@ -1,0 +1,13 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "groups", path: "../groups"
+eval_gemfile "../groups/Gemfile.runtime"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "locations", path: "../locations"
+eval_gemfile "../locations/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"

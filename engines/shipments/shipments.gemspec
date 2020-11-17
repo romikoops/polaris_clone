@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-shipments'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = <<~SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "shipments"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = <<~SUMMARY
     The Shipments Engine is responsible for handling the data level of shipment requests and shipments
   SUMMARY
 
-  s.metadata = { 'type' => 'service' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
+
+  spec.add_dependency "shared-runtime"
 
   # External gems
-  s.add_dependency 'aasm'
-  s.add_dependency 'money-rails', '~> 1.12'
+  spec.add_dependency "aasm"
+  spec.add_dependency "money-rails", "~> 1.12"
 
-  # Internal engines
-  s.add_dependency 'imc-address_book'
-  s.add_dependency 'imc-cargo'
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-quotations'
-  s.add_dependency 'imc-routing'
-  s.add_dependency 'imc-sequential'
-  s.add_dependency 'imc-organizations'
+  # pec Internal engines
+  spec.add_dependency "address_book"
+  spec.add_dependency "cargo"
+  spec.add_dependency "quotations"
+  spec.add_dependency "routing"
+  spec.add_dependency "sequential"
+  spec.add_dependency "organizations"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

@@ -1,0 +1,13 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "cargo", path: "../cargo"
+eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "rate_extractor", path: "../rate_extractor"
+eval_gemfile "../rate_extractor/Gemfile.runtime"
+
+gem "rates", path: "../rates"
+eval_gemfile "../rates/Gemfile.runtime"
+
+gem "tenant_routing", path: "../tenant_routing"
+eval_gemfile "../tenant_routing/Gemfile.runtime"

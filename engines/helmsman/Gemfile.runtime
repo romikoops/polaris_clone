@@ -1,0 +1,19 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "federation", path: "../federation"
+eval_gemfile "../federation/Gemfile.runtime"
+
+gem "ledger", path: "../ledger"
+eval_gemfile "../ledger/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
+gem "tenant_routing", path: "../tenant_routing"
+eval_gemfile "../tenant_routing/Gemfile.runtime"

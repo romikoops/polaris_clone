@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Contact, type: :model do
   context 'validations' do
-    let(:user) { build(:organizations_user) }
+    let(:user) { FactoryBot.build(:organizations_user) }
 
-    let!(:contact_one) { create(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
-    let(:contact_two) { build(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
-    let(:contact_three) { build(:contact, user: user, first_name: 'Johnny') }
+    let!(:contact_one) { FactoryBot.create(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
+    let(:contact_two) { FactoryBot.build(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
+    let(:contact_three) { FactoryBot.build(:contact, user: user, first_name: 'Johnny') }
 
     context 'Different first names' do
       it 'is validate the uniqueness' do

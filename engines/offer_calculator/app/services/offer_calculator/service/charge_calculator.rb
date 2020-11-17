@@ -14,7 +14,7 @@ module OfferCalculator
 
       def perform
         grouped_fees.flat_map do |grouped_fees|
-          calulate_charges(grouped_fees: grouped_fees)
+          calculate_charges(grouped_fees: grouped_fees)
         end
       rescue
         raise OfferCalculator::Errors::CalculationError
@@ -28,7 +28,7 @@ module OfferCalculator
         fees.group_by(&:object).values
       end
 
-      def calulate_charges(grouped_fees:)
+      def calculate_charges(grouped_fees:)
         standard_charges = build_standard_fees(input: grouped_fees)
         percentage_charges = build_percentage_fees(
           input: grouped_fees,

@@ -1,0 +1,26 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+gem "money_cache", path: "../../gems/money_cache"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "notes", path: "../notes"
+eval_gemfile "../notes/Gemfile.runtime"
+
+gem "pricings", path: "../pricings"
+eval_gemfile "../pricings/Gemfile.runtime"
+
+gem "profiles", path: "../profiles"
+eval_gemfile "../profiles/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"
+
+gem "quotations", path: "../quotations"
+eval_gemfile "../quotations/Gemfile.runtime"
+
+gem "result_formatter", path: "../result_formatter"
+eval_gemfile "../result_formatter/Gemfile.runtime"

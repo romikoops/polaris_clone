@@ -1,1 +1,4 @@
-engines/**/spec/dummy  linguist-generated=true
+*.gemspec diff=ruby
+*.rake diff=ruby
+*.rb diff=ruby
+Gemfile.lock -diff linguist-generated=true

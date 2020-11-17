@@ -1,0 +1,7 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"

@@ -1,0 +1,4 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"

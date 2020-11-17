@@ -4,8 +4,8 @@ require 'rails_helper'
 require "#{Rails.root}/app/classes/application_error"
 
 RSpec.describe 'Authentication by token', type: :request do
-  let(:organization) { create(:organizations_organization) }
-  let(:user) { create(:authentication_user, organization_id: organization.id) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:user) { FactoryBot.create(:authentication_user, organization_id: organization.id) }
 
   context 'user logged out' do
     it 'responds correctly, requiring authentication' do

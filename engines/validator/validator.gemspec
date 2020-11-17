@@ -1,31 +1,30 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-validator'
-  s.version     = '1'
-  s.license     = 'PROPRIETARY'
-  s.authors     = ['ItsMyCargo ApS']
-  s.email       = ['mikko.kokkonen@itsmycargo.com']
-  s.summary     = <<~SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "validator"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.email = ["mikko.kokkonen@itsmycargo.com"]
+  spec.summary = <<~SUMMARY
     Validator takes an itinerary and checks each part of the journey for
     matching TenantVehicles, valid Pricings and available Schedules
   SUMMARY
 
-  s.metadata = { 'type' => 'service' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-groups'
-  s.add_dependency 'imc-legacy'
-  s.add_dependency 'imc-pricings'
-  s.add_dependency 'imc-organizations'
-  s.add_dependency 'imc-organization_manager'
-  s.add_dependency 'imc-trucking'
+  spec.add_dependency "shared-runtime"
 
-  Gemhelper.common(s)
+  spec.add_dependency "groups"
+  spec.add_dependency "legacy"
+  spec.add_dependency "pricings"
+  spec.add_dependency "organizations"
+  spec.add_dependency "organization_manager"
+  spec.add_dependency "trucking"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

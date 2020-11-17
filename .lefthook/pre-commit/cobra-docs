@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-ruby -r./lib/cobra_helper -e "CobraHelper.graphviz"
+ruby -r./lib/cobra_helper -e "CobraHelper.uml"
 
-git add doc/engines/graph.{dot,pdf}
+git add doc/engines/graph.{puml,svg}

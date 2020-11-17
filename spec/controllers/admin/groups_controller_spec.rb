@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
+  let!(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
-    create(:groups_group, organization: organization, name: "Test").tap do |grp|
+    FactoryBot.create(:groups_group, organization: organization, name: "Test").tap do |grp|
       FactoryBot.create(:groups_membership, group: grp, member: user)
     end
   end
@@ -18,7 +18,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
   end
 
   describe "GET #index" do
-    let!(:groups) { create_list(:groups_group, 5, organization: organization) + [default_group] }
+    let!(:groups) { FactoryBot.create_list(:groups_group, 5, organization: organization) + [default_group] }
 
     context "without sorting" do
       it "returns http success" do
@@ -99,10 +99,10 @@ RSpec.describe Admin::GroupsController, type: :controller do
   end
 
   describe "POST #edit_members" do
-    let!(:user_a) { create(:organizations_user, :with_profile, organization: organization) }
-    let!(:user_b) { create(:organizations_user, :with_profile, organization: organization) }
-    let(:company_a) { create(:companies_company, organization: organization) }
-    let(:company_b) { create(:companies_company, organization: organization) }
+    let!(:user_a) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let!(:user_b) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let(:company_a) { FactoryBot.create(:companies_company, organization: organization) }
+    let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
 
     let(:profile) { FactoryBot.build(:profiles_profile) }
     let(:edit_params) do
@@ -118,8 +118,8 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let(:expected) { [user_a.id, company_a.id] }
 
     before do
-      create(:groups_membership, group: group, member: user_b)
-      create(:groups_membership, group: group, member: company_b)
+      FactoryBot.create(:groups_membership, group: group, member: user_b)
+      FactoryBot.create(:groups_membership, group: group, member: company_b)
     end
 
     it "returns http success" do

@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-address_book'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = <<~SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "address_book"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = <<~SUMMARY
     This engine is used to work with addresses and contacts for shipments.
     eg: consignee, consignor, notifyees.
   SUMMARY
 
-  s.metadata = { 'type' => 'data' }
+  spec.metadata["type"] = "data"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-organizations'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'geocoder'
-  s.add_dependency 'pg_search'
+  spec.add_dependency "organizations"
 
-  Gemhelper.common(s)
+  spec.add_dependency "geocoder"
+  spec.add_dependency "pg_search"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

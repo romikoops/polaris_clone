@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe QuoteMailer, type: :mailer do
-  let(:organization) { create(:organizations_organization, slug: 'demo') }
-  let(:user) { create(:organizations_user, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, slug: 'demo') }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let!(:profile) { FactoryBot.create(:profiles_profile, user: user, external_id: '1234') }
   let(:load_type) { 'container' }
   let(:billing) { :external }
   let(:original_shipment) do
-    create(:complete_legacy_shipment,
+    FactoryBot.create(:complete_legacy_shipment,
       :with_meta,
       user: user,
       billing: billing,
@@ -23,7 +23,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   let(:quotations_quotation) { Quotations::Quotation.find_by(legacy_shipment_id: original_shipment.id) }
   let(:shipment_count) { 1 }
   let(:quotation) do
-    create(:legacy_quotation, user: user, original_shipment_id: original_shipment.id, shipment_count: shipment_count)
+    FactoryBot.create(:legacy_quotation, user: user, original_shipment_id: original_shipment.id, shipment_count: shipment_count)
   end
   let(:pickup_address) { FactoryBot.create(:gothenburg_address) }
   let(:umlaut_address) { FactoryBot.create(:dusseldorf_address) }
@@ -77,7 +77,7 @@ RSpec.describe QuoteMailer, type: :mailer do
   describe 'quotation_email (internal)' do
     let(:billing) { :internal }
     let(:quotation) do
-      create(:legacy_quotation, user: user, shipment_count: 1, original_shipment: original_shipment, billing: billing)
+      FactoryBot.create(:legacy_quotation, user: user, shipment_count: 1, original_shipment: original_shipment, billing: billing)
     end
     let(:mail) {
       described_class.new_quotation_email(

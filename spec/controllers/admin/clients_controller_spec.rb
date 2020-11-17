@@ -102,8 +102,8 @@ RSpec.describe Admin::ClientsController do
 
   describe 'post #create' do
     let(:email) { "email123@demo.com" }
-    let(:user_attributes) { attributes_for(:organizations_user, email: email).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
-    let(:profile_params) { attributes_for(:profiles_profile) }
+    let(:user_attributes) { FactoryBot.attributes_for(:organizations_user, email: email).deep_transform_keys { |k| k.to_s.camelize(:lower) } }
+    let(:profile_params) { FactoryBot.attributes_for(:profiles_profile) }
     let(:profile_attributes) { profile_params.deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
     let(:created_profile_attrs) { Profiles::Profile.last.attributes }

@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe OrganizationsController do
-  let!(:user) { create(:organizations_user, email: "user@itsmycargo.com") }
+  let!(:user) { FactoryBot.create(:organizations_user, email: "user@itsmycargo.com") }
   let(:organization) { user.organization }
-  let(:domain) { create(:organizations_domain, organization: organization, domain: "itsmycargo.example") }
+  let(:domain) { FactoryBot.create(:organizations_domain, organization: organization, domain: "itsmycargo.example") }
 
   before do
     request.env["HTTP_REFERER"] = "http://#{domain.domain}"

@@ -35,10 +35,10 @@ module CoreExt
 SQL
 
       hostname = begin
-                   `hostname`
-                 rescue StandardError
-                   ''
-                 end
+        `hostname`
+      rescue StandardError
+        ''
+      end
       sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, {
                                       version: version || '',
                                       duration: (time.real * 1000).to_i,

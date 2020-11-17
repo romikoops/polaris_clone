@@ -1,0 +1,19 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "cargo", path: "../cargo"
+eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "offer_calculator", path: "../offer_calculator"
+eval_gemfile "../offer_calculator/Gemfile.runtime"
+
+gem "pdf", path: "../pdf"
+eval_gemfile "../pdf/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"

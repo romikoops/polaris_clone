@@ -1,0 +1,16 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "companies", path: "../companies"
+eval_gemfile "../companies/Gemfile.runtime"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"
+
+gem "profiles", path: "../profiles"
+eval_gemfile "../profiles/Gemfile.runtime"
+
+gem "shipments", path: "../shipments"
+eval_gemfile "../shipments/Gemfile.runtime"

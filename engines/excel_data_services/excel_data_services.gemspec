@@ -1,38 +1,38 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("lib", __dir__)
-require File.expand_path("../../lib/engines/gemhelper.rb", __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name = "imc-excel_data_services"
-  s.version = "1"
-  s.authors = ["ItsMyCargo ApS"]
-  s.summary = <<~SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "excel_data_services"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = <<~SUMMARY
     Engine responsible for parsing, validating, mangling and inserting all data in the system
   SUMMARY
 
-  s.metadata = {"type" => "service"}
+  spec.metadata["type"] = "service"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "Rakefile"]
+  spec.files = Dir["{app,lib}/**/*"]
 
-  s.add_dependency "mimemagic"
-  s.add_dependency "roo"
-  s.add_dependency "roo-xls"
-  s.add_dependency "rover-df"
-  s.add_dependency "sentry-raven"
-  s.add_dependency "write_xlsx"
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency "imc-authentication"
-  s.add_dependency "imc-companies"
-  s.add_dependency "imc-groups"
-  s.add_dependency "imc-legacy"
-  s.add_dependency "imc-locations"
-  s.add_dependency "imc-pricings"
-  s.add_dependency "imc-organizations"
-  s.add_dependency "imc-organization_manager"
-  s.add_dependency "imc-trucking"
-  s.add_dependency "imc-users"
+  spec.add_dependency "mimemagic"
+  spec.add_dependency "roo"
+  spec.add_dependency "roo-xls"
+  spec.add_dependency "rover-df"
+  spec.add_dependency "sentry-raven"
+  spec.add_dependency "write_xlsx"
 
-  Gemhelper.common(s)
+  spec.add_dependency "authentication"
+  spec.add_dependency "companies"
+  spec.add_dependency "groups"
+  spec.add_dependency "legacy"
+  spec.add_dependency "locations"
+  spec.add_dependency "pricings"
+  spec.add_dependency "organizations"
+  spec.add_dependency "organization_manager"
+  spec.add_dependency "trucking"
+  spec.add_dependency "users"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

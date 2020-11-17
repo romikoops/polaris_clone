@@ -6,8 +6,8 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_user) }
   let(:organizations_membership) { FactoryBot.create(:organizations_membership, role: :admin, organization: organization, member: user) }
-  let!(:shipper) { create(:organizations_user, organization_id: organization.id) }
-  let!(:profile) { create(:profiles_profile, user: shipper) }
+  let!(:shipper) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let!(:profile) { FactoryBot.create(:profiles_profile, user: shipper) }
   let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true, organization: organization, user: shipper, status: 'requested') }
   let(:charge_breakdown) { shipment.charge_breakdowns.selected }
   let(:breakdown) { FactoryBot.build(:pricings_breakdown) }

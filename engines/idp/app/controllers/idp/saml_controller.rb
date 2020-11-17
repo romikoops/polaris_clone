@@ -65,7 +65,7 @@ module IDP
     end
 
     def saml_response
-      return false if saml_settings.blank?
+      return if saml_settings.blank?
 
       @saml_response ||= OneLogin::RubySaml::Response.new(saml_params, settings: saml_settings)
     end

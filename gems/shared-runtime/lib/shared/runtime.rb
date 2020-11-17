@@ -1,0 +1,8 @@
+require "activerecord-postgis-adapter"
+require "active_storage/cascade"
+require "audited"
+require "config"
+require "paper_trail"
+require "pg"
+require "rails"
+require "strong_migrations"

@@ -124,7 +124,6 @@ module ExcelTools
   end
 
   def debug_message(message)
-    puts message if DEBUG
   end
 
   def generate_meta_from_sheet(sheet)

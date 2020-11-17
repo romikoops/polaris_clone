@@ -22,14 +22,14 @@ namespace :deploy do
       puts "--- Cannot find Application Version for #{current_head}"
       puts ""
       puts "* Please wait for master Jenkins build to finish"
-      puts "* Or HOTFIX: run `eb deploy imc-alpha && eb deploy imc-alpha-worker`"
+      puts "* Or HOTFIX: run `eb deploy alpha && eb deploy alpha-worker`"
       puts ""
       fail
     end
 
     application_version = response.application_versions.first.version_label
 
-    system("eb deploy imc-alpha --version #{application_version}") || fail
-    system("eb deploy imc-alpha-worker --version #{application_version}") || fail
+    system("eb deploy alpha --version #{application_version}") || fail
+    system("eb deploy alpha-worker --version #{application_version}") || fail
   end
 end

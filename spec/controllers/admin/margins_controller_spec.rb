@@ -8,17 +8,17 @@ RSpec.describe Admin::MarginsController, type: :controller do
   let(:organization_vehicle_2) { FactoryBot.create(:tenant_vehicle, name: 'faster', organization: organization) }
   let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let!(:currency) { Users::Settings.find_by(user: user).currency }
-  let!(:user_profile) { create(:profiles_profile, user_id: user.id) }
+  let!(:user_profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:company) do
-    company = create(:companies_company, name: 'Test', organization: organization)
-    membership = create(:companies_membership, company: company, member: user)
+    company = FactoryBot.create(:companies_company, name: 'Test', organization: organization)
+    membership = FactoryBot.create(:companies_membership, company: company, member: user)
     company
   end
 
   let(:group) do
-    group = create(:groups_group, organization: organization)
-    create(:groups_membership, member: user, group: group)
+    group = FactoryBot.create(:groups_group, organization: organization)
+    FactoryBot.create(:groups_membership, member: user, group: group)
     group
   end
   let(:json_response) { JSON.parse(response.body) }
@@ -117,7 +117,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: user, target_name: "#{user_profile.first_name} #{user_profile.last_name}", margin: user_margin, service_level: organization_vehicle_1))
+        expect(results.first).to include(FactoryBot.build(:margin_preview_result, target: user, target_name: "#{user_profile.first_name} #{user_profile.last_name}", margin: user_margin, service_level: organization_vehicle_1))
       end
     end
 
@@ -130,7 +130,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: company, target_name: company.name, margin: company_margin, service_level: organization_vehicle_1))
+        expect(results.first).to include(FactoryBot.build(:margin_preview_result, target: company, target_name: company.name, margin: company_margin, service_level: organization_vehicle_1))
       end
     end
 
@@ -143,7 +143,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(results.length).to eq(1)
-        expect(results.first).to include(build(:margin_preview_result, target: group, target_name: group.name, margin: group_margin, service_level: organization_vehicle_1))
+        expect(results.first).to include(FactoryBot.build(:margin_preview_result, target: group, target_name: group.name, margin: group_margin, service_level: organization_vehicle_1))
       end
     end
   end

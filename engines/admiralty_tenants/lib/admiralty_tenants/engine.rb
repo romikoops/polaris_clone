@@ -1,29 +1,15 @@
 # frozen_string_literal: true
 
-require 'jsoneditor-rails'
-
-require 'admiralty_assets'
-require 'admiralty_auth'
-require "authentication"
-require 'draper'
-require 'core'
-require 'legacy'
-require 'pricings'
-require "profiles"
-require 'organizations'
-require "users"
+require "draper"
+require "jsoneditor-rails"
 
 module AdmiraltyTenants
   class Engine < ::Rails::Engine
     isolate_namespace AdmiraltyTenants
 
-    config.autoload_paths << File.expand_path('../../app', __dir__)
-
-    config.active_record.primary_key = :uuid
-
     config.generators do |g|
       g.orm                 :active_record, primary_key_type: :uuid
-      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+      g.fixture_replacement :factory_bot, dir: 'factories'
       g.test_framework      :rspec
       g.assets              false
       g.helper              false
@@ -31,18 +17,6 @@ module AdmiraltyTenants
       g.model_specs         false
       g.stylesheets         false
       g.view_specs          false
-    end
-
-    initializer :append_migrations do |app|
-      config.paths['db/migrate'].expanded.each do |expanded_path|
-        app.config.paths['db/migrate'] << expanded_path
-      end
-    end
-
-    if defined?(FactoryBot)
-      initializer 'model_core.factories', after: 'factory_bot.set_factory_paths' do
-        FactoryBot.definition_file_paths << Pathname.new(File.expand_path('../../spec/factories', __dir__))
-      end
     end
   end
 end

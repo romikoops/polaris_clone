@@ -12,25 +12,19 @@ hotfix_commits = git.commits.any? { |commit| commit.message[/hotfix(\(.*\))?:/] 
 
 # PR Tickets
 pr_title_issues = github.pr_title.scan(JIRA_REGEXP).flatten.map(&:upcase).uniq
-fix_chore_pr = /\A(chore|(hot)?fix)/i.match?(github.pr_title)
 
 # Fix common issues on PR title
-pr_title = github.pr_title.gsub(/imc-(\d+)/, 'IMC-\1')
+pr_title = github.pr_title
+pr_title.gsub!(/(\d+)/, 'IMC-\1') if pr_title[/\d+/] && !pr_title[/IMC-\d+/i]
+pr_title.gsub!(/imc (\d+)/, 'IMC-\1') if pr_title[/imc (\d+)/]
 
 # Check title has all issues
-unless (pr_title_issues - jira_issues).empty?
-  missing_issues = (pr_title_issues - jira_issues)
-  pr_title = "#{missing_issues.join(" ")} #{pr_title}"
-end
+missing_issues = (pr_title_issues - jira_issues)
+pr_title = [*missing_issues, pr_title].join(" ")
 
 # Check title for chore
-if chore_commits && !pr_title[/chore/i]
-  pr_title = "CHORE: #{pr_title}"
-end
-
-if fix_commits && !pr_title[/(hot)?fix/i]
-  pr_title = "#{hotfix_commits ? "HOTFIX" : "FIX"}: #{pr_title}"
-end
+pr_title = "CHORE: #{pr_title}" if chore_commits && !pr_title[/chore/i]
+pr_title = "#{hotfix_commits ? "HOTFIX" : "FIX"}: #{pr_title}" if fix_commits && !pr_title[/(hot)?fix/i]
 
 # Update PR Title
 github.api.update_pull_request(github.pr_json[:base][:repo][:full_name], github.pr_json['number'], title: pr_title)

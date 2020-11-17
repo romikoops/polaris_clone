@@ -61,7 +61,7 @@ RSpec.describe Address do
   end
 
   describe '#reverse_geocoded_by' do
-    let(:address) { create(:address, latitude: 57.7072326, longitude: 11.9670171) }
+    let(:address) { FactoryBot.create(:address, latitude: 57.7072326, longitude: 11.9670171) }
 
     it 'successfully' do
       address.reverse_geocode
@@ -90,7 +90,7 @@ RSpec.describe Address do
   end
 
   describe '.primary_for?' do
-    let(:user) { create(:organizations_user) }
+    let(:user) { FactoryBot.create(:organizations_user) }
     let(:addresses) { FactoryBot.create_list(:address, 2) }
 
     before do
@@ -147,7 +147,7 @@ RSpec.describe Address do
     end
 
     it 'sanitized' do
-      address = create(:address, zip_code: '43 81-3')
+      address = FactoryBot.create(:address, zip_code: '43 81-3')
 
       expect(address.get_zip_code).to eq '43813'
     end

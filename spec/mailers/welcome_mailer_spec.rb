@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe WelcomeMailer do
-  let(:user) { create(:organizations_user) }
+  let(:user) { FactoryBot.create(:organizations_user) }
   let(:organization) { user.organization }
   let(:profile) { FactoryBot.build(:profiles_profile) }
 
   before do
-    create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', organization_id: organization.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', organization_id: organization.id)
-    create(:legacy_content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'body', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'social', text: 'WELCOME_EMAIL', organization_id: organization.id)
+    FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'footer', text: 'WELCOME_EMAIL', organization_id: organization.id)
 
     stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})

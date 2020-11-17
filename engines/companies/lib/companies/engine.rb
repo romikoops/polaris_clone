@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
-require "activerecord-postgis-adapter"
-require "config"
-require "pg_search"
 require "paranoia"
-require "paper_trail"
-require "rails"
-require "strong_migrations"
-
-require "legacy"
-require "organizations"
+require "pg_search"
 
 module Companies
   class Engine < ::Rails::Engine
@@ -37,10 +29,8 @@ module Companies
       end
     end
 
-    if defined?(FactoryBot)
-      initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-        FactoryBot.definition_file_paths << Pathname.new(File.expand_path("../../spec/factories", __dir__))
-      end
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
     end
   end
 end

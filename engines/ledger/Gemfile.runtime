@@ -1,0 +1,13 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "cargo", path: "../cargo"
+eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
+gem "tenant_routing", path: "../tenant_routing"
+eval_gemfile "../tenant_routing/Gemfile.runtime"

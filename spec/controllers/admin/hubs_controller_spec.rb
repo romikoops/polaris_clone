@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Admin::HubsController, type: :controller do
-  let(:organization) { create(:organizations_organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:gothenburg) { FactoryBot.create(:gothenburg_hub, organization: organization) }
-  let!(:user) { create(:authentication_user, :organizations_user, organization_id: organization.id) }
-  let!(:felixstowe) { create(:felixstowe_hub, organization: organization) }
-  let!(:shanghai) { create(:shanghai_hub, organization: organization) }
+  let!(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
+  let!(:felixstowe) { FactoryBot.create(:felixstowe_hub, organization: organization) }
+  let!(:shanghai) { FactoryBot.create(:shanghai_hub, organization: organization) }
   before(:each) do
     FactoryBot.create(:groups_group, :default, organization: organization)
     expect_any_instance_of(described_class).to receive(:doorkeeper_authorize!).and_return(true)
@@ -120,7 +120,7 @@ RSpec.describe Admin::HubsController, type: :controller do
 
   describe 'GET #download' do
     context 'unsuccesfully downloads' do
-      let!(:hubs) { create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: create(:mandatory_charge), nexus: create(:gothenburg_nexus)) }
+      let!(:hubs) { FactoryBot.create(:gothenburg_hub, free_out: false, organization: organization, mandatory_charge: FactoryBot.create(:mandatory_charge), nexus: FactoryBot.create(:gothenburg_nexus)) }
 
       it 'returns error with messages when an error is raised' do
         get :download, params: { organization_id: organization.id }
@@ -155,7 +155,7 @@ RSpec.describe Admin::HubsController, type: :controller do
 
   describe 'POST #update_mandatory_charges' do
     let!(:desired_mandatory_charge) do
-      create(:mandatory_charge,
+      FactoryBot.create(:mandatory_charge,
              import_charges: true,
              export_charges: false,
              pre_carriage: false,

@@ -1,0 +1,11 @@
+gem "cargo", path: "../cargo"
+eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"

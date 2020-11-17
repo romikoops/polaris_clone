@@ -13,7 +13,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
 
   describe 'GET #index' do
     before do
-      create(:legacy_local_charge,
+      FactoryBot.create(:legacy_local_charge,
              organization: organization,
              effective_date: Date.parse('Thu, 24 Jan 2019'),
              expiration_date: Date.parse('Fri, 24 Jan 2020'))
@@ -33,7 +33,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
 
   describe 'POST #edit' do
     let(:local_charge) do
-      create(:legacy_local_charge,
+      FactoryBot.create(:legacy_local_charge,
              organization: organization,
              effective_date: Date.parse('Thu, 24 Jan 2019'),
              expiration_date: Date.parse('Fri, 24 Jan 2020'))
@@ -88,24 +88,24 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
   describe 'GET #download' do
     let(:hubs) do
       [
-        create(:hub,
+        FactoryBot.create(:hub,
                organization: organization,
                name: 'Gothenburg',
                hub_type: 'ocean',
-               nexus: create(:nexus, name: 'Gothenburg')),
-        create(:hub,
+               nexus: FactoryBot.create(:nexus, name: 'Gothenburg')),
+        FactoryBot.create(:hub,
                organization: organization,
                name: 'Shanghai',
                hub_type: 'ocean',
-               nexus: create(:nexus, name: 'Shanghai'))
+               nexus: FactoryBot.create(:nexus, name: 'Shanghai'))
       ]
     end
     let(:organization_vehicle) do
-      create(:tenant_vehicle, organization: organization)
+      FactoryBot.create(:tenant_vehicle, organization: organization)
     end
 
     before do
-      create(
+      FactoryBot.create(
         :local_charge,
         mode_of_transport: 'ocean',
         load_type: 'lcl',
@@ -120,7 +120,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
         expiration_date: Date.parse('Fri, 24 Jan 2020'),
         user_id: nil
       )
-      create(:organizations_scope, target: organization, content: { 'base_pricing' => true })
+      FactoryBot.create(:organizations_scope, target: organization, content: { 'base_pricing' => true })
     end
 
     it 'returns error with messages when an error is raised' do
@@ -135,7 +135,7 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
 
   describe 'DELETE #destroy' do
     let(:local_charge) do
-      create(:legacy_local_charge,
+      FactoryBot.create(:legacy_local_charge,
              organization: organization,
              effective_date: Date.parse('Thu, 24 Jan 2019'),
              expiration_date: Date.parse('Fri, 24 Jan 2020'))

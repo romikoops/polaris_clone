@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-integrations'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Provides integration with 3rd party systems.'
+Gem::Specification.new do |spec|
+  spec.name = "integrations"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Provides integration with 3rd party systems."
 
-  s.metadata = { 'type' => 'service' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'imc-organization_manager'
-  s.add_dependency 'imc-companies'
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-legacy'
-  s.add_dependency 'imc-profiles'
-  s.add_dependency 'imc-shipments'
+  spec.add_dependency "shared-runtime"
 
-  s.add_development_dependency 'json-schema'
+  spec.add_dependency "companies"
+  spec.add_dependency "legacy"
+  spec.add_dependency "organization_manager"
+  spec.add_dependency "profiles"
+  spec.add_dependency "shipments"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "json-schema"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

@@ -7,12 +7,12 @@ RSpec.describe DocumentService::GdprWriter do
     subject { described_class.new(user_id: user.id) }
     subject(:writer) { described_class.new(user_id: user.id) }
 
-    let(:user) { create(:organizations_user) }
-    let!(:contact) { create(:legacy_contact, user: user) }
-    let!(:shipment) { create(:complete_legacy_shipment, user: user, with_breakdown: true, with_tenders: true) }
+    let(:user) { FactoryBot.create(:organizations_user) }
+    let!(:contact) { FactoryBot.create(:legacy_contact, user: user) }
+    let!(:shipment) { FactoryBot.create(:complete_legacy_shipment, user: user, with_breakdown: true, with_tenders: true) }
 
     before do
-      create(:profiles_profile,
+      FactoryBot.create(:profiles_profile,
              first_name: 'Max',
              last_name: 'Muster',
              user_id: user.id)

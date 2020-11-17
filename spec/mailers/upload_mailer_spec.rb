@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe UploadMailer, type: :mailer do
-  let(:user) { create(:organizations_user) }
+  let(:user) { FactoryBot.create(:organizations_user) }
   let(:organization) { user.organization }
 
   before do

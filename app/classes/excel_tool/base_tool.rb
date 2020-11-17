@@ -8,7 +8,7 @@ module ExcelTool
       params = args[:params].with_indifferent_access
       @stats = _stats
       @results = _results
-      
+
       if args[:hub_id]
         @hub_id = args[:hub_id]
         @hub = Hub.find(@hub_id)
@@ -57,7 +57,6 @@ module ExcelTool
     end
 
     def debug_message(message)
-      puts message
     end
 
     def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)

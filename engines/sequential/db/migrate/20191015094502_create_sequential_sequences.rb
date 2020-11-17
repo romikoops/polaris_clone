@@ -7,7 +7,6 @@ class CreateSequentialSequences < ActiveRecord::Migration[5.2]
       t.integer :name
       t.timestamps
     end
-    Sequential::Sequence.create!(name: :shipment_invoice_number)
   end
 
   def down

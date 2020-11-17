@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::MembershipsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
 
   before do
     ::Organizations.current_id = organization.id
@@ -13,13 +13,13 @@ RSpec.describe Admin::MembershipsController, type: :controller do
   end
 
   describe 'POST #bulk_edit' do
-    let(:group_a) { create(:groups_group, organization: organization, name: 'Group A') }
-    let(:group_b) { create(:groups_group, organization: organization, name: 'Group B') }
-    let!(:user_a) { create(:organizations_user, organization: organization) }
-    let(:company_a) { create(:companies_company, organization: organization) }
-    let(:company_b) { create(:companies_company, organization: organization) }
-    let!(:membership_a) { create(:groups_membership, group: group_a, member: user_a) }
-    let!(:membership_b) { create(:groups_membership, group: group_b, member: user_a) }
+    let(:group_a) { FactoryBot.create(:groups_group, organization: organization, name: 'Group A') }
+    let(:group_b) { FactoryBot.create(:groups_group, organization: organization, name: 'Group B') }
+    let!(:user_a) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:company_a) { FactoryBot.create(:companies_company, organization: organization) }
+    let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
+    let!(:membership_a) { FactoryBot.create(:groups_membership, group: group_a, member: user_a) }
+    let!(:membership_b) { FactoryBot.create(:groups_membership, group: group_b, member: user_a) }
     let(:edit_params) {
       {
         addedGroups: [group_a.id],
@@ -53,9 +53,9 @@ RSpec.describe Admin::MembershipsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:group) { create(:groups_group, organization: organization, name: 'Discount') }
-    let(:membership_user) { create(:organizations_user, organization: organization) }
-    let(:membership) { create(:groups_membership, group: group, member: membership_user) }
+    let(:group) { FactoryBot.create(:groups_group, organization: organization, name: 'Discount') }
+    let(:membership_user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:membership) { FactoryBot.create(:groups_membership, group: group, member: membership_user) }
 
     it 'destroys the membership' do
       delete :destroy, params: { id: membership.id, organization_id: organization.id }
@@ -80,9 +80,9 @@ RSpec.describe Admin::MembershipsController, type: :controller do
   end
 
   describe 'GET #index' do
-    let(:group) { create(:groups_group, organization: organization, name: 'Discount') }
+    let(:group) { FactoryBot.create(:groups_group, organization: organization, name: 'Discount') }
     let(:membership_user) { user }
-    let!(:membership) { create(:groups_membership, group: group, member: membership_user) }
+    let!(:membership) { FactoryBot.create(:groups_membership, group: group, member: membership_user) }
 
     it 'returns the memberships for a specific user' do
       get :index, params: { targetId: user.id, targetType: 'user', organization_id: organization.id }

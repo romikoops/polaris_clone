@@ -1,19 +1,8 @@
 # frozen_string_literal: true
 
-require "activerecord-postgis-adapter"
-require "config"
-require "paper_trail"
-require "rails"
-require "strong_migrations"
-
-require "groups"
-require "users"
-
 module Organizations
   class Engine < ::Rails::Engine
     isolate_namespace Organizations
-
-    config.autoload_paths << File.expand_path("../../app", __dir__)
 
     config.active_record.primary_key = :uuid
 
@@ -35,10 +24,8 @@ module Organizations
       end
     end
 
-    if defined?(FactoryBot)
-      initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-        FactoryBot.definition_file_paths << Pathname.new(File.expand_path("../../spec/factories", __dir__))
-      end
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
     end
   end
 end

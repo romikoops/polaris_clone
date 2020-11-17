@@ -1,39 +1,40 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-api'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Improved API for new frontend code.'
+Gem::Specification.new do |spec|
+  spec.name = "api"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Improved API for new frontend code."
 
-  s.metadata = { 'type' => 'view', 'direct' => 'true' }
+  spec.metadata["type"] = "direct"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'imc-analytics'
-  s.add_dependency 'imc-api_auth'
-  s.add_dependency 'imc-authentication'
-  s.add_dependency 'imc-cargo'
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-organizations'
-  s.add_dependency 'imc-organization_manager'
-  s.add_dependency 'imc-pricings'
-  s.add_dependency 'imc-profiles'
-  s.add_dependency 'imc-result_formatter'
-  s.add_dependency 'imc-cms_data'
-  s.add_dependency 'imc-trucking'
-  s.add_dependency 'imc-users'
-  s.add_dependency 'imc-wheelhouse'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'draper', '~> 4.0'
-  s.add_dependency 'fast_jsonapi'
-  s.add_dependency 'kaminari'
+  spec.add_dependency "active_model_serializers", "~> 0.10.10"
+  spec.add_dependency "draper", "~> 4.0"
+  spec.add_dependency "fast_jsonapi"
+  spec.add_dependency "kaminari"
+  spec.add_dependency "money_cache"
 
-  Gemhelper.common(s)
+  spec.add_dependency "analytics"
+  spec.add_dependency "api_auth"
+  spec.add_dependency "authentication"
+  spec.add_dependency "cargo"
+  spec.add_dependency "organizations"
+  spec.add_dependency "organization_manager"
+  spec.add_dependency "pricings"
+  spec.add_dependency "profiles"
+  spec.add_dependency "result_formatter"
+  spec.add_dependency "cms_data"
+  spec.add_dependency "trucking"
+  spec.add_dependency "users"
+  spec.add_dependency "wheelhouse"
 
-  s.add_development_dependency 'rswag-specs'
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
+  spec.add_development_dependency "rswag-specs"
 end

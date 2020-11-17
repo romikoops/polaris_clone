@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::CompaniesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
+  let!(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
 
   before do
     ::Organizations.current_id = organization.id

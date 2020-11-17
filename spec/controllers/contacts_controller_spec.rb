@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe ContactsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
-  let!(:contacts) { create_list(:legacy_contact, 5, user: user) }
+  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let!(:contacts) { FactoryBot.create_list(:legacy_contact, 5, user: user) }
 
   before do
     append_token_header
@@ -71,7 +71,7 @@ RSpec.describe ContactsController do
   end
 
   context 'when searching' do
-    let!(:target_contact) { create(:contact, user: user, first_name: 'Bobert') }
+    let!(:target_contact) { FactoryBot.create(:contact, user: user, first_name: 'Bobert') }
 
     describe 'GET #search_contacts' do
       it 'returns the correct contact' do

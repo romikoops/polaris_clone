@@ -1,0 +1,22 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "companies", path: "../companies"
+eval_gemfile "../companies/Gemfile.runtime"
+
+gem "legacy", path: "../legacy"
+eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"
+
+gem "pricings", path: "../pricings"
+eval_gemfile "../pricings/Gemfile.runtime"
+
+gem "quotations", path: "../quotations"
+eval_gemfile "../quotations/Gemfile.runtime"
+
+gem "shipments", path: "../shipments"
+eval_gemfile "../shipments/Gemfile.runtime"

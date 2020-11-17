@@ -111,39 +111,39 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe 'GET #download' do
-    let(:organization) { create(:organizations_organization, slug: 'demo') }
+    let(:organization) { FactoryBot.create(:organizations_organization, slug: 'demo') }
     let(:hubs) do
       [
-        create(:hub,
+        FactoryBot.create(:hub,
                organization: organization,
                name: 'Gothenburg',
                hub_type: 'ocean',
-               nexus: create(:nexus, name: 'Gothenburg')),
-        create(:hub,
+               nexus: FactoryBot.create(:nexus, name: 'Gothenburg')),
+        FactoryBot.create(:hub,
                organization: organization,
                name: 'Shanghai',
                hub_type: 'ocean',
-               nexus: create(:nexus, name: 'Shanghai'))
+               nexus: FactoryBot.create(:nexus, name: 'Shanghai'))
       ]
     end
     let(:itinerary_with_stops) do
-      create(:itinerary, organization: organization,
+      FactoryBot.create(:itinerary, organization: organization,
                          stops: [
-                           build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
-                           build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
+                           FactoryBot.build(:stop, itinerary_id: nil, index: 0, hub: hubs.first),
+                           FactoryBot.build(:stop, itinerary_id: nil, index: 1, hub: hubs.second)
                          ])
     end
     let(:tenant_vehicle) do
-      create(:tenant_vehicle, organization: organization)
+      FactoryBot.create(:tenant_vehicle, organization: organization)
     end
 
     before do
-      create(:organizations_scope, target: organization, content: { 'base_pricing' => true })
+      FactoryBot.create(:organizations_scope, target: organization, content: { 'base_pricing' => true })
     end
 
     context 'when calculating cargo_item' do
       before do
-        create(:lcl_pricing)
+        FactoryBot.create(:lcl_pricing)
         get :download, params: { organization_id: organization.id, options: { mot: 'ocean', load_type: 'cargo_item', group_id: nil } }
       end
 
@@ -157,7 +157,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
     context 'when a container' do
       before do
-        create(:fcl_20_pricing)
+        FactoryBot.create(:fcl_20_pricing)
         get :download, params: { organization_id: organization.id, options: { mot: 'ocean', load_type: 'container', group_id: nil } }
       end
 
@@ -177,7 +177,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
         delete :destroy, params: { 'id' => base_pricing.id, organization_id: organization.id }
       end
 
-      let(:base_pricing) { create(:pricings_pricing, organization: organization) }
+      let(:base_pricing) { FactoryBot.create(:pricings_pricing, organization: organization) }
 
       it 'deletes the Pricings::Pricing' do
         aggregate_failures do

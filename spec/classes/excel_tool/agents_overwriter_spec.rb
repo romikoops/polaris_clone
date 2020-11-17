@@ -3,8 +3,8 @@
 require 'rails_helper'
 RSpec.deprecate "ExcelTool::AgentsOverwriter#perform" do
   RSpec.describe ExcelTool::AgentsOverwriter do
-    let(:organization) { create(:organizations_organization) }
-    let(:user) { create(:organizations_user, organization: organization) }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
     let(:xlsx) { instance_double('xlsx') }
 
     before do

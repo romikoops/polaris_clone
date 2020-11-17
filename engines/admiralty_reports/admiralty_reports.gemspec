@@ -1,32 +1,31 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-admiralty_reports'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Provides financal reporting for Admiralty.'
+Gem::Specification.new do |spec|
+  spec.name = "admiralty_reports"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Provides financal reporting for Admiralty."
 
-  s.metadata = { 'type' => 'view' }
+  spec.metadata["type"] = "api"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,lib}/**/*"]
 
-  s.add_dependency 'imc-admiralty_assets'
-  s.add_dependency 'imc-admiralty_auth'
-  s.add_dependency 'imc-companies'
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-quotations'
-  s.add_dependency 'imc-organizations'
-  s.add_dependency 'imc-organization_manager'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'axlsx'
-  s.add_dependency 'axlsx_rails'
-  s.add_dependency 'rubyzip'
+  spec.add_dependency "admiralty_assets"
+  spec.add_dependency "admiralty_auth"
+  spec.add_dependency "companies"
+  spec.add_dependency "quotations"
+  spec.add_dependency "organizations"
+  spec.add_dependency "organization_manager"
 
-  s.add_development_dependency 'roo'
+  spec.add_dependency "axlsx"
+  spec.add_dependency "axlsx_rails"
+  spec.add_dependency "rubyzip"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "roo"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

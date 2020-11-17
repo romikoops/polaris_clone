@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("lib", __dir__)
-require File.expand_path("../../lib/engines/gemhelper.rb", __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name = "imc-companies"
-  s.version = "1"
-  s.authors = ["ItsMyCargo ApS"]
-  s.summary = <<~SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "companies"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = <<~SUMMARY
   SUMMARY
 
-  s.metadata = {"type" => "data"}
+  spec.metadata["type"] = "service"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "Rakefile"]
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency "imc-organizations"
-  s.add_dependency "imc-legacy"
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency "paranoia"
-  s.add_dependency "pg_search"
+  spec.add_dependency "paranoia"
+  spec.add_dependency "pg_search"
 
-  s.add_development_dependency "imc-groups"
+  spec.add_dependency "organizations"
+  spec.add_dependency "legacy"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "groups"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

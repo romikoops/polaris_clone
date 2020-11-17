@@ -1,27 +1,26 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-routing'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = 'Provides information about routing.'
+Gem::Specification.new do |spec|
+  spec.name = "routing"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = "Provides information about routing."
 
-  s.metadata = { 'type' => 'data' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'activerecord-import'
-  s.add_dependency 'bitfields'
-  s.add_dependency 'rgeo'
-  s.add_dependency 'rgeo-geojson'
+  spec.add_dependency "shared-runtime"
 
-  s.add_dependency 'imc-core'
+  spec.add_dependency "activerecord-import"
+  spec.add_dependency "bitfields"
+  spec.add_dependency "rgeo", "~> 2.1.1"
+  spec.add_dependency "rgeo-geojson"
 
-  s.add_development_dependency 'imc-legacy'
+  spec.add_development_dependency "legacy"
 
-  Gemhelper.common(s)
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

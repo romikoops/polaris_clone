@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AccountMailer, type: :mailer, skip: true do
-  let(:user) { create(:organizations_user) }
+  let(:user) { FactoryBot.create(:organizations_user) }
   let(:organization) { user.organization }
   let(:profile) { FactoryBot.build(:profiles_profile) }
 

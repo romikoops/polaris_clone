@@ -47,8 +47,6 @@ module Trucking
         create_coverage
         end_time = DateTime.now
         diff = (end_time - start_time) / 86_400
-        puts @missing_locations
-        puts "Time elapsed: #{diff}"
 
         stats
       end
@@ -719,7 +717,6 @@ module Trucking
                      )
                   end
 
-        puts idents_and_country if geometry.nil?
         if geometry.nil?
           geocoder_results = Geocoder.search(
             idents_and_country.values.join(' '),

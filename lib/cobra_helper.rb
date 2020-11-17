@@ -1,54 +1,50 @@
 # frozen_string_literal: true
 
-require "bundler"
-require "digest"
+require 'bundler'
+require 'digest'
+require 'fileutils'
 
 class CobraHelper
-  def self.graphviz(output: Pathname.new("../doc/engines").expand_path(__dir__))
-    output_file = output.join("graph.dot")
+  def self.uml(output: Pathname.new("../doc/engines").expand_path(__dir__))
+    FileUtils.mkdir output unless File.directory?(output)
+    output_file = output.join("graph.puml")
     previous_sha = Digest::SHA256.file(output_file) if output_file.exist?
     output_file.open("w") do |io|
-      io.puts new.graphviz
+      io.puts new.uml
     end
 
-    (previous_sha == Digest::SHA256.file(output_file)) ||
-      system("dot -Tpdf -o#{output.join("graph.pdf")} #{output_file}")
+    if (plantuml = `which plantuml`.strip)
+      (previous_sha == Digest::SHA256.file(output_file)) ||
+        system("#{plantuml} -nometadata -duration -tsvg -o#{output} #{output_file}")
+    else
+      puts "Please install PlantUML (brew install plantuml) to generate graph"
+    end
   end
 
-  def graphviz
-    dot = []
+  def uml
+    uml = []
+    uml << "@startuml"
 
-    dot << "digraph G {"
-    dot << "  compound=true;"
-
-    dot << "  subgraph cluster0 {"
-    dot << "    app [shape=box];"
-    dot << "  }"
-
-    groups.each_with_index do |(type, group), index|
-      dot << "  subgraph cluster#{index + 1} {"
-      dot << "    label = \"#{type}\";"
-
-      group.each do |_, s|
-        name = s.name.delete_prefix("imc-")
-
-        dot << "    \"#{name}\" [shape=ellipse];"
-
-        # Direct Requirements (Gem driven)
-        dot << "    app -> \"#{name}\"" if s.metadata["direct"] == "true"
-
-        # Dependencies
-        s.dependencies.select { |d| specs.key?(d.name) }.each do |d|
-          dot << "    \"#{name}\" -> \"#{d.name.delete_prefix("imc-")}\" [color=grey];"
-        end
+    %w[direct api service data].each do |type|
+      uml << "package \"#{type.capitalize}\" {"
+      groups[type].each do |spec|
+        uml << "  [#{spec.name}]"
       end
-
-      dot << "  };"
+      uml << "}"
     end
 
-    dot << "}"
+    # Dependencies
+    specs.each do |name, spec|
+      uml << ":User: --> [#{spec.name}]" if spec.metadata["type"] == "direct"
 
-    dot.join("\n")
+      spec.dependencies.select { |d| specs.key?(d.name) }.each do |d|
+        arrow = spec.metadata["type"] == specs[d.name].metadata["type"] ? "->" : "-->"
+        uml << "[#{name}] #{arrow} [#{d.name}]"
+      end
+    end
+
+    uml << "@enduml"
+    uml.join("\n")
   end
 
   private
@@ -65,6 +61,6 @@ class CobraHelper
   end
 
   def groups
-    @groups ||= specs.group_by { |_, s| s.metadata["type"] }
+    @groups ||= specs.values.group_by { |s| s.metadata["type"] }
   end
 end

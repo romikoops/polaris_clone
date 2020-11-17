@@ -37,7 +37,7 @@ WORKDIR /app
 FROM busybox AS dependencies
 
 COPY . /app
-RUN find /app -type f ! -name "Gemfile*" ! -name "*.gemspec" ! -name "gemhelper.rb" -delete
+RUN find /app -type f ! -name "Gemfile*" ! -name "*.gemspec" ! -name ".rails-version" -delete
 
 # Build production image
 FROM base AS builder
@@ -115,4 +115,4 @@ ENV MALLOC_ARENA_MAX 2
 
 EXPOSE 3000
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb", "-p", "3000"]

@@ -1,0 +1,41 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"
+gem "money_cache", path: "../../gems/money_cache"
+
+gem "analytics", path: "../analytics"
+eval_gemfile "../analytics/Gemfile.runtime"
+
+gem "api_auth", path: "../api_auth"
+eval_gemfile "../api_auth/Gemfile.runtime"
+
+gem "authentication", path: "../authentication"
+eval_gemfile "../authentication/Gemfile.runtime"
+
+gem "cargo", path: "../cargo"
+eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "organization_manager", path: "../organization_manager"
+eval_gemfile "../organization_manager/Gemfile.runtime"
+
+gem "pricings", path: "../pricings"
+eval_gemfile "../pricings/Gemfile.runtime"
+
+gem "profiles", path: "../profiles"
+eval_gemfile "../profiles/Gemfile.runtime"
+
+gem "result_formatter", path: "../result_formatter"
+eval_gemfile "../result_formatter/Gemfile.runtime"
+
+gem "cms_data", path: "../cms_data"
+eval_gemfile "../cms_data/Gemfile.runtime"
+
+gem "trucking", path: "../trucking"
+eval_gemfile "../trucking/Gemfile.runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"
+
+gem "wheelhouse", path: "../wheelhouse"
+eval_gemfile "../wheelhouse/Gemfile.runtime"

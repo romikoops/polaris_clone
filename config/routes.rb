@@ -17,13 +17,9 @@ end
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
   get "/healthz", to: "application#health"
-  mount Api::Engine, at: "/"
-  mount Admiralty::Engine, at: "/admiralty"
   mount Sidekiq::Web, at: "/sidekiq"
   mount Rswag::Ui::Engine, at: "/docs"
   mount Rswag::Api::Engine, at: "/docs"
-
-  mount Coverband::Reporters::Web.new, at: "/coverage"
 
   constraints subdomain: "api" do
     namespace :saml do
@@ -623,8 +619,8 @@ end
 # == Route Map
 #
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
-#                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
+#                                                          idp        /                                                                                                  IDP::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
 #                                                          api        /                                                                                                  Api::Engine
@@ -871,14 +867,14 @@ end
 #                                    update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                                active_storage/disk#update
 #                                         rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                     active_storage/direct_uploads#create
 #
+# Routes for GoogleSignIn::Engine:
+# authorization POST /authorization(.:format) google_sign_in/authorizations#create
+#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
+#
 # Routes for IDP::Engine:
 #     init_saml GET  /saml/:id/init(.:format)     idp/saml#init {:subdomain=>"idp"}
 # metadata_saml GET  /saml/:id/metadata(.:format) idp/saml#metadata {:subdomain=>"idp"}
 #  consume_saml POST /saml/:id/consume(.:format)  idp/saml#consume {:subdomain=>"idp"}
-#
-# Routes for GoogleSignIn::Engine:
-# authorization POST /authorization(.:format) google_sign_in/authorizations#create
-#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index

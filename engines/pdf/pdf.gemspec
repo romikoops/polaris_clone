@@ -1,32 +1,33 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require File.expand_path('../../lib/engines/gemhelper.rb', __dir__)
-
 # Describe your gem and declare its dependencies:
-Gem::Specification.new do |s|
-  s.name        = 'imc-pdf'
-  s.version     = '1'
-  s.authors     = ['ItsMyCargo ApS']
-  s.summary     = <<~SUMMARY
-  SUMMARY
+Gem::Specification.new do |spec|
+  spec.name = "pdf"
+  spec.version = "1"
+  spec.authors = ["ItsMyCargo"]
+  spec.summary = ""
 
-  s.metadata = { 'type' => 'service' }
+  spec.metadata["type"] = "service"
 
-  s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
+  spec.files = Dir["{app,config,db,lib}/**/*"]
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'draper', '~> 4.0'
-  s.add_dependency 'pdfkit'
-  s.add_dependency 'wkhtmltopdf-binary'
+  spec.add_dependency "shared-runtime"
+  spec.add_dependency "money_cache"
 
-  s.add_dependency 'imc-core'
-  s.add_dependency 'imc-legacy'
-  s.add_dependency 'imc-notes'
-  s.add_dependency 'imc-pricings'
-  s.add_dependency 'imc-profiles'
-  s.add_dependency 'imc-quotations'
-  s.add_dependency 'imc-organizations'
-  s.add_dependency 'imc-organization_manager'
+  spec.add_dependency "draper", "~> 4.0"
+  spec.add_dependency "pdfkit"
+  spec.add_dependency "wkhtmltopdf-binary"
 
-  Gemhelper.common(s)
+  spec.add_dependency "legacy"
+  spec.add_dependency "notes"
+  spec.add_dependency "organization_manager"
+  spec.add_dependency "organizations"
+  spec.add_dependency "pricings"
+  spec.add_dependency "profiles"
+  spec.add_dependency "quotations"
+  spec.add_dependency "result_formatter"
+
+  spec.add_development_dependency "combustion", "~> 1.3"
+  spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

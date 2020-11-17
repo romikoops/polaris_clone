@@ -10,14 +10,14 @@ RSpec.describe ShippingTools do
     stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
   end
 
-  let!(:organization) { create(:organizations_organization) }
-  let!(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:itinerary_2) { create(:hamburg_shanghai_itinerary, organization: organization) }
-  let(:trip) { create(:trip, itinerary_id: itinerary.id) }
+  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:itinerary_2) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
+  let(:trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id) }
   let(:origin_hub) { Hub.find(itinerary.hubs.find_by(name: 'Gothenburg').id) }
   let(:destination_hub) { Hub.find(itinerary.hubs.find_by(name: 'Shanghai').id) }
-  let!(:scope) { create(:organizations_scope, target: organization, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
-  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
+  let!(:scope) { FactoryBot.create(:organizations_scope, target: organization, content: { send_email_on_quote_download: true, send_email_on_quote_email: true, base_pricing: true }) }
+  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
   let(:group) do
     FactoryBot.create(:groups_group, name: 'Test', organization: organization).tap do |tapped_group|
       FactoryBot.create(:groups_membership, member: user, group: tapped_group)
@@ -25,10 +25,10 @@ RSpec.describe ShippingTools do
   end
   let(:hidden_args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
   let(:args) { Pdf::HiddenValueService.new(user: user).hide_total_args }
-  let(:tenant_vehicle) { create(:tenant_vehicle, organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:tenant_vehicle, organization: organization) }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let(:shipment) do
-    create(:legacy_shipment,
+    FactoryBot.create(:legacy_shipment,
            user: user,
            trip: trip,
            organization: organization,
@@ -56,7 +56,7 @@ RSpec.describe ShippingTools do
 
   context 'when sending admin emails on quote download' do
     let(:shipment) do
-      create(:complete_legacy_shipment,
+      FactoryBot.create(:complete_legacy_shipment,
              user: user,
              trip: trip,
              organization: organization,
@@ -86,7 +86,7 @@ RSpec.describe ShippingTools do
 
     before do
       quote_mailer = object_double('Mailer')
-      create(:legacy_quotation, original_shipment: shipment)
+      FactoryBot.create(:legacy_quotation, original_shipment: shipment)
       FactoryBot.create(:legacy_content, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id)
       FactoryBot.create(:organizations_theme, organization: organization)
     end
@@ -143,7 +143,7 @@ RSpec.describe ShippingTools do
     before { ::Organizations.current_id = organization.id }
 
     context 'with base pricing  && display_itineraries_with_rates enabled' do
-      let!(:itinerary_with_no_pricing) { create(:shanghai_gothenburg_itinerary, organization: organization) }
+      let!(:itinerary_with_no_pricing) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
 
       before do
         FactoryBot.create(:pricings_pricing,
@@ -167,7 +167,7 @@ RSpec.describe ShippingTools do
     end
 
     context 'with base pricing  && display_itineraries_with_rates enabled && user margins' do
-      let!(:itinerary_with_no_pricing) { create(:shanghai_gothenburg_itinerary, organization: organization) }
+      let!(:itinerary_with_no_pricing) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
 
       before do
         FactoryBot.create(:pricings_pricing,
@@ -192,7 +192,7 @@ RSpec.describe ShippingTools do
     end
 
     context 'with base pricing  && expired rates' do
-      let(:itinerary_with_expired_pricing) { create(:shanghai_gothenburg_itinerary, organization: organization) }
+      let(:itinerary_with_expired_pricing) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
 
       before do
         FactoryBot.create(:pricings_pricing,
@@ -225,7 +225,7 @@ RSpec.describe ShippingTools do
   end
 
   describe '.get_offers' do
-    let(:current_user) { create(:organizations_user, organization: organization) }
+    let(:current_user) { FactoryBot.create(:organizations_user, organization: organization) }
     let(:shipment_params) do
       shipment.as_json.merge(
         origin: {
@@ -367,9 +367,9 @@ RSpec.describe ShippingTools do
 
   describe '.update_shipment' do
     let(:current_user) { FactoryBot.create(:organizations_user, organization: organization) }
-    let(:address) { create(:address, country: create(:country)) }
-    let(:itinerary_2) { create(:itinerary, name: 'A - B', organization: organization) }
-    let(:contact) { create(:contact, user: current_user, address: address) }
+    let(:address) { FactoryBot.create(:address, country: FactoryBot.create(:country)) }
+    let(:itinerary_2) { FactoryBot.create(:itinerary, name: 'A - B', organization: organization) }
+    let(:contact) { FactoryBot.create(:contact, user: current_user, address: address) }
     let(:trip) { FactoryBot.create(:trip, itinerary: itinerary_2, tenant_vehicle: tenant_vehicle) }
     let(:user_params) do
       {
@@ -378,7 +378,7 @@ RSpec.describe ShippingTools do
       }
     end
     let(:shipment) do
-      create(:complete_legacy_shipment,
+      FactoryBot.create(:complete_legacy_shipment,
              user: user,
              trip: trip,
              organization: organization,
@@ -562,10 +562,10 @@ RSpec.describe ShippingTools do
     end
 
     context 'when it is a basic lcl with documents customs' do
-      let(:address) { create(:address) }
+      let(:address) { FactoryBot.create(:address) }
       let(:schedule) { OfferCalculator::Schedule.from_trip(trip) }
       let(:lcl_shipment) do
-        create(:shipment,
+        FactoryBot.create(:shipment,
                user: user,
                trip: trip,
                organization: organization,
@@ -594,10 +594,10 @@ RSpec.describe ShippingTools do
       end
 
       before do
-        create(:user_addresses, user: user, address: address)
-        create(:customs_fee, hub: origin_hub, direction: 'export', tenant_vehicle_id: trip.tenant_vehicle_id)
-        create(:customs_fee, hub: destination_hub, direction: 'import', tenant_vehicle_id: trip.tenant_vehicle_id)
-        create(:legacy_file, shipment_id: lcl_shipment.id)
+        FactoryBot.create(:user_addresses, user: user, address: address)
+        FactoryBot.create(:customs_fee, hub: origin_hub, direction: 'export', tenant_vehicle_id: trip.tenant_vehicle_id)
+        FactoryBot.create(:customs_fee, hub: destination_hub, direction: 'import', tenant_vehicle_id: trip.tenant_vehicle_id)
+        FactoryBot.create(:legacy_file, shipment_id: lcl_shipment.id)
         stub_request(:get, 'http://data.fixer.io/latest?access_key=FAKEKEY&base=EUR')
           .to_return(status: 200, body: { rates: { AED: 4.11, BIF: 1.1456, EUR: 1.34 } }.to_json, headers: {})
         FactoryBot.create(:charge_breakdown, shipment: lcl_shipment, tender_id: tender.id)
@@ -616,7 +616,7 @@ RSpec.describe ShippingTools do
     context 'with a positive delta' do
       let(:delta) { 1 }
       let!(:later_trip) do
-        create(:legacy_trip, itinerary: itinerary_2,
+        FactoryBot.create(:legacy_trip, itinerary: itinerary_2,
                              tenant_vehicle: tenant_vehicle,
                              start_date: trip.start_date + 7,
                              end_date: trip.end_date + 14)
@@ -631,7 +631,7 @@ RSpec.describe ShippingTools do
     context 'with a negative delta' do
       let(:delta) { -1 }
       let!(:earlier_trip) do
-        create(:legacy_trip, itinerary: itinerary_2,
+        FactoryBot.create(:legacy_trip, itinerary: itinerary_2,
                              tenant_vehicle: tenant_vehicle,
                              start_date: trip.start_date - 14,
                              end_date: trip.end_date - 7)

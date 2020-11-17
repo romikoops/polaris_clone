@@ -6,42 +6,46 @@ defaultBuild()
 
 pipeline {
   options {
-    disableConcurrentBuilds()
+    lock(env.BRANCH_NAME)
     podTemplate(inheritFrom: "default")
-    preserveStashes()
     skipDefaultCheckout()
-    timeout(60)
   }
 
   agent none
 
   stages {
+    stage("Checkout") {
+      options { timeout(5) }
+      agent { kubernetes true }
+
+      steps {
+        checkout(scm)
+        stash(name: "source")
+      }
+    }
+
     stage("Test") {
       parallel {
         stage("Wolfhound") {
           options { timeout(15) }
-          steps { wolfhound() }
+          steps { wolfhound(stash: "source") }
         }
 
-        stage("App") {
+        stage("Gems") {
+          options { timeout(15) }
+          environment {
+            LC_ALL = "C.UTF-8"
+            BUNDLE_PATH = "vendor/ruby"
+          }
+
           agent {
             kubernetes {
               defaultContainer "ruby"
               yaml podSpec(
                 containers: [
                   [
-                    name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
-                    requests: [ memory: "1500Mi", cpu: "1000m" ],
-                    env: [
-                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ]
-                    ]
-                  ],
-                  [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",
-                    requests: [ memory: "500Mi", cpu: "250m" ],
-                    env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
-                  ],
-                  [ name: "redis", image: "redis",
-                    requests: [ memory: "50Mi", cpu: "100m" ]
+                    name: "ruby", image: "ruby:2.6", interactive: true,
+                    requests: [ memory: "200Mi", cpu: "250m" ]
                   ]
                 ]
               )
@@ -49,9 +53,15 @@ pipeline {
           }
 
           steps {
-            checkout(scm)
-            appPrepare()
-            appRunner("app")
+            unstash(name: "source")
+
+            dir("gems/money_cache") {
+              withCache(["vendor/ruby=gems/money_cache/money_cache.gemspec"]) {
+                sh("bundle check || bundle install")
+              }
+
+              sh("bundle exec rspec")
+            }
           }
 
           post {
@@ -62,7 +72,14 @@ pipeline {
           }
         }
 
-        stage("Engine") {
+        stage("App") {
+          options { timeout(45) }
+          environment {
+            LC_ALL = "C.UTF-8"
+            BUNDLE_PATH = "vendor/ruby"
+            RAILS_ENV = "test"
+          }
+
           agent {
             kubernetes {
               defaultContainer "ruby"
@@ -70,24 +87,25 @@ pipeline {
                 containers: [
                   [
                     name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
-                    requests: [ memory: "1500Mi", cpu: "1000m" ],
+                    requests: [ memory: "1000Mi", cpu: "2000m" ],
                     env: [
                       [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
                       [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
                     ]
                   ],
                   [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",
-                    requests: [ memory: "500Mi", cpu: "250m" ],
+                    requests: [ memory: "256Mi", cpu: "250m" ],
                     env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
                   ],
                   [ name: "redis", image: "redis",
-                    requests: [ memory: "50Mi", cpu: "100m" ]
+                    requests: [ memory: "25Mi", cpu: "100m" ]
                   ],
                   [ name: "elasticsearch", image: "amazon/opendistro-for-elasticsearch:1.8.0",
-                    requests: [ memory: "1500Mi", cpu: "250m" ],
+                    requests: [ memory: "1024Mi", cpu: "250m" ],
                     env: [
+                      [ name: "ES_JAVA_OPTS", value: "-Xms512m -Xmx512m"],
                       [ name: "discovery.type", value: "single-node" ],
-                      [ name: "opendistro_security.disabled", value: "true"]
+                      [ name: "opendistro_security.disabled", value: "true"],
                     ]
                   ]
                 ]
@@ -96,9 +114,22 @@ pipeline {
           }
 
           steps {
-            checkout(scm)
-            appPrepare()
-            appRunner("engines")
+            unstash(name: "source")
+            withCache(["vendor/ruby=Gemfile.lock"]) {
+              sh(label: "Bundle Install", script: "bundle check || bundle install")
+            }
+
+            sh(label: "Install Postgres 12 Client", script: """
+                  apt-get install curl ca-certificates gnupg \
+                  && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+                  && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
+                  && apt-get update \
+                  && apt install -y postgresql-client-12
+            """)
+            sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
+
+            sh("bundle exec rspec")
+
           }
 
           post {
@@ -112,13 +143,13 @@ pipeline {
 
       post {
         always {
-          reportCoverage()
           coverDiff()
         }
       }
     }
 
     stage("Build") {
+      options { timeout(25) }
       when {
         anyOf {
           branch "master"
@@ -130,6 +161,7 @@ pipeline {
     }
 
     stage("Sentry") {
+      options { timeout(5) }
       when { branch "master" }
 
       steps { sentryRelease(projects: ["polaris"]) }
@@ -141,39 +173,5 @@ pipeline {
       jiraBuildInfo()
       slackNotify()
     }
-  }
-}
-
-void appPrepare() {
-  withSecrets {
-    withEnv([
-      "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby",
-      "LC_ALL=C.UTF-8",
-    ]) {
-      withCache(["vendor/ruby=Gemfile.lock"]) {
-        sh(label: "Bundle Install", script: """
-            ls Gemfile engines/*/Gemfile lib/money_cache/Gemfile \
-            | xargs -P 4 -I {} sh -c "BUNDLE_GEMFILE={} bundle check 1>&2 || echo {}" \
-            | xargs -I {} sh -c "BUNDLE_GEMFILE={} bundle install --retry=2 --jobs=2"
-        """)
-
-        withEnv(["RAILS_ENV=test"]) {
-          sh(label: "Install Postgres 12 Client", script: """
-                apt-get install curl ca-certificates gnupg \
-                && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-                && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
-                && apt-get update \
-                && apt install -y postgresql-client-12
-          """)
-          sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
-        }
-      }
-    }
-  }
-}
-
-void appRunner(String name) {
-  withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=${env.WORKSPACE}/vendor/ruby"]) {
-    sh(label: "Test", script: "scripts/ci-test ${name}")
   }
 }

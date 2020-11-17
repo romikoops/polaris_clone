@@ -59,6 +59,7 @@ pids
 # Coverage directory used by tools like istanbul
 /coverage
 /engines/*/coverage
+/gems/*/coverage
 
 # /config/database.yml
 .idea

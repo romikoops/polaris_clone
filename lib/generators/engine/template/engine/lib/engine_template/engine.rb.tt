@@ -1,0 +1,37 @@
+# frozen_string_literal: true
+
+module <%= @namespace %>
+  class Engine < ::Rails::Engine
+    isolate_namespace <%= @namespace %>
+
+    <%- if @engine_type == "data" %>
+    config.active_record.primary_key = :uuid
+    <%- end %>
+
+    config.generators do |g|
+      <%- if @engine_type == "data" %>
+      g.orm                 :active_record, primary_key_type: :uuid
+      g.fixture_replacement :factory_bot, dir: 'factories'
+      <%- end %>
+      g.test_framework      :rspec
+      g.assets              false
+      g.helper              false
+      g.javascripts         false
+      g.model_specs         false
+      g.stylesheets         false
+      g.view_specs          false
+    end
+
+    <%- if @engine_type == "data" %>
+    initializer :append_migrations do |app|
+      config.paths["db/migrate"].expanded.each do |expanded_path|
+        app.config.paths["db/migrate"] << expanded_path
+      end
+    end
+
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
+    end
+    <%- end %>
+  end
+end

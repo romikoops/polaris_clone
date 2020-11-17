@@ -1,30 +1,37 @@
 ## Component Based Rails Applications (CBRA)
 
-CBRA (or cobra) is an architecture where monolithic Rails application is split to multiple Rails engines.
-This allows easy separation of responsibility, separating view, services and data layer from each other.
+CBRA (or cobra) is an architecture where monolithic Rails application is split to
+multiple Rails engines. This allows easy separation of responsibility, separating view,
+services and data layer from each other.
 
 ### Engine Types
 
 Currently our application supports three different engine types and separation of logic.
 
     ┌──────────────┐
-    │  View Layer  │ For example API endpoints, Admiralty etc.
+    │  Direct      │ Engines providing endpoints and access directly to users
     └──────────────┘
-          │       
-          ▼       
+           │       
+           ▼       
+    ┌──────────────┐
+    │  API Layer   │ API endpoints etc.
+    └──────────────┘
+           │       
+           ▼       
     ┌──────────────┐
     │Service Layer │ All service objects, and business logic.
     └──────────────┘
-          │       
-          ▼       
+           │       
+           ▼       
     ┌──────────────┐
     │  Data Layer  │ Database abstraction and 3rd party integrations.
     └──────────────┘    
 
 #### Data
 
-Data engines are providing raw data. Models in data engines own database tables, manage migrations and provide basic
-wrappers over accessing data. Data engines are allowed to have ActiveRecord relationships across engines if required.
+Data engines are providing raw data. Models in data engines own database tables, manage
+migrations and provide basic wrappers over accessing data. Data engines are allowed to
+have ActiveRecord relationships across engines if required.
 
 #### Service
 
@@ -32,8 +39,8 @@ wrappers over accessing data. Data engines are allowed to have ActiveRecord rela
 
 ### Creating New Engines
 
-Main application has custom Rails generator that allows to create new engines easily. By simply running __engine__
-generator:
+Main application has custom Rails generator that allows to create new engines easily.
+By simply running __engine__ generator:
 
     % rails g engine --help
     Usage:
@@ -41,7 +48,7 @@ generator:
 
     Options:
       [--skip-namespace], [--no-skip-namespace]  # Skip namespace (affects only isolated applications)
-    -t, --type=TYPE                              # Engine type (options: view/service/data)
+    -t, --type=TYPE                              # Engine type (options: api/service/data)
 
     Runtime options:
     -f, [--force]                    # Overwrite files that already exist
@@ -54,33 +61,31 @@ generator:
 Engine type is mandatory argument and that defines what files are
 generated in the new engine.
 
-**Note**: Please note that engine gem name is prefixed with _imc-_ but engine and namespace is always without IMC prefix. For example _imc-organizations_ engine has namespace _Tenants_ only.
-
 #### Dependencies
 
 Engine is most likely requiring external dependencies as well other engines.
 
 ##### Other Engines
 
-To use other engines in the runtime, add required engines in engine's `gemspec` file as dependency:
+To use other engines in the runtime, add required engines in engine's `gemspec` file as
+dependency:
 
-    s.add_dependency 'imc-api_auth'
-    s.add_dependency 'imc-organizations'
+    s.add_dependency "api_auth"
+    s.add_dependency "organizations"
 
-Then add to `lib/<ENGINE NAME>/engine.rb` file necessary requires:
+Add necessary other internal gems or engines to `Gemfile.runtime` with following
+pattern:
 
-    require 'api_auth'
-    require 'organizations'
-
-All runtime dependencies are automatically required in engine's
-Gemfile.
+    gem "ENGINE_NAME", path: "../ENGINE_NAME"
+    eval_gemfile "../ENGINE_NAME/Gemfile.runtime"
 
 ##### External Dependencies
 
 Similar to other engines, external rubygems dependencies are added as
-usual to gemspec. Similarly all gems needs to be required in `lib/<ENGINE NAME>/engine.rb` file.
+usual to gemspec. All external gems needs to be explicitly required in
+`lib/ENGINE/engine.rb` file.
 
 ## Documentation
 
 Everytime there is changes in engines or their gemspec, always
-generate corresponding dependency graph with `rails cobra:graph`.
+generate corresponding dependency graph with `rails docs:engines`.

@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
-  let(:organization) { create(:organizations_organization, slug: 'test') }
-  let(:saml_response) { FactoryBot.build(:idp_saml_response) }
-  let(:user) { create(:organizations_user, organization: organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, slug: 'test') }
+  let(:saml_response) { file_fixture("idp/saml_response").read }
+  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
-  let!(:organizations_domain) { create(:organizations_domain, domain: 'test.host', organization: organization, default: true) }
+  let!(:organizations_domain) { FactoryBot.create(:organizations_domain, domain: 'test.host', organization: organization, default: true) }
   let(:forwarded_host) { organizations_domain.domain }
   let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
   let(:user_groups) {
@@ -15,7 +15,7 @@ RSpec.describe SamlController, type: :controller do
   }
 
   before do
-    create(:organizations_saml_metadatum, organization: organization)
+    FactoryBot.create(:organizations_saml_metadatum, organization: organization)
     request.headers['X-Forwarded-Host'] = forwarded_host
   end
 

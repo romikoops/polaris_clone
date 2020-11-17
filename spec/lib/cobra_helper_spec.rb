@@ -8,18 +8,17 @@ RSpec.describe CobraHelper do
   let(:helper) { described_class.new }
 
   context "class methods" do
-    let(:temp_dir) { Pathname.new(Dir.mktmpdir) }
+    let(:temp_dir) {
+      Pathname.new(File.expand_path("../../tmp", __dir__))
+    }
 
-    after do
-      FileUtils.remove_entry temp_dir
-    end
-
-    it "#graphviz" do
-      expect(described_class.graphviz(output: temp_dir)).to be_truthy
+    it "#uml" do
+      described_class.uml(output: temp_dir)
+      expect(temp_dir.join("graph.puml")).to exist
     end
   end
 
-  it ".graphviz" do
-    expect(helper.graphviz).to include("app")
+  it ".uml" do
+    expect(helper.uml).to include("@startuml")
   end
 end

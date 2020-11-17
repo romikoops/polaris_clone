@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Shipments::BookingProcessController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
   let(:shipment) {
-    create(:completed_legacy_shipment,
+    FactoryBot.create(:completed_legacy_shipment,
       organization: organization,
       trip: trip,
       user: user,
@@ -16,8 +16,8 @@ RSpec.describe Shipments::BookingProcessController do
   }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
   let(:shipments_shipment) { Shipment.find(shipment.id) }
-  let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:trip) { create(:legacy_trip, itinerary: itinerary) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
   let(:shipping_tools_double) { instance_double('ShippingTools') }
 
   before do
@@ -61,7 +61,7 @@ RSpec.describe Shipments::BookingProcessController do
         }.with_indifferent_access
       ]
     end
-    let(:quote) { create(:legacy_quotation, user: user, original_shipment_id: shipment.id) }
+    let(:quote) { FactoryBot.create(:legacy_quotation, user: user, original_shipment_id: shipment.id) }
 
     before do
       quote_mailer = object_double('Mailer')
@@ -82,7 +82,7 @@ RSpec.describe Shipments::BookingProcessController do
 
   describe 'POST #get_offers' do
     let(:shipment) {
-      create(:complete_legacy_shipment,
+      FactoryBot.create(:complete_legacy_shipment,
         organization: organization,
         trip: trip,
         user: user,
@@ -90,8 +90,8 @@ RSpec.describe Shipments::BookingProcessController do
         with_breakdown: true,
         with_tenders: true)
     }
-    let(:itinerary) { create(:gothenburg_shanghai_itinerary, organization: organization) }
-    let(:trip) { create(:trip, itinerary_id: itinerary.id) }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+    let(:trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id) }
     let(:origin_hub) { itinerary.origin_hub }
     let(:destination_hub) { itinerary.destination_hub }
     let(:shipment_params) do

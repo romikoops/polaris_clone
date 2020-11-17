@@ -159,7 +159,6 @@ module ExcelTool
       rows.each do |row|
         if row[:destination]
           counterpart_hub = find_hub(row)
-          puts row unless counterpart_hub
           counterpart_hub_id = counterpart_hub.id
           hub_fees[counterpart_hub_id] = {} unless hub_fees[counterpart_hub_id]
           customs[counterpart_hub_id] = {}  unless customs[counterpart_hub_id]
