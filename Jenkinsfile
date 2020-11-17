@@ -1,7 +1,5 @@
 #!groovy
 
-@Library('common@wolfhound') _
-
 defaultBuild()
 
 pipeline {
