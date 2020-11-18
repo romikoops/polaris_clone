@@ -59,7 +59,7 @@ module Trucking
         @distance_hubs ||= tenant_hubs.where(id: distance_hub_ids)
         .where(
           'ST_DWithin(:point, ST_SetSRID(point, 4326), :radius, true)',
-          { point: point, radius: distance_radius_limit}
+          { point: point.to_s, radius: distance_radius_limit}
         )
       end
 
