@@ -2299,7 +2299,7 @@ ALTER SEQUENCE public.locations_20200504_id_seq OWNED BY public.locations_202005
 
 CREATE TABLE public.locations_locations (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    bounds public.geometry,
+    bounds public.geometry(Geometry,4326),
     osm_id bigint,
     name character varying,
     admin_level integer,
@@ -12603,6 +12603,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201014100229'),
 ('20201015084121'),
 ('20201015084345'),
-('20201015084420');
+('20201015084420'),
+('20201118173330');
 
 

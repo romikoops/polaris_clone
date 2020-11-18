@@ -31,7 +31,7 @@ end
 #
 #  id           :uuid             not null, primary key
 #  admin_level  :integer
-#  bounds       :geometry         geometry, 0
+#  bounds       :geometry         geometry, 4326
 #  country_code :string
 #  deleted_at   :datetime
 #  name         :string

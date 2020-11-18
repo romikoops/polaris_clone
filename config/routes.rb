@@ -619,16 +619,15 @@ end
 # == Route Map
 #
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
-#                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                          idp        /                                                                                                  IDP::Engine
+#                                                    admiralty        /admiralty                                                                                         Admiralty::Engine
+#                                                          api        /                                                                                                  Api::Engine
+#                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                          api        /                                                                                                  Api::Engine
-#                                                    admiralty        /admiralty                                                                                         Admiralty::Engine
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
-#                                                                     /coverage                                                                                          #<Coverband::Reporters::Web:0x00007fecaeffb818 @static=#<Rack::Static:0x00007fec9c017698 @app=#<Coverband::Reporters::Web:0x00007fecaeffb818 ...>, @urls=[/.*\.css/, /.*\.js/, /.*\.gif/, /.*\.png/], @index=nil, @gzip=nil, @cascade=nil, @header_rules=[], @file_server=#<Rack::Files:0x00007fec9c017648 @root="/Users/wbeamish/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/coverband-4.2.6/public", @headers={}, @default_mime="text/plain", @head=#<Rack::Head:0x00007fec9c017558 @app=#<Proc:0x00007fec9c017580@/Users/wbeamish/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/rack-2.2.3/lib/rack/files.rb:33 (lambda)>>>>>
 #                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init {:subdomain=>"api"}
 #                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata {:subdomain=>"api"}
 #                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume {:subdomain=>"api"}
@@ -867,19 +866,35 @@ end
 #                                    update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                                active_storage/disk#update
 #                                         rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                     active_storage/direct_uploads#create
 #
-# Routes for GoogleSignIn::Engine:
-# authorization POST /authorization(.:format) google_sign_in/authorizations#create
-#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
-#
 # Routes for IDP::Engine:
 #     init_saml GET  /saml/:id/init(.:format)     idp/saml#init {:subdomain=>"idp"}
 # metadata_saml GET  /saml/:id/metadata(.:format) idp/saml#metadata {:subdomain=>"idp"}
 #  consume_saml POST /saml/:id/consume(.:format)  idp/saml#consume {:subdomain=>"idp"}
 #
-# Routes for Easymon::Engine:
-#        GET  /(.:format)       easymon/checks#index
-#   root GET  /                 easymon/checks#index
-#        GET  /:check(.:format) easymon/checks#show
+# Routes for AdmiraltyAuth::Engine:
+#        login GET    /login(.:format)        admiralty_auth/logins#new
+# create_login GET    /login/create(.:format) admiralty_auth/logins#create
+# delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
+#
+# Routes for AdmiraltyReports::Engine:
+#        reports GET  /reports(.:format)        admiralty_reports/reports#index
+#         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
+# download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
+#
+# Routes for AdmiraltyTenants::Engine:
+#     organizations GET   /organizations(.:format)          admiralty_tenants/organizations#index
+#                   POST  /organizations(.:format)          admiralty_tenants/organizations#create
+#  new_organization GET   /organizations/new(.:format)      admiralty_tenants/organizations#new
+# edit_organization GET   /organizations/:id/edit(.:format) admiralty_tenants/organizations#edit
+#      organization GET   /organizations/:id(.:format)      admiralty_tenants/organizations#show
+#                   PATCH /organizations/:id(.:format)      admiralty_tenants/organizations#update
+#                   PUT   /organizations/:id(.:format)      admiralty_tenants/organizations#update
+#
+# Routes for Admiralty::Engine:
+#    admiralty_auth      /           AdmiraltyAuth::Engine
+# admiralty_reports      /           AdmiraltyReports::Engine
+# admiralty_tenants      /           AdmiraltyTenants::Engine
+#              root GET  /           admiralty/dashboard#index
 #
 # Routes for ApiAuth::Engine:
 #      oauth_token POST   /oauth/token(.:format)      api_auth/tokens#create
@@ -937,30 +952,14 @@ end
 #                                             DELETE /v1/organizations/:organization_id/widgets/:id(.:format)                                 api/v1/widgets#destroy
 #                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
 #
-# Routes for AdmiraltyAuth::Engine:
-#        login GET    /login(.:format)        admiralty_auth/logins#new
-# create_login GET    /login/create(.:format) admiralty_auth/logins#create
-# delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
+# Routes for GoogleSignIn::Engine:
+# authorization POST /authorization(.:format) google_sign_in/authorizations#create
+#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
-# Routes for AdmiraltyReports::Engine:
-#        reports GET  /reports(.:format)        admiralty_reports/reports#index
-#         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
-# download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
-#
-# Routes for AdmiraltyTenants::Engine:
-#     organizations GET   /organizations(.:format)          admiralty_tenants/organizations#index
-#                   POST  /organizations(.:format)          admiralty_tenants/organizations#create
-#  new_organization GET   /organizations/new(.:format)      admiralty_tenants/organizations#new
-# edit_organization GET   /organizations/:id/edit(.:format) admiralty_tenants/organizations#edit
-#      organization GET   /organizations/:id(.:format)      admiralty_tenants/organizations#show
-#                   PATCH /organizations/:id(.:format)      admiralty_tenants/organizations#update
-#                   PUT   /organizations/:id(.:format)      admiralty_tenants/organizations#update
-#
-# Routes for Admiralty::Engine:
-#    admiralty_auth      /           AdmiraltyAuth::Engine
-# admiralty_reports      /           AdmiraltyReports::Engine
-# admiralty_tenants      /           AdmiraltyTenants::Engine
-#              root GET  /           admiralty/dashboard#index
+# Routes for Easymon::Engine:
+#        GET  /(.:format)       easymon/checks#index
+#   root GET  /                 easymon/checks#index
+#        GET  /:check(.:format) easymon/checks#show
 #
 # Routes for Rswag::Ui::Engine:
 #
