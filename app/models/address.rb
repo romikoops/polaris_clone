@@ -139,6 +139,7 @@ end
 #  longitude        :float
 #  name             :string
 #  photo            :string
+#  point            :geometry         point, 4326
 #  premise          :string
 #  province         :string
 #  street           :string
@@ -152,5 +153,6 @@ end
 #
 # Indexes
 #
+#  index_addresses_on_point       (point) USING gist
 #  index_addresses_on_sandbox_id  (sandbox_id)
 #

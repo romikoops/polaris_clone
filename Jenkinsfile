@@ -91,8 +91,8 @@ pipeline {
                       [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
                     ]
                   ],
-                  [ name: "postgis", image: "postgis/postgis:12-2.5-alpine",
-                    requests: [ memory: "256Mi", cpu: "250m" ],
+                  [ name: "postgis", image: "postgis/postgis:12-3.0-alpine",
+                    requests: [ memory: "512Mi", cpu: "250m" ],
                     env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
                   ],
                   [ name: "redis", image: "redis",

@@ -54,6 +54,10 @@ module Locations
         @lon ||= data[:lng] || coordinates[:lng]
       end
 
+      def point
+        @point ||= RGeo::Cartesian.factory(srid: 4326).point(lon, lat)
+      end
+
       def location
         raise NotImplementedError, "This method must be implemented in #{self.class.name}"
       end

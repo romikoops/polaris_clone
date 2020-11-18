@@ -106,12 +106,11 @@ module Api
         address = Geocoder.search([lat.to_f, lng.to_f]).first
         return unless address
 
-        OpenStruct.new(
+        ::Legacy::Address.new(
           latitude: lat.to_f,
           longitude: lng.to_f,
-          lat_lng_string: [lat, lng].join(','),
-          get_zip_code: address.postal_code,
-          city_name: address.city,
+          zip_code: address.postal_code,
+          city: address.city,
           country: Legacy::Country.find_by(code: address.country_code)
         )
       end

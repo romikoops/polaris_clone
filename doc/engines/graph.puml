@@ -220,6 +220,7 @@ package "Data" {
 [integrations] -> [organization_manager]
 [integrations] -> [profiles]
 [integrations] -> [shipments]
+[migrator] -> [locations]
 [migrator] --> [organizations]
 [migrator] --> [users]
 [rates] -> [cargo]

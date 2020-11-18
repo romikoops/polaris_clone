@@ -64,16 +64,6 @@ RSpec.describe Trucking::Queries::Availability do
 
       let(:query_type) { :zipcode }
 
-      it 'finds the correct trucking_rate with avulsed address filters' do
-        trucking_rates = described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, country_code: country_code,
-          zipcode: zipcode, groups: groups
-        ).perform
-
-        expect(trucking_rates).to match([trucking_trucking_zipcode])
-      end
-
       it 'finds the correct trucking_rate with address object filter' do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
@@ -119,16 +109,6 @@ RSpec.describe Trucking::Queries::Availability do
           country: country)
       }
 
-      it 'finds the correct trucking_rate with avulsed address filters' do
-        trucking_rates = described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, country_code: 'NL',
-          zipcode: '1802 PT', groups: groups
-        ).perform
-
-        expect(trucking_rates).to match([nl_trucking_trucking_zipcode])
-      end
-
       it 'finds the correct trucking_rate with address' do
         trucking_rates = described_class.new(
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
@@ -157,9 +137,12 @@ RSpec.describe Trucking::Queries::Availability do
       end
       let(:distance_service) do
         described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage, country_code: 'NL',
-          address: nl_address, groups: groups
+          organization_id: organization.id,
+          load_type: load_type,
+          carriage: carriage,
+          country_code: 'NL',
+          address: nl_address,
+          groups: groups
         )
       end
       let(:other_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
@@ -197,16 +180,6 @@ RSpec.describe Trucking::Queries::Availability do
                           location: trucking_location_geometry)
       end
       let(:query_type) { :location }
-
-      it 'finds the correct trucking_rate with avulsed address filters' do
-        trucking_rates = described_class.new(
-          klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
-          carriage: carriage,   country_code: country_code,
-          latitude: latitude,   longitude: longitude, groups: groups
-        ).perform
-
-        expect(trucking_rates).to match([trucking_trucking_geometry])
-      end
 
       it 'finds the correct trucking_rate with address object filter' do
         trucking_rates = described_class.new(

@@ -29,11 +29,29 @@ module Legacy
       end
     end
 
-    describe '.point_wkt' do
-      let(:hub) { FactoryBot.build(:legacy_hub) }
+    describe '.geo_point' do
+      let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, address: address) }
+      let(:address) { FactoryBot.create(:legacy_address) }
 
       it 'returns the Rgeo WKT point of the hub' do
-        expect(hub.point_wkt).to eq("Point (#{hub.address.longitude} #{hub.address.latitude})")
+        expect(hub.geo_point.to_s).to eq("POINT (#{address.longitude} #{address.latitude})")
+      end
+
+      context "with no address" do
+        let(:address) { FactoryBot.create(:legacy_address, latitude: nil, longitude: nil) }
+
+        it 'returns nil' do
+          expect(hub.geo_point.to_s).to eq("POINT (#{hub.longitude} #{hub.latitude})")
+        end
+      end
+
+      context "with no address" do
+        let(:hub) { FactoryBot.create(:legacy_hub, address: address, latitude: nil, longitude: nil) }
+        let(:address) { FactoryBot.create(:legacy_address, latitude: nil, longitude: nil) }
+
+        it 'returns nil' do
+          expect(hub.geo_point).not_to be
+        end
       end
     end
 

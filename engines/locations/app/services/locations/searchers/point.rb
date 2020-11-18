@@ -6,14 +6,14 @@ module Locations
       def location
         return city if city
 
-        Locations::Location.smallest_contains(lat: lat, lon: lon).first
+        Locations::Location.smallest_contains(point: point).first
       end
 
       private
 
       def city
         @city ||= Locations::Location
-          .contains(lat: lat, lon: lon)
+          .contains(point: point)
           .where("admin_level > 3")
           .where("admin_level < 8")
           .order(admin_level: :desc)

@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "shared-runtime"
 
+  spec.add_dependency "locations"
   spec.add_dependency "organizations"
   spec.add_dependency "users"
 

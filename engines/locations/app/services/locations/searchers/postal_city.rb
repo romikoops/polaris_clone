@@ -41,7 +41,7 @@ module Locations
 
       def geolocation_fallback
         @geolocation_fallback ||= Locations::Location.smallest_contains(
-          lat: locations_name.point.y, lon: locations_name.point.x
+          point: locations_name.point
         ).first
       end
 

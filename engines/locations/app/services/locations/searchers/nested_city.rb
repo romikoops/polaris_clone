@@ -7,14 +7,14 @@ module Locations
         return nil unless city.present? && locations_name.present?
         return locations_name.location if locations_name.location.present?
 
-        Locations::Location.smallest_contains(lat: locations_name.point.y, lon: locations_name.point.x).first
+        Locations::Location.smallest_contains(point: locations_name.point).first
       end
 
       private
 
       def city
         @city ||= Locations::Location
-          .contains(lat: lat, lon: lon)
+          .contains(point: point)
           .where("admin_level > 5")
           .order(:admin_level)
           .first

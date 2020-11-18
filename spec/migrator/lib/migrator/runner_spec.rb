@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Migrator do
-  before { FactoryBot.create(:organizations_organization) }
+  before { FactoryBot.create(:locations_location) }
 
   it "runs migrators" do
     Migrator.run

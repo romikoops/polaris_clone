@@ -29,7 +29,7 @@ services:
     image: redis
 
   postgres:
-    image: postgis/postgis:12-2.5-alpine
+    image: postgis/postgis:12-3.0-alpine
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:

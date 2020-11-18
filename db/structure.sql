@@ -582,7 +582,8 @@ CREATE TABLE public.addresses (
     sandbox_id uuid,
     address_line_1 character varying,
     address_line_2 character varying,
-    address_line_3 character varying
+    address_line_3 character varying,
+    point public.geometry(Point,4326)
 );
 
 
@@ -2304,7 +2305,8 @@ CREATE TABLE public.locations_locations (
     admin_level integer,
     country_code character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    deleted_at timestamp without time zone
 );
 
 
@@ -2517,6 +2519,19 @@ CREATE TABLE public.migrator_unique_carrier_syncs (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     unique_carrier_id bigint,
     duplicate_carrier_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: migrator_unique_locations_locations_syncs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.migrator_unique_locations_locations_syncs (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    unique_location_location_id uuid,
+    duplicate_location_location_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -6381,6 +6396,14 @@ ALTER TABLE ONLY public.migrator_unique_carrier_syncs
 
 
 --
+-- Name: migrator_unique_locations_locations_syncs migrator_unique_locations_locations_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
+    ADD CONSTRAINT migrator_unique_locations_locations_syncs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: migrator_unique_tenant_vehicles_syncs migrator_unique_tenant_vehicles_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7332,6 +7355,13 @@ CREATE INDEX index_address_book_contacts_on_user_id ON public.address_book_conta
 
 
 --
+-- Name: index_addresses_on_point; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_addresses_on_point ON public.addresses USING gist (point);
+
+
+--
 -- Name: index_addresses_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8193,10 +8223,24 @@ CREATE INDEX index_local_charges_on_validity ON public.local_charges USING gist 
 
 
 --
+-- Name: index_location_locations_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_location_locations_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_locations_locations_syncs USING btree (unique_location_location_id, duplicate_location_location_id);
+
+
+--
 -- Name: index_locations_locations_on_bounds; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_locations_locations_on_bounds ON public.locations_locations USING gist (bounds);
+
+
+--
+-- Name: index_locations_locations_on_deleted_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_locations_locations_on_deleted_at ON public.locations_locations USING btree (deleted_at);
 
 
 --
@@ -8312,6 +8356,13 @@ CREATE INDEX index_max_dimensions_bundles_on_tenant_vehicle_id ON public.max_dim
 
 
 --
+-- Name: index_migrator_duplicate_location_location_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_migrator_duplicate_location_location_id ON public.migrator_unique_locations_locations_syncs USING btree (duplicate_location_location_id);
+
+
+--
 -- Name: index_migrator_syncs_on_organization_id_and_tenant_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8379,6 +8430,13 @@ CREATE INDEX index_migrator_unique_carrier_syncs_on_duplicate_carrier_id ON publ
 --
 
 CREATE INDEX index_migrator_unique_carrier_syncs_on_unique_carrier_id ON public.migrator_unique_carrier_syncs USING btree (unique_carrier_id);
+
+
+--
+-- Name: index_migrator_unique_location_location_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_migrator_unique_location_location_id ON public.migrator_unique_locations_locations_syncs USING btree (unique_location_location_id);
 
 
 --
@@ -11451,6 +11509,14 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 
 --
+-- Name: migrator_unique_locations_locations_syncs fk_rails_8a1314387e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
+    ADD CONSTRAINT fk_rails_8a1314387e FOREIGN KEY (duplicate_location_location_id) REFERENCES public.locations_locations(id);
+
+
+--
 -- Name: shipments_shipments fk_rails_8b183ef30a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11640,6 +11706,14 @@ ALTER TABLE ONLY public.shipments_documents
 
 ALTER TABLE ONLY public.shipments_shipments
     ADD CONSTRAINT fk_rails_b1cdb6e99b FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: migrator_unique_locations_locations_syncs fk_rails_b22a3ed5ed; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
+    ADD CONSTRAINT fk_rails_b22a3ed5ed FOREIGN KEY (unique_location_location_id) REFERENCES public.locations_locations(id);
 
 
 --
@@ -12481,6 +12555,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200904120051'),
 ('20200907063048'),
 ('20200907083453'),
+('20200908071608'),
+('20200908072224'),
 ('20200909142452'),
 ('20200909144539'),
 ('20200910055552'),
@@ -12524,6 +12600,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201007192212'),
 ('20201012094238'),
 ('20201013122604'),
-('20201014100229');
+('20201014100229'),
+('20201015084121'),
+('20201015084345'),
+('20201015084420');
 
 

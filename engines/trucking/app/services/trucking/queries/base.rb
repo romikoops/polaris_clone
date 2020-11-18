@@ -17,7 +17,6 @@ module Trucking
         @zipcode = sanitized_postal_code(args: args)
         @city_name = args[:city_name] || args[:address].try(:city)
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
-
         @organization_id = args[:organization_id]
         @load_type = args[:load_type]
         @carriage = args[:carriage]
@@ -29,7 +28,7 @@ module Trucking
       end
 
       def locations_locations
-        Locations::Location.contains(lat: latitude, lon: longitude)
+        Locations::Location.where(country_code: country_code.downcase).contains(point: point)
       end
 
       def location_based_locations
@@ -59,10 +58,8 @@ module Trucking
       def distance_hubs
         @distance_hubs ||= tenant_hubs.where(id: distance_hub_ids)
         .where(
-          'ST_DWithin(ST_SetSRID(ST_MakePoint(:lng,:lat), 4326), point, :radius, true)',
-          { lng: longitude,
-            lat: latitude,
-            radius: distance_radius_limit}
+          'ST_DWithin(:point, ST_SetSRID(point, 4326), :radius, true)',
+          { point: point, radius: distance_radius_limit}
         )
       end
 
@@ -97,16 +94,17 @@ module Trucking
       end
 
       def distances_with_hubs
-        @distances_with_hubs ||= distance_hubs.map { |hub| { hub_id: hub.id, distance: calc_distance(hub: hub) } }
+        @distances_with_hubs ||= distance_hubs.map { |hub|
+          { hub_id: hub.id, distance: calc_distance(hub: hub) }
+        }
       end
 
       def distance_hubs_arguments
-        distances_with_hubs.map { |hub_and_distance|
+        distances_with_hubs.each_with_object([]) { |hub_and_distance, memo|
           distance_location = distance_based_locations.find_by(data: hub_and_distance[:distance].to_i)
-          next if distance_location.blank?
 
-          "(#{hub_and_distance[:hub_id]}, '#{distance_location.id}')"
-        }.compact
+          memo << "(#{hub_and_distance[:hub_id]}, '#{distance_location.id}')" if distance_location.present?
+        }
       end
 
       def truckings_for_query
@@ -118,7 +116,8 @@ module Trucking
       end
 
       def append_distance_truckings(query:)
-        return query if distances_with_hubs.empty?
+        return query if distance_hubs_arguments.empty?
+
         query.or(
           validated_truckings.where(
             "(hub_id, trucking_truckings.location_id) IN (#{distance_hubs_arguments.join(", ")})"
@@ -142,7 +141,7 @@ module Trucking
       end
 
       def group_condition
-        { group_id: groups.pluck(:id) + [nil] }
+        { group_id: groups.pluck(:id) }
       end
 
       def cargo_class_condition
@@ -165,8 +164,12 @@ module Trucking
         { trucking_locations: { distance: distances } }
       end
 
-      def trucking_location_conditions_binds
-        { latitude: latitude, longitude: longitude }
+      def latitude_longitude
+        { latitude: point.y, longitude: point.x }
+      end
+
+      def point
+        @point ||= RGeo::Cartesian.factory(srid: 4326).point(longitude, latitude)
       end
 
       def sanitized_postal_code(args:)
@@ -196,7 +199,7 @@ module Trucking
           load_type_condition.values,
           carriage_condition.values,
           hubs_condition.values,
-          trucking_location_conditions_binds.values].flatten.join('-')
+          latitude_longitude.values].flatten.join('-')
       end
 
       def calc_distance(hub:)
@@ -208,7 +211,13 @@ module Trucking
       end
 
       def distance_radius_limit
-        trucking_locations.where.not(distance: nil).order(distance: :desc).limit(1).first&.distance || 0
+        return 0 if existing_distance_limit.blank?
+
+        (existing_distance_limit.data.to_i * 1000) + 1
+      end
+
+      def existing_distance_limit
+        @existing_distance_limit ||= trucking_locations.where(query: :distance).order(data: :desc).first
       end
       # Argument Errors
 

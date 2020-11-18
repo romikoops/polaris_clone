@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'elasticsearch'
+require 'paranoia'
 require 'geocoder'
 require 'searchkick'
 require 'rgeo'

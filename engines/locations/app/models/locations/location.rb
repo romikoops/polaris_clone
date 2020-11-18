@@ -3,13 +3,16 @@
 module Locations
   class Location < ApplicationRecord
     validates :osm_id, uniqueness: true, if: :osm_data?
+    validates :name, uniqueness: {scope: [:country_code]}
 
-    def self.contains(lat:, lon:)
-      where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))
+    acts_as_paranoid
+
+    def self.contains(point:)
+      where(arel_table[:bounds].st_contains(point.to_s))
     end
 
-    def self.smallest_contains(lat:, lon:)
-      where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})")).order(arel_table[:bounds].st_area)
+    def self.smallest_contains(point:)
+      Locations::Location.contains(point: point).order(arel_table[:bounds].st_area)
     end
 
     def geojson
@@ -30,6 +33,7 @@ end
 #  admin_level  :integer
 #  bounds       :geometry         geometry, 0
 #  country_code :string
+#  deleted_at   :datetime
 #  name         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -37,7 +41,8 @@ end
 #
 # Indexes
 #
-#  index_locations_locations_on_bounds  (bounds) USING gist
-#  index_locations_locations_on_name    (name)
-#  index_locations_locations_on_osm_id  (osm_id)
+#  index_locations_locations_on_bounds      (bounds) USING gist
+#  index_locations_locations_on_deleted_at  (deleted_at)
+#  index_locations_locations_on_name        (name)
+#  index_locations_locations_on_osm_id      (osm_id)
 #

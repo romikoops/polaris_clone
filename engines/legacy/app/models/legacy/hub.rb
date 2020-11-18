@@ -79,15 +79,12 @@ module Legacy
       Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [latitude, longitude])
     end
 
-    def point_wkt
-      long = longitude || address.longitude
-      lat = latitude || address.latitude
-
-      "Point (#{long} #{lat})"
+    def geo_point
+      geo_point_from_address || geo_point_from_lat_lon
     end
 
     def set_point
-      self.point = point_wkt
+      self.point ||= geo_point
     end
 
     def earliest_expiration
@@ -96,6 +93,17 @@ module Legacy
                          .order(expiration_date: :asc)
                          .first
                          &.expiration_date
+    end
+
+    private
+
+    def geo_point_from_address
+      cached_address = address
+      cached_address.geo_point if cached_address.present?
+    end
+
+    def geo_point_from_lat_lon
+      latitude && longitude && RGeo::Geos.factory(srid: 4326).point(longitude, latitude)
     end
   end
 end

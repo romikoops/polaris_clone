@@ -6,7 +6,7 @@ module Locations
       def location
         return nil if coordinates.nil?
 
-        Locations::Location.smallest_contains(lat: lat, lon: lon).first
+        Locations::Location.smallest_contains(point: point).first
       end
     end
   end

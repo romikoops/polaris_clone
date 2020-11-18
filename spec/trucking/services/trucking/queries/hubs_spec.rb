@@ -18,18 +18,23 @@ RSpec.describe Trucking::Queries::Hubs do
     FactoryBot.create(:trucking_location, :zipcode, country: country, data: zipcode)
   }
   let(:trucking_location_geometry)  {
-    FactoryBot.create(:trucking_location, :with_location, country: country)
+    FactoryBot.create(:trucking_location, :with_location, location: locations_location, country: country)
   }
   let(:trucking_location_distance)  {
     FactoryBot.create(:trucking_location, :distance, country: country, data: distance)
   }
+  let(:locations_location) do
+    FactoryBot.create(:locations_location,
+      bounds: FactoryBot.build(:legacy_bounds, lat: latitude.to_f, lng: longitude.to_f),
+      country_code: country_code.downcase)
+  end
 
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:groups) { [default_group] }
 
   let(:zipcode)      { '15211' }
-  let(:latitude)     { '57.000000' }
-  let(:longitude)    { '11.100000' }
+  let(:latitude)     { '57.700000' }
+  let(:longitude)    { '11.900000' }
   let(:load_type)    { 'cargo_item' }
   let(:carriage)     { 'pre' }
   let(:distance)     { 55 }
@@ -71,10 +76,10 @@ RSpec.describe Trucking::Queries::Hubs do
                           organization: organization,
                           hub: distance_hub,
                           location: trucking_location_distance)
-        allow(hubs_service).to receive(:calc_distance).and_return(55)
+        allow(hubs_service).to receive(:calc_distance).and_return(distance)
       end
 
-      it 'return empty collection if cargo_class filter does not match any item in db' do
+      it 'return all the relevant hubs' do
         expect(hubs_service.perform).to match_array([distance_hub, zipcode_hub, location_hub])
       end
     end

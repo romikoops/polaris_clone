@@ -11,7 +11,10 @@ RSpec.describe OfferCalculator::Service::PricingFinder do
   let(:results) { described_class.pricings(shipment: shipment, quotation: quotation, schedules: schedules) }
 
   context "when no trucking exists" do
-    before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
+    before do
+      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+      allow(quotation).to receive(:pickup_address).and_return(FactoryBot.create(:legacy_address, :gothenburg))
+    end
 
     it "raises an error" do
       expect { results }.to raise_error(OfferCalculator::Errors::NoPreCarriageFound)

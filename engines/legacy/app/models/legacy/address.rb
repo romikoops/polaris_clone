@@ -14,6 +14,7 @@ module Legacy
     has_many :user_addresses, class_name: 'Legacy::UserAddress'
     has_many :users, class_name: 'Organizations::User', through: :user_addresses, dependent: :destroy
     has_many :shipments
+    before_validation :set_point
 
     reverse_geocoded_by :latitude, :longitude do |address, results|
       if geo = results.first
@@ -99,6 +100,16 @@ module Legacy
       raise "This 'Location' object is not associated with a user!" if user_address.blank?
       user_address.primary
     end
+
+    def set_point
+      self.point ||= geo_point
+    end
+
+    def geo_point
+      return nil unless [longitude, latitude].all?(&:present?)
+
+      RGeo::Geos.factory(srid: 4326).point(longitude, latitude)
+    end
   end
 end
 
@@ -117,6 +128,7 @@ end
 #  longitude        :float
 #  name             :string
 #  photo            :string
+#  point            :geometry         point, 4326
 #  premise          :string
 #  province         :string
 #  street           :string
@@ -130,5 +142,6 @@ end
 #
 # Indexes
 #
+#  index_addresses_on_point       (point) USING gist
 #  index_addresses_on_sandbox_id  (sandbox_id)
 #
