@@ -8,7 +8,7 @@ module Locations
     acts_as_paranoid
 
     def self.contains(point:)
-      where(arel_table[:bounds].st_contains(point.to_s))
+      where(arel_table[:bounds].st_contains(Arel::Nodes.build_quoted(point)))
     end
 
     def self.smallest_contains(point:)
