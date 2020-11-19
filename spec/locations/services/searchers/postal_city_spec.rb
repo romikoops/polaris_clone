@@ -23,6 +23,7 @@ RSpec.describe Locations::Searchers::PostalCity do
     let(:point) { postal_location.bounds.centroid }
 
     before do
+      Locations::Name.reindex
       Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE",
         [
           "address_components" => [{"types" => ["premise"]}],

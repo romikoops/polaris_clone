@@ -4,88 +4,60 @@ lat = 57.000000
 lng = 11.100000
 delta = 0.3
 
-# Hardcoding a square polygon around the lat, lng  pair to be tested.
-serialized_coordinate_pairs = [
-  "#{lng + delta},#{lat + delta}",
-  "#{lng + delta},#{lat - delta}",
-  "#{lng - delta},#{lat - delta}",
-  "#{lng - delta},#{lat + delta}",
-  "#{lng + delta},#{lat + delta}"
-]
-
-points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
-  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(',').map(&:to_f))
-end
-line_string   = RGeo::Cartesian.factory.line_string(points)
-polygon       = RGeo::Cartesian.factory.polygon(line_string)
-se_multi_polygon = RGeo::Cartesian.factory.multi_polygon([polygon])
-
-delta = 0.5
-serialized_coordinate_pairs = [
-  "#{lng + delta},#{lat + delta}",
-  "#{lng + delta},#{lat - delta}",
-  "#{lng - delta},#{lat - delta}",
-  "#{lng - delta},#{lat + delta}",
-  "#{lng + delta},#{lat + delta}"
-]
-
-points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
-  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(',').map(&:to_f))
-end
-line_string   = RGeo::Cartesian.factory.line_string(points)
-polygon       = RGeo::Cartesian.factory.polygon(line_string)
-se_large_multi_polygon = RGeo::Cartesian.factory.multi_polygon([polygon])
-
 FactoryBot.define do
-  factory :locations_location, class: 'Locations::Location' do
-    bounds { '010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40' }
+  factory :locations_location, class: "Locations::Location" do
+    bounds { "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40" }
     sequence(:osm_id) { |n| n }
     sequence(:name) { |n| "Location #{n}" }
     admin_level { 8 }
-    country_code { 'cn' }
+    country_code { "cn" }
 
     trait :in_china do
-      bounds { '010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40' }
-      osm_id { '11111' }
-      name { 'Shanghai' }
-      country_code { 'cn' }
+      bounds { "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40" }
+      osm_id { "11111" }
+      name { "Shanghai" }
+      country_code { "cn" }
       admin_level { 8 }
     end
+
     trait :in_sweden do
-      bounds { se_multi_polygon }
-      osm_id { '22222' }
-      name { 'Gothenburg' }
+      bounds { FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta) }
+      osm_id { "22222" }
+      name { "Gothenburg" }
       admin_level { 8 }
-      country_code { 'se' }
+      country_code { "se" }
     end
+
     trait :postal_sweden do
-      bounds { se_multi_polygon }
+      bounds { FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta) }
       osm_id { nil }
-      name { '22222' }
+      name { "22222" }
       admin_level { 8 }
-      country_code { 'se' }
+      country_code { "se" }
     end
+
     trait :in_germany do
-      bounds { '010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40' }
-      osm_id { '22222' }
-      name { 'Altenberg Bårenfels' }
-      country_code { 'de' }
+      bounds { "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40" }
+      osm_id { "22222" }
+      name { "Altenberg Bårenfels" }
+      country_code { "de" }
       admin_level { nil }
     end
+
     trait :postal_germany do
-      bounds { '010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40' }
-      osm_id { '1' }
-      name { '10001' }
-      country_code { 'de' }
+      bounds { "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40" }
+      osm_id { "1" }
+      name { "10001" }
+      country_code { "de" }
       admin_level { nil }
     end
 
     trait :in_sweden_large do
-      bounds { se_large_multi_polygon }
-      osm_id { '22222' }
-      name { 'Gothenburg Metro' }
+      bounds { FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta * 2) }
+      osm_id { "22222" }
+      name { "Gothenburg Metro" }
       admin_level { 8 }
-      country_code { 'se' }
+      country_code { "se" }
     end
 
     factory :swedish_location, traits: [:in_sweden]

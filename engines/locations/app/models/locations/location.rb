@@ -8,7 +8,10 @@ module Locations
     acts_as_paranoid
 
     def self.contains(point:)
-      where(arel_table[:bounds].st_contains(Arel::Nodes.build_quoted(point)))
+      where(
+        "ST_Contains(bounds, ST_SetSRID(ST_MakePoint(:lat, :lon), 4326))",
+        {lat: point.x, lon: point.y}
+      )
     end
 
     def self.smallest_contains(point:)
