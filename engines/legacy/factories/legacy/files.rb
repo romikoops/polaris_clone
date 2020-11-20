@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_file, class: 'Legacy::File' do
+  factory :legacy_file, class: "Legacy::File" do
     association :shipment, factory: :legacy_shipment
     association :organization, factory: :organizations_organization
 
     trait :with_file do
       after(:build) do |document|
-        document.file.attach(io: StringIO.new, filename: 'test-image.jpg', content_type: 'image/jpg')
+        document.file.attach(io: StringIO.new, filename: "test-image.jpg", content_type: "image/jpg")
       end
     end
   end

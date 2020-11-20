@@ -46,7 +46,9 @@ module OfferCalculator
 
       context "with trucking" do
         let(:address) { FactoryBot.create(:gothenburg_address) }
-        let(:trucking) { {"pre_carriage" => {"address_id" => address.id, "trucking_time_in_seconds" => 100, "truck_type" => "default"}} }
+        let(:trucking) {
+          {"pre_carriage" => {"address_id" => address.id, "trucking_time_in_seconds" => 100, "truck_type" => "default"}}
+        }
 
         before do
           service.perform

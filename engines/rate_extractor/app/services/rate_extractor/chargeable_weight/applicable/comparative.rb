@@ -20,9 +20,9 @@ module RateExtractor
 
         def units_total_load_meterage_weight
           @units_total_load_meterage_weight ||=
-            cargo.units.inject(Measured::Weight.new(0.0, :kg)) do |total, cargo_unit|
+            cargo.units.inject(Measured::Weight.new(0.0, :kg)) { |total, cargo_unit|
               total + unit_ldm_weight(cargo_unit)
-            end
+            }
         end
 
         def unit_ldm_weight(cargo_unit)
@@ -33,7 +33,7 @@ module RateExtractor
         end
 
         def ldm_measurement(cargo_unit)
-          cargo_unit.stackable ? 'stacked_area' : 'area'
+          cargo_unit.stackable ? "stacked_area" : "area"
         end
       end
     end

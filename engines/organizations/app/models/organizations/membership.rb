@@ -5,7 +5,7 @@ module Organizations
     belongs_to :user, class_name: "Users::User"
     belongs_to :organization
 
-    enum role: { owner: 1, admin: 2, user: 3 }
+    enum role: {owner: 1, admin: 2, user: 3}
   end
 end
 

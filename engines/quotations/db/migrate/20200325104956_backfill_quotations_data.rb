@@ -10,8 +10,8 @@ class BackfillQuotationsData < ActiveRecord::Migration[5.2]
       next if shipment.nil?
 
       quotation = tender.quotation
-      quotation.pickup_address_id = shipment.trucking.dig('pre_carriage', 'address_id')
-      quotation.delivery_address_id = shipment.trucking.dig('on_carriage', 'address_id')
+      quotation.pickup_address_id = shipment.trucking.dig("pre_carriage", "address_id")
+      quotation.delivery_address_id = shipment.trucking.dig("on_carriage", "address_id")
       quotation.save
 
       if charge_breakdown.trip.present? && tender.itinerary_id.nil?

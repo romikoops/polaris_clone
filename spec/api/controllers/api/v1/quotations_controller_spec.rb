@@ -27,8 +27,14 @@ module Api
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
       let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
-      let(:trip_1) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container", tenant_vehicle: tenant_vehicle) }
-      let(:trip_2) { FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container", tenant_vehicle: tenant_vehicle_2) }
+      let(:trip_1) {
+        FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container",
+                                               tenant_vehicle: tenant_vehicle)
+      }
+      let(:trip_2) {
+        FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container",
+                                               tenant_vehicle: tenant_vehicle_2)
+      }
       let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
       let(:token_header) { "Bearer #{access_token.token}" }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
@@ -69,17 +75,22 @@ module Api
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
             FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
           end
-          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization, amount: 170)
-          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2, organization: organization, amount: 190)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle,
+                                             organization: organization, amount: 170)
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2,
+                                             organization: organization, amount: 190)
 
           OfferCalculator::Schedule.from_trips(trips)
-          FactoryBot.create(:freight_margin, default_for: "ocean", organization_id: organization.id, applicable: organization, value: 0)
+          FactoryBot.create(:freight_margin, default_for: "ocean", organization_id: organization.id,
+                                             applicable: organization, value: 0)
         end
 
         it "returns tenders ordered by amount by default" do
           post :create, params: params, as: :json
 
-          amounts = response_data.dig("attributes", "tenders", "data").map { |i| i.dig("attributes", "total", "amount") }
+          amounts = response_data.dig("attributes", "tenders", "data").map { |i|
+            i.dig("attributes", "total", "amount")
+          }
 
           expect(amounts).to eq([170.0, 190.0])
         end
@@ -228,7 +239,9 @@ module Api
               }
             ]
           end
-          let(:expected_keys) { %w[selectedDate loadType user origin destination containers cargoItems tenders completed] }
+          let(:expected_keys) {
+            %w[selectedDate loadType user origin destination containers cargoItems tenders completed]
+          }
 
           it "returns prices with default margins" do
             post :create, params: params
@@ -264,7 +277,9 @@ module Api
       let(:cargo_item) { Legacy::CargoItem.last }
 
       context "when async error has occurred " do
-        let(:quotation) { FactoryBot.create(:quotations_quotation, error_class: "OfferCalculator::Errors::LoadMeterageExceeded") }
+        let(:quotation) {
+          FactoryBot.create(:quotations_quotation, error_class: "OfferCalculator::Errors::LoadMeterageExceeded")
+        }
 
         it "renders the errors" do
           get :show, params: {organization_id: organization.id, id: quotation.id}
@@ -280,8 +295,12 @@ module Api
           get :show, params: {organization_id: organization.id, id: quotation.id}
 
           aggregate_failures do
-            expect(response_data.dig("attributes", "origin", "data", "id").to_i).to eq quotation.origin_nexus_id
-            expect(response_data.dig("attributes", "destination", "data", "id").to_i).to eq quotation.destination_nexus_id
+            expect(
+              response_data.dig("attributes", "origin", "data", "id").to_i
+            ).to eq quotation.origin_nexus_id
+            expect(
+              response_data.dig("attributes", "destination", "data", "id").to_i
+            ).to eq quotation.destination_nexus_id
           end
         end
       end
@@ -300,7 +319,9 @@ module Api
 
           aggregate_failures do
             expect(response_data.dig("attributes", "origin", "data", "id").to_i).to eq quotation.pickup_address_id
-            expect(response_data.dig("attributes", "destination", "data", "id").to_i).to eq quotation.delivery_address_id
+            expect(
+              response_data.dig("attributes", "destination", "data", "id").to_i
+            ).to eq quotation.delivery_address_id
           end
         end
       end
@@ -371,10 +392,10 @@ module Api
         end
 
         it "sorts by selected date desc" do
-          get :index, params: { organization_id: organization.id, sort_by: "selected_date", direction: "desc"}
+          get :index, params: {organization_id: organization.id, sort_by: "selected_date", direction: "desc"}
           aggregate_failures do
-            expect(response_data.first['id']).to eq newer_quotation.id
-            expect(response_data.last['id']).to eq older_quotation.id
+            expect(response_data.first["id"]).to eq newer_quotation.id
+            expect(response_data.last["id"]).to eq older_quotation.id
           end
         end
       end
@@ -382,7 +403,8 @@ module Api
 
     describe "POST #download" do
       before do
-        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id, user: user)
+        FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization_id: organization.id,
+                                            user: user)
       end
 
       shared_examples_for "a downloadable quotation format" do |format|

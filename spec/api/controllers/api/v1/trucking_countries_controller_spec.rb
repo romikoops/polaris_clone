@@ -28,7 +28,9 @@ module Api
 
       context "with single country trucking" do
         it "renders the list correct list of countries" do
-          get :index, params: {organization_id: organization.id, load_type: "cargo_item", location_type: "destination"}, as: :json
+          get :index, params: {
+            organization_id: organization.id, load_type: "cargo_item", location_type: "destination"
+          }, as: :json
 
           expect(country_codes).to match_array(["Sweden"])
         end
@@ -38,11 +40,14 @@ module Api
         let(:other_country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
         before do
-          FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: other_country)
+          FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location,
+                                                            country: other_country)
         end
 
         it "renders the list correct list of countries" do
-          get :index, params: {organization_id: organization.id, load_type: "cargo_item", location_type: "destination"}, as: :json
+          get :index, params: {
+            organization_id: organization.id, load_type: "cargo_item", location_type: "destination"
+          }, as: :json
 
           expect(country_codes).to match_array(["Sweden", "Germany"])
         end

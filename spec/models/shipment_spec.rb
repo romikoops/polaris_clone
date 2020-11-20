@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Shipment, type: :model do
   before do
     FactoryBot.create(:charge_breakdown,
-           shipment: shipment,
-           trip: other_trip,
-           valid_until: 10.days.from_now.beginning_of_day,
-           charge_category_name: 'Cargo1')
+      shipment: shipment,
+      trip: other_trip,
+      valid_until: 10.days.from_now.beginning_of_day,
+      charge_category_name: "Cargo1")
   end
 
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
@@ -19,43 +19,43 @@ RSpec.describe Shipment, type: :model do
 
   before do
     FactoryBot.create(:profiles_profile,
-                      first_name: 'Test',
-                      last_name: 'User',
-                      company_name: 'ItsMyCargo',
-                      user_id: shipment.user_id)
+      first_name: "Test",
+      last_name: "User",
+      company_name: "ItsMyCargo",
+      user_id: shipment.user_id)
   end
 
-  context 'when hidden grand totals is true' do
+  context "when hidden grand totals is true" do
     before do
       allow(Pdf::HiddenValueService).to receive(:new).and_return(hidden_value_service)
       allow(hidden_value_service).to receive(:hide_total_args).and_return(hidden_grand_total: false)
     end
 
-    describe '.valid_until' do
-      it 'returns the Charge Breakdown valid_until value for the shipment trip' do
+    describe ".valid_until" do
+      it "returns the Charge Breakdown valid_until value for the shipment trip" do
         expect(shipment.valid_until(shipment.trip)).to eq(4.days.from_now.beginning_of_day)
       end
 
-      it 'returns the Charge Breakdown valid_until value a different trip' do
+      it "returns the Charge Breakdown valid_until value a different trip" do
         expect(shipment.valid_until(other_trip)).to eq(10.days.from_now.beginning_of_day)
       end
     end
   end
 
-  context 'when searching via user profiles' do
+  context "when searching via user profiles" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
     let!(:shipment) { FactoryBot.create(:shipment, organization: organization, user: user) }
 
-    context 'when searching via user names' do
-      it 'returns shipments matching with users matching the name provided' do
-        expect(described_class.user_name('Test')).to include(shipment)
+    context "when searching via user names" do
+      it "returns shipments matching with users matching the name provided" do
+        expect(described_class.user_name("Test")).to include(shipment)
       end
     end
 
-    context 'when searching via company names' do
-      it 'returns shipments matching with users matching the company name provided' do
-        expect(described_class.company_name('ItsMyCargo')).to include(shipment)
+    context "when searching via company names" do
+      it "returns shipments matching with users matching the company name provided" do
+        expect(described_class.company_name("ItsMyCargo")).to include(shipment)
       end
     end
   end

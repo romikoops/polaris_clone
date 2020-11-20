@@ -12,11 +12,11 @@ module Helmsman
       @tenant_connections = TenantRouting::Connection.where(organization_id: federated_targets)
       @route_line_services = Routing::RouteLineService.where(route_id: paths.flatten)
       @carriage_ids = Routing::RouteLineService.joins(:route)
-                                               .where(
-                                                 routing_routes: {
-                                                   mode_of_transport: Routing::Route.mode_of_transports[:carriage]
-                                                 }
-                                               ).ids
+        .where(
+          routing_routes: {
+            mode_of_transport: Routing::Route.mode_of_transports[:carriage]
+          }
+        ).ids
       unless @visibilities.empty?
         @tenant_connections = tenant_connections.where(id: @visibilities.select(:connection_id))
       end
@@ -26,9 +26,9 @@ module Helmsman
     def filter
       expand_paths.each_with_object([]) do |route_line_service_ids, accumulator|
         matches = []
-        adj_route_ids = route_line_service_ids.map do |route_line_service_id|
+        adj_route_ids = route_line_service_ids.map { |route_line_service_id|
           carriage_ids.include?(route_line_service_id) ? nil : route_line_service_id
-        end
+        }
         # Replaces carriage route line service ids with nil for TenantConnection validation
         grouped_route_line_services = adj_route_ids.slice_when { |x, y| x.nil? || y.nil? }.to_a
 
@@ -36,7 +36,8 @@ module Helmsman
         freight_group_index = grouped_route_line_services.index { |group| group.compact.present? }
         if grouped_route_line_services[freight_group_index].length == 1
           # If there is only one freight route, we double it up as inbound and outbound
-          grouped_route_line_services[freight_group_index] = [grouped_route_line_services[freight_group_index].first] * 2
+          grouped_route_line_services[freight_group_index] =
+            [grouped_route_line_services[freight_group_index].first] * 2
         end
 
         # Take each consecutive adjusted pair (ie. with nil values) and run valid?
@@ -52,9 +53,9 @@ module Helmsman
 
     def expand_paths
       paths.flat_map do |route_id_arr|
-        values = route_id_arr.map do |route_id|
+        values = route_id_arr.map { |route_id|
           route_line_services.where(route_id: route_id).ids
-        end
+        }
 
         values.shift.product(*values)
       end

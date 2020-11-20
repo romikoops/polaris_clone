@@ -1,7 +1,7 @@
 RSpec.shared_context "false_itinerary" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:faux_origin_country) { FactoryBot.create(:country_de)}
-  let(:faux_destination_country) { FactoryBot.create(:country_uk)}
+  let(:faux_origin_country) { FactoryBot.create(:country_de) }
+  let(:faux_destination_country) { FactoryBot.create(:country_uk) }
   let(:faux_origin_address) { FactoryBot.create(:hamburg_address, country: faux_origin_country) }
   let(:faux_destination_address) { FactoryBot.create(:felixstowe_address, country: faux_destination_country) }
   let(:faux_origin_name) { "Gothenburg" }

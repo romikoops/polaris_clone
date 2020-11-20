@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RateExtractor::Section do
   let(:organization) { FactoryBot.create(:organizations_organization) }
@@ -9,7 +9,7 @@ RSpec.describe RateExtractor::Section do
 
   let(:service) { described_class.new(organization: organization, user: user, path: path) }
 
-  describe 'dedicated pricings' do
+  describe "dedicated pricings" do
     context "when applicable to a group" do
       let(:group) do
         FactoryBot.create(:groups_group, organization: organization).tap do |g|

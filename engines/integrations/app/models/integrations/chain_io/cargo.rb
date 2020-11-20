@@ -6,7 +6,7 @@ module Integrations
       has_many :units
 
       def containerization_type
-        units.map(&:containerization_type).uniq.sort.join(',')
+        units.map(&:containerization_type).uniq.sort.join(",")
       end
 
       def prepare_units
@@ -17,21 +17,21 @@ module Integrations
           if unit.lcl?
             packages.push(
               package_quantity: unit.quantity,
-              description_of_goods: '',
-              gross_weight_kgs: unit.total_weight.value.to_s('F'),
-              volume_cbms: unit.volume.value.to_s('F')
+              description_of_goods: "",
+              gross_weight_kgs: unit.total_weight.value.to_s("F"),
+              volume_cbms: unit.volume.value.to_s("F")
             )
           elsif unit.fcl?
             containers.push(
-              container_number: '',
-              delivery_mode: '',
+              container_number: "",
+              delivery_mode: "",
               size_code: unit.size_code,
               type_code: unit.type_code
             )
           end
         end
 
-        { containers: containers, packages: packages }
+        {containers: containers, packages: packages}
       end
     end
   end

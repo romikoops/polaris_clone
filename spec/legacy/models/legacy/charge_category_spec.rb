@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 module Legacy
   RSpec.describe ChargeCategory, type: :model do
-    describe '.cargo_unit' do
+    describe ".cargo_unit" do
       let!(:organization) { FactoryBot.create(:organizations_organization) }
       let(:legacy_cargo_item) { FactoryBot.create(:legacy_cargo_item) }
       let(:charge_category) do
         FactoryBot.create(:legacy_charge_categories,
-                          organization: organization,
-                          code: 'cargo_item',
-                          name: 'CargoItem',
-                          cargo_unit_id: legacy_cargo_item.id)
+          organization: organization,
+          code: "cargo_item",
+          name: "CargoItem",
+          cargo_unit_id: legacy_cargo_item.id)
       end
 
-      it 'returns the cargo item' do
+      it "returns the cargo item" do
         expect(charge_category.cargo_unit).to eq(legacy_cargo_item)
       end
     end

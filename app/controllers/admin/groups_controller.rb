@@ -3,9 +3,9 @@
 class Admin::GroupsController < Admin::AdminBaseController
   def index
     paginated_groups = handle_search(params).paginate(pagination_options)
-    response_groups = paginated_groups.map do |group|
+    response_groups = paginated_groups.map { |group|
       for_index_json(group).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    }
     response_handler(
       pagination_options.merge(
         groupData: response_groups,
@@ -16,7 +16,7 @@ class Admin::GroupsController < Admin::AdminBaseController
 
   def create
     group = ::Groups::Group.create(name: params[:name], organization: current_organization)
-    params[:addedMembers].keys.each do |type|
+    params[:addedMembers].each do |type, _|
       params[:addedMembers][type].each do |new_member|
         create_member_from_type(group: group, type: type, member: new_member)
       end
@@ -27,7 +27,7 @@ class Admin::GroupsController < Admin::AdminBaseController
   def edit_members
     group = ::Groups::Group.find_by(id: params[:id])
 
-    params[:addedMembers].keys.each do |type|
+    params[:addedMembers].each do |type, _|
       params[:addedMembers][type].each do |new_member|
         create_member_from_type(group: group, type: type, member: new_member)
       end
@@ -75,17 +75,17 @@ class Admin::GroupsController < Admin::AdminBaseController
 
   def create_member_from_type(group:, type:, member:)
     case type
-    when 'clients'
+    when "clients"
       user = ::Organizations::User.find_by(id: member[:id])
       return nil unless user
 
       ::Groups::Membership.find_or_create_by(group_id: group.id, member: user)
-    when 'companies'
+    when "companies"
       company = ::Companies::Company.find_by(id: member[:id])
       return nil unless company
 
       ::Groups::Membership.find_or_create_by(group_id: group.id, member: company)
-    when 'groups'
+    when "groups"
       member_group = ::Groups::Group.find_by(id: member[:id])
       return nil unless member_group
 
@@ -112,23 +112,23 @@ class Admin::GroupsController < Admin::AdminBaseController
     query = groups
     if search_params[:target_type] && search_params[:target_id]
       case search_params[:target_type]
-      when 'company'
+      when "company"
         query = query.joins(:memberships)
-                     .where(groups_memberships: { member_type: 'Companies::Company', member_id: search_params[:target_id] })
-      when 'group'
+          .where(groups_memberships: {member_type: "Companies::Company", member_id: search_params[:target_id]})
+      when "group"
         query = query.joins(:memberships)
-                     .where(groups_memberships: { member_type: 'Groups::Group', member_id: search_params[:target_id] })
-      when 'user'
+          .where(groups_memberships: {member_type: "Groups::Group", member_id: search_params[:target_id]})
+      when "user"
         query = query.joins(:memberships)
-                     .where(groups_memberships: { member_type: 'Users::User', member_id: search_params[:target_id] })
+          .where(groups_memberships: {member_type: "Users::User", member_id: search_params[:target_id]})
       end
     end
-    query = query.order(name: search_params[:name_desc] == 'true' ? :desc : :asc) if search_params[:name_desc]
+    query = query.order(name: search_params[:name_desc] == "true" ? :desc : :asc) if search_params[:name_desc]
     if search_params[:member_count_desc]
-      sorting_direction = search_params[:member_count_desc] == 'true' ? 'DESC' : 'ASC'
+      sorting_direction = search_params[:member_count_desc] == "true" ? "DESC" : "ASC"
       query = query.left_joins(:memberships)
-                   .group('groups_groups.id')
-                   .order("COUNT(groups_memberships.id) #{sorting_direction}")
+        .group("groups_groups.id")
+        .order("COUNT(groups_memberships.id) #{sorting_direction}")
     end
     query = query.search(search_params[:query]) if search_params[:query]
     query = query.search(search_params[:name]) if search_params[:name]
@@ -175,25 +175,25 @@ class Admin::GroupsController < Admin::AdminBaseController
 
   def member_info(membership:)
     case membership.member_type
-    when 'Users::User'
+    when "Users::User"
       {
         member_name: Profiles::ProfileService.fetch(user_id: membership.member_id).full_name,
-        human_type: 'client',
+        human_type: "client",
         member_email: membership.member.email,
         original_member_id: membership.member_id
       }
-    when 'Companies::Company'
+    when "Companies::Company"
       {
         member_name: membership.member.name,
-        human_type: 'company',
+        human_type: "company",
         member_email: membership.member.email,
         original_member_id: membership.member_id
       }
-    when 'Groups::Group'
+    when "Groups::Group"
       {
         member_name: membership.member.name,
-        human_type: 'group',
-        member_email: '',
+        human_type: "group",
+        member_email: "",
         original_member_id: membership.member_id
       }
     end

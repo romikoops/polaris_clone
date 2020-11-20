@@ -26,7 +26,7 @@ module ExcelDataServices
     end
 
     if defined?(FactoryBotRails)
-      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
+      config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)]
     end
   end
 end

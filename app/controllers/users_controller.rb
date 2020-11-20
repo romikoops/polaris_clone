@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :doorkeeper_authorize!, only: [:currencies, :create, :activate, :passwordless_authentication]
+  skip_before_action :doorkeeper_authorize!, only: [:create, :activate, :passwordless_authentication]
 
   def home
     current_shipments = organization_user_shipments
-    response = Rails.cache.fetch("#{current_shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
-      @contacts = Legacy::Contact.where(user: organization_user).limit(6).map do |contact|
+    response = Rails.cache.fetch("#{current_shipments.cache_key}/dashboard_index", expires_in: 12.hours) {
+      @contacts = Legacy::Contact.where(user: organization_user).limit(6).map { |contact|
         contact.as_json(
-          include: { address: { include: { country: { only: :name } },
-                                except: %i[created_at updated_at country_id] } },
+          include: {address: {include: {country: {only: :name}},
+                              except: %i[created_at updated_at country_id]}},
           except: %i[created_at updated_at address_id]
         )
-      end
+      }
       user_locs = Legacy::UserAddress.where(user: organization_user)
-      addresses = user_locs.map do |ul|
-        { user: ul, address: ul.address.to_custom_hash }
-      end
+      addresses = user_locs.map { |ul|
+        {user: ul, address: ul.address.to_custom_hash}
+      }
 
       {
         shipments: shipments_hash,
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
         num_contact_pages: (Legacy::Contact.where(user: organization_user).count.to_f / 6).to_f.ceil,
         addresses: addresses
       }
-    end
+    }
     response_handler(response)
   end
 
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     user = organization_user
     @addresses = Legacy::UserAddress.where(user: user).map(&:address)
 
-    { addresses: @addresses }
+    {addresses: @addresses}
   end
 
   def update
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     end
 
     user_response = complete_user_response(user: user)
-    token = generate_token_for(user: user, scope: 'public')
+    token = generate_token_for(user: user, scope: "public")
     token_header = Doorkeeper::OAuth::TokenResponse.new(token).body
 
     response_handler(user: user_response, headers: token_header)
@@ -64,13 +64,13 @@ class UsersController < ApplicationController
 
   def create
     user = Authentication::User.new(new_user_params).tap do |u|
-      u.type = 'Organizations::User'
+      u.type = "Organizations::User"
     end
     ActiveRecord::Base.transaction do
       user.save!
       create_or_update_profile(user: user)
     end
-    response = generate_token_for(user: user, scope: 'public')
+    response = generate_token_for(user: user, scope: "public")
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
   rescue ActiveRecord::RecordInvalid => e
     response_handler(
@@ -89,12 +89,12 @@ class UsersController < ApplicationController
 
     user = Authentication::User.find_by(passwordless_new_user_params)
     user ||= Authentication::User.new(passwordless_new_user_params).tap do |org_user|
-      org_user.type = 'Organizations::User'
+      org_user.type = "Organizations::User"
     end
     ActiveRecord::Base.transaction do
       user.save!
       create_or_update_profile(user: user)
-      response = generate_token_for(user: user, scope: 'public')
+      response = generate_token_for(user: user, scope: "public")
       response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
     end
   rescue ActiveRecord::RecordInvalid => e
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
 
   def download_gdpr
     url = DocumentService::GdprWriter.new(user_id: organization_user.id).perform
-    response_handler(url: url, key: 'gdpr')
+    response_handler(url: url, key: "gdpr")
   end
 
   def set_currency
@@ -148,7 +148,7 @@ class UsersController < ApplicationController
   end
 
   def not_authenticated
-    render json: {success: false}, status: 401
+    render json: {success: false}, status: :unauthorized
   end
 
   def new_user_params
@@ -174,7 +174,9 @@ class UsersController < ApplicationController
 
     unless return_params[:cookies].nil?
       return_params.delete(:cookies)
-      return_params[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
+      return_params[:optin_status_id] = OptinStatus
+        .find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true)
+        .id
     end
 
     return_params
@@ -189,12 +191,17 @@ class UsersController < ApplicationController
   end
 
   def shipments_hash
-    quotation_tool? ?
-    {
-      quoted: decorate_shipments(shipments: quoted_shipments.order(booking_placed_at: :desc).limit(3)).map(&:legacy_index_json)
-    } : {
-      requested: decorate_shipments(shipments: requested_shipments.order(booking_placed_at: :desc).limit(3)).map(&:legacy_index_json)
-    }
+    if quotation_tool?
+      {
+        quoted: decorate_shipments(shipments: quoted_shipments.order(booking_placed_at: :desc).limit(3))
+          .map(&:legacy_index_json)
+      }
+    else
+      {
+        requested: decorate_shipments(shipments: requested_shipments.order(booking_placed_at: :desc).limit(3))
+          .map(&:legacy_index_json)
+      }
+    end
   end
 
   def requested_shipments
@@ -232,7 +239,7 @@ class UsersController < ApplicationController
   end
 
   def complete_user_response(user:)
-    role = { name: role_for(user: user) }
+    role = {name: role_for(user: user)}
     currency = Users::Settings.find_by(user_id: user.id)&.currency
     user_metadata = {role: role, inactivityLimit: inactivity_limit, currency: currency}
     merge_profile(user: user).merge(user_metadata)

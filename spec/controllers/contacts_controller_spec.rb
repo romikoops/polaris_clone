@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ContactsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
@@ -11,21 +11,21 @@ RSpec.describe ContactsController do
     append_token_header
   end
 
-  describe 'GET #index' do
-    it 'returns http success' do
-      get :index, params: { organization_id: user.organization_id }
+  describe "GET #index" do
+    it "returns http success" do
+      get :index, params: {organization_id: user.organization_id}
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
         json = JSON.parse(response.body)
-        expect(json['success']).to eq true
-        expect(json.dig('data', 'numContactPages')).to eq 1
-        expect(json.dig('data', 'contacts').map { |c| c['id'] }.sort).to eq contacts.map(&:id).sort
+        expect(json["success"]).to eq true
+        expect(json.dig("data", "numContactPages")).to eq 1
+        expect(json.dig("data", "contacts").map { |c| c["id"] }.sort).to eq contacts.map(&:id).sort
       end
     end
   end
 
-  describe 'POST #create' do
+  describe "POST #create" do
     let(:contact_params) {
       {
         organization_id: user.organization_id,
@@ -44,15 +44,15 @@ RSpec.describe ContactsController do
       }
     }
 
-    context 'when params are valid' do
-      it 'returns http success' do
+    context "when params are valid" do
+      it "returns http success" do
         post :create, params: contact_params
 
         expect(response).to have_http_status(:success)
       end
     end
 
-    context 'when params are not unique' do
+    context "when params are not unique" do
       before do
         FactoryBot.create(:legacy_contact,
           user: user,
@@ -62,7 +62,7 @@ RSpec.describe ContactsController do
           phone: "123456789")
       end
 
-      it 'returns 422' do
+      it "returns 422" do
         post :create, params: contact_params
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -70,47 +70,47 @@ RSpec.describe ContactsController do
     end
   end
 
-  context 'when searching' do
-    let!(:target_contact) { FactoryBot.create(:contact, user: user, first_name: 'Bobert') }
+  context "when searching" do
+    let!(:target_contact) { FactoryBot.create(:contact, user: user, first_name: "Bobert") }
 
-    describe 'GET #search_contacts' do
-      it 'returns the correct contact' do
-        get :search_contacts, params: { organization_id: user.organization_id, query: 'Bober' }
+    describe "GET #search_contacts" do
+      it "returns the correct contact" do
+        get :search_contacts, params: {organization_id: user.organization_id, query: "Bober"}
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
           json = JSON.parse(response.body)
-          expect(json['success']).to eq true
-          expect(json.dig('data', 'numContactPages')).to eq 1
-          expect(json.dig('data', 'contacts', 0, 'id')).to eq target_contact.id
+          expect(json["success"]).to eq true
+          expect(json.dig("data", "numContactPages")).to eq 1
+          expect(json.dig("data", "contacts", 0, "id")).to eq target_contact.id
         end
       end
     end
 
-    describe 'GET #booking_process' do
-      it 'returns the correct contact' do
-        get :booking_process, params: { organization_id: user.organization_id, query: 'Bober' }
+    describe "GET #booking_process" do
+      it "returns the correct contact" do
+        get :booking_process, params: {organization_id: user.organization_id, query: "Bober"}
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
           json = JSON.parse(response.body)
-          expect(json['success']).to eq true
-          expect(json.dig('data', 'numContactPages')).to eq 1
-          expect(json.dig('data', 'contacts', 0, 'contact', 'id')).to eq target_contact.id
+          expect(json["success"]).to eq true
+          expect(json.dig("data", "numContactPages")).to eq 1
+          expect(json.dig("data", "contacts", 0, "contact", "id")).to eq target_contact.id
         end
       end
     end
   end
 
-  describe 'GET #show' do
+  describe "GET #show" do
     let(:contact) { contacts.first }
     let(:shipment_user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
     let(:shipment) { FactoryBot.create(:completed_legacy_shipment, organization: organization, user: shipment_user) }
 
     before { FactoryBot.create(:legacy_shipment_contact, shipment: shipment, contact: contact) }
 
-    it 'returns http success' do
-      get :show, params: { organization_id: user.organization_id, id: contact.id }
+    it "returns http success" do
+      get :show, params: {organization_id: user.organization_id, id: contact.id}
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
@@ -119,8 +119,8 @@ RSpec.describe ContactsController do
       end
     end
 
-    it 'returns http not found if no contact' do
-      get :show, params: { organization_id: user.organization_id, id: 'dkfhskjfh' }
+    it "returns http not found if no contact" do
+      get :show, params: {organization_id: user.organization_id, id: "dkfhskjfh"}
 
       aggregate_failures do
         expect(response).to have_http_status(:not_found)
@@ -128,19 +128,19 @@ RSpec.describe ContactsController do
     end
   end
 
-  describe 'update' do
+  describe "update" do
     let(:contact) { contacts.first }
     let(:contact_two) { contacts.last }
     let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
 
     before do
       Geocoder::Lookup::Test.add_stub([hamburg_address.latitude, hamburg_address.longitude], [
-        'address_components' => [{ 'types' => ['premise'] }],
-        'address' => 'Brooktorkai 7, Hamburg, 20457, Germany',
-        'city' => 'Hamburg',
-        'country' => 'Germany',
-        'country_code' => 'DE',
-        'postal_code' => '20457'
+        "address_components" => [{"types" => ["premise"]}],
+        "address" => "Brooktorkai 7, Hamburg, 20457, Germany",
+        "city" => "Hamburg",
+        "country" => "Germany",
+        "country_code" => "DE",
+        "postal_code" => "20457"
       ])
     end
 
@@ -170,7 +170,7 @@ RSpec.describe ContactsController do
           'firstName': contact.first_name,
           'lastName': contact.last_name,
           'phone': contact.phone,
-          'email': 'newemail@itsmycargo.com',
+          'email': "newemail@itsmycargo.com",
           "street": "brooktorkai",
           "number": "brooktorkai",
           "zipCode": "20457",
@@ -180,7 +180,7 @@ RSpec.describe ContactsController do
       }
     }
 
-    it 'when updated with valid params' do
+    it "when updated with valid params" do
       post :update, params: valid_params
 
       aggregate_failures do
@@ -188,7 +188,7 @@ RSpec.describe ContactsController do
       end
     end
 
-    it 'when updated with unique contact' do
+    it "when updated with unique contact" do
       post :update, params: invalid_params
 
       aggregate_failures do

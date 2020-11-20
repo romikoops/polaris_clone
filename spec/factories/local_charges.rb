@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :local_charge do
     association :hub
     association :organization, factory: :tenant_vehicle
-    direction { 'export' }
-    load_type { 'lcl' }
+    direction { "export" }
+    load_type { "lcl" }
   end
 end
 

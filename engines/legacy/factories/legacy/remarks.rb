@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_remark, class: 'Legacy::Remark' do
-    body { 'Some Remark' }
+  factory :legacy_remark, class: "Legacy::Remark" do
+    body { "Some Remark" }
     association :organization, factory: :organizations_organization
-    category { 'Quotation' }
-    subcategory { 'Shipment' }
+    category { "Quotation" }
+    subcategory { "Shipment" }
   end
 end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'admiralty/application_controller'
+require_dependency "admiralty/application_controller"
 
 module Admiralty
   class DashboardController < ApplicationController
@@ -17,20 +17,20 @@ module Admiralty
 
     def excluded_users
       Users::User.with_deleted
-                 .select(:id)
-                 .where(email: excluded_emails)
+        .select(:id)
+        .where(email: excluded_emails)
     end
 
     def shipments_from_excluded_users
       ::Shipments::ShipmentRequest.includes(:user)
-                                  .where.not(user_id: excluded_users.ids, billing: :test)
-                                  .order(created_at: :desc)
+        .where.not(user_id: excluded_users.ids, billing: :test)
+        .order(created_at: :desc)
     end
 
     def quotations_from_excluded_users
       ::Quotations::Quotation.includes(:user)
-                             .where.not(user_id: excluded_users.ids, billing: :test)
-                             .order(created_at: :desc)
+        .where.not(user_id: excluded_users.ids, billing: :test)
+        .order(created_at: :desc)
     end
 
     def booking_slug(booking)
@@ -44,7 +44,7 @@ module Admiralty
 
     def excluded_emails
       Organizations::Organization.all.flat_map do |organization|
-        ::OrganizationManager::ScopeService.new(organization: organization).fetch('blacklisted_emails')
+        ::OrganizationManager::ScopeService.new(organization: organization).fetch("blacklisted_emails")
       end
     end
 

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_price, class: 'Legacy::Price' do
-    value { '9.99' }
-    currency { 'EUR' }
+  factory :legacy_price, class: "Legacy::Price" do
+    value { "9.99" }
+    currency { "EUR" }
   end
 end
 

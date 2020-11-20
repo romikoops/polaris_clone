@@ -17,11 +17,11 @@ class ValidityService
     return [start_date, end_date] if schedules.blank?
 
     case validity_logic
-    when 'vatos'
+    when "vatos"
       handle_vatos_schedules
-    when 'vatoa'
+    when "vatoa"
       handle_vatoa_schedules
-    when 'vatob'
+    when "vatob"
       @start_date = @end_date = booking_date
     end
     @start_date = start_value if start_value.present?
@@ -40,7 +40,7 @@ class ValidityService
   end
 
   def handle_vatoa_schedules
-    method = direction == 'export' ? :etd : :eta
+    method = direction == "export" ? :etd : :eta
     @start_value = schedules.first.try(method)
     @end_value = schedules.last.try(method)
   end

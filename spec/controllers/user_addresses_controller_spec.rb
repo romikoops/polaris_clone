@@ -18,7 +18,7 @@ RSpec.describe UserAddressesController do
     end
 
     it "returns http success" do
-      get :index, params: { organization_id: organization.id, user_id: user.id }
+      get :index, params: {organization_id: organization.id, user_id: user.id}
 
       expect(JSON.parse(response.body).dig("data").count).to eq addresses.count
     end

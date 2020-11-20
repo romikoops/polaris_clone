@@ -2,14 +2,14 @@
 
 module Legacy
   class ChargeBreakdown < ApplicationRecord
-    self.table_name = 'charge_breakdowns'
+    self.table_name = "charge_breakdowns"
 
     belongs_to :shipment
-    belongs_to :tender, class_name: 'Quotations::Tender', optional: true
+    belongs_to :tender, class_name: "Quotations::Tender", optional: true
     belongs_to :trip
-    belongs_to :pickup_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :freight_tenant_vehicle, class_name: 'Legacy::TenantVehicle'
-    belongs_to :delivery_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
+    belongs_to :pickup_tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    belongs_to :freight_tenant_vehicle, class_name: "Legacy::TenantVehicle"
+    belongs_to :delivery_tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
 
     validates :freight_tenant_vehicle, uniqueness: {
       scope: %i[trip_id shipment_id pickup_tenant_vehicle delivery_tenant_vehicle]
@@ -28,7 +28,7 @@ module Legacy
     end
 
     scope :selected, lambda {
-      joins(:shipment).where('charge_breakdowns.trip_id = shipments.trip_id').first
+      joins(:shipment).where("charge_breakdowns.trip_id = shipments.trip_id").first
     }
 
     acts_as_paranoid
@@ -38,7 +38,7 @@ module Legacy
     end
 
     def grand_total
-      charge('grand_total')
+      charge("grand_total")
     end
 
     def grand_total=(value)
@@ -52,9 +52,9 @@ module Legacy
 
     def to_nested_hash(args, sub_total_charge: false)
       grand_total.deconstruct_tree_into_schedule_charge(args,
-                                                        sub_total_charge: sub_total_charge)
-                 .merge(trip_id: trip_id, valid_until: valid_until)
-                 .deep_stringify_keys
+        sub_total_charge: sub_total_charge)
+        .merge(trip_id: trip_id, valid_until: valid_until)
+        .deep_stringify_keys
     end
 
     def dup_charges(charge_breakdown:)

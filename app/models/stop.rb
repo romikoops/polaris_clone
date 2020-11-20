@@ -5,7 +5,7 @@ class Stop < Legacy::Stop
   belongs_to :hub
   has_many :layovers, dependent: :destroy
 
-  validates_uniqueness_of :index, scope: %i(itinerary_id hub_id)
+  validates :index, uniqueness: {scope: %i[itinerary_id hub_id]}
 end
 
 # == Schema Information

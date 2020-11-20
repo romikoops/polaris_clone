@@ -12,16 +12,15 @@ class Shipment < Legacy::Shipment
   belongs_to :quotation, optional: true
   belongs_to :route, optional: true
 
-  belongs_to :origin_nexus, class_name: 'Nexus', optional: true
-  belongs_to :destination_nexus, class_name: 'Nexus', optional: true
-  belongs_to :origin_hub, class_name: 'Hub', optional: true
-  belongs_to :destination_hub, class_name: 'Hub', optional: true
+  belongs_to :origin_nexus, class_name: "Nexus", optional: true
+  belongs_to :destination_nexus, class_name: "Nexus", optional: true
+  belongs_to :origin_hub, class_name: "Hub", optional: true
+  belongs_to :destination_hub, class_name: "Hub", optional: true
 
   has_many :contacts, through: :shipment_contacts
   has_many :messages, through: :conversations
   has_many :shipment_contacts
   has_many :charge_breakdowns do
-
     def to_schedules_charges
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
     end
@@ -42,11 +41,11 @@ class Shipment < Legacy::Shipment
   def edited_total
     return if trip_id.nil?
 
-    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
+    price = charge_breakdowns.find_by(trip_id: trip_id).charge("grand_total").edited_price
 
     return nil if price.nil?
 
-    { value: price.value, currency: price.currency }
+    {value: price.value, currency: price.currency}
   end
 
   def origin_layover
@@ -64,35 +63,35 @@ class Shipment < Legacy::Shipment
   def origin_layover=(layover)
     set_trip_using_layover(layover)
 
-    self.planned_etd  = layover.etd
+    self.planned_etd = layover.etd
     self.closing_date = layover.closing_date
-    self.origin_hub   = layover.hub
+    self.origin_hub = layover.hub
   end
 
   def destination_layover=(layover)
     set_trip_using_layover(layover)
 
-    self.planned_eta     = layover.eta
+    self.planned_eta = layover.eta
     self.destination_hub = layover.hub
   end
 
   def set_trip_using_layover(layover)
-    raise 'Trip Mismatch' unless trip_id.nil? || layover.trip.id == trip_id
+    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id == trip_id
 
-    self.trip      ||= layover.trip
+    self.trip ||= layover.trip
     self.itinerary ||= layover.trip.itinerary
   end
 
   def set_trucking_chargeable_weight(target, weight)
-    trucking[target]['chargeable_weight'] = weight
+    trucking[target]["chargeable_weight"] = weight
   end
 
   def import?
-    direction == 'import'
+    direction == "import"
   end
 
   def export?
-    direction == 'export'
+    direction == "export"
   end
 
   def cargo_count
@@ -105,7 +104,7 @@ class Shipment < Legacy::Shipment
 
   def cargo_classes
     if aggregated_cargo
-      ['lcl']
+      ["lcl"]
     else
       cargo_units.pluck(:cargo_class).uniq
     end
@@ -144,44 +143,44 @@ class Shipment < Legacy::Shipment
   end
 
   def has_on_carriage=(_value)
-    raise 'This property is read only. Please write to the trucking property instead.'
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_pre_carriage=(_value)
-    raise 'This property is read only. Please write to the trucking property instead.'
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_customs?
-    !!selected_offer.dig('customs')
+    !!selected_offer.dig("customs")
   end
 
   def has_insurance?
-    !!selected_offer.dig('insurance')
+    !!selected_offer.dig("insurance")
   end
 
   def confirm!
-    update!(status: 'confirmed')
+    update!(status: "confirmed")
   end
 
   def finish!
-    update!(status: 'finished')
+    update!(status: "finished")
   end
 
   def request!
-    new_status = confirmed_user? ? 'requested' : 'requested_by_unconfirmed_account'
+    new_status = confirmed_user? ? "requested" : "requested_by_unconfirmed_account"
     update!(status: new_status)
   end
 
   def decline!
-    update!(status: 'declined')
+    update!(status: "declined")
   end
 
   def ignore!
-    update!(status: 'ignored')
+    update!(status: "ignored")
   end
 
   def archive!
-    update!(status: 'archived')
+    update!(status: "archived")
   end
 
   def route_notes
@@ -191,12 +190,12 @@ class Shipment < Legacy::Shipment
   end
 
   def confirmed_user?
-    user&.activation_state == 'active'
+    user&.activation_state == "active"
   end
 
   def self.create_all_empty_charge_breakdowns!
-    where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
-         .find_each(&:create_charge_breakdowns_from_schedules_charges!)
+    where.not(id: ChargeBreakdown.uniq.pluck(:shipment_id), schedules_charges: {})
+      .find_each(&:create_charge_breakdowns_from_schedules_charges!)
   end
 
   def self.update_refactor_shipments
@@ -204,8 +203,8 @@ class Shipment < Legacy::Shipment
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus
-      s.trucking['on_carriage']['address_id'] ||= itinerary.last_stop.hub.id if s.has_on_carriage
-      s.trucking['pre_carriage']['address_id'] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
+      s.trucking["on_carriage"]["address_id"] ||= itinerary.last_stop.hub.id if s.has_on_carriage
+      s.trucking["pre_carriage"]["address_id"] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
       s.save!
     end
   end

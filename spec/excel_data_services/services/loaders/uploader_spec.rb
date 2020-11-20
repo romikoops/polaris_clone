@@ -33,7 +33,8 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
         allow(header_validator).to receive(:restructurer_name).twice.and_return("")
         allow(ExcelDataServices::FileParser).to receive(:parse).and_return([{sheet_name: "DummySheet"}])
         allow(ExcelDataServices::Restructurers::Base).to receive(:restructure).and_return(DummyInsertionType: [])
-        allow(ExcelDataServices::Validators::Base).to receive(:get).exactly(3).times.and_return(flavor_based_validator_klass)
+        allow(ExcelDataServices::Validators::Base).to receive(:get)
+          .exactly(3).times.and_return(flavor_based_validator_klass)
         allow(flavor_based_validator_klass).to receive(:new).exactly(3).times.and_return(flavor_based_validator)
         allow(flavor_based_validator).to receive(:perform).exactly(3).times
         allow(flavor_based_validator).to receive(:valid?).exactly(3).times.and_return(true)

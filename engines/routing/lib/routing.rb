@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'routing/engine'
+require "routing/engine"
 
 module Routing
 end

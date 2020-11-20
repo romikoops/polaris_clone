@@ -5,12 +5,12 @@ module OfferCalculator
     attr_reader :shipment, :quotation
 
     def initialize(shipment:, params:, user:, creator:, wheelhouse: false)
-      @user           = user
-      @shipment       = shipment
+      @user = user
+      @shipment = shipment
       @creator = creator
       @params = params
-      @delay = params['delay']
-      @estimated = params['estimated']
+      @delay = params["delay"]
+      @estimated = params["estimated"]
       @organization = @shipment.organization
       @quotation = create_quotations_quotations
       @async = params[:async] || false
@@ -56,7 +56,7 @@ module OfferCalculator
     end
 
     def mailer
-      'QuoteMailer' unless wheelhouse
+      "QuoteMailer" unless wheelhouse
     end
 
     def create_quotations_quotations

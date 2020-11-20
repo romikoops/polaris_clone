@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'api/api_controller'
+require_dependency "api/api_controller"
 
 module Api
   module V1
@@ -12,7 +12,7 @@ module Api
 
       def index
         itineraries = Legacy::Itinerary.where(organization: current_organization)
-        render json: ItinerarySerializer.new(itineraries, params: { includes: ['stops'] })
+        render json: ItinerarySerializer.new(itineraries, params: {includes: ["stops"]})
       end
     end
   end

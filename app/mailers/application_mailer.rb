@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: 'no-reply@itsmycargo.tech'
-  layout 'mailer'
+  default from: "no-reply@itsmycargo.tech"
+  layout "mailer"
   CHARACTER_COUNT = 90
 
   include ActionView::Helpers::TextHelper
@@ -15,7 +15,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def mail_target_interceptor(billing, email)
-    billing == 'external' && email.present? ? email : Settings.emails.booking
+    billing == "external" && email.present? ? email : Settings.emails.booking
   end
 
   def set_current_id(organization_id:)
@@ -33,7 +33,7 @@ class ApplicationMailer < ActionMailer::Base
   def subject_line(type:, references:, quotation:)
     template = scope_for(record: quotation.user).dig(:email_subject_template)
     liquid = Liquid::Template.parse(template)
-    noun = type == :quotation ? 'Quotation' : 'Booking'
+    noun = type == :quotation ? "Quotation" : "Booking"
     liquid_string = liquid.render(
       context(
         references: references,
@@ -44,7 +44,7 @@ class ApplicationMailer < ActionMailer::Base
     grapheme_clusters = liquid_string.each_grapheme_cluster
     return liquid_string if grapheme_clusters.count < CHARACTER_COUNT
 
-    grapheme_clusters.take(CHARACTER_COUNT).join + '...'
+    grapheme_clusters.take(CHARACTER_COUNT).join + "..."
   end
 
   def context(references:, noun:, quotation:)
@@ -61,7 +61,7 @@ class ApplicationMailer < ActionMailer::Base
       total_volume: quotation.total_volume,
       client_name: quotation.client_name,
       load_type: quotation.load_type,
-      references: truncate("Refs: #{references.join(", ")}", length: 23, separator: ' '),
+      references: truncate("Refs: #{references.join(", ")}", length: 23, separator: " "),
       routing: quotation.routing,
       noun: noun
     }.deep_stringify_keys

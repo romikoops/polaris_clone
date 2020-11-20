@@ -19,8 +19,8 @@ module TenderCalculator
       @section_rates.each do |section_rate|
         cargo_rates = section_rate.cargos.sort_by(&:order).group_by(&:applicable_to)
 
-        section_cargos_node = cargo_line_items(cargo_applicable_rates: cargo_rates['cargo'], rate: section_rate)
-        section_node = percentage_line_items(cargo_rates['section'], section_cargos_node)
+        section_cargos_node = cargo_line_items(cargo_applicable_rates: cargo_rates["cargo"], rate: section_rate)
+        section_node = percentage_line_items(cargo_rates["section"], section_cargos_node)
 
         # adding percentage margins with target = section_rate
         section_node = percentage_margins(target: section_rate, node: section_node)
@@ -29,7 +29,7 @@ module TenderCalculator
 
         section_node = construct_discounts(rate: section_rate, base_node: section_node)
 
-        shipment_node = percentage_line_items(cargo_rates['shipment'], section_node)
+        shipment_node = percentage_line_items(cargo_rates["shipment"], section_node)
 
         @root << shipment_node
       end

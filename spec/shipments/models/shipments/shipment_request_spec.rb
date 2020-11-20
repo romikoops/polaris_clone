@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Shipments
   RSpec.describe ShipmentRequest, type: :model do
-    it 'has many documents as attachables' do
+    it "has many documents as attachables" do
       is_expected.to respond_to(:documents)
     end
 
-    it 'creates a valid shipment request' do
+    it "creates a valid shipment request" do
       shipment_request = FactoryBot.create :shipments_shipment_request
       expect(shipment_request.valid?).to eql(true)
     end
 
-    it 'creates a an object with consignee, consignor, and notifyee' do
+    it "creates a an object with consignee, consignor, and notifyee" do
       shipment_request = FactoryBot.build :shipments_shipment_request
 
       consignee = FactoryBot.build(:shipments_shipment_request_contact, :as_consignee)
@@ -24,9 +24,9 @@ module Shipments
       shipment_request.consignor = consignor
       shipment_request.notifyees = notifyees
 
-      expect(shipment_request.consignee.type).to eq('Shipments::ShipmentRequestContacts::Consignee')
-      expect(shipment_request.consignor.type).to eq('Shipments::ShipmentRequestContacts::Consignor')
-      expect(shipment_request.notifyees.first.type).to eq('Shipments::ShipmentRequestContacts::Notifyee')
+      expect(shipment_request.consignee.type).to eq("Shipments::ShipmentRequestContacts::Consignee")
+      expect(shipment_request.consignor.type).to eq("Shipments::ShipmentRequestContacts::Consignor")
+      expect(shipment_request.notifyees.first.type).to eq("Shipments::ShipmentRequestContacts::Notifyee")
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ledger/engine'
+require "ledger/engine"
 
 module Ledger
 end

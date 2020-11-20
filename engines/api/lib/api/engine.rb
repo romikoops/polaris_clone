@@ -11,15 +11,15 @@ module Api
     isolate_namespace Api
 
     config.generators do |g|
-      g.orm                 :active_record, primary_key_type: :uuid
-      g.fixture_replacement :factory_bot, dir: 'factories'
-      g.test_framework      :rspec
-      g.assets              false
-      g.helper              false
-      g.javascripts         false
-      g.model_specs         false
-      g.stylesheets         false
-      g.view_specs          false
+      g.orm :active_record, primary_key_type: :uuid
+      g.fixture_replacement :factory_bot, dir: "factories"
+      g.test_framework :rspec
+      g.assets false
+      g.helper false
+      g.javascripts false
+      g.model_specs false
+      g.stylesheets false
+      g.view_specs false
     end
 
     initializer "api.automount" do |app|
@@ -28,7 +28,7 @@ module Api
       end
     end
 
-    initializer 'json_api', after: 'active_model_serializers.set_configs' do
+    initializer "json_api", after: "active_model_serializers.set_configs" do
       ActiveModelSerializers.config.adapter = :json_api
       ActiveModelSerializers.config.key_transform = :camel_lower
     end

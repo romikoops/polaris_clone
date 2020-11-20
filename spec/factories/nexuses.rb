@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :nexus do
-    name { 'Gothenburg' }
-    latitude { '57.694253' }
-    longitude { '11.854048' }
+    name { "Gothenburg" }
+    latitude { "57.694253" }
+    longitude { "11.854048" }
     association :organization, factory: :organizations_organization
     association :country
   end

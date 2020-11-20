@@ -11,7 +11,9 @@ module Pricings
       @directions = args[:directions]
       @margin_type = args[:marginType]
       @attached_to = args[:attached_to]
-      @pricing = args[:pricing_id] ? Pricings::Pricing.where(organization_id: current_organization.id).find(args[:pricing_id]) : nil
+      @pricing = if args[:pricing_id]
+        Pricings::Pricing.where(organization_id: current_organization.id).find(args[:pricing_id])
+      end
       @new_organization = Organizations::Organization.find(args[:organization_id])
       @group = Groups::Group.find(args[:groupId])
       @args = args
@@ -43,8 +45,8 @@ module Pricings
         )
 
         unless @args[:fineFeeValues].empty?
-          @args[:fineFeeValues].keys.each do |key|
-            fee_code = key.to_s.split(' - ').first
+          @args[:fineFeeValues].each_key do |key|
+            fee_code = key.to_s.split(" - ").first
             charge_category = ::Legacy::ChargeCategory.from_code(code: fee_code, organization_id: @new_organization.id)
             ::Pricings::Detail.create!(
               margin_id: margin.id,
@@ -61,22 +63,22 @@ module Pricings
     end
 
     def get_margin_value(operator, value)
-      return value.to_d / 100.0 if operator == '%'
+      return value.to_d / 100.0 if operator == "%"
 
       value
     end
 
     def determine_iterations
-      if @margin_type == 'freight' && !@hub_ids.empty?
+      if @margin_type == "freight" && !@hub_ids.empty?
         freight_iterations_by_hub
-      elsif @margin_type == 'freight' && !@itinerary_ids.empty?
+      elsif @margin_type == "freight" && !@itinerary_ids.empty?
         freight_iterations_by_itinerary
-      elsif @margin_type == 'freight' && @itinerary_ids.empty? && @attached_to == 'itinerary'
+      elsif @margin_type == "freight" && @itinerary_ids.empty? && @attached_to == "itinerary"
         @itinerary_ids = [nil]
         freight_iterations_by_itinerary
-      elsif @margin_type == 'trucking'
+      elsif @margin_type == "trucking"
         trucking_iterations
-      elsif @margin_type == 'local_charges'
+      elsif @margin_type == "local_charges"
         local_charge_iterations
       end
     end
@@ -88,7 +90,7 @@ module Pricings
           @cargo_classes.each do |cargo_class|
             @tenant_vehicle_ids.each do |tv_id|
               case direction
-              when 'import'
+              when "import"
                 iterations << {
                   destination_hub_id: hub_id,
                   origin_hub_id: @counterpart_hub_id,
@@ -96,7 +98,7 @@ module Pricings
                   tenant_vehicle_id: tv_id,
                   margin_type: :import_margin
                 }
-              when 'export'
+              when "export"
                 iterations << {
                   origin_hub_id: hub_id,
                   destination_hub_id: @counterpart_hub_id,
@@ -118,14 +120,14 @@ module Pricings
         @hub_ids.each do |hub_id|
           @cargo_classes.each do |cargo_class|
             case direction
-            when 'import'
+            when "import"
               iterations << {
                 origin_hub_id: hub_id,
                 destination_hub_id: @counterpart_hub_id,
                 cargo_class: cargo_class,
                 margin_type: :trucking_on_margin
               }
-            when 'export'
+            when "export"
               iterations << {
                 destination_hub_id: hub_id,
                 origin_hub_id: @counterpart_hub_id,
@@ -146,7 +148,7 @@ module Pricings
           @cargo_classes.each do |cargo_class|
             @tenant_vehicle_ids.each do |tv_id|
               case direction
-              when 'import'
+              when "import"
                 iterations << {
                   destination_hub_id: hub_id,
                   origin_hub_id: @counterpart_hub_id,
@@ -154,7 +156,7 @@ module Pricings
                   tenant_vehicle_id: tv_id,
                   margin_type: :freight_margin
                 }
-              when 'export'
+              when "export"
                 iterations << {
                   origin_hub_id: hub_id,
                   destination_hub_id: @counterpart_hub_id,
@@ -188,13 +190,13 @@ module Pricings
     end
 
     def self.create_default_margins(organization)
-      ['rail', 'ocean', 'air', 'truck', 'local_charge', 'trucking', nil].each do |default|
+      ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil].each do |default|
         %i[freight_margin export_margin import_margin trucking_pre_margin trucking_on_margin].each do |m_type|
           ::Pricings::Margin.find_or_create_by!(
             organization: organization,
             value: 0,
             default_for: default,
-            operator: '%',
+            operator: "%",
             applicable: organization,
             margin_type: m_type,
             effective_date: Date.current,

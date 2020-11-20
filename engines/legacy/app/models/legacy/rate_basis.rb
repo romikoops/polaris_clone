@@ -2,7 +2,7 @@
 
 module Legacy
   class RateBasis < ApplicationRecord
-    self.table_name = 'rate_bases'
+    self.table_name = "rate_bases"
 
     def self.get_internal_key(external_rate_basis)
       rate_basis = RateBasis.find_by(external_code: external_rate_basis)

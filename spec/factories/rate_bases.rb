@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :rate_basis do
-    external_code { 'PER_HBL' }
-    internal_code { 'PER_SHIPMENT' }
+    external_code { "PER_HBL" }
+    internal_code { "PER_SHIPMENT" }
   end
 end
 

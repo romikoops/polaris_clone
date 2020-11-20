@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Admin::ItinerariesController < Admin::AdminBaseController
-
   def index
     paginated_itineraries = handle_search.paginate(pagination_options)
 
@@ -23,8 +22,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def destroy
-    itinerary = Itinerary.find_by(id: params[:id]).destroy
-    response_handler(true)
+    response_handler(Itinerary.find_by(id: params[:id]).destroy)
   end
 
   def stops
@@ -38,9 +36,10 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def show
     itinerary = Itinerary.find_by(id: params[:id])
     resp = {
-             itinerary: itinerary,
-             validationResult: Validator::Itinerary.new(user: organization_user, itinerary: itinerary).perform,
-             notes: itinerary.notes }
+      itinerary: itinerary,
+      validationResult: Validator::Itinerary.new(user: organization_user, itinerary: itinerary).perform,
+      notes: itinerary.notes
+    }
     response_handler(resp)
   end
 
@@ -55,7 +54,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
       mot: ->(query, param) { query.where(mode_of_transport: param) },
       mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) },
       transshipment: ->(query, param) { query.transshipment_search(param) },
-      transshipment_desc: ->(query, param) { query.ordered_by(:transshipment, param) },
+      transshipment_desc: ->(query, param) { query.ordered_by(:transshipment, param) }
     }.each do |key, lambd|
       itinerary_relation = lambd.call(itinerary_relation, search_params[key]) if search_params[key]
     end
@@ -92,14 +91,14 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def first_sheet
-    xlsx = open_file(params['xlsx'])
+    xlsx = open_file(params["xlsx"])
     xlsx.sheet(xlsx.sheets.first)
   end
 
   def itinerary_params
     {
-      mode_of_transport: params['itinerary']['mot'],
-      name: params['itinerary']['name'],
+      mode_of_transport: params["itinerary"]["mot"],
+      name: params["itinerary"]["name"],
       organization_id: current_organization_id
     }
   end
@@ -110,7 +109,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def params_stops
-    params['itinerary']['stops'].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
+    params["itinerary"]["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
   end
 
   def app_error(message)

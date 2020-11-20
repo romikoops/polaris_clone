@@ -9,7 +9,7 @@ class SamlController < ApplicationController
   end
 
   def metadata
-    render xml: OneLogin::RubySaml::Metadata.new.generate(saml_settings), content_type: 'application/samlmetadata+xml'
+    render xml: OneLogin::RubySaml::Metadata.new.generate(saml_settings), content_type: "application/samlmetadata+xml"
   end
 
   def consume
@@ -22,7 +22,7 @@ class SamlController < ApplicationController
     attach_to_groups(user: user, group_names: saml_response.attributes[:groups])
     create_or_update_user_profile(user: user, response: saml_response)
 
-    token = generate_token_for(user: user, scope: 'public')
+    token = generate_token_for(user: user, scope: "public")
     token_header = Doorkeeper::OAuth::TokenResponse.new(token).body
     response_params = token_header.merge(userId: user.id, organizationId: organization.id)
     redirect_to generate_url(url_string: "https://#{saml_domain}/login/saml/success", params: response_params)
@@ -62,8 +62,8 @@ class SamlController < ApplicationController
 
       settings.assertion_consumer_service_url = "https://#{saml_domain}/saml/consume"
       settings.sp_entity_id = "https://#{saml_domain}/saml/metadata"
-      settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
-      settings.authn_context = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
+      settings.name_identifier_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+      settings.authn_context = "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
 
       settings
     end

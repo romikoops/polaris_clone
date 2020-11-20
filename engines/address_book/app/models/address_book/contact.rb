@@ -5,18 +5,18 @@ module AddressBook
     include PgSearch::Model
 
     pg_search_scope :contact_search, against: %i[first_name last_name company_name email phone country_code], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
 
-    belongs_to :user, class_name: 'Organizations::User'
-    has_many :shipment_request_contacts, class_name: 'Shipments::ShipmentRequestContact'
+    belongs_to :user, class_name: "Organizations::User"
+    has_many :shipment_request_contacts, class_name: "Shipments::ShipmentRequestContact"
 
     # Validations
     validates :first_name, :email, presence: true
 
     # validates uniqueness for each user
-    validates :user_id, uniqueness: { scope: %i[first_name last_name phone email],
-                                      message: 'Contact must be unique to add.' }
+    validates :user_id, uniqueness: {scope: %i[first_name last_name phone email],
+                                     message: "Contact must be unique to add."}
   end
 end
 

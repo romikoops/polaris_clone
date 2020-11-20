@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'locations/engine'
+require "locations/engine"
 
 module Locations
 end

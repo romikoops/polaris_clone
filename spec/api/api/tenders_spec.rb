@@ -11,7 +11,10 @@ RSpec.describe "Tenders" do
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment: shipment) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization: organization, user: user) }
+  let(:shipment) {
+    FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, organization: organization,
+                                        user: user)
+  }
   let(:charge_category) { shipment.charge_breakdowns.first.charges.first.children_charge_category }
   let(:tender) { quotation.tenders.first }
   let(:line_item) { tender.line_items.first }

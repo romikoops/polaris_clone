@@ -5,7 +5,9 @@ require "rails_helper"
 RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization, mode_of_transport: "ocean") }
+  let(:itinerary) {
+    FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization, mode_of_transport: "ocean")
+  }
   let(:result) do
     described_class.errors(
       modes_of_transport: modes_of_transport,

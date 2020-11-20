@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :contact do
-    company_name { 'Example Company' }
+    company_name { "Example Company" }
     sequence(:first_name) { |n| "John#{n}" }
     sequence(:last_name) { |n| "Smith#{n}" }
     sequence(:phone) { |n| "1234567#{n}" }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Api
   RSpec.describe V1::ItinerarySerializer do
@@ -9,12 +9,12 @@ module Api
     let(:serialized_itinerary) { described_class.new(itinerary).serializable_hash }
     let(:target) { serialized_itinerary.dig(:data, :attributes) }
 
-    it 'returns the correct name for the object passed' do
-      expect(target[:name]).to eq('Gothenburg - Shanghai')
+    it "returns the correct name for the object passed" do
+      expect(target[:name]).to eq("Gothenburg - Shanghai")
     end
 
-    it 'returns the correct mode_of_transport for the object passed' do
-      expect(target[:modeOfTransport]).to eq('ocean')
+    it "returns the correct mode_of_transport for the object passed" do
+      expect(target[:modeOfTransport]).to eq("ocean")
     end
   end
 end

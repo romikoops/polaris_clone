@@ -2,7 +2,7 @@
 
 module Legacy
   class Currency < ApplicationRecord
-    self.table_name = 'currencies'
+    self.table_name = "currencies"
   end
 end
 

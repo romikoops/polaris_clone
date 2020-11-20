@@ -1,123 +1,123 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_rate_basis, class: 'Pricings::RateBasis' do
-    internal_code { 'PER_CONTAINER' }
-    external_code { 'PER_CONTAINER' }
+  factory :pricings_rate_basis, class: "Pricings::RateBasis" do
+    internal_code { "PER_CONTAINER" }
+    external_code { "PER_CONTAINER" }
 
     trait :container do
-      internal_code { 'PER_CONTAINER' }
-      external_code { 'PER_CONTAINER' }
+      internal_code { "PER_CONTAINER" }
+      external_code { "PER_CONTAINER" }
     end
 
     trait :wm do
-      internal_code { 'PER_WM' }
-      external_code { 'PER_WM' }
+      internal_code { "PER_WM" }
+      external_code { "PER_WM" }
     end
 
     trait :hbl do
-      internal_code { 'PER_SHIPMENT' }
-      external_code { 'PER_HBL' }
+      internal_code { "PER_SHIPMENT" }
+      external_code { "PER_HBL" }
     end
 
     trait :shipment do
-      internal_code { 'PER_SHIPMENT' }
-      external_code { 'PER_SHIPMENT' }
+      internal_code { "PER_SHIPMENT" }
+      external_code { "PER_SHIPMENT" }
     end
 
     trait :item do
-      internal_code { 'PER_ITEM' }
-      external_code { 'PER_ITEM' }
+      internal_code { "PER_ITEM" }
+      external_code { "PER_ITEM" }
     end
 
     trait :unit do
-      internal_code { 'PER_UNIT' }
-      external_code { 'PER_UNIT' }
+      internal_code { "PER_UNIT" }
+      external_code { "PER_UNIT" }
     end
 
     trait :cbm do
-      internal_code { 'PER_CBM' }
-      external_code { 'PER_CBM' }
+      internal_code { "PER_CBM" }
+      external_code { "PER_CBM" }
     end
 
     trait :kg do
-      internal_code { 'PER_KG' }
-      external_code { 'PER_KG' }
+      internal_code { "PER_KG" }
+      external_code { "PER_KG" }
     end
 
     trait :kg_per_cbm do
-      internal_code { 'CBM_PER_KG' }
-      external_code { 'CBM_PER_KG' }
+      internal_code { "CBM_PER_KG" }
+      external_code { "CBM_PER_KG" }
     end
 
     trait :x_kg_flat do
-      internal_code { 'PER_X_KG_FLAT' }
-      external_code { 'PER_X_KG_FLAT' }
+      internal_code { "PER_X_KG_FLAT" }
+      external_code { "PER_X_KG_FLAT" }
     end
 
     trait :cbm_ton do
-      internal_code { 'PER_CBM_TON' }
-      external_code { 'PER_CBM_TON' }
+      internal_code { "PER_CBM_TON" }
+      external_code { "PER_CBM_TON" }
     end
 
     trait :ton do
-      internal_code { 'PER_TON' }
-      external_code { 'PER_TON' }
+      internal_code { "PER_TON" }
+      external_code { "PER_TON" }
     end
 
     trait :kg_range do
-      internal_code { 'PER_KG_RANGE' }
-      external_code { 'PER_KG_RANGE' }
+      internal_code { "PER_KG_RANGE" }
+      external_code { "PER_KG_RANGE" }
     end
 
     trait :kg_range_flat do
-      internal_code { 'PER_KG_RANGE_FLAT' }
-      external_code { 'PER_KG_RANGE_FLAT' }
+      internal_code { "PER_KG_RANGE_FLAT" }
+      external_code { "PER_KG_RANGE_FLAT" }
     end
 
     trait :unit_ton_cbm_range do
-      internal_code { 'PER_UNIT_TON_CBM_RANGE' }
-      external_code { 'PER_UNIT_TON_CBM_RANGE' }
+      internal_code { "PER_UNIT_TON_CBM_RANGE" }
+      external_code { "PER_UNIT_TON_CBM_RANGE" }
     end
 
     trait :container_range do
-      internal_code { 'PER_CONTAINER_RANGE' }
-      external_code { 'PER_CONTAINER_RANGE' }
+      internal_code { "PER_CONTAINER_RANGE" }
+      external_code { "PER_CONTAINER_RANGE" }
     end
 
     trait :unit_range do
-      internal_code { 'PER_UNIT_RANGE' }
-      external_code { 'PER_UNIT_RANGE' }
+      internal_code { "PER_UNIT_RANGE" }
+      external_code { "PER_UNIT_RANGE" }
     end
 
     trait :cbm_range do
-      internal_code { 'PER_CBM_RANGE' }
-      external_code { 'PER_CBM_RANGE' }
+      internal_code { "PER_CBM_RANGE" }
+      external_code { "PER_CBM_RANGE" }
     end
 
     trait :wm_range do
-      internal_code { 'PER_WM_RANGE' }
-      external_code { 'PER_WM_RANGE' }
+      internal_code { "PER_WM_RANGE" }
+      external_code { "PER_WM_RANGE" }
     end
 
     trait :container_range_flat do
-      internal_code { 'PER_CONTAINER_RANGE_FLAT' }
-      external_code { 'PER_CONTAINER_RANGE_FLAT' }
+      internal_code { "PER_CONTAINER_RANGE_FLAT" }
+      external_code { "PER_CONTAINER_RANGE_FLAT" }
     end
 
     trait :unit_range_flat do
-      internal_code { 'PER_UNIT_RANGE_FLAT' }
-      external_code { 'PER_UNIT_RANGE_FLAT' }
+      internal_code { "PER_UNIT_RANGE_FLAT" }
+      external_code { "PER_UNIT_RANGE_FLAT" }
     end
 
     trait :cbm_range_flat do
-      internal_code { 'PER_CBM_RANGE_FLAT' }
-      external_code { 'PER_CBM_RANGE_FLAT' }
+      internal_code { "PER_CBM_RANGE_FLAT" }
+      external_code { "PER_CBM_RANGE_FLAT" }
     end
 
     trait :wm_range_flat do
-      internal_code { 'PER_WM_RANGE_FLAT' }
-      external_code { 'PER_WM_RANGE_FLAT' }
+      internal_code { "PER_WM_RANGE_FLAT" }
+      external_code { "PER_WM_RANGE_FLAT" }
     end
 
     factory :per_wm_rate_basis, traits: [:wm]

@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Pricings
   RSpec.describe Fee, type: :model do
-    context 'instance methods' do
+    context "instance methods" do
       let!(:organization) { FactoryBot.create(:organizations_organization) }
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
       let!(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization, itinerary: itinerary) }
       let!(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
 
-      describe '.to_fee_hash' do
+      describe ".to_fee_hash" do
         let(:result) { fee.to_fee_hash }
 
-        it 'returns the fee as a hash' do
+        it "returns the fee as a hash" do
           aggregate_failures do
-            expect(result.keys).to eq(['bas'])
-            expect(result['bas']['rate']).to eq(fee.rate)
-            expect(result['bas']['base']).to eq(fee.base)
-            expect(result['bas']['rate_basis']).to eq('PER_WM')
-            expect(result['bas']['currency']).to eq('EUR')
+            expect(result.keys).to eq(["bas"])
+            expect(result["bas"]["rate"]).to eq(fee.rate)
+            expect(result["bas"]["base"]).to eq(fee.base)
+            expect(result["bas"]["rate_basis"]).to eq("PER_WM")
+            expect(result["bas"]["currency"]).to eq("EUR")
           end
         end
       end
 
-      describe '.fee_name_and_code' do
-        it 'returns the fee name and code' do
-          expect(fee.fee_name_and_code).to eq('BAS - Basic Ocean Freight')
+      describe ".fee_name_and_code" do
+        it "returns the fee name and code" do
+          expect(fee.fee_name_and_code).to eq("BAS - Basic Ocean Freight")
         end
       end
     end

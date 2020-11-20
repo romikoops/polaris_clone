@@ -4,15 +4,15 @@ module Integrations
   module ChainIo
     class Unit < ::Cargo::Unit
       def containerization_type
-        cargo_class == '00' ? 'LCL' : 'FCL'
+        cargo_class == "00" ? "LCL" : "FCL"
       end
 
       def lcl?
-        containerization_type == 'LCL'
+        containerization_type == "LCL"
       end
 
       def fcl?
-        containerization_type == 'FCL'
+        containerization_type == "FCL"
       end
 
       def size_type_codes

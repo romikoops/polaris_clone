@@ -24,7 +24,9 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
       )
     end
   end
-  let(:object) { FactoryBot.build(:manipulator_result, original: local_charge, result: local_charge.as_json, breakdowns: breakdowns) }
+  let(:object) {
+    FactoryBot.build(:manipulator_result, original: local_charge, result: local_charge.as_json, breakdowns: breakdowns)
+  }
 
   describe ".perform" do
     context "with (no consolidation)" do

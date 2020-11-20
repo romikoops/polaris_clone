@@ -7,7 +7,7 @@ module Organizations
     has_one :theme, dependent: :destroy
     has_one :scope, as: :target, class_name: "Organizations::Scope"
 
-    validates :slug, presence: true, uniqueness: true, format: { with: /[a-z-]{1,63}/ }
+    validates :slug, presence: true, uniqueness: true, format: {with: /[a-z-]{1,63}/}
 
     has_paper_trail
 

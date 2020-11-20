@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :rates_cargo, class: 'Rates::Cargo' do
+  factory :rates_cargo, class: "Rates::Cargo" do
     association :section, factory: :rates_section
 
-    cargo_class { '00' }
-    cargo_type { 'GP' }
-    code { 'BAS' }
+    cargo_class { "00" }
+    cargo_type { "GP" }
+    code { "BAS" }
     cbm_ratio { 200 }
     operator { :default }
 
@@ -19,24 +19,24 @@ FactoryBot.define do
     end
 
     trait :lcl do
-      cargo_class { '00' }
-      cargo_type { 'LCL' }
+      cargo_class { "00" }
+      cargo_type { "LCL" }
     end
 
     trait :container_20 do
-      cargo_class { '22' }
+      cargo_class { "22" }
     end
 
     trait :container_40 do
-      cargo_class { '42' }
+      cargo_class { "42" }
     end
 
     trait :container_40_hq do
-      cargo_class { '45' }
+      cargo_class { "45" }
     end
 
     trait :container_45 do
-      cargo_class { 'L0' }
+      cargo_class { "L0" }
     end
   end
 end

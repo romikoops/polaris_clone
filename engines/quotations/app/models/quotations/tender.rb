@@ -3,13 +3,13 @@
 module Quotations
   class Tender < ApplicationRecord
     belongs_to :quotation, inverse_of: :tenders
-    belongs_to :origin_hub, class_name: 'Legacy::Hub'
-    belongs_to :destination_hub, class_name: 'Legacy::Hub'
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
-    belongs_to :pickup_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :delivery_tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    has_one :charge_breakdown, -> { with_deleted }, class_name: 'Legacy::ChargeBreakdown'
+    belongs_to :origin_hub, class_name: "Legacy::Hub"
+    belongs_to :destination_hub, class_name: "Legacy::Hub"
+    belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle"
+    belongs_to :pickup_tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    belongs_to :delivery_tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    belongs_to :itinerary, class_name: "Legacy::Itinerary"
+    has_one :charge_breakdown, -> { with_deleted }, class_name: "Legacy::ChargeBreakdown"
 
     has_many :line_items, inverse_of: :tender
 
@@ -30,14 +30,14 @@ module Quotations
 
     def generate_imc_reference
       first_part = imc_reference_timestamp
-      last_tender_in_this_hour = Quotations::Tender.where('imc_reference LIKE ?', first_part + '%')
+      last_tender_in_this_hour = Quotations::Tender.where("imc_reference LIKE ?", first_part + "%")
         .order(:created_at).last
       if last_tender_in_this_hour
         last_serial_number = last_tender_in_this_hour.imc_reference[first_part.length..-1].to_i
         new_serial_number = last_serial_number + 1
-        serial_code = new_serial_number.to_s.rjust(5, '0')
+        serial_code = new_serial_number.to_s.rjust(5, "0")
       else
-        serial_code = '1'.rjust(5, '0')
+        serial_code = "1".rjust(5, "0")
       end
 
       self.imc_reference = first_part + serial_code
@@ -45,8 +45,8 @@ module Quotations
 
     def imc_reference_timestamp
       now = DateTime.now
-      day_of_the_year = now.strftime('%d%m')
-      hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
+      day_of_the_year = now.strftime("%d%m")
+      hour_as_letter = ("A".."Z").to_a[now.hour - 1]
       year = now.year.to_s[-2..-1]
       day_of_the_year + hour_as_letter + year
     end

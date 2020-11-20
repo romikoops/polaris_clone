@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :rates_section, class: 'Rates::Section' do
+  factory :rates_section, class: "Rates::Section" do
     association :organization, factory: :organizations_organization
     association :applicable_to, factory: :organizations_user
     association :target, factory: :routing_route_line_service
@@ -41,7 +41,6 @@ FactoryBot.define do
     end
 
     factory :section_lcl_rate, traits: %i[with_lcl_cargo_rate]
-    factory :section_for_multiple_cargo_classes, traits: %i[with_lcl_cargo_rate with_fcl_20_cargo_rate with_fcl_40_cargo_rate]
   end
 end
 

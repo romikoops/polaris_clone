@@ -1,29 +1,33 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe MaxDimensionsBundle, type: :model do
     let(:organization) { FactoryBot.create(:organizations_organization) }
 
-    describe 'mode_of_transport uniqueness' do
-      let(:max_dimensions_bundle_attributes) { FactoryBot.attributes_for(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true) }
+    describe "mode_of_transport uniqueness" do
+      let(:max_dimensions_bundle_attributes) {
+        FactoryBot.attributes_for(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true)
+      }
 
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true)
       end
 
-      it 'return error' do
-        expect { described_class.new(max_dimensions_bundle_attributes).save! }.to raise_exception(ActiveRecord::RecordInvalid)
+      it "return error" do
+        expect {
+          described_class.new(max_dimensions_bundle_attributes).save!
+        }.to raise_exception(ActiveRecord::RecordInvalid)
       end
     end
 
-    describe '.to_max_dimensions_hash' do
+    describe ".to_max_dimensions_hash" do
       before do
         FactoryBot.create(:legacy_max_dimensions_bundle, organization_id: organization.id, aggregate: true)
       end
 
-      it 'return all max dimensions' do
+      it "return all max dimensions" do
         expect(described_class.to_max_dimensions_hash).to eq(general: {
           chargeable_weight: 0.1e5,
           width: 0.5e3,
@@ -35,10 +39,10 @@ module Legacy
       end
     end
 
-    describe '.creates a valid object' do
-      let!(:max_dimensions_bundle) { FactoryBot.build(:legacy_max_dimensions_bundle, mode_of_transport: 'air') }
+    describe ".creates a valid object" do
+      let!(:max_dimensions_bundle) { FactoryBot.build(:legacy_max_dimensions_bundle, mode_of_transport: "air") }
 
-      it 'builds a valid max dimensions bundle' do
+      it "builds a valid max dimensions bundle" do
         expect(max_dimensions_bundle).to be_valid
       end
     end

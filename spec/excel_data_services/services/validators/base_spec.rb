@@ -10,7 +10,9 @@ RSpec.describe ExcelDataServices::Validators::Base do
 
   describe ".get" do
     it "finds the correct child class" do
-      expect(described_class.get("Insertable Checks", "Pricing")).to eq(ExcelDataServices::Validators::InsertableChecks::Pricing)
+      expect(
+        described_class.get("Insertable Checks", "Pricing")
+      ).to eq(ExcelDataServices::Validators::InsertableChecks::Pricing)
     end
   end
 

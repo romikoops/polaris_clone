@@ -29,8 +29,8 @@ class Admin::AdminBaseController < ApplicationController
       include: {
         hub: {
           include: {
-            nexus: { only: %i[id name] },
-            address: { only: %i[longitude latitude geocoded_address] }
+            nexus: {only: %i[id name]},
+            address: {only: %i[longitude latitude geocoded_address]}
           },
           only: %i[id name]
         }

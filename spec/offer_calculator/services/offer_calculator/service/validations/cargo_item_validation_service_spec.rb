@@ -13,7 +13,9 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization, mode_of_transport: "ocean") }
+  let(:itinerary) {
+    FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization, mode_of_transport: "ocean")
+  }
   let(:result) do
     described_class.errors(
       modes_of_transport: modes_of_transport,
@@ -364,7 +366,9 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
         FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
       end
 
-      let(:air_itinerary) { FactoryBot.create(:default_itinerary, organization: organization, mode_of_transport: "air") }
+      let(:air_itinerary) {
+        FactoryBot.create(:default_itinerary, organization: organization, mode_of_transport: "air")
+      }
       let(:itinerary_ids) { [itinerary, air_itinerary].map(&:id) }
       let(:modes_of_transport) { %w[ocean air] }
       let(:cargos) do

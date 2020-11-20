@@ -2,7 +2,7 @@
 
 module Trucking
   class Coverage < ApplicationRecord
-    belongs_to :hub, class_name: 'Legacy::Hub'
+    belongs_to :hub, class_name: "Legacy::Hub"
     has_many :truckings, through: :hub
 
     before_validation :generate_bounds
@@ -13,7 +13,7 @@ module Trucking
     end
 
     def write_bounds_to_disk
-      File.open(Rails.root.join('tmp', "#{hub.name}_coverage.geojson"), 'w') { |f| f.puts geojson.to_json }
+      File.open(Rails.root.join("tmp", "#{hub.name}_coverage.geojson"), "w") { |f| f.puts geojson.to_json }
     end
 
     def write_bounds_to_s3
@@ -23,10 +23,10 @@ module Trucking
       f.rewind
       f.close
       s_3.put_object(
-        bucket: 'assets.itsmycargo.com',
+        bucket: "assets.itsmycargo.com",
         key: "data/#{hub.organization.slug}/trucking_coverage/#{hub.name}_coverage.geojson",
         body: f,
-        content_type: 'application/json', acl: 'private'
+        content_type: "application/json", acl: "private"
       )
     end
 
@@ -34,17 +34,15 @@ module Trucking
 
     def generate_bounds
       self.bounds = Locations::Location
-                    .where(
-                      id: Location.joins(:truckings).where(trucking_truckings: { hub_id: hub.id }).select(:location_id)
-                    )
-                    .pluck('ST_Collect(bounds)').first
+        .where(
+          id: Location.joins(:truckings).where(trucking_truckings: {hub_id: hub.id}).select(:location_id)
+        )
+        .pluck("ST_Collect(bounds)").first
     rescue => e
       puts e
     end
   end
 end
-
-
 
 # == Schema Information
 #

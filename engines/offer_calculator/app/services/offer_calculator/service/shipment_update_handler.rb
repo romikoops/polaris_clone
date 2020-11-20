@@ -16,28 +16,28 @@ module OfferCalculator
         return if @shipment.itinerary.nil?
 
         @shipment.itinerary = nil
-        @shipment.trip      = nil
+        @shipment.trip = nil
         @shipment.save
       end
 
       def update_nexuses
-        @shipment.origin_nexus_id      = @params[:shipment][:origin][:nexus_id]
+        @shipment.origin_nexus_id = @params[:shipment][:origin][:nexus_id]
         @shipment.destination_nexus_id = @params[:shipment][:destination][:nexus_id]
-        @quotation.origin_nexus_id      = @params[:shipment][:origin][:nexus_id]
+        @quotation.origin_nexus_id = @params[:shipment][:origin][:nexus_id]
         @quotation.destination_nexus_id = @params[:shipment][:destination][:nexus_id]
       end
 
       def update_trucking
         # Setting trucking also sets has_on_carriage and has_pre_carriage
         @shipment.update(trucking: trucking_params.to_h)
-        { origin: 'pre', destination: 'on' }.each do |target, carriage|
+        {origin: "pre", destination: "on"}.each do |target, carriage|
           next unless trucking_requested(target: target)
 
           address = Legacy::Address.new_from_raw_params(address_params(target))
           raise_trucking_address_error(target) if trucking_address_invalid?(address)
           address.save!
-          @shipment.trucking["#{carriage}_carriage"]['address_id'] = address.id
-          if carriage == 'pre'
+          @shipment.trucking["#{carriage}_carriage"]["address_id"] = address.id
+          if carriage == "pre"
             @quotation.pickup_address_id = address.id
           else
             @quotation.delivery_address_id = address.id
@@ -54,8 +54,8 @@ module OfferCalculator
       end
 
       def update_billing
-        email = @shipment.user&.email || ''
-        internal_domain = scope.fetch(:internal_domains).find { |domain|  email.include?(domain) }
+        email = @shipment.user&.email || ""
+        internal_domain = scope.fetch(:internal_domains).find { |domain| email.include?(domain) }
 
         billing = if excluded_emails(organization: shipment.organization).include? email
           :test
@@ -122,19 +122,19 @@ module OfferCalculator
 
       def cargo_items_params
         @params.require(:shipment).permit(
-          cargo_items_attributes: %i(
+          cargo_items_attributes: %i[
             payload_in_kg width length height
             quantity cargo_item_type_id dangerous_goods stackable
             contents
-          )
+          ]
         )[:cargo_items_attributes]
       end
 
       def containers_params
         @params.require(:shipment).permit(
-          containers_attributes: %i(
+          containers_attributes: %i[
             payload_in_kg size_class tareWeight quantity dangerous_goods contents
-          )
+          ]
         )[:containers_attributes].map do |container_attributes|
           container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }
         end
@@ -173,7 +173,7 @@ module OfferCalculator
       end
 
       def raise_trucking_address_error(target)
-        raise OfferCalculator::Errors::InvalidPickupAddress   if target == :origin
+        raise OfferCalculator::Errors::InvalidPickupAddress if target == :origin
         raise OfferCalculator::Errors::InvalidDeliveryAddress if target == :destination
       end
 
@@ -184,7 +184,7 @@ module OfferCalculator
       end
 
       def excluded_emails(organization:)
-        ::OrganizationManager::ScopeService.new(organization: organization).fetch('blacklisted_emails')
+        ::OrganizationManager::ScopeService.new(organization: organization).fetch("blacklisted_emails")
       end
     end
   end

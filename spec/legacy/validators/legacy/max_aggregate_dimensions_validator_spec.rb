@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Legacy::MaxAggregateDimensionsValidator do
   let(:user) { FactoryBot.create(:organizations_user) }
@@ -19,35 +19,35 @@ RSpec.describe Legacy::MaxAggregateDimensionsValidator do
     }
   end
 
-  context 'with max dimensions' do
+  context "with max dimensions" do
     before do
       FactoryBot.create(:legacy_max_dimensions_bundle, organization: user.organization)
       FactoryBot.create(:legacy_max_dimensions_bundle, :aggregated, organization: user.organization)
     end
 
-    it 'passes validation' do
+    it "passes validation" do
       expect(Legacy::Shipment.new(args.merge(cargo_items: valid_cargos))).to be_valid
     end
 
-    it 'passes validation with agg cargo' do
+    it "passes validation with agg cargo" do
       expect(Legacy::Shipment.new(args.except(:trip_id, :itinerary_id).merge(aggregated_cargo: agg_cargo))).to be_valid
     end
 
-    it 'passes validation without a trip set' do
+    it "passes validation without a trip set" do
       expect(Legacy::Shipment.new(args.except(:trip_id, :itinerary_id).merge(cargo_items: valid_cargos))).to be_valid
     end
 
-    it 'passes validation with agg cargo without a trip set' do
+    it "passes validation with agg cargo without a trip set" do
       expect(Legacy::Shipment.new(args.merge(aggregated_cargo: agg_cargo))).to be_valid
     end
 
-    it 'fails validation with an above 21770kg' do
+    it "fails validation with an above 21770kg" do
       expect(Legacy::Shipment.new(args.merge(cargo_items: invalid_cargos))).to be_invalid
     end
   end
 
-  context 'without max dimensions' do
-    it 'passes validation' do
+  context "without max dimensions" do
+    it "passes validation" do
       expect(Legacy::Shipment.new(args.merge(cargo_items: valid_cargos))).to be_valid
     end
   end

@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe File, type: :model do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:file) { FactoryBot.create(:legacy_file, :with_file, organization_id: organization.id) }
 
-    describe '.local_file_path' do
-      it 'returns the path to the file' do
+    describe ".local_file_path" do
+      it "returns the path to the file" do
         file_path = file.local_file_path
 
         aggregate_failures do
           expect(file_path).to be_truthy
-          expect(file_path).to include('/tmp/storage/')
+          expect(file_path).to include("/tmp/storage/")
         end
       end
     end

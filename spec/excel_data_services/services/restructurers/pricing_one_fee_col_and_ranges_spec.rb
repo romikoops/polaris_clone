@@ -8,7 +8,9 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
 
   describe ".restructure" do
     let(:input_data) { FactoryBot.build(:excel_data_parsed_correct_pricings_one_fee_col_and_ranges).first }
-    let(:output_data) { {"Pricing" => FactoryBot.build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges)} }
+    let(:output_data) {
+      {"Pricing" => FactoryBot.build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges)}
+    }
     let(:result) { described_class.restructure(options) }
 
     it "restructures the data correctly" do
@@ -25,7 +27,9 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
   end
 
   describe ".restructure with remarks" do
-    let(:input_data) { FactoryBot.build(:excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_remarks).first }
+    let(:input_data) {
+      FactoryBot.build(:excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_remarks).first
+    }
     let(:output_data) do
       {"Pricing" =>
      FactoryBot.build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_remarks)}

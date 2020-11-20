@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: 'user@itsmycargo.com') }
+  let!(:user) {
+    FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: "user@itsmycargo.com")
+  }
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization, name: "Test").tap do |grp|
@@ -63,12 +65,12 @@ RSpec.describe Admin::GroupsController, type: :controller do
 
       it "returns the users groups" do
         get :index, params: {organization_id: organization.id,
-                             target_type: 'user',
+                             target_type: "user",
                              target_id: user_2.id}
         aggregate_failures do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:success)
-          expect(json_response.dig('data', 'groupData').first.dig('id')).to eq(user_group.id)
+          expect(json_response.dig("data", "groupData").first.dig("id")).to eq(user_group.id)
         end
       end
     end

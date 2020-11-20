@@ -102,15 +102,19 @@ RSpec.describe OfferCalculator::Calculator do
   end
   let(:quotation) { Quotations::Quotation.first }
   let(:creator) { FactoryBot.create(:organizations_user, organization: organization) }
-  let(:service) { described_class.new(shipment: shipment, params: params, user: user, creator: creator).perform }
+  let(:service) {
+    described_class.new(shipment: shipment, params: params, user: user, creator: creator).perform
+  }
 
   include_context "complete_route_with_trucking"
 
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:organizations_scope, target: organization, content: {closed_quotation_tool: true})
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:origin).and_return(origin_address_params)
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:destination).and_return(destination_address_params)
+    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
+      .with(:origin).and_return(origin_address_params)
+    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
+      .with(:destination).and_return(destination_address_params)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
   end
 
@@ -196,7 +200,9 @@ RSpec.describe OfferCalculator::Calculator do
         tenders = Quotations::Tender.all
         aggregate_failures do
           expect(tenders.count).to be(4)
-          expect(tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq).to match_array(desired_tenant_vehicle_combos)
+          expect(
+            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq
+          ).to match_array(desired_tenant_vehicle_combos)
         end
       end
     end
@@ -272,7 +278,9 @@ RSpec.describe OfferCalculator::Calculator do
         aggregate_failures do
           expect(tenders.count).to be(2)
           expect(
-            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id, t.itinerary_id] }.uniq
+            tenders.map { |t|
+              [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id, t.itinerary_id]
+            }.uniq
           ).to match_array(desired_tenant_vehicle_combos)
         end
       end

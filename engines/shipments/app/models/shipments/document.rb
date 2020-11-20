@@ -4,12 +4,12 @@ module Shipments
   class Document < ApplicationRecord
     has_paper_trail
 
-    enum doc_type: { packing_sheet: 0,
-                     commercial_invoice: 1,
-                     miscellaneous: 2,
-                     customs_declaration: 3,
-                     export_customs_paper: 4,
-                     customs_value_declaration: 5 }
+    enum doc_type: {packing_sheet: 0,
+                    commercial_invoice: 1,
+                    miscellaneous: 2,
+                    customs_declaration: 3,
+                    export_customs_paper: 4,
+                    customs_value_declaration: 5}
 
     belongs_to :attachable, polymorphic: true
 

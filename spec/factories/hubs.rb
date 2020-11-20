@@ -3,14 +3,14 @@
 FactoryBot.define do
   factory :hub do
     trait :with_lat_lng do
-      latitude { '57.694253' }
-      longitude { '11.854048' }
+      latitude { "57.694253" }
+      longitude { "11.854048" }
     end
 
-    name { 'Gothenburg' }
-    hub_type { 'ocean' }
-    hub_status { 'active' }
-    hub_code { 'SEGOT' }
+    name { "Gothenburg" }
+    hub_type { "ocean" }
+    hub_status { "active" }
+    hub_code { "SEGOT" }
 
     association :organization, factory: :organizations_organization
     association :address

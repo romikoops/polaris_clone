@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :routing_terminal, class: 'Routing::Terminal' do
+  factory :routing_terminal, class: "Routing::Terminal" do
     association :location, factory: :routing_location
     center { FactoryBot.build(:routing_point, lat: 53.558572, lng: 9.9278215) }
-    terminal_code { 'DEHAMPS' }
+    terminal_code { "DEHAMPS" }
     default { false }
     mode_of_transport { 1 }
 
@@ -13,7 +13,7 @@ FactoryBot.define do
     trait :air do
       mode_of_transport { 2 }
     end
-    
+
     trait :rail do
       mode_of_transport { 3 }
     end
@@ -26,37 +26,37 @@ FactoryBot.define do
       mode_of_transport { 5 }
     end
     trait :hamburg do
-      terminal_code { 'DEHAM1' }
+      terminal_code { "DEHAM1" }
       center { FactoryBot.build(:routing_point, lat: 53.558572, lng: 9.9278215) }
     end
 
     trait :shanghai do
-      terminal_code { 'CNSHA1' }
+      terminal_code { "CNSHA1" }
       center { FactoryBot.build(:routing_point, lat: 31.2231338, lng: 120.9162975) }
     end
 
     trait :felixstowe do
-      terminal_code { 'GBFXT1' }
+      terminal_code { "GBFXT1" }
       center { FactoryBot.build(:routing_point, lat: 51.966, lng: 1.3277) }
     end
 
     trait :gothenburg do
-      terminal_code { 'SEGOT1' }
+      terminal_code { "SEGOT1" }
       center { FactoryBot.build(:routing_point, lat: 57.694253, lng: 11.854048) }
     end
 
     trait :rotterdam do
-      terminal_code { 'NLRTM1' }
+      terminal_code { "NLRTM1" }
       center { FactoryBot.build(:routing_point, lat: 51.9280573, lng: 4.4203672) }
     end
 
     trait :ningbo do
-      terminal_code { 'CNNBO1' }
+      terminal_code { "CNNBO1" }
       center { FactoryBot.build(:routing_point, lat: 29.8700041, lng: 121.4318779) }
     end
 
     trait :veracruz do
-      terminal_code { 'MXVER1' }
+      terminal_code { "MXVER1" }
       center { FactoryBot.build(:routing_point, lat: 19.1787535, lng: -96.2463566) }
     end
 

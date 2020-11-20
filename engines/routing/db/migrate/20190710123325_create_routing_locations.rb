@@ -3,7 +3,7 @@ class CreateRoutingLocations < ActiveRecord::Migration[5.2]
     create_table :routing_locations, id: :uuid do |t|
       t.string :locode, index: true, unique: true
       t.geometry :center, index: true
-      t.geometry :bounds, limit: { srid: 0, type: 'geometry' }
+      t.geometry :bounds, limit: {srid: 0, type: "geometry"}
       t.string :name
       t.string :country_code
       t.timestamps

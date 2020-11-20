@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'analytics/engine'
+require "analytics/engine"
 
 module Analytics
 end

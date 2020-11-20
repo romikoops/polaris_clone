@@ -22,7 +22,9 @@ RSpec.describe ExcelDataServices::FileWriters::ChargeCategories do
 
   describe ".perform" do
     it "creates the routes" do
-      result = described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {})
+      result = described_class.write_document(
+        organization: organization, user: user, file_name: "test.xlsx", options: {}
+      )
       xlsx = Roo::Excelx.new(StringIO.new(result.file.download))
       first_sheet = xlsx.sheet(xlsx.sheets.first)
       expect(first_sheet.row(1)).to eq(charge_category_headers)

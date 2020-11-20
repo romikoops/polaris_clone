@@ -1,39 +1,39 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_country, class: 'Legacy::Country' do
-    name { 'Sweden' }
-    code { 'SE' }
-    flag { 'https://restcountries.eu/data/swe.svg' }
+  factory :legacy_country, class: "Legacy::Country" do
+    name { "Sweden" }
+    code { "SE" }
+    flag { "https://restcountries.eu/data/swe.svg" }
 
     trait :cn do
-      name { 'China' }
-      code { 'CN' }
-      flag { 'https://restcountries.eu/data/cny.svg' }
+      name { "China" }
+      code { "CN" }
+      flag { "https://restcountries.eu/data/cny.svg" }
     end
 
     trait :se do
-      name { 'Sweden' }
-      code { 'SE' }
-      flag { 'https://restcountries.eu/data/sek.svg' }
+      name { "Sweden" }
+      code { "SE" }
+      flag { "https://restcountries.eu/data/sek.svg" }
     end
 
     trait :uk do
-      name { 'United Kingdom' }
-      code { 'GB' }
-      flag { 'https://restcountries.eu/data/gbp.svg' }
+      name { "United Kingdom" }
+      code { "GB" }
+      flag { "https://restcountries.eu/data/gbp.svg" }
     end
 
     trait :de do
-      name { 'Germany' }
-      code { 'DE' }
-      flag { 'https://restcountries.eu/data/de.svg' }
+      name { "Germany" }
+      code { "DE" }
+      flag { "https://restcountries.eu/data/de.svg" }
     end
 
     trait :nl do
-      name { 'Netherlands' }
-      code { 'NL' }
-      flag { 'https://restcountries.eu/data/nl.svg' }
+      name { "Netherlands" }
+      code { "NL" }
+      flag { "https://restcountries.eu/data/nl.svg" }
     end
 
     to_create do |instance|

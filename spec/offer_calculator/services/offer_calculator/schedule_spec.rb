@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe OfferCalculator::Schedule do
   let(:organization) { FactoryBot.create(:organizations_organization) }
@@ -40,10 +40,10 @@ RSpec.describe OfferCalculator::Schedule do
     ]
   end
 
-  context 'when class methods' do
-    describe '.from_routes', :vcr do
-      it 'returns the schedules for the route' do
-        results = described_class.from_routes(routes, current_etd, 60, 'cargo_item', 'depature')
+  context "when class methods" do
+    describe ".from_routes", :vcr do
+      it "returns the schedules for the route" do
+        results = described_class.from_routes(routes, current_etd, 60, "cargo_item", "depature")
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip).to eq(trip)
@@ -51,8 +51,8 @@ RSpec.describe OfferCalculator::Schedule do
       end
     end
 
-    describe '.from_trips', :vcr do
-      it 'returns a hash of schedule values' do
+    describe ".from_trips", :vcr do
+      it "returns a hash of schedule values" do
         results = described_class.from_trips([trip])
         aggregate_failures do
           expect(results.length).to eq(1)
@@ -62,24 +62,24 @@ RSpec.describe OfferCalculator::Schedule do
     end
   end
 
-  context 'when instance methods' do
+  context "when instance methods" do
     let(:schedule) { described_class.from_trip(trip) }
 
-    describe '.hub_for_carriage', :vcr do
-      it 'returns the origin hub' do
-        expect(schedule.hub_for_carriage('pre')).to eq(origin_hub)
+    describe ".hub_for_carriage", :vcr do
+      it "returns the origin hub" do
+        expect(schedule.hub_for_carriage("pre")).to eq(origin_hub)
       end
 
-      it 'returns the destination hub' do
-        expect(schedule.hub_for_carriage('on')).to eq(destination_hub)
+      it "returns the destination hub" do
+        expect(schedule.hub_for_carriage("on")).to eq(destination_hub)
       end
 
-      it 'returns the itinerary' do
+      it "returns the itinerary" do
         expect(schedule.itinerary).to eq(itinerary)
       end
 
-      it 'raises an argument error' do
-        expect { schedule.hub_for_carriage('blue') }.to raise_error(ArgumentError)
+      it "raises an argument error" do
+        expect { schedule.hub_for_carriage("blue") }.to raise_error(ArgumentError)
       end
     end
   end

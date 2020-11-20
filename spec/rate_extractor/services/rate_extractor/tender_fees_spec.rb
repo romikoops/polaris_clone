@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RateExtractor::TenderFees do
   let(:organization) { FactoryBot.create(:organizations_organization) }
@@ -23,9 +23,9 @@ RSpec.describe RateExtractor::TenderFees do
   let(:section_rates) do
     path.map do |section|
       FactoryBot.create(:rates_section,
-                        target: section,
-                        applicable_to: user,
-                        organization: organization)
+        target: section,
+        applicable_to: user,
+        organization: organization)
     end
   end
 
@@ -45,7 +45,10 @@ RSpec.describe RateExtractor::TenderFees do
     end
   end
 
-  let(:klass) { described_class.new(organization: organization, tender: tender, user: user, desired_date: 1.month.from_now, cargo: cargo) }
+  let(:klass) {
+    described_class.new(organization: organization, tender: tender, user: user,
+                        desired_date: 1.month.from_now, cargo: cargo)
+  }
 
   let(:decorated_section) { instance_double(RateExtractor::Decorators::SectionRate) }
 
@@ -54,24 +57,24 @@ RSpec.describe RateExtractor::TenderFees do
     allow(decorated_section).to receive(:carriage_distance).and_return(6)
   end
 
-  context 'when tender has fees' do
-    it 'finds the applicable section rates' do
+  context "when tender has fees" do
+    it "finds the applicable section rates" do
       expect(klass.section_rates).to match_array section_rates
     end
 
-    it 'filters out the un applicable section rates' do
+    it "filters out the un applicable section rates" do
       expect(klass.section_rates).not_to include unapplicable_section_rate
     end
 
-    it 'finds the applicable cargo rates' do
+    it "finds the applicable cargo rates" do
       expect(klass.cargo_rates).to match_array cargo_rates
     end
 
-    it 'filters out the un applicable cargo rates' do
+    it "filters out the un applicable cargo rates" do
       expect(klass.cargo_rates).not_to include unapplicable_cargo_rate
     end
 
-    it 'returns the applicable fees' do
+    it "returns the applicable fees" do
       expect(klass.fees.flatten.pluck(:id)).to match_array fees.pluck(:id)
     end
   end

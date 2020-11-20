@@ -111,14 +111,14 @@ RSpec.describe Trucking::GoogleDirections do
 
     describe ".set_departure_time" do
       it "returns the departure_time if it is greater than one hour" do
-        allow(Time).to receive(:now).and_return(Time.at(departure_time - 5000))
+        allow(Time).to receive(:now).and_return(Time.zone.at(departure_time - 5000))
 
         target = described_class.new(origin, destination, departure_time)
         expect(target.departure_time).to eq(departure_time)
       end
 
       it "returns the now it the departure time is less than one hour" do
-        allow(DateTime).to receive(:now).and_return(Time.at(departure_time))
+        allow(DateTime).to receive(:now).and_return(Time.zone.at(departure_time))
 
         target = described_class.new(origin, destination, departure_time)
         expect(target.departure_time).to eq("now")

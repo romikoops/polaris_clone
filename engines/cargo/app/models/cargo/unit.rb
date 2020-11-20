@@ -5,8 +5,8 @@ module Cargo
     measured_weight :weight
     measured_volume :volume
     measured_length :width, :length, :height
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :cargo, class_name: 'Cargo::Cargo'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :cargo, class_name: "Cargo::Cargo"
     belongs_to :legacy, -> { with_deleted }, polymorphic: true, optional: true
 
     enum cargo_class: Specification::CLASS_ENUM, _prefix: true
@@ -16,11 +16,11 @@ module Cargo
     }
 
     validates :organization_id, presence: true
-    validates :quantity, presence: true, numericality: { greater_than: 0 }
-    validates :weight, measured: { units: :kg, greater_than: 0 }
-    validates :volume, measured: { units: :m3 }
-    validates :width, :length, :height, measured: { units: :m }
-    validates :width, :length, :height, measured: { greater_than: 0 }, if: :requires_dimensions?
+    validates :quantity, presence: true, numericality: {greater_than: 0}
+    validates :weight, measured: {units: :kg, greater_than: 0}
+    validates :volume, measured: {units: :m3}
+    validates :width, :length, :height, measured: {units: :m}
+    validates :width, :length, :height, measured: {greater_than: 0}, if: :requires_dimensions?
 
     before_validation :ensure_si_units
 
@@ -46,7 +46,7 @@ module Cargo
 
     def stowage_factor
       factor = total_volume.value / total_weight.convert_to(:t).value
-      Measured::StowageFactor.new(factor.round(6), 'm3/t')
+      Measured::StowageFactor.new(factor.round(6), "m3/t")
     end
 
     alias_method :consolidated?, :cargo_type_AGR?
@@ -54,11 +54,11 @@ module Cargo
     private
 
     def ensure_si_units
-      self.weight = weight.convert_to('kg')
-      self.volume = volume.convert_to('m3')
-      self.width = width.convert_to('m')
-      self.length = length.convert_to('m')
-      self.height = height.convert_to('m')
+      self.weight = weight.convert_to("kg")
+      self.volume = volume.convert_to("m3")
+      self.width = width.convert_to("m")
+      self.length = length.convert_to("m")
+      self.height = height.convert_to("m")
     end
 
     def requires_dimensions?
@@ -66,9 +66,9 @@ module Cargo
     end
 
     def set_volume_and_height
-      return true unless cargo_class == '00'
+      return true unless cargo_class == "00"
 
-      if cargo_type == 'AGR'
+      if cargo_type == "AGR"
         self.height_value = Specification::DEFAULT_HEIGHT if height_value.zero?
       else
         self.volume_value = (width_value * length_value * height_value)

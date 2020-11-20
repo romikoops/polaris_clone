@@ -62,7 +62,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Rates do
     end
 
     context "when there are multiple sheets" do
-      let(:sheet_names) { ["Import", "Export"]}
+      let(:sheet_names) { ["Import", "Export"] }
 
       it "returns the frame with the fee data", :aggregate_failures do
         expect(result.count).to eq(2)

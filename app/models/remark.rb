@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Remark < Legacy::Remark
-  belongs_to :organization, class_name: 'Organizations::Organization'
+  belongs_to :organization, class_name: "Organizations::Organization"
 end
 
 # == Schema Information

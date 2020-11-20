@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ExchangeRate, type: :model do
-  it 'creates a valid object' do
+  it "creates a valid object" do
     expect(FactoryBot.build(:exchange_rate)).to be_valid
   end
 
-  context 'class methods' do
+  context "class methods" do
     let(:currencies) { %w[USD AUD GBP] }
-    let(:base) { 'EUR' }
+    let(:base) { "EUR" }
 
     before do
       [2.days.ago, 1.day.ago, 30.minutes.ago].each do |timestamp|
@@ -19,19 +19,19 @@ RSpec.describe ExchangeRate, type: :model do
       end
     end
 
-    describe 'self.current' do
+    describe "self.current" do
       let!(:desired_currencies) do
         currencies.map do |currency|
           FactoryBot.create(:exchange_rate, from: base, to: currency)
         end
       end
 
-      it 'returns the latest exchanges rates uniq by pair' do
+      it "returns the latest exchanges rates uniq by pair" do
         expect(described_class.current).to match_array(desired_currencies)
       end
     end
 
-    describe 'self.for_date' do
+    describe "self.for_date" do
       let(:date) { 60.minutes.ago }
       let!(:desired_currencies) do
         currencies.map do |currency|
@@ -39,7 +39,7 @@ RSpec.describe ExchangeRate, type: :model do
         end
       end
 
-      it 'returns the latest exchanges rates uniq by pair' do
+      it "returns the latest exchanges rates uniq by pair" do
         expect(described_class.for_date(date: date)).to match_array(desired_currencies)
       end
     end

@@ -14,9 +14,9 @@ module Legacy
 
     def self.sum_and_convert_cargo(hash_obj, base)
       hash_obj.values
-              .reject(&:empty?)
-              .inject(Money.new(0, base)) do |sum, charge|
-        sum + Money.new(charge['value'] * 100.0, charge['currency'])
+        .reject(&:empty?)
+        .inject(Money.new(0, base)) do |sum, charge|
+        sum + Money.new(charge["value"] * 100.0, charge["currency"])
       end
     end
   end

@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :exchange_rate do
-    from { 'USD' }
-    to { 'EUR' }
+    from { "USD" }
+    to { "EUR" }
     rate { 1.26 }
   end
 end

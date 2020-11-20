@@ -22,17 +22,24 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
     end
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) { described_class.results(association: Trucking::Trucking.all, shipment: shipment, schedules: schedules) }
+  let(:results) {
+    described_class.results(association: Trucking::Trucking.all, shipment: shipment, schedules: schedules)
+  }
 
   before do
     Organizations.current_id = organization.id
-    FactoryBot.create(:trucking_pre_margin, default_for: "trucking", organization: organization, applicable: organization, value: 0)
-    FactoryBot.create(:trucking_on_margin, default_for: "trucking", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:trucking_pre_margin,
+      default_for: "trucking", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:trucking_on_margin,
+      default_for: "trucking", organization: organization, applicable: organization, value: 0)
   end
 
   describe ".perform" do
     context "when only one trucking available w/o margins" do
-      let!(:trucking) { FactoryBot.create(:trucking_trucking, carriage: "on", hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:trucking) {
+        FactoryBot.create(:trucking_trucking,
+          carriage: "on", hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
 
       it "returns the one trucking" do
         results
@@ -44,7 +51,10 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
     end
 
     context "when only two truckings w/o margins" do
-      let!(:trucking_1) { FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:trucking_1) {
+        FactoryBot.create(:trucking_trucking,
+          hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
       let!(:trucking_2) do
         FactoryBot.create(:trucking_trucking,
           hub: origin_hub,
@@ -69,8 +79,15 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
     end
 
     context "when only two truckings w/ one margin (groups)" do
-      let!(:trucking) { FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
-      let!(:margin) { FactoryBot.create(:trucking_pre_margin, organization: organization, applicable: user, value: 100) }
+      let!(:trucking) {
+        FactoryBot.create(:trucking_trucking,
+          hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1,
+          group_id: group.id)
+      }
+      let!(:margin) {
+        FactoryBot.create(:trucking_pre_margin, organization: organization,
+                                                applicable: user, value: 100)
+      }
 
       it "returns the one trucking" do
         aggregate_failures do

@@ -14,7 +14,7 @@ module Api
       end
 
       attribute :tenders do |quotation, params|
-        TenderSerializer.new(quotation.tenders, params: { scope: params.dig(:scope) })
+        TenderSerializer.new(quotation.tenders, params: {scope: params.dig(:scope)})
       end
 
       def self.legacy_containers(quotation:)

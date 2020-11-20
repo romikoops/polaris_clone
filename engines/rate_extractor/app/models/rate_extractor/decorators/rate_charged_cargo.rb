@@ -23,7 +23,8 @@ module RateExtractor
         )
       end
 
-      def route_distance; end
+      def route_distance
+      end
 
       private
 

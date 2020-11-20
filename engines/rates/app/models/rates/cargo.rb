@@ -4,9 +4,9 @@ module Rates
   class Cargo < ApplicationRecord
     enum cargo_class: ::Cargo::Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: ::Cargo::Specification::TYPE_ENUM, _prefix: true
-    enum operator: { min_value: 0, max_value: 1, sum_values: 2, default: 3 }
-    enum applicable_to: { cargo: 0, section: 1, shipment: 2 }
-    enum valid_at: { vatos: 0, vatoa: 1, vatob: 2 }
+    enum operator: {min_value: 0, max_value: 1, sum_values: 2, default: 3}
+    enum applicable_to: {cargo: 0, section: 1, shipment: 2}
+    enum valid_at: {vatos: 0, vatoa: 1, vatob: 2}
 
     belongs_to :section
 

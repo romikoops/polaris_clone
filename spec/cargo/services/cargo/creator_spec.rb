@@ -45,7 +45,10 @@ module Cargo
       end
 
       context "when shipment is aggregated cargo" do
-        let(:shipment) { FactoryBot.create(:complete_legacy_shipment, load_type: :cargo_item, with_aggregated_cargo: true, organization: organization, user: user) }
+        let(:shipment) {
+          FactoryBot.create(:complete_legacy_shipment,
+            load_type: :cargo_item, with_aggregated_cargo: true, organization: organization, user: user)
+        }
 
         before { creator.perform }
 

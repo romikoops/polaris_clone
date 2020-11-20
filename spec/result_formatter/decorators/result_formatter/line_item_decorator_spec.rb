@@ -109,7 +109,9 @@ RSpec.describe ResultFormatter::LineItemDecorator do
 
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle) }
       let(:tender) { FactoryBot.create(:quotations_tender, tenant_vehicle: tenant_vehicle) }
-      let(:ocean_line_item) { FactoryBot.create(:quotations_line_item, charge_category: charge_category, tender: tender) }
+      let(:ocean_line_item) {
+        FactoryBot.create(:quotations_line_item, charge_category: charge_category, tender: tender)
+      }
       let(:decorated_ocean_line_item) { described_class.new(line_item, context: {scope: scope}) }
 
       it "decorates the line item with the correct name" do

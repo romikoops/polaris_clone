@@ -6,14 +6,14 @@ class DocumentsController < ApplicationController
   def download_redirect
     redirect_to Rails.application.routes.url_helpers.rails_blob_url(
       Legacy::File.find_by(id: params[:document_id]).file,
-      disposition: 'attachment'
+      disposition: "attachment"
     )
   end
 
   def download_url
     response_handler(url: rails_blob_url(
       Legacy::File.find_by(id: params[:document_id]).file,
-      disposition: 'attachment'
+      disposition: "attachment"
     ))
   end
 

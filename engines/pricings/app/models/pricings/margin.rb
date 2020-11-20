@@ -4,30 +4,32 @@ module Pricings
   class Margin < ApplicationRecord
     attr_accessor :transient_marked_as_old
 
-    enum margin_type: { trucking_pre_margin: 1, export_margin: 2, freight_margin: 3, import_margin: 4, trucking_on_margin: 5 }
+    enum margin_type: {
+      trucking_pre_margin: 1, export_margin: 2, freight_margin: 3, import_margin: 4, trucking_on_margin: 5
+    }
 
     belongs_to :applicable, polymorphic: true
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    has_many :details, class_name: 'Pricings::Detail', dependent: :destroy
-    belongs_to :pricing, class_name: 'Pricings::Pricing', optional: true
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :itinerary, class_name: 'Legacy::Itinerary', optional: true
-    belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
+    has_many :details, class_name: "Pricings::Detail", dependent: :destroy
+    belongs_to :pricing, class_name: "Pricings::Pricing", optional: true
+    belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    belongs_to :itinerary, class_name: "Legacy::Itinerary", optional: true
+    belongs_to :origin_hub, class_name: "Legacy::Hub", optional: true
+    belongs_to :destination_hub, class_name: "Legacy::Hub", optional: true
 
     scope :for_cargo_classes, (lambda do |cargo_classes|
       where(cargo_class: cargo_classes.map(&:downcase))
     end)
     scope :for_dates, (lambda do |start_date, end_date|
-      where('validity && daterange(?::date, ?::date)', start_date, end_date)
+      where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
-    validates :operator, inclusion: { in: %w[+ %],
-                                      message: '%{value} is not a valid operator for a parent margin' }
+    validates :operator, inclusion: {in: %w[+ %],
+                                     message: "%{value} is not a valid operator for a parent margin"}
 
     before_validation :set_application_order, :set_validity
 
     def service_level
-      (tenant_vehicle&.name || pricing&.tenant_vehicle&.name) || 'All'
+      (tenant_vehicle&.name || pricing&.tenant_vehicle&.name) || "All"
     end
 
     def itinerary_name
@@ -42,12 +44,12 @@ module Pricings
       elsif destination_hub && origin_hub && (destination_hub == origin_hub)
         destination_hub.name
       else
-        'All'
+        "All"
       end
     end
 
     def mode_of_transport
-      (itinerary&.mode_of_transport || pricing&.itinerary&.mode_of_transport) || (default_for || 'ALL')
+      (itinerary&.mode_of_transport || pricing&.itinerary&.mode_of_transport) || (default_for || "ALL")
     end
 
     def get_pricing
@@ -61,17 +63,18 @@ module Pricings
     end
 
     def cargo_class
-      (self[:cargo_class] || pricing&.cargo_class) || 'All'
+      (self[:cargo_class] || pricing&.cargo_class) || "All"
     end
 
     def fee_code
-      'N/A'
+      "N/A"
     end
 
     private
 
     def set_application_order
-      existing_margins = Pricings::Margin.where(applicable: applicable, margin_type: margin_type).order(application_order: :desc)
+      existing_margins = Pricings::Margin.where(applicable: applicable, margin_type: margin_type)
+        .order(application_order: :desc)
       return if existing_margins.empty?
 
       self.application_order = existing_margins.first.application_order + 1

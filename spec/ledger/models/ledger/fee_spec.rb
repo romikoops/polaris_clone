@@ -1,37 +1,45 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Ledger
   RSpec.describe Fee, type: :model do
-    it 'builds a valid object' do
+    it "builds a valid object" do
       expect(FactoryBot.build(:ledger_fee).valid?).to eq(true)
     end
 
     ## Requires code from PR - Temporarily lowering coverage to pass
 
-    describe '.carriage' do
+    describe ".carriage" do
       let(:line_service) { FactoryBot.create(:routing_line_service) }
       let(:pre_carriage_route) { FactoryBot.create(:pre_carriage_route, all_mots: true) }
-      let(:pre_carriage_rls_target) { FactoryBot.create(:routing_route_line_service, route: pre_carriage_route, line_service: line_service) }
+      let(:pre_carriage_rls_target) {
+        FactoryBot.create(:routing_route_line_service, route: pre_carriage_route, line_service: line_service)
+      }
       let(:pre_carriage_rls_rate) { FactoryBot.create(:lcl_rate, target: pre_carriage_rls_target) }
       let(:pre_carriage_rls_fee) { pre_carriage_rls_rate.fees.first }
 
       let(:on_carriage_route) { FactoryBot.create(:on_carriage_route, all_mots: true) }
-      let(:on_carriage_rls_target) { FactoryBot.create(:routing_route_line_service, route: on_carriage_route, line_service: line_service) }
+      let(:on_carriage_rls_target) {
+        FactoryBot.create(:routing_route_line_service, route: on_carriage_route, line_service: line_service)
+      }
       let(:on_carriage_rls_rate) { FactoryBot.create(:lcl_rate, target: on_carriage_rls_target) }
       let(:on_carriage_rls_fee) { on_carriage_rls_rate.fees.first }
 
       let(:ocean_route) { FactoryBot.create(:ocean_route) }
-      let(:ocean_rls_target) { FactoryBot.create(:routing_route_line_service, route: ocean_route, line_service: line_service) }
+      let(:ocean_rls_target) {
+        FactoryBot.create(:routing_route_line_service, route: ocean_route, line_service: line_service)
+      }
       let(:ocean_rls_rate) { FactoryBot.create(:lcl_rate, target: ocean_rls_target) }
       let(:ocean_rls_fee) { ocean_rls_rate.fees.first }
 
-      let(:conn_target) { FactoryBot.create(:tenant_routing_connection, inbound: pre_carriage_rls_target, outbound: ocean_rls_target) }
+      let(:conn_target) {
+        FactoryBot.create(:tenant_routing_connection, inbound: pre_carriage_rls_target, outbound: ocean_rls_target)
+      }
       let(:conn_rate) { FactoryBot.create(:lcl_rate, target: conn_target) }
       let(:conn_fee) { conn_rate.fees.first }
 
-      it 'returns the correct carriage for the route' do
+      it "returns the correct carriage for the route" do
         expect(pre_carriage_rls_fee.carriage).to eq(:pre)
         expect(on_carriage_rls_fee.carriage).to eq(:on)
         expect(conn_fee.carriage).to eq(nil)

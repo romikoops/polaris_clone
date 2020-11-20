@@ -3,16 +3,16 @@
 module Quotations
   class LineItem < ApplicationRecord
     belongs_to :tender, inverse_of: :line_items
-    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
     belongs_to :cargo, polymorphic: true, optional: true
-    enum section: { trucking_pre_section: 1,
-                    export_section: 2,
-                    cargo_section: 3,
-                    import_section: 4,
-                    trucking_on_section: 5,
-                    customs_section: 6,
-                    insurance_section: 7,
-                    addons_section: 8}
+    enum section: {trucking_pre_section: 1,
+                   export_section: 2,
+                   cargo_section: 3,
+                   import_section: 4,
+                   trucking_on_section: 5,
+                   customs_section: 6,
+                   insurance_section: 7,
+                   addons_section: 8}
 
     monetize :amount_cents
     monetize :original_amount_cents

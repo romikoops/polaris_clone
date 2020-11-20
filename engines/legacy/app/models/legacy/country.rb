@@ -2,8 +2,8 @@
 
 module Legacy
   class Country < ApplicationRecord
-    self.table_name = 'countries'
-    has_many :addresses, class_name: 'Legacy::Address'
+    self.table_name = "countries"
+    has_many :addresses, class_name: "Legacy::Address"
     has_many :nexuses
     Geoplace = Struct.new(:name, :code)
 
@@ -14,7 +14,7 @@ module Legacy
       geocoder_results = Geocoder.search(country: name)
       return nil if geocoder_results.empty?
 
-      code = geocoder_results.first.data['address_components'].first['short_name']
+      code = geocoder_results.first.data["address_components"].first["short_name"]
       find_by(code: code)
     end
 
@@ -23,8 +23,8 @@ module Legacy
 
       geocoder_results.map do |geo|
         Geoplace.new(
-          geo.data['address_components'].first['long_name'],
-          geo.data['address_components'].first['short_name']
+          geo.data["address_components"].first["long_name"],
+          geo.data["address_components"].first["short_name"]
         )
       end
     end

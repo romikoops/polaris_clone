@@ -125,7 +125,7 @@ module Api
       end
 
       def attach_to_default_group(user:)
-        default_group = Groups::Group.find_by(organization_id: current_organization.id, name: 'default')
+        default_group = Groups::Group.find_by(organization_id: current_organization.id, name: "default")
         return if default_group.blank?
 
         Groups::Membership.find_or_create_by(
@@ -145,7 +145,7 @@ module Api
         end
 
         paginated = paginate(clients)
-        UserDecorator.decorate_collection(paginated, { context: { links: pagination_links(paginated) }})
+        UserDecorator.decorate_collection(paginated, {context: {links: pagination_links(paginated)}})
       end
 
       def filtered_profiles
@@ -159,7 +159,7 @@ module Api
       end
 
       def restored_client
-        user_params = { email: client_params[:email], organization_id: current_organization }
+        user_params = {email: client_params[:email], organization_id: current_organization}
         user = Organizations::User.with_deleted.find_by(user_params)
         restore_user_associations(user: user) if user
 

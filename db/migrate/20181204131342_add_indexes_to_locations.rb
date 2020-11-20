@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AddIndexesToLocations < ActiveRecord::Migration[5.2]
-  def change
+  def up
     safety_assured do
       execute "
         create index on locations using gin(to_tsvector('english', postal_code));

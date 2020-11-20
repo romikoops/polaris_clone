@@ -26,23 +26,23 @@ module ExcelDataServices
       attr_reader :value
 
       def string
-        proc { |value| value.strip }
+        proc(&:strip)
       end
 
       def upcase
-        proc { |value| value.upcase }
+        proc(&:upcase)
       end
 
       def downcase
-        proc { |value| value.downcase }
+        proc(&:downcase)
       end
 
       def decimal
-        proc { |value| value.to_d }
+        proc(&:to_d)
       end
 
       def integer
-        proc { |value| value.to_i }
+        proc(&:to_i)
       end
 
       def nan_as_nil

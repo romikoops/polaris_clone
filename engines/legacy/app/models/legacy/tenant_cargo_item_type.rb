@@ -2,10 +2,10 @@
 
 module Legacy
   class TenantCargoItemType < ApplicationRecord
-    self.table_name = 'tenant_cargo_item_types'
+    self.table_name = "tenant_cargo_item_types"
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :cargo_item_type, class_name: 'Legacy::CargoItemType'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :cargo_item_type, class_name: "Legacy::CargoItemType"
 
     validates :cargo_item_type, uniqueness: {
       scope: :organization,

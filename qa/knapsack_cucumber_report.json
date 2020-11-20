@@ -1,8 +1,0 @@
-{
-  "features/agent/download_quote.feature": 130.45537519454956,
-  "features/shipper/create_contacts.feature": 12.311704158782959,
-  "features/shipper/fcl_export_booking_process.feature": 391.44763803482056,
-  "features/shipper/lcl_export_booking_process.feature": 341.91290855407715,
-  "features/shipper/request_rates.feature": 42.28028607368469,
-  "features/visitors/login.feature": 9.983465909957886
-}

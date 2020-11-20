@@ -38,7 +38,7 @@ module Api
         end
 
         def carriage
-          target == :origin ? 'pre' : 'on'
+          target == :origin ? "pre" : "on"
         end
 
         def truck_type_carriage

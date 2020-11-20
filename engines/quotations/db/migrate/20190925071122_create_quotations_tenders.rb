@@ -10,7 +10,7 @@ class CreateQuotationsTenders < ActiveRecord::Migration[5.2]
       t.string :carrier_name
       t.string :name
       t.string :load_type
-      t.monetize :amount, amount: { null: true, default: nil }, currency: { null: true, default: nil }
+      t.monetize :amount, amount: {null: true, default: nil}, currency: {null: true, default: nil}
 
       t.timestamps
     end

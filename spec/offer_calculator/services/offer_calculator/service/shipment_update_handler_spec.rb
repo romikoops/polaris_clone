@@ -22,7 +22,10 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       user: user,
       organization: organization)
   end
-  let(:quotation) { FactoryBot.create(:quotations_quotation, organization: organization, user: user, legacy_shipment_id: base_shipment.id) }
+  let(:quotation) {
+    FactoryBot.create(:quotations_quotation,
+      organization: organization, user: user, legacy_shipment_id: base_shipment.id)
+  }
   let(:wheelhouse) { false }
 
   let(:cargo_item_attributes) do
@@ -131,7 +134,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
       params[:shipment]["cargo_items_attributes"] = cargo_item_attributes
       ActionController::Parameters.new(params)
     end
-    let(:service) { described_class.new(shipment: base_shipment, params: port_to_port_params, quotation: quotation) }
+    let(:service) {
+      described_class.new(shipment: base_shipment, params: port_to_port_params, quotation: quotation)
+    }
 
     describe ".update_nexuses" do
       it "updates the nexus" do
@@ -205,9 +210,9 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
         expect { agg_service.update_cargo_units }.to raise_error(OfferCalculator::Errors::InvalidCargoUnit)
       end
 
-      context 'when Cargo::Creator fails' do
+      context "when Cargo::Creator fails" do
         before do
-          cargo_double = instance_double('Cargo::Creator')
+          cargo_double = instance_double("Cargo::Creator")
           allow(cargo_double).to receive(:perform).and_raise(Cargo::Creator::InvalidCargo)
           allow(Cargo::Creator).to receive(:new).and_return(cargo_double)
         end

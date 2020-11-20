@@ -5,9 +5,9 @@ module Legacy
     include ActiveModel::Model
 
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
-                  :origin_hub_name, :destination_hub_name, :mode_of_transport,
-                  :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                  :quote, :carrier_name, :load_type
+      :origin_hub_name, :destination_hub_name, :mode_of_transport,
+      :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
+      :quote, :carrier_name, :load_type
 
     def origin_hub
       Hub.find origin_hub_id
@@ -18,8 +18,8 @@ module Legacy
     end
 
     def hub_for_carriage(carriage)
-      return origin_hub      if carriage == 'pre'
-      return destination_hub if carriage == 'on'
+      return origin_hub if carriage == "pre"
+      return destination_hub if carriage == "on"
 
       raise ArgumentError, "carriage must be 'pre' or 'on'"
     end

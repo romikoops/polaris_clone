@@ -7,10 +7,10 @@ FactoryBot.define do
     association :destination_hub, factory: :hub
     association :trip
     load_type { :container }
-    booking_placed_at { Date.today }
-    planned_etd { Date.tomorrow + 7.days + 2.hours }
-    planned_eta { Date.tomorrow + 11.days }
-    closing_date { Date.tomorrow + 4.days + 5.hours }
+    booking_placed_at { Time.zone.today }
+    planned_etd { Time.zone.today + 8.days + 2.hours }
+    planned_eta { Time.zone.today + 12.days }
+    closing_date { Time.zone.today + 5.days + 5.hours }
     billing { :external }
     total_goods_value do
       {
@@ -24,7 +24,6 @@ FactoryBot.define do
       with_full_breakdown { false }
       with_aggregated_cargo { false }
     end
-
 
     trait :with_contacts do
       after(:build) do |shipment|
@@ -43,7 +42,7 @@ FactoryBot.define do
       if evaluator.with_aggregated_cargo
         create(:aggregated_cargo, shipment: shipment)
       else
-        shipment.cargo_units << create("#{shipment.load_type}".to_sym, shipment: shipment)
+        shipment.cargo_units << create(shipment.load_type.to_s.to_sym, shipment: shipment)
       end
 
       if evaluator.with_breakdown
@@ -51,6 +50,6 @@ FactoryBot.define do
       end
     end
 
-    factory :complete_shipment, traits: %i(with_contacts)
+    factory :complete_shipment, traits: %i[with_contacts]
   end
 end

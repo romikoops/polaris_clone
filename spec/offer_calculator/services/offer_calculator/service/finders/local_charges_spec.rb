@@ -5,7 +5,9 @@ require "rails_helper"
 RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:itinerary_1) {
+    FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)
+  }
   let(:origin_1) { itinerary_1.origin_hub }
   let(:destination_1) { itinerary_1.destination_hub }
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
@@ -29,7 +31,10 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
 
   describe ".perform" do
     context "when no local charges required" do
-      before { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      before do
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      end
 
       it "returns the one pricing" do
         aggregate_failures do
@@ -40,7 +45,10 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
     end
 
     context "when only origin local charge required on one itinerary" do
-      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:local_charge) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
 
       before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
 
@@ -54,8 +62,14 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
     end
 
     context "when only origin local charge required, multiple tenant vehicles available" do
-      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:local_charge_2) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let!(:local_charge) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
+      let!(:local_charge_2) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_2)
+      }
       let(:trips) do
         [
           FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
@@ -75,8 +89,15 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
     end
 
     context "when both local charge required on one itinerary" do
-      let!(:export) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:import) { FactoryBot.create(:legacy_local_charge, direction: "import", hub: destination_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:export) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
+      let!(:import) {
+        FactoryBot.create(:legacy_local_charge,
+          direction: "import", hub: destination_1, organization: organization,
+          tenant_vehicle: tenant_vehicle_1)
+      }
 
       before do
         allow(shipment).to receive(:has_pre_carriage?).and_return(true)
@@ -93,11 +114,19 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
     end
 
     context "when both local charge required on one itinerary and one has a group" do
-      let!(:export) { FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
-      let!(:import) { FactoryBot.create(:legacy_local_charge, direction: "import", hub: destination_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:export) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1,
+          group_id: group.id)
+      }
+      let!(:import) {
+        FactoryBot.create(:legacy_local_charge, direction: "import", hub: destination_1,
+                                                organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
 
       before do
-        FactoryBot.create(:legacy_local_charge, hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
         allow(shipment).to receive(:has_pre_carriage?).and_return(true)
         allow(shipment).to receive(:has_on_carriage?).and_return(true)
       end

@@ -7,14 +7,14 @@ module Integrations
 
       def origin
         {
-          unlocode: origin_hub.locode || '',
+          unlocode: origin_hub.locode || "",
           description: "#{origin_hub.address.city}, #{origin_hub.address.country.code}"
         }
       end
 
       def destination
         {
-          unlocode: destination_hub.locode || '',
+          unlocode: destination_hub.locode || "",
           description: "#{destination_hub.address.city}, #{destination_hub.address.country.code}"
         }
       end

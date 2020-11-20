@@ -12,13 +12,13 @@ class CreateShipmentsShipmentRequests < ActiveRecord::Migration[5.2]
       t.datetime :submitted_at
       t.datetime :eta
       t.datetime :etd
-      t.references :sandbox, foreign_key: { to_table: :tenants_sandboxes },
+      t.references :sandbox, foreign_key: {to_table: :tenants_sandboxes},
                              type: :uuid, index: true
-      t.references :user, foreign_key: { to_table: :tenants_users },
+      t.references :user, foreign_key: {to_table: :tenants_users},
                           type: :uuid, index: true, null: false
-      t.references :tenant, foreign_key: { to_table: :tenants_tenants },
+      t.references :tenant, foreign_key: {to_table: :tenants_tenants},
                             type: :uuid, index: true, null: false
-      t.references :tender, foreign_key: { to_table: :quotations_tenders },
+      t.references :tender, foreign_key: {to_table: :quotations_tenders},
                             type: :uuid, index: true, null: false
 
       t.timestamps

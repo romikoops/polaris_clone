@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe Address, type: :model do
-    let(:lat_lng) { { latitude: 57.7072326, longitude: 11.9670171 } }
+    let(:lat_lng) { {latitude: 57.7072326, longitude: 11.9670171} }
     let(:address) { FactoryBot.create(:legacy_address) }
     let(:address_with_lat_lng) { FactoryBot.create(:legacy_address, **lat_lng) }
 
@@ -12,110 +12,114 @@ module Legacy
       Geocoder::Lookup::Test.reset
       Geocoder.configure(lookup: :test)
       Geocoder::Lookup::Test.add_stub([57.7072326, 11.9670171], [
-                                        'address_components' => [{ 'types' => ['premise'] }],
-                                        'address' => 'Göteborg, Sweden',
-                                        'city' => 'Gothenburg',
-                                        'country' => 'Sweden',
-                                        'country_code' => 'SE',
-                                        'postal_code' => '43813'
-                                      ])
-      Geocoder::Lookup::Test.add_stub({ country: 'Sweden' }, [
-                                        'address_components' => ['short_name' => 'Sweden'],
-                                        'country' => 'Sweden', 'code' => 'SE'
-                                      ])
-      Geocoder::Lookup::Test.add_stub(', 43813 Gothenburg, Sweden', [
-                                        'coordinates' => [57.7072326, 11.9670171],
-                                        'address' => 'Göteborg, Sweden',
-                                        'state' => 'Götaland',
-                                        'country' => 'Sweden',
-                                        'country_code' => 'SE'
-                                      ])
-      Geocoder::Lookup::Test.add_stub('Landvetter, Sweden', [
-                                      'coordinates' => [57.7072326, 11.9670171]
-                                    ])
-      Geocoder::Lookup::Test.add_stub({ country: 'sweden' }, ['coordinates' => [57.7072326, 11.9670171]])
-      Geocoder::Lookup::Test.add_stub(', Gothenburg', ['coordinates' => [57.7072326, 11.9670171]])
-      Geocoder::Lookup::Test.add_stub('Gothenburg, Sweden', ['coordinates' => [57.7072326, 11.9670171]])
+        "address_components" => [{"types" => ["premise"]}],
+        "address" => "Göteborg, Sweden",
+        "city" => "Gothenburg",
+        "country" => "Sweden",
+        "country_code" => "SE",
+        "postal_code" => "43813"
+      ])
+      Geocoder::Lookup::Test.add_stub({country: "Sweden"}, [
+        "address_components" => ["short_name" => "Sweden"],
+        "country" => "Sweden", "code" => "SE"
+      ])
+      Geocoder::Lookup::Test.add_stub(", 43813 Gothenburg, Sweden", [
+        "coordinates" => [57.7072326, 11.9670171],
+        "address" => "Göteborg, Sweden",
+        "state" => "Götaland",
+        "country" => "Sweden",
+        "country_code" => "SE"
+      ])
+      Geocoder::Lookup::Test.add_stub("Landvetter, Sweden", [
+        "coordinates" => [57.7072326, 11.9670171]
+      ])
+      Geocoder::Lookup::Test.add_stub({country: "sweden"}, ["coordinates" => [57.7072326, 11.9670171]])
+      Geocoder::Lookup::Test.add_stub(", Gothenburg", ["coordinates" => [57.7072326, 11.9670171]])
+      Geocoder::Lookup::Test.add_stub("Gothenburg, Sweden", ["coordinates" => [57.7072326, 11.9670171]])
     end
 
-    describe '.full_address' do
-      it 'successfully' do
-        expect(address.full_address).to eq '43813, Gothenburg, Sweden'
+    describe ".full_address" do
+      it "successfully" do
+        expect(address.full_address).to eq "43813, Gothenburg, Sweden"
       end
     end
 
-    describe '.get_zip_code' do
-      it 'returns the zipcode' do
-        expect(address.get_zip_code).to eq('43813')
+    describe ".get_zip_code" do
+      it "returns the zipcode" do
+        expect(address.get_zip_code).to eq("43813")
       end
     end
 
-    describe '.new_from_raw_params' do
+    describe ".new_from_raw_params" do
       let(:country) { FactoryBot.create(:legacy_country) }
       let(:address_attributes) { FactoryBot.attributes_for(:legacy_address) }
 
-      it 'returns the zipcode' do
-        address_attributes['country'] = country.name
+      it "returns the zipcode" do
+        address_attributes["country"] = country.name
         address = described_class.new_from_raw_params(address_attributes)
 
         expect(address.save).to be_truthy
       end
     end
 
-    describe '.reverse_geocoded_by' do
-      it 'gets address from coordinates' do
+    describe ".reverse_geocoded_by" do
+      it "gets address from coordinates" do
         address_with_lat_lng.reverse_geocode
-        expect(address_with_lat_lng.zip_code).to eq('43813')
+        expect(address_with_lat_lng.zip_code).to eq("43813")
       end
     end
 
-    describe '#get_zip_code' do
+    describe "#get_zip_code" do
       let(:address_without_zipcode) { FactoryBot.create(:legacy_address, zip_code: nil, **lat_lng) }
 
-      it 'returns the zip code from the address' do
-        expect(address_without_zipcode.get_zip_code).to eq('43813')
+      it "returns the zip code from the address" do
+        expect(address_without_zipcode.get_zip_code).to eq("43813")
       end
 
-      it 'returns the zip code from the address with zipcode' do
-        expect(address_with_lat_lng.get_zip_code).to eq('43813')
-      end
-    end
-
-    describe '.geocoded_address' do
-      let(:address) { described_class.geocoded_address 'Landvetter, Sweden' }
-
-      it 'find the address from the user input' do
-        expect(address.geocoded_address).to eq 'Göteborg, Sweden'
+      it "returns the zip code from the address with zipcode" do
+        expect(address_with_lat_lng.get_zip_code).to eq("43813")
       end
     end
 
-    describe '.lat_lng_string' do
-      it 'converts coordinates to string' do
-        expect(address_with_lat_lng.lat_lng_string).to eq("#{address_with_lat_lng.latitude},#{address_with_lat_lng.longitude}")
+    describe ".geocoded_address" do
+      let(:address) { described_class.geocoded_address "Landvetter, Sweden" }
+
+      it "find the address from the user input" do
+        expect(address.geocoded_address).to eq "Göteborg, Sweden"
       end
     end
 
-    describe '#furthest_hubs' do
+    describe ".lat_lng_string" do
+      it "converts coordinates to string" do
+        expect(
+          address_with_lat_lng.lat_lng_string
+        ).to eq("#{address_with_lat_lng.latitude},#{address_with_lat_lng.longitude}")
+      end
+    end
+
+    describe "#furthest_hubs" do
       let(:hubs) { [FactoryBot.create(:legacy_hub)] }
 
-      it 'furthest_hubs' do
+      it "furthest_hubs" do
         expect(address_with_lat_lng.furthest_hubs(hubs)).to eq(hubs)
       end
     end
 
-    describe '#to_custom_hash' do
-      let(:keys) { %i[city country geocoded_address id longitude name street street_number zip_code latitude location_type] }
+    describe "#to_custom_hash" do
+      let(:keys) {
+        %i[city country geocoded_address id longitude name street street_number zip_code latitude location_type]
+      }
 
-      it 'produces a hash from address' do
+      it "produces a hash from address" do
         expect(address.to_custom_hash.keys).to match_array(keys)
       end
     end
 
-    describe '#set_geocoded_address_from_fields!' do
-      it 'it completes the address based on it`s fields' do
+    describe "#set_geocoded_address_from_fields!" do
+      it "it completes the address based on it`s fields" do
         address.set_geocoded_address_from_fields!
 
-        expect(address.geocoded_address).to eq(', 43813 Gothenburg, Sweden')
+        expect(address.geocoded_address).to eq(", 43813 Gothenburg, Sweden")
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TenantVehicle < Legacy::TenantVehicle
-  belongs_to :organization, class_name: 'Organizations::Organization'
+  belongs_to :organization, class_name: "Organizations::Organization"
   belongs_to :vehicle
   belongs_to :carrier, optional: true
   has_many :pricings

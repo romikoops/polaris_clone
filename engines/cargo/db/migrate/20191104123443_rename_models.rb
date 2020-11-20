@@ -24,13 +24,13 @@ class RenameModels < ActiveRecord::Migration[5.2]
       add_column :cargo_units, :length_value, :decimal, default: 0.0, precision: 100, scale: 4
       add_column :cargo_units, :height_value, :decimal, default: 0.0, precision: 100, scale: 4
       add_column :cargo_units, :volume_value, :decimal, default: 0.0, precision: 100, scale: 6
-      add_column :cargo_units, :volume_unit, :string, default: 'm3'
-      add_column :cargo_units, :weight_unit, :string, default: 'kg'
-      add_column :cargo_units, :width_unit, :string, default: 'm'
-      add_column :cargo_units, :length_unit, :string, default: 'm'
-      add_column :cargo_units, :height_unit, :string, default: 'm'
+      add_column :cargo_units, :volume_unit, :string, default: "m3"
+      add_column :cargo_units, :weight_unit, :string, default: "kg"
+      add_column :cargo_units, :width_unit, :string, default: "m"
+      add_column :cargo_units, :length_unit, :string, default: "m"
+      add_column :cargo_units, :height_unit, :string, default: "m"
 
-      add_reference :cargo_units, :cargo, foreign_key: { to_table: :cargo_cargos },
+      add_reference :cargo_units, :cargo, foreign_key: {to_table: :cargo_cargos},
                                           type: :uuid, index: true
     end
   end
@@ -38,11 +38,11 @@ class RenameModels < ActiveRecord::Migration[5.2]
   def down
     safety_assured do
       remove_column :cargo_units, :cargo_id, :uuid
-      remove_column :cargo_units, :volume_unit, :string, default: 'm3'
-      remove_column :cargo_units, :weight_unit, :string, default: 'kg'
-      remove_column :cargo_units, :width_unit, :string, default: 'm'
-      remove_column :cargo_units, :length_unit, :string, default: 'm'
-      remove_column :cargo_units, :height_unit, :string, default: 'm'
+      remove_column :cargo_units, :volume_unit, :string, default: "m3"
+      remove_column :cargo_units, :weight_unit, :string, default: "kg"
+      remove_column :cargo_units, :width_unit, :string, default: "m"
+      remove_column :cargo_units, :length_unit, :string, default: "m"
+      remove_column :cargo_units, :height_unit, :string, default: "m"
       remove_column :cargo_units, :volume_value, :decimal, default: 0.0
       remove_column :cargo_units, :weight_value, :decimal, default: 0.0, scale: 5
       remove_column :cargo_units, :width_value, :decimal, default: 0.0, scale: 5

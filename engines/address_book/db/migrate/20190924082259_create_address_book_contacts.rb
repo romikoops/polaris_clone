@@ -3,8 +3,8 @@
 class CreateAddressBookContacts < ActiveRecord::Migration[5.2]
   def change
     create_table :address_book_contacts, id: :uuid do |t|
-      t.references :user, foreign_key: { to_table: :tenants_users }, type: :uuid, index: true
-      t.references :sandbox, foreign_key: { to_table: :tenants_sandboxes }, type: :uuid, index: true
+      t.references :user, foreign_key: {to_table: :tenants_users}, type: :uuid, index: true
+      t.references :sandbox, foreign_key: {to_table: :tenants_sandboxes}, type: :uuid, index: true
 
       t.string :company_name
       t.string :first_name

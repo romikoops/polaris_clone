@@ -28,7 +28,7 @@ module Api
       end
 
       def perform
-        itineraries_nexuses(target_index: index).reorder('name')
+        itineraries_nexuses(target_index: index).reorder("name")
       end
 
       private
@@ -56,7 +56,7 @@ module Api
       end
 
       def carriage
-        target == :origin_destination ? 'on' : 'pre'
+        target == :origin_destination ? "on" : "pre"
       end
 
       def organization_itineraries
@@ -77,10 +77,10 @@ module Api
 
       def itineraries_nexuses(target_index:)
         nexuses = Legacy::Nexus.joins(:hubs)
-                               .where(hubs: itineraries_hubs(target_index: target_index))
+          .where(hubs: itineraries_hubs(target_index: target_index))
 
         nexuses = nexuses.name_search(query) if query.present?
-        nexuses.reorder('').distinct
+        nexuses.reorder("").distinct
       end
 
       def nexus_hubs(nexus_id:)
@@ -96,7 +96,7 @@ module Api
           organization_id: organization.id,
           address: address,
           carriage: carriage,
-          order_by: 'group_id',
+          order_by: "group_id",
           load_type: load_type,
           groups: user_groups
         }
@@ -123,7 +123,7 @@ module Api
       end
 
       def default_group
-        Groups::Group.where(name: 'default', organization: organization)
+        Groups::Group.where(name: "default", organization: organization)
       end
     end
   end

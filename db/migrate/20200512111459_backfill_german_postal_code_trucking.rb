@@ -4,15 +4,15 @@ class BackfillGermanPostalCodeTrucking < ActiveRecord::Migration[5.2]
   def up
     safety_assured do
       hub_ids = Legacy::Hub.joins(address: :country)
-                           .where(countries: { code: 'DE' })
-                           .select(:id)
+        .where(countries: {code: "DE"})
+        .select(:id)
       Trucking::TypeAvailability.joins(:hub_availabilities)
-                                .where(
-                                  trucking_hub_availabilities: {
-                                    hub_id: hub_ids
-                                  },
-                                  query_method: 2
-                                ).update_all(query_method: 3)
+        .where(
+          trucking_hub_availabilities: {
+            hub_id: hub_ids
+          },
+          query_method: 2
+        ).update_all(query_method: 3)
       execute("
         UPDATE trucking_locations
         SET location_id = locations_locations.id

@@ -152,7 +152,7 @@ RSpec.describe Pricings::ManipulatorResult do
 
     describe ".distance" do
       it "returns the correct distance" do
-        expect(instance.distance).to eq (Measured::Length.new(55, "km"))
+        expect(instance.distance).to eq(Measured::Length.new(55, "km"))
       end
     end
   end

@@ -1,80 +1,80 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_charge_categories, class: 'Legacy::ChargeCategory' do
-    name { 'Grand Total' }
-    code { 'grand_total' }
+  factory :legacy_charge_categories, class: "Legacy::ChargeCategory" do
+    name { "Grand Total" }
+    code { "grand_total" }
     cargo_unit_id { nil }
     association :organization, factory: :organizations_organization
 
     trait :bas do
-      name { 'Basic Ocean Freight' }
-      code { 'bas' }
+      name { "Basic Ocean Freight" }
+      code { "bas" }
     end
 
     trait :solas do
-      name { 'SOLAS FEE' }
-      code { 'solas' }
+      name { "SOLAS FEE" }
+      code { "solas" }
     end
 
     trait :baf do
-      name { 'Bunker Adjustment Fee' }
-      code { 'baf' }
+      name { "Bunker Adjustment Fee" }
+      code { "baf" }
     end
 
     trait :thc do
-      name { 'Terminal Handling Cost' }
-      code { 'thc' }
+      name { "Terminal Handling Cost" }
+      code { "thc" }
     end
 
     trait :has do
-      name { 'Heavy Weight Freight' }
-      code { 'has' }
+      name { "Heavy Weight Freight" }
+      code { "has" }
     end
 
     trait :puf do
-      name { 'Pick Up Fee' }
-      code { 'puf' }
+      name { "Pick Up Fee" }
+      code { "puf" }
     end
 
     trait :export do
-      name { 'Export Charges' }
-      code { 'export' }
+      name { "Export Charges" }
+      code { "export" }
     end
 
     trait :import do
-      name { 'Import Charges' }
-      code { 'import' }
+      name { "Import Charges" }
+      code { "import" }
     end
 
     trait :cargo do
-      name { 'Freight Charges' }
-      code { 'cargo' }
+      name { "Freight Charges" }
+      code { "cargo" }
     end
 
     trait :trucking_pre do
-      name { 'Trucking' }
-      code { 'trucking_pre' }
+      name { "Trucking" }
+      code { "trucking_pre" }
     end
 
     trait :trucking_on do
-      name { 'Trucking' }
-      code { 'trucking_on' }
+      name { "Trucking" }
+      code { "trucking_on" }
     end
 
     trait :trucking_lcl do
-      name { 'Trucking Rate' }
-      code { 'trucking_lcl' }
+      name { "Trucking Rate" }
+      code { "trucking_lcl" }
     end
 
     to_create do |instance|
       instance.attributes = Legacy::ChargeCategory.create_with(code: instance.code)
-                                                  .find_or_create_by(
-                                                    organization: instance.organization,
-                                                    name: instance.name,
-                                                    cargo_unit_id: instance.cargo_unit_id
-                                                  )
-                                                  .attributes
+        .find_or_create_by(
+          organization: instance.organization,
+          name: instance.name,
+          cargo_unit_id: instance.cargo_unit_id
+        )
+        .attributes
       instance.reload
     end
 

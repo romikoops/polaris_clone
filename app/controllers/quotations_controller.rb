@@ -16,7 +16,9 @@ class QuotationsController < ApplicationController
     shipment = Shipment.find(params[:id])
     tender = Quotations::Tender.find(shipment.tender_id)
     document = Pdf::Quotation::Client.new(quotation: tender.quotation, tender_ids: [tender.id]).file
-    response = Rails.application.routes.url_helpers.rails_blob_url(document&.file, disposition: 'attachment') if document&.file
-    response_handler(key: 'quote', url: response)
+    response = if document&.file
+      Rails.application.routes.url_helpers.rails_blob_url(document&.file, disposition: "attachment")
+    end
+    response_handler(key: "quote", url: response)
   end
 end

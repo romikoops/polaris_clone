@@ -24,7 +24,9 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
       )
     end
   end
-  let(:object) { FactoryBot.build(:manipulator_result, original: pricing, result: pricing.as_json, breakdowns: breakdowns) }
+  let(:object) {
+    FactoryBot.build(:manipulator_result, original: pricing, result: pricing.as_json, breakdowns: breakdowns)
+  }
 
   describe ".perform" do
     context "with freight pricing (no consolidation)" do
@@ -126,7 +128,9 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
         aggregate_failures do
           expect(component).to be_a(OfferCalculator::Service::RateBuilders::FeeComponent)
           expect(fee.components.length).to eq(1)
-          target_range = pricing.fees.first.range.find { |range| (range["min"]..range["max"]).cover?(measures.kg.value) }
+          target_range = pricing.fees.first.range.find { |range|
+            (range["min"]..range["max"]).cover?(measures.kg.value)
+          }
           expect(component.value).to eq(Money.new(target_range["rate"] * 100, pricing.fees.first.currency_name))
         end
       end

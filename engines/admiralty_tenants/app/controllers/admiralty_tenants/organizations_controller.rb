@@ -7,7 +7,9 @@ module AdmiraltyTenants
     before_action :set_organization, except: %i[index new create]
 
     def index
-      @organizations = ::AdmiraltyTenants::OrganizationDecorator.decorate_collection(::Organizations::Organization.order(:slug))
+      @organizations = ::AdmiraltyTenants::OrganizationDecorator.decorate_collection(
+        ::Organizations::Organization.order(:slug)
+      )
     end
 
     def show

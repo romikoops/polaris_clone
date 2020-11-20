@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'bigdecimal'
+require "bigdecimal"
 
 class Charge < Legacy::Charge
 end

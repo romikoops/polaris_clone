@@ -10,8 +10,8 @@ class CargoItemType < Legacy::CargoItemType
   private
 
   def set_description
-    dimensions_prefix = width && length ? "#{length}cm × #{width}cm " : ''
-    area_suffix = area ? ": #{area}" : ''
+    dimensions_prefix = width && length ? "#{length}cm × #{width}cm " : ""
+    area_suffix = area ? ": #{area}" : ""
     self.description = dimensions_prefix + category + area_suffix
   end
 end

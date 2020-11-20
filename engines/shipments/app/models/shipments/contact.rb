@@ -4,9 +4,9 @@ module Shipments
   class Contact < ApplicationRecord
     has_paper_trail
 
-    enum contact_type: { consignee: 0,
-                         consignor: 1,
-                         notifyee: 2 }
+    enum contact_type: {consignee: 0,
+                        consignor: 1,
+                        notifyee: 2}
 
     belongs_to :shipment
   end

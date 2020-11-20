@@ -2,7 +2,7 @@
 
 module Legacy
   class Container < ApplicationRecord
-    self.table_name = 'containers'
+    self.table_name = "containers"
 
     acts_as_paranoid
 
@@ -28,15 +28,15 @@ module Legacy
     PRICING_WEIGHT_STEPS = [28.0, 24.0, 18.0, 14.0, 5.0].freeze
     CARGO_CLASSES = TARE_WEIGHTS.keys.map(&:to_s)
 
-    belongs_to :shipment, class_name: 'Legacy::Shipment'
+    belongs_to :shipment, class_name: "Legacy::Shipment"
 
     before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class, :set_tare_weight
 
     validates :size_class, presence: true
     validates :weight_class, presence: true
-    validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
-    validates :tare_weight, presence: true, numericality: { greater_than_or_equal_to: 0 }
-    validates :gross_weight, presence: true, numericality: { greater_than_or_equal_to: 0 }
+    validates :payload_in_kg, presence: true, numericality: {greater_than_or_equal_to: 0}
+    validates :tare_weight, presence: true, numericality: {greater_than_or_equal_to: 0}
+    validates :gross_weight, presence: true, numericality: {greater_than_or_equal_to: 0}
 
     def self.extract(containers_attributes)
       containers_attributes.map do |container_attributes|
@@ -45,7 +45,7 @@ module Legacy
     end
 
     def size
-      size_class.split('_').first
+      size_class.split("_").first
     end
 
     private
@@ -74,7 +74,7 @@ module Legacy
 
     def sync_cargo_class
       self.cargo_class ||= size_class
-      self.size_class  ||= cargo_class
+      self.size_class ||= cargo_class
     end
   end
 end

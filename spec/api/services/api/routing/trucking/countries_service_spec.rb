@@ -8,7 +8,9 @@ RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
   let(:country) { FactoryBot.create(:country_se) }
   let(:location_1) { FactoryBot.create(:zipcode_location, :zipcode, data: "00001", country: country) }
   let(:location_2) { FactoryBot.create(:zipcode_location, :zipcode, data: "00002", country: country) }
-  let(:results) { described_class.new(target: :destination, organization: organization, load_type: "cargo_item").perform }
+  let(:results) {
+    described_class.new(target: :destination, organization: organization, load_type: "cargo_item").perform
+  }
 
   describe ".perform" do
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }

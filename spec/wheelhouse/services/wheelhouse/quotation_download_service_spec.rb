@@ -5,7 +5,10 @@ require "rails_helper"
 RSpec.describe Wheelhouse::QuotationDownloadService do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user_with_profile, organization: organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, user: user, organization: organization) }
+  let(:shipment) {
+    FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, user: user,
+                                        organization: organization)
+  }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment) }
   let(:tender_ids) { [shipment.charge_breakdowns.first.tender_id] }
   let(:result) { described_class.new(tender_ids: tender_ids, quotation_id: quotation.id, format: format).document }

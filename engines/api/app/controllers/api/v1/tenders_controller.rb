@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_dependency 'api/application_controller'
+require_dependency "api/application_controller"
 
 module Api
   module V1
     class TendersController < ApiController
       def update
         updated_tender = tender_updater.perform
-        decorated_tender = TenderDecorator.decorate(updated_tender, context: { scope: current_scope })
-        render json: QuotationTenderSerializer.new(decorated_tender, params: { scope: current_scope })
+        decorated_tender = TenderDecorator.decorate(updated_tender, context: {scope: current_scope})
+        render json: QuotationTenderSerializer.new(decorated_tender, params: {scope: current_scope})
       end
 
       private

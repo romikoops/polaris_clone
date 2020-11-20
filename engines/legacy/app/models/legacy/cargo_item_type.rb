@@ -2,8 +2,8 @@
 
 module Legacy
   class CargoItemType < ApplicationRecord
-    self.table_name = 'cargo_item_types'
-    has_many :cargo_items, class_name: 'Legacy::CargoItem'
+    self.table_name = "cargo_item_types"
+    has_many :cargo_items, class_name: "Legacy::CargoItem"
   end
 end
 

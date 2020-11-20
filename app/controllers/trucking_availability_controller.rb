@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'scientist'
+require "scientist"
 class TruckingAvailabilityController < ApplicationController
   skip_before_action :doorkeeper_authorize!
 
@@ -37,10 +37,10 @@ class TruckingAvailabilityController < ApplicationController
       organization_id: params[:organization_id],
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids: params[:hub_ids].split(',').map(&:to_i),
+      hub_ids: params[:hub_ids].split(",").map(&:to_i),
       carriage: params[:carriage],
       klass: Trucking::Trucking,
-      order_by: 'group_id',
+      order_by: "group_id",
       groups: user_groups
     }
     Trucking::Queries::Availability.new(args).perform

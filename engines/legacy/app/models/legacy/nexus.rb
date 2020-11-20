@@ -2,18 +2,18 @@
 
 module Legacy
   class Nexus < ApplicationRecord
-    self.table_name = 'nexuses'
+    self.table_name = "nexuses"
 
     include PgSearch::Model
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    has_many :hubs, class_name: 'Legacy::Hub', dependent: :destroy
-    belongs_to :country, class_name: 'Legacy::Country'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    has_many :hubs, class_name: "Legacy::Hub", dependent: :destroy
+    belongs_to :country, class_name: "Legacy::Country"
 
     pg_search_scope :name_search, against: %i[name], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
 
-    validates :locode, format: { with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode" }, allow_nil: true
+    validates :locode, format: {with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode"}, allow_nil: true
   end
 end
 

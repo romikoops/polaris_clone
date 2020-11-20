@@ -9,9 +9,9 @@ module Wheelhouse
     # We pass config hash of the sort
     # {code: 100, message: 'Some Error Message', http_code: 501}
     def initialize(config)
-      @config    = config
-      @code      = config[:code]
-      @message   = config[:message]
+      @config = config
+      @code = config[:code]
+      @message = config[:message]
       @http_code = config[:http_code]
     end
 

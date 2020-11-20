@@ -21,17 +21,17 @@ module Trucking
         query = query.where(truck_type: filters[:truck_type]) if filters[:truck_type]
         query = query.where(carriage: filters[:carriage]) if filters[:carriage]
         if filters[:destination]
-          query = query.joins(:location).where('trucking_locations.data ILIKE ?', "#{filters[:destination]}%")
+          query = query.joins(:location).where("trucking_locations.data ILIKE ?", "#{filters[:destination]}%")
         end
         if filters[:courier_name]
-          query = query.joins(:tenant_vehicle).where('tenant_vehicles.name ILIKE ?', "#{filters[:courier_name]}%")
+          query = query.joins(:tenant_vehicle).where("tenant_vehicles.name ILIKE ?", "#{filters[:courier_name]}%")
         end
 
         @result = query
       end
 
       def argument_errors(args)
-        raise ArgumentError, 'Must provide hub_ids or hub_id' if args[:hub_ids].empty?
+        raise ArgumentError, "Must provide hub_ids or hub_id" if args[:hub_ids].empty?
       end
     end
   end

@@ -6,11 +6,11 @@ class UserAddressesController < ApplicationController
   def index
     user = Organizations::User.find(params[:user_id])
     user_addresses = addresses_for_user(user: user)
-    resp = user_addresses.map do |user_address|
+    resp = user_addresses.map { |user_address|
       loc = user_address.address
-      prim = { primary: loc.primary_for?(user) }
+      prim = {primary: loc.primary_for?(user)}
       loc.to_custom_hash.merge(prim)
-    end
+    }
 
     response_handler(resp)
   end
@@ -50,10 +50,10 @@ class UserAddressesController < ApplicationController
     user = Organizations::User.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
     address_data = JSON.parse(params[:edit_address])
-    address_data.delete('id')
-    address_data['country'] = Country.geo_find_by_name(address_data['country'])
+    address_data.delete("id")
+    address_data["country"] = Country.geo_find_by_name(address_data["country"])
     user_loc = Address.find_by(id: params[:address_id])
-    user_loc.update_attributes(address_data)
+    user_loc.update(address_data)
     user_loc.save!
     resp = []
     user_locs = user_addresses

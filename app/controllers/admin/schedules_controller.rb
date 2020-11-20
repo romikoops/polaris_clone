@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::SchedulesController < Admin::AdminBaseController
-  before_action :initialize_variables, only: %i(auto_generate_schedules)
+  before_action :initialize_variables, only: %i[auto_generate_schedules]
 
   def index
     map_data = MapDatum.where(organization: current_organization).limit(100)
@@ -29,14 +29,14 @@ class Admin::SchedulesController < Admin::AdminBaseController
     options = params[:options].as_json.symbolize_keys
     options[:organization_id] = current_organization.id
     url = DocumentService::ScheduleSheetWriter.new(options).perform
-    response_handler(url: url, key: 'schedules')
+    response_handler(url: url, key: "schedules")
   end
 
   def generate_schedules_from_sheet
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}:schedule_generator",
-      type: 'schedules_generator',
+      type: "schedules_generator",
       options: {
         user: organization_user
       }
@@ -47,7 +47,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}:schedules",
-      type: 'schedules',
+      type: "schedules",
       options: {
         user: organization_user
       }
@@ -63,14 +63,13 @@ class Admin::SchedulesController < Admin::AdminBaseController
     response_handler(trip_layovers)
   end
 
-
   private
 
   def initialize_variables
-    @train_schedules = mot_schedule('rail')
-    @ocean_schedules = mot_schedule('ocean')
-    @air_schedules = mot_schedule('air')
-    @truck_schedules = mot_schedule('truck')
+    @train_schedules = mot_schedule("rail")
+    @ocean_schedules = mot_schedule("ocean")
+    @air_schedules = mot_schedule("air")
+    @truck_schedules = mot_schedule("truck")
   end
 
   def mot_schedule(mot)
@@ -114,7 +113,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def trip_layovers
     trip.layovers.order(:stop_index).map do |layover|
-      { layover: layover, stop: layover.stop, hub: layover.stop.hub }
+      {layover: layover, stop: layover.stop, hub: layover.stop.hub}
     end
   end
 
@@ -123,7 +122,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
       .trips
       .lastday_today
       .left_joins(tenant_vehicle: :carrier)
-      .select('trips.*, tenant_vehicles.name AS service_level, carriers.name AS carrier')
+      .select("trips.*, tenant_vehicles.name AS service_level, carriers.name AS carrier")
       .order(:start_date)
       .limit(limit)
       .map(&:attributes)

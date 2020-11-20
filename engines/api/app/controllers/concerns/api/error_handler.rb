@@ -11,7 +11,7 @@ module Api
 
         status_code = Rack::Utils::SYMBOL_TO_STATUS_CODE[status] if status.is_a?(Symbol)
 
-        response = { success: false, message: exception, status: status, code: status_code }
+        response = {success: false, message: exception, status: status, code: status_code}
         render json: response, status: status_code
       end
     end

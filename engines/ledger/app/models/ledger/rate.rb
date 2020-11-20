@@ -3,9 +3,9 @@
 module Ledger
   class Rate < ApplicationRecord
     belongs_to :target, polymorphic: true
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :location, class_name: 'Routing::Location', optional: true
-    has_many :fees, class_name: 'Ledger::Fee'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :location, class_name: "Routing::Location", optional: true
+    has_many :fees, class_name: "Ledger::Fee"
   end
 end
 

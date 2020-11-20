@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Profiles::Profile, type: :model do
   let(:user) { FactoryBot.create(:organizations_user) }
 
-  it 'builds a valid object' do
+  it "builds a valid object" do
     expect(FactoryBot.build(:profiles_profile, user: user)).to be_valid
   end
 end

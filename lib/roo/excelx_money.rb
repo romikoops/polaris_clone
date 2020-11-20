@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-require 'zip/filesystem'
-require 'roo/link'
-require 'roo/tempdir'
-require 'roo/utils'
-require 'forwardable'
-require 'set'
+require "nokogiri"
+require "zip/filesystem"
+require "roo/link"
+require "roo/tempdir"
+require "roo/utils"
+require "forwardable"
+require "set"
 
 module Roo
   class ExcelxMoney < ::Roo::Excelx
@@ -23,11 +23,11 @@ module Roo
       @sheet_names.each_with_index do |sheet_name, n|
         @sheets_by_name[sheet_name] = @sheets[n] = ::Roo::ExcelxMoney::Sheet.new(sheet_name, @shared, n, sheet_options)
       end
-    rescue StandardError
+    rescue
       self.class.finalize_tempdirs(object_id)
       raise
     end
   end
 end
 
-require_relative 'sheet_money'
+require_relative "sheet_money"

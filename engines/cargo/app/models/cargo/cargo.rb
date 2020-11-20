@@ -2,8 +2,8 @@
 
 module Cargo
   class Cargo < ApplicationRecord
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    has_many :units, class_name: 'Cargo::Unit'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    has_many :units, class_name: "Cargo::Unit"
     monetize :total_goods_value_cents
 
     def total_area
@@ -28,7 +28,7 @@ module Cargo
 
     def stowage_factor
       factor = total_volume.value / total_weight.convert_to(:t).value
-      Measured::StowageFactor.new(factor.round(6), 'm3/t')
+      Measured::StowageFactor.new(factor.round(6), "m3/t")
     end
 
     def lcl?

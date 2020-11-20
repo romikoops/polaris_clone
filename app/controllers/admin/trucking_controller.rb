@@ -23,7 +23,7 @@ class Admin::TruckingController < Admin::AdminBaseController
         page: params[:page] || 1,
         filters: filters,
         per_page: params[:page_size],
-        group_id: params[:group] == 'all' ? default_group.id : params[:group]
+        group_id: params[:group] == "all" ? default_group.id : params[:group]
       }
     )
 
@@ -54,7 +54,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "group_id:#{params[:group_id] || "all"},hub_id: #{hub.id}",
-      type: 'trucking',
+      type: "trucking",
       options: {
         group_id: upload_params[:group_id],
         applicable: hub,
@@ -66,17 +66,17 @@ class Admin::TruckingController < Admin::AdminBaseController
   def overwrite_zonal_trucking_by_hub
     if upload_params[:file]
       document = Legacy::File.create!(
-        text: '',
-        doc_type: 'truckings',
+        text: "",
+        doc_type: "truckings",
         organization: current_organization,
         file: upload_params[:file]
       )
 
       args = {
-        params: { 'xlsx' => upload_params[:file] },
+        params: {"xlsx" => upload_params[:file]},
         hub_id: upload_params[:id],
         user: organization_user,
-        group: upload_params[:group] == 'all' ? nil : upload_params[:group],
+        group: upload_params[:group] == "all" ? nil : upload_params[:group],
         document: document
       }
 
@@ -91,9 +91,9 @@ class Admin::TruckingController < Admin::AdminBaseController
   def download
     options = params[:options].as_json.symbolize_keys
     options[:organization_id] = current_organization.id
-    options[:group_id] = options[:target] == 'all' ? nil : options[:target]
+    options[:group_id] = options[:target] == "all" ? nil : options[:target]
     url = DocumentService::TruckingWriter.new(options).perform
-    response_handler(url: url, key: 'trucking')
+    response_handler(url: url, key: "trucking")
   end
 
   def upload_params

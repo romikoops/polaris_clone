@@ -8,7 +8,7 @@ module Analytics
       def data
         @data ||= tally(
           requests: tender_or_request_with_itinerary,
-          grouping_attribute: 'itineraries.name',
+          grouping_attribute: "itineraries.name",
           order_by_count: true,
           order: :desc,
           limit: TOP_ROUTES

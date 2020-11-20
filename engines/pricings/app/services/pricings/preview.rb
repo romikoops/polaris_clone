@@ -4,14 +4,14 @@ module Pricings
   class Preview
     attr_accessor :tenant_vehicle_id, :cargo_class, :target, :date, :organization, :truckings
 
-    def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Date.today + 5.days)
+    def initialize(params:, target:, organization: nil, tenant_vehicle_id: nil, date: Time.zone.today + 5.days)
       @params = params
       @target = target
       @organization = organization
       @scope = OrganizationManager::ScopeService.new(target: target, organization: organization).fetch
-      @local_charges = { origin: [], destination: [] }
+      @local_charges = {origin: [], destination: []}
       @cargo_class = params[:selectedCargoClass]
-      @load_type = params[:selectedCargoClass] == 'lcl' ? 'cargo_item' : 'container'
+      @load_type = params[:selectedCargoClass] == "lcl" ? "cargo_item" : "container"
       @hierarchy = OrganizationManager::GroupsService.new(
         target: target,
         organization: organization,
@@ -41,42 +41,42 @@ module Pricings
     end
 
     def determine_route_combinations
-      @route_results = @manipulated_pricings.map do |pricing|
+      @route_results = @manipulated_pricings.map { |pricing|
         itinerary = ::Legacy::Itinerary.find(pricing.itinerary_id)
         origin_hub = itinerary.origin_hub
         destination_hub = itinerary.destination_hub
-        pre_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == origin_hub.id }
-        on_carriage = @manipulated_truckings.find { |trucking| trucking.result['hub_id'] == destination_hub.id }
+        pre_carriage = @manipulated_truckings.find { |trucking| trucking.result["hub_id"] == origin_hub.id }
+        on_carriage = @manipulated_truckings.find { |trucking| trucking.result["hub_id"] == destination_hub.id }
         origin_charges_mandatory = origin_hub.mandatory_charge&.export_charges || pre_carriage.present?
         destination_charges_mandatory = destination_hub.mandatory_charge&.import_charges || on_carriage.present?
-        origin_local_charge = @manipulated_local_charges.find do |lc|
-          lc.result['hub_id'] == origin_hub.id &&
-            lc.direction == 'export' &&
+        origin_local_charge = @manipulated_local_charges.find { |lc|
+          lc.result["hub_id"] == origin_hub.id &&
+            lc.direction == "export" &&
             lc.tenant_vehicle_id == pricing.tenant_vehicle_id
-        end
-        destination_local_charge = @manipulated_local_charges.find do |lc|
-          lc.result['hub_id'] == destination_hub.id &&
-            lc.direction == 'import' &&
+        }
+        destination_local_charge = @manipulated_local_charges.find { |lc|
+          lc.result["hub_id"] == destination_hub.id &&
+            lc.direction == "import" &&
             lc.tenant_vehicle_id == pricing.tenant_vehicle_id
-        end
+        }
 
         next if origin_charges_mandatory && origin_local_charge.nil?
         next if destination_charges_mandatory && destination_local_charge.nil?
 
         result = {
-          freight: build_breakdowns(target: pricing, type: 'pricing')
+          freight: build_breakdowns(target: pricing, type: "pricing")
         }
         if origin_local_charge.present?
-          result[:export] = build_breakdowns(target: origin_local_charge, type: 'local_charge')
+          result[:export] = build_breakdowns(target: origin_local_charge, type: "local_charge")
         end
         if destination_local_charge.present?
-          result[:import] = build_breakdowns(target: destination_local_charge, type: 'local_charge')
+          result[:import] = build_breakdowns(target: destination_local_charge, type: "local_charge")
         end
-        result[:trucking_pre] = build_breakdowns(target: pre_carriage, type: 'trucking') if pre_carriage.present?
-        result[:trucking_on] = build_breakdowns(target: on_carriage, type: 'trucking') if on_carriage.present?
+        result[:trucking_pre] = build_breakdowns(target: pre_carriage, type: "trucking") if pre_carriage.present?
+        result[:trucking_on] = build_breakdowns(target: on_carriage, type: "trucking") if on_carriage.present?
 
         result
-      end
+      }
     end
 
     def build_breakdowns(target:, type:)
@@ -105,8 +105,8 @@ module Pricings
     def build_breakdown_response(target:)
       target.breakdowns.group_by(&:code).each_with_object({}) do |(fee_key, data), hash|
         adjusted_breakdowns = data.map { |breakdown| manipulate_breakdown(breakdown: breakdown) }
-        margin_breakdowns = adjusted_breakdowns.reject { |breakdown| breakdown[:operator] == '+' }
-        flat_breakdowns = adjusted_breakdowns.select { |breakdown| breakdown[:operator] == '+' }
+        margin_breakdowns = adjusted_breakdowns.reject { |breakdown| breakdown[:operator] == "+" }
+        flat_breakdowns = adjusted_breakdowns.select { |breakdown| breakdown[:operator] == "+" }
         original = adjusted_breakdowns.find { |breakdown| breakdown[:source].blank? }
         hash[fee_key.to_sym] = {
           original: original[:data],
@@ -123,14 +123,14 @@ module Pricings
       args = {
         load_type: @load_type,
         organization_id: @organization.id,
-        truck_type: @cargo_class == 'lcl' ? 'default' : 'chassis',
+        truck_type: @cargo_class == "lcl" ? "default" : "chassis",
         cargo_classes: [@cargo_class],
         groups: groups
       }
       @params.slice(:selectedOriginTrucking, :selectedDestinationTrucking).each do |key, target|
         next if target.empty?
 
-        carriage = key.to_sym == :selectedOriginTrucking ? 'pre' : 'on'
+        carriage = key.to_sym == :selectedOriginTrucking ? "pre" : "on"
         adjusted_args = args.merge(
           address: ::Legacy::Address.new(latitude: target[:lat], longitude: target[:lng]).reverse_geocode,
           carriage: carriage
@@ -164,9 +164,10 @@ module Pricings
     end
 
     def fee_origins
-      @fee_origins ||= Pricings::Fee.where(pricing_id: pricings.ids).each_with_object(Hash.new { |h, k| h[k] = {} }) do |fee, hash|
+      @fee_origins ||= Pricings::Fee.where(pricing_id: pricings.ids)
+        .each_with_object(Hash.new { |h, k| h[k] = {} }) { |fee, hash|
         hash[fee.pricing_id][fee.fee_code] = fee.metadata if fee.metadata.present?
-      end
+      }
     end
 
     def determine_service_levels
@@ -178,18 +179,18 @@ module Pricings
       @local_charges[:origin] = cargo_local_charges.where(
         hub_id: origin_hub_ids,
         group_id: group_ids,
-        direction: 'export'
+        direction: "export"
       )
       @local_charges[:destination] = cargo_local_charges.where(
         hub_id: destination_hub_ids,
-        direction: 'import',
+        direction: "import",
         group_id: group_ids
       )
       if @local_charges[:origin].empty?
         @local_charges[:origin] = cargo_local_charges.where(
           hub_id: origin_hub_ids,
           group_id: nil,
-          direction: 'export'
+          direction: "export"
         )
       end
       return if @local_charges[:destination].present?
@@ -197,7 +198,7 @@ module Pricings
       @local_charges[:destination] = cargo_local_charges.where(
         hub_id: destination_hub_ids,
         group_id: nil,
-        direction: 'import'
+        direction: "import"
       )
     end
 
@@ -245,7 +246,7 @@ module Pricings
           args: {
             schedules: default_schedules(tenant_vehicle_id: nil),
             trucking_pricing: trucking,
-            date: Date.today,
+            date: Time.zone.today,
             cargo_class_count: 1
           }
         ).perform
@@ -255,7 +256,7 @@ module Pricings
     end
 
     def prepare_trips
-      @trips = pricings.map do |pricing|
+      @trips = pricings.map { |pricing|
         trip = ::Legacy::Trip.for_dates(date, date + 5.days).where(
           tenant_vehicle_id: pricing.tenant_vehicle_id,
           itinerary_id: pricing.itinerary_id,
@@ -272,17 +273,25 @@ module Pricings
         )
 
         trip
-      end
+      }
     end
 
     private
 
     def origin_hub_ids
-      @truckings['pre'].present? ? @truckings['pre'].map { |trucking| trucking[:hub_id] }.uniq : [@params[:selectedOriginHub]]
+      if @truckings["pre"].present?
+        @truckings["pre"].map { |trucking| trucking[:hub_id] }.uniq
+      else
+        [@params[:selectedOriginHub]]
+      end
     end
 
     def destination_hub_ids
-      @truckings['on'].present? ? @truckings['on'].map { |trucking| trucking[:hub_id] }.uniq : [@params[:selectedDestinationHub]]
+      if @truckings["on"].present?
+        @truckings["on"].map { |trucking| trucking[:hub_id] }.uniq
+      else
+        [@params[:selectedDestinationHub]]
+      end
     end
 
     def group_ids
@@ -308,7 +317,8 @@ module Pricings
     end
 
     def default_schedules(tenant_vehicle_id: tenant_vehicles.first.id)
-      @trips.select { |trip| trip.tenant_vehicle_id == tenant_vehicle_id }.map { |trip| ::Legacy::Schedule.from_trip(trip) }
+      @trips.select { |trip| trip.tenant_vehicle_id == tenant_vehicle_id }
+        .map { |trip| ::Legacy::Schedule.from_trip(trip) }
     end
   end
 end

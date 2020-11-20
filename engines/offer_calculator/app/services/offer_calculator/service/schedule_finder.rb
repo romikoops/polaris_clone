@@ -20,8 +20,8 @@ module OfferCalculator
         trucking_time = longest_trucking_time(hubs).seconds
         if trucking_time != 0
           trucking_time_upper_limit = 129_600
-          pre_carriage = @shipment.trucking['pre_carriage']
-          pre_carriage['trucking_time_in_seconds'] = [trucking_time, trucking_time_upper_limit].max
+          pre_carriage = @shipment.trucking["pre_carriage"]
+          pre_carriage["trucking_time_in_seconds"] = [trucking_time, trucking_time_upper_limit].max
         end
         @shipment.desired_start_date + trucking_time
       end

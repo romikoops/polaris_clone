@@ -9,7 +9,9 @@ class Carrier < Legacy::Carrier
       mode_of_transport: mode_of_transport,
       name: name
     )
-    tv ||= Vehicle.create_from_name(name: name, mot: mode_of_transport, organization_id: organization_id, carrier: self.name)
+    tv ||= Vehicle.create_from_name(
+      name: name, mot: mode_of_transport, organization_id: organization_id, carrier: self.name
+    )
 
     tv
   end

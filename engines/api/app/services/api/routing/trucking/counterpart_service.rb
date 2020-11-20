@@ -42,7 +42,7 @@ module Api
         end
 
         def truck_type_carriage
-          carriage == 'pre' ? 'on' : 'pre'
+          carriage == "pre" ? "on" : "pre"
         end
       end
     end

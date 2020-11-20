@@ -30,7 +30,11 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           country: {name: "United Arab Emirates"},
           city: "Abu Dhabi",
           geocoded_address: "Khalifa Port - Abu Dhabi - United Arab Emirates"},
-        nexus: {name: "Abu Dhabi", latitude: 24.806936, longitude: 54.644405, photo: nil, locode: "AEAUH", country: {name: "United Arab Emirates"}, organization_id: organization.id},
+        nexus: {
+          name: "Abu Dhabi", latitude: 24.806936, longitude: 54.644405, photo: nil,
+          locode: "AEAUH", country: {name: "United Arab Emirates"},
+          organization_id: organization.id
+        },
         mandatory_charge: {pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true},
         hub: {
           organization_id: organization.id,
@@ -67,9 +71,16 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            country: {name: "Australia"},
            city: "Adelaide",
            geocoded_address: "202 Victoria Square, Adelaide SA 5000, Australia"},
-         nexus: {name: "Adelaide", latitude: -34.9284989, longitude: 138.6007456, photo: nil, locode: "AUADL", country: {name: "Australia"}, organization_id: organization.id},
-         mandatory_charge: {pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false},
-         hub: {organization_id: organization.id, hub_type: "ocean", latitude: -34.9284989, longitude: 138.6007456, name: "Adelaide", photo: nil, hub_code: "AUADL"}}]
+         nexus: {
+           name: "Adelaide", latitude: -34.9284989, longitude: 138.6007456, photo: nil,
+           locode: "AUADL", country: {name: "Australia"},
+           organization_id: organization.id
+         },
+         mandatory_charge: {pre_carriage: false, on_carriage: false,
+                            import_charges: true, export_charges: false},
+         hub: {organization_id: organization.id, hub_type: "ocean",
+               latitude: -34.9284989, longitude: 138.6007456, name: "Adelaide", photo: nil,
+               hub_code: "AUADL"}}]
     end
 
     let!(:countries) do
@@ -80,8 +91,12 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
     end
     let!(:mandatory_charges) do
       [
-        FactoryBot.create(:legacy_mandatory_charge, pre_carriage: false, on_carriage: false, import_charges: true, export_charges: false),
-        FactoryBot.create(:legacy_mandatory_charge, pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true)
+        FactoryBot.create(:legacy_mandatory_charge,
+          pre_carriage: false, on_carriage: false, import_charges: true,
+          export_charges: false),
+        FactoryBot.create(:legacy_mandatory_charge,
+          pre_carriage: false, on_carriage: false, import_charges: false,
+          export_charges: true)
       ]
     end
 
@@ -189,7 +204,11 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
            country: {name: "United Arab Emirates"},
            city: "Abu Dhabi",
            geocoded_address: "Khalifa Port - Abu Dhabi - United Arab Emirates"},
-          nexus: {name: "Abu Dhabi", latitude: 24.806936, longitude: 54.644405, photo: nil, locode: "AEAUH", country: {name: "United Arab Emirates"}, organization_id: organization.id},
+          nexus: {
+            name: "Abu Dhabi", latitude: 24.806936, longitude: 54.644405, photo: nil,
+            locode: "AEAUH", country: {name: "United Arab Emirates"},
+            organization_id: organization.id
+          },
           mandatory_charge: {pre_carriage: false, on_carriage: false, import_charges: false, export_charges: true},
           hub: {organization_id: organization.id,
                 hub_type: "ocean",

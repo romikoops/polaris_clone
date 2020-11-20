@@ -2,14 +2,14 @@
 
 module Legacy
   class ShipmentContact < ApplicationRecord
-    self.table_name = 'shipment_contacts'
+    self.table_name = "shipment_contacts"
 
-    CONTACT_TYPES = %w(shipper consignee notifyee).freeze
+    CONTACT_TYPES = %w[shipper consignee notifyee].freeze
 
     belongs_to :shipment
     belongs_to :contact
 
-    validates :contact_id, uniqueness: { scope: :shipment_id }
+    validates :contact_id, uniqueness: {scope: :shipment_id}
   end
 end
 

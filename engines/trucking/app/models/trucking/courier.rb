@@ -1,7 +1,7 @@
 module Trucking
   class Courier < ApplicationRecord
-    has_many :rates, class_name: 'Trucking::Rate'
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    has_many :rates, class_name: "Trucking::Rate"
+    belongs_to :organization, class_name: "Organizations::Organization"
   end
 end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 # Specs in this file have access to a helper object that includes
 # the ApplicationHelper. For example:
@@ -16,21 +16,21 @@ module AdmiraltyAssets
   RSpec.describe ApplicationHelper, type: :helper do
     include AdmiraltyAssets::ApplicationHelper
 
-    describe 'controller_classes' do
-      it 'returns controller specific CSS class names' do
-        expect(controller_classes).to eq('admiralty_assets admiralty_assets_application admiralty_assets_application_')
+    describe "controller_classes" do
+      it "returns controller specific CSS class names" do
+        expect(controller_classes).to eq("admiralty_assets admiralty_assets_application admiralty_assets_application_")
       end
     end
 
-    describe 'controller_class' do
-      it 'returns namespaces class' do
-        expect(controller_class).to eq('admiralty_assets_application')
+    describe "controller_class" do
+      it "returns namespaces class" do
+        expect(controller_class).to eq("admiralty_assets_application")
       end
     end
 
-    describe 'controller_action_class' do
-      it 'returns controller class with action' do
-        expect(controller_action_class).to eq('admiralty_assets_application_')
+    describe "controller_action_class" do
+      it "returns controller class with action" do
+        expect(controller_action_class).to eq("admiralty_assets_application_")
       end
     end
   end

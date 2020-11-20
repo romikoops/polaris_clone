@@ -37,7 +37,7 @@ module Api
       end
 
       def quotation_tool?(scope:)
-        scope['open_quotation_tool'] || scope['closed_quotation_tool']
+        scope["open_quotation_tool"] || scope["closed_quotation_tool"]
       end
 
       def meta(object)

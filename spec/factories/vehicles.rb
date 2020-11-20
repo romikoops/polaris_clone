@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :vehicle do
-    name { 'standard' }
-    mode_of_transport { 'ocean' }
+    name { "standard" }
+    mode_of_transport { "ocean" }
   end
 end
 

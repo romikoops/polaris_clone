@@ -7,24 +7,24 @@ class ShipmentsController < ApplicationController
 
   def delta_page_handler
     case params[:target]
-    when 'requested'
+    when "requested"
       shipment_association = requested_shipments
-                             .order(booking_placed_at: :desc)
-    when 'open'
+        .order(booking_placed_at: :desc)
+    when "open"
       shipment_association = open_shipments
-                             .order(booking_placed_at: :desc)
-    when 'rejected'
+        .order(booking_placed_at: :desc)
+    when "rejected"
       shipment_association = rejected_shipments
-                             .order(booking_placed_at: :desc)
-    when 'finished'
+        .order(booking_placed_at: :desc)
+    when "finished"
       shipment_association = finished_shipments
-                             .order(booking_placed_at: :desc)
-    when 'archived'
+        .order(booking_placed_at: :desc)
+    when "archived"
       shipment_association = archived_shipments
-                             .order(booking_placed_at: :desc)
-    when 'quoted'
+        .order(booking_placed_at: :desc)
+    when "quoted"
       shipment_association = quoted_shipments
-                             .order(booking_placed_at: :desc)
+        .order(booking_placed_at: :desc)
     end
     per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
@@ -41,25 +41,24 @@ class ShipmentsController < ApplicationController
   end
 
   def test_email
-    tenant_notification_email(organization_user, Shipment.where(status: 'requested').first)
+    tenant_notification_email(organization_user, Shipment.where(status: "requested").first)
   end
 
   def search_shipments
     case params[:target]
-    when 'requested'
+    when "requested"
       shipment_association = requested_shipments.order(booking_placed_at: :desc)
-    when 'open'
+    when "open"
       shipment_association = open_shipments.order(booking_placed_at: :desc)
-    when 'finished'
+    when "finished"
       shipment_association = finished_shipments.order(booking_placed_at: :desc)
-    when 'rejected'
+    when "rejected"
       shipment_association = rejected_shipments.order(booking_placed_at: :desc)
-    when 'archived'
+    when "archived"
       shipment_association = archived_shipments.order(booking_placed_at: :desc)
-    when 'quoted'
+    when "quoted"
       shipment_association = quoted_shipments.order(booking_placed_at: :desc)
     end
-    per_page = params.fetch(:per_page, 4).to_f
 
     results = shipment_association.index_search(params[:query])
     per_page = params.fetch(:per_page, 4).to_f
@@ -79,7 +78,7 @@ class ShipmentsController < ApplicationController
     if params[:file]
       document = Legacy::File.create!(
         shipment: @shipment,
-        text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
+        text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, "_"),
         doc_type: params[:type],
         user: organization_user,
         organization: current_organization,
@@ -87,7 +86,7 @@ class ShipmentsController < ApplicationController
       )
 
       document_with_url = document.as_json.merge(
-        signed_url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
       )
     end
 
@@ -100,19 +99,19 @@ class ShipmentsController < ApplicationController
 
   def show
     @shipment = Shipment.find_by(id: params[:id])
-    cargo_item_types = @shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
+    cargo_item_types = @shipment.cargo_item_types.each_with_object({}) { |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
-    end
+    }
 
-    contacts = @shipment.shipment_contacts.map do |sc|
-      { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
-    end
+    contacts = @shipment.shipment_contacts.map { |sc|
+      {contact: sc.contact, type: sc.contact_type, address: sc.contact.address} if sc.contact
+    }
 
-    documents = @shipment.files.select { |doc| doc.file.attached? }.map do |doc|
+    documents = @shipment.files.select { |doc| doc.file.attached? }.map { |doc|
       doc.as_json.merge(
-        signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: "attachment")
       )
-    end
+    }
     charge_breakdown = @shipment.charge_breakdowns.selected
     exchange_rates = ResultFormatter::ExchangeRateService.new(tender: charge_breakdown.tender).perform
 
@@ -129,23 +128,23 @@ class ShipmentsController < ApplicationController
   end
 
   def get_booking_index
-    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
+    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) {
       per_page = params.fetch(:per_page, 4).to_f
       r_shipments = requested_shipments
-                    .order(booking_placed_at: :desc)
-                    .paginate(page: params[:requested_page], per_page: per_page)
+        .order(booking_placed_at: :desc)
+        .paginate(page: params[:requested_page], per_page: per_page)
       o_shipments = open_shipments
-                    .order(booking_placed_at: :desc)
-                    .paginate(page: params[:open_page], per_page: per_page)
+        .order(booking_placed_at: :desc)
+        .paginate(page: params[:open_page], per_page: per_page)
       f_shipments = finished_shipments
-                    .order(booking_placed_at: :desc)
-                    .paginate(page: params[:finished_page], per_page: per_page)
+        .order(booking_placed_at: :desc)
+        .paginate(page: params[:finished_page], per_page: per_page)
       rj_shipments = rejected_shipments
-                     .order(booking_placed_at: :desc)
-                     .paginate(page: params[:rejected_page], per_page: per_page)
+        .order(booking_placed_at: :desc)
+        .paginate(page: params[:rejected_page], per_page: per_page)
       a_shipments = archived_shipments
-                    .order(booking_placed_at: :desc)
-                    .paginate(page: params[:archived_page], per_page: per_page)
+        .order(booking_placed_at: :desc)
+        .paginate(page: params[:archived_page], per_page: per_page)
 
       num_pages = {
         finished: f_shipments.total_pages,
@@ -201,15 +200,15 @@ class ShipmentsController < ApplicationController
         },
         num_shipment_pages: num_pages
       }
-    end
+    }
     response_handler(response)
   end
 
   def get_quote_index
-    response = Rails.cache.fetch("#{quoted_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
+    response = Rails.cache.fetch("#{quoted_shipments.cache_key}/shipment_index", expires_in: 12.hours) {
       per_page = params.fetch(:per_page, 4).to_f
       quoted = quoted_shipments.order(updated_at: :desc)
-                               .paginate(page: params[:quoted_page], per_page: per_page)
+        .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
         quoted: quoted.total_pages
       }
@@ -220,30 +219,31 @@ class ShipmentsController < ApplicationController
         },
         num_shipment_pages: num_pages
       }
-    end
+    }
     response_handler(response)
   end
 
   def shipment_as_json
     hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
-    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope}).legacy_address_json(offer_args: hidden_args)
+    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope})
+      .legacy_address_json(offer_args: hidden_args)
   end
 
   def filtered_user_shipments
     @filtered_user_shipments ||= begin
       @filtered_user_shipments = organization_user_shipments
       if params[:origin_nexus]
-        @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
+        @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(","))
       end
 
       if params[:destination_nexus]
         @filtered_user_shipments = @filtered_user_shipments
-                                   .where(destination_nexus_id: params[:destination_nexus].split(','))
+          .where(destination_nexus_id: params[:destination_nexus].split(","))
       end
 
-      if params[:hub_type] && params[:hub_type] != ''
+      if params[:hub_type] && params[:hub_type] != ""
 
-        hub_type_array = params[:hub_type].split(',')
+        hub_type_array = params[:hub_type].split(",")
 
         @filtered_user_shipments = @filtered_user_shipments.modes_of_transport(*hub_type_array)
       end

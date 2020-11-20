@@ -8,14 +8,14 @@ module Shipments
 
     has_paper_trail
 
-    belongs_to :tender, class_name: 'Quotations::Tender'
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :user, class_name: 'Organizations::User'
-    belongs_to :tender, class_name: 'Quotations::Tender'
-    has_many   :documents, as: :attachable
-    has_many   :notifyees, class_name: 'ShipmentRequestContacts::Notifyee'
-    has_one    :consignee, class_name: 'ShipmentRequestContacts::Consignee'
-    has_one    :consignor, class_name: 'ShipmentRequestContacts::Consignor'
+    belongs_to :tender, class_name: "Quotations::Tender"
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :tender, class_name: "Quotations::Tender"
+    has_many :documents, as: :attachable
+    has_many :notifyees, class_name: "ShipmentRequestContacts::Notifyee"
+    has_one :consignee, class_name: "ShipmentRequestContacts::Consignee"
+    has_one :consignor, class_name: "ShipmentRequestContacts::Consignor"
 
     delegate :itinerary, :mode_of_transport, :carrier, to: :tender
 

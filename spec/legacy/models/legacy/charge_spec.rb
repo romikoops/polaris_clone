@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 module Legacy
   RSpec.describe Charge, type: :model do
-    describe 'instance methods' do
+    describe "instance methods" do
       let(:charge) { FactoryBot.create(:legacy_charge) }
       let!(:organization) { FactoryBot.create(:organizations_organization) }
 
       before do
         FactoryBot.create(:legacy_charge, parent: charge)
-        stub_request(:get, 'http://data.fixer.io/latest?access_key=&base=EUR')
-          .to_return(status: 200, body: { rates: { EUR: 1, USD: 1.26 } }.to_json)
+        stub_request(:get, "http://data.fixer.io/latest?access_key=&base=EUR")
+          .to_return(status: 200, body: {rates: {EUR: 1, USD: 1.26}}.to_json)
       end
 
-      it 'updats quote price' do
+      it "updats quote price" do
         expect(charge.update_price!).to be true
       end
 
-      it 'updates edited price' do
+      it "updates edited price" do
         expect(charge.update_edited_price!).to be true
       end
     end

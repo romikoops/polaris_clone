@@ -2,22 +2,22 @@
 
 module Legacy
   class LocalCharge < ApplicationRecord
-    self.table_name = 'local_charges'
+    self.table_name = "local_charges"
 
     has_paper_trail
 
-    belongs_to :hub, class_name: 'Legacy::Hub'
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle', optional: true
-    belongs_to :counterpart_hub, class_name: 'Legacy::Hub', optional: true
+    belongs_to :hub, class_name: "Legacy::Hub"
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    belongs_to :counterpart_hub, class_name: "Legacy::Hub", optional: true
     has_many :notes, dependent: :destroy, as: :target
 
     scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot.downcase) }
     scope :for_load_type, ->(load_type) { where(load_type: load_type.downcase) }
     scope :for_dates, (lambda do |start_date, end_date|
-      where('validity && daterange(?::date, ?::date)', start_date, end_date)
+      where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
-    scope :current, -> { where('expiration_date > ?', 7.days.ago) }
+    scope :current, -> { where("expiration_date > ?", 7.days.ago) }
 
     before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
     before_validation :set_validity

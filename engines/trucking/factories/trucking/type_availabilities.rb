@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :trucking_type_availability, class: 'Trucking::TypeAvailability' do
-    load_type  { 'cargo_item' }
-    carriage   { 'pre' }
-    truck_type { 'default' }
+  factory :trucking_type_availability, class: "Trucking::TypeAvailability" do
+    load_type { "cargo_item" }
+    carriage { "pre" }
+    truck_type { "default" }
     query_method { :not_set }
     association :country, factory: :legacy_country
 
@@ -31,16 +31,16 @@ FactoryBot.define do
     end
 
     trait :pre_carriage do
-      carriage   { 'pre' }
+      carriage { "pre" }
     end
     trait :on_carriage do
-      carriage   { 'on' }
+      carriage { "on" }
     end
     trait :container do
-      load_type  { 'container' }
+      load_type { "container" }
     end
     trait :cargo_item do
-      load_type  { 'cargo_item' }
+      load_type { "cargo_item" }
     end
     trait :distance do
       query_method { :distance }

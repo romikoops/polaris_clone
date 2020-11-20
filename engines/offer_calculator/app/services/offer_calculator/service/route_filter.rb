@@ -3,7 +3,7 @@
 module OfferCalculator
   module Service
     class RouteFilter < Base
-      DEFAULT_MOT = 'general'
+      DEFAULT_MOT = "general"
 
       def perform(routes)
         return routes unless should_apply_filter?(routes)

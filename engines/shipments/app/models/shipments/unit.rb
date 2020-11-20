@@ -16,11 +16,11 @@ module Shipments
 
     belongs_to :cargo
 
-    validates :weight, measured: { units: :kg }
-    validates :volume, measured: { units: :m3 }
-    validates :width, :length, :height, measured: { units: :m }
-    validates_presence_of %i(quantity cargo_class cargo_type)
-    %i(weight width length height volume).each do |attr|
+    validates :weight, measured: {units: :kg}
+    validates :volume, measured: {units: :m3}
+    validates :width, :length, :height, measured: {units: :m}
+    validates_presence_of %i[quantity cargo_class cargo_type]
+    %i[weight width length height volume].each do |attr|
       validates attr, measured: true
     end
 
@@ -44,17 +44,17 @@ module Shipments
 
     def stowage_factor
       factor = total_volume.value / total_weight.convert_to(:t).value
-      Measured::StowageFactor.new(factor.round(6), 'm3/t')
+      Measured::StowageFactor.new(factor.round(6), "m3/t")
     end
 
     private
 
     def ensure_si_units
-      self.weight = weight.convert_to('kg')
-      self.volume = volume.convert_to('m3')
-      self.width = width.convert_to('m') unless width.nil?
-      self.length = length.convert_to('m') unless length.nil?
-      self.height = height.convert_to('m') unless height.nil?
+      self.weight = weight.convert_to("kg")
+      self.volume = volume.convert_to("m3")
+      self.width = width.convert_to("m") unless width.nil?
+      self.length = length.convert_to("m") unless length.nil?
+      self.height = height.convert_to("m") unless height.nil?
     end
   end
 end

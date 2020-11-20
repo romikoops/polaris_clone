@@ -61,10 +61,26 @@ module Validator
           load_type = %w[cargo_item lcl].include?(cargo_class) ? "cargo_item" : "container"
           {
             cargo_class: cargo_class,
-            origin_local_charges: status_result(association: origin_local_charges.where(group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, load_type: cargo_class)),
-            destination_local_charges: status_result(association: destination_local_charges.where(group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, load_type: cargo_class)),
-            freight: status_result(association: pricings.where(group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, cargo_class: cargo_class)),
-            schedules: trip_status_result(trips: Legacy::Trip.where(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id, load_type: load_type))
+            origin_local_charges: status_result(
+              association: origin_local_charges.where(
+                group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, load_type: cargo_class
+              )
+            ),
+            destination_local_charges: status_result(
+              association: destination_local_charges.where(
+                group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, load_type: cargo_class
+              )
+            ),
+            freight: status_result(
+              association: pricings.where(
+                group_id: group_id, tenant_vehicle_id: tenant_vehicle_id, cargo_class: cargo_class
+              )
+            ),
+            schedules: trip_status_result(
+              trips: Legacy::Trip.where(
+                itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id, load_type: load_type
+              )
+            )
           }.merge(tenant_vehicle_info(tenant_vehicle_id: tenant_vehicle_id))
         }
 

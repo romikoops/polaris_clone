@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
-  describe 'calculating chargeable weight for each unit separately' do
+  describe "calculating chargeable weight for each unit separately" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:quotation) { FactoryBot.create(:quotations_quotation) }
     let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
 
-    context 'when volumetric weight is the highest' do
+    context "when volumetric weight is the highest" do
       before do
         FactoryBot.create(:lcl_unit,
           cargo: cargo,
@@ -36,21 +36,30 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
           quantity: 32)
       end
 
-      let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
-      let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
+      let(:decorated_cargo) {
+        RateExtractor::Decorators::RateChargedCargo.new(cargo, context: {rate: cargo_rate})
+      }
+      let(:section_rate) {
+        FactoryBot.create(:rates_section,
+          organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height)
+      }
+      let(:cargo_rate) {
+        FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio)
+      }
       let(:cbm_ratio) { 200 }
 
       let(:klass) { described_class.new(cargo: decorated_cargo, cargo_rate: cargo_rate) }
 
-      it 'calculates the chargeable weight as the volumteric weight of each unit' do
-        expected_volumetric_weight = cargo.units.inject(Measured::Weight.new(0.0, :kg)) { |total, unit| total + Measured::Weight.new(unit.total_volume.value * cbm_ratio, :kg) }
+      it "calculates the chargeable weight as the volumteric weight of each unit" do
+        expected_volumetric_weight = cargo.units.inject(Measured::Weight.new(0.0, :kg)) { |total, unit|
+          total + Measured::Weight.new(unit.total_volume.value * cbm_ratio, :kg)
+        }
 
         expect(klass.chargeable_weight).to eq expected_volumetric_weight
       end
     end
 
-    context 'when payload weight is the highest' do
+    context "when payload weight is the highest" do
       before do
         FactoryBot.create(:lcl_unit,
           cargo: cargo,
@@ -78,19 +87,22 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
           quantity: 32)
       end
 
-      let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height) }
+      let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: {rate: cargo_rate}) }
+      let(:section_rate) {
+        FactoryBot.create(:rates_section,
+          organization: organization, ldm_ratio: 1000, ldm_threshold: 10, ldm_measurement: :height)
+      }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 200 }
 
       let(:klass) { described_class.new(cargo: decorated_cargo, cargo_rate: cargo_rate) }
 
-      it 'calculates the chargeable weight as the sum of payload weight of all units' do
+      it "calculates the chargeable weight as the sum of payload weight of all units" do
         expect(klass.chargeable_weight).to eq cargo.total_weight
       end
     end
 
-    context 'when ldm weight is the highest' do
+    context "when ldm weight is the highest" do
       before do
         FactoryBot.create(:lcl_unit,
           cargo: cargo,
@@ -118,15 +130,20 @@ RSpec.describe RateExtractor::ChargeableWeight::Applicable::Regular do
           quantity: 32)
       end
 
-      let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: { rate: cargo_rate }) }
-      let(:section_rate) { FactoryBot.create(:rates_section, organization: organization, ldm_ratio: 2000, ldm_threshold: 1, ldm_measurement: :height) }
+      let(:decorated_cargo) { RateExtractor::Decorators::RateChargedCargo.new(cargo, context: {rate: cargo_rate}) }
+      let(:section_rate) {
+        FactoryBot.create(:rates_section,
+          organization: organization, ldm_ratio: 2000, ldm_threshold: 1, ldm_measurement: :height)
+      }
       let(:cargo_rate) { FactoryBot.create(:rates_cargo, section: section_rate, cbm_ratio: cbm_ratio) }
       let(:cbm_ratio) { 100 }
 
       let(:klass) { described_class.new(cargo: decorated_cargo, cargo_rate: cargo_rate) }
 
-      it 'calculates the chargeable weight as the sum of ldm weights of each unit' do
-        expected_ldm_weight = cargo.units.inject(Measured::Weight.new(0.0, :kg)) { |total, unit| total + Measured::Weight.new(unit.total_area.value / 2.4 * section_rate.ldm_ratio, :kg) }
+      it "calculates the chargeable weight as the sum of ldm weights of each unit" do
+        expected_ldm_weight = cargo.units.inject(Measured::Weight.new(0.0, :kg)) { |total, unit|
+          total + Measured::Weight.new(unit.total_area.value / 2.4 * section_rate.ldm_ratio, :kg)
+        }
 
         expect(klass.chargeable_weight).to eq expected_ldm_weight
       end

@@ -6,8 +6,8 @@ class Trip < Legacy::Trip
   belongs_to :tenant_vehicle
   belongs_to :itinerary
   validates :itinerary_id, uniqueness: {
-    scope: %i(start_date end_date closing_date tenant_vehicle_id load_type),
-    message: 'Trip must be unique to add.'
+    scope: %i[start_date end_date closing_date tenant_vehicle_id load_type],
+    message: "Trip must be unique to add."
   }
 
   def self.update_times
@@ -22,7 +22,7 @@ class Trip < Legacy::Trip
   def self.clear_dupes
     Trip.all.find_each do |trip|
       t = trip.as_json
-      t.delete('id')
+      t.delete("id")
       dupes = Trip.where(t)
       dupes.each do |d|
         d.destroy if d.id != trip.id
@@ -32,33 +32,33 @@ class Trip < Legacy::Trip
 
   def later_trips
     itinerary.trips
-             .where(tenant_vehicle: tenant_vehicle)
-             .where('start_date > ?', start_date)
-             .order(start_date: :asc)
-             .limit(5)
+      .where(tenant_vehicle: tenant_vehicle)
+      .where("start_date > ?", start_date)
+      .order(start_date: :asc)
+      .limit(5)
   end
 
   def last_trips
     itinerary.trips
-             .where(tenant_vehicle: tenant_vehicle)
-             .order(start_date: :desc)
-             .limit(5)
+      .where(tenant_vehicle: tenant_vehicle)
+      .order(start_date: :desc)
+      .limit(5)
   end
 
-  def earlier_trips(min_date: Date.today + 5.days)
+  def earlier_trips(min_date: Time.zone.today + 5.days)
     itinerary.trips
-             .where(tenant_vehicle: tenant_vehicle)
-             .where('start_date < ? AND start_date > ?', start_date, min_date)
-             .order(start_date: :desc)
-             .limit(5)
+      .where(tenant_vehicle: tenant_vehicle)
+      .where("start_date < ? AND start_date > ?", start_date, min_date)
+      .order(start_date: :desc)
+      .limit(5)
   end
 
-  def earliest_trips(min_date: Date.today + 5.days)
+  def earliest_trips(min_date: Time.zone.today + 5.days)
     itinerary.trips
-             .where(tenant_vehicle: tenant_vehicle)
-             .where('start_date > ?', min_date)
-             .order(start_date: :desc)
-             .limit(5)
+      .where(tenant_vehicle: tenant_vehicle)
+      .where("start_date > ?", min_date)
+      .order(start_date: :desc)
+      .limit(5)
   end
 end
 

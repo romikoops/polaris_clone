@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'api_auth/application_controller'
+require_dependency "api_auth/application_controller"
 
 module ApiAuth
   class AuthController < ApplicationController

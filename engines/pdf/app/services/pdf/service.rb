@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_storage'
+require "active_storage"
 module Pdf
   class Service < Pdf::Base
     attr_reader :organization, :user, :url
@@ -30,7 +30,7 @@ module Pdf
     def pdf
       @pdf ||= begin
         pdf_html = ActionController::Base.new.render_to_string(
-          layout: 'pdfs/simple.pdf.html.erb',
+          layout: "pdfs/simple.pdf.html.erb",
           template: template,
           locals: locals_for_generation
         )
@@ -70,7 +70,7 @@ module Pdf
         file: {
           io: StringIO.new(pdf),
           filename: "#{file_text}.pdf",
-          content_type: 'application/pdf'
+          content_type: "application/pdf"
         }
       }
     end

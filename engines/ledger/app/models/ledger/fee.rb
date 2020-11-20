@@ -2,19 +2,19 @@
 
 module Ledger
   class Fee < ApplicationRecord
-    belongs_to :rate, class_name: 'Ledger::Rate'
-    has_many :deltas, class_name: 'Ledger::Delta'
+    belongs_to :rate, class_name: "Ledger::Rate"
+    has_many :deltas, class_name: "Ledger::Delta"
     enum cargo_class: Cargo::Specification::CLASS_ENUM, _prefix: true
     enum cargo_type: Cargo::Specification::TYPE_ENUM, _prefix: true
-    enum action: { nothing: 0, min_value: 1, max_value: 2, sum_values: 3, total: 4 }
-    enum applicable: { self: 0, section: 1, shipment: 2 }
-    enum load_meterage_logic: { regular: 0, comparative: 1, consolidated: 2 }
-    enum load_meterage_type: { height: 0, area: 1, stacked_area: 2, load_meters: 3 }
+    enum action: {nothing: 0, min_value: 1, max_value: 2, sum_values: 3, total: 4}
+    enum applicable: {self: 0, section: 1, shipment: 2}
+    enum load_meterage_logic: {regular: 0, comparative: 1, consolidated: 2}
+    enum load_meterage_type: {height: 0, area: 1, stacked_area: 2, load_meters: 3}
 
     def carriage
       target = rate.target
       route = target.try(:route)
-      return if route&.mode_of_transport != 'carriage'
+      return if route&.mode_of_transport != "carriage"
 
       route.origin_terminal_id ? :on : :pre
     end

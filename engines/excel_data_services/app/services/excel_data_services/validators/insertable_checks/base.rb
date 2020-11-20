@@ -12,7 +12,9 @@ module ExcelDataServices
           check_all_data(flattened_data) if respond_to?(:check_all_data, true)
 
           flattened_data.each do |single_data|
-            row = ExcelDataServices::Rows::Base.get(klass_identifier).new(row_data: single_data, organization: organization)
+            row = ExcelDataServices::Rows::Base
+              .get(klass_identifier)
+              .new(row_data: single_data, organization: organization)
             check_single_data(row)
           end
         end

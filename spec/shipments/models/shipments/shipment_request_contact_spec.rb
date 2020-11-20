@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Shipments
   RSpec.describe ShipmentRequestContact, type: :model do
-    it 'behaves as sti' do
+    it "behaves as sti" do
       expect(described_class).to have_attribute :type
     end
 
-    it 'creates a valid consignee' do
+    it "creates a valid consignee" do
       consignee = FactoryBot.build(:shipments_shipment_request_contact, :as_consignee)
       expect(consignee.valid?).to eq(true)
       expect(consignee).to be_a_kind_of Shipments::ShipmentRequestContact
     end
 
-    it 'creates a valid consignor' do
+    it "creates a valid consignor" do
       consignor = FactoryBot.build(:shipments_shipment_request_contact, :as_consignor)
       expect(consignor.valid?).to eq(true)
       expect(consignor).to be_a_kind_of Shipments::ShipmentRequestContact
     end
 
-    it 'creates a valid notifyee' do
+    it "creates a valid notifyee" do
       notifyee = FactoryBot.build(:shipments_shipment_request_contact, :as_notifyee)
       expect(notifyee.valid?).to eq(true)
       expect(notifyee).to be_a_kind_of Shipments::ShipmentRequestContact

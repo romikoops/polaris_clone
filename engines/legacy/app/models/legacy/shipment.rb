@@ -4,7 +4,7 @@ module Legacy
   class Shipment < ApplicationRecord
     include PgSearch::Model
 
-    self.table_name = 'shipments'
+    self.table_name = "shipments"
     STATUSES = %w[
       booking_process_started
       requested_by_unconfirmed_account
@@ -23,43 +23,43 @@ module Legacy
 
     acts_as_paranoid
 
-    belongs_to :user, -> { with_deleted }, class_name: 'Organizations::User', optional: true
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
-    belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
-    belongs_to :origin_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :destination_hub, class_name: 'Legacy::Hub', optional: true
-    belongs_to :itinerary, optional: true, class_name: 'Legacy::Itinerary'
-    belongs_to :trip, optional: true, class_name: 'Legacy::Trip'
+    belongs_to :user, -> { with_deleted }, class_name: "Organizations::User", optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :origin_nexus, class_name: "Legacy::Nexus", optional: true
+    belongs_to :destination_nexus, class_name: "Legacy::Nexus", optional: true
+    belongs_to :origin_hub, class_name: "Legacy::Hub", optional: true
+    belongs_to :destination_hub, class_name: "Legacy::Hub", optional: true
+    belongs_to :itinerary, optional: true, class_name: "Legacy::Itinerary"
+    belongs_to :trip, optional: true, class_name: "Legacy::Trip"
     belongs_to :quotation, optional: true
-    has_many :shipment_contacts, class_name: 'Legacy::ShipmentContact'
-    has_many :containers, class_name: 'Legacy::Container'
-    has_many :cargo_items, class_name: 'Legacy::CargoItem'
-    has_many :cargo_item_types, through: :cargo_items, class_name: 'Legacy::CargoItemType'
-    has_one :aggregated_cargo, class_name: 'Legacy::AggregatedCargo'
-    has_many :files, class_name: 'Legacy::File'
-    has_many :charge_breakdowns, class_name: 'Legacy::ChargeBreakdown' do
+    has_many :shipment_contacts, class_name: "Legacy::ShipmentContact"
+    has_many :containers, class_name: "Legacy::Container"
+    has_many :cargo_items, class_name: "Legacy::CargoItem"
+    has_many :cargo_item_types, through: :cargo_items, class_name: "Legacy::CargoItemType"
+    has_one :aggregated_cargo, class_name: "Legacy::AggregatedCargo"
+    has_many :files, class_name: "Legacy::File"
+    has_many :charge_breakdowns, class_name: "Legacy::ChargeBreakdown" do
       def to_schedules_charges
         reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
       end
     end
 
     has_many :documents # DEPRECATED
-    deprecate documents: 'Migrated to Legacy::File'
+    deprecate documents: "Migrated to Legacy::File"
 
-     # Scopes
+    # Scopes
     scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
-    scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
+    scope :has_on_carriage, -> { where(has_on_carriage: true) }
     scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
-    scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
-    scope :requested_by_unconfirmed_account, -> { where(status: 'requested_by_unconfirmed_account') }
-    scope :open, -> { where(status: %w(in_progress confirmed)) }
-    scope :rejected, -> { where(status: %w(ignored declined)) }
-    scope :archived, -> { where(status: 'archived') }
-    scope :finished, -> { where(status: 'finished') }
-    scope :quoted, -> { where(status: 'quoted') }
+    scope :requested, -> { where(status: %w[requested requested_by_unconfirmed_account]) }
+    scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
+    scope :open, -> { where(status: %w[in_progress confirmed]) }
+    scope :rejected, -> { where(status: %w[ignored declined]) }
+    scope :archived, -> { where(status: "archived") }
+    scope :finished, -> { where(status: "finished") }
+    scope :quoted, -> { where(status: "quoted") }
     scope :excluding_tests, -> { where.not(billing: :test) }
-    %i(ocean air rail).each do |mot|
+    %i[ocean air rail].each do |mot|
       scope mot, -> { joins(:itinerary).where(Itinerary.arel_table[:mode_of_transport].eq(mot)) }
     end
 
@@ -75,53 +75,53 @@ module Legacy
     validates_with Legacy::HubNexusMatchValidator
 
     # Validations
-    { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
+    {status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS}.each do |attribute, array|
       validates attribute.to_sym,
-                inclusion: {
-                  in: array,
-                  message: "must be included in #{array}"
-                },
-                allow_nil: true
+        inclusion: {
+          in: array,
+          message: "must be included in #{array}"
+        },
+        allow_nil: true
     end
 
     before_validation :set_default_trucking,
-                      :set_organization,
-                      :set_distinct_id,
-                      on: :create
+      :set_organization,
+      :set_distinct_id,
+      on: :create
     before_validation :update_carriage_properties!, :set_default_destination_dates
 
     delegate :mode_of_transport, to: :itinerary, allow_nil: true
 
     pg_search_scope :index_search,
-    against: %i(imc_reference),
-    associated_against: {
-      user: %i[email],
-      origin_hub: %i(name),
-      destination_hub: %i(name)
-    },
-    using: {
-      tsearch: { prefix: true }
-    }
+      against: %i[imc_reference],
+      associated_against: {
+        user: %i[email],
+        origin_hub: %i[name],
+        destination_hub: %i[name]
+      },
+      using: {
+        tsearch: {prefix: true}
+      }
 
     scope :user_name, lambda { |query|
       user_ids = Profiles::Profile
-        .where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%")
+        .where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%")
         .pluck(:user_id)
       where(user_id: user_ids)
     }
 
     scope :company_name, lambda { |query|
-      user_ids = Profiles::Profile.where('company_name ILIKE ? ', "%#{query}%").pluck(:user_id)
+      user_ids = Profiles::Profile.where("company_name ILIKE ? ", "%#{query}%").pluck(:user_id)
       where(user_id: user_ids)
     }
 
     scope :reference_number, lambda { |query|
-      where('imc_reference ILIKE ? ', "%#{query}%")
+      where("imc_reference ILIKE ? ", "%#{query}%")
     }
 
     scope :hub_names, lambda { |query|
-      hub_ids = Hub.where('name ILIKE ?', "%#{query}%").ids
-      where('origin_hub_id IN (?) OR destination_hub_id IN (?)', hub_ids, hub_ids)
+      hub_ids = Hub.where("name ILIKE ?", "%#{query}%").ids
+      where("origin_hub_id IN (?) OR destination_hub_id IN (?)", hub_ids, hub_ids)
     }
 
     scope :user_search, lambda { |query|
@@ -129,7 +129,7 @@ module Legacy
         .or(Shipment.hub_names(query))
     }
 
-    has_many :charge_breakdowns, class_name: 'Legacy::ChargeBreakdown' do
+    has_many :charge_breakdowns, class_name: "Legacy::ChargeBreakdown" do
       def to_schedules_charges
         reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
       end
@@ -138,12 +138,12 @@ module Legacy
     before_validation :update_carriage_properties!, :set_default_destination_dates
 
     def set_trucking_chargeable_weight(target, weight)
-      trucking[target]['chargeable_weight'] = weight
+      trucking[target]["chargeable_weight"] = weight
     end
 
     def cargo_classes
       if aggregated_cargo
-        ['lcl']
+        ["lcl"]
       else
         cargo_units.pluck(:cargo_class).uniq
       end
@@ -158,11 +158,11 @@ module Legacy
     end
 
     def lcl?
-      load_type == 'cargo_item'
+      load_type == "cargo_item"
     end
 
     def fcl?
-      load_type == 'container'
+      load_type == "container"
     end
 
     def has_on_carriage?
@@ -193,15 +193,15 @@ module Legacy
     end
 
     def shipper
-      find_contacts('shipper').first
+      find_contacts("shipper").first
     end
 
     def consignee
-      find_contacts('consignee').first
+      find_contacts("consignee").first
     end
 
     def notifyees
-      find_contacts('notifyee')
+      find_contacts("notifyee")
     end
 
     def etd
@@ -213,11 +213,11 @@ module Legacy
     end
 
     def pickup_address
-      Legacy::Address.where(id: trucking.dig('pre_carriage', 'address_id')).first
+      Legacy::Address.where(id: trucking.dig("pre_carriage", "address_id")).first
     end
 
     def delivery_address
-      Legacy::Address.where(id: trucking.dig('on_carriage', 'address_id')).first
+      Legacy::Address.where(id: trucking.dig("on_carriage", "address_id")).first
     end
 
     def valid_until(target_trip)
@@ -245,19 +245,19 @@ module Legacy
     def total_price(hidden_total: false)
       return if trip_id.nil? || hidden_total
 
-      price = charge_breakdowns.find_by(trip_id: trip_id).charge('grand_total').price
+      price = charge_breakdowns.find_by(trip_id: trip_id).charge("grand_total").price
 
-      { value: price.value, currency: price.currency }
+      {value: price.value, currency: price.currency}
     end
 
     def edited_total
       return if trip_id.nil?
 
-      price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
+      price = charge_breakdowns.where(trip_id: trip_id).first.charge("grand_total").edited_price
 
       return nil if price.nil?
 
-      { value: price.value, currency: price.currency }
+      {value: price.value, currency: price.currency}
     end
 
     def cargo_count
@@ -307,7 +307,7 @@ module Legacy
 
     def update_carriage_properties!
       %w[on_carriage pre_carriage].each do |carriage|
-        self["has_#{carriage}"] = trucking.dig(carriage, 'address_id').present?
+        self["has_#{carriage}"] = trucking.dig(carriage, "address_id").present?
       end
     end
 
@@ -327,17 +327,17 @@ module Legacy
     end
 
     def find_contacts(type)
-      Contact.joins(:shipment_contacts).where(shipment_contacts: { contact_type: type, shipment_id: id })
+      Contact.joins(:shipment_contacts).where(shipment_contacts: {contact_type: type, shipment_id: id})
     end
 
     def desired_start_date_is_a_datetime?
       return if desired_start_date.nil?
 
-      errors.add(:desired_start_date, 'must be a DateTime') unless desired_start_date.is_a?(ActiveSupport::TimeWithZone)
+      errors.add(:desired_start_date, "must be a DateTime") unless desired_start_date.is_a?(ActiveSupport::TimeWithZone)
     end
 
     def set_default_trucking
-      self.trucking ||= { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
+      self.trucking ||= {on_carriage: {truck_type: ""}, pre_carriage: {truck_type: ""}}
     end
 
     def itinerary_trip_match
@@ -347,7 +347,7 @@ module Legacy
     end
 
     def set_distinct_id
-      self.distinct_id = [Time.zone.now.gmtime.tv_sec, SecureRandom.uuid].join('-') if user_id.blank?
+      self.distinct_id = [Time.zone.now.gmtime.tv_sec, SecureRandom.uuid].join("-") if user_id.blank?
     end
 
     def set_organization

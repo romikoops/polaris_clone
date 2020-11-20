@@ -3,7 +3,7 @@
 module Api
   module V1
     class NexusDecorator < Draper::Decorator
-      decorates 'Legacy::Nexus'
+      decorates "Legacy::Nexus"
 
       delegate_all
       delegate :name, to: :country, prefix: true

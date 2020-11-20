@@ -1,24 +1,34 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Contact, type: :model do
-  context 'validations' do
+  context "validations" do
     let(:user) { FactoryBot.build(:organizations_user) }
 
-    let!(:contact_one) { FactoryBot.create(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
-    let(:contact_two) { FactoryBot.build(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
-    let(:contact_three) { FactoryBot.build(:contact, user: user, first_name: 'Johnny') }
+    let!(:contact_one) {
+      FactoryBot.create(:contact,
+        user: user, first_name: "John", last_name: "Doe", company_name: "ACME",
+        email: "john@example.com", phone: "123456")
+    }
+    let(:contact_two) {
+      FactoryBot.build(:contact,
+        user: user, first_name: "John", last_name: "Doe", company_name: "ACME",
+        email: "john@example.com", phone: "123456")
+    }
+    let(:contact_three) {
+      FactoryBot.build(:contact, user: user, first_name: "Johnny")
+    }
 
-    context 'Different first names' do
-      it 'is validate the uniqueness' do
+    context "Different first names" do
+      it "is validate the uniqueness" do
         expect(contact_one).to be_valid
         expect(contact_three).to be_valid
       end
     end
 
-    context 'Same information' do
-      it 'does not validate because they are not unique' do
+    context "Same information" do
+      it "does not validate because they are not unique" do
         expect(contact_two).to be_invalid
       end
     end

@@ -4,7 +4,7 @@ class CreateOrganizationsThemes < ActiveRecord::Migration[5.2]
   def change
     create_table :organizations_themes, id: :uuid do |t|
       t.references :organization, index: {unique: true},
-                                  foreign_key: { to_table: :organizations_organizations }, type: :uuid
+                                  foreign_key: {to_table: :organizations_organizations}, type: :uuid
 
       t.string :name
       t.string :welcome_text

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'bundler'
-require 'digest'
-require 'fileutils'
+require "bundler"
+require "digest"
+require "fileutils"
 
 class CobraHelper
   def self.uml(output: Pathname.new("../doc/engines").expand_path(__dir__))

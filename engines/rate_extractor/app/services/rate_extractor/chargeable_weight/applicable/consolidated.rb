@@ -6,9 +6,9 @@ module RateExtractor
       class Consolidated < Base
         def chargeable_weight
           ldm_weight = "RateExtractor::ChargeableWeight::LoadMeterage::#{ldm_measurement.camelize}Based"
-                       .constantize
-                       .new(rate: section_rate, cargo: cargo)
-                       .weight
+            .constantize
+            .new(rate: section_rate, cargo: cargo)
+            .weight
 
           [ldm_weight, cargo.volumetric_weight, cargo.total_weight].max
         end

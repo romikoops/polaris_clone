@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :routing_route, class: 'Routing::Route' do
+  factory :routing_route, class: "Routing::Route" do
     time_factor { 5 }
     price_factor { 5 }
     allowed_cargo { 3 }
@@ -76,12 +76,12 @@ FactoryBot.define do
       mode_of_transport { 5 }
     end
 
-    factory :pre_carriage_route, traits: %i(carriage pre)
-    factory :on_carriage_route, traits: %i(carriage on)
-    factory :ocean_route, traits: %i(ocean freight)
-    factory :air_route, traits: %i(air freight)
-    factory :rail_route, traits: %i(rail freight)
-    factory :truck_route, traits: %i(truck freight)
+    factory :pre_carriage_route, traits: %i[carriage pre]
+    factory :on_carriage_route, traits: %i[carriage on]
+    factory :ocean_route, traits: %i[ocean freight]
+    factory :air_route, traits: %i[air freight]
+    factory :rail_route, traits: %i[rail freight]
+    factory :truck_route, traits: %i[truck freight]
     factory :freight_route, traits: [:freight]
   end
 end

@@ -11,7 +11,7 @@ module Requests
     end
 
     def response_meta
-      response_json.fetch('meta')
+      response_json.fetch("meta")
     end
 
     def response_error

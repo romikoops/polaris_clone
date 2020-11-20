@@ -15,7 +15,9 @@ module Api
       let(:last_hub) { itinerary_1.stops.last.hub }
 
       let(:second_organization) { FactoryBot.create(:organizations_organization) }
-      let(:itinerary_second_organization) { FactoryBot.create(:shanghai_felixstowe_itinerary, organization: second_organization) }
+      let(:itinerary_second_organization) {
+        FactoryBot.create(:shanghai_felixstowe_itinerary, organization: second_organization)
+      }
 
       it "returns a list of origin locations belonging to the organization" do
         query = first_hub[:name]
@@ -30,7 +32,9 @@ module Api
 
       it "returns filter related locations to origin" do
         query = last_hub[:name]
-        get :index, as: :json, params: {organization_id: organization.id, location_type: "origin", location_id: first_hub[:id], query: query}
+        get :index, as: :json, params: {
+          organization_id: organization.id, location_type: "origin", location_id: first_hub[:id], query: query
+        }
         data = JSON.parse(response.body)["data"]
 
         aggregate_failures do
@@ -42,7 +46,9 @@ module Api
 
       it "returns filter related locations to destination" do
         query = first_hub[:name]
-        get :index, as: :json, params: {organization_id: organization.id, location_type: "destination", location_id: last_hub[:id], query: query}
+        get :index, as: :json, params: {
+          organization_id: organization.id, location_type: "destination", location_id: last_hub[:id], query: query
+        }
         data = JSON.parse(response.body)["data"]
 
         aggregate_failures do
@@ -53,7 +59,9 @@ module Api
       end
 
       it "filters locations by organization" do
-        get :index, as: :json, params: {organization_id: second_organization.id, location_type: "origin", query: first_hub[:name]}
+        get :index, as: :json, params: {
+          organization_id: second_organization.id, location_type: "origin", query: first_hub[:name]
+        }
         data = JSON.parse(response.body)["data"]
         aggregate_failures do
           expect(response).to be_successful

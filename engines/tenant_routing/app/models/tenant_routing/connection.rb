@@ -2,9 +2,9 @@
 
 module TenantRouting
   class Connection < ApplicationRecord
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :inbound, class_name: 'Routing::RouteLineService', optional: true
-    belongs_to :outbound, class_name: 'Routing::RouteLineService', optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :inbound, class_name: "Routing::RouteLineService", optional: true
+    belongs_to :outbound, class_name: "Routing::RouteLineService", optional: true
   end
 end
 

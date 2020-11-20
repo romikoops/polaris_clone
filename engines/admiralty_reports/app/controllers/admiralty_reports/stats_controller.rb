@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'admiralty_reports/application_controller'
+require_dependency "admiralty_reports/application_controller"
 
 module AdmiraltyReports
   class StatsController < ApplicationController
@@ -9,13 +9,15 @@ module AdmiraltyReports
       @stats = stats
       @raw_request_data = raw_request_data
       excel_package = ExcelGenerator.generate(raw_request_data: @raw_request_data).process_excel_file
-      send_data excel_package.to_stream.read, type: 'application/xlsx', filename: 'StatsOverview.xlsx'
+      send_data excel_package.to_stream.read, type: "application/xlsx", filename: "StatsOverview.xlsx"
     end
 
     private
 
     def stats
-      @organizations.map { |organization| Stats.new(organization: organization, month: filter_params[:month], year: filter_params[:year]) }
+      @organizations.map { |organization|
+        Stats.new(organization: organization, month: filter_params[:month], year: filter_params[:year])
+      }
     end
 
     def raw_request_data

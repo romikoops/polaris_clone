@@ -12,5 +12,6 @@ class BackfillMaxDimensionsBundles < ActiveRecord::Migration[5.2]
     SQL
   end
 
-  def down; end
+  def down
+  end
 end

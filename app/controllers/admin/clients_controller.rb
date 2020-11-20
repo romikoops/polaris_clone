@@ -7,10 +7,10 @@ class Admin::ClientsController < Admin::AdminBaseController
     clients, profiles = handle_search(params)
     paginated_clients = clients.paginate(pagination_options)
     response_clients = if search_params[:email_desc].present? || profiles.blank?
-                         paginated_clients.map { |client| merge_profile(user: client) }
-                       else
-                         sort_response_clients(clients: paginated_clients, profiles: profiles)
-                       end
+      paginated_clients.map { |client| merge_profile(user: client) }
+    else
+      sort_response_clients(clients: paginated_clients, profiles: profiles)
+    end
 
     response_handler(
       pagination_options.merge(
@@ -24,23 +24,23 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def show
     client = Users::User.find_by(organization_id: params[:organization_id], id: params[:id])
-    addresses = Address.joins(:user_addresses).where(user_addresses: { user_id: client.id })
+    addresses = Address.joins(:user_addresses).where(user_addresses: {user_id: client.id})
     groups = target_groups(target: client).map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client.id)
     profile = Profiles::Profile.find_by(user_id: client.id).as_json(except: %i[user_id id])
     client_data = client.as_json.merge(profile)
-    resp = { clientData: client_data, addresses: addresses, managerAssignments: manager_assignments, groups: groups }
+    resp = {clientData: client_data, addresses: addresses, managerAssignments: manager_assignments, groups: groups}
     response_handler(resp)
   end
 
   # Api end point to create a new User through the Admin Dashboard
   def create
     user_data = {
-      email: new_client_params['email'],
-      password: new_client_params['password'],
-      password_confirmation: new_client_params['password_confirmation'],
+      email: new_client_params["email"],
+      password: new_client_params["password"],
+      password_confirmation: new_client_params["password_confirmation"],
       organization_id: current_organization.id,
-      type: 'Organizations::User'
+      type: "Organizations::User"
     }
     ActiveRecord::Base.transaction do
       user = restorable_client ? restore_client(user_data: user_data) : create_client(user_data: user_data)
@@ -60,7 +60,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}_clients",
-      type: 'clients',
+      type: "clients",
       options: {
         user: organization_user
       }
@@ -89,7 +89,7 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def clients
     @clients ||= Users::User.where(organization_id: current_organization.id)
-                                    .order(updated_at: :desc)
+      .order(updated_at: :desc)
   end
 
   def pagination_options
@@ -115,8 +115,8 @@ class Admin::ClientsController < Admin::AdminBaseController
 
       user_ids =
         Companies::Membership.where(company: companies)
-                             .where(member_type: 'Users::User')
-                             .pluck(:member_id)
+          .where(member_type: "Users::User")
+          .pluck(:member_id)
 
       profile_query = profile_query.where(user_id: user_ids)
     end
@@ -142,7 +142,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     users_search_results_ids = email_params_present ? users_search_results.pluck(:id) : []
     results = clients.where(id: [*user_ids, *users_search_results_ids].uniq)
     if search_params[:email_desc].present?
-      results = results.reorder(email: search_params[:email_desc] == 'true' ? :desc : :asc)
+      results = results.reorder(email: search_params[:email_desc] == "true" ? :desc : :asc)
     end
     results
   end
@@ -190,8 +190,8 @@ class Admin::ClientsController < Admin::AdminBaseController
       sort_keys.each do |order_key|
         next if search_params[order_key].blank?
 
-        key = order_key.to_s.gsub('_desc', '')
-        order_params = { key => search_params[order_key] == 'true' ? :desc : :asc }
+        key = order_key.to_s.gsub("_desc", "")
+        order_params = {key => search_params[order_key] == "true" ? :desc : :asc}
         profiles = profiles.reorder(order_params)
       end
     end
@@ -210,7 +210,7 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def restorable_client
     @restorable_client ||= begin
-      email = new_client_params.dig('email')
+      email = new_client_params.dig("email")
       Organizations::User.only_deleted.find_by(email: email)
     end
   end

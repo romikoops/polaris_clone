@@ -6,14 +6,14 @@ class Array
   end
 
   def sql_format
-    "(#{join(', ')})"
+    "(#{join(", ")})"
   end
 
   def each_with_times(arg)
     num_times =
       case arg
-      when Float   then arg > rand ? 1 : 0
-      when Range   then rand(arg)
+      when Float then arg > rand ? 1 : 0
+      when Range then rand(arg)
       when Integer then arg
       else raise ArgumentError
       end

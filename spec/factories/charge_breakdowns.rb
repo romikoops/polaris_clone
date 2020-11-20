@@ -7,7 +7,7 @@ FactoryBot.define do
     valid_until { 4.days.from_now.beginning_of_day }
 
     transient do
-      charge_category_name { 'Cargo' }
+      charge_category_name { "Cargo" }
     end
 
     before(:create) do |charge_breakdown, evaluator|
@@ -20,9 +20,9 @@ FactoryBot.define do
           code: evaluator.charge_category_name.underscore,
           organization_id: shipment.organization_id
         ) || create(:charge_category,
-                    name: evaluator.charge_category_name,
-                    code: evaluator.charge_category_name.underscore,
-                    organization_id: shipment.organization_id)
+          name: evaluator.charge_category_name,
+          code: evaluator.charge_category_name.underscore,
+          organization_id: shipment.organization_id)
         cargo_units.each do |cargo_unit|
           cargo_unit_charge_category = ChargeCategory.find_by(
             name: cargo_unit.class.name.humanize,
@@ -30,20 +30,26 @@ FactoryBot.define do
             cargo_unit_id: cargo_unit[:id],
             organization_id: shipment.organization_id
           ) || create(:charge_category,
-                      name: cargo_unit.class.name.humanize,
-                      code: cargo_unit.class.name.underscore.downcase,
-                      cargo_unit_id: cargo_unit[:id],
-                      organization_id: shipment.organization_id)
+            name: cargo_unit.class.name.humanize,
+            code: cargo_unit.class.name.underscore.downcase,
+            cargo_unit_id: cargo_unit[:id],
+            organization_id: shipment.organization_id)
           base_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.from_code(code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id),
-            children_charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id)
+            charge_category: ChargeCategory.from_code(
+              code: "base_node", name: "Base Node", organization_id: shipment.organization_id
+            ),
+            children_charge_category: ChargeCategory.from_code(
+              code: "grand_total", name: "Grand Total", organization_id: shipment.organization_id
+            )
           )
           grand_total_charge = build(
             :charge,
             charge_breakdown: charge_breakdown,
-            charge_category: ChargeCategory.from_code(code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id),
+            charge_category: ChargeCategory.from_code(
+              code: "grand_total", name: "Grand Total", organization_id: shipment.organization_id
+            ),
             children_charge_category: cargo_charge_category,
             parent_id: base_charge.id
           )

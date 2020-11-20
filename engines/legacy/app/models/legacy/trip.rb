@@ -2,24 +2,22 @@
 
 module Legacy
   class Trip < ApplicationRecord
-    self.table_name = 'trips'
+    self.table_name = "trips"
     has_many :layovers, dependent: :destroy
     belongs_to :tenant_vehicle
     belongs_to :itinerary
 
     scope :for_dates, (lambda do |start_date, end_date|
       where(Arel::Nodes::InfixOperation.new(
-              'OVERLAPS',
-              Arel::Nodes::SqlLiteral.new("(#{arel_table[:start_date].name}, #{arel_table[:end_date].name})"),
-              Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
-            ))
+        "OVERLAPS",
+        Arel::Nodes::SqlLiteral.new("(#{arel_table[:start_date].name}, #{arel_table[:end_date].name})"),
+        Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
+      ))
     end)
 
-    scope :lastday_today, -> { where('closing_date > ?', Date.current) }
+    scope :lastday_today, -> { where("closing_date > ?", Date.current) }
 
-    def vehicle
-      tenant_vehicle.vehicle
-    end
+    delegate :vehicle, to: :tenant_vehicle
   end
 end
 

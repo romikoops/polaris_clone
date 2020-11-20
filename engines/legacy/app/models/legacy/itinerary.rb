@@ -2,7 +2,7 @@
 
 module Legacy
   class Itinerary < ApplicationRecord
-    self.table_name = 'itineraries'
+    self.table_name = "itineraries"
 
     include PgSearch::Model
 
@@ -13,39 +13,40 @@ module Legacy
       truck
     ].freeze
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     has_many :stops, dependent: :destroy
     has_many :shipments, dependent: :nullify
-    has_many :layovers,  dependent: :destroy
-    has_many :trips,     dependent: :destroy
-    has_many :notes,     dependent: :destroy
-    has_many :margins,   dependent: :destroy, class_name: 'Pricings::Margin'
-    has_many :rates, class_name: 'Pricings::Pricing', dependent: :destroy
-    has_many :hubs,      through: :stops
-    belongs_to :origin_hub, class_name: 'Legacy::Hub'
-    belongs_to :destination_hub, class_name: 'Legacy::Hub'
-    has_many :map_data, class_name: 'Legacy::MapDatum',  dependent: :destroy
+    has_many :layovers, dependent: :destroy
+    has_many :trips, dependent: :destroy
+    has_many :notes, dependent: :destroy
+    has_many :margins, dependent: :destroy, class_name: "Pricings::Margin"
+    has_many :rates, class_name: "Pricings::Pricing", dependent: :destroy
+    has_many :hubs, through: :stops
+    belongs_to :origin_hub, class_name: "Legacy::Hub"
+    belongs_to :destination_hub, class_name: "Legacy::Hub"
+    has_many :map_data, class_name: "Legacy::MapDatum", dependent: :destroy
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
     scope :for_organization, ->(organization_id) { where(organization_id: organization_id) }
 
     validate :must_have_stops
     pg_search_scope :list_search, against: %i[name], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
     pg_search_scope :mot_search, against: %i[mode_of_transport], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
-    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
-    validates :origin_hub_id, uniqueness: { scope: %i[destination_hub_id organization_id transshipment mode_of_transport] }
+    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
+    validates :origin_hub_id,
+      uniqueness: {scope: %i[destination_hub_id organization_id transshipment mode_of_transport]}
 
     def generate_schedules_from_sheet(stops:,
-                                      start_date:,
-                                      end_date:,
-                                      tenant_vehicle_id:,
-                                      closing_date:,
-                                      vessel:,
-                                      voyage_code:,
-                                      load_type:)
+      start_date:,
+      end_date:,
+      tenant_vehicle_id:,
+      closing_date:,
+      vessel:,
+      voyage_code:,
+      load_type:)
       results = {
         layovers: [],
         trips: []
@@ -90,9 +91,9 @@ module Legacy
 
     def parse_load_type(raw_load_type)
       if %w[cargo_item lcl].include?(raw_load_type.downcase.strip)
-        'cargo_item'
+        "cargo_item"
       else
-        'container'
+        "container"
       end
     end
 
@@ -105,10 +106,10 @@ module Legacy
         %w[container cargo_item].each do |load_type|
           existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
           steps_in_order = if existing_trip
-                             (existing_trip.end_date - existing_trip.start_date) / 86_400
-                           else
-                             rand(20..50)
-                           end
+            (existing_trip.end_date - existing_trip.start_date) / 86_400
+          else
+            rand(20..50)
+          end
           generate_weekly_schedules(
             stops_in_order: stops_in_order,
             steps_in_order: [steps_in_order],
@@ -124,19 +125,19 @@ module Legacy
     end
 
     def generate_weekly_schedules(stops_in_order:,
-                                  steps_in_order:,
-                                  start_date:,
-                                  end_date:,
-                                  ordinal_array:,
-                                  tenant_vehicle_id:,
-                                  load_type:, closing_date_buffer: 4)
+      steps_in_order:,
+      start_date:,
+      end_date:,
+      ordinal_array:,
+      tenant_vehicle_id:,
+      load_type:, closing_date_buffer: 4)
       results = {
         layovers: [],
         trips: []
       }
 
-      tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
-      end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
+      tmp_date = start_date.is_a?(Date) ? start_date : DateTime.parse(start_date)
+      end_date_parsed = end_date.is_a?(Date) ? end_date : DateTime.parse(end_date)
 
       stop_data = []
       steps_in_order = steps_in_order.map(&:to_i)
@@ -233,10 +234,10 @@ module Legacy
     def modes_of_transport
       exists = ->(mot) { !Itinerary.where(mode_of_transport: mot).limit(1).empty? }
       {
-        ocean: exists.call('ocean'),
-        air: exists.call('air'),
-        rail: exists.call('rail'),
-        truck: exists.call('truck')
+        ocean: exists.call("ocean"),
+        air: exists.call("air"),
+        rail: exists.call("rail"),
+        truck: exists.call("truck")
       }
     end
 
@@ -273,11 +274,11 @@ module Legacy
     end
 
     def origin_nexus_ids
-      origin_stops.joins(:hub).pluck('hubs.nexus_id')
+      origin_stops.joins(:hub).pluck("hubs.nexus_id")
     end
 
     def destination_nexus_ids
-      destination_stops.joins(:hub).pluck('hubs.nexus_id')
+      destination_stops.joins(:hub).pluck("hubs.nexus_id")
     end
 
     def origin_hub_ids
@@ -314,7 +315,7 @@ module Legacy
           origin: stop_array[0].hub.lng_lat_array,
           destination: stop_array[1].hub.lng_lat_array,
           line: {
-            type: 'LineString',
+            type: "LineString",
             id: "#{id}-#{stop_array[0].index}",
             coordinates: [stop_array[0].hub.lng_lat_array, stop_array[1].hub.lng_lat_array]
           }
@@ -326,19 +327,19 @@ module Legacy
       origin = stop_array[0]
       destination = stop_array[1]
       return_h = attributes
-      return_h[:origin_nexus]         = origin.hub.nexus.name                if options[:nexus_names]
-      return_h[:destination_nexus]    = destination.hub.nexus.name           if options[:nexus_names]
-      return_h[:origin_nexus_id]      = origin.hub.nexus.id                  if options[:nexus_ids]
-      return_h[:destination_nexus_id] = destination.hub.nexus.id             if options[:nexus_ids]
-      return_h[:origin_hub_id]        = origin.hub.id                        if options[:hub_ids]
-      return_h[:destination_hub_id]   = destination.hub.id                   if options[:hub_ids]
-      return_h[:origin_hub_name]      = origin.hub.name                      if options[:hub_names]
-      return_h[:destination_hub_name] = destination.hub.name                 if options[:hub_names]
-      return_h[:origin_stop_id]       = origin.id                            if options[:stop_ids]
-      return_h[:destination_stop_id]  = destination.id                       if options[:stop_ids]
-      return_h[:modes_of_transport]   = modes_of_transport                   if options[:modes_of_transport]
-      return_h[:next_departure]       = next_departure                       if options[:next_departure]
-      return_h[:dedicated]            = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
+      return_h[:origin_nexus] = origin.hub.nexus.name if options[:nexus_names]
+      return_h[:destination_nexus] = destination.hub.nexus.name if options[:nexus_names]
+      return_h[:origin_nexus_id] = origin.hub.nexus.id if options[:nexus_ids]
+      return_h[:destination_nexus_id] = destination.hub.nexus.id if options[:nexus_ids]
+      return_h[:origin_hub_id] = origin.hub.id if options[:hub_ids]
+      return_h[:destination_hub_id] = destination.hub.id if options[:hub_ids]
+      return_h[:origin_hub_name] = origin.hub.name if options[:hub_names]
+      return_h[:destination_hub_name] = destination.hub.name if options[:hub_names]
+      return_h[:origin_stop_id] = origin.id if options[:stop_ids]
+      return_h[:destination_stop_id] = destination.id if options[:stop_ids]
+      return_h[:modes_of_transport] = modes_of_transport if options[:modes_of_transport]
+      return_h[:next_departure] = next_departure if options[:next_departure]
+      return_h[:dedicated] = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
       return_h
     end
 
@@ -374,8 +375,8 @@ module Legacy
     end
 
     def self.for_addresses(shipment, trucking_data)
-      if trucking_data && trucking_data['pre_carriage']
-        start_hub_ids = trucking_data['pre_carriage'].keys
+      if trucking_data && trucking_data["pre_carriage"]
+        start_hub_ids = trucking_data["pre_carriage"].keys
         start_hubs = Hub.where(id: start_hub_ids)
       else
         start_city = shipment.origin_nexus
@@ -383,8 +384,8 @@ module Legacy
         start_hub_ids = start_hubs.ids
       end
 
-      if trucking_data && trucking_data['on_carriage']
-        end_hub_ids = trucking_data['on_carriage'].keys
+      if trucking_data && trucking_data["on_carriage"]
+        end_hub_ids = trucking_data["on_carriage"].keys
         end_hubs = Hub.where(id: end_hub_ids)
       else
         end_city = shipment.destination_nexus
@@ -394,15 +395,15 @@ module Legacy
 
       itineraries = shipment.organization.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
-      { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
+      {itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs}
     end
 
     def self.update_hubs
       its = Itinerary.all
       its.each do |it|
-        hub_arr = it.stops.order(:index).map do |s|
-          { hub_id: s.hub_id, index: s.index }
-        end
+        hub_arr = it.stops.order(:index).map { |s|
+          {hub_id: s.hub_id, index: s.index}
+        }
         it.hubs = hub_arr
         it.save!
       end
@@ -415,8 +416,8 @@ module Legacy
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i[id name] },
-                  address: { only: %i[longitude latitude geocoded_address] }
+                  nexus: {only: %i[id name]},
+                  address: {only: %i[longitude latitude geocoded_address]}
                 },
                 only: %i[id name]
               }
@@ -440,7 +441,7 @@ module Legacy
     private
 
     def must_have_stops
-      errors.add(:base, 'Itinerary must have stops') if stops.empty?
+      errors.add(:base, "Itinerary must have stops") if stops.empty?
     end
   end
 end

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_fee, class: 'Pricings::Fee' do
+  factory :pricings_fee, class: "Pricings::Fee" do
     rate { 1111 }
     min { 1 }
     association :rate_basis, factory: :pricings_rate_basis
     association :charge_category, factory: :bas_charge
     association :organization, factory: :organizations_organization
-    currency_name { 'EUR' }
+    currency_name { "EUR" }
     base { 1e-6 }
 
     trait :per_wm do
@@ -31,8 +31,8 @@ FactoryBot.define do
       hw_threshold { 100 }
       range do
         [
-          { min: 1500, max: 2000, rate: 100 },
-          { min: 2001, max: 2500, rate: 250 }
+          {min: 1500, max: 2000, rate: 100},
+          {min: 2001, max: 2500, rate: 250}
         ]
       end
     end
@@ -90,10 +90,10 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 100, rate: 10 },
-          { min: 101, max: 500, rate: 8 },
-          { min: 501, max: 1000, rate: 6 },
-          { min: 1001, max: 2000, rate: 5 }
+          {min: 0, max: 100, rate: 10},
+          {min: 101, max: 500, rate: 8},
+          {min: 501, max: 1000, rate: 6},
+          {min: 1001, max: 2000, rate: 5}
         ]
       end
     end
@@ -103,9 +103,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 100, rate: 20 },
-          { min: 101, max: 500, rate: 15 },
-          { min: 501, max: 1000, rate: 12 }
+          {min: 0, max: 100, rate: 20},
+          {min: 101, max: 500, rate: 15},
+          {min: 501, max: 1000, rate: 12}
         ]
       end
     end
@@ -115,8 +115,8 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 5, cbm: 100 },
-          { min: 5, max: 25, ton: 80 }
+          {min: 0, max: 5, cbm: 100},
+          {min: 5, max: 25, ton: 80}
         ]
       end
     end
@@ -125,9 +125,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 4, rate: 10 },
-          { min: 5, max: 10, rate: 8 },
-          { min: 11, max: 20, rate: 6 }
+          {min: 0, max: 4, rate: 10},
+          {min: 5, max: 10, rate: 8},
+          {min: 11, max: 20, rate: 6}
         ]
       end
     end
@@ -136,9 +136,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 5, rate: 10 },
-          { min: 6, max: 10, rate: 8 },
-          { min: 11, max: 20, rate: 6 }
+          {min: 0, max: 5, rate: 10},
+          {min: 6, max: 10, rate: 8},
+          {min: 11, max: 20, rate: 6}
         ]
       end
     end
@@ -148,9 +148,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 4, rate: 10 },
-          { min: 5, max: 10, rate: 8 },
-          { min: 11, max: 20, rate: 6 }
+          {min: 0, max: 4, rate: 10},
+          {min: 5, max: 10, rate: 8},
+          {min: 11, max: 20, rate: 6}
         ]
       end
     end
@@ -160,9 +160,9 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0, max: 5, rate: 10 },
-          { min: 6, max: 10, rate: 8 },
-          { min: 11, max: 20, rate: 6 }
+          {min: 0, max: 5, rate: 10},
+          {min: 6, max: 10, rate: 8},
+          {min: 11, max: 20, rate: 6}
         ]
       end
     end
@@ -172,8 +172,8 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0.0, max: 4.9, rate: 8 },
-          { min: 5.0, max: 10, rate: 12 }
+          {min: 0.0, max: 4.9, rate: 8},
+          {min: 5.0, max: 10, rate: 12}
         ]
       end
     end
@@ -183,8 +183,8 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0.0, max: 4.9, rate: 8 },
-          { min: 5.0, max: 10, rate: 12 }
+          {min: 0.0, max: 4.9, rate: 8},
+          {min: 5.0, max: 10, rate: 12}
         ]
       end
     end
@@ -194,8 +194,8 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0.0, max: 4.9, rate: 8 },
-          { min: 5.0, max: 10, rate: 12 }
+          {min: 0.0, max: 4.9, rate: 8},
+          {min: 5.0, max: 10, rate: 12}
         ]
       end
     end
@@ -205,8 +205,8 @@ FactoryBot.define do
       association :charge_category, factory: :bas_charge
       range do
         [
-          { min: 0.0, max: 4.9, rate: 8 },
-          { min: 5.0, max: 10, rate: 12 }
+          {min: 0.0, max: 4.9, rate: 8},
+          {min: 5.0, max: 10, rate: 12}
         ]
       end
     end

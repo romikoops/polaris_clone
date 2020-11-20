@@ -26,7 +26,9 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
 
     context "with single country trucking" do
       it "renders the list correct list of countries" do
-        get :index, params: {organization_id: organization.id, load_type: "cargo_item", target: "destination"}, as: :json
+        get :index, params: {
+          organization_id: organization.id, load_type: "cargo_item", target: "destination"
+        }, as: :json
 
         expect(data).to match_array(["SE"])
       end
@@ -41,7 +43,9 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
       end
 
       it "renders the list correct list of countries" do
-        get :index, params: {organization_id: organization.id, load_type: "cargo_item", target: "destination"}, as: :json
+        get :index, params: {
+          organization_id: organization.id, load_type: "cargo_item", target: "destination"
+        }, as: :json
 
         expect(data).to match_array(["SE", "DE"])
       end

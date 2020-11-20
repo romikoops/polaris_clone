@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
 class QuoteMailer < ApplicationMailer
-  default from: 'ItsMyCargo Bookings <bookings@itsmycargo.com>'
-  layout 'mailer'
+  default from: "ItsMyCargo Bookings <bookings@itsmycargo.com>"
+  layout "mailer"
   add_template_helper(ApplicationHelper)
 
   def new_quotation_email(quotation:, tender_ids:, shipment:, email:)
     set_current_id(organization_id: quotation.organization_id)
 
-    @shipment = Legacy::ShipmentDecorator.new(shipment, context: { scope: @scope})
+    @shipment = Legacy::ShipmentDecorator.new(shipment, context: {scope: @scope})
     @quotation = quotation
     organization_variables
     @pdf_service = Pdf::Quotation::Client.new(quotation: quotation, tender_ids: tender_ids)
     @quotes = @pdf_service.decorated_tenders
     @email = email[/[^@]+/]
-    @content = Legacy::Content.get_component('QuotePdf', ::Organizations.current_id)
+    @content = Legacy::Content.get_component("QuotePdf", ::Organizations.current_id)
     add_attachments
 
     mail(
       from: from(display_name: @org_theme.name),
-      reply_to: @org_theme.emails.dig('support', 'general'),
+      reply_to: @org_theme.emails.dig("support", "general"),
       to: mail_target_interceptor(shipment.billing, email),
       subject: subject_line(type: :quotation, references: tender_references, quotation: decorated_quotation)
     ) do |format|
-      format.html { render 'quotation_email' }
-      format.mjml { render 'quotation_email' }
+      format.html { render "quotation_email" }
+      format.mjml { render "quotation_email" }
     end
   end
 
@@ -35,17 +35,17 @@ class QuoteMailer < ApplicationMailer
     organization_variables
     @pdf_service = Pdf::Quotation::Admin.new(quotation: @quotation)
     @quotes = @pdf_service.decorated_tenders
-    @content = Legacy::Content.get_component('QuotePdf', current_organization.id)
+    @content = Legacy::Content.get_component("QuotePdf", current_organization.id)
     add_attachments
 
     mail(
-      from: from(display_name: 'ItsMyCargo Quotation Tool'),
+      from: from(display_name: "ItsMyCargo Quotation Tool"),
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@quotation.billing, @org_theme.email_for(:sales, shipment.mode_of_transport)),
       subject: subject_line(type: :quotation, references: tender_references, quotation: decorated_quotation)
     ) do |format|
-      format.html { render 'quotation_admin_email' }
-      format.mjml { render 'quotation_admin_email' }
+      format.html { render "quotation_admin_email" }
+      format.mjml { render "quotation_admin_email" }
     end
   end
 
@@ -59,8 +59,8 @@ class QuoteMailer < ApplicationMailer
 
   def add_attachments
     attachments[pdf_name] = pdf_document if pdf_document.present?
-    attachments.inline['logo.png'] = @org_theme.email_logo.attached? ? @org_theme.email_logo.download : ''
-    attachments.inline['icon.png'] = mot_icon(mot)
+    attachments.inline["logo.png"] = @org_theme.email_logo.attached? ? @org_theme.email_logo.download : ""
+    attachments.inline["icon.png"] = mot_icon(mot)
   end
 
   def pdf_document
@@ -78,11 +78,11 @@ class QuoteMailer < ApplicationMailer
   end
 
   def mot
-    @quotes.first.mode_of_transport || 'ocean'
+    @quotes.first.mode_of_transport || "ocean"
   end
 
   def decorated_shipment
-    @decorated_shipment ||= Legacy::ShipmentDecorator.new(@shipment, context: { scope: @scope})
+    @decorated_shipment ||= Legacy::ShipmentDecorator.new(@shipment, context: {scope: @scope})
   end
 
   def decorated_quotation
@@ -94,7 +94,7 @@ class QuoteMailer < ApplicationMailer
   end
 
   def pdf_name
-    "quotation_#{tender_references.join(',')}.pdf"
+    "quotation_#{tender_references.join(",")}.pdf"
   end
 
   def from(display_name:)

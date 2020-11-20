@@ -1,20 +1,23 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe TenantCargoItemType, type: :model do
-    describe 'it creates a valid object' do
-      it 'is valid' do
+    describe "it creates a valid object" do
+      it "is valid" do
         tenant_cargo_item_type = FactoryBot.build(:legacy_tenant_cargo_item_type)
         expect(tenant_cargo_item_type).to be_valid
       end
 
-      it 'raises  an error when item type is taken' do
+      it "raises  an error when item type is taken" do
         organization = FactoryBot.create(:organizations_organization)
         cargo_item_type = FactoryBot.create(:legacy_cargo_item_type)
         FactoryBot.create(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: cargo_item_type)
-        expect(FactoryBot.build(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: cargo_item_type)).not_to be_valid
+
+        expect(
+          FactoryBot.build(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: cargo_item_type)
+        ).not_to be_valid
       end
     end
   end

@@ -3,12 +3,12 @@
 module Api
   module V1
     class TripDecorator < Draper::Decorator
-      decorates 'Legacy::Trip'
+      decorates "Legacy::Trip"
 
       delegate_all
 
       def carrier
-        tenant_vehicle.carrier&.name || '-'
+        tenant_vehicle.carrier&.name || "-"
       end
 
       def service
@@ -16,15 +16,15 @@ module Api
       end
 
       def start
-        start_date.strftime('%F')
+        start_date.strftime("%F")
       end
 
       def closing
-        closing_date.strftime('%F')
+        closing_date.strftime("%F")
       end
 
       def end
-        end_date.strftime('%F')
+        end_date.strftime("%F")
       end
 
       def tender_id

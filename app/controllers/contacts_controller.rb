@@ -43,33 +43,40 @@ class ContactsController < ApplicationController
 
     contact = Contact.find_by(id: params[:id])
     loc = contact.address || Address.new
-    update_data.delete('id')
-    update_data.delete('userId')
-    update_data.delete('addressId')
+    update_data.delete("id")
+    update_data.delete("userId")
+    update_data.delete("addressId")
 
     edited_contact_data = {}
     edited_contact_address = {}
-    edited_contact_data[:first_name] = update_data['firstName']
-    edited_contact_data[:last_name] = update_data['lastName']
-    edited_contact_data[:company_name] = update_data['companyName']
-    edited_contact_data[:phone] = update_data['phone']
-    edited_contact_data[:email] = update_data['email']
-    if !update_data['geocodedAddress']
-      edited_contact_address[:geocoded_address] =
-        "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}, #{update_data['city']}, #{update_data['zipCode']}, #{update_data['country']}"
+    edited_contact_data[:first_name] = update_data["firstName"]
+    edited_contact_data[:last_name] = update_data["lastName"]
+    edited_contact_data[:company_name] = update_data["companyName"]
+    edited_contact_data[:phone] = update_data["phone"]
+    edited_contact_data[:email] = update_data["email"]
+    edited_contact_address[:geocoded_address] = if !update_data["geocodedAddress"]
+      [
+        "#{update_data["street"]} #{update_data["number"] || update_data["streetNumber"]}",
+        update_data["city"],
+        update_data["zipCode"],
+        update_data["country"]
+      ].join(", ")
     else
-      edited_contact_address[:geocoded_address] = update_data['geocodedAddress']
+      update_data["geocodedAddress"]
     end
-    edited_contact_address[:street_number] = update_data['number'] || update_data['streetNumber']
-    edited_contact_address[:street] = update_data['street']
-    edited_contact_address[:street_address] = "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}"
-    edited_contact_address[:city] = update_data['city']
-    edited_contact_address[:zip_code] = update_data['zipCode']
-    edited_contact_address[:country] = Country.geo_find_by_name(update_data['country'])
-    loc.update_attributes(edited_contact_address)
+    edited_contact_address[:street_number] = update_data["number"] || update_data["streetNumber"]
+    edited_contact_address[:street] = update_data["street"]
+    edited_contact_address[:street_address] = [
+      update_data["street"],
+      update_data["number"] || update_data["streetNumber"]
+    ].join(" ")
+    edited_contact_address[:city] = update_data["city"]
+    edited_contact_address[:zip_code] = update_data["zipCode"]
+    edited_contact_address[:country] = Country.geo_find_by_name(update_data["country"])
+    loc.update(edited_contact_address)
     edited_contact_data[:address_id] = loc.id
     edited_contact_data[:user_id] = organization_user.id
-    contact.update_attributes(edited_contact_data)
+    contact.update(edited_contact_data)
     if contact.save
       response_handler(contact.as_options_json)
     else
@@ -92,12 +99,12 @@ class ContactsController < ApplicationController
   end
 
   def booking_process
-    response_contacts = paginated_contacts.map do |contact|
+    response_contacts = paginated_contacts.map { |contact|
       {
         address: contact.address.try(:to_custom_hash) || {},
         contact: contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    }
 
     response_handler(
       pagination_options.merge(
@@ -109,11 +116,11 @@ class ContactsController < ApplicationController
 
   def update_contact_address
     data = JSON.parse(params[:address])
-    loc = Address.find_by(id: data['id'])
-    data['country'] = Country.geo_find_by_name(data['country'])
-    data.delete('id')
-    data.delete('address_type')
-    loc.update_attributes(data)
+    loc = Address.find_by(id: data["id"])
+    data["country"] = Country.geo_find_by_name(data["country"])
+    data.delete("id")
+    data.delete("address_type")
+    loc.update(data)
     loc.save!
     response_handler(loc.to_custom_hash)
   end
@@ -166,22 +173,22 @@ class ContactsController < ApplicationController
 
   def create_contact_params
     {
-      first_name: contact_params['firstName'],
-      last_name: contact_params['lastName'],
-      company_name: contact_params['companyName'],
-      phone: contact_params['phone'],
-      email: contact_params['email'],
+      first_name: contact_params["firstName"],
+      last_name: contact_params["lastName"],
+      company_name: contact_params["companyName"],
+      phone: contact_params["phone"],
+      email: contact_params["email"],
       user: organization_user
     }
   end
 
   def create_contact_address_params
     {
-      street_number: contact_params['number'] || contact_params['streetNumber'],
-      street: contact_params['street'],
-      city: contact_params['city'],
-      zip_code: contact_params['zipCode'],
-      country: Country.find_by_name(contact_params['country'])
+      street_number: contact_params["number"] || contact_params["streetNumber"],
+      street: contact_params["street"],
+      city: contact_params["city"],
+      zip_code: contact_params["zipCode"],
+      country: Country.find_by(name: contact_params["country"])
     }
   end
 end

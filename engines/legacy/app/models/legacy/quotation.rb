@@ -2,12 +2,12 @@
 
 module Legacy
   class Quotation < ApplicationRecord
-    self.table_name = 'quotations'
+    self.table_name = "quotations"
 
-    has_many :shipments, class_name: 'Legacy::Shipment'
-    has_many :files, class_name: 'Legacy::File', dependent: :destroy
-    belongs_to :user, class_name: 'Organizations::User', optional: true
-    belongs_to :original_shipment, class_name: 'Legacy::Shipment'
+    has_many :shipments, class_name: "Legacy::Shipment"
+    has_many :files, class_name: "Legacy::File", dependent: :destroy
+    belongs_to :user, class_name: "Organizations::User", optional: true
+    belongs_to :original_shipment, class_name: "Legacy::Shipment"
 
     enum billing: {external: 0, internal: 1, test: 2}
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'validator/engine'
+require "validator/engine"
 
 module Validator
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'api_auth/resource_helper'
+require "api_auth/resource_helper"
 
 ::Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
@@ -75,7 +75,7 @@ require 'api_auth/resource_helper'
   # Defaults to ActionController::Base.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-base-controller
   #
-  base_controller 'ApiAuth::ApplicationController'
+  base_controller "ApiAuth::ApplicationController"
 
   # Reuse access token for the same resource owner within an application (disabled by default).
   #
@@ -114,7 +114,7 @@ require 'api_auth/resource_helper'
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   #
-  default_scopes  :public
+  default_scopes :public
   optional_scopes :write, :update, :admin
 
   # Change the way client credentials are retrieved from the request object.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-require 'monetize'
+require "forwardable"
+require "monetize"
 
 module Roo
   class ExcelxMoney
@@ -26,7 +26,7 @@ module Roo
       end
 
       def parse_to_money(currency_descr, cell_value)
-        Monetize.parse("#{currency_descr} #{cell_value.to_f}", 'no-fallback-currency', assume_from_symbol: true)
+        Monetize.parse("#{currency_descr} #{cell_value.to_f}", "no-fallback-currency", assume_from_symbol: true)
       end
     end
   end

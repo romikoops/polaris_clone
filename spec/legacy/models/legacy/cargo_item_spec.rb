@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe CargoItem, type: :model do
-    describe '.extract' do
-      it 'initialize the model from the attributes' do
+    describe ".extract" do
+      it "initialize the model from the attributes" do
         attributes = FactoryBot.attributes_for(:legacy_cargo_item)
         target = CargoItem.extract([attributes]).first
 
@@ -13,59 +13,59 @@ module Legacy
       end
     end
 
-    describe '.calc_chargeable_weight_from_values' do
-      it 'calcs the volume from inputs with air' do
-        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'air')).to eq(1000)
+    describe ".calc_chargeable_weight_from_values" do
+      it "calcs the volume from inputs with air" do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, "air")).to eq(1000)
       end
 
-      it 'calcs the volume from inputs with rail' do
-        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'rail')).to eq(1000)
+      it "calcs the volume from inputs with rail" do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, "rail")).to eq(1000)
       end
 
-      it 'calcs the volume from inputs with ocean' do
-        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'ocean')).to eq(1500)
+      it "calcs the volume from inputs with ocean" do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, "ocean")).to eq(1500)
       end
 
-      it 'calcs the volume from inputs with trucking' do
-        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'trucking')).to eq(1000)
+      it "calcs the volume from inputs with trucking" do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, "trucking")).to eq(1000)
       end
 
-      it 'calcs the volume from inputs with truck' do
-        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, 'truck')).to eq(1000)
+      it "calcs the volume from inputs with truck" do
+        expect(CargoItem.calc_chargeable_weight_from_values(1.5, 1000, "truck")).to eq(1000)
       end
     end
 
-    describe '#volume' do
-      it 'calcs the volume' do
+    describe "#volume" do
+      it "calcs the volume" do
         cargo = FactoryBot.create(:legacy_cargo_item)
         expect(cargo.volume).to eq(0.008)
       end
     end
 
-    describe '#payload_in_tons' do
-      it 'calcs the volume' do
+    describe "#payload_in_tons" do
+      it "calcs the volume" do
         cargo = FactoryBot.create(:legacy_cargo_item)
         expect(cargo.payload_in_tons).to eq(0.2)
       end
     end
 
-    describe '#calc_chareable_weight' do
-      it 'calcs the volume' do
+    describe "#calc_chareable_weight" do
+      it "calcs the volume" do
         cargo = FactoryBot.create(:legacy_cargo_item)
-        expect(cargo.calc_chargeable_weight('ocean')).to eq(200)
+        expect(cargo.calc_chargeable_weight("ocean")).to eq(200)
       end
     end
 
-    describe '#set_chargeable_weight!' do
-      it 'calculates the chargeableweight and set it' do
+    describe "#set_chargeable_weight!" do
+      it "calculates the chargeableweight and set it" do
         cargo = FactoryBot.create(:legacy_cargo_item)
         expect(cargo.set_chargeable_weight!).to eq(200)
       end
     end
 
-    describe '.valid?' do
-      context 'with negative values' do
-        it 'is invalid' do
+    describe ".valid?" do
+      context "with negative values" do
+        it "is invalid" do
           expect(FactoryBot.build(:legacy_cargo_item, payload_in_kg: -10)).not_to be_valid
         end
       end

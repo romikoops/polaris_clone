@@ -50,8 +50,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
     end
 
     context "when all pricings are valid" do
-      let(:pricing) { FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {mode_of_transport: "ocean"}) }
+      let(:pricing) {
+        FactoryBot.create(:fcl_20_pricing, organization: organization,
+                                           itinerary: itinerary, tenant_vehicle: tenant_vehicle)
+      }
+      let(:result) {
+        described_class.write_document(organization: organization, user: user,
+                                       file_name: "test.xlsx", options: {mode_of_transport: "ocean"})
+      }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -69,8 +75,18 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context "when all pricings are valid with attached group" do
       let(:group_id) { FactoryBot.create(:groups_group, organization: organization, name: "TEST").id }
-      let(:pricing) { FactoryBot.create(:fcl_20_pricing, organization: organization, group_id: group_id, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {mode_of_transport: "ocean", group_id: group_id}) }
+      let(:pricing) {
+        FactoryBot.create(:fcl_20_pricing,
+          organization: organization, group_id: group_id, itinerary: itinerary,
+          tenant_vehicle: tenant_vehicle)
+      }
+      let(:result) {
+        described_class.write_document(organization: organization, user: user,
+                                       file_name: "test.xlsx", options: {
+                                         mode_of_transport: "ocean",
+                                         group_id: group_id
+                                       })
+      }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -123,8 +139,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         ]
       end
 
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {mode_of_transport: "ocean"}) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary,
+                                        tenant_vehicle: tenant_vehicle)
+      }
+      let(:result) {
+        described_class.write_document(organization: organization, user: user,
+                                       file_name: "test.xlsx", options: {mode_of_transport: "ocean"})
+      }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -144,7 +166,9 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
     context "when some pricings are expired" do
       before do
-        FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle, expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days)
+        FactoryBot.create(:lcl_pricing,
+          organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle,
+          expiration_date: Time.zone.now - 10.days, effective_date: Time.zone.now - 30.days)
       end
 
       let(:pricing_row) do
@@ -172,8 +196,14 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           25
         ]
       end
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {mode_of_transport: "ocean"}) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary,
+                                        tenant_vehicle: tenant_vehicle)
+      }
+      let(:result) {
+        described_class.write_document(organization: organization, user: user, file_name: "test.xlsx",
+                                       options: {mode_of_transport: "ocean"})
+      }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
@@ -192,7 +222,11 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         described_class::HEADER_COLLECTION::PRICING_ONE_FEE_COL_AND_RANGES.keys.map { |header| header.to_s.upcase }
       end
       let(:group_id) { FactoryBot.create(:groups_group, organization: organization, name: "TEST").id }
-      let(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization, group_id: group_id, tenant_vehicle: tenant_vehicle, itinerary: itinerary, transshipment: "ZACPT") }
+      let(:pricing) {
+        FactoryBot.create(:pricings_pricing,
+          organization: organization, group_id: group_id,
+          tenant_vehicle: tenant_vehicle, itinerary: itinerary, transshipment: "ZACPT")
+      }
       let(:pricing_row) do
         [
           pricing.group_id,
@@ -223,7 +257,12 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           4.9
         ]
       end
-      let(:result) { described_class.write_document(organization: organization, user: user, file_name: "test.xlsx", options: {mode_of_transport: "ocean", group_id: group_id}) }
+      let(:result) {
+        described_class.write_document(organization: organization, user: user,
+                                       file_name: "test.xlsx", options: {
+                                         mode_of_transport: "ocean", group_id: group_id
+                                       })
+      }
       let(:xlsx) { Roo::Excelx.new(StringIO.new(result.file.download)) }
       let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 

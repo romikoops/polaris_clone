@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'shipments/engine'
+require "shipments/engine"
 
 module Shipments
 end

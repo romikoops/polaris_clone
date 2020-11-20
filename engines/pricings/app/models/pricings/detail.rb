@@ -2,11 +2,11 @@
 
 module Pricings
   class Detail < ApplicationRecord
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :margin
-    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
-    validates :operator, inclusion: { in: %w[+ % &],
-                                      message: '%{value} is not a valid operator for a margin detail' }
+    belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
+    validates :operator, inclusion: {in: %w[+ % &],
+                                     message: "%{value} is not a valid operator for a margin detail"}
 
     def rate_basis
       margin.get_pricing&.fees&.find_by(charge_category_id: charge_category_id)&.rate_basis&.external_code

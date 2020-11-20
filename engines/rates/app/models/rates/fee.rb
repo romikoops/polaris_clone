@@ -2,7 +2,7 @@
 
 module Rates
   class Fee < ApplicationRecord
-    enum operator: { addition: 0, multiplication: 1 }
+    enum operator: {addition: 0, multiplication: 1}
     enum rate_basis: {
       shipment: 0,
       wm: 1,

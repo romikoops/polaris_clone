@@ -12,13 +12,13 @@ module Organizations
         }
       }
       [
-        { response_key: :logoWide, value: wide_logo },
-        { response_key: :logoSmall, value: small_logo },
-        { response_key: :emailLogo, value: email_logo },
-        { response_key: :logoLarge, value: large_logo },
-        { response_key: :logoWhite, value: white_logo },
-        { response_key: :background, value: background },
-        { response_key: :bookingProcessImage, value: booking_process_image }
+        {response_key: :logoWide, value: wide_logo},
+        {response_key: :logoSmall, value: small_logo},
+        {response_key: :emailLogo, value: email_logo},
+        {response_key: :logoLarge, value: large_logo},
+        {response_key: :logoWhite, value: white_logo},
+        {response_key: :background, value: background},
+        {response_key: :bookingProcessImage, value: booking_process_image}
       ].each do |response_key_and_value|
         if response_key_and_value[:value].attached?
           link = Rails.application.routes.url_helpers.rails_blob_url(response_key_and_value[:value])

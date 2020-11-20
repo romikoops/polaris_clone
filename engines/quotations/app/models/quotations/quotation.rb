@@ -3,23 +3,23 @@
 module Quotations
   class Quotation < ApplicationRecord
     include Sortable
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :user, optional: true, class_name: 'Organizations::User'
-    belongs_to :creator, class_name: 'Users::User', optional: true
-    belongs_to :origin_nexus, class_name: 'Legacy::Nexus', optional: true
-    belongs_to :destination_nexus, class_name: 'Legacy::Nexus', optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :user, optional: true, class_name: "Organizations::User"
+    belongs_to :creator, class_name: "Users::User", optional: true
+    belongs_to :origin_nexus, class_name: "Legacy::Nexus", optional: true
+    belongs_to :destination_nexus, class_name: "Legacy::Nexus", optional: true
     has_many :tenders, inverse_of: :quotation
-    has_one :cargo, class_name: 'Cargo::Cargo'
-    belongs_to :pickup_address, class_name: 'Legacy::Address', optional: true
-    belongs_to :delivery_address, class_name: 'Legacy::Address', optional: true
-    belongs_to :legacy_shipment, class_name: 'Legacy::Shipment', optional: true
+    has_one :cargo, class_name: "Cargo::Cargo"
+    belongs_to :pickup_address, class_name: "Legacy::Address", optional: true
+    belongs_to :delivery_address, class_name: "Legacy::Address", optional: true
+    belongs_to :legacy_shipment, class_name: "Legacy::Shipment", optional: true
 
     scope :sorted_by_load_type, ->(direction) {
       joins(:tenders).order("load_type #{direction}")
     }
 
     scope :sorted_by_last_name, ->(direction) {
-      joins('INNER JOIN profiles_profiles ON quotations_quotations.user_id = profiles_profiles.user_id')
+      joins("INNER JOIN profiles_profiles ON quotations_quotations.user_id = profiles_profiles.user_id")
         .order("last_name #{direction}")
     }
 

@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require 'cgi'
-require 'net/http'
-require 'open-uri'
-require 'nokogiri'
-require 'openssl'
-require 'base64'
+require "cgi"
+require "net/http"
+require "open-uri"
+require "nokogiri"
+require "openssl"
+require "base64"
 
 class GoogleDirections
   NoDrivingTime = Class.new(StandardError)
 
   # API Doc: https://developers.google.com/maps/documentation/directions/intro
-  BASE_URL  = 'https://maps.googleapis.com'
-  BASE_PATH = '/maps/api/directions/xml'
+  BASE_URL = "https://maps.googleapis.com"
+  BASE_PATH = "/maps/api/directions/xml"
   DEFAULT_OPTIONS = {
     key: Settings.google.api_key,
-    language: 'en',
-    alternative: 'false',
-    mode: 'driving',
-    traffic_model: 'pessimistic'
+    language: "en",
+    alternative: "false",
+    mode: "driving",
+    traffic_model: "pessimistic"
     # avoid: "tolls|highways|ferries"
   }.freeze
 
@@ -28,17 +28,17 @@ class GoogleDirections
     @origin = origin
     @destination = destination
     @departure_time = set_departure_time(departure_time)
-    @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
-    path = BASE_PATH + '?' + querify(@options)
+    @options = opts.merge({origin: @origin, destination: @destination, departure_time: @departure_time}.compact)
+    path = BASE_PATH + "?" + querify(@options)
     @url = BASE_URL + sign_path(path, @options)
     open(@url) { |io| @xml = io.read }
     @doc = Nokogiri::XML(@xml)
-    @status = @doc.css('status').text
+    @status = @doc.css("status").text
   end
 
   def set_departure_time(departure_time)
     if departure_time < Time.now.to_i + 3600
-      'now'
+      "now"
     else
       departure_time
     end
@@ -55,27 +55,27 @@ class GoogleDirections
   end
 
   def successful?
-    @status == 'OK'
+    @status == "OK"
   end
 
   def geocoded_start_address
-    @doc.css('start_address').text if successful?
+    @doc.css("start_address").text if successful?
   end
 
   def geocoded_end_address
-    @doc.css('end_address').text if successful?
+    @doc.css("end_address").text if successful?
   end
 
   def reverse_geocoded_start_address
-    [@doc.css('start_location lat').last.text.to_f, @doc.css('start_location lng').last.text.to_f] if successful?
+    [@doc.css("start_location lat").last.text.to_f, @doc.css("start_location lng").last.text.to_f] if successful?
   end
 
   def reverse_geocoded_end_address
-    [@doc.css('end_location lat').last.text.to_f, @doc.css('end_location lng').last.text.to_f] if successful?
+    [@doc.css("end_location lat").last.text.to_f, @doc.css("end_location lng").last.text.to_f] if successful?
   end
 
   def distance_in_meters
-    @doc.css('distance value').last.text if successful?
+    @doc.css("distance value").last.text if successful?
   end
 
   def distance_in_km
@@ -95,7 +95,7 @@ class GoogleDirections
   end
 
   def driving_time_in_seconds
-    @doc.css('duration value').last.text.to_i if successful?
+    @doc.css("duration value").last.text.to_i if successful?
   end
 
   def driving_time_in_seconds_for_trucks(seconds)
@@ -111,7 +111,7 @@ class GoogleDirections
     time_driven_after_last_full_rest = 0
 
     until seconds_of_tour_left <= 0
-      resting_time += 45 * 60 if time_driven_after_last_full_rest == 4.5 * 3600
+      resting_time += 45 * 60 if time_driven_after_last_full_rest == 4.5.to_d * 3600
 
       if time_driven_after_last_full_rest == 9 * 3600
         resting_time += 11 * 3600
@@ -139,13 +139,13 @@ class GoogleDirections
     if minutes == 0
       if days == 0
         if hours == 1
-          'About one hour'
+          "About one hour"
         elsif hours > 1
           "About #{hours} hours"
         end
       elsif days == 1
         if hours == 1
-          'About one day and one hour'
+          "About one day and one hour"
         elsif hours > 1
           "About one day and #{hours} hours"
         end
@@ -159,17 +159,17 @@ class GoogleDirections
     elsif minutes > 0 && minutes < 30
       if days == 0
         if hours == 0
-          'Less than half an hour'
+          "Less than half an hour"
         elsif hours == 1
-          'More than one hour'
+          "More than one hour"
         elsif hours > 1
           "More than #{hours} hours"
         end
       elsif days == 1
         if hours == 0
-          'One day and less than half an hour'
+          "One day and less than half an hour"
         elsif hours == 1
-          'One day and more than one hour'
+          "One day and more than one hour"
         elsif hours > 1
           "One day and more than #{hours} hours"
         end
@@ -185,17 +185,17 @@ class GoogleDirections
     elsif minutes >= 30 && minutes < 60
       if days == 0
         if hours == 0
-          'More than half an hour'
+          "More than half an hour"
         elsif hours == 1
-          'More than one and a half hours'
+          "More than one and a half hours"
         elsif hours > 1
           "More than #{hours}.5 hours"
         end
       elsif days == 1
         if hours == 0
-          'One day and more than half an hour'
+          "One day and more than half an hour"
         elsif hours == 1
-          'One day and more than one and a half hours'
+          "One day and more than one and a half hours"
         elsif hours > 1
           "One day and more than #{hours}.5 hours"
         end
@@ -212,7 +212,7 @@ class GoogleDirections
   end
 
   def steps
-    @doc.css('html_instructions').map(&:text) if successful?
+    @doc.css("html_instructions").map(&:text) if successful?
   end
 
   private
@@ -228,23 +228,23 @@ class GoogleDirections
       params << "#{transcribe(k.to_s)}=#{transcribe(v.to_s)}" unless k == :private_key
     end
 
-    params.join('&')
+    params.join("&")
   end
 
   def sign_path(path, options)
     return path unless options[:private_key]
 
     raw_private_key = url_safe_base64_decode(options[:private_key])
-    digest = OpenSSL::Digest.new('sha1')
+    digest = OpenSSL::Digest.new("sha1")
     raw_signature = OpenSSL::HMAC.digest(digest, raw_private_key, path)
     path + "&signature=#{url_safe_base64_encode(raw_signature)}"
   end
 
   def url_safe_base64_decode(base64_string)
-    Base64.decode64(base64_string.tr('-_', '+/'))
+    Base64.decode64(base64_string.tr("-_", "+/"))
   end
 
   def url_safe_base64_encode(raw)
-    Base64.encode64(raw).tr('+/', '-_').strip
+    Base64.encode64(raw).tr("+/", "-_").strip
   end
 end

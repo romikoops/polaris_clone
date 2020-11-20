@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :tenant_routing_visibility, class: 'TenantRouting::Visibility' do
+  factory :tenant_routing_visibility, class: "TenantRouting::Visibility" do
     association :target, factory: :organizations_organization
     association :connection, factory: :tenant_routing_connection
   end

@@ -28,7 +28,9 @@ module Api
     let(:estimated) { false }
     let(:default_scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
     let(:decorated_quotation) { Api::V1::QuotationDecorator.new(quotation, context: {scope: default_scope}) }
-    let(:serialized_quotation) { described_class.new(decorated_quotation, params: {scope: default_scope}).serializable_hash }
+    let(:serialized_quotation) {
+      described_class.new(decorated_quotation, params: {scope: default_scope}).serializable_hash
+    }
     let(:target) { serialized_quotation.dig(:data, :attributes) }
     let(:serialized_containers) { target[:containers].as_json }
     let(:serialized_cargo_items) { target[:cargoItems].as_json }

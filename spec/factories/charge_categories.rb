@@ -3,17 +3,17 @@
 FactoryBot.define do
   factory :charge_category do
     association :organization, factory: :organizations_organization
-    name { 'Grand Total' }
-    code { 'grand_total' }
+    name { "Grand Total" }
+    code { "grand_total" }
 
     trait :bas do
-      name { 'Basic Ocean Freight' }
-      code { 'bas' }
+      name { "Basic Ocean Freight" }
+      code { "bas" }
     end
 
     trait :has do
-      name { 'Heavy Weight Freight' }
-      code { 'has' }
+      name { "Heavy Weight Freight" }
+      code { "has" }
     end
   end
 end

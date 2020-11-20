@@ -81,7 +81,9 @@ module AdmiraltyTenants
       end
 
       it "renders page" do
-        patch :update, params: {id: organization.id, organization: organization_params, max_dimensions: updated_max_bundle}
+        patch :update, params: {
+          id: organization.id, organization: organization_params, max_dimensions: updated_max_bundle
+        }
 
         expect(response).to redirect_to("/admiralty/organizations/#{organization.id}")
         expect(::Organizations::Organization.find(organization.id).scope.content).to eq("foo" => true)
@@ -99,7 +101,9 @@ module AdmiraltyTenants
       let(:updated_max_bundle) { {max_bundle.id => {width: -10}} }
 
       it "renders page without update" do
-        patch :update, params: {id: organization.id, organization: organization_params, max_dimensions: updated_max_bundle}
+        patch :update, params: {
+          id: organization.id, organization: organization_params, max_dimensions: updated_max_bundle
+        }
 
         expect(::Legacy::MaxDimensionsBundle.find(max_bundle.id).width).to eq(max_bundle.width)
       end

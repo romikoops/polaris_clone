@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_charge_breakdown, class: 'Legacy::ChargeBreakdown' do
+  factory :legacy_charge_breakdown, class: "Legacy::ChargeBreakdown" do
     association :shipment, factory: :legacy_shipment
     association :freight_tenant_vehicle, factory: :legacy_tenant_vehicle
     transient do
       with_tender { false }
       quotation { nil }
-      sections { ['cargo'] }
+      sections { ["cargo"] }
     end
 
     before(:create) do |charge_breakdown, evaluator|
@@ -17,19 +17,19 @@ FactoryBot.define do
       end
       cargo_units = shipment.aggregated_cargo.present? ? [shipment.aggregated_cargo] : shipment.cargo_units
       cargo_unit_charge_category_code = if shipment.aggregated_cargo.present?
-                                          'aggregated_cargo'
-                                        else
-                                          shipment.load_type
-                                        end
+        "aggregated_cargo"
+      else
+        shipment.load_type
+      end
       if evaluator.with_tender
         tender = FactoryBot.create(:quotations_tender,
-                                   carrier_name: charge_breakdown.trip.tenant_vehicle.carrier&.name,
-                                   load_type: shipment.load_type,
-                                   origin_hub: charge_breakdown.trip.itinerary.hubs.first,
-                                   destination_hub: charge_breakdown.trip.itinerary.hubs.last,
-                                   tenant_vehicle: charge_breakdown.trip.tenant_vehicle,
-                                   amount: charge_breakdown&.grand_total&.price&.money,
-                                   quotation: evaluator.quotation)
+          carrier_name: charge_breakdown.trip.tenant_vehicle.carrier&.name,
+          load_type: shipment.load_type,
+          origin_hub: charge_breakdown.trip.itinerary.hubs.first,
+          destination_hub: charge_breakdown.trip.itinerary.hubs.last,
+          tenant_vehicle: charge_breakdown.trip.tenant_vehicle,
+          amount: charge_breakdown&.grand_total&.price&.money,
+          quotation: evaluator.quotation)
         charge_breakdown.tender = tender
       end
       evaluator.sections.each do |section|
@@ -39,18 +39,18 @@ FactoryBot.define do
           code: section,
           organization_id: shipment.organization_id
         ) || create(:legacy_charge_categories,
-                    name: section.humanize,
-                    code: section,
-                    organization_id: shipment.organization_id)
+          name: section.humanize,
+          code: section,
+          organization_id: shipment.organization_id)
 
         base_charge = create(
           :legacy_charge,
           charge_breakdown: charge_breakdown,
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'base_node', name: 'Base Node', organization_id: shipment.organization_id
+            code: "base_node", name: "Base Node", organization_id: shipment.organization_id
           ),
           children_charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id
+            code: "grand_total", name: "Grand Total", organization_id: shipment.organization_id
           )
         )
 
@@ -58,7 +58,7 @@ FactoryBot.define do
           :legacy_charge,
           charge_breakdown: charge_breakdown,
           charge_category: Legacy::ChargeCategory.from_code(
-            code: 'grand_total', name: 'Grand Total', organization_id: shipment.organization_id
+            code: "grand_total", name: "Grand Total", organization_id: shipment.organization_id
           ),
           children_charge_category: section_charge_category,
           parent_id: base_charge.id,
@@ -67,10 +67,10 @@ FactoryBot.define do
 
         cargo_units.each do |cargo_unit|
           cargo_unit_charge_category = create(:legacy_charge_categories,
-                                              name: cargo_unit_charge_category_code.humanize,
-                                              code: cargo_unit_charge_category_code,
-                                              cargo_unit_id: cargo_unit[:id],
-                                              organization_id: shipment.organization_id)
+            name: cargo_unit_charge_category_code.humanize,
+            code: cargo_unit_charge_category_code,
+            cargo_unit_id: cargo_unit[:id],
+            organization_id: shipment.organization_id)
 
           cargo_charge = create(
             :legacy_charge,
@@ -83,22 +83,22 @@ FactoryBot.define do
           trait = case section
           when /trucking_/
             :trucking_lcl
-          when 'import', 'export'
+          when "import", "export"
             :thc
           else
             :bas
           end
           child_charge_category = FactoryBot.create(:legacy_charge_categories,
-              trait,
-              organization_id: shipment.organization_id)
+            trait,
+            organization_id: shipment.organization_id)
           child_price = FactoryBot.create(:legacy_price)
           if evaluator.with_tender
             line_item = FactoryBot.create(:quotations_line_item,
-                              amount: child_price.money,
-                              tender: tender,
-                              cargo: cargo_unit,
-                              charge_category: child_charge_category,
-                              section: "#{section}_section".to_sym)
+              amount: child_price.money,
+              tender: tender,
+              cargo: cargo_unit,
+              charge_category: child_charge_category,
+              section: "#{section}_section".to_sym)
           end
           cargo_unit_charge = create(
             :legacy_charge,

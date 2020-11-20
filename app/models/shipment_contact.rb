@@ -7,11 +7,11 @@ class ShipmentContact < Legacy::ShipmentContact
   belongs_to :contact
 
   validates :contact_type,
-            inclusion: {
-              in: CONTACT_TYPES,
-              message: "must be included in #{CONTACT_TYPES}"
-            },
-            allow_nil: true
+    inclusion: {
+      in: CONTACT_TYPES,
+      message: "must be included in #{CONTACT_TYPES}"
+    },
+    allow_nil: true
 end
 
 # == Schema Information

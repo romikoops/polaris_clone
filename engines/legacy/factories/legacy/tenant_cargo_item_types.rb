@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_tenant_cargo_item_type, class: 'Legacy::TenantCargoItemType' do
+  factory :legacy_tenant_cargo_item_type, class: "Legacy::TenantCargoItemType" do
     association :organization, factory: :organizations_organization
     association :cargo_item_type, factory: :legacy_cargo_item_type
   end

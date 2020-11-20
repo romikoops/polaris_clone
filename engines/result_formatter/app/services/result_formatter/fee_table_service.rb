@@ -259,13 +259,13 @@ module ResultFormatter
 
     def bank
       @bank ||= begin
-       store = MoneyCache::Converter.new(
-         klass: Legacy::ExchangeRate,
-         date: tender.created_at,
-         config: {bank_app_id: Settings.open_exchange_rate&.app_id || ""}
-       )
-       Money::Bank::VariableExchange.new(store)
-     end
+        store = MoneyCache::Converter.new(
+          klass: Legacy::ExchangeRate,
+          date: tender.created_at,
+          config: {bank_app_id: Settings.open_exchange_rate&.app_id || ""}
+        )
+        Money::Bank::VariableExchange.new(store)
+      end
     end
   end
 end

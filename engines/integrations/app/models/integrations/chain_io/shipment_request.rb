@@ -16,7 +16,7 @@ module Integrations
       end
 
       def incoterm_text
-        super || ''
+        super || ""
       end
 
       def user_profile

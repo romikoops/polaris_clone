@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'admiralty_auth/application_controller'
+require_dependency "admiralty_auth/application_controller"
 
 module AdmiraltyAuth
   class AuthorizedController < ApplicationController
@@ -17,7 +17,7 @@ module AdmiraltyAuth
       end
 
       session[:return_to_url] = request.url
-      redirect_to(admiralty_auth.login_path, flash: { return_to_url: request.url })
+      redirect_to(admiralty_auth.login_path, flash: {return_to_url: request.url})
     end
   end
 end

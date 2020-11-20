@@ -2,8 +2,8 @@
 
 module Legacy
   class Addon < ApplicationRecord
-    self.table_name = 'addons'
-    belongs_to :hub, class_name: 'Legacy::Hub'
+    self.table_name = "addons"
+    belongs_to :hub, class_name: "Legacy::Hub"
   end
 end
 

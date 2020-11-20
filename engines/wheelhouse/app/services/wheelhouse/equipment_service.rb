@@ -5,8 +5,8 @@ module Wheelhouse
     def initialize(user:, organization:, origin: nil, destination: nil, dedicated_pricings_only: false)
       @user = user
       @organization = organization
-      @origin_nexus_ids = nexus_ids(target: 'origin', location: origin)
-      @destination_nexus_ids = nexus_ids(target: 'destination', location: destination)
+      @origin_nexus_ids = nexus_ids(target: "origin", location: origin)
+      @destination_nexus_ids = nexus_ids(target: "destination", location: destination)
       @group_ids = user_groups.map(&:id)
       @dedicated_pricings_only = dedicated_pricings_only
     end
@@ -81,9 +81,9 @@ module Wheelhouse
     def itinerary_condition
       return unless origin_nexus_ids.present? || destination_nexus_ids.present?
 
-      condition = ''
-      condition += 'AND itineraries.id = origin_stops.itinerary_id' if origin_nexus_ids.present?
-      condition += ' AND itineraries.id = destination_stops.itinerary_id' if destination_nexus_ids.present?
+      condition = ""
+      condition += "AND itineraries.id = origin_stops.itinerary_id" if origin_nexus_ids.present?
+      condition += " AND itineraries.id = destination_stops.itinerary_id" if destination_nexus_ids.present?
       condition
     end
 
@@ -94,9 +94,9 @@ module Wheelhouse
       ::Trucking::Queries::Hubs.new(
         organization_id: organization.id,
         address: address(latitude: location[:latitude], longitude: location[:longitude]),
-        carriage: target == 'origin' ? 'pre' : 'on',
-        order_by: 'group_id',
-        load_type: 'container',
+        carriage: target == "origin" ? "pre" : "on",
+        order_by: "group_id",
+        load_type: "container",
         groups: user_groups
       ).perform.select(:nexus_id).distinct.pluck(:nexus_id)
     end
@@ -108,7 +108,7 @@ module Wheelhouse
       OpenStruct.new(
         latitude: latitude.to_f,
         longitude: longitude.to_f,
-        lat_lng_string: [latitude, longitude].join(','),
+        lat_lng_string: [latitude, longitude].join(","),
         get_zip_code: address.postal_code,
         city_name: address.city,
         country: OpenStruct.new(code: address.country_code)

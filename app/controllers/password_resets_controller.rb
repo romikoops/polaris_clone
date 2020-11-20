@@ -52,6 +52,6 @@ class PasswordResetsController < ApplicationController
   private
 
   def not_authenticated
-    render json: {success: false}, status: 401
+    render json: {success: false}, status: :unauthorized
   end
 end

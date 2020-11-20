@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_agency, class: 'Legacy::Agency' do
-    name { 'Agency Name' }
+  factory :legacy_agency, class: "Legacy::Agency" do
+    name { "Agency Name" }
 
     association :organization, factory: :organizations_organization
     association :agency_manager, factory: :organizations_user

@@ -21,7 +21,9 @@ RSpec.describe "TruckingAvailabilities" do
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
-    FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location)
+    FactoryBot.create(
+      :trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location
+    )
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
       "address_components" => [{"types" => ["premise"]}],
@@ -45,7 +47,8 @@ RSpec.describe "TruckingAvailabilities" do
       parameter name: :lng, in: :query, type: :string, schema: {type: :string}
       parameter name: :load_type, in: :query, type: :string, schema: {type: :string}
       parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
-      parameter name: :client, in: :query, type: :string, schema: {type: :string}, description: "The client id of the query"
+      parameter name: :client, in: :query, type: :string, schema: {type: :string},
+                description: "The client id of the query"
       parameter name: :target, in: :query, type: :string, schema: {type: :string}
 
       let(:lat) { origin_hub.latitude }

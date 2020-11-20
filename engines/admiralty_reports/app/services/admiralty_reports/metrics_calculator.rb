@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'core_ext/array_refinements'
+require "core_ext/array_refinements"
 
 module AdmiraltyReports
   class MetricsCalculator
@@ -28,7 +28,7 @@ module AdmiraltyReports
         weekdays_without_activity: weekdays_without_activity.length,
         three_most_active_days: days_sorted_by_activity(order: :asc, days: 3),
         three_least_active_days: days_sorted_by_activity(order: :desc, days: 3)
-        )
+      )
     end
 
     private
@@ -74,8 +74,8 @@ module AdmiraltyReports
         end
       end
 
-      { users: sort_by_count(users_data),
-        companies: sort_by_count(companies_data) }
+      {users: sort_by_count(users_data),
+       companies: sort_by_count(companies_data)}
     end
 
     def sort_by_count(data)
@@ -110,8 +110,8 @@ module AdmiraltyReports
 
       quotation_result = {}
       result.each do |k, v|
-        quotation_result[k] = v unless k.to_s.include?('shipment')
-        quotation_key = k.to_s.gsub('shipment', 'quotation').to_sym
+        quotation_result[k] = v unless k.to_s.include?("shipment")
+        quotation_key = k.to_s.gsub("shipment", "quotation").to_sym
         quotation_result[quotation_key] = v
       end
       quotation_result

@@ -11,10 +11,10 @@ RSpec.describe Trucking::Queries::TruckTypes do
   let(:trucking_location_zipcode) {
     FactoryBot.create(:trucking_location, :zipcode, country: country, data: zipcode)
   }
-  let(:trucking_location_geometry)  {
+  let(:trucking_location_geometry) {
     FactoryBot.create(:trucking_location, :with_location, location: locations_location, country: country)
   }
-  let(:trucking_location_distance)  {
+  let(:trucking_location_distance) {
     FactoryBot.create(:trucking_location, :distance, country: country, data: distance)
   }
   let(:locations_location) do
@@ -23,12 +23,12 @@ RSpec.describe Trucking::Queries::TruckTypes do
       country_code: country_code)
   end
 
-  let(:zipcode)      { "15211" }
-  let(:latitude)     { "57.000000" }
-  let(:longitude)    { "11.100000" }
-  let(:load_type)    { "cargo_item" }
-  let(:carriage)     { "pre" }
-  let(:distance)     { 179 }
+  let(:zipcode) { "15211" }
+  let(:latitude) { "57.000000" }
+  let(:longitude) { "11.100000" }
+  let(:load_type) { "cargo_item" }
+  let(:carriage) { "pre" }
+  let(:distance) { 179 }
   let(:country_code) { "SE" }
   let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
 
@@ -49,8 +49,8 @@ RSpec.describe Trucking::Queries::TruckTypes do
   before do
     %i[distance location zipcode].each do |query_method|
       FactoryBot.create(:trucking_hub_availability,
-                        hub: distance_hub,
-                        type_availability: FactoryBot.create(:trucking_type_availability, query_method: query_method))
+        hub: distance_hub,
+        type_availability: FactoryBot.create(:trucking_type_availability, query_method: query_method))
     end
   end
 
@@ -58,17 +58,17 @@ RSpec.describe Trucking::Queries::TruckTypes do
     context "when finding hubs from truckings" do
       before do
         FactoryBot.create(:trucking_trucking,
-                          organization: organization,
-                          hub: zipcode_hub,
-                          location: trucking_location_zipcode)
+          organization: organization,
+          hub: zipcode_hub,
+          location: trucking_location_zipcode)
         FactoryBot.create(:trucking_trucking,
-                          organization: organization,
-                          hub: location_hub,
-                          location: trucking_location_geometry)
+          organization: organization,
+          hub: location_hub,
+          location: trucking_location_geometry)
         FactoryBot.create(:trucking_trucking,
-                          organization: organization,
-                          hub: distance_hub,
-                          location: trucking_location_distance)
+          organization: organization,
+          hub: distance_hub,
+          location: trucking_location_distance)
         allow(service).to receive(:calc_distance).and_return(55)
       end
 

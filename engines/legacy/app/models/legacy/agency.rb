@@ -2,13 +2,13 @@
 
 module Legacy
   class Agency < ApplicationRecord
-    self.table_name = 'agencies'
+    self.table_name = "agencies"
 
     has_paper_trail
 
-    has_many :users, class_name: 'Organizations::User'
-    belongs_to :agency_manager, class_name: 'Organizations::User', optional: true
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    has_many :users, class_name: "Organizations::User"
+    belongs_to :agency_manager, class_name: "Organizations::User", optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
   end
 end
 

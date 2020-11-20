@@ -4,14 +4,14 @@ module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
     has_paper_trail
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :pricing, class_name: '::Pricings::Pricing'
-    belongs_to :rate_basis, class_name: '::Pricings::RateBasis'
-    belongs_to :hw_rate_basis, class_name: '::Pricings::RateBasis', optional: true
-    belongs_to :charge_category, class_name: 'Legacy::ChargeCategory'
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :pricing, class_name: "::Pricings::Pricing"
+    belongs_to :rate_basis, class_name: "::Pricings::RateBasis"
+    belongs_to :hw_rate_basis, class_name: "::Pricings::RateBasis", optional: true
+    belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
 
     def to_fee_hash
-      return unless charge_category.present?
+      return if charge_category.blank?
 
       {
         fee_code => fee_data

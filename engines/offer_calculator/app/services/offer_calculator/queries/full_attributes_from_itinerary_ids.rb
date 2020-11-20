@@ -4,8 +4,8 @@ module OfferCalculator
   module Queries
     class FullAttributesFromItineraryIds
       def initialize(args = {})
-        @itinerary_ids = args[:itinerary_ids] || args['itinerary_ids']
-        @options       = args[:options]       || args['options']
+        @itinerary_ids = args[:itinerary_ids] || args["itinerary_ids"]
+        @options = args[:options] || args["options"]
       end
 
       def perform
@@ -105,7 +105,6 @@ module OfferCalculator
           GROUP BY origin_stops.id, destination_stops.id
         SQL
       end
-
     end
   end
 end

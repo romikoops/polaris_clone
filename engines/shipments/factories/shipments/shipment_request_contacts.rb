@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :shipments_shipment_request_contact, class: 'Shipments::ShipmentRequestContact' do
+  factory :shipments_shipment_request_contact, class: "Shipments::ShipmentRequestContact" do
     association :shipment_request, factory: :shipments_shipment_request
 
     after(:build) do |request|

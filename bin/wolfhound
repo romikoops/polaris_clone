@@ -2,5 +2,5 @@
 
 set -e
 
-docker pull itsmycargo/wolfhound
-docker run -v "$(pwd):/workspace" -ti --init itsmycargo/wolfhound
+docker pull 003688427525.dkr.ecr.eu-central-1.amazonaws.com/wolfhound
+docker run -v "$(pwd):/workspace" -ti --init 003688427525.dkr.ecr.eu-central-1.amazonaws.com/wolfhound

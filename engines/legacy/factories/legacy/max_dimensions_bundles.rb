@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_max_dimensions_bundle, class: 'Legacy::MaxDimensionsBundle' do
+  factory :legacy_max_dimensions_bundle, class: "Legacy::MaxDimensionsBundle" do
     association :organization, factory: :organizations_organization
-    mode_of_transport { 'general' }
-    cargo_class { 'lcl' }
+    mode_of_transport { "general" }
+    cargo_class { "lcl" }
     aggregate { false }
     width { 500 }
     length { 500 }
@@ -14,7 +14,7 @@ FactoryBot.define do
     volume { 10_000 }
 
     trait :aggregated do
-      mode_of_transport { 'general' }
+      mode_of_transport { "general" }
       aggregate { true }
       width { 5000 }
       length { 5000 }

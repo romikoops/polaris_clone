@@ -7,40 +7,40 @@ module Integrations
       delegate :containers, :containerization_type, :packages, to: :@cargo
       delegate :origin, :destination, :created_on, to: :@tender
       delegate :pickup_address, :delivery_address, :selected_day,
-               :dimensional_weight, :chargeable_weight, to: :@shipment
+        :dimensional_weight, :chargeable_weight, to: :@shipment
 
       def initialize(shipment_request_id: nil, options: {})
         @shipment_request = Integrations::ChainIo::ShipmentRequest.find(shipment_request_id)
         @tender = @shipment_request.tender
         @shipment = Integrations::ChainIo::Shipment.find_by(tender_id: @tender.id)
         @cargo = @tender.quotation.cargo
-        @data = { version: '1.6',
-                  doc_type: 'shipment_json' }
+        @data = {version: "1.6",
+                 doc_type: "shipment_json"}
       end
 
       def prepare
         shipment = {
-          'lading_port' => origin,
-          'departure_estimated' => etd,
-          'arrival_port' => destination,
-          'arrival_port_estimated' => eta,
-          'freight_payment_terms' => freight_payment_terms,
-          'inco_term' => incoterm_text,
-          'consignee' => consignee,
-          'consignor' => consignor,
-          'containerization_type' => containerization_type,
-          'containers' => units[:containers],
-          'created_by' => created_by,
-          'transport_mode' => transport_mode,
-          'package_group' => units[:packages],
-          'cost_invoices' => [service_invoice],
-          'cargo_ready_estimated' => selected_day,
-          'chargeable_weight' => chargeable_weight,
-          'created_on' => created_on,
-          'dimensional_weight' => dimensional_weight,
-          'notify_party' => notify_party,
-          'ship_from' => pickup_address,
-          'ship_to' => delivery_address
+          "lading_port" => origin,
+          "departure_estimated" => etd,
+          "arrival_port" => destination,
+          "arrival_port_estimated" => eta,
+          "freight_payment_terms" => freight_payment_terms,
+          "inco_term" => incoterm_text,
+          "consignee" => consignee,
+          "consignor" => consignor,
+          "containerization_type" => containerization_type,
+          "containers" => units[:containers],
+          "created_by" => created_by,
+          "transport_mode" => transport_mode,
+          "package_group" => units[:packages],
+          "cost_invoices" => [service_invoice],
+          "cargo_ready_estimated" => selected_day,
+          "chargeable_weight" => chargeable_weight,
+          "created_on" => created_on,
+          "dimensional_weight" => dimensional_weight,
+          "notify_party" => notify_party,
+          "ship_from" => pickup_address,
+          "ship_to" => delivery_address
         }
         @data[:shipments] = [shipment]
         @data
@@ -70,7 +70,7 @@ module Integrations
       end
 
       def freight_payment_terms
-        'Collect'
+        "Collect"
       end
 
       def service_invoice

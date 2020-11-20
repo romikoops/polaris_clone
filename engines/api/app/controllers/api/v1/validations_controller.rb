@@ -46,7 +46,7 @@ module Api
       def cargo
         Cargo::Cargo.new(
           organization: current_organization,
-          units: load_type == 'container' ? containers : cargo_items
+          units: load_type == "container" ? containers : cargo_items
         )
       end
 
@@ -54,8 +54,8 @@ module Api
         cargo_params[:cargo_items_attributes].map do |attrs|
           Cargo::Unit.new(
             id: attrs[:id],
-            cargo_class: '00',
-            cargo_type: 'LCL',
+            cargo_class: "00",
+            cargo_type: "LCL",
             organization: current_organization,
             width_value: attrs[:width].to_f / 100,
             height_value: attrs[:height].to_f / 100,
@@ -71,7 +71,7 @@ module Api
           Cargo::Unit.new(
             id: attrs[:id],
             cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
-            cargo_type: 'GP',
+            cargo_type: "GP",
             organization: current_organization,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]
@@ -81,11 +81,11 @@ module Api
 
       def cargo_params
         cargo_items_attributes = %i[id payload_in_kg width length
-                                    height quantity total_weight total_volume
-                                    stackable cargo_item_type_id dangerous_goods cargo_class]
+          height quantity total_weight total_volume
+          stackable cargo_item_type_id dangerous_goods cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
                                               containers_attributes: %i[id size_class quantity
-                                                                        payload_in_kg dangerous_goods cargo_class])
+                                                payload_in_kg dangerous_goods cargo_class])
       end
 
       def address_params

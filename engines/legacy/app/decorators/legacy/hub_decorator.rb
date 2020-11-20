@@ -37,7 +37,7 @@ module Legacy
     end
 
     def select_option
-      { label: name, value: legacy_index_json }
+      {label: name, value: legacy_index_json}
     end
 
     private

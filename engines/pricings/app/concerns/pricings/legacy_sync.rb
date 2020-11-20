@@ -5,8 +5,8 @@ module Pricings
     extend ActiveSupport::Concern
 
     included do
-      after_commit   :__legacy__create, on: :create
-      after_commit   :__legacy__update, on: :update
+      after_commit :__legacy__create, on: :create
+      after_commit :__legacy__update, on: :update
       before_destroy :__legacy__destroy
     end
 

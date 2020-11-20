@@ -32,17 +32,18 @@ class ApplicationController < Api::ApiController
 
   def current_organization
     @current_organization ||= begin
-                                Organizations::Organization.current ||
-                                  Organizations::Organization.find_by(id: organization_id)
-                              end
+      Organizations::Organization.current ||
+        Organizations::Organization.find_by(id: organization_id)
+    end
   end
 
   def current_scope
-    @current_scope ||= ::OrganizationManager::ScopeService.new(target: current_user, organization: current_organization).fetch
+    @current_scope ||= ::OrganizationManager::ScopeService.new(target: current_user, organization: current_organization)
+      .fetch
   end
 
   def quotation_tool?
-    current_scope['open_quotation_tool'] || current_scope['closed_quotation_tool']
+    current_scope["open_quotation_tool"] || current_scope["closed_quotation_tool"]
   end
 
   def append_info_to_payload(payload)
@@ -68,7 +69,7 @@ class ApplicationController < Api::ApiController
     )
     Raven.tags_context(
       # agency: current_user&.agency_id.present?,
-      namespace: ENV['REVIEW_APP_NAME'],
+      namespace: ENV["REVIEW_APP_NAME"],
       tenant: current_organization&.slug
     )
     Raven.extra_context(
@@ -80,7 +81,7 @@ class ApplicationController < Api::ApiController
   end
 
   def test_user?
-    current_user&.email&.ends_with?('@itsmycargo.com')
+    current_user&.email&.ends_with?("@itsmycargo.com")
   end
 
   def generate_token_for(user:, scope:)
@@ -100,9 +101,9 @@ class ApplicationController < Api::ApiController
   def role_for(user:)
     if user.organization_id.nil? &&
         Organizations::Membership.where(organization_id: current_organization.id, user_id: user.id).exists?
-      'admin'
+      "admin"
     else
-      'shipper'
+      "shipper"
     end
   end
 
@@ -114,6 +115,6 @@ class ApplicationController < Api::ApiController
   end
 
   def default_group
-    @default_group ||= Groups::Group.find_by(name: 'default', organization: current_organization)
+    @default_group ||= Groups::Group.find_by(name: "default", organization: current_organization)
   end
 end

@@ -27,4 +27,4 @@ pr_title = "CHORE: #{pr_title}" if chore_commits && !pr_title[/chore/i]
 pr_title = "#{hotfix_commits ? "HOTFIX" : "FIX"}: #{pr_title}" if fix_commits && !pr_title[/(hot)?fix/i]
 
 # Update PR Title
-github.api.update_pull_request(github.pr_json[:base][:repo][:full_name], github.pr_json['number'], title: pr_title)
+github.api.update_pull_request(github.pr_json[:base][:repo][:full_name], github.pr_json["number"], title: pr_title)

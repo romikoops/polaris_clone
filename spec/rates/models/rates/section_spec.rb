@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Rates
   RSpec.describe Section, type: :model do
-    it 'builds a valid object' do
+    it "builds a valid object" do
       expect(FactoryBot.build(:rates_section)).to be_valid
     end
   end

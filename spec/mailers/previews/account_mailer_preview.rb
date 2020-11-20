@@ -2,7 +2,7 @@
 
 class AccountMailerPreview < ActionMailer::Preview
   def confirmation_instructions
-    @organization = Organizations::Organization.find_by(slug: 'normanglobal')
+    @organization = Organizations::Organization.find_by(slug: "normanglobal")
     @user = Authentication::User.unscoped.where(organization_id: @organization.id).last
     @user.setup_activation
     @user.save
@@ -10,7 +10,7 @@ class AccountMailerPreview < ActionMailer::Preview
   end
 
   def reset_password_instructions
-    @organization = Organizations::Organization.find_by(slug: 'demo')
+    @organization = Organizations::Organization.find_by(slug: "demo")
     @user = Authentication::User.unscoped.where(organization_id: @organization.id).last
     @user.generate_reset_password_token!
     Authentication::UserMailer.reset_password_email(@user)

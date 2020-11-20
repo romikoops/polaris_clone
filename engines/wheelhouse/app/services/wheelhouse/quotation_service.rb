@@ -2,8 +2,8 @@
 
 module Wheelhouse
   class QuotationService
-    CARGO_ITEM_CARGO_CLASS = 'lcl'
-    CONAINER_CARGO_CLASS = 'fcl_20'
+    CARGO_ITEM_CARGO_CLASS = "lcl"
+    CONAINER_CARGO_CLASS = "fcl_20"
     CARGO_ITEM_TYPE = "Pallet"
 
     attr_reader :estimated, :organization
@@ -146,7 +146,8 @@ module Wheelhouse
     end
 
     def default_cargo_item_type
-      org_cargo_item_types = Legacy::TenantCargoItemType.where(organization_id: @organization.id).select(:cargo_item_type_id)
+      org_cargo_item_types = Legacy::TenantCargoItemType.where(organization_id: @organization.id)
+        .select(:cargo_item_type_id)
       cargo_item_types = Legacy::CargoItemType.where(id: org_cargo_item_types)
       cargo_item_types.find_by(description: CARGO_ITEM_TYPE) || cargo_item_types.take
     end

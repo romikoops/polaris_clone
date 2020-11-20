@@ -9,7 +9,7 @@ module Sequential
         Sequence.create!(name: :shipment_invoice_number, value: 0)
       end
 
-      it "Does not count unless called from within a transaction", pending: "Extract to gem"  do
+      it "Does not count unless called from within a transaction", pending: "Extract to gem" do
         expect { Sequence.next(:shipment_invoice_number) }.to raise_error(ActiveRecord::Rollback)
       end
 

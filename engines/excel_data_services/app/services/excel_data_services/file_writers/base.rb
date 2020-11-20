@@ -121,7 +121,7 @@ module ExcelDataServices
       end
 
       def temp_dir
-        Rails.root.join("tmp", "write_xlsx/").to_s
+        Rails.root.join("tmp", "write_xlsx").to_s
       end
 
       def load_and_prepare_data
@@ -201,7 +201,7 @@ module ExcelDataServices
 
           # Fill all dynamic headers with nil
           dynamic_headers.each do |key|
-            row_data.merge!(key => nil)
+            row_data[key] = nil
           end
 
           # Overwrite the one existing dynamic header with the correct value

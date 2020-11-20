@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Wheelhouse::PdfService do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:organizations_user_with_profile, organization: organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, user: user, organization: organization) }
+  let(:shipment) {
+    FactoryBot.create(:legacy_shipment, with_breakdown: true, with_tenders: true, user: user,
+                                        organization: organization)
+  }
   let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment) }
   let(:tender_ids) { quotation.tenders.ids }
   let(:pdf_service) { described_class.new(tender_ids: tender_ids, quotation_id: quotation.id) }
@@ -21,31 +24,34 @@ RSpec.describe Wheelhouse::PdfService do
     end
   end
 
-  describe '.download' do
-    context 'with tender ids' do
-      it 'returns the Legacy::File' do
+  describe ".download" do
+    context "with tender ids" do
+      it "returns the Legacy::File" do
         expect(result.file).to be_attached
       end
     end
 
-    context 'without tender ids' do
+    context "without tender ids" do
       let(:tender_ids) { [] }
 
-      it 'returns the Legacy::File' do
+      it "returns the Legacy::File" do
         expect(result.file).to be_attached
       end
     end
   end
 
-  describe '.shipment' do
-    context 'when shipment is linked to the quotation' do
-      it 'returns the Legacy::File' do
+  describe ".shipment" do
+    context "when shipment is linked to the quotation" do
+      it "returns the Legacy::File" do
         expect(pdf_service.send(:shipment)).to eq(shipment)
       end
     end
 
     context "when shipment is soft deleted" do
-      let(:shipment) { FactoryBot.create(:legacy_shipment, deleted_at: Time.zone.now, with_tenders: true, user: user, organization: organization) }
+      let(:shipment) {
+        FactoryBot.create(:legacy_shipment, deleted_at: Time.zone.now, with_tenders: true, user: user,
+                                            organization: organization)
+      }
 
       it "returns the shipment" do
         expect(pdf_service.send(:shipment)).to eq(shipment)

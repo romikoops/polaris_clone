@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :pricings_metadatum, class: 'Pricings::Metadatum' do
+  factory :pricings_metadatum, class: "Pricings::Metadatum" do
     association :organization, factory: :organizations_organization
     association :charge_breakdown, factory: :legacy_charge_breakdown
 
@@ -11,8 +11,7 @@ FactoryBot.define do
           charge: charge,
           charge_category: charge_category,
           cargo_unit_id: charge_category.cargo_unit_id,
-          cargo_unit_type: cargo_units.find_by(id: charge_category.cargo_unit_id)&.class&.to_s
-        )
+          cargo_unit_type: cargo_units.find_by(id: charge_category.cargo_unit_id)&.class&.to_s)
       end
     end
   end

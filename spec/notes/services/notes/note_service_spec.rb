@@ -25,7 +25,9 @@ RSpec.describe Notes::Service do
     end
 
     context "when hub notes" do
-      let!(:note) { FactoryBot.create(:legacy_note, organization: organization, target: tender.origin_hub, pricings_pricing_id: nil) }
+      let!(:note) {
+        FactoryBot.create(:legacy_note, organization: organization, target: tender.origin_hub, pricings_pricing_id: nil)
+      }
 
       it "returns correct notes" do
         expect(result_notes).to match([note])
@@ -33,7 +35,10 @@ RSpec.describe Notes::Service do
     end
 
     context "when nexus notes" do
-      let!(:note) { FactoryBot.create(:legacy_note, organization: organization, target: tender.origin_hub.nexus, pricings_pricing_id: nil) }
+      let!(:note) {
+        FactoryBot.create(:legacy_note,
+          organization: organization, target: tender.origin_hub.nexus, pricings_pricing_id: nil)
+      }
 
       it "returns correct notes" do
         expect(result_notes).to match([note])
@@ -41,7 +46,10 @@ RSpec.describe Notes::Service do
     end
 
     context "when country notes" do
-      let!(:note) { FactoryBot.create(:legacy_note, organization: organization, target: tender.origin_hub.nexus.country, pricings_pricing_id: nil) }
+      let!(:note) {
+        FactoryBot.create(:legacy_note,
+          organization: organization, target: tender.origin_hub.nexus.country, pricings_pricing_id: nil)
+      }
 
       it "returns correct notes" do
         expect(result_notes).to match([note])

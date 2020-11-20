@@ -3,7 +3,7 @@
 module Api
   module V1
     class UserDecorator < ApplicationDecorator
-      decorates 'Users::User'
+      decorates "Users::User"
 
       delegate_all
       delegate :first_name, :last_name, :phone, :company_name, to: :profile

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Legacy::HubNexusMatchValidator do
   let(:user) { FactoryBot.create(:organizations_user) }
@@ -28,11 +28,11 @@ RSpec.describe Legacy::HubNexusMatchValidator do
     FactoryBot.create(:legacy_max_dimensions_bundle, :aggregated, organization: user.organization)
   end
 
-  it 'passes validation' do
+  it "passes validation" do
     expect(Legacy::Shipment.new(args)).to be_valid
   end
 
-  it 'fails validation with the wrong origin hub id' do
+  it "fails validation with the wrong origin hub id" do
     expect(Legacy::Shipment.new(args.merge(origin_hub_id: wrong_hub.id))).to be_invalid
   end
 end

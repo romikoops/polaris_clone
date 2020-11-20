@@ -4,9 +4,9 @@ module Legacy
   class MaxDimensionsBundle < ApplicationRecord
     MODES_OF_TRANSPORT = %w[ocean rail air truck truck_carriage general].freeze
 
-    self.table_name = 'max_dimensions_bundles'
+    self.table_name = "max_dimensions_bundles"
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :tenant_vehicle, optional: true
     belongs_to :itinerary, optional: true
     belongs_to :carrier, optional: true
@@ -14,27 +14,25 @@ module Legacy
     validates :mode_of_transport, presence: true, uniqueness: {
       scope: %i[organization_id aggregate tenant_vehicle_id carrier_id cargo_class itinerary_id],
       message: lambda do |obj, _|
-        max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
-
         "'#{obj.mode_of_transport}' already exists"
       end
     }
     validates :mode_of_transport,
-              inclusion: {
-                in: MODES_OF_TRANSPORT,
-                message: "must be included in #{MODES_OF_TRANSPORT}"
-              },
-              allow_nil: true
-    validates :payload_in_kg, numericality: { greater_than: 0 }
-    validates :chargeable_weight, numericality: { greater_than: 0 }, if: :lcl?
+      inclusion: {
+        in: MODES_OF_TRANSPORT,
+        message: "must be included in #{MODES_OF_TRANSPORT}"
+      },
+      allow_nil: true
+    validates :payload_in_kg, numericality: {greater_than: 0}
+    validates :chargeable_weight, numericality: {greater_than: 0}, if: :lcl?
     validates :width, :length, :height,
-              numericality: { greater_than: 0 }, if: :dimensions_required?
+      numericality: {greater_than: 0}, if: :dimensions_required?
     validates :cargo_class, presence: true
 
     has_paper_trail
 
-    scope :aggregate,  -> { where(aggregate: true, cargo_class: 'lcl') }
-    scope :unit,       -> { where(aggregate: false, cargo_class: 'lcl') }
+    scope :aggregate, -> { where(aggregate: true, cargo_class: "lcl") }
+    scope :unit, -> { where(aggregate: false, cargo_class: "lcl") }
 
     CARGO_ITEM_DEFAULTS = {
       general: {
@@ -75,9 +73,16 @@ module Legacy
     }.freeze
 
     def self.to_max_dimensions_hash
-      where(cargo_class: 'lcl').reduce({}) do |return_h, max_dimensions_bundle|
+      where(cargo_class: "lcl").reduce({}) do |return_h, max_dimensions_bundle|
         return_h.merge(max_dimensions_bundle.to_max_dimension_hash)
       end
+    end
+
+    def self.excluded_in_options?(options, mode_of_transport)
+      return false if options[:modes_of_transport].nil?
+
+      modes_of_transport = [options[:modes_of_transport]].flatten.compact
+      modes_of_transport.exclude?(mode_of_transport)
     end
 
     def to_max_dimension_hash
@@ -96,18 +101,11 @@ module Legacy
     private
 
     def dimensions_required?
-      aggregate.blank? && cargo_class == 'lcl'
+      aggregate.blank? && cargo_class == "lcl"
     end
 
     def lcl?
-      cargo_class == 'lcl'
-    end
-
-    def self.excluded_in_options?(options, mode_of_transport)
-      return false if options[:modes_of_transport].nil?
-
-      modes_of_transport = [options[:modes_of_transport]].flatten.compact
-      modes_of_transport.exclude?(mode_of_transport)
+      cargo_class == "lcl"
     end
   end
 end

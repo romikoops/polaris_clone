@@ -6,6 +6,7 @@ module Locations
   RSpec.describe Location, type: :model do
     context "validations" do
       let(:location) { FactoryBot.create(:locations_location) }
+
       it "is valid with valid attributes" do
         expect(FactoryBot.build(:locations_location)).to be_valid
       end

@@ -49,36 +49,36 @@ module Trucking
 
       def non_distance_query_types
         @non_distance_query_types ||= type_availabilities
-                         .where(query_method: %i[location zipcode])
-                         .select(:query_method)
-                         .distinct
-                         .pluck(:query_method)
+          .where(query_method: %i[location zipcode])
+          .select(:query_method)
+          .distinct
+          .pluck(:query_method)
       end
 
       def distance_hubs
         @distance_hubs ||= tenant_hubs.where(id: distance_hub_ids)
-        .where(
-          'ST_DWithin(:point, ST_SetSRID(point, 4326), :radius, true)',
-          { point: point.to_s, radius: distance_radius_limit}
-        )
+          .where(
+            "ST_DWithin(:point, ST_SetSRID(point, 4326), :radius, true)",
+            {point: point.to_s, radius: distance_radius_limit}
+          )
       end
 
       def type_availabilities
         @type_availabilities ||= ::Trucking::TypeAvailability
-                                 .joins(:hub_availabilities)
-                                 .where(
-                                   trucking_hub_availabilities: {
-                                     hub_id: tenant_hubs.select(:id)
-                                   },
-                                   load_type: load_type,
-                                   carriage: carriage
-                                 )
+          .joins(:hub_availabilities)
+          .where(
+            trucking_hub_availabilities: {
+              hub_id: tenant_hubs.select(:id)
+            },
+            load_type: load_type,
+            carriage: carriage
+          )
       end
 
       def distance_hub_ids
         type_availabilities
           .where(query_method: 1)
-          .select('trucking_hub_availabilities.hub_id')
+          .select("trucking_hub_availabilities.hub_id")
           .distinct
       end
 
@@ -95,7 +95,7 @@ module Trucking
 
       def distances_with_hubs
         @distances_with_hubs ||= distance_hubs.map { |hub|
-          { hub_id: hub.id, distance: calc_distance(hub: hub) }
+          {hub_id: hub.id, distance: calc_distance(hub: hub)}
         }
       end
 
@@ -127,45 +127,45 @@ module Trucking
 
       def validated_truckings
         @validated_truckings ||= ::Trucking::Trucking.joins(:hub, :location)
-                              .merge(tenant_hubs)
-                              .where(organization_id: organization_id)
-                              .where(cargo_class_condition)
-                              .where(load_type_condition)
-                              .where(truck_type_condition)
-                              .where(carriage_condition)
-                              .where(group_condition)
+          .merge(tenant_hubs)
+          .where(organization_id: organization_id)
+          .where(cargo_class_condition)
+          .where(load_type_condition)
+          .where(truck_type_condition)
+          .where(carriage_condition)
+          .where(group_condition)
       end
 
       def truck_type_condition
-        truck_type.present? ? { truck_type: truck_type } : {}
+        truck_type.present? ? {truck_type: truck_type} : {}
       end
 
       def group_condition
-        { group_id: groups.pluck(:id) }
+        {group_id: groups.pluck(:id)}
       end
 
       def cargo_class_condition
-        cargo_classes.present? ? { cargo_class: cargo_classes } : {}
+        cargo_classes.present? ? {cargo_class: cargo_classes} : {}
       end
 
       def load_type_condition
-        load_type.present? ? { load_type: load_type } : {}
+        load_type.present? ? {load_type: load_type} : {}
       end
 
       def carriage_condition
-        carriage.present? ? { carriage: carriage } : {}
+        carriage.present? ? {carriage: carriage} : {}
       end
 
       def hubs_condition
-        hub_ids.present? ? { organization_id: organization_id, id: hub_ids } : { organization_id: organization_id }
+        hub_ids.present? ? {organization_id: organization_id, id: hub_ids} : {organization_id: organization_id}
       end
 
       def trucking_location_where_statement
-        { trucking_locations: { distance: distances } }
+        {trucking_locations: {distance: distances}}
       end
 
       def latitude_longitude
-        { latitude: point.y, longitude: point.x }
+        {latitude: point.y, longitude: point.x}
       end
 
       def point
@@ -173,11 +173,11 @@ module Trucking
       end
 
       def sanitized_postal_code(args:)
-        postal_code = args[:zipcode]&.tr(' ', '') || args[:address].try(:get_zip_code)
+        postal_code = args[:zipcode]&.tr(" ", "") || args[:address].try(:get_zip_code)
         country_code = args[:country_code] || args[:address]&.country&.code
 
         case country_code
-        when 'NL'
+        when "NL"
           postal_code[0..-3]
         else
           postal_code
@@ -189,7 +189,7 @@ module Trucking
       end
 
       def country
-        @country ||= address.present? ? address.country : Legacy::Country.find_by(code:  @country_code)
+        @country ||= address.present? ? address.country : Legacy::Country.find_by(code: @country_code)
       end
 
       def cache_key
@@ -199,7 +199,7 @@ module Trucking
           load_type_condition.values,
           carriage_condition.values,
           hubs_condition.values,
-          latitude_longitude.values].flatten.join('-')
+          latitude_longitude.values].flatten.join("-")
       end
 
       def calc_distance(hub:)

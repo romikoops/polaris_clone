@@ -6,5 +6,5 @@ ApiAuth::Engine.routes.draw do
     controllers tokens: :tokens, token_info: :token_info
   end
 
-  delete 'oauth/signout', to: 'auth#destroy'
+  delete "oauth/signout", to: "auth#destroy"
 end

@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :country do
-    name { 'Sweden' }
-    code { 'SE' }
-    flag { 'https://restcountries.eu/data/swe.svg' }
+    name { "Sweden" }
+    code { "SE" }
+    flag { "https://restcountries.eu/data/swe.svg" }
 
     to_create do |instance|
       instance.attributes = Country.create_with(code: instance.code)

@@ -473,7 +473,7 @@ module Pricings
     def apply_json_fee_manipulation(value:, operator:, fee:)
       new_fee = fee.dup.with_indifferent_access
       only_values = fee.except("name", "key", "currency", "rate_basis", "range", "effective_date", "expiration_date")
-      only_values.keys.each do |k|
+      only_values.each_key do |k|
         new_fee[k] = determine_manipulation(rate: fee[k].to_d, value: value, operator: operator) if fee[k]
       end
       new_fee["key"] = fee["key"].downcase
@@ -481,7 +481,7 @@ module Pricings
       return new_fee if fee["range"].blank?
 
       new_fee["range"] = fee["range"].map { |range|
-        range.except("name", "currency", "rate_basis", "max", "min").keys.each do |rk|
+        range.except("name", "currency", "rate_basis", "max", "min").each_key do |rk|
           range[rk] = determine_manipulation(rate: range[rk].to_d, value: value, operator: operator) if range[rk]
         end
         range

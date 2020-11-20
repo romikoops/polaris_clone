@@ -11,10 +11,10 @@ module Analytics
 
       def tally(requests:, grouping_attribute:, order_by_count: true, order: nil, limit: nil)
         result = requests.group(grouping_attribute)
-        result = result.order("#{order_by_count ? 'count_all' : grouping_attribute} #{order}") if order
+        result = result.order("#{order_by_count ? "count_all" : grouping_attribute} #{order}") if order
         result = result.limit(limit) if limit
         result.count
-              .map { |label, count| { label: label, count: count } }
+          .map { |label, count| {label: label, count: count} }
       end
     end
   end

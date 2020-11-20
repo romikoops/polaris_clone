@@ -12,6 +12,6 @@ FactoryBot.define do
     quantity { 1 }
     dangerous_goods { false }
     stackable { true }
-    cargo_class { 'lcl' }
+    cargo_class { "lcl" }
   end
 end

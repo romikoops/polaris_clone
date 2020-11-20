@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'profiles/engine'
+require "profiles/engine"
 
 module Profiles
 end

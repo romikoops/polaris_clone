@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'money-rails'
-require 'money_cache'
+require "money-rails"
+require "money_cache"
 
 MoneyRails.configure do |config|
   # To set the default currency

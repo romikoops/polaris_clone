@@ -32,7 +32,10 @@ RSpec.describe RateExtractor::DiscountFilter do
       FactoryBot.create(:rates_cargo, :lcl, section: section, cbm_ratio: 200)
     end
   end
-  let(:klass) { described_class.new(organization: organization, user: user, tender: tender, desired_date: 1.month.from_now, cargo: cargo) }
+  let(:klass) {
+    described_class.new(organization: organization, user: user, tender: tender,
+                        desired_date: 1.month.from_now, cargo: cargo)
+  }
 
   context "when target is a section rate" do
     let!(:section_rate_discounts) {
@@ -123,11 +126,13 @@ RSpec.describe RateExtractor::DiscountFilter do
 
   context "when filtered by validity" do
     let!(:valid_discounts) {
-      FactoryBot.create_list(:rates_discount, 2, organization: organization, applicable_to: organization, validity: 2.days.from_now..60.days.from_now)
+      FactoryBot.create_list(:rates_discount, 2,
+        organization: organization, applicable_to: organization, validity: 2.days.from_now..60.days.from_now)
     }
 
     let!(:invalid_discounts) {
-      FactoryBot.create_list(:rates_discount, 2, organization: organization, applicable_to: organization, validity: 3.days.ago..2.days.ago)
+      FactoryBot.create_list(:rates_discount, 2,
+        organization: organization, applicable_to: organization, validity: 3.days.ago..2.days.ago)
     }
 
     it "finds the valid discounts" do

@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :legacy_carrier, class: 'Legacy::Carrier' do
-    name { 'Hapag Lloyd' }
+  factory :legacy_carrier, class: "Legacy::Carrier" do
+    name { "Hapag Lloyd" }
     sequence(:code) { |n| "hpg#{n}" }
   end
 end

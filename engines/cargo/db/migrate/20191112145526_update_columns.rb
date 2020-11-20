@@ -5,8 +5,8 @@ class UpdateColumns < ActiveRecord::Migration[5.2]
     safety_assured do
       remove_column :cargo_units, :dangerous_goods
       add_column :cargo_units, :dangerous_goods, :integer, default: 0
-      add_monetize :cargo_units, :goods_value, currency: { default: nil }
-      add_monetize :cargo_cargos, :total_goods_value, currency: { default: nil }
+      add_monetize :cargo_units, :goods_value, currency: {default: nil}
+      add_monetize :cargo_cargos, :total_goods_value, currency: {default: nil}
     end
   end
 

@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_pricing, class: 'Pricings::Pricing' do
+  factory :pricings_pricing, class: "Pricings::Pricing" do
     wm_rate { 1000 }
     transient do
       fee_attrs { nil }
       amount { 250 }
       default_group do
-        Groups::Group.find_by(organization: organization, name: 'default') ||
-          FactoryBot.create(:groups_group, organization: organization, name: 'default')
+        Groups::Group.find_by(organization: organization, name: "default") ||
+          FactoryBot.create(:groups_group, organization: organization, name: "default")
       end
     end
 
     effective_date { Time.zone.today }
     expiration_date { 6.months.from_now }
-    cargo_class { 'lcl' }
-    load_type { 'cargo_item' }
+    cargo_class { "lcl" }
+    load_type { "cargo_item" }
     group_id { default_group.id }
 
     association :organization, factory: :organizations_organization
@@ -25,104 +25,104 @@ FactoryBot.define do
     after :create do |pricing, evaluator|
       next unless evaluator.fee_attrs
 
-      fee_options = { pricing: pricing,
-                      organization_id: pricing.organization_id,
-                      rate_basis: FactoryBot.create(evaluator.fee_attrs[:rate_basis]) }
+      fee_options = {pricing: pricing,
+                     organization_id: pricing.organization_id,
+                     rate_basis: FactoryBot.create(evaluator.fee_attrs[:rate_basis])}
       fee_options.merge!(evaluator.fee_attrs.except(:rate_basis))
       create_list :pricings_fee, 1, **fee_options
     end
 
     trait :lcl do
-      cargo_class { 'lcl' }
-      load_type { 'cargo_item' }
+      cargo_class { "lcl" }
+      load_type { "cargo_item" }
       after :create do |pricing|
         create_list(:pricings_fee,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id,
-                    rate_basis: FactoryBot.create(:per_wm_rate_basis),
-                    rate: 25,
-                    charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          rate_basis: FactoryBot.create(:per_wm_rate_basis),
+          rate: 25,
+          charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
       end
     end
     trait :fcl_20 do
-      cargo_class { 'fcl_20' }
-      load_type { 'container' }
+      cargo_class { "fcl_20" }
+      load_type { "container" }
       after :create do |pricing, evaluator|
         create_list(:pricings_fee,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id,
-                    rate_basis: FactoryBot.create(:per_container_rate_basis),
-                    rate: evaluator.amount,
-                    charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          rate_basis: FactoryBot.create(:per_container_rate_basis),
+          rate: evaluator.amount,
+          charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
       end
     end
 
     trait :fcl_40 do
-      cargo_class { 'fcl_40' }
-      load_type { 'container' }
+      cargo_class { "fcl_40" }
+      load_type { "container" }
       after :create do |pricing|
         create_list(:pricings_fee,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id,
-                    rate_basis: FactoryBot.create(:per_container_rate_basis),
-                    rate: 250,
-                    charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          rate_basis: FactoryBot.create(:per_container_rate_basis),
+          rate: 250,
+          charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
       end
     end
 
     trait :fcl_40_hq do
-      cargo_class { 'fcl_40_hq' }
-      load_type { 'container' }
+      cargo_class { "fcl_40_hq" }
+      load_type { "container" }
       after :create do |pricing|
         create_list(:pricings_fee,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id,
-                    rate_basis: FactoryBot.create(:per_container_rate_basis),
-                    rate: 250,
-                    charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          rate_basis: FactoryBot.create(:per_container_rate_basis),
+          rate: 250,
+          charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
       end
     end
 
     trait :lcl_range do
-      cargo_class { 'lcl' }
-      load_type { 'cargo_item' }
+      cargo_class { "lcl" }
+      load_type { "cargo_item" }
       after :create do |pricing|
         create_list(:fee_per_kg_range,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id)
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id)
       end
     end
 
     trait :container_range do
-      cargo_class { 'lcl' }
-      load_type { 'cargo_item' }
+      cargo_class { "lcl" }
+      load_type { "cargo_item" }
       after :create do |pricing|
         create_list(:fee_per_container_range,
-                    1,
-                    pricing: pricing,
-                    organization_id: pricing.organization_id)
+          1,
+          pricing: pricing,
+          organization_id: pricing.organization_id)
       end
     end
 
     trait :fully_loaded_lcl do
-      cargo_class { 'lcl' }
-      load_type { 'cargo_item' }
+      cargo_class { "lcl" }
+      load_type { "cargo_item" }
       after :create do |pricing|
         create(:pricings_fee,
-                  pricing: pricing,
-                  organization_id: pricing.organization_id,
-                  rate_basis: FactoryBot.create(:per_wm_rate_basis),
-                  rate: 25,
-                  charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          rate_basis: FactoryBot.create(:per_wm_rate_basis),
+          rate: 25,
+          charge_category: FactoryBot.create(:bas_charge, organization_id: pricing.organization_id))
         create(:fee_per_kg_range,
-                  pricing: pricing,
-                  organization_id: pricing.organization_id,
-                  charge_category: FactoryBot.create(:solas_charge, organization_id: pricing.organization_id))
+          pricing: pricing,
+          organization_id: pricing.organization_id,
+          charge_category: FactoryBot.create(:solas_charge, organization_id: pricing.organization_id))
       end
     end
 

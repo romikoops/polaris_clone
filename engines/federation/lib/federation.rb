@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'federation/engine'
+require "federation/engine"
 
 module Federation
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sequential/engine'
+require "sequential/engine"
 
 module Sequential
 end

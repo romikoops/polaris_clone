@@ -4,8 +4,8 @@ module Legacy
   class File < ApplicationRecord
     has_one_attached :file
     belongs_to :shipment, optional: true
-    belongs_to :user, class_name: 'Organizations::User', optional: true
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :user, class_name: "Organizations::User", optional: true
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :quotation, optional: true
     belongs_to :target, polymorphic: true, optional: true
 

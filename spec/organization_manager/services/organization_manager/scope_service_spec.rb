@@ -24,7 +24,7 @@ RSpec.describe OrganizationManager::ScopeService do
     end
 
     context "when key given" do
-      let(:content) { { foo: "bar" } }
+      let(:content) { {foo: "bar"} }
 
       it "returns correct value of the correct scope" do
         expect(scope.fetch(:foo)).to eq("bar")
@@ -33,7 +33,7 @@ RSpec.describe OrganizationManager::ScopeService do
 
     context "when merging scopes" do
       before do
-        FactoryBot.create(:organizations_scope, target: company, content: { foo: "baz" })
+        FactoryBot.create(:organizations_scope, target: company, content: {foo: "baz"})
       end
 
       it "returns combined scope" do

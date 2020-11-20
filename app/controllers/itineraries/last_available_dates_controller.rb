@@ -15,7 +15,7 @@ module Itineraries
     def available_dates
       Itinerary
         .joins(:trips)
-        .where(id: last_available_date_params[:itinerary_ids].split(','))
+        .where(id: last_available_date_params[:itinerary_ids].split(","))
         .distinct
         .order(Trip.arel_table[:closing_date].asc)
         .pluck(Trip.arel_table[:closing_date])
@@ -34,7 +34,7 @@ module Itineraries
           business_day_counter += 1 if business_day?(date)
         end
 
-        date >= Date.today ? date : nil
+        date >= Time.zone.today ? date : nil
       end
     end
 

@@ -2,7 +2,7 @@
 
 module Legacy
   class MandatoryCharge < ApplicationRecord
-    self.table_name = 'mandatory_charges'
+    self.table_name = "mandatory_charges"
     has_many :hubs
   end
 end

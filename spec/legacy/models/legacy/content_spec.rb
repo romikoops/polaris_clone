@@ -1,35 +1,39 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe Content, type: :model do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:content) { FactoryBot.create(:legacy_content, :with_image, component: 'WelcomeMail', section: 'subject', text: 'WELCOME_EMAIL', organization_id: organization.id) }
+    let!(:content) {
+      FactoryBot.create(:legacy_content,
+        :with_image, component: "WelcomeMail", section: "subject", text: "WELCOME_EMAIL",
+                     organization_id: organization.id)
+    }
 
-    describe '.get_component' do
-      it 'returns the content broken down by section' do
-        content_response = described_class.get_component('WelcomeMail', organization.id)
+    describe ".get_component" do
+      it "returns the content broken down by section" do
+        content_response = described_class.get_component("WelcomeMail", organization.id)
 
         aggregate_failures do
-          expect(content_response.dig('subject', 0, 'id')).to eq(content.id)
-          expect(content_response.dig('subject', 0, 'section')).to eq('subject')
+          expect(content_response.dig("subject", 0, "id")).to eq(content.id)
+          expect(content_response.dig("subject", 0, "section")).to eq("subject")
         end
       end
     end
 
-    describe '.image_url' do
-      it 'returns the url for the file' do
-        expect(content.image_url).to include('test-image.jpg')
+    describe ".image_url" do
+      it "returns the url for the file" do
+        expect(content.image_url).to include("test-image.jpg")
       end
     end
 
-    describe 'as_content_json' do
-      it 'returns the content in json form with image url' do
+    describe "as_content_json" do
+      it "returns the content in json form with image url" do
         content_json = content.as_content_json
         aggregate_failures do
-          expect(content_json['image_url']).to include('test-image.jpg')
-          expect(content_json['id']).to eq(content.id)
+          expect(content_json["image_url"]).to include("test-image.jpg")
+          expect(content_json["id"]).to eq(content.id)
         end
       end
     end

@@ -44,15 +44,15 @@ class Admin::MembershipsController < Admin::AdminBaseController
 
   def target_member
     @target_member ||= if params[:targetId]
-                         case params[:targetType]
-                         when 'company'
-                           Companies::Company.find(params[:targetId])
-                         when 'group'
-                           Groups::Group.find(params[:targetId])
-                         when 'user'
-                           Organizations::User.find(params[:targetId])
-                         end
-                       end
+      case params[:targetType]
+      when "company"
+        Companies::Company.find(params[:targetId])
+      when "group"
+        Groups::Group.find(params[:targetId])
+      when "user"
+        Organizations::User.find(params[:targetId])
+      end
+    end
   end
 
   def for_list_json(membership, options = {})
@@ -62,25 +62,25 @@ class Admin::MembershipsController < Admin::AdminBaseController
 
   def member_info(membership:)
     case membership.member_type
-    when 'Users::User'
+    when "Users::User"
       {
         member_name: Profiles::ProfileService.fetch(user_id: membership.member_id).full_name,
-        human_type: 'client',
+        human_type: "client",
         member_email: membership.member.email,
         original_member_id: membership.member_id
       }
-    when 'Companies::Company'
+    when "Companies::Company"
       {
         member_name: membership.member.name,
-        human_type: 'company',
+        human_type: "company",
         member_email: membership.member.email,
         original_member_id: membership.member_id
       }
-    when 'Groups::Group'
+    when "Groups::Group"
       {
         member_name: membership.member.name,
-        human_type: 'group',
-        member_email: '',
+        human_type: "group",
+        member_email: "",
         original_member_id: membership.member_id
       }
     end

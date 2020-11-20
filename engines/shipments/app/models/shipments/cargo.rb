@@ -4,7 +4,7 @@ module Shipments
   class Cargo < ApplicationRecord
     has_paper_trail
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :shipment
 
     has_many :units
@@ -39,7 +39,7 @@ module Shipments
 
     def stowage_factor
       factor = volume.value / weight.convert_to(:t).value
-      Measured::StowageFactor.new(factor.round(6), 'm3/t')
+      Measured::StowageFactor.new(factor.round(6), "m3/t")
     end
   end
 end

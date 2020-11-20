@@ -134,7 +134,8 @@ Rails.application.routes.draw do
       end
 
       resources :open_pricings, only: [:index]
-      post "open_pricings/ocean_lcl_pricings/process_csv", to: "open_pricings#overwrite_main_lcl_carriage", as: :open_main_lcl_carriage_pricings_overwrite
+      post "open_pricings/ocean_lcl_pricings/process_csv", to: "open_pricings#overwrite_main_lcl_carriage",
+                                                           as: :open_main_lcl_carriage_pricings_overwrite
       post "shipments/:shipment_id/upload/:type", to: "shipments#upload_client_document"
       resources :local_charges, only: %i[index update destroy] do
         collection do

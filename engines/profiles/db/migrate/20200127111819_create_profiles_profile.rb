@@ -7,7 +7,7 @@ class CreateProfilesProfile < ActiveRecord::Migration[5.2]
       t.string :last_name
       t.string :company_name
       t.string :phone
-      t.references :user, type: :uuid, unique: true, foreign_key: { to_table: :tenants_users, on_delete: :cascade }
+      t.references :user, type: :uuid, unique: true, foreign_key: {to_table: :tenants_users, on_delete: :cascade}
     end
   end
 end

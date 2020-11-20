@@ -40,8 +40,7 @@ module ExcelDataServices
     end
 
     def build_row_obj(headers, row)
-      row_data = headers.zip(row).to_h
-      row_data = sanitize_row_data(row_data)
+      sanitize_row_data(headers.zip(row).to_h)
     end
 
     def sanitize_row_data(row_data)

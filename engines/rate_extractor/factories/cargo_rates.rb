@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :rate_extractor_cargo_rate, class: 'RateExtractor::Decorators::CargoRate' do
+  factory :rate_extractor_cargo_rate, class: "RateExtractor::Decorators::CargoRate" do
     initialize_with do
       instance = new(object)
       instance.targets = targets
@@ -15,21 +15,21 @@ FactoryBot.define do
     trait :shipment_targeted_rate do
       transient do
         object { FactoryBot.create(:rates_cargo, section: section, applicable_to: :shipment) }
-        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: { rate: self })] }
+        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: {rate: self})] }
       end
     end
 
     trait :section_targeted_rate do
       transient do
         object { FactoryBot.create(:rates_cargo, section: section, applicable_to: :section) }
-        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: { rate: self })] }
+        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: {rate: self})] }
       end
     end
 
     trait :cargo_targeted_rate do
       transient do
         object { FactoryBot.create(:rates_cargo, section: section, applicable_to: :cargo) }
-        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: { rate: self })] }
+        targets { [FactoryBot.create(:rate_charged_cargo, :unit, context: {rate: self})] }
       end
     end
 
@@ -38,7 +38,7 @@ FactoryBot.define do
         cargo { nil }
       end
 
-      targets { [FactoryBot.create(:rate_charged_cargo, object: cargo, context: { rate: self })] }
+      targets { [FactoryBot.create(:rate_charged_cargo, object: cargo, context: {rate: self})] }
     end
   end
 end

@@ -4,9 +4,15 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::OfferCreators::LegacyResponse do
   include_context "full_offer"
-  let(:tender) { OfferCalculator::Service::OfferCreators::Tender.tender(offer: offer, shipment: shipment, quotation: quotation) }
+  let(:tender) {
+    OfferCalculator::Service::OfferCreators::Tender.tender(offer: offer, shipment: shipment, quotation: quotation)
+  }
   let(:scope) { {} }
-  let(:charge_breakdown) { OfferCalculator::Service::OfferCreators::LegacyChargeBreakdown.charge_breakdown(offer: offer, shipment: shipment, tender: tender) }
+  let(:charge_breakdown) {
+    OfferCalculator::Service::OfferCreators::LegacyChargeBreakdown.charge_breakdown(
+      offer: offer, shipment: shipment, tender: tender
+    )
+  }
   let(:meta) { FactoryBot.build(:legacy_meta) }
   let(:response) do
     described_class.response(
@@ -17,7 +23,11 @@ RSpec.describe OfferCalculator::Service::OfferCreators::LegacyResponse do
     )
   end
 
-  before { OfferCalculator::Service::OfferCreators::TenderLineItems.tender(offer: offer, shipment: shipment, tender: tender) }
+  before do
+    OfferCalculator::Service::OfferCreators::TenderLineItems.tender(
+      offer: offer, shipment: shipment, tender: tender
+    )
+  end
 
   context "when it returns a complete legacy response" do
     it "returns a valid response" do

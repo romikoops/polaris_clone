@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :quotations_line_item, class: 'Quotations::LineItem' do
+  factory :quotations_line_item, class: "Quotations::LineItem" do
     amount_cents { 30 }
-    amount_currency { 'USD' }
+    amount_currency { "USD" }
     original_amount_cents { 30 }
-    original_amount_currency { 'USD' }
+    original_amount_currency { "USD" }
     association :tender, factory: :quotations_tender
     association :charge_category, factory: :legacy_charge_categories
     section { 3 }

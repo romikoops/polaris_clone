@@ -1,35 +1,35 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_quotation, class: 'Legacy::Quotation' do
+  factory :legacy_quotation, class: "Legacy::Quotation" do
     association :user, factory: :organizations_user
     association :original_shipment, factory: :legacy_shipment
     transient do
       shipment_count { 1 }
-      load_type { 'cargo_item' }
+      load_type { "cargo_item" }
     end
 
-    target_email { 'john@example.test' }
-    name { 'NAME' }
+    target_email { "john@example.test" }
+    name { "NAME" }
     billing { :external }
 
     before(:create) do |quotation, evaluator|
       if quotation.original_shipment_id.nil?
         original_shipment = create(:legacy_shipment,
-                                   user: quotation.user,
-                                   organization: quotation.user.organization,
-                                   load_type: evaluator.load_type,
-                                   with_breakdown: true,
-                                   with_tenders: true)
+          user: quotation.user,
+          organization: quotation.user.organization,
+          load_type: evaluator.load_type,
+          with_breakdown: true,
+          with_tenders: true)
         quotation.original_shipment_id = original_shipment.id
       end
       if quotation.shipments.empty?
         quotation.shipments = create_list(:legacy_shipment, evaluator.shipment_count,
-                                          user: quotation.user,
-                                          organization: quotation.user.organization,
-                                          load_type: evaluator.load_type,
-                                          with_breakdown: true,
-                                          with_tenders: true)
+          user: quotation.user,
+          organization: quotation.user.organization,
+          load_type: evaluator.load_type,
+          with_breakdown: true,
+          with_tenders: true)
       end
     end
   end

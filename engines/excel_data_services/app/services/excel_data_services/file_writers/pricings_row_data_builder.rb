@@ -116,8 +116,9 @@ module ExcelDataServices
         data_static_fee_col = expand_ranges(data_static_fee_col)
 
         data_static_fee_col.map do |attributes|
-          PRICING_ONE_FEE_COL_AND_RANGES_LOOKUP.inject({}) do |row_data, (key, value)|
-            row_data.merge!(key => attributes[value])
+          PRICING_ONE_FEE_COL_AND_RANGES_LOOKUP.each_with_object({}) do |(key, value), row_data|
+            row_data[key] = attributes[value]
+            row_data
           end
         end
       end

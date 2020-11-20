@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :cargo_unit, class: 'Cargo::Unit' do
+  factory :cargo_unit, class: "Cargo::Unit" do
     quantity { 2 }
     weight_value { 3000 }
-    cargo_class { '00' }
-    cargo_type { 'GP' }
+    cargo_class { "00" }
+    cargo_type { "GP" }
     goods_value_cents { 1_000 }
     goods_value_currency { :usd }
     association :organization, factory: :organizations_organization
@@ -31,31 +31,31 @@ FactoryBot.define do
       height_value { 1.40 }
       weight_value { 500 }
       quantity { 1 }
-      cargo_class { '00' }
-      cargo_type { 'LCL' }
+      cargo_class { "00" }
+      cargo_type { "LCL" }
     end
 
     trait :aggregated do
       volume_value { 1.3 }
-      cargo_class { '00' }
-      cargo_type { 'AGR' }
+      cargo_class { "00" }
+      cargo_type { "AGR" }
       stackable { true }
     end
 
     trait :fcl_20 do
-      cargo_class { '22' }
+      cargo_class { "22" }
     end
 
     trait :fcl_40 do
-      cargo_class { '42' }
+      cargo_class { "42" }
     end
 
     trait :fcl_40_hq do
-      cargo_class { '45' }
+      cargo_class { "45" }
     end
 
     trait :fcl_45 do
-      cargo_class { 'L2' }
+      cargo_class { "L2" }
     end
 
     factory :lcl_unit, traits: %i[lcl]

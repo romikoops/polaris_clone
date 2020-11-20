@@ -2,9 +2,9 @@
 
 module Legacy
   class Stop < ApplicationRecord
-    self.table_name = 'stops'
+    self.table_name = "stops"
 
-    default_scope { order('index asc') }
+    default_scope { order("index asc") }
 
     belongs_to :itinerary
     belongs_to :hub

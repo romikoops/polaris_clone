@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_detail, class: 'Pricings::Detail' do
+  factory :pricings_detail, class: "Pricings::Detail" do
     value { 0.10 }
-    operator { '%' }
+    operator { "%" }
     association :charge_category, factory: :legacy_charge_categories
     association :organization, factory: :organizations_organization
     association :margin, factory: :pricings_margin
@@ -13,7 +13,7 @@ FactoryBot.define do
 
     trait :bas_addition_detail do
       association :charge_category, factory: :bas_charge
-      operator { '+' }
+      operator { "+" }
       value { 30 }
     end
 

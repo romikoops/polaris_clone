@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class Admin::MapsController < Admin::AdminBaseController 
+class Admin::MapsController < Admin::AdminBaseController
   def geojsons
     @hub = Hub.find_by(id: params[:id])
     @truckings = @hub.truckings
-    response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) do
+    response = Rails.cache.fetch("#{@truckings.cache_key}/geojson", expires_in: 12.hours) {
       @truckings.first(20).map { |tl| response_hash(tl) }
-    end
+    }
     response_handler(response.flatten)
   end
 
@@ -27,21 +27,21 @@ class Admin::MapsController < Admin::AdminBaseController
       north: params[:north]
     }
     raw_query =
-    <<-SQL
+      <<-SQL
     SELECT *
     FROM locations_locations
     WHERE locations_locations.admin_level = :admin_level
     AND ST_Contains(
             ST_MakeEnvelope(:west, :south, :east, :north, 4236)
     ,ST_SetSRID(locations_locations.bounds, 4236))
-    SQL
+      SQL
     sanitized_query = ApplicationRecord.public_sanitize_sql([raw_query, binds])
     results = Locations::Location.find_by_sql(sanitized_query)
     center = trucking.location.location.bounds.centroid
 
     parsed_results = {
       data: results.map { |r| map_editor_hash(r) },
-      center: { lat: center.y, lng: center.x },
+      center: {lat: center.y, lng: center.x},
       original_location: map_editor_hash(trucking.location&.location),
       current_admin_level: effective_admin_level
     }
@@ -58,7 +58,7 @@ class Admin::MapsController < Admin::AdminBaseController
       admin_level: params[:admin_level] || 6,
       country_code: params[:country_code].downcase
     )
-    results = locations.map { |l| { geojson: l.geojson, name: l.name, id: l.id } }
+    results = locations.map { |l| {geojson: l.geojson, name: l.name, id: l.id} }
     response_handler(results)
   end
 

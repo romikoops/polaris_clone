@@ -2,9 +2,9 @@
 
 module Routing
   class Location < ApplicationRecord
-    has_many :terminals, class_name: 'Routing::Terminal'
-    has_many :inbound_routes, class_name: 'Routing::Route', foreign_key: :destination_id
-    has_many :outbound_routes, class_name: 'Routing::Route', foreign_key: :origin_id
+    has_many :terminals, class_name: "Routing::Terminal"
+    has_many :inbound_routes, class_name: "Routing::Route", foreign_key: :destination_id
+    has_many :outbound_routes, class_name: "Routing::Route", foreign_key: :origin_id
   end
 end
 

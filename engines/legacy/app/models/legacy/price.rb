@@ -2,8 +2,8 @@
 
 module Legacy
   class Price < ApplicationRecord
-    self.table_name = 'prices'
-    belongs_to :charge, optional: true, class_name: 'Legacy::Charge'
+    self.table_name = "prices"
+    belongs_to :charge, optional: true, class_name: "Legacy::Charge"
 
     def rounded_attributes
       {

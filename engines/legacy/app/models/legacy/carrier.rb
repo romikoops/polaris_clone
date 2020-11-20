@@ -2,7 +2,7 @@
 
 module Legacy
   class Carrier < ApplicationRecord
-    self.table_name = 'carriers'
+    self.table_name = "carriers"
 
     acts_as_paranoid
 

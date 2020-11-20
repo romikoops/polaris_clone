@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :shipments_cargo, class: 'Shipments::Cargo' do
+  factory :shipments_cargo, class: "Shipments::Cargo" do
     association :organization, factory: :organizations_organization
 
     total_goods_value_cents { 100_000 }

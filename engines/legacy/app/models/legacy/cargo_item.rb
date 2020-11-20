@@ -2,7 +2,7 @@
 
 module Legacy
   class CargoItem < ApplicationRecord
-    self.table_name = 'cargo_items'
+    self.table_name = "cargo_items"
 
     acts_as_paranoid
 
@@ -18,7 +18,7 @@ module Legacy
 
     has_paper_trail
 
-    belongs_to :shipment, class_name: 'Legacy::Shipment'
+    belongs_to :shipment, class_name: "Legacy::Shipment"
     delegate :organization, to: :shipment
 
     belongs_to :cargo_item_type
@@ -74,7 +74,7 @@ module Legacy
     private
 
     def set_default_cargo_class!
-      self.cargo_class ||= 'lcl'
+      self.cargo_class ||= "lcl"
     end
   end
 end

@@ -43,11 +43,14 @@ RSpec.describe Pricings::Manipulator do
     )
   end
   let(:target_shipment) { lcl_shipment }
-  let(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization) }
+  let(:pricing) {
+    FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization)
+  }
 
   before do
     FactoryBot.create(:organizations_scope, content: {}, target: organization)
-    FactoryBot.create(:freight_margin, default_for: "ocean", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:freight_margin,
+      default_for: "ocean", organization: organization, applicable: organization, value: 0)
   end
 
   describe "fee_keys" do
@@ -82,7 +85,9 @@ RSpec.describe Pricings::Manipulator do
     let(:margins) { klass.find_applicable_margins }
 
     context "with freight pricings and user margin" do
-      let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
+      let!(:user_margin) {
+        FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user)
+      }
 
       it "returns the applicable margin attached to the user" do
         expect(margins.first[:margin]).to eq(user_margin)
@@ -90,7 +95,9 @@ RSpec.describe Pricings::Manipulator do
     end
 
     context "with freight pricings and tenant margin" do
-      let!(:tenant_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: organization) }
+      let!(:tenant_margin) {
+        FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: organization)
+      }
 
       it "returns the applicable margin attached to the tenant when the user has none" do
         expect(margins.first[:margin]).to eq(tenant_margin)
@@ -98,8 +105,12 @@ RSpec.describe Pricings::Manipulator do
     end
 
     context "with freight pricings and user and company group margin" do
-      let!(:user_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user) }
-      let!(:group_margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: group) }
+      let!(:user_margin) {
+        FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user)
+      }
+      let!(:group_margin) {
+        FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: group)
+      }
       let(:group) {
         FactoryBot.create(:groups_group, name: "Test", organization: organization).tap do |tapped_group|
           FactoryBot.create(:groups_membership, member: user, group: tapped_group)

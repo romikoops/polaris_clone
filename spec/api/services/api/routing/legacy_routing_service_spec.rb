@@ -126,7 +126,9 @@ RSpec.describe Api::Routing::LegacyRoutingService, type: :service do
     end
 
     context "withexpired rates" do
-      let(:itinerary_with_expired_pricing) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
+      let(:itinerary_with_expired_pricing) {
+        FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization)
+      }
 
       before do
         FactoryBot.create(:pricings_pricing,
@@ -151,7 +153,9 @@ RSpec.describe Api::Routing::LegacyRoutingService, type: :service do
         aggregate_failures do
           expect(result[:route_hashes]).not_to be_empty
           expect(result[:route_hashes].find { |route| route[:itinerary_id] == itinerary.id }).not_to be_nil
-          expect(result[:route_hashes].find { |route| route[:itinerary_id] == itinerary_with_expired_pricing.id }).to be_nil
+          expect(
+            result[:route_hashes].find { |route| route[:itinerary_id] == itinerary_with_expired_pricing.id }
+          ).to be_nil
         end
       end
     end

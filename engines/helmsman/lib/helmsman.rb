@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'helmsman/engine'
+require "helmsman/engine"
 
 module Helmsman
 end

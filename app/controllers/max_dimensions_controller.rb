@@ -25,12 +25,12 @@ class MaxDimensionsController < ApplicationController
   def max_dimensions(aggregate:)
     max_dimensions = max_dimensions_bundles(aggregate: aggregate)
     max_dimensions.group_by(&:mode_of_transport).each_with_object({}) do |(mot, mdbs), result|
-      result[mot] = mdbs.each_with_object(Hash.new { |h, k| h[k] = 0.0 }) do |mdb, inner_result|
+      result[mot] = mdbs.each_with_object(Hash.new { |h, k| h[k] = 0.0 }) { |mdb, inner_result|
         dimensions.each do |dimension|
           inner_result[dimension] = mdb[dimension] if mdb[dimension] > inner_result[dimension]
         end
         inner_result
-      end
+      }
       result
     end
   end
@@ -57,7 +57,7 @@ class MaxDimensionsController < ApplicationController
   end
 
   def modes_of_transport
-    @modes_of_transport ||= itineraries.pluck(:mode_of_transport).uniq + ['general']
+    @modes_of_transport ||= itineraries.pluck(:mode_of_transport).uniq + ["general"]
   end
 
   def itineraries
@@ -92,6 +92,6 @@ class MaxDimensionsController < ApplicationController
   end
 
   def itinerary_ids
-    max_dimensions_params[:itinerary_ids].present? ? max_dimensions_params[:itinerary_ids].split(',') : []
+    max_dimensions_params[:itinerary_ids].present? ? max_dimensions_params[:itinerary_ids].split(",") : []
   end
 end

@@ -1,5 +1,7 @@
 ---
-inherit_from: .rubocop_strict.yml
+inherit_mode:
+  merge:
+    - Exclude
 
 inherit_gem:
   rubocop-itsmycargo:
@@ -7,20 +9,21 @@ inherit_gem:
     - config/rails.yml
     - config/rspec.yml
 
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   TargetRubyVersion: 2.6
   Exclude:
     - '**/bin/*'
-    - 'db/schema.rb'
 
 Layout/LineLength:
-  Max: 120
-  IgnoreCopDirectives: true
   Exclude:
-    - '**/*_spec.rb'
-    - '.lefthook/**/*'
-    - 'config/routes.rb'
-  IgnoredPatterns: ['\A#']
+    - 'engines/locations/factories/locations_locations.rb'
+    - 'engines/trucking/factories/trucking/coverages.rb'
+    - 'engines/trucking/factories/trucking/google_directions_response.rb'
+    - 'spec/trucking/services/trucking/google_directions_spec.rb'
+    - 'spec/wheelhouse/services/wheelhouse/quotation_service_spec.rb'
+  IgnoredPatterns: ['\A\s*#']
 
 Metrics/AbcSize:
   Max: 25
@@ -33,8 +36,8 @@ Metrics/BlockLength:
     - '**/*.gemspec'
     - '**/*.rake'
     - '**/*/factories/**/*.rb'
-    - '**/*_spec.rb'
     - '**/migrate/*.rb'
+    - 'spec/**/*.rb'
     - config/**/*.rb
 
 Metrics/MethodLength:
@@ -48,15 +51,6 @@ Metrics/ModuleLength:
   Exclude:
     - '**/*_spec.rb'
 
-Metrics/ParameterLists:
-  Max: 5
-  Exclude:
-    - qa/features/**/*_steps.rb
-
-Naming/VariableName:
-  Exclude:
-    - 'engines/*/spec/api/*_spec.rb'
-
 RSpec/EmptyExampleGroup:
   Exclude:
-    - '**/spec/api/*_spec.rb'
+    - 'spec/**/api/*_spec.rb'

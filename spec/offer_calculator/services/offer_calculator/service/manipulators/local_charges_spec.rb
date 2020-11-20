@@ -21,17 +21,25 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) { described_class.results(association: Legacy::LocalCharge.all, shipment: shipment, schedules: schedules) }
+  let(:results) {
+    described_class.results(association: Legacy::LocalCharge.all, shipment: shipment, schedules: schedules)
+  }
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:export_margin, default_for: "local_charge", organization: organization, applicable: organization, value: 0)
-    FactoryBot.create(:import_margin, default_for: "local_charge", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:export_margin,
+      default_for: "local_charge", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:import_margin,
+      default_for: "local_charge", organization: organization, applicable: organization, value: 0)
   end
 
   describe ".perform" do
     context "when only one local_charge available w/o margins" do
-      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, direction: "import", hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:local_charge) {
+        FactoryBot.create(:legacy_local_charge,
+          direction: "import", hub: itinerary_1.origin_hub, organization: organization,
+          tenant_vehicle: tenant_vehicle_1)
+      }
 
       it "returns the one local_charge" do
         results
@@ -43,8 +51,14 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
 
     context "when only two local_charges w/o margins" do
-      let!(:local_charge_1) { FactoryBot.create(:legacy_local_charge, hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:local_charge_2) { FactoryBot.create(:legacy_local_charge, hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let!(:local_charge_1) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
+      let!(:local_charge_2) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_2)
+      }
       let(:trips) do
         [
           FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
@@ -62,8 +76,14 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
 
     context "when only two pricings w/ one margin (groups)" do
-      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
-      let!(:margin) { FactoryBot.create(:export_margin, tenant_vehicle: tenant_vehicle_1, organization: organization, applicable: user, value: 100) }
+      let!(:local_charge) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+      }
+      let!(:margin) {
+        FactoryBot.create(:export_margin,
+          tenant_vehicle: tenant_vehicle_1, organization: organization, applicable: user, value: 100)
+      }
 
       it "returns the one local_charge" do
         aggregate_failures do
@@ -77,7 +97,11 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
 
     context "with invalid direction" do
-      before { FactoryBot.create(:legacy_local_charge, direction: "blue", hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
+      before do
+        FactoryBot.create(:legacy_local_charge,
+          direction: "blue", hub: itinerary_1.origin_hub, organization: organization,
+          tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+      end
 
       it "raises InvalidDirection error" do
         expect { results }.to raise_error(OfferCalculator::Errors::InvalidDirection)

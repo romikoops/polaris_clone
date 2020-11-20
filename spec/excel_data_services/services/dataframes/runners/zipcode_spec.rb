@@ -46,7 +46,9 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Trucking do
     end
 
     context "with errors" do
-      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, mode_of_transport: "truck_carriage") }
+      let(:tenant_vehicle) {
+        FactoryBot.create(:legacy_tenant_vehicle, organization: organization, mode_of_transport: "truck_carriage")
+      }
       let(:expected_error) do
         {exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks,
          reason: "The service 'standard' on carrier 'SACO' cannot be found.",

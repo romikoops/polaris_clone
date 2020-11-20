@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require 'elasticsearch'
-require 'paranoia'
-require 'geocoder'
-require 'searchkick'
-require 'rgeo'
-require 'rgeo-geojson'
+require "elasticsearch"
+require "paranoia"
+require "geocoder"
+require "searchkick"
+require "rgeo"
+require "rgeo-geojson"
 
 module Locations
   class Engine < ::Rails::Engine
     isolate_namespace Locations
 
-    config.autoload_paths << File.expand_path('../../app', __dir__)
+    config.autoload_paths << File.expand_path("../../app", __dir__)
 
     config.active_record.primary_key = :uuid
 
     config.generators do |g|
-      g.orm                 :active_record, primary_key_type: :uuid
-      g.fixture_replacement :factory_bot, dir: 'factories'
-      g.test_framework      :rspec
-      g.assets              false
-      g.helper              false
-      g.javascripts         false
-      g.model_specs         false
-      g.stylesheets         false
-      g.view_specs          false
+      g.orm :active_record, primary_key_type: :uuid
+      g.fixture_replacement :factory_bot, dir: "factories"
+      g.test_framework :rspec
+      g.assets false
+      g.helper false
+      g.javascripts false
+      g.model_specs false
+      g.stylesheets false
+      g.view_specs false
     end
 
     initializer :append_migrations do |app|
-      config.paths['db/migrate'].expanded.each do |expanded_path|
-        app.config.paths['db/migrate'] << expanded_path
+      config.paths["db/migrate"].expanded.each do |expanded_path|
+        app.config.paths["db/migrate"] << expanded_path
       end
     end
 
     if defined?(FactoryBotRails)
-      config.factory_bot.definition_file_paths += [File.expand_path('../../factories', __dir__)]
+      config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)]
     end
   end
 end

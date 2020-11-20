@@ -2,10 +2,10 @@
 
 module Ledger
   class Delta < ApplicationRecord
-    belongs_to :fee, class_name: 'Ledger::Fee'
+    belongs_to :fee, class_name: "Ledger::Fee"
     belongs_to :target, polymorphic: true, optional: true
-    enum operator: { addition: 0, percentage: 1 }
-    enum rate_basis: { wm: 0, cbm: 1, kg: 2, unit: 3, km: 4, stowage: 5, flat: 6 }
+    enum operator: {addition: 0, percentage: 1}
+    enum rate_basis: {wm: 0, cbm: 1, kg: 2, unit: 3, km: 4, stowage: 5, flat: 6}
 
     MAX_VALUE = (1 << 63) - 1
   end

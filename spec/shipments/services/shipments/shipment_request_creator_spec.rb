@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Shipments
   RSpec.describe ShipmentRequestCreator do
-    describe 'Mapping a legacy shipment to shipment request' do
+    describe "Mapping a legacy shipment to shipment request" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:currency) { FactoryBot.create(:legacy_currency) }
       let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-      let(:legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id) }
+      let(:legacy_shipment) {
+        FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id)
+      }
       let(:tender) { FactoryBot.create(:quotations_tender) }
 
-      context 'when creating a shipment request' do
+      context "when creating a shipment request" do
         before do
           FactoryBot.create_list(:legacy_file, 2, :with_file, shipment: legacy_shipment, organization: organization)
         end
@@ -19,14 +21,14 @@ module Shipments
         let(:creator) { described_class.new(legacy_shipment: legacy_shipment, user: user) }
         let(:shipment_request) { creator.create.shipment_request }
 
-        it 'creates a valid shipment request' do
+        it "creates a valid shipment request" do
           aggregate_failures do
             expect(shipment_request).to be_valid
             expect(shipment_request).to be_persisted
           end
         end
 
-        it 'associates to the chosen tender' do
+        it "associates to the chosen tender" do
           aggregate_failures do
             expect(shipment_request.tender).to be_present
             expect(shipment_request.tender.origin_hub.hub_code).to eq(legacy_shipment.origin_hub.hub_code)
@@ -34,29 +36,31 @@ module Shipments
           end
         end
 
-        it 'attaches documents to the shipment request' do
+        it "attaches documents to the shipment request" do
           aggregate_failures do
             expect(shipment_request.documents.count).to eq 2
             expect(shipment_request.documents[0]).to be_persisted
             expect(shipment_request.documents[1]).to be_persisted
-            expect(shipment_request.documents.map { |doc| doc.file.blob }).to match_array(Legacy::File.where(shipment: legacy_shipment).map { |doc| doc.file.blob })
+            expect(
+              shipment_request.documents.map { |doc| doc.file.blob }
+            ).to match_array(Legacy::File.where(shipment: legacy_shipment).map { |doc| doc.file.blob })
           end
         end
 
-        it 'creates the consignee and consignor' do
+        it "creates the consignee and consignor" do
           aggregate_failures do
             expect(shipment_request.consignor).to be_persisted
             expect(shipment_request.consignee).to be_persisted
           end
         end
 
-        it 'creates the notifyees' do
+        it "creates the notifyees" do
           expect(shipment_request.notifyees.count).to eq 2
         end
 
-        it 'maps contacts correctly' do
+        it "maps contacts correctly" do
           consignee = shipment_request.consignee.contact
-          legacy_consignee = legacy_shipment.shipment_contacts.find_by(contact_type: 'consignee').contact
+          legacy_consignee = legacy_shipment.shipment_contacts.find_by(contact_type: "consignee").contact
           aggregate_failures do
             expect(consignee.user_id).to eql Organizations::User.unscoped.find(legacy_consignee.user_id).id
             expect(consignee.company_name).to eql legacy_consignee.company_name

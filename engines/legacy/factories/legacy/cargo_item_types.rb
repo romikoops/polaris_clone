@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_cargo_item_type, class: 'Legacy::CargoItemType' do
+  factory :legacy_cargo_item_type, class: "Legacy::CargoItemType" do
     width { 101 }
     length { 121 }
-    description { 'Pallet' }
-    area { '' }
-    category { 'Pallet' }
+    description { "Pallet" }
+    area { "" }
+    category { "Pallet" }
   end
 end
 

@@ -10,7 +10,7 @@ class Shipments::BookingProcessController < ApplicationController
 
   def get_offers
     resp = ShippingTools.new.get_offers(params, organization_user)
-    Skylight.instrument title: 'Serialize Results' do
+    Skylight.instrument title: "Serialize Results" do
       resp = resp.to_json if params[:async].blank?
     end
     response_handler(resp)
@@ -24,8 +24,8 @@ class Shipments::BookingProcessController < ApplicationController
 
   def send_quotes
     ShippingTools.new.save_and_send_quotes(shipment,
-                                       save_and_send_params[:quotes].map(&:to_h),
-                                       organization_user.email)
+      save_and_send_params[:quotes].map(&:to_h),
+      organization_user.email)
     response_handler(params)
   end
 
@@ -35,27 +35,30 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def refresh_quotes
-    resp = shipment.charge_breakdowns.map do |charge_breakdown|
+    resp = shipment.charge_breakdowns.map { |charge_breakdown|
       {
         trip_id: charge_breakdown.trip_id,
         quote: charge_breakdown.to_nested_hash(Pdf::HiddenValueService.new(user: organization_user).hide_total_args)
       }
-    end
+    }
 
     response_handler(resp)
   end
 
   def download_quotations
     document = ShippingTools.new.save_pdf_quotes(shipment, current_organization, result_params[:quotes].map(&:to_h))
-    response_handler(key: 'quotations', url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(
+      key: "quotations",
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
+    )
   end
 
   def download_shipment
     document = Pdf::Shipment::Recap.new(quotation: quotations_quotation, shipment: shipment).file
 
     response_handler(
-      key: 'shipment_recap',
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+      key: "shipment_recap",
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
     )
   end
 
@@ -91,7 +94,7 @@ class Shipments::BookingProcessController < ApplicationController
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
-                    :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
+          :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
       ])
   end
@@ -101,7 +104,7 @@ class Shipments::BookingProcessController < ApplicationController
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
-                    :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
+          :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
       ])
   end

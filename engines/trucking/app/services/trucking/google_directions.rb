@@ -100,7 +100,7 @@ module Trucking
       time_driven_after_last_full_rest = 0
 
       until seconds_of_tour_left <= 0
-        resting_time += 45 * 60 if time_driven_after_last_full_rest == 4.5 * 3600
+        resting_time += 45 * 60 if time_driven_after_last_full_rest == 4.5.to_d * 3600
 
         if time_driven_after_last_full_rest == 9 * 3600
           resting_time += 11 * 3600

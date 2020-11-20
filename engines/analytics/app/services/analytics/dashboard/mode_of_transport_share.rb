@@ -6,7 +6,7 @@ module Analytics
       def data
         @data ||= tally(
           requests: tenders.joins(:itinerary),
-          grouping_attribute: 'itineraries.mode_of_transport',
+          grouping_attribute: "itineraries.mode_of_transport",
           order_by_count: true,
           order: :desc
         )

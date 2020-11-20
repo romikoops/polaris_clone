@@ -6,7 +6,7 @@ module Analytics
       def data
         @data ||= tally(
           requests: tenders.joins(tenant_vehicle: :carrier),
-          grouping_attribute: 'carriers.name',
+          grouping_attribute: "carriers.name",
           order_by_count: true,
           order: :desc
         )

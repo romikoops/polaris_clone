@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :trucking_location, class: 'Trucking::Location' do
+  factory :trucking_location, class: "Trucking::Location" do
     association :country, factory: :legacy_country
     trait :zipcode do
-      query { 'postal_code' }
-      data { '15211' }
+      query { "postal_code" }
+      data { "15211" }
     end
 
     trait :with_location do
-      query { 'location' }
+      query { "location" }
       association :location, factory: :swedish_location
     end
 
     trait :with_chinese_location do
-      query { 'location' }
+      query { "location" }
       association :location, factory: :chinese_location
     end
 
     trait :distance do
-      query { 'distance' }
+      query { "distance" }
       data { 55 }
     end
 
@@ -38,7 +38,7 @@ FactoryBot.define do
     end
 
     trait :postal_code do
-      query { 'postal_code' }
+      query { "postal_code" }
     end
 
     factory :city_location, traits: [:with_location]

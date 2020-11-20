@@ -4,7 +4,7 @@ class CreateShipmentsContacts < ActiveRecord::Migration[5.2]
   def change
     create_table :shipments_contacts, id: :uuid do |t|
       t.references :shipment, type: :uuid, index: true, null: false
-      t.references :sandbox, foreign_key: { to_table: :tenants_sandboxes }, type: :uuid, index: true
+      t.references :sandbox, foreign_key: {to_table: :tenants_sandboxes}, type: :uuid, index: true
       t.integer :contact_type
       t.float :latitude
       t.float :longitude

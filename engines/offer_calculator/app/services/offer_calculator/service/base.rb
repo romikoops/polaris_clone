@@ -3,7 +3,7 @@
 module OfferCalculator
   module Service
     class Base
-      CARRIAGE_MAP = {'export' => 'pre', 'import' => 'on'}.freeze
+      CARRIAGE_MAP = {"export" => "pre", "import" => "on"}.freeze
 
       def initialize(quotation:, shipment: false)
         @shipment = shipment
@@ -23,7 +23,7 @@ module OfferCalculator
       def check_for_fee_type(type:, results:)
         return check_for_freight(results: results) if type == :pricings
 
-        fee_type_map = {truckings: 'Carriage', local_charges: 'Fees'}
+        fee_type_map = {truckings: "Carriage", local_charges: "Fees"}
 
         %w[export import].each do |direction|
           carriage = CARRIAGE_MAP[direction]
@@ -43,7 +43,7 @@ module OfferCalculator
       def error_for_fee_type(results:, switch_name:, fee_type_name:, direction:)
         if results.is_a?(ActiveRecord::Relation)
           return if case fee_type_name
-                    when 'Carriage'
+                    when "Carriage"
                       results.exists?(carriage: CARRIAGE_MAP[direction])
                     else
                       results.exists?(direction: direction)

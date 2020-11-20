@@ -10,11 +10,17 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
   let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, organization: organization, cbm_ratio: cbm_ratio) }
   let(:cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let!(:puf_charge_category) { FactoryBot.create(:puf_charge, organization: organization) }
-  let!(:trucking_lcl_charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: "trucking_lcl") }
+  let!(:trucking_lcl_charge_category) {
+    FactoryBot.create(:legacy_charge_categories, organization: organization, code: "trucking_lcl")
+  }
   let(:puf_original_fee) { trucking_pricing.fees["PUF"] }
   let(:trucking_original_fee) { trucking_pricing.rates.dig("kg", 0, "rate") }
   let(:scope) { {} }
-  let(:measures) { OfferCalculator::Service::Measurements::Cargo.new(cargo: cargo, scope: scope.with_indifferent_access, object: object) }
+  let(:measures) {
+    OfferCalculator::Service::Measurements::Cargo.new(
+      cargo: cargo, scope: scope.with_indifferent_access, object: object
+    )
+  }
   let(:breakdowns) do
     breakdown_array = []
     trucking_pricing.fees.each do |key, fee|
@@ -33,7 +39,10 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
     )
     breakdown_array
   end
-  let(:object) { FactoryBot.build(:manipulator_result, original: trucking_pricing, result: trucking_pricing.as_json, breakdowns: breakdowns) }
+  let(:object) {
+    FactoryBot.build(:manipulator_result,
+      original: trucking_pricing, result: trucking_pricing.as_json, breakdowns: breakdowns)
+  }
   let(:puf_fee) { results.find { |f| f.charge_category == puf_charge_category } }
   let(:trucking_fee) { results.find { |f| f.charge_category == trucking_lcl_charge_category } }
   let(:puf_component) { puf_fee.components.first }
@@ -63,7 +72,9 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
         aggregate_failures do
           expect(trucking_component).to be_a(OfferCalculator::Service::RateBuilders::FeeComponent)
           expect(trucking_fee.components.length).to eq(1)
-          expect(trucking_component.value).to eq(Money.new(trucking_original_fee["value"] * 100, trucking_original_fee["currency"]))
+          expect(
+            trucking_component.value
+          ).to eq(Money.new(trucking_original_fee["value"] * 100, trucking_original_fee["currency"]))
         end
       end
     end
@@ -79,12 +90,16 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
       let(:scope) { {hard_trucking_limit: true} }
 
       it "raises and error when above the limit" do
-        expect { described_class.fees(quotation: quotation, measures: measures) }.to raise_error(OfferCalculator::Errors::LoadMeterageExceeded)
+        expect {
+          described_class.fees(quotation: quotation, measures: measures)
+        }.to raise_error(OfferCalculator::Errors::LoadMeterageExceeded)
       end
     end
 
     context "with hard trucking limit and multiple ranges (one above range)" do
-      let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, :unit_and_kg, organization: organization, cbm_ratio: cbm_ratio, fees: {}) }
+      let(:trucking_pricing) {
+        FactoryBot.create(:trucking_trucking, :unit_and_kg, organization: organization, cbm_ratio: cbm_ratio, fees: {})
+      }
       let(:cargo) do
         FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
           FactoryBot.create(:lcl_unit,

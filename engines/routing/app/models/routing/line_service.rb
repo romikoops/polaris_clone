@@ -1,9 +1,8 @@
 module Routing
   class LineService < ApplicationRecord
-    belongs_to :carrier, class_name: 'Routing::Carrier'
+    belongs_to :carrier, class_name: "Routing::Carrier"
 
-    enum category: { fastest: 1, standard: 2, cheapest: 3 }
-
+    enum category: {fastest: 1, standard: 2, cheapest: 3}
   end
 end
 

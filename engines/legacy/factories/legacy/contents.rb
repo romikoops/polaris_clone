@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_content, class: 'Legacy::Content' do
-    component { 'main' }
-    section { 'main' }
-    text { 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+  factory :legacy_content, class: "Legacy::Content" do
+    component { "main" }
+    section { "main" }
+    text { "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }
 
     index { 0 }
 
     trait :with_image do
       after(:build) do |content|
-        content.image.attach(io: StringIO.new, filename: 'test-image.jpg', content_type: 'image/jpg')
+        content.image.attach(io: StringIO.new, filename: "test-image.jpg", content_type: "image/jpg")
       end
     end
   end

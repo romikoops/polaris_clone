@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 Api::Engine.routes.draw do
-  mount ApiAuth::Engine, at: '/'
+  mount ApiAuth::Engine, at: "/"
 
   namespace :v1 do
     resource :me, controller: :users, only: :show
 
     resources :organizations, only: :index do
       member do
-        get 'scope'
-        get 'countries'
+        get "scope"
+        get "countries"
       end
 
       resource :dashboard, controller: :dashboard, only: %i[show]
@@ -28,8 +28,8 @@ Api::Engine.routes.draw do
       resources :groups, controller: :organizations_groups, only: :index
       resources :locations do
         collection do
-          get 'origins'
-          get 'destinations'
+          get "origins"
+          get "destinations"
         end
       end
 
@@ -37,7 +37,7 @@ Api::Engine.routes.draw do
 
       resources :clients, only: %i[index show update create destroy] do
         member do
-          patch 'password_reset'
+          patch "password_reset"
         end
       end
 
@@ -48,7 +48,7 @@ Api::Engine.routes.draw do
       resources :itineraries, only: %i[index] do
         resources :schedules, only: :index do
           collection do
-            get 'enabled'
+            get "enabled"
           end
         end
       end

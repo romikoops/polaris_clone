@@ -4,16 +4,16 @@ module Shipments
   class Shipment < ApplicationRecord
     has_paper_trail
 
-    belongs_to :destination, class_name: 'Routing::Terminal'
-    belongs_to :origin, class_name: 'Routing::Terminal'
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :user, class_name: 'Organizations::User'
+    belongs_to :destination, class_name: "Routing::Terminal"
+    belongs_to :origin, class_name: "Routing::Terminal"
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :user, class_name: "Organizations::User"
 
     has_many :documents, as: :attachable
-    has_many :notifyees, class_name: 'Contact'
+    has_many :notifyees, class_name: "Contact"
 
-    has_one :consignee, class_name: 'Contact', required: true
-    has_one :consignor, class_name: 'Contact', required: true
+    has_one :consignee, class_name: "Contact", required: true
+    has_one :consignor, class_name: "Contact", required: true
     has_one :cargo, required: true
     has_one :invoice, required: true
   end

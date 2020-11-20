@@ -46,7 +46,7 @@ module Wheelhouse
     end
 
     def hubs_from_coordinates(target:)
-      carriage = target == origin ? 'pre' : 'on'
+      carriage = target == origin ? "pre" : "on"
       ::Trucking::Queries::Hubs.new(
         organization_id: organization.id,
         address: address(target.slice(:latitude, :longitude)),
@@ -63,7 +63,7 @@ module Wheelhouse
       OpenStruct.new(
         latitude: latitude.to_f,
         longitude: longitude.to_f,
-        lat_lng_string: [latitude, longitude].join(','),
+        lat_lng_string: [latitude, longitude].join(","),
         get_zip_code: address.postal_code,
         city_name: address.city,
         country: Legacy::Country.find_by(code: address.country_code)

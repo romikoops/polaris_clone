@@ -54,7 +54,7 @@ module Pricings
     end
 
     def update_from_legacy(source)
-      update_attributes(self.class.__legacy_params(source))
+      update(self.class.__legacy_params(source))
     end
   end
 end

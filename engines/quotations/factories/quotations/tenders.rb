@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :quotations_tender, class: 'Quotations::Tender' do
-    carrier_name { 'Sealand' }
-    load_type { 'container' }
+  factory :quotations_tender, class: "Quotations::Tender" do
+    carrier_name { "Sealand" }
+    load_type { "container" }
     amount_cents { 30 }
-    amount_currency { 'USD' }
+    amount_currency { "USD" }
     original_amount_cents { 30 }
-    original_amount_currency { 'USD' }
+    original_amount_currency { "USD" }
     association :quotation, factory: :quotations_quotation
     association :itinerary, factory: :gothenburg_shanghai_itinerary
     association :origin_hub, factory: :legacy_hub

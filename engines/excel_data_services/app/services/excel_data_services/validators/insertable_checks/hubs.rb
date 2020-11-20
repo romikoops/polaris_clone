@@ -24,14 +24,20 @@ module ExcelDataServices
             return
           end
 
-          geocoded_country_name = Legacy::Address.new(latitude: row[:address][:latitude], longitude: row[:address][:longitude]).reverse_geocode&.country&.name
+          geocoded_country_name = Legacy::Address.new(
+            latitude: row[:address][:latitude], longitude: row[:address][:longitude]
+          ).reverse_geocode&.country&.name
           return if country_name == geocoded_country_name
 
           add_to_errors(
             type: :error,
             row_nr: row[:row_nr],
             sheet_name: sheet_name,
-            reason: "The given coordinates do not match the assigned country: Given #{country_name}, Geocoded: #{geocoded_country_name}.",
+            reason: format(
+              "The given coordinates do not match the assigned country: Given %s, Geocoded: %s.",
+              country_name,
+              geocoded_country_name
+            ),
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
         end

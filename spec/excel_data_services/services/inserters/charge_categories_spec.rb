@@ -28,7 +28,9 @@ RSpec.describe ExcelDataServices::Inserters::ChargeCategories do
         aggregate_failures do
           expect(stats.dig("legacy/charge_categories".to_sym, :number_created)).to be(14)
           expect(Legacy::ChargeCategory.where(organization_id: organization.id).count).to be(14)
-          expect(Legacy::ChargeCategory.find_by(organization_id: organization.id, code: "export").name).to eq("Origin Local Charges")
+          expect(
+            Legacy::ChargeCategory.find_by(organization_id: organization.id, code: "export").name
+          ).to eq("Origin Local Charges")
         end
       end
     end

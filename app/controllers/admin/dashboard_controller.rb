@@ -10,14 +10,14 @@ class Admin::DashboardController < Admin::AdminBaseController
   DASH_ITINERARIES = 30
 
   def index
-    response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
+    response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) {
       {
         itineraries: @detailed_itineraries,
         hubs: @hubs,
         shipments: shipments_hash,
         mapData: @map_data
       }
-    end
+    }
     response_handler(response)
   end
 
@@ -25,15 +25,15 @@ class Admin::DashboardController < Admin::AdminBaseController
 
   def initialize_variables
     tenant_shipments = Legacy::Shipment.where(organization: current_organization)
-      .joins(:user).where(users_users: { deleted_at: nil })
+      .joins(:user).where(users_users: {deleted_at: nil})
     @shipments = test_user? ? tenant_shipments : tenant_shipments.excluding_tests
     @requested_shipments = requested_shipments
     @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
     hubs = Hub.where(organization_id: current_organization.id)
-    @hubs = hubs.limit(8).map do |hub|
-      { data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash }
-    end
+    @hubs = hubs.limit(8).map { |hub|
+      {data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash}
+    }
     @map_data = MapDatum.where(organization_id: current_organization.id).limit(100)
   end
 
@@ -47,7 +47,9 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    decorate_shipments(shipments: @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS)).map(&:legacy_index_json)
+    decorate_shipments(
+      shipments: @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS)
+    ).map(&:legacy_index_json)
   end
 
   def open_shipments

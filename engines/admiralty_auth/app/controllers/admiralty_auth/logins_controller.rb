@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
-require_dependency 'admiralty_auth/application_controller'
+require_dependency "admiralty_auth/application_controller"
 
 module AdmiraltyAuth
   class LoginsController < ApplicationController
-    def new; end
+    def new
+    end
 
     def create
       if authenticate_with_google
         session[:last_activity_at] = Time.zone.now
         redirect_to session[:return_to_url] || admiralty.root_url
       else
-        redirect_to admiralty_auth.login_url, alert: 'authentication_failed'
+        redirect_to admiralty_auth.login_url, alert: "authentication_failed"
       end
     end
 

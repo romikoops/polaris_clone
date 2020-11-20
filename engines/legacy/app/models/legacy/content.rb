@@ -11,7 +11,7 @@ module Legacy
       where(organization_id: organization_id, component: component_name)
         .order(:index)
         .map(&:as_content_json)
-        .group_by { |content| content['section'] }
+        .group_by { |content| content["section"] }
     end
 
     def image_url

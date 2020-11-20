@@ -23,7 +23,8 @@ RSpec.describe "TruckingCountries" do
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string}, description: "Organization ID"
+      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string},
+                description: "Organization ID"
       parameter name: :load_type, in: :query, type: :string, schema: {type: :string}, description: "Load Type"
       parameter name: :location_type, in: :query, type: :string, schema: {type: :string}, description: "Location Type"
 

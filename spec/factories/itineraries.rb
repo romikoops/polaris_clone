@@ -6,8 +6,8 @@ FactoryBot.define do
       num_stops { 2 }
     end
 
-    name { 'Gothenburg - Shanghai' }
-    mode_of_transport { 'ocean' }
+    name { "Gothenburg - Shanghai" }
+    mode_of_transport { "ocean" }
     transshipment { nil }
     association :organization, factory: :organizations_organization
     association :origin_hub, factory: :hub
@@ -18,12 +18,12 @@ FactoryBot.define do
 
       evaluator.num_stops.times do |i|
         stop = build(:stop,
-                                 itinerary: itinerary,
-                                 index: i,
-                                 hub: build(:hub,
-                                            organization: itinerary.organization,
-                                            nexus: build(:nexus,
-                                                         organization: itinerary.organization)))
+          itinerary: itinerary,
+          index: i,
+          hub: build(:hub,
+            organization: itinerary.organization,
+            nexus: build(:nexus,
+              organization: itinerary.organization)))
         itinerary.stops << stop
         if i == 1
           itinerary.origin_hub = stop.hub

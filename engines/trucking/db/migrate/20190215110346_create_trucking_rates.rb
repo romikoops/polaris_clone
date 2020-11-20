@@ -13,7 +13,7 @@ class CreateTruckingRates < ActiveRecord::Migration[5.2]
       t.jsonb :fees
       t.string :identifier_modifier
       t.uuid :scope_id
-      t.index ['scope_id'], name: 'index_trucking_rates_on_trucking_scope_id'
+      t.index ["scope_id"], name: "index_trucking_rates_on_trucking_scope_id"
       t.timestamps
     end
   end

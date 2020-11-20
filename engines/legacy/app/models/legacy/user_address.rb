@@ -2,14 +2,14 @@
 
 module Legacy
   class UserAddress < ApplicationRecord
-    self.table_name = 'user_addresses'
-    belongs_to :user, class_name: 'Organizations::User'
-    belongs_to :address, class_name: 'Legacy::Address'
+    self.table_name = "user_addresses"
+    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :address, class_name: "Legacy::Address"
 
     before_validation :set_primary
 
-    validates :primary, uniqueness: { scope: :user }, if: -> { primary }
-    validates :address, uniqueness: { scope: :user }
+    validates :primary, uniqueness: {scope: :user}, if: -> { primary }
+    validates :address, uniqueness: {scope: :user}
 
     private
 

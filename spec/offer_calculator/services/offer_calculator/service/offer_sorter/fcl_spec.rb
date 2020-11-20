@@ -49,8 +49,13 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       days: [1, 7, 10, 15])
   end
 
-  let(:schedules) { trips[:trips].map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) { described_class.sorted_offers(shipment: shipment, quotation: quotation, charges: charges, schedules: schedules) }
+  let(:schedules) {
+    trips[:trips].map { |trip| OfferCalculator::Schedule.from_trip(trip) }
+  }
+  let(:results) {
+    described_class.sorted_offers(shipment: shipment, quotation: quotation,
+                                  charges: charges, schedules: schedules)
+  }
 
   context "with only freight and pricings split over period" do
     let(:raw_objects) { pricing_group_1 | pricing_group_2 }
@@ -84,7 +89,9 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   end
 
   context "with multiple trucking options" do
-    let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "trucking_2") }
+    let(:trucking_tenant_vehicle_2) {
+      FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "trucking_2")
+    }
     let(:other_truckings) do
       cargo_classes.flat_map do |cargo_class|
         [FactoryBot.create(:trucking_with_unit_rates,
@@ -116,7 +123,9 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     context "with end to end and pricings and all permutations" do
-      let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "trucking_2") }
+      let(:trucking_tenant_vehicle_2) {
+        FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "trucking_2")
+      }
 
       before do
         allow(shipment).to receive(:has_pre_carriage?).and_return(true)

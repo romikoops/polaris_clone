@@ -12,20 +12,20 @@ module AwsConfig
     end
 
     def awsurl
-      'https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/'
+      "https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/"
     end
 
     def path(shipment)
       slug = shipment.organization.slug
 
-      "#{slug}/documents/#{shipment['uuid']}"
+      "#{slug}/documents/#{shipment["uuid"]}"
     end
 
     def create_on_aws(file, shipment)
       shipment.documents.create!(
-        file: { io: file, filename: file.name, content_type: file.content_type },
+        file: {io: file, filename: file.name, content_type: file.content_type},
         user_id: shipment.user_id,
-        shipment_id: shipment['uuid'],
+        shipment_id: shipment["uuid"],
         text: file.name
       )
     end
@@ -41,13 +41,13 @@ module AwsConfig
     end
 
     def asset_url
-      'https://assets.itsmycargo.com/'
+      "https://assets.itsmycargo.com/"
     end
 
     def save_asset(file, obj_key)
       aws_client.put_object(
         bucket: Settings.aws.bucket, key: obj_key, body: file,
-        content_type: file.content_type, acl: 'public-read'
+        content_type: file.content_type, acl: "public-read"
       )
     end
   end
@@ -58,8 +58,8 @@ module AwsConfig
       self.class.asset_url
     end
 
-    def save_asset(file, objKey)
-      self.class.save_asset(file, objKey)
+    def save_asset(file, obj_key)
+      self.class.save_asset(file, obj_key)
     end
 
     def aws_signer
@@ -71,7 +71,7 @@ module AwsConfig
     end
 
     def awsurl
-      'https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/'
+      "https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/"
     end
 
     def path(shipment)
@@ -83,7 +83,7 @@ module AwsConfig
     end
 
     def get_file_url(key, bucket = Settings.aws.bucket)
-      aws_signer.presigned_url(:get_object, bucket: bucket, key: key, response_content_disposition: 'attachment')
+      aws_signer.presigned_url(:get_object, bucket: bucket, key: key, response_content_disposition: "attachment")
     end
 
     def upload(args = {})

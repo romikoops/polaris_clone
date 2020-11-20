@@ -96,8 +96,7 @@ module Pdf
 
     def dimensions_format
       h.content_tag :p do
-        [length, width, height]
-          .map { |value| value.format }.join(" x ")
+        [length, width, height].map(&:format).join(" x ")
       end
     end
 

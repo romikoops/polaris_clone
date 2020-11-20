@@ -16,12 +16,16 @@ RSpec.describe Admin::OrganizationsController, type: :controller do
     let(:email_params) { {"sales" => {"ocean" => "new_ocean@sales.com"}} }
 
     it "returns http success" do
-      put :update, params: {organization_id: theme.organization_id, id: theme.organization_id, tenant: {emails: email_params}}
+      put :update, params: {
+        organization_id: theme.organization_id, id: theme.organization_id, tenant: {emails: email_params}
+      }
       expect(response).to have_http_status(:success)
     end
 
     it "updates organization emails" do
-      put :update, params: {organization_id: theme.organization_id, id: theme.organization_id, tenant: {emails: email_params}}
+      put :update, params: {
+        organization_id: theme.organization_id, id: theme.organization_id, tenant: {emails: email_params}
+      }
       expect(theme.emails["ocean"]).to match email_params["ocean"]
     end
   end

@@ -31,7 +31,10 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
 
   describe ".perform" do
     context "when only one pricing available on one itinerary" do
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
 
       it "returns the one pricing" do
         aggregate_failures do
@@ -42,8 +45,14 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
     end
 
     context "when only two pricings available on one itinerary" do
-      let!(:pricing_1) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:pricing_2) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let!(:pricing_1) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
+      let!(:pricing_2) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_2)
+      }
       let(:trips) do
         [
           FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
@@ -61,9 +70,15 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
     end
 
     context "when only two pricings available on one itinerary (groups)" do
-      before { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      before do
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      end
 
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+      }
 
       it "returns the one pricing" do
         aggregate_failures do
@@ -76,7 +91,8 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
 
     context "when only two pricings available on one itinerary (groups & dedicated_only)" do
       before do
-        FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
         FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
       end
 
@@ -90,8 +106,10 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
 
     context "when only two pricings available on one itinerary (groups & dedicated_only)" do
       before do
-        FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, group_id: group.id, tenant_vehicle: tenant_vehicle_1)
-        FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, group_id: group.id, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
         FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
       end
 
@@ -112,8 +130,11 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
 
       before do
         allow(shipment).to receive(:cargo_classes).and_return(["fcl_20", "fcl_40"])
-        FactoryBot.create(:fcl_20_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
-        FactoryBot.create(:fcl_40_pricing, itinerary: itinerary_1, organization: organization, group_id: other_group.id, tenant_vehicle: tenant_vehicle_1)
+        FactoryBot.create(:fcl_20_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+        FactoryBot.create(:fcl_40_pricing,
+          itinerary: itinerary_1, organization: organization, group_id: other_group.id,
+          tenant_vehicle: tenant_vehicle_1)
         FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
       end
 

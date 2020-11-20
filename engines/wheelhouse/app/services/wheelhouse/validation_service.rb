@@ -66,26 +66,26 @@ module Wheelhouse
 
       if scope[:dedicated_pricings_only]
         code = 4009
-        message = 'No Pricings are available for your groups'
+        message = "No Pricings are available for your groups"
       else
         code = 4008
-        message = 'No Pricings are available for your route'
+        message = "No Pricings are available for your route"
       end
 
       Wheelhouse::Validations::Error.new(
-        id: 'routing',
+        id: "routing",
         message: message,
-        attribute: 'routing',
-        section: 'routing',
+        attribute: "routing",
+        section: "routing",
         code: code
       )
     end
 
     def modes_of_transport
       @modes_of_transport ||= routes.where(id: pricings.select(:itinerary_id))
-                                    .select(:mode_of_transport)
-                                    .distinct
-      @modes_of_transport += ['truck_carriage'] if includes_trucking?
+        .select(:mode_of_transport)
+        .distinct
+      @modes_of_transport += ["truck_carriage"] if includes_trucking?
       @modes_of_transport
     end
 
@@ -107,10 +107,10 @@ module Wheelhouse
       return if routing[:origin].present? && routing[:destination].present?
 
       Wheelhouse::Validations::Error.new(
-        id: 'routing',
-        message: 'Origin and destination are required to make a request',
-        attribute: 'routing',
-        section: 'routing',
+        id: "routing",
+        message: "Origin and destination are required to make a request",
+        attribute: "routing",
+        section: "routing",
         code: 4016
       )
     end

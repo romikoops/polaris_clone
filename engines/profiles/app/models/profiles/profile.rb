@@ -12,14 +12,14 @@ module Profiles
 
     include PgSearch::Model
     pg_search_scope :search, against: %i[first_name last_name company_name phone], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
 
     pg_search_scope :first_name_search, against: %i[first_name], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
     pg_search_scope :last_name_search, against: %i[last_name], using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
   end
 end

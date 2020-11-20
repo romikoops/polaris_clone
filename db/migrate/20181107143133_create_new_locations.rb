@@ -10,7 +10,7 @@ class CreateNewLocations < ActiveRecord::Migration[5.2]
       t.string :province
       t.string :country
       t.string :admin_level
-      t.geometry :bounds, limit: { srid: 0, type: 'geometry' }
+      t.geometry :bounds, limit: {srid: 0, type: "geometry"}
     end
   end
 end

@@ -5,7 +5,7 @@ module RateExtractor
     module Applicable
       class Base
         attr_reader :ldm_threshold, :ldm_ratio, :ldm_measurement, :cargo,
-                    :section_rate, :cargo_rate, :cbm_ratio
+          :section_rate, :cargo_rate, :cbm_ratio
 
         delegate :ldm_threshold, :ldm_ratio, :ldm_measurement, to: :section_rate
         delegate :cbm_ratio, to: :cargo_rate

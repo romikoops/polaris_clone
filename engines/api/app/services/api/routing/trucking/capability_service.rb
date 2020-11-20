@@ -13,17 +13,17 @@ module Api
         end
 
         def perform
-          { origin: origin_capability, destination: destination_capability }
+          {origin: origin_capability, destination: destination_capability}
         end
 
         private
 
         def origin_capability
-          type_availabilities(target_index: ORIGIN_INDEX).exists?(carriage: 'pre')
+          type_availabilities(target_index: ORIGIN_INDEX).exists?(carriage: "pre")
         end
 
         def destination_capability
-          type_availabilities(target_index: DESTINATION_INDEX).exists?(carriage: 'on')
+          type_availabilities(target_index: DESTINATION_INDEX).exists?(carriage: "on")
         end
       end
     end

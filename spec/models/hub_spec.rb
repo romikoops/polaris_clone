@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Hub, type: :model do
-  it 'builds  a valid hub' do
+  it "builds  a valid hub" do
     expect(FactoryBot.build(:hub)).to be_valid
   end
 end

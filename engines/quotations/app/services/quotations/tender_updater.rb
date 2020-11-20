@@ -9,7 +9,7 @@ module Quotations
     def initialize(tender:, line_item_id:, charge_category_id:, value:, section:)
       @tender = tender
       @line_item = Quotations::LineItem.find(line_item_id) if line_item_id.present?
-      @section = section.gsub('_section', '')
+      @section = section.gsub("_section", "")
       @value = value
       @charge_category_id = charge_category_id
     end
@@ -46,9 +46,9 @@ module Quotations
 
     def update_tender
       new_amount = tender.line_items
-                           .inject(Money.new(0, tender.amount.currency.iso_code)) { |total, item|
-                             total + item.amount
-                           }
+        .inject(Money.new(0, tender.amount.currency.iso_code)) { |total, item|
+        total + item.amount
+      }
       tender.update!(amount: new_amount)
     end
 

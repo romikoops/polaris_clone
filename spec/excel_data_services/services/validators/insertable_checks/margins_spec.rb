@@ -47,7 +47,9 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
             row_nr: 2,
             sheet_name: "Margins",
             reason:
-            "There exist margins (in the system or this file) with an overlapping effective period.\n(Old is covered by new: [2019-01-01 00:00 - 2019-03-31 00:00] <-> [2019-01-01 00:00 - 2019-03-31 23:59]).",
+            "There exist margins (in the system or this file) with an overlapping "\
+            "effective period.\n(Old is covered by new: [2019-01-01 00:00 - 2019-03-31"\
+            " 00:00] <-> [2019-01-01 00:00 - 2019-03-31 23:59]).",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           },
             {

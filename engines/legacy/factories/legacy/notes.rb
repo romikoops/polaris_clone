@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-
 FactoryBot.define do
-  factory :legacy_note, class: 'Legacy::Note' do
-    body { 'body' }
-    header { 'header' }
-    level { 'level' }
+  factory :legacy_note, class: "Legacy::Note" do
+    body { "body" }
+    header { "header" }
+    level { "level" }
     target { build(:legacy_hub) }
 
     association :organization, factory: :organizations_organization

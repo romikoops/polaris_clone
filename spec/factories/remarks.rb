@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :remark do
-    body { 'Some Remark' }
+    body { "Some Remark" }
     association :organization, factory: :organizations_organization
-    category { 'Quotation' }
-    subcategory { 'Shipment' }
+    category { "Quotation" }
+    subcategory { "Shipment" }
   end
 end
 

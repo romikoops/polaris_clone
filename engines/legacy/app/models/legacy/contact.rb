@@ -2,9 +2,9 @@
 
 module Legacy
   class Contact < ApplicationRecord
-    self.table_name = 'contacts'
+    self.table_name = "contacts"
 
-    belongs_to :user, class_name: 'Organizations::User'
+    belongs_to :user, class_name: "Organizations::User"
     has_many :shipment_contacts
     belongs_to :address, optional: true
   end

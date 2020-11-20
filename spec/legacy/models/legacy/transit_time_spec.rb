@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Legacy
   RSpec.describe TransitTime, type: :model do
-    it 'creates a valid transit time' do
+    it "creates a valid transit time" do
       expect(FactoryBot.build(:legacy_transit_time)).to be_valid
     end
   end

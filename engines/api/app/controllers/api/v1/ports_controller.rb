@@ -46,10 +46,10 @@ module Api
         itineraries = Legacy::Itinerary.joins(:stops)
           .where(organization_id: current_organization.id,
                  mode_of_transport: "ocean",
-                 stops: { index: default_stop_index })
+                 stops: {index: default_stop_index})
 
         hub_id = ports_params[:location_id]
-        itineraries = itineraries.where(stops: { hub_id: hub_id }) if hub_id.present?
+        itineraries = itineraries.where(stops: {hub_id: hub_id}) if hub_id.present?
 
         itineraries
       end

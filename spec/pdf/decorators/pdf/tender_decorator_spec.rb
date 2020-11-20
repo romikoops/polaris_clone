@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.describe Pdf::TenderDecorator do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) {
+    FactoryBot.create(:organizations_user, :with_profile, organization: organization)
+  }
 
   let(:load_type) { "cargo_item" }
   let!(:shipment) do
@@ -17,7 +19,9 @@ RSpec.describe Pdf::TenderDecorator do
       with_full_breakdown: true)
   end
   let(:chargeable_weight_view) { "volume" }
-  let(:scope_content) { {"show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view} }
+  let(:scope_content) {
+    {"show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view}
+  }
   let(:scope) { OrganizationManager::ScopeService.new(target: user, organization: organization).fetch }
   let(:tender) { Quotations::Tender.last }
   let(:charge_breakdown) { shipment.charge_breakdowns.find_by(tender_id: tender.id) }
@@ -134,7 +138,9 @@ RSpec.describe Pdf::TenderDecorator do
 
     context "when cargo" do
       it "returns the chargeable weight string" do
-        expect(klass.chargeable_weight_string(section: "cargo")).to eq("<small class='chargeable_weight'> (Chargeable Volume: 1.34 m<sup>3</sup></small>")
+        expect(
+          klass.chargeable_weight_string(section: "cargo")
+        ).to eq("<small class='chargeable_weight'> (Chargeable Volume: 1.34 m<sup>3</sup></small>")
       end
     end
 
@@ -144,7 +150,9 @@ RSpec.describe Pdf::TenderDecorator do
       end
 
       it "returns the chargeable weight string" do
-        expect(klass.chargeable_weight_string(section: "trucking_pre")).to eq("<small class='chargeable_weight'> (Chargeable Weight: 500 kg)</small>")
+        expect(
+          klass.chargeable_weight_string(section: "trucking_pre")
+        ).to eq("<small class='chargeable_weight'> (Chargeable Weight: 500 kg)</small>")
       end
     end
   end

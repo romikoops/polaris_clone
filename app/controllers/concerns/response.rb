@@ -14,12 +14,12 @@ module Response
       code = e.config[:http_code] || 500
       Rails.logger.debug "#{e.class} (#{e.code}): #{e.message}"
 
-      resp = { success: false, message: e.message, code: e.code }
+      resp = {success: false, message: e.message, code: e.code}
       json_response(resp, code)
     end
 
     def success_handler(res)
-      json_response({ success: true, data: res }, 200)
+      json_response({success: true, data: res}, 200)
     end
 
     def not_found

@@ -3,9 +3,9 @@
 class Admin::MarginsController < Admin::AdminBaseController
   def index
     paginated_margins = handle_search(params).paginate(pagination_options)
-    response_margins = paginated_margins.map do |margin|
+    response_margins = paginated_margins.map { |margin|
       for_list_json(margin).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    }
     response_handler(
       pagination_options.merge(
         marginData: response_margins,
@@ -53,7 +53,7 @@ class Admin::MarginsController < Admin::AdminBaseController
         effective_date: Date.parse(param_margin[:effectiveDate]).beginning_of_day,
         expiration_date: Date.parse(param_margin[:expirationDate]).end_of_day
       )
-      unless param_margin[:margin_details].nil? || param_margin[:margin_details].empty?
+      if param_margin[:margin_details].present?
         param_margin[:margin_details].each do |param_margin_detail|
           detail = Pricings::Detail.find_by(
             margin: margin,
@@ -75,7 +75,7 @@ class Admin::MarginsController < Admin::AdminBaseController
       pricings: []
     }
 
-    if params[:itinerary_id] && !params[:itinerary_id].empty?
+    if params[:itinerary_id].present?
       itinerary = Itinerary.find(params[:itinerary_id])
 
       itinerary.rates.each do |pr|
@@ -92,13 +92,13 @@ class Admin::MarginsController < Admin::AdminBaseController
         hash[:pricings] << pr.as_json
       end
     else
-      hash[:service_levels] = Legacy::TenantVehicle.where(organization_id: current_organization.id).map do |tv|
+      hash[:service_levels] = Legacy::TenantVehicle.where(organization_id: current_organization.id).map { |tv|
         {
           service_level: tv.full_name,
           carrier_id: tv.carrier_id,
           tenant_vehicle_id: tv.id
         }
-      end
+      }
     end
     hash[:groups] = Groups::Group.where(organization_id: current_organization.id)
     response_handler(hash)
@@ -106,11 +106,11 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def itinerary_list
     list_options = Legacy::Itinerary
-                    .where(organization: current_organization)
-                    .list_search(params[:query]).limit(30).map do |it|
-      { label: "(#{it.mode_of_transport.capitalize}) #{it.name}", value: it.as_options_json }
-    end
-    all = { label: 'All', value: nil }
+      .where(organization: current_organization)
+      .list_search(params[:query]).limit(30).map { |it|
+      {label: "(#{it.mode_of_transport.capitalize}) #{it.name}", value: it.as_options_json}
+    }
+    all = {label: "All", value: nil}
     response_handler([all, *list_options])
   end
 
@@ -124,13 +124,13 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def fee_data
-    result = if params[:margin_type] == 'local_charges'
-               local_charge_fees
-             elsif params[:margin_type] == 'trucking'
-               trucking_fees
-             else
-               pricing_fees
-             end
+    result = if params[:margin_type] == "local_charges"
+      local_charge_fees
+    elsif params[:margin_type] == "trucking"
+      trucking_fees
+    else
+      pricing_fees
+    end
 
     response_handler(result)
   end
@@ -140,7 +140,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "target_id:#{upload_params[:target_id]},target_type:#{upload_params[:target_type]}",
-      type: 'margins',
+      type: "margins",
       options: {
         applicable: applicable,
         group_id: upload_params[:group_id],
@@ -155,42 +155,42 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   private
 
-  def get_target(type: , id:)
+  def get_target(type:, id:)
     case type
-    when 'group'
+    when "group"
       Groups::Group.find_by(id: id)
-    when 'company'
+    when "company"
       Companies::Company.find_by(id: id)
-    when 'user'
+    when "user"
       Organizations::User.find_by(id: id)
     end
   end
 
   def extract_tenant_vehicle_ids
-    if params[:tenant_vehicle_ids] == 'all' && params[:itinerary_id]
+    if params[:tenant_vehicle_ids] == "all" && params[:itinerary_id]
       Legacy::Itinerary
-      .find_by(id: params[:itinerary_id], organization: current_organization)
-      .rates.pluck(:tenant_vehicle_id)
-    elsif params[:tenant_vehicle_ids] == 'all'
+        .find_by(id: params[:itinerary_id], organization: current_organization)
+        .rates.pluck(:tenant_vehicle_id)
+    elsif params[:tenant_vehicle_ids] == "all"
       Legacy::TenantVehicle.where(organization: current_organization).ids
     else
-      params[:tenant_vehicle_ids].split(',')
+      params[:tenant_vehicle_ids].split(",")
     end
   end
 
   def extract_cargo_classes
-    if params[:cargo_classes] == 'all' && params[:itinerary_id]
+    if params[:cargo_classes] == "all" && params[:itinerary_id]
       Legacy::Itinerary.where(organization: current_organization)
-                    .find(params[:itinerary_id]).rates.pluck(:cargo_class)
-    elsif params[:cargo_classes] == 'all'
-      %w(lcl) + Legacy::Container::CARGO_CLASSES
+        .find(params[:itinerary_id]).rates.pluck(:cargo_class)
+    elsif params[:cargo_classes] == "all"
+      %w[lcl] + Legacy::Container::CARGO_CLASSES
     else
-      params[:cargo_classes].split(',')
+      params[:cargo_classes].split(",")
     end
   end
 
   def pricing_fees
-    if params[:pricing_id] && params[:pricing_id] != 'null'
+    if params[:pricing_id] && params[:pricing_id] != "null"
       pricing = Pricings::Pricing.find_by(organization: current_organization, id: params[:pricing_id])
       pricing&.fees&.map(&:fee_name_and_code)
     else
@@ -201,12 +201,12 @@ class Admin::MarginsController < Admin::AdminBaseController
         cargo_class: extract_cargo_classes
       )
       pricings.map(&:fees)
-              .flatten
-              .group_by(&:charge_category_id)
-              .values
-              .map(&:first)
-              .flatten
-              .map(&:fee_name_and_code)
+        .flatten
+        .group_by(&:charge_category_id)
+        .values
+        .map(&:first)
+        .flatten
+        .map(&:fee_name_and_code)
     end
   end
 
@@ -214,32 +214,32 @@ class Admin::MarginsController < Admin::AdminBaseController
     local_charges =
       Legacy::LocalCharge.where(
         organization: current_organization,
-        hub_id: params[:hub_ids].split(','),
-        direction: params[:directions].split(','),
-        counterpart_hub_id: params[:counterpart_hub_id] != 'null' ? params[:counterpart_hub_id] : nil,
+        hub_id: params[:hub_ids].split(","),
+        direction: params[:directions].split(","),
+        counterpart_hub_id: params[:counterpart_hub_id] != "null" ? params[:counterpart_hub_id] : nil,
         tenant_vehicle_id: extract_tenant_vehicle_ids,
         load_type: extract_cargo_classes
       )
-    all_fees = local_charges.pluck(:fees).each_with_object({}) do |fees, hash|
+    all_fees = local_charges.pluck(:fees).each_with_object({}) { |fees, hash|
       hash.merge!(fees)
       hash
-    end
+    }
 
-    all_fees.values.map { |fee| "#{fee['key']} - #{fee['name']}" }
+    all_fees.values.map { |fee| "#{fee["key"]} - #{fee["name"]}" }
   end
 
   def trucking_fees
-    carriages = params[:directions].map { |dir| dir == 'import' ? 'on' : 'pre' }
+    carriages = params[:directions].map { |dir| dir == "import" ? "on" : "pre" }
 
     truckings =
       Trucking::Trucking.where(
-        hub_id: params[:hub_ids].split(','),
+        hub_id: params[:hub_ids].split(","),
         carriage: carriages,
         organization: current_organization,
         cargo_class: extract_cargo_classes
       )
 
-    truckings.map { |tr| tr&.fees&.values&.map { |fee| "#{fee['key']} - #{fee['name']}" } }.flatten
+    truckings.map { |tr| tr&.fees&.values&.map { |fee| "#{fee["key"]} - #{fee["name"]}" } }.flatten
   end
 
   def margins
@@ -261,23 +261,23 @@ class Admin::MarginsController < Admin::AdminBaseController
     query = margins
     if params[:target_id]
       case params[:target_type]
-      when 'company'
+      when "company"
         query = query.where(
           applicable: Companies::Company.find_by(id: params[:target_id])
         )
-      when 'group'
+      when "group"
         query = query.where(
           applicable: Groups::Group.find_by(id: params[:target_id])
         )
-      when 'user'
+      when "user"
         query = query.where(
           applicable: Organizations::User.find_by(id: params[:target_id])
         )
-      when 'tenant'
+      when "tenant"
         query = query.where(
           applicable: Organizations::Organization.find_by(id: params[:target_id])
         )
-      when 'itinerary'
+      when "itinerary"
         query = query.where(itinerary_id: params[:target_id])
       end
     end
@@ -286,14 +286,14 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def get_margin_value(operator, value)
-    return value.to_d / 100.0 if operator == '%' && value.to_d > 1
+    return value.to_d / 100.0 if operator == "%" && value.to_d > 1
 
     value
   end
 
   def for_list_json(margin, options = {})
     new_options = options.reverse_merge(
-      methods: %i(service_level itinerary_name fee_code cargo_class mode_of_transport)
+      methods: %i[service_level itinerary_name fee_code cargo_class mode_of_transport]
     )
     margin.as_json(new_options).reverse_merge(
       marginDetails: margin.details.map { |d| detail_list_json(d) }
@@ -302,7 +302,7 @@ class Admin::MarginsController < Admin::AdminBaseController
 
   def detail_list_json(detail, options = {})
     new_options = options.reverse_merge(
-      methods: %i(rate_basis itinerary_name fee_code)
+      methods: %i[rate_basis itinerary_name fee_code]
     )
     detail.as_json(new_options)
   end
@@ -319,7 +319,8 @@ class Admin::MarginsController < Admin::AdminBaseController
       :targetId,
       :margin,
       :selectedCargoClass,
-      selectedOriginTrucking: %i(lat lng),
-      selectedDestinationTrucking: %i(lat lng))
+      selectedOriginTrucking: %i[lat lng],
+      selectedDestinationTrucking: %i[lat lng]
+    )
   end
 end

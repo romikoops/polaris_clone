@@ -49,7 +49,9 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   end
 
   let(:schedules) { trips[:trips].map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) { described_class.sorted_offers(shipment: shipment, quotation: quotation, charges: charges, schedules: schedules) }
+  let(:results) {
+    described_class.sorted_offers(shipment: shipment, quotation: quotation, charges: charges, schedules: schedules)
+  }
 
   context "with no valid responses" do
     let(:raw_objects) { [pricing_1, pricing_2] }
@@ -117,8 +119,12 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     let(:raw_objects) do
       [pricing_1, pricing_2] | local_charges | local_charges_2 | truckings | truckings_2
     end
-    let(:itinerary_2) { FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization) }
-    let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "tv_2", organization: organization) }
+    let(:itinerary_2) {
+      FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
+    }
+    let(:tenant_vehicle_2) {
+      FactoryBot.create(:legacy_tenant_vehicle, name: "tv_2", organization: organization)
+    }
     let(:local_charges_2) do
       cargo_classes.flat_map do |cc|
         %w[import export].map do |direction|

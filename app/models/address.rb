@@ -9,7 +9,7 @@ class Address < Legacy::Address
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
 
-  scope :nexus, -> { where(address_type: 'nexus') }
+  scope :nexus, -> { where(address_type: "nexus") }
 
   before_validation :sanitize_zip_code!
 
@@ -19,16 +19,16 @@ class Address < Legacy::Address
   reverse_geocoded_by :latitude, :longitude do |address, results|
     if (geo = results.first)
       premise_data = geo.address_components.find do |address_component|
-        address_component['types'] == ['premise']
+        address_component["types"] == ["premise"]
       end || {}
-      address.premise          = premise_data['long_name']
-      address.street_number    = geo.street_number
-      address.street           = geo.route
-      address.street_address   = geo.street_number.to_s + ' ' + geo.route.to_s
+      address.premise = premise_data["long_name"]
+      address.street_number = geo.street_number
+      address.street = geo.route
+      address.street_address = geo.street_number.to_s + " " + geo.route.to_s
       address.geocoded_address = geo.address
-      address.city             = geo.city
-      address.zip_code         = geo.postal_code
-      address.country          = Country.find_by(code: geo.country_code)
+      address.city = geo.city
+      address.zip_code = geo.postal_code
+      address.country = Country.find_by(code: geo.country_code)
     end
 
     address
@@ -37,8 +37,8 @@ class Address < Legacy::Address
   # Class methods
   def set_geocoded_address_from_fields!
     raw_address = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country&.name}"
-    self.geocoded_address = raw_address.gsub(/\s+/, ' ').gsub(/\s+,/, ',').strip
-                                       .gsub(/^,/, '').delete_suffix(',').strip.squeeze(',')
+    self.geocoded_address = raw_address.gsub(/\s+/, " ").gsub(/\s+,/, ",").strip
+      .gsub(/^,/, "").delete_suffix(",").strip.squeeze(",")
   end
 
   def geocode_from_address_fields!
@@ -71,9 +71,9 @@ class Address < Legacy::Address
   end
 
   def full_address
-    part_one = [street, street_number].delete_if(&:blank?).join(' ')
-    part_two = [zip_code, city, country.name].delete_if(&:blank?).join(', ')
-    [part_one, part_two].delete_if(&:blank?).join(', ')
+    part_one = [street, street_number].delete_if(&:blank?).join(" ")
+    part_two = [zip_code, city, country.name].delete_if(&:blank?).join(", ")
+    [part_one, part_two].delete_if(&:blank?).join(", ")
   end
 
   def lat_lng_string
@@ -87,12 +87,12 @@ class Address < Legacy::Address
   end
 
   def to_custom_hash
-    custom_hash = { country: country.try(:name) }
-    %i(
+    custom_hash = {country: country.try(:name)}
+    %i[
       id city street street_number zip_code
       geocoded_address latitude longitude
       address_type name
-    ).each do |attribute|
+    ].each do |attribute|
       custom_hash[attribute] = self[attribute]
     end
 
@@ -107,10 +107,10 @@ class Address < Legacy::Address
   end
 
   def self.address_params(raw_address_params)
-    country = Country.geo_find_by_name(raw_address_params['country'])
+    country = Country.geo_find_by_name(raw_address_params["country"])
     filtered_params = raw_address_params.try(:permit,
-                                             :latitude, :longitude, :geocoded_address, :street,
-                                             :street_number, :zip_code, :city) || raw_address_params
+      :latitude, :longitude, :geocoded_address, :street,
+      :street_number, :zip_code, :city) || raw_address_params
 
     filtered_params.to_h.merge(country: country)
   end
@@ -120,7 +120,7 @@ class Address < Legacy::Address
   def sanitize_zip_code!
     return if zip_code.nil?
 
-    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
+    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, "")
   end
 end
 

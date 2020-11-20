@@ -26,7 +26,6 @@ module OfferCalculator
             remarkNotes: remark_notes,
             pricing_rate_data: rate_overview,
             charge_trip_id: schedule.trip_id,
-            tender_id: tender.id,
             exchange_rates: ResultFormatter::ExchangeRateService.new(tender: tender).perform
           }.merge(routing_info)
         end

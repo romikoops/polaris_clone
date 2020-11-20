@@ -6,7 +6,10 @@ RSpec.describe TenderCalculator::RateBasis::Calculator::Percentage do
   include_context "when calculator"
 
   context "when fee is percentage" do
-    let(:calculated_cargo_rate) { TenderCalculator::CargoRate.new(cargo_rate: targeted_rate.object, cargo: target_cargo) }
+    let(:calculated_cargo_rate) {
+      TenderCalculator::CargoRate.new(cargo_rate: targeted_rate.object,
+                                      cargo: target_cargo)
+    }
     let(:perentage_based_fee) { FactoryBot.create(:rates_fee, :percentage_basis, cargo: cargo_rate, percentage: 100) }
 
     it "calculates the line item value as the fee value" do

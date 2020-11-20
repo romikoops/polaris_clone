@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :quotations_quotation, class: 'Quotations::Quotation' do
-    selected_date { Date.today }
+  factory :quotations_quotation, class: "Quotations::Quotation" do
+    selected_date { Time.zone.today }
 
     association :origin_nexus, factory: :legacy_nexus
     association :destination_nexus, factory: :legacy_nexus

@@ -1,38 +1,44 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Pricings
   RSpec.describe Metadatum, type: :model do
     let(:metadatum) { FactoryBot.build(:pricings_metadatum) }
 
-    describe '#valid?' do
-      context 'when valid' do
-        it 'build valid object' do
+    describe "#valid?" do
+      context "when valid" do
+        it "build valid object" do
           expect(metadatum).to be_valid
         end
       end
 
-      context 'when valid with other metadata' do
-        let(:metadatum) { FactoryBot.build(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown) }
+      context "when valid with other metadata" do
+        let(:metadatum) {
+          FactoryBot.build(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown)
+        }
         let(:charge_breakdown) { FactoryBot.build(:legacy_charge_breakdown) }
         let(:organization) { FactoryBot.build(:organizations_organization) }
 
         before { FactoryBot.create(:pricings_metadatum, charge_breakdown: charge_breakdown) }
 
-        it 'build valid object' do
+        it "build valid object" do
           expect(metadatum).to be_valid
         end
       end
 
-      context 'when invalid' do
-        let(:metadatum) { FactoryBot.build(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown) }
+      context "when invalid" do
+        let(:metadatum) {
+          FactoryBot.build(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown)
+        }
         let(:charge_breakdown) { FactoryBot.build(:legacy_charge_breakdown) }
         let(:organization) { FactoryBot.build(:organizations_organization) }
 
-        before { FactoryBot.create(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown) }
+        before do
+          FactoryBot.create(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown)
+        end
 
-        it 'build valid object' do
+        it "build valid object" do
           expect(metadatum).not_to be_valid
         end
       end

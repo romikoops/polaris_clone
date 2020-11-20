@@ -3,7 +3,7 @@
 module TenantRouting
   class Visibility < ApplicationRecord
     belongs_to :target, polymorphic: true
-    belongs_to :connection, class_name: 'TenantRouting::Connection'
+    belongs_to :connection, class_name: "TenantRouting::Connection"
   end
 end
 

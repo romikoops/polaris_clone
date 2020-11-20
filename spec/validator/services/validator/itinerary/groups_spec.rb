@@ -14,7 +14,10 @@ RSpec.describe Validator::Itinerary do
     let(:dedicated_pricings_only) { false }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:carrier_1) { FactoryBot.create(:legacy_carrier, name: "TCR") }
-    let(:default_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "Default", carrier: carrier_1) }
+    let(:default_tenant_vehicle) {
+      FactoryBot.create(:legacy_tenant_vehicle, organization: organization,
+                                                name: "Default", carrier: carrier_1)
+    }
     let(:origin_hub) { itinerary.hubs.first }
     let(:destination_hub) { itinerary.hubs.last }
 
@@ -44,7 +47,10 @@ RSpec.describe Validator::Itinerary do
         effective_date: DateTime.now.beginning_of_minute,
         expiration_date: 90.days.from_now.beginning_of_minute)
     end
-    let!(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle_id: default_tenant_vehicle.id, load_type: "cargo_item") }
+    let!(:trip) {
+      FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle_id: default_tenant_vehicle.id,
+                                      load_type: "cargo_item")
+    }
     let(:results) { described_class.new(user: user, itinerary: itinerary).perform }
     let!(:group_1) { FactoryBot.create(:groups_group, organization: organization, name: "Test") }
     let!(:membership_1) { FactoryBot.create(:groups_membership, group: group_1, member: user) }
@@ -135,7 +141,8 @@ RSpec.describe Validator::Itinerary do
         expect(target_group_result.dig(:freight)).to eq(
           required: true, status: "good", last_expiry: pricing_3.expiration_date.beginning_of_minute
         )
-        expect(target_group_result.dig(:schedules)).to eq(required: true, status: "expiring_soon", last_expiry: trip.start_date)
+        expect(target_group_result.dig(:schedules)).to eq(required: true, status: "expiring_soon",
+                                                          last_expiry: trip.start_date)
       end
     end
 
@@ -152,8 +159,10 @@ RSpec.describe Validator::Itinerary do
       let(:target_group_result) { group_result[:results].find { |res| res[:service_level] == tenant_vehicle_2.name } }
 
       it "returns the expected result ", :aggregate_failures do
-        expect(target_group_result.dig(:origin_local_charges)).to eq(required: false, status: "no_data", last_expiry: nil)
-        expect(target_group_result.dig(:destination_local_charges)).to eq(required: false, status: "no_data", last_expiry: nil)
+        expect(target_group_result.dig(:origin_local_charges)).to eq(required: false, status: "no_data",
+                                                                     last_expiry: nil)
+        expect(target_group_result.dig(:destination_local_charges)).to eq(required: false, status: "no_data",
+                                                                          last_expiry: nil)
         expect(target_group_result.dig(:freight)).to eq(
           required: true, status: "expiring_soon", last_expiry: pricing_4.expiration_date.beginning_of_minute
         )

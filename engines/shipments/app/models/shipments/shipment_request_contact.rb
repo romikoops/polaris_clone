@@ -3,7 +3,7 @@
 module Shipments
   class ShipmentRequestContact < ApplicationRecord
     belongs_to :shipment_request
-    belongs_to :contact, class_name: 'AddressBook::Contact'
+    belongs_to :contact, class_name: "AddressBook::Contact"
   end
 end
 

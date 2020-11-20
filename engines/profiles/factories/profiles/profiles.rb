@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :profiles_profile, class: 'Profiles::Profile' do
-    first_name { 'Guest' }
+  factory :profiles_profile, class: "Profiles::Profile" do
+    first_name { "Guest" }
     sequence(:last_name) { |n| "User #{n}" }
-    phone { '081 9847079' }
+    phone { "081 9847079" }
     sequence(:company_name) { |n| "Guest Company #{n}" }
   end
 end

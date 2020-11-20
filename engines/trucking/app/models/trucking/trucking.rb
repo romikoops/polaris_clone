@@ -1,38 +1,38 @@
 # frozen_string_literal: true
 
-require 'will_paginate'
+require "will_paginate"
 
 module Trucking
   class Trucking < ApplicationRecord
     LCL_TRUCK_TYPES = %w[default].freeze
     FCL_TRUCK_TYPES = %w[chassis side_lifter].freeze
 
-    belongs_to :hub, class_name: 'Legacy::Hub'
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
-    belongs_to :hub, class_name: 'Legacy::Hub'
-    belongs_to :organization, class_name: 'Organizations::Organization'
-    belongs_to :location, class_name: 'Trucking::Location'
+    belongs_to :hub, class_name: "Legacy::Hub"
+    belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle"
+    belongs_to :hub, class_name: "Legacy::Hub"
+    belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :location, class_name: "Trucking::Location"
     validates :hub_id, :location_id, presence: true
-    belongs_to :group, class_name: 'Groups::Group', optional: true
+    belongs_to :group, class_name: "Groups::Group", optional: true
     validates :hub_id,
-              uniqueness: {
-                scope: %i(
-                  carriage
-                  load_type
-                  cargo_class
-                  location_id
-                  user_id
-                  modifier
-                  organization_id
-                  truck_type
-                  group_id
-                  tenant_vehicle_id
-                  validity
-                ),
-                message: lambda { |obj, _msg|
-                  "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
-                }
-              }
+      uniqueness: {
+        scope: %i[
+          carriage
+          load_type
+          cargo_class
+          location_id
+          user_id
+          modifier
+          organization_id
+          truck_type
+          group_id
+          tenant_vehicle_id
+          validity
+        ],
+        message: lambda { |obj, _msg|
+          "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
+        }
+      }
     MODIFIERS = %w[cbm_kg unit km unit_in_kg unit cbm wm kg].freeze
 
     acts_as_paranoid
@@ -42,10 +42,10 @@ module Trucking
     end
 
     def self.find_by_hub_id(hub_id:, options: {})
-      find_by_hub_ids(hub_ids: [hub_id], options: options)
+      for_hubs(hub_ids: [hub_id], options: options)
     end
 
-    def self.find_by_hub_ids(hub_ids:, options: {})
+    def self.for_hubs(hub_ids:, options: {})
       args = options.merge(hub_ids: hub_ids)
       result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
       result = result.paginate(page: options[:page], per_page: options[:per_page] || 20) if options[:paginate]
@@ -54,15 +54,13 @@ module Trucking
     end
 
     # Instance Methods
-    def nexus_id
-      hub.nexus_id
-    end
+    delegate :nexus_id, to: :hub
 
     def as_index_result
       {
-        'truckingPricing' => as_json,
-        'countryCode' => location.country.code,
-        'courier' => tenant_vehicle.name
+        "truckingPricing" => as_json,
+        "countryCode" => location.country.code,
+        "courier" => tenant_vehicle.name
       }.merge(location_info)
     end
 
@@ -70,11 +68,11 @@ module Trucking
       return {} if location.nil?
 
       if location&.zipcode
-        { 'zipCode' => location.zipcode }
+        {"zipCode" => location.zipcode}
       elsif location&.distance
-        { 'distance' => location.distance }
+        {"distance" => location.distance}
       else
-        { 'city' => location.city_name || location.location&.name }
+        {"city" => location.city_name || location.location&.name}
       end
     end
   end

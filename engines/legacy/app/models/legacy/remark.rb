@@ -2,9 +2,9 @@
 
 module Legacy
   class Remark < ApplicationRecord
-    self.table_name = 'remarks'
+    self.table_name = "remarks"
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
   end
 end
 

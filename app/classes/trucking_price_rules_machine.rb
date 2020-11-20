@@ -9,7 +9,7 @@ class TruckingPriceRulesMachine
 
   def rule_evaluation(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code)
     if volume_in_cm3 / 1_000_000 > pricing.fcl_limit_m3_40_foot || weight_in_tons > pricing.fcl_limit_tons_40_foot
-      raise 'Volume and/or weight are out of bounds!'
+      raise "Volume and/or weight are out of bounds!"
     end
 
     if pricing.has_steptable?
@@ -36,7 +36,7 @@ class TruckingPriceRulesMachine
     multiplier = determine_multiplier(weight, volume)
 
     price_per_part = nil
-    table.keys.each do |zip_code_range_string|
+    table.each_key do |zip_code_range_string|
       zip_code_range_array = JSON.parse(zip_code_range_string)
       next unless zip_code.between?(zip_code_range_array.first, zip_code_range_array.last)
 

@@ -2,8 +2,8 @@
 
 module Trucking
   class HubAvailability < ApplicationRecord
-    belongs_to :hub, class_name: 'Legacy::Hub'
-    belongs_to :type_availability, class_name: 'Trucking::TypeAvailability'
+    belongs_to :hub, class_name: "Legacy::Hub"
+    belongs_to :type_availability, class_name: "Trucking::TypeAvailability"
 
     delegate :truck_type, to: :type_availability
     validates :hub_id, uniqueness: {scope: %i[type_availability_id]}

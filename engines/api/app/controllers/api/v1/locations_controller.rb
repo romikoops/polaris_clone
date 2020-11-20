@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_dependency 'api/application_controller'
+require_dependency "api/application_controller"
 
 module Api
   module V1

@@ -4,15 +4,15 @@ module Integrations
   module ChainIo
     class Shipment < Legacy::Shipment
       def pickup_address
-        read_attribute(:pickup_address) || ''
+        read_attribute(:pickup_address) || ""
       end
 
       def delivery_address
-        read_attribute(:delivery_address) || ''
+        read_attribute(:delivery_address) || ""
       end
 
       def selected_day
-        read_attribute(:selected_day) || ''
+        read_attribute(:selected_day) || ""
       end
 
       def dimensional_weight

@@ -42,8 +42,9 @@ module RateExtractor
     end
 
     def consolidation
-      consolidation = OrganizationManager::ScopeService.new(target: nil, organization: organization).fetch(:consolidation)
-      consolidation['trucking']['calculation']
+      consolidation = OrganizationManager::ScopeService.new(target: nil, organization: organization)
+        .fetch(:consolidation)
+      consolidation["trucking"]["calculation"]
     end
   end
 end

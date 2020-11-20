@@ -2,14 +2,13 @@
 
 module Legacy
   class Layover < ApplicationRecord
-    self.table_name = 'layovers'
-    belongs_to :stop, class_name: 'Legacy::Stop'
-    belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    belongs_to :trip, class_name: 'Legacy::Trip'
+    self.table_name = "layovers"
+    belongs_to :stop, class_name: "Legacy::Stop"
+    belongs_to :itinerary, class_name: "Legacy::Itinerary"
+    belongs_to :trip, class_name: "Legacy::Trip"
     delegate :hub_id, :hub, to: :stop
 
     scope :hub_id, ->(hub_id) { joins(:stop).where('stops.hub_id': hub_id) }
-
   end
 end
 

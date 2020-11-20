@@ -8,16 +8,30 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
     let(:carrier) { FactoryBot.create(:legacy_carrier, code: "hapag lloyd", name: "Hapag LLoyd") }
-    let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: "lcl_service", organization: organization) }
-    let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "fcl_service", organization: organization, carrier: carrier) }
+    let(:tenant_vehicle_1) {
+      FactoryBot.create(:legacy_tenant_vehicle, name: "lcl_service", organization: organization)
+    }
+    let(:tenant_vehicle_2) {
+      FactoryBot.create(:legacy_tenant_vehicle, name: "fcl_service", organization: organization, carrier: carrier)
+    }
     let!(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe") }
-    let!(:ignored_itinerary) { FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe", mode_of_transport: "rail") }
-    let!(:misspelled_itinerary) { FactoryBot.create(:default_itinerary, organization: organization, name: "Sahnghai - Felixstowe", mode_of_transport: "air") }
+    let!(:ignored_itinerary) {
+      FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe",
+                                            mode_of_transport: "rail")
+    }
+    let!(:misspelled_itinerary) {
+      FactoryBot.create(:default_itinerary, organization: organization, name: "Sahnghai - Felixstowe",
+                                            mode_of_transport: "air")
+    }
     let!(:multi_mot_itineraries) do
       [
-        FactoryBot.create(:default_itinerary, organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "ocean"),
-        FactoryBot.create(:default_itinerary, organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "ocean", transshipment: "ZACPT"),
-        FactoryBot.create(:default_itinerary, organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "air")
+        FactoryBot.create(:default_itinerary,
+          organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "ocean"),
+        FactoryBot.create(:default_itinerary,
+          organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "ocean",
+          transshipment: "ZACPT"),
+        FactoryBot.create(:default_itinerary,
+          organization: organization, name: "Shanghai - Felixstowe", mode_of_transport: "air")
       ]
     end
 
@@ -38,9 +52,15 @@ RSpec.describe ExcelDataServices::Inserters::ScheduleGenerator do
 
         aggregate_failures do
           expect(stats.dig(:"legacy/trips", :number_created)).to eq(60)
-          expect(itinerary.trips.where(load_type: "cargo_item").pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_1.id])
-          expect(itinerary.trips.where(load_type: "container").pluck(:tenant_vehicle_id).uniq).to eq([tenant_vehicle_2.id])
-          expect(itinerary.trips.pluck(:start_date).map { |d| d.strftime("%^A") }.uniq).to eq(["THURSDAY"])
+          expect(
+            itinerary.trips.where(load_type: "cargo_item").pluck(:tenant_vehicle_id).uniq
+          ).to eq([tenant_vehicle_1.id])
+          expect(
+            itinerary.trips.where(load_type: "container").pluck(:tenant_vehicle_id).uniq
+          ).to eq([tenant_vehicle_2.id])
+          expect(
+            itinerary.trips.pluck(:start_date).map { |d| d.strftime("%^A") }.uniq
+          ).to eq(["THURSDAY"])
           expect(ignored_itinerary.trips).to be_empty
           expect(ignored_itinerary.trips).to be_empty
           expect(multi_mot_itineraries.map { |it| it.trips.count }.sum).to be_positive

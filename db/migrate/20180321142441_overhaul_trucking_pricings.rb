@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OverhaulTruckingPricings < ActiveRecord::Migration[5.1]
-  def change
+  def up
     remove_column :trucking_pricings, :tenant_id
     remove_column :trucking_pricings, :nexus_id
     remove_column :trucking_pricings, :upper_zip

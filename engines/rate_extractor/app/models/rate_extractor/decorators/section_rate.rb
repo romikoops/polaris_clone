@@ -7,7 +7,8 @@ module RateExtractor
 
       decorates_association :cargos, with: RateExtractor::Decorators::CargoRate
 
-      def carriage_distance; end
+      def carriage_distance
+      end
     end
   end
 end

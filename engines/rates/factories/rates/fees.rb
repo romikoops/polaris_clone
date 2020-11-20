@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :rates_fee, class: 'Rates::Fee' do
+  factory :rates_fee, class: "Rates::Fee" do
     association :cargo, factory: :rates_cargo
     amount_cents { 2500 }
     level { 0 }
     operator { 0 }
-    amount_currency { 'USD' }
+    amount_currency { "USD" }
     rate_basis { 0 }
     kg_range { (0..Float::INFINITY) }
     stowage_range { (0..Float::INFINITY) }
@@ -16,9 +16,9 @@ FactoryBot.define do
     unit_range { (0..Float::INFINITY) }
     validity { (4.days.ago..60.days.from_now) }
     min_amount_cents { 100 }
-    min_amount_currency { 'USD' }
+    min_amount_currency { "USD" }
     max_amount_cents { 1_000_000 }
-    max_amount_currency { 'USD' }
+    max_amount_currency { "USD" }
     cbm_ratio { 1000 }
 
     trait :kg_basis do

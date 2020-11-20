@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_dependency 'api/application_controller'
+require_dependency "api/application_controller"
 
 module Api
   class ApiController < ApplicationController
-    API_HOST = 'api.itsmycargo.com'
+    API_HOST = "api.itsmycargo.com"
     include ErrorHandler
     include Pagination
 
@@ -86,7 +86,7 @@ module Api
         domains = [
           URI(request.referer.to_s).host,
           request.host,
-          Rails.env.production? ? nil : ENV.fetch("DEFAULT_TENANT") { "demo.local" }
+          Rails.env.production? ? nil : ENV.fetch("DEFAULT_TENANT", "demo.local")
         ]
 
         domains.push(parse_saco_idp)
@@ -95,10 +95,10 @@ module Api
     end
 
     def parse_saco_idp
-      forwarded_host = request.headers['X-Forwarded-Host']
+      forwarded_host = request.headers["X-Forwarded-Host"]
       return if forwarded_host.nil?
 
-      forwarded_host.split(',').map(&:strip).reject { |host| host == API_HOST }
+      forwarded_host.split(",").map(&:strip).reject { |host| host == API_HOST }
     end
 
     def referer

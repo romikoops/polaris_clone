@@ -3,14 +3,14 @@
 module Trucking
   class Location < ApplicationRecord
     validates :data,
-              uniqueness: {
-                scope: %i(query location_id),
-                message: 'is a duplicate (all attributes match an existing record in the DB)'
-              }
+      uniqueness: {
+        scope: %i[query location_id],
+        message: "is a duplicate (all attributes match an existing record in the DB)"
+      }
 
-    belongs_to :country, optional: true, class_name: 'Legacy::Country'
-    belongs_to :location, optional: true, class_name: 'Locations::Location'
-    has_many :truckings, class_name: 'Trucking::Trucking'
+    belongs_to :country, optional: true, class_name: "Legacy::Country"
+    belongs_to :location, optional: true, class_name: "Locations::Location"
+    has_many :truckings, class_name: "Trucking::Trucking"
     has_many :hubs, through: :truckings
     enum query: {postal_code: 0, location: 1, distance: 2}
 

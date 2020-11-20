@@ -2,14 +2,14 @@
 
 module Legacy
   class TenantVehicle < ApplicationRecord
-    self.table_name = 'tenant_vehicles'
+    self.table_name = "tenant_vehicles"
 
     acts_as_paranoid
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :vehicle, optional: true
     belongs_to :carrier, optional: true
-    has_many :pricings, class_name: 'Pricings::Pricing'
+    has_many :pricings, class_name: "Pricings::Pricing"
 
     validates_uniqueness_of :name, scope: [:organization_id, :carrier_id, :mode_of_transport]
 
@@ -18,7 +18,7 @@ module Legacy
     end
 
     def with_carrier
-      as_json(include: { carrier: { only: %i[id name] } })
+      as_json(include: {carrier: {only: %i[id name]}})
     end
   end
 end

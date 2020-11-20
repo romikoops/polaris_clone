@@ -20,7 +20,9 @@ module Api
     let(:quotation) { Quotations::Quotation.find_by(legacy_shipment: shipment) }
     let(:default_scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
     let(:decorated_quotation) { Api::V1::QuotationDecorator.new(quotation, context: {scope: default_scope}) }
-    let(:serialized_quotation) { described_class.new(decorated_quotation, params: {scope: default_scope}).serializable_hash }
+    let(:serialized_quotation) {
+      described_class.new(decorated_quotation, params: {scope: default_scope}).serializable_hash
+    }
     let(:target) { serialized_quotation.dig(:data, :attributes) }
 
     before do

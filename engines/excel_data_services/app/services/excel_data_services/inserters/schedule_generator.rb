@@ -7,7 +7,9 @@ module ExcelDataServices
       STANDARD_PERIOD = 3.months
       def perform
         data.each do |datum|
-          generate_schedules(ExcelDataServices::Rows::ScheduleGenerator.new(row_data: datum, organization: organization))
+          generate_schedules(
+            ExcelDataServices::Rows::ScheduleGenerator.new(row_data: datum, organization: organization)
+          )
         end
 
         stats
@@ -38,7 +40,7 @@ module ExcelDataServices
       def generate_from_itinerary(itinerary:, row:)
         tenant_vehicle_ids = relevant_tenant_vehicle_ids(itinerary, row)
         stops_in_order = itinerary.stops.order(:index)
-        finish_date = Date.today + STANDARD_PERIOD
+        finish_date = Time.zone.today + STANDARD_PERIOD
         tenant_vehicle_ids.each do |tv_id|
           trip_results = itinerary.generate_weekly_schedules(
             stops_in_order: stops_in_order,

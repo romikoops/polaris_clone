@@ -5,7 +5,8 @@ class AddCargoToLineItem < ActiveRecord::Migration[5.2]
 
   def change
     safety_assured do
-      add_reference :quotations_line_items, :cargo, polymorphic: true, index: { algorithm: :concurrently }, type: :integer
+      add_reference :quotations_line_items, :cargo, polymorphic: true, index: {algorithm: :concurrently},
+                                                    type: :integer
     end
   end
 end

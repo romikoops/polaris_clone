@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :carrier do
-    name { 'Hapag Lloyd' }
+    name { "Hapag Lloyd" }
   end
 end
 

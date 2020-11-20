@@ -17,7 +17,7 @@ module ExcelDataServices
 
         def perform
           query_results.each_with_object({}) do |result, memo|
-            result.keys.each do |conflict_key|
+            result.each_key do |conflict_key|
               memo[conflict_key] = result[conflict_key] if memo[conflict_key].blank?
             end
             memo

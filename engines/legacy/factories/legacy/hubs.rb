@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_hub, class: 'Legacy::Hub' do
+  factory :legacy_hub, class: "Legacy::Hub" do
     trait :with_lat_lng do
-      latitude { '57.694253' }
-      longitude { '11.854048' }
+      latitude { "57.694253" }
+      longitude { "11.854048" }
     end
 
-    name { 'Gothenburg' }
-    hub_type { 'ocean' }
-    hub_status { 'active' }
-    hub_code { 'SEGOT' }
+    name { "Gothenburg" }
+    hub_type { "ocean" }
+    hub_status { "active" }
+    hub_code { "SEGOT" }
     free_out { false }
     association :organization, factory: :organizations_organization
     association :address, factory: :legacy_address
@@ -18,45 +18,45 @@ FactoryBot.define do
     association :mandatory_charge, factory: :legacy_mandatory_charge
 
     trait :gothenburg do
-      name { 'Gothenburg' }
-      hub_type { 'ocean' }
-      hub_status { 'active' }
-      hub_code { 'SEGOT' }
-      latitude { '57.694253' }
-      longitude { '11.854048' }
+      name { "Gothenburg" }
+      hub_type { "ocean" }
+      hub_status { "active" }
+      hub_code { "SEGOT" }
+      latitude { "57.694253" }
+      longitude { "11.854048" }
       association :address, factory: :gothenburg_address
       association :nexus, factory: :gothenburg_nexus
     end
 
     trait :shanghai do
-      name { 'Shanghai' }
-      hub_type { 'ocean' }
-      hub_status { 'active' }
-      hub_code { 'CNSHA' }
-      latitude { '31.2231338' }
-      longitude { '120.9162975' }
+      name { "Shanghai" }
+      hub_type { "ocean" }
+      hub_status { "active" }
+      hub_code { "CNSHA" }
+      latitude { "31.2231338" }
+      longitude { "120.9162975" }
       association :address, factory: :shanghai_address
       association :nexus, factory: :shanghai_nexus
     end
 
     trait :hamburg do
-      name { 'Hamburg' }
-      hub_type { 'ocean' }
-      hub_status { 'active' }
-      hub_code { 'DEHAM' }
-      latitude { '53.55' }
-      longitude { '9.927' }
+      name { "Hamburg" }
+      hub_type { "ocean" }
+      hub_status { "active" }
+      hub_code { "DEHAM" }
+      latitude { "53.55" }
+      longitude { "9.927" }
       association :address, factory: :hamburg_address
       association :nexus, factory: :hamburg_nexus
     end
 
     trait :felixstowe do
-      name { 'Felixstowe' }
-      hub_type { 'ocean' }
-      hub_status { 'active' }
-      hub_code { 'GBFXT' }
-      latitude { '51.96' }
-      longitude { '1.3277' }
+      name { "Felixstowe" }
+      hub_type { "ocean" }
+      hub_status { "active" }
+      hub_code { "GBFXT" }
+      latitude { "51.96" }
+      longitude { "1.3277" }
       association :address, factory: :felixstowe_address
       association :nexus, factory: :felixstowe_nexus
     end

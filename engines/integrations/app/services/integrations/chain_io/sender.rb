@@ -3,7 +3,7 @@
 module Integrations
   module ChainIo
     class Sender
-      BASE_URL = 'https://webhooks.chain.io'
+      BASE_URL = "https://webhooks.chain.io"
 
       def initialize(data:, organization_id:)
         @body = data
@@ -17,7 +17,7 @@ module Integrations
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true
 
-        header = { 'Content-Type' => 'application/json', 'x-api-key' => organization_api_key }
+        header = {"Content-Type" => "application/json", "x-api-key" => organization_api_key}
         request = Net::HTTP::Post.new(uri, header)
 
         request.body = @body.to_json

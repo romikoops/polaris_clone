@@ -21,16 +21,22 @@ RSpec.describe OfferCalculator::Service::Manipulators::Pricings do
     end
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) { described_class.results(association: Pricings::Pricing.all, shipment: shipment, schedules: schedules) }
+  let(:results) {
+    described_class.results(association: Pricings::Pricing.all, shipment: shipment, schedules: schedules)
+  }
 
   before do
     Organizations.current_id = organization.id
-    FactoryBot.create(:freight_margin, default_for: "ocean", organization: organization, applicable: organization, value: 0)
+    FactoryBot.create(:freight_margin,
+      default_for: "ocean", organization: organization, applicable: organization, value: 0)
   end
 
   describe ".perform" do
     context "when only one pricing available w/o margins" do
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
 
       it "returns the one pricing" do
         results
@@ -42,8 +48,14 @@ RSpec.describe OfferCalculator::Service::Manipulators::Pricings do
     end
 
     context "when only two pricings w/o margins" do
-      let!(:pricing_1) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1) }
-      let!(:pricing_2) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_2) }
+      let!(:pricing_1) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+      }
+      let!(:pricing_2) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_2)
+      }
       let(:trips) do
         [
           FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
@@ -61,8 +73,14 @@ RSpec.describe OfferCalculator::Service::Manipulators::Pricings do
     end
 
     context "when only two pricings w/ one margin (groups)" do
-      let!(:pricing) { FactoryBot.create(:lcl_pricing, itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id) }
-      let!(:margin) { FactoryBot.create(:freight_margin, pricing: pricing, organization: organization, applicable: user, value: 100) }
+      let!(:pricing) {
+        FactoryBot.create(:lcl_pricing,
+          itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+      }
+      let!(:margin) {
+        FactoryBot.create(:freight_margin,
+          pricing: pricing, organization: organization, applicable: user, value: 100)
+      }
 
       it "returns the one pricing" do
         aggregate_failures do

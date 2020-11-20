@@ -2,9 +2,9 @@
 
 module Legacy
   class ChargeCategory < ApplicationRecord
-    self.table_name = 'charge_categories'
+    self.table_name = "charge_categories"
     has_many :charges
-    belongs_to :organization, class_name: 'Organizations::Organization', optional: true
+    belongs_to :organization, class_name: "Organizations::Organization", optional: true
     validates :name, :code, presence: true
     validates_uniqueness_of :name, scope: %i[code organization_id cargo_unit_id]
 

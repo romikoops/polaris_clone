@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rates/engine'
+require "rates/engine"
 
 module Rates
 end

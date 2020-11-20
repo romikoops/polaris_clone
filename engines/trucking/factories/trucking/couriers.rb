@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :trucking_courier, class: 'Trucking::Courier' do
-    name { 'example courier' }
+  factory :trucking_courier, class: "Trucking::Courier" do
+    name { "example courier" }
     association :organization, factory: :organizations_organization
   end
 end

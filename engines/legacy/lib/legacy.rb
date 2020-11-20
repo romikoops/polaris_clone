@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'legacy/engine'
+require "legacy/engine"
 
 module Legacy
 end

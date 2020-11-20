@@ -114,18 +114,23 @@ RSpec.describe OfferCalculator::Calculator do
 
   before do
     Organizations.current_id = organization.id
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:origin).and_return(origin_address_params)
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params).with(:destination).and_return(destination_address_params)
+    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
+      .with(:origin).and_return(origin_address_params)
+    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
+      .with(:destination).and_return(destination_address_params)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
   end
 
   describe ".perform" do
     context "with calculator errors" do
-      let(:shipment_update_handler) { instance_double(OfferCalculator::Service::ShipmentUpdateHandler, update_trucking: nil, update_nexuses: nil) }
+      let(:shipment_update_handler) {
+        instance_double(OfferCalculator::Service::ShipmentUpdateHandler, update_trucking: nil, update_nexuses: nil)
+      }
 
       before do
         allow(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:new).and_return(shipment_update_handler)
-        allow(shipment_update_handler).to receive(:update_trucking).and_raise(OfferCalculator::Errors::InvalidPickupAddress)
+        allow(shipment_update_handler).to receive(:update_trucking)
+          .and_raise(OfferCalculator::Errors::InvalidPickupAddress)
       end
 
       it "set the error class on the quotation" do
@@ -138,7 +143,8 @@ RSpec.describe OfferCalculator::Calculator do
 
     context "with offer creator errors" do
       before do
-        allow(OfferCalculator::Service::OfferCreator).to receive(:offers).and_raise(OfferCalculator::Errors::OfferBuilder)
+        allow(OfferCalculator::Service::OfferCreator).to receive(:offers)
+          .and_raise(OfferCalculator::Errors::OfferBuilder)
       end
 
       it "set the error class on the quotation" do
@@ -212,7 +218,9 @@ RSpec.describe OfferCalculator::Calculator do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(legacy_results.length).to eq(4)
-          expect(legacy_results.map { |result| result.dig(:meta, :tender_id) }).to match_array(Quotations::Tender.order(:amount_cents).ids)
+          expect(
+            legacy_results.map { |result| result.dig(:meta, :tender_id) }
+          ).to match_array(Quotations::Tender.order(:amount_cents).ids)
           expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
         end
       end
@@ -230,7 +238,9 @@ RSpec.describe OfferCalculator::Calculator do
         tenders = Quotations::Tender.all
         aggregate_failures do
           expect(tenders.count).to be(4)
-          expect(tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq).to match_array(desired_tenant_vehicle_combos)
+          expect(
+            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq
+          ).to match_array(desired_tenant_vehicle_combos)
         end
       end
     end

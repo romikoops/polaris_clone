@@ -7,38 +7,38 @@ module Pricings
                        rail: 500,
                        truck: 333}.freeze
     attr_accessor :transient_marked_as_old
-    self.ignored_columns = ['disabled']
+    self.ignored_columns = ["disabled"]
 
     has_paper_trail
 
-    belongs_to :itinerary, class_name: 'Legacy::Itinerary'
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :itinerary, class_name: "Legacy::Itinerary"
+    belongs_to :organization, class_name: "Organizations::Organization"
 
-    belongs_to :tenant_vehicle, class_name: 'Legacy::TenantVehicle'
-    belongs_to :user, class_name: 'Organizations::User', optional: true
-    has_many :fees, class_name: 'Pricings::Fee', dependent: :destroy
-    has_many :margins, class_name: 'Pricings::Margin'
-    belongs_to :group, class_name: 'Groups::Group', optional: true
-    has_many :notes, class_name: 'Legacy::Note', foreign_key: 'pricings_pricing_id', dependent: :destroy
+    belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle"
+    belongs_to :user, class_name: "Organizations::User", optional: true
+    has_many :fees, class_name: "Pricings::Fee", dependent: :destroy
+    has_many :margins, class_name: "Pricings::Margin"
+    belongs_to :group, class_name: "Groups::Group", optional: true
+    has_many :notes, class_name: "Legacy::Note", foreign_key: "pricings_pricing_id", dependent: :destroy
 
     validates :itinerary_id, uniqueness: {
       scope: %i[ organization_id
-                 user_id
-                 tenant_vehicle_id
-                 effective_date
-                 expiration_date
-                 cargo_class
-                 load_type
-                 legacy_id
-                 group_id
-                 transshipment ]
+        user_id
+        tenant_vehicle_id
+        effective_date
+        expiration_date
+        cargo_class
+        load_type
+        legacy_id
+        group_id
+        transshipment ]
     }
 
     before_validation :set_validity
 
-    scope :current, -> { where('validity @> CURRENT_DATE') }
-    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == 'true' ? :desc : :asc) }
-    scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
+    scope :current, -> { where("validity @> CURRENT_DATE") }
+    scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
+    scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: {mode_of_transport: mot.downcase}) }
     scope :for_load_type, (lambda do |load_type|
       where(load_type: load_type.downcase)
     end)
@@ -46,7 +46,7 @@ module Pricings
       where(cargo_class: cargo_classes.map(&:downcase))
     end)
     scope :for_dates, (lambda do |start_date, end_date|
-      where('validity && daterange(?::date, ?::date)', start_date, end_date)
+      where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
 
     def as_json(options = {})

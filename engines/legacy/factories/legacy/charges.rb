@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_charge, class: 'Legacy::Charge' do
+  factory :legacy_charge, class: "Legacy::Charge" do
     association :price, factory: :legacy_price
     association :charge_breakdown, factory: :legacy_charge_breakdown
     association :charge_category, factory: :legacy_charge_categories

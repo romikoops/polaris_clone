@@ -2,7 +2,7 @@
 
 class IsModelValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    @record    = record
+    @record = record
     @attribute = attribute
 
     camelized_value = value.camelize

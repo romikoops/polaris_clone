@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'axlsx'
+require "axlsx"
 
 module AdmiraltyReports
   class ExcelGenerator
@@ -21,18 +21,19 @@ module AdmiraltyReports
     private
 
     def xlsx_content(workbook)
-      workbook.add_worksheet(name: 'Stat Overview') do |sheet|
-        sheet.add_row ['Tenant Name', 'Date of Quotation/Booking', 'User', 'Company', 'Status']
+      workbook.add_worksheet(name: "Stat Overview") do |sheet|
+        sheet.add_row ["Tenant Name", "Date of Quotation/Booking", "User", "Company", "Status"]
         @raw_request_data.each do |request|
           request_user = ::Users::User.find_by(id: request.user_id)
-          request_organization = request.try(:organization) || Legacy::Shipment.find(request.original_shipment_id).organization
+          request_organization = request.try(:organization) ||
+            Legacy::Shipment.find(request.original_shipment_id).organization
           company = Companies::Membership.find_by(member: request_user)&.company
           sheet.add_row(
             [request_organization.try(:name) || request_organization.try(:slug),
-             request.created_at.to_date,
-             request_user&.email,
-             company&.name,
-             request.try(:status)]
+              request.created_at.to_date,
+              request_user&.email,
+              company&.name,
+              request.try(:status)]
           )
         end
       end

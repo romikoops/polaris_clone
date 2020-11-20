@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :shipments_invoice, class: 'Shipments::Invoice' do
+  factory :shipments_invoice, class: "Shipments::Invoice" do
     amount_cents { 1000 }
 
     after(:build) do

@@ -2,17 +2,17 @@
 
 module Legacy
   class AggregatedCargo < ApplicationRecord
-    self.table_name = 'aggregated_cargos'
+    self.table_name = "aggregated_cargos"
 
     acts_as_paranoid
 
-    belongs_to :shipment, class_name: 'Legacy::Shipment'
+    belongs_to :shipment, class_name: "Legacy::Shipment"
     before_validation :set_chargeable_weight!
     DEFAULT_HEIGHT = 130
     DIMENSIONS = %i[weight volume chargeable_weight].freeze
     AGGREGATE_DIMENSION_MAP = {
-      weight: 'payload_in_kg',
-      chargeable_weight: 'chargeable_weight'
+      weight: "payload_in_kg",
+      chargeable_weight: "chargeable_weight"
     }.freeze
 
     delegate :organization, to: :shipment
@@ -32,7 +32,7 @@ module Legacy
     end
 
     def cargo_class
-      'lcl'
+      "lcl"
     end
   end
 end

@@ -8,7 +8,9 @@ module OfferCalculator
 
     describe "#perform_later" do
       let(:perform_latter) do
-        described_class.perform_later(shipment_id: 1, quotation_id: SecureRandom.uuid, user_id: SecureRandom.uuid, wheelhouse: false)
+        described_class.perform_later(
+          shipment_id: 1, quotation_id: SecureRandom.uuid, user_id: SecureRandom.uuid, wheelhouse: false
+        )
       end
 
       it "enqueues the job" do

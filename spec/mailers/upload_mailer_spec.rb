@@ -7,9 +7,12 @@ RSpec.describe UploadMailer, type: :mailer do
   let(:organization) { user.organization }
 
   before do
-    stub_request(:get, "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png").to_return(status: 200, body: "", headers: {})
-    stub_request(:get, "https://assets.itsmycargo.com/assets/logos/logo_box.png").to_return(status: 200, body: "", headers: {})
-    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700").to_return(status: 200, body: "", headers: {})
+    stub_request(:get, "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png")
+      .to_return(status: 200, body: "", headers: {})
+    stub_request(:get, "https://assets.itsmycargo.com/assets/logos/logo_box.png")
+      .to_return(status: 200, body: "", headers: {})
+    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
+      .to_return(status: 200, body: "", headers: {})
   end
 
   describe "complete_mail" do

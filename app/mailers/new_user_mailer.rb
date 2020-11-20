@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class NewUserMailer < ApplicationMailer
-  default from: 'ItsMyCargo Bookings <bookings@itsmycargo.com>'
-  layout 'mailer'
+  default from: "ItsMyCargo Bookings <bookings@itsmycargo.com>"
+  layout "mailer"
   add_template_helper(ApplicationHelper)
 
   def new_user_email(user:)
@@ -15,21 +15,21 @@ class NewUserMailer < ApplicationMailer
     @scope = scope_for(record: @user)
 
     @mot_icon = URI.open(
-      'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png'
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png"
     ).read
     email_logo = @organization.theme.email_logo
-    attachments.inline['logo.png'] = email_logo.attached? ? email_logo&.download : ''
-    attachments.inline['icon.png'] = @mot_icon
-    email = @org_theme.emails.dig('sales', 'general')
+    attachments.inline["logo.png"] = email_logo.attached? ? email_logo&.download : ""
+    attachments.inline["icon.png"] = @mot_icon
+    email = @org_theme.emails.dig("sales", "general")
 
     return if email.nil?
 
     mail(
       from: Mail::Address.new("no-reply@#{Settings.emails.domain}")
-                         .tap { |a| a.display_name = 'ItsMyCargo Service Request' }.format,
-      reply_to: 'support@itsmycargo.com',
+                         .tap { |a| a.display_name = "ItsMyCargo Service Request" }.format,
+      reply_to: "support@itsmycargo.com",
       to: email,
-      subject: 'A New User Has Registered!'
+      subject: "A New User Has Registered!"
     ) do |format|
       format.html
       format.mjml

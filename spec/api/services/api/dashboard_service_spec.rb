@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Api
   RSpec.describe DashboardService, type: :service do
@@ -9,9 +9,11 @@ module Api
     let(:start_date) { DateTime.new(2020, 2, 10) }
     let(:end_date) { DateTime.new(2020, 3, 10) }
 
-    describe 'with activeClientCount widget' do
+    describe "with activeClientCount widget" do
       let(:widget_class) { Analytics::Dashboard::ActiveClientCount }
-      let(:widget) { widget_class.new(organization: quote_organization, user: quote_user, start_date: start_date, end_date: end_date) }
+      let(:widget) {
+        widget_class.new(organization: quote_organization, user: quote_user, start_date: start_date, end_date: end_date)
+      }
       let(:mock_result) { 1 }
 
       before do
@@ -19,10 +21,10 @@ module Api
         allow(widget).to receive(:data).and_return(mock_result)
       end
 
-      it 'instantiates the correct widget class and calls the service' do
+      it "instantiates the correct widget class and calls the service" do
         result = described_class.data(user: quote_user,
                                       organization: quote_organization,
-                                      widget_name: 'activeClientCount',
+                                      widget_name: "activeClientCount",
                                       start_date: start_date,
                                       end_date: end_date)
 

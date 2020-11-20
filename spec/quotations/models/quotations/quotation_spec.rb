@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Quotations
   RSpec.describe Quotations::Quotation, type: :model do
@@ -36,142 +36,144 @@ module Quotations
     }
     let(:sorted_quotations) { described_class.sorted(sort_by: sort_key, direction: direction_key) }
 
-    context 'Associations' do
-      %i(organization user origin_nexus destination_nexus).each do |association|
+    context "Associations" do
+      %i[organization user origin_nexus destination_nexus].each do |association|
         it { is_expected.to respond_to(association) }
       end
     end
 
-    context 'Validity' do
+    context "Validity" do
       it { is_expected.to be_valid }
     end
 
-    context 'sorted by load_type' do
-      let(:sort_key) { 'load_type' }
+    context "sorted by load_type" do
+      let(:sort_key) { "load_type" }
 
       before do
-        FactoryBot.create(:quotations_tender, quotation: asc_quotation, load_type: 'cargo_item', itinerary: itinerary_one)
-        FactoryBot.create(:quotations_tender, quotation: desc_quotation, load_type: 'container', itinerary: itinerary_two)
+        FactoryBot.create(:quotations_tender,
+          quotation: asc_quotation, load_type: "cargo_item", itinerary: itinerary_one)
+        FactoryBot.create(:quotations_tender,
+          quotation: desc_quotation, load_type: "container", itinerary: itinerary_two)
       end
 
-      context 'sorted by load_type asc' do
-        let(:direction_key) { 'asc' }
+      context "sorted by load_type asc" do
+        let(:direction_key) { "asc" }
 
-        it 'sorts quotation load types in ascending direction' do
+        it "sorts quotation load types in ascending direction" do
           expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
         end
       end
 
-      context 'sorted by load_type desc' do
-        let(:direction_key) { 'desc' }
+      context "sorted by load_type desc" do
+        let(:direction_key) { "desc" }
 
-        it 'sorts quotationload types in descending direction' do
+        it "sorts quotationload types in descending direction" do
           expect(sorted_quotations).to eq([desc_quotation, asc_quotation])
         end
       end
     end
 
-    context 'sorted by user last name' do
-      let(:sort_key) { 'last_name' }
+    context "sorted by user last name" do
+      let(:sort_key) { "last_name" }
 
       before do
-        FactoryBot.create(:profiles_profile, user: user_one, last_name: '1')
-        FactoryBot.create(:profiles_profile, user: user_two, last_name: '2')
+        FactoryBot.create(:profiles_profile, user: user_one, last_name: "1")
+        FactoryBot.create(:profiles_profile, user: user_two, last_name: "2")
       end
 
-      context 'sorted by user last name asc' do
-        let(:direction_key) { 'asc' }
+      context "sorted by user last name asc" do
+        let(:direction_key) { "asc" }
 
-        it 'sorts quotations by their users first name in ascending direction' do
+        it "sorts quotations by their users first name in ascending direction" do
           expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
         end
       end
 
-      context 'sorted by user last name desc' do
-        let(:direction_key) { 'desc' }
+      context "sorted by user last name desc" do
+        let(:direction_key) { "desc" }
 
-        it 'sorts quotations by their users first name in descending direction' do
+        it "sorts quotations by their users first name in descending direction" do
           expect(sorted_quotations).to eq([desc_quotation, asc_quotation])
         end
       end
     end
 
-    context 'origin' do
-      let(:sort_key) { 'origin' }
+    context "origin" do
+      let(:sort_key) { "origin" }
 
-      context 'sorted by origin asc' do
-        let(:direction_key) { 'asc' }
+      context "sorted by origin asc" do
+        let(:direction_key) { "asc" }
 
-        it 'sorts quotations by their origins in ascending direction' do
+        it "sorts quotations by their origins in ascending direction" do
           expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
         end
       end
 
-      context 'sorted by origin desc' do
-        let(:direction_key) { 'desc' }
+      context "sorted by origin desc" do
+        let(:direction_key) { "desc" }
 
-        it 'sorts quotations by their origin in descending direction' do
+        it "sorts quotations by their origin in descending direction" do
           expect(sorted_quotations).to eq([desc_quotation, asc_quotation])
         end
       end
     end
 
-    context 'sort by destination' do
-      let(:sort_key) { 'destination' }
+    context "sort by destination" do
+      let(:sort_key) { "destination" }
 
-      context 'sorted by destination asc' do
-        let(:direction_key) { 'asc' }
+      context "sorted by destination asc" do
+        let(:direction_key) { "asc" }
 
-        it 'sorts quotations by their destination in ascending direction' do
+        it "sorts quotations by their destination in ascending direction" do
           # desc_quotation has gothenburg as destination, therefore is first
           expect(sorted_quotations).to eq([desc_quotation, asc_quotation])
         end
       end
 
-      context 'sorted by destination desc' do
-        let(:direction_key) { 'desc' }
+      context "sorted by destination desc" do
+        let(:direction_key) { "desc" }
 
-        it 'sorts quotations by their destination in descending direction' do
+        it "sorts quotations by their destination in descending direction" do
           # asc_quotation in this case has gothenburg as destination therefore is first
           expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
         end
       end
     end
 
-    context 'sort by selected_date' do
-      let(:sort_key) { 'selected_date' }
+    context "sort by selected_date" do
+      let(:sort_key) { "selected_date" }
 
-      context 'sorted by selected_date asc' do
-        let(:direction_key) { 'asc' }
+      context "sorted by selected_date asc" do
+        let(:direction_key) { "asc" }
 
-        it 'sorts quotations by their selected date in ascending direction' do
+        it "sorts quotations by their selected date in ascending direction" do
           expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
         end
       end
 
-      context 'sorted by selected_date desc' do
-        let(:direction_key) { 'desc' }
+      context "sorted by selected_date desc" do
+        let(:direction_key) { "desc" }
 
-        it 'sorts quotations by their selected date in descending direction' do
+        it "sorts quotations by their selected date in descending direction" do
           expect(sorted_quotations).to eq([desc_quotation, asc_quotation])
         end
       end
     end
 
-    context 'without matching sort_by scope' do
-      let(:sort_key) { 'nonsense' }
-      let(:direction_key) { 'desc' }
+    context "without matching sort_by scope" do
+      let(:sort_key) { "nonsense" }
+      let(:direction_key) { "desc" }
 
-      it 'returns default direction' do
+      it "returns default direction" do
         expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
       end
     end
 
-    context 'without proper direction scope' do
-      let(:sort_key) { 'selected_date' }
+    context "without proper direction scope" do
+      let(:sort_key) { "selected_date" }
       let(:direction_key) { nil }
 
-      it 'returns default direction' do
+      it "returns default direction" do
         expect(sorted_quotations).to eq([asc_quotation, desc_quotation])
       end
     end

@@ -10,7 +10,7 @@ Rails.application.configure do
   Mail.register_interceptor(
     RecipientInterceptor.new(
       ENV.fetch("EMAIL_RECIPIENTS", "development+qa@itsmycargo.com"),
-      subject_prefix: ENV.fetch("EMAIL_SUBJECT_PREFIX") { "[STAGING]" }
+      subject_prefix: ENV.fetch("EMAIL_SUBJECT_PREFIX", "[STAGING]")
     )
   )
 end

@@ -35,20 +35,18 @@ module Analytics
     end
 
     def requests_with_profiles
-      requests = begin
-          if quotation_tool?
-            quotations.joins(profile_join(reference: 'quotations_quotations'))
-          else
-            shipment_requests.joins(profile_join(reference: 'shipments_shipment_requests'))
-          end
-        end
+      if quotation_tool?
+        quotations.joins(profile_join(reference: "quotations_quotations"))
+      else
+        shipment_requests.joins(profile_join(reference: "shipments_shipment_requests"))
+      end
     end
 
     def requests_with_companies
       if quotation_tool?
-        quotations.joins(companies_join(reference: 'quotations_quotations'))
+        quotations.joins(companies_join(reference: "quotations_quotations"))
       else
-        shipment_requests.joins(companies_join(reference: 'shipments_shipment_requests'))
+        shipment_requests.joins(companies_join(reference: "shipments_shipment_requests"))
       end
     end
 
@@ -69,11 +67,11 @@ module Analytics
     attr_reader :organization, :user, :start_date, :end_date
 
     def blacklisted_emails
-      scope['blacklisted_emails']
+      scope["blacklisted_emails"]
     end
 
     def quotation_tool?
-      @quotation_tool ||= scope['open_quotation_tool'] || scope['closed_quotation_tool']
+      @quotation_tool ||= scope["open_quotation_tool"] || scope["closed_quotation_tool"]
     end
 
     def scope

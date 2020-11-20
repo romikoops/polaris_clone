@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :role do
-    name { 'shipper' }
+    name { "shipper" }
   end
 end
 

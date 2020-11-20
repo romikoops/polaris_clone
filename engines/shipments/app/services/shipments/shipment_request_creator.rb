@@ -50,8 +50,8 @@ module Shipments
     end
 
     def build_contacts
-      build_contact(legacy_type: 'shipper', contact_type: 'Consignor')
-      build_contact(legacy_type: 'consignee', contact_type: 'Consignee')
+      build_contact(legacy_type: "shipper", contact_type: "Consignor")
+      build_contact(legacy_type: "consignee", contact_type: "Consignee")
       build_notifyees
     end
 
@@ -65,19 +65,19 @@ module Shipments
       )
 
       case contact_type
-      when 'Consignor'
+      when "Consignor"
         @shipment_request.consignor = shipment_request_contact
-      when 'Consignee'
+      when "Consignee"
         @shipment_request.consignee = shipment_request_contact
       end
     end
 
     def build_notifyees
-      legacy_shipment.shipment_contacts.where(contact_type: 'notifyee').find_each do |legacy_shipment_contact|
+      legacy_shipment.shipment_contacts.where(contact_type: "notifyee").find_each do |legacy_shipment_contact|
         shipment_request_contact = ShipmentRequestContact.find_or_initialize_by(
           contact: addressbook_contact(legacy_shipment_contact: legacy_shipment_contact),
           shipment_request: shipment_request,
-          type: 'Shipments::ShipmentRequestContacts::Notifyee'
+          type: "Shipments::ShipmentRequestContacts::Notifyee"
         )
 
         @shipment_request.notifyees << shipment_request_contact
@@ -89,12 +89,12 @@ module Shipments
       address = legacy_contact.address
       user = Organizations::User.unscoped.find(legacy_contact.user_id)
       legacy_contact_attrs = legacy_contact.attributes
-                                           .merge(address.attributes)
-                                           .symbolize_keys
-                                           .slice(
-                                             :city, :company_name, :email, :first_name, :geocoded_address, :last_name,
-                                             :phone, :premise, :province, :street, :street_number
-                                           )
+        .merge(address.attributes)
+        .symbolize_keys
+        .slice(
+          :city, :company_name, :email, :first_name, :geocoded_address, :last_name,
+          :phone, :premise, :province, :street, :street_number
+        )
 
       addressbook_contact = AddressBook::Contact.find_or_initialize_by(
         legacy_contact_attrs.slice(:first_name, :last_name, :email, :phone)
@@ -108,7 +108,7 @@ module Shipments
         .merge(
           postal_code: address.zip_code,
           user_id: user.id,
-          country_code: address.country&.code || ''
+          country_code: address.country&.code || ""
         )
       )
 

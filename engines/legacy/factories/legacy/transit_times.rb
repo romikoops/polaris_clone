@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_transit_time, class: 'Legacy::TransitTime' do
+  factory :legacy_transit_time, class: "Legacy::TransitTime" do
     association :itinerary, factory: :legacy_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     duration { 20 }

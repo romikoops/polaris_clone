@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :ledger_deltum, class: 'Ledger::Delta' do
+  factory :ledger_deltum, class: "Ledger::Delta" do
     association :fee, factory: :ledger_fee
     amount_cents { 2500 }
     level { 0 }
     operator { 0 }
-    amount_currency { 'USD' }
+    amount_currency { "USD" }
     rate_basis { 0 }
     kg_range { (0..Float::INFINITY) }
     stowage_range { (0..Float::INFINITY) }
@@ -16,9 +16,9 @@ FactoryBot.define do
     unit_range { (0..Float::INFINITY) }
     validity { (4.days.ago..60.days.from_now) }
     min_amount_cents { 100 }
-    min_amount_currency { 'USD' }
+    min_amount_currency { "USD" }
     max_amount_cents { Ledger::Delta::MAX_VALUE }
-    max_amount_currency { 'USD' }
+    max_amount_currency { "USD" }
     wm_ratio { 1000 }
 
     trait :kg_basis do

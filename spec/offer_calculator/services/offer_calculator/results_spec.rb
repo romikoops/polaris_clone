@@ -13,7 +13,9 @@ RSpec.describe OfferCalculator::Results do
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
-  let(:results) { described_class.new(shipment: shipment, quotation: quotation, wheelhouse: false, mailer: "QuoteMailer") }
+  let(:results) {
+    described_class.new(shipment: shipment, quotation: quotation, wheelhouse: false, mailer: "QuoteMailer")
+  }
   let(:mailer) { class_double("QuoteMailer").as_stubbed_const(transfer_nested_constants: true) }
 
   before do

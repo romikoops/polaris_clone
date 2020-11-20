@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :pricings_margin, class: 'Pricings::Margin' do
+  factory :pricings_margin, class: "Pricings::Margin" do
     value { 0.10 }
-    operator { '%' }
+    operator { "%" }
     margin_type { :freight_margin }
-    effective_date { Date.today.beginning_of_day }
+    effective_date { Time.zone.today.beginning_of_day }
     expiration_date { 6.months.from_now.end_of_day }
     association :organization, factory: :organizations_organization
     association :applicable, factory: :organizations_user
@@ -40,7 +40,7 @@ FactoryBot.define do
 
     trait :addition do
       value { 10 }
-      operator { '+' }
+      operator { "+" }
     end
 
     trait :organization do

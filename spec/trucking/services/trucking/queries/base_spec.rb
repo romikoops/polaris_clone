@@ -23,8 +23,8 @@ RSpec.describe Trucking::Queries::Base do
   end
 
   before do
-    stub_request(:get, stub_url).
-      to_return(status: 200)
+    stub_request(:get, stub_url)
+      .to_return(status: 200)
     FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :distance)
     FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: hub, location: trucking_location)
   end

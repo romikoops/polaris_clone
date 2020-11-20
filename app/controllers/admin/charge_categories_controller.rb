@@ -5,7 +5,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}_charge_categories",
-      type: 'charge_categories',
+      type: "charge_categories",
       options: {
         user: organization_user
       }
@@ -13,7 +13,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
   end
 
   def download
-    category_identifier = 'charge_categories'
+    category_identifier = "charge_categories"
     file_name = "#{current_organization.slug}__#{category_identifier}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
@@ -25,7 +25,7 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
     # TODO: When timing out, file will not be downloaded!!!
     response_handler(
       key: category_identifier,
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
     )
   end
 

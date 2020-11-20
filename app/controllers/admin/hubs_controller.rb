@@ -51,8 +51,8 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def options_search
     list_hubs = Hub.where(organization: current_organization)
-                      .name_search(params[:query])
-                      .limit(30)
+      .name_search(params[:query])
+      .limit(30)
     list_options = decorate_table_list(hubs: list_hubs).map(&:select_option)
     response_handler(list_options)
   end
@@ -83,26 +83,26 @@ class Admin::HubsController < Admin::AdminBaseController
     address = hub.address
     new_loc = params[:address].as_json
     new_hub = params[:data].as_json
-    country_name = new_loc.delete('country')
-    country = Country.find_by_name(country_name)
+    country_name = new_loc.delete("country")
+    country = Country.find_by(name: country_name)
     new_loc[:country_id] = country.id
-    hub.update_attributes(new_hub)
-    address.update_attributes(new_loc)
+    hub.update(new_hub)
+    address.update(new_loc)
     response_handler(hub: decorated_hub(hub: hub).legacy_json, address: address)
   end
 
   def all_hubs
-    processed_hubs = Hub.where(organization_id: current_organization.id).map do |hub|
-      { data: hub, address: hub.address.to_custom_hash }
-    end
+    processed_hubs = Hub.where(organization_id: current_organization.id).map { |hub|
+      {data: hub, address: hub.address.to_custom_hash}
+    }
     response_handler(hubs: processed_hubs)
   end
 
   def upload
     handle_upload(
       params: upload_params,
-      text: "#{current_organization.slug} hubs upload #{Time.zone.today.strftime('%d/%m/%Y')}",
-      type: 'hubs',
+      text: "#{current_organization.slug} hubs upload #{Time.zone.today.strftime("%d/%m/%Y")}",
+      type: "hubs",
       options: {
         user: organization_user,
         group_id: upload_params[:group_id]
@@ -111,8 +111,8 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def download
-    category_identifier = 'hubs'
-    file_name = "#{current_organization.slug}__#{category_identifier}_#{Time.zone.today.strftime('%d/%m/%Y')}"
+    category_identifier = "hubs"
+    file_name = "#{current_organization.slug}__#{category_identifier}_#{Time.zone.today.strftime("%d/%m/%Y")}"
 
     document = ExcelDataServices::Loaders::Downloader.new(
       organization: current_organization,
@@ -122,7 +122,7 @@ class Admin::HubsController < Admin::AdminBaseController
 
     response_handler(
       key: category_identifier,
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
     )
   end
 
@@ -132,9 +132,9 @@ class Admin::HubsController < Admin::AdminBaseController
     hubs_relation = ::Legacy::Hub.where(organization_id: current_organization.id)
     country_table_ref =
       if search_params[:country].present? && search_params[:country_desc].present?
-        'countries_hubs'
+        "countries_hubs"
       else
-        'countries'
+        "countries"
       end
     {
       country: ->(query, param) { query.country_search(param) },
@@ -142,11 +142,11 @@ class Admin::HubsController < Admin::AdminBaseController
       name_desc: ->(query, param) { query.ordered_by(:name, param) },
       locode: ->(query, param) { query.locode_search(param) },
       locode_desc: ->(query, param) { query.ordered_by(:hub_code, param) },
-      type: ->(query, param) { param == 'all' ? query : query.where(hub_type: param) },
+      type: ->(query, param) { param == "all" ? query : query.where(hub_type: param) },
       type_desc: ->(query, param) { query.ordered_by(:hub_type, param) },
       country_desc: lambda do |query, param|
                       query.left_joins(:country).order(
-                        "#{country_table_ref}.name #{param.to_s == 'true' ? 'DESC' : 'ASC'}"
+                        "#{country_table_ref}.name #{param.to_s == "true" ? "DESC" : "ASC"}"
                       )
                     end
     }.each do |key, lambd|
@@ -159,19 +159,19 @@ class Admin::HubsController < Admin::AdminBaseController
   def for_table(hub)
     hub.as_json(
       include: {
-        nexus: { only: %i(id name) },
+        nexus: {only: %i[id name]},
         address: {
           include: {
-            country: { only: %i(name) }
+            country: {only: %i[name]}
           }
         }
       },
-      methods: %i(earliest_expiration)
+      methods: %i[earliest_expiration]
     )
   end
 
   def decorate_table_list(hubs:)
-    Legacy::HubDecorator.decorate_collection(hubs, context: { scope: current_scope})
+    Legacy::HubDecorator.decorate_collection(hubs, context: {scope: current_scope})
   end
 
   def pagination_options
@@ -228,7 +228,7 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def new_mandatory_charge
     nmc = params[:mandatoryCharge].as_json
-    MandatoryCharge.find_by(nmc.except('id', 'created_at', 'updated_at'))
+    MandatoryCharge.find_by(nmc.except("id", "created_at", "updated_at"))
   end
 
   def create_hub_mandatory_charge
@@ -240,7 +240,7 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def save_on_aws(organization_id)
     file = params[:file]
-    obj_key = 'images/' + organization_id.to_s + '/' + file.original_filename
+    obj_key = "images/" + organization_id.to_s + "/" + file.original_filename
     save_asset(file, obj_key)
     asset_url + obj_key
   end

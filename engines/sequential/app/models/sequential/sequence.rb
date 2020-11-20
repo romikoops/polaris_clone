@@ -3,7 +3,7 @@
 module Sequential
   class Sequence < ApplicationRecord
     validates :name, uniqueness: true
-    enum name: { shipment_invoice_number: 0 }
+    enum name: {shipment_invoice_number: 0}
 
     def self.next(counter_name)
       raise ActiveRecord::Rollback unless ActiveRecord::Base.connection.open_transactions.positive?

@@ -5,7 +5,7 @@ class Admin::NotesController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}:notes",
-      type: 'notes',
+      type: "notes",
       options: {
         group_id: upload_params[:group_id],
         user: organization_user

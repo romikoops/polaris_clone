@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :legacy_shipment, class: 'Legacy::Shipment' do
+  factory :legacy_shipment, class: "Legacy::Shipment" do
     association :user, factory: :organizations_user
     association :origin_hub, factory: :legacy_hub
     association :destination_hub, factory: :legacy_hub
@@ -9,7 +9,7 @@ FactoryBot.define do
 
     association :organization, factory: :organizations_organization
     load_type { :container }
-    booking_placed_at { Date.today }
+    booking_placed_at { Time.zone.today }
     planned_etd { Date.tomorrow + 7.days + 2.hours }
     planned_eta { Date.tomorrow + 11.days }
     closing_date { Date.tomorrow + 4.days + 5.hours }
@@ -55,20 +55,20 @@ FactoryBot.define do
           'pricing_rate_data': {
             "lcl": {
               "bas": {
-                "min": '7.0',
+                "min": "7.0",
                 "base": nil,
-                "rate": '7.0',
+                "rate": "7.0",
                 "range": [],
-                "currency": 'USD',
-                "rate_basis": 'PER_WM',
+                "currency": "USD",
+                "rate_basis": "PER_WM",
                 "hw_threshold": nil,
                 "hw_rate_basis": nil
               },
               "total": {
-                "value": '7.0',
-                "currency": 'USD'
+                "value": "7.0",
+                "currency": "USD"
               },
-              "valid_until": '2020-12-31T23:59:59.000Z'
+              "valid_until": "2020-12-31T23:59:59.000Z"
             }
           }
         }
@@ -90,14 +90,14 @@ FactoryBot.define do
       shipment.destination_nexus = shipment.destination_hub.nexus if shipment.destination_hub.present?
       if evaluator.with_tenders
         quotation = FactoryBot.create(:quotations_quotation,
-                                      shipment.load_type.to_sym,
-                                      origin_nexus: shipment.origin_nexus,
-                                      destination_nexus: shipment.destination_nexus,
-                                      user: shipment.user,
-                                      created_at: shipment.created_at,
-                                      legacy_shipment: shipment,
-                                      completed: evaluator.completed,
-                                      organization: shipment.organization)
+          shipment.load_type.to_sym,
+          origin_nexus: shipment.origin_nexus,
+          destination_nexus: shipment.destination_nexus,
+          user: shipment.user,
+          created_at: shipment.created_at,
+          legacy_shipment: shipment,
+          completed: evaluator.completed,
+          organization: shipment.organization)
       end
       if evaluator.with_aggregated_cargo
         create(:legacy_aggregated_cargo, shipment: shipment)
@@ -110,7 +110,7 @@ FactoryBot.define do
       end
 
       if evaluator.with_breakdown || evaluator.with_full_breakdown
-        sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ['cargo']
+        sections = evaluator.with_full_breakdown ? %w[trucking_pre export cargo import trucking_on] : ["cargo"]
         breakdowns = create_list(:legacy_charge_breakdown,
           evaluator.breakdown_count,
           trip: shipment.trip || create(:legacy_trip, itinerary: shipment.itinerary),

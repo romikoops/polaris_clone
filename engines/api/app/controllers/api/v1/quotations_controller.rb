@@ -1,42 +1,42 @@
 # frozen_string_literal: true
 
-require_dependency 'api/api_controller'
+require_dependency "api/api_controller"
 
 module Api
   module V1
     class QuotationsController < ApiController
-      SORTING_ATTRIBUTES = ['selected_date', 'load_type', 'last_name', 'origin', 'destination']
+      SORTING_ATTRIBUTES = ["selected_date", "load_type", "last_name", "origin", "destination"]
       def index
-        sort_by = SORTING_ATTRIBUTES.include?(index_params[:sort_by]) ? index_params[:sort_by] : 'selected_date'
+        sort_by = SORTING_ATTRIBUTES.include?(index_params[:sort_by]) ? index_params[:sort_by] : "selected_date"
         quotations = quotations_filter.perform.sorted(sort_by: sort_by,
                                                       direction: sanitize_direction(index_params[:direction]))
 
         paginated = paginate(quotations)
 
         decorated_quotations = QuotationDecorator.decorate_collection(paginated,
-          { context: { links: pagination_links(paginated) }})
+          {context: {links: pagination_links(paginated)}})
 
-        render json: QuotationListSerializer.new(decorated_quotations, params: { scope: current_scope })
+        render json: QuotationListSerializer.new(decorated_quotations, params: {scope: current_scope})
       end
 
       def create
         if validation.errors.present?
-          return render json: ValidationErrorSerializer.new(validation.errors), status: 417
+          return render json: ValidationErrorSerializer.new(validation.errors), status: :expectation_failed
         end
 
         decorated_quotation = QuotationDecorator.decorate(quotation_service.result)
-        render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
+        render json: QuotationSerializer.new(decorated_quotation, params: {scope: current_scope})
       rescue Wheelhouse::ApplicationError => e
-        render json: { error: e.message }, status: 422
+        render json: {error: e.message}, status: :unprocessable_entity
       end
 
       def show
         handle_async_error if quotation.error_class.present?
 
         decorated_quotation = QuotationDecorator.decorate(quotation)
-        render json: QuotationSerializer.new(decorated_quotation, params: { scope: current_scope })
+        render json: QuotationSerializer.new(decorated_quotation, params: {scope: current_scope})
       rescue OfferCalculator::Errors::Failure => e
-        render json: { error: e.message }, status: 422
+        render json: {error: e.message}, status: :unprocessable_entity
       end
 
       def download
@@ -48,7 +48,7 @@ module Api
           render json: PdfSerializer.new(document)
         end
       rescue Wheelhouse::ApplicationError => e
-        render json: { error: e.message }, status: 422
+        render json: {error: e.message}, status: :unprocessable_entity
       end
 
       private
@@ -119,9 +119,9 @@ module Api
 
       def dimension_params
         shipment_params.fetch(:cargo_items_attributes).map do |cargo_item_params|
-          { width: cargo_item_params[:width] || cargo_item_params[:dimension_x],
-            length: cargo_item_params[:length] || cargo_item_params[:dimension_y],
-            height: cargo_item_params[:height] || cargo_item_params[:dimension_z] }
+          {width: cargo_item_params[:width] || cargo_item_params[:dimension_x],
+           length: cargo_item_params[:length] || cargo_item_params[:dimension_y],
+           height: cargo_item_params[:height] || cargo_item_params[:dimension_z]}
         end
       end
 
@@ -130,22 +130,22 @@ module Api
       end
 
       def modified_shipment_params
-        return shipment_params if shipment_params['cargo_items_attributes'].nil?
+        return shipment_params if shipment_params["cargo_items_attributes"].nil?
 
-        { cargo_items_attributes: modified_cargo_item_params,
-          container_attributes: shipment_params[:container_attributes],
-          trucking_info: shipment_params[:trucking_info] }
+        {cargo_items_attributes: modified_cargo_item_params,
+         container_attributes: shipment_params[:container_attributes],
+         trucking_info: shipment_params[:trucking_info]}
       end
 
       def shipment_params
         cargo_items_attributes = %i[id payload_in_kg width length
-                                    dimension_x dimension_z dimension_y
-                                    height quantity total_weight total_volume
-                                    stackable cargo_item_type_id dangerous_goods
-                                    contents cargo_class]
+          dimension_x dimension_z dimension_y
+          height quantity total_weight total_volume
+          stackable cargo_item_type_id dangerous_goods
+          contents cargo_class]
         params.require(:shipment_info).permit(cargo_items_attributes: cargo_items_attributes,
                                               containers_attributes: %i[id size_class quantity contents
-                                                                        payload_in_kg dangerous_goods cargo_class],
+                                                payload_in_kg dangerous_goods cargo_class],
                                               trucking_info: [pre_carriage: [:truck_type], on_carriage: [:truck_type]])
       end
 
@@ -175,7 +175,7 @@ module Api
       def cargo
         Cargo::Cargo.new(
           organization: current_organization,
-          units: load_type == 'container' ? containers : cargo_items
+          units: load_type == "container" ? containers : cargo_items
         )
       end
 
@@ -184,8 +184,8 @@ module Api
           Cargo::Unit.new(
             id: attrs[:id],
             organization_id: current_organization.id,
-            cargo_class: '00',
-            cargo_type: 'LCL',
+            cargo_class: "00",
+            cargo_type: "LCL",
             organization: current_organization,
             width_value: attrs[:width].to_f / 100,
             height_value: attrs[:height].to_f / 100,
@@ -201,7 +201,7 @@ module Api
           Cargo::Unit.new(
             id: attrs[:id],
             cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
-            cargo_type: 'GP',
+            cargo_type: "GP",
             organization: current_organization,
             weight_value: attrs[:payload_in_kg].to_f,
             quantity: attrs[:quantity]

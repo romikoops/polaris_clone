@@ -5,11 +5,11 @@ FactoryBot.define do
     association :user, factory: :organizations_user
     transient do
       shipment_count { 1 }
-      load_type { 'cargo_item' }
+      load_type { "cargo_item" }
     end
 
-    target_email { 'john@example.test' }
-    name { 'NAME' }
+    target_email { "john@example.test" }
+    name { "NAME" }
     billing { :external }
 
     after(:build) do |quotation, evaluator|
@@ -22,8 +22,7 @@ FactoryBot.define do
         user: quotation.user,
         organization: quotation.user.organization,
         load_type: evaluator.load_type,
-        with_breakdown: true
-      )
+        with_breakdown: true)
       quotation.original_shipment_id = original_shipment.id
     end
   end

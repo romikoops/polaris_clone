@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_dependency 'api/api_controller'
+require_dependency "api/api_controller"
 
 module Api
   module V1
     class TruckingCapabilitiesController < ApiController
       def index
-        render json: { data: capability }
+        render json: {data: capability}
       end
 
       private

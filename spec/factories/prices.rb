@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :price do
-    value { '9.99' }
-    currency { 'EUR' }
+    value { "9.99" }
+    currency { "EUR" }
   end
 end
 

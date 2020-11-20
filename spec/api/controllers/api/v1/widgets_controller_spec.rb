@@ -31,7 +31,9 @@ module Api
 
     shared_examples_for "an admin only action" do
       context "when user is not admin" do
-        let(:user_2) { FactoryBot.create(:organizations_user, email: "test_user2@example.com", organization: organization) }
+        let(:user_2) {
+          FactoryBot.create(:organizations_user, email: "test_user2@example.com", organization: organization)
+        }
         let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user_2.id, scopes: "public") }
 
         it "halts the request and returns a forbidden response" do
@@ -79,7 +81,9 @@ module Api
       let(:widget) { FactoryBot.create(:cms_data_widget, organization: organization) }
       let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "admin") }
       let(:widget_params) { {name: "New widget name"} }
-      let(:perform_request) { patch :update, params: {id: widget.id, widget: widget_params, organization_id: organization.id} }
+      let(:perform_request) {
+        patch :update, params: {id: widget.id, widget: widget_params, organization_id: organization.id}
+      }
 
       it_behaves_like "an admin only action"
 

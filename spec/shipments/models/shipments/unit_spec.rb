@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 module Shipments
   RSpec.describe Unit, type: :model do
-    describe 'cargo unit functionality' do
-      it_behaves_like 'a Cargo Unit' do
+    describe "cargo unit functionality" do
+      it_behaves_like "a Cargo Unit" do
         subject do
           unit = FactoryBot.build(:shipments_unit, :lcl, quantity: 2,
                                                          weight_value: 3000,
@@ -19,10 +19,10 @@ module Shipments
       end
     end
 
-    describe 'validity' do
+    describe "validity" do
       let(:unit) { FactoryBot.build(:shipments_unit, :lcl, quantity: 2) }
 
-      it 'is valid' do
+      it "is valid" do
         expect(unit).to be_valid
       end
     end

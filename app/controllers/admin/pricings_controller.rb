@@ -5,9 +5,9 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def index
     paginated_pricing_itineraries = handle_itineraries_search.paginate(pagination_options)
-    response_pricing_itineraries = paginated_pricing_itineraries.map do |itinerary|
+    response_pricing_itineraries = paginated_pricing_itineraries.map { |itinerary|
       for_table_json(itinerary).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
+    }
 
     response_handler(
       pagination_options.merge(
@@ -30,8 +30,8 @@ class Admin::PricingsController < Admin::AdminBaseController
     }
 
     query[:mode_of_transport] = params[:mot] if params[:mot]
-    itineraries = Itinerary.where(query).order('name ASC')
-    itinerary_results = itineraries.where('name ILIKE ?', "%#{params[:text]}%")
+    itineraries = Itinerary.where(query).order("name ASC")
+    itinerary_results = itineraries.where("name ILIKE ?", "%#{params[:text]}%")
     detailed_itineraries = itinerary_results.paginate(page: params[:page])
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
@@ -48,7 +48,7 @@ class Admin::PricingsController < Admin::AdminBaseController
       id: params[:pricing_id],
       organization_id: params[:organization_id]
     )
-    pricing.update(internal: params[:target_action] == 'disable')
+    pricing.update(internal: params[:target_action] == "disable")
 
     response_handler(pricing.for_table_json)
   end
@@ -60,7 +60,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     if current_user.is_a? Organizations::User
       # Filter out all pricings that have a user with `internal == true`, but keep the ones that don't have a user
       pricings = pricings.left_outer_joins(:user)
-                         .where.not(users_users: { organization_id: nil })
+        .where.not(users_users: {organization_id: nil})
     end
 
     response_handler(
@@ -95,8 +95,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   def upload
     handle_upload(
       params: upload_params,
-      text: "group_id:#{params[:group_id] || 'all'}",
-      type: 'pricings',
+      text: "group_id:#{params[:group_id] || "all"}",
+      type: "pricings",
       options: {
         user: organization_user,
         group_id: upload_params[:group_id]
@@ -105,7 +105,7 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def download
-    category_identifier = 'pricings'
+    category_identifier = "pricings"
     mot = download_params[:mot].downcase
     load_type = download_params[:load_type].downcase
     cargo_class = generic_cargo_class_from_load_type(load_type)
@@ -126,7 +126,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     # TODO: When timing out, file will not be downloaded!!!
     response_handler(
       key: category_identifier,
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: 'attachment')
+      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
     )
   end
 
@@ -134,21 +134,21 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def generic_cargo_class_from_load_type(load_type)
     case load_type
-    when 'cargo_item' then 'lcl'
-    when 'container' then 'fcl'
+    when "cargo_item" then "lcl"
+    when "container" then "fcl"
     else
-      raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
+      raise StandardError, "Unknown load type! Expected item of [cargo_item, container]."
     end
   end
 
   def update_pricing_details(pricing_to_update)
-    sanitized_params['data'].each do |shipping_type, pricing_detail_data|
-      currency = pricing_detail_data.delete('currency')
+    sanitized_params["data"].each do |shipping_type, pricing_detail_data|
+      currency = pricing_detail_data.delete("currency")
       pricing_detail_params = pricing_detail_data.merge(
         shipping_type: shipping_type, tenant: current_organization
       )
 
-      range = pricing_detail_params.delete('range')
+      range = pricing_detail_params.delete("range")
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
         shipping_type: shipping_type, tenant: current_organization
       )
@@ -159,15 +159,15 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def update_pricing_exception_data(pricing_to_update)
-    sanitized_params['exceptions']&.each do |pricing_exception_data|
-      pricing_details = pricing_exception_data.delete('data')
+    sanitized_params["exceptions"]&.each do |pricing_exception_data|
+      pricing_details = pricing_exception_data.delete("data")
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
       ).first_or_create(pricing_exception_data.merge(tenant: current_organization))
 
       pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete('currency')
-        range = pricing_detail_data.delete('range')
+        currency = pricing_detail_data.delete("currency")
+        range = pricing_detail_data.delete("range")
 
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type, tenant: current_organization
@@ -185,8 +185,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   def sanitized_params
     new_pricing_data = params.as_json
     new_pricing_data.except(
-      'controller', 'subdomain_id', 'action', 'id', 'created_at',
-      'updated_at', 'load_type', 'currency', 'pricing', 'exceptions'
+      "controller", "subdomain_id", "action", "id", "created_at",
+      "updated_at", "load_type", "currency", "pricing", "exceptions"
     )
   end
 
@@ -213,8 +213,8 @@ class Admin::PricingsController < Admin::AdminBaseController
       expiration_date_desc: ->(query, param) { query.ordered_by(:expiration_date, param) },
       load_type_desc: ->(query, param) { query.ordered_by(:load_type, param) },
       effective_date_desc: ->(query, param) { query.ordered_by(:effective_date, param) },
-      cargo_class: ->(query, param) { query.where('cargo_class ILIKE ?', "%#{param}%") },
-      load_type: ->(query, param) { query.where('load_type ILIKE ?', "%#{param}%") }
+      cargo_class: ->(query, param) { query.where("cargo_class ILIKE ?", "%#{param}%") },
+      load_type: ->(query, param) { query.where("load_type ILIKE ?", "%#{param}%") }
     }
 
     check_modifiers(pricings, relation_modifiers)
@@ -226,7 +226,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     relation_modifiers = {
       name: ->(query, param) { query.list_search(param) },
       name_desc: ->(query, param) { query.ordered_by(:name, param) },
-      mot: ->(query, param) { param == 'all' ? query : query.where(mode_of_transport: param) },
+      mot: ->(query, param) { param == "all" ? query : query.where(mode_of_transport: param) },
       mot_desc: ->(query, param) { query.ordered_by(:mode_of_transport, param) }
     }
 
@@ -250,12 +250,12 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def for_table_json(itinerary)
-    itinerary.as_json(methods: [:pricing_count]).merge('last_expiry' => last_expiry(itinerary))
+    itinerary.as_json(methods: [:pricing_count]).merge("last_expiry" => last_expiry(itinerary))
   end
 
   def last_expiry(itinerary)
     pricings_based_on_scope(itinerary)
-      .where('expiration_date > ?', DateTime.now)
+      .where("expiration_date > ?", DateTime.now)
       .order(:expiration_date)
       .first&.expiration_date
   end

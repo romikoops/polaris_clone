@@ -2,7 +2,7 @@
 
 module Wheelhouse
   class TenderDecorator < Draper::Decorator
-    decorates 'Quotations::Tender'
+    decorates "Quotations::Tender"
     delegate_all
     delegate :valid_until, to: :charge_breakdown
 
@@ -23,7 +23,7 @@ module Wheelhouse
     end
 
     def transshipment
-      object.transshipment || 'direct'
+      object.transshipment || "direct"
     end
 
     def estimated
@@ -32,7 +32,7 @@ module Wheelhouse
 
     def transit_time
       trip = itinerary.trips.find_by(tenant_vehicle: tenant_vehicle, load_type: load_type)
-      return '-' if trip.blank?
+      return "-" if trip.blank?
 
       (trip.end_date.to_date - trip.start_date.to_date).to_i
     end

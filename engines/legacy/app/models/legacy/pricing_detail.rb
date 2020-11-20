@@ -2,9 +2,9 @@
 
 module Legacy
   class PricingDetail < ApplicationRecord
-    self.table_name = 'pricing_details'
+    self.table_name = "pricing_details"
 
-    belongs_to :organization, class_name: 'Organizations::Organization'
+    belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :priceable, polymorphic: true
 
     def to_fee_hash

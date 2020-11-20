@@ -5,10 +5,10 @@ module OfferCalculator
     include ActiveModel::Model
 
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
-                  :origin_hub_name, :destination_hub_name, :mode_of_transport,
-                  :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                  :quote, :carrier_name, :load_type, :voyage_code, :vessel, :transshipment,
-                  :itinerary_id, :tenant_vehicle_id, :carrier_id, :carrier_lock
+      :origin_hub_name, :destination_hub_name, :mode_of_transport,
+      :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
+      :quote, :carrier_name, :load_type, :voyage_code, :vessel, :transshipment,
+      :itinerary_id, :tenant_vehicle_id, :carrier_id, :carrier_lock
 
     def origin_hub
       Legacy::Hub.find(origin_hub_id)
@@ -23,8 +23,8 @@ module OfferCalculator
     end
 
     def hub_for_carriage(carriage)
-      return origin_hub      if carriage == 'pre'
-      return destination_hub if carriage == 'on'
+      return origin_hub if carriage == "pre"
+      return destination_hub if carriage == "on"
 
       raise ArgumentError, "carriage must be 'pre' or 'on'"
     end
@@ -47,7 +47,7 @@ module OfferCalculator
 
     def to_detailed_hash
       keys = %i[id mode_of_transport total_price eta etd closing_date vehicle_name
-                carrier_name voyage_code vessel trip_id transshipment itinerary_id carrier_id carrier_lock]
+        carrier_name voyage_code vessel trip_id transshipment itinerary_id carrier_id carrier_lock]
 
       as_json.symbolize_keys.slice(*keys).merge(origin_hub: detailed_hash_hub_data_for(:origin),
                                                 destination_hub: detailed_hash_hub_data_for(:destination))
@@ -55,7 +55,7 @@ module OfferCalculator
 
     def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type, date_type)
       grouped_data_from_routes = OfferCalculator::Route.group_data_by_attribute(routes)
-      date_attr = date_type == 'closing_date' ? 'closing_date' : 'etd'
+      date_attr = date_type == "closing_date" ? "closing_date" : "etd"
       raw_query = "
         SELECT DISTINCT
           origin_hubs.id                AS origin_hub_id,

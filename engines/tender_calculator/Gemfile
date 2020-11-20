@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 gemspec
 
 eval_gemfile "Gemfile.runtime"
 
 gem "shared-factory", path: "../../gems/shared-factory"
-
 
 gem "legacy", path: "../legacy"
 gem "profiles", path: "../profiles"

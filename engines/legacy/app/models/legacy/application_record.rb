@@ -5,7 +5,7 @@ module Legacy
     self.abstract_class = true
 
     def self.given_attribute_names
-      attribute_names - %w(id created_at updated_at)
+      attribute_names - %w[id created_at updated_at]
     end
 
     def given_attributes
@@ -22,14 +22,14 @@ module Legacy
       attribute_names.sort.map do |attr_name|
         val = self[attr_name]
         case val
-        when %w(created_at updated_at).include?(attr_name) && nil
+        when %w[created_at updated_at].include?(attr_name) && nil
           "'#{DateTime.now}'"
         when Hash
           "'#{val.to_json}'::jsonb"
         when String
           "'#{val}'"
         when nil
-          'NULL'
+          "NULL"
         else
           val
         end

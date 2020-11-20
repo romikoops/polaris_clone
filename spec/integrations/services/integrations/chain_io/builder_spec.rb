@@ -11,8 +11,12 @@ module Integrations
         let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
         let(:profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
         let(:tender) { FactoryBot.create(:quotations_tender) }
-        let(:fcl_legacy_shipment) { FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id) }
-        let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user) }
+        let(:fcl_legacy_shipment) {
+          FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id)
+        }
+        let(:shipment_request_creator) {
+          ::Shipments::ShipmentRequestCreator.new(legacy_shipment: fcl_legacy_shipment, user: user)
+        }
         let(:shipment_request) { shipment_request_creator.create.shipment_request }
         let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
         let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }
@@ -69,12 +73,18 @@ module Integrations
           end
 
           it "has the correct containerization type" do
-            expect(json_shipment["containerization_type"]).to match shipment_request_decorator.tender.quotation.cargo.containerization_type
+            expect(
+              json_shipment["containerization_type"]
+            ).to match shipment_request_decorator.tender.quotation.cargo.containerization_type
           end
 
           it "has the correct containers" do
-            expect(json_shipment["containers"]).to match [{container_number: "", delivery_mode: "", size_code: "22GP", type_code: "22GP"},
-              {container_number: "", delivery_mode: "", size_code: "22GP", type_code: "22GP"}]
+            expect(
+              json_shipment["containers"]
+            ).to match [
+              {container_number: "", delivery_mode: "", size_code: "22GP", type_code: "22GP"},
+              {container_number: "", delivery_mode: "", size_code: "22GP", type_code: "22GP"}
+            ]
           end
 
           it "has the correct created_by date" do
@@ -86,14 +96,23 @@ module Integrations
           end
 
           it "has the correct package group" do
-            expect(json_shipment["package_group"]).to match [{description_of_goods: "", gross_weight_kgs: "500.0", package_quantity: 1, volume_cbms: "1.344"},
-              {description_of_goods: "", gross_weight_kgs: "500.0", package_quantity: 1, volume_cbms: "1.344"}]
+            expect(
+              json_shipment["package_group"]
+            ).to match [
+              {description_of_goods: "", gross_weight_kgs: "500.0", package_quantity: 1, volume_cbms: "1.344"},
+              {description_of_goods: "", gross_weight_kgs: "500.0", package_quantity: 1, volume_cbms: "1.344"}
+            ]
           end
         end
 
         context "with no notifyee" do
-          let(:no_notifyee_shipment) { FactoryBot.create(:legacy_shipment_without_notifyee, organization: organization, user: user, meta: {tender_id: tender.id}, tender_id: tender.id) }
-          let(:shipment_request_creator) { ::Shipments::ShipmentRequestCreator.new(legacy_shipment: no_notifyee_shipment, user: user) }
+          let(:no_notifyee_shipment) {
+            FactoryBot.create(:legacy_shipment_without_notifyee,
+              organization: organization, user: user, meta: {tender_id: tender.id}, tender_id: tender.id)
+          }
+          let(:shipment_request_creator) {
+            ::Shipments::ShipmentRequestCreator.new(legacy_shipment: no_notifyee_shipment, user: user)
+          }
           let(:shipment_request) { shipment_request_creator.create.shipment_request }
           let(:data) { described_class.new(shipment_request_id: shipment_request.id).prepare }
           let(:shipment_request_decorator) { ShipmentRequest.find(shipment_request.id) }

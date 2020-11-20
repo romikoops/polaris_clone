@@ -12,7 +12,9 @@ RSpec.describe Locations::Finders::PostalCode do
         country_code: "SE"
       }
     end
-    let(:postal_location) { FactoryBot.create(:swedish_location, osm_id: 4, admin_level: 10, name: "21001", country_code: "SE") }
+    let(:postal_location) {
+      FactoryBot.create(:swedish_location, osm_id: 4, admin_level: 10, name: "21001", country_code: "SE")
+    }
     let(:point) { postal_location.bounds.centroid }
     let!(:target_location_name) do
       FactoryBot.create(:locations_name,

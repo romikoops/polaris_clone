@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :shipments_shipment, class: 'Shipments::Shipment' do
+  factory :shipments_shipment, class: "Shipments::Shipment" do
     association :user, factory: :organizations_user
     association :organization, factory: :organizations_organization
     association :origin, factory: :routing_terminal
@@ -12,9 +12,9 @@ FactoryBot.define do
       shipment.consignor = FactoryBot.build(:shipments_contact, :consignor, shipment: shipment)
       shipment.invoice = FactoryBot.build(:shipments_invoice, shipment: shipment)
       shipment.cargo = FactoryBot.build(:shipments_cargo,
-                                        units: [
-                                          FactoryBot.build(:shipment_lcl_unit)
-                                        ])
+        units: [
+          FactoryBot.build(:shipment_lcl_unit)
+        ])
     end
   end
 end
