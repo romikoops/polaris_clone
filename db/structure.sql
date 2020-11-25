@@ -80,6 +80,41 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: journey_document_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.journey_document_type AS ENUM (
+    'commercial_invoice',
+    'dock_receipt',
+    'bill_of_lading',
+    'certificate_of_origin',
+    'warehouse_receipt',
+    'inspection_certificate',
+    'export_license',
+    'packing_list',
+    'health_certificate',
+    'insurance_certificate',
+    'consular_documents',
+    'free_trade_document',
+    'shippers_letter_of_instruction',
+    'destination_control_statement'
+);
+
+
+--
+-- Name: journey_mode_of_transport; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.journey_mode_of_transport AS ENUM (
+    'ocean',
+    'air',
+    'rail',
+    'truck',
+    'carriage'
+);
+
+
+--
 -- Name: get_latin_name(text, text, text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -1841,6 +1876,302 @@ CREATE SEQUENCE public.itineraries_id_seq
 --
 
 ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
+
+
+--
+-- Name: journey_cargo_units; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_cargo_units (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    query_id uuid,
+    quantity integer DEFAULT 1 NOT NULL,
+    stackable boolean NOT NULL,
+    cargo_class character varying NOT NULL,
+    weight_unit character varying DEFAULT 'kg'::character varying NOT NULL,
+    width_unit character varying DEFAULT 'm'::character varying NOT NULL,
+    length_unit character varying DEFAULT 'm'::character varying NOT NULL,
+    height_unit character varying DEFAULT 'm'::character varying NOT NULL,
+    weight_value numeric(20,5) DEFAULT 0.0 NOT NULL,
+    width_value numeric(20,5) DEFAULT 0.0 NOT NULL,
+    length_value numeric(20,5) DEFAULT 0.0 NOT NULL,
+    height_value numeric(20,5) DEFAULT 0.0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_cargo_units_cargo_class_presence CHECK (((cargo_class IS NOT NULL) AND ((cargo_class)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_cargo_units_height_unit_presence CHECK (((height_unit IS NOT NULL) AND ((height_unit)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_cargo_units_height_value_numericality CHECK ((height_value > (0)::numeric)),
+    CONSTRAINT journey_cargo_units_length_unit_presence CHECK (((length_unit IS NOT NULL) AND ((length_unit)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_cargo_units_length_value_numericality CHECK ((length_value > (0)::numeric)),
+    CONSTRAINT journey_cargo_units_quantity_numericality CHECK ((quantity > 0)),
+    CONSTRAINT journey_cargo_units_weight_unit_presence CHECK (((weight_unit IS NOT NULL) AND ((weight_unit)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_cargo_units_weight_value_numericality CHECK ((weight_value > (0)::numeric)),
+    CONSTRAINT journey_cargo_units_width_unit_presence CHECK (((width_unit IS NOT NULL) AND ((width_unit)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_cargo_units_width_value_numericality CHECK ((width_value > (0)::numeric))
+);
+
+
+--
+-- Name: journey_commodity_infos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_commodity_infos (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    cargo_unit_id uuid,
+    hs_code character varying,
+    imo_class character varying DEFAULT ''::character varying NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_commodity_infos_description_presence CHECK (((description IS NOT NULL) AND ((description)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_contacts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_contacts (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    shipment_request_id uuid,
+    original_id uuid NOT NULL,
+    function character varying NOT NULL,
+    company_name character varying DEFAULT ''::character varying NOT NULL,
+    name character varying NOT NULL,
+    phone character varying DEFAULT ''::character varying NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    point public.geometry(Geometry,4326) NOT NULL,
+    geocoded_address character varying,
+    address_line_1 character varying DEFAULT ''::character varying NOT NULL,
+    address_line_2 character varying DEFAULT ''::character varying NOT NULL,
+    address_line_3 character varying DEFAULT ''::character varying NOT NULL,
+    postal_code character varying DEFAULT ''::character varying NOT NULL,
+    city character varying DEFAULT ''::character varying NOT NULL,
+    country_code character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_contacts_city_presence CHECK (((city IS NOT NULL) AND ((city)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_contacts_company_name_presence CHECK (((company_name IS NOT NULL) AND ((company_name)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_contacts_country_code_length CHECK ((length((country_code)::text) = 2)),
+    CONSTRAINT journey_contacts_country_code_presence CHECK (((country_code IS NOT NULL) AND ((country_code)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_contacts_email_presence CHECK (((email IS NOT NULL) AND ((email)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_contacts_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_contacts_phone_presence CHECK (((phone IS NOT NULL) AND ((phone)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_documents; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_documents (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    shipment_request_id uuid,
+    query_id uuid,
+    kind public.journey_document_type,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_line_item_cargo_units; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_line_item_cargo_units (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    line_item_id uuid,
+    cargo_unit_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_line_item_sets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_line_item_sets (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    shipment_request_id uuid,
+    result_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_line_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_line_items (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    route_section_id uuid,
+    route_point_id uuid,
+    line_item_set_id uuid,
+    note character varying DEFAULT ''::character varying NOT NULL,
+    "order" integer NOT NULL,
+    fee_code character varying NOT NULL,
+    description character varying DEFAULT ''::character varying NOT NULL,
+    total_cents integer,
+    total_currency character varying,
+    unit_price_cents integer,
+    unit_price_currency character varying,
+    units integer NOT NULL,
+    included boolean DEFAULT false,
+    optional boolean DEFAULT false,
+    wm_rate numeric NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_line_items_fee_code_presence CHECK (((fee_code IS NOT NULL) AND ((fee_code)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_line_items_note_presence CHECK (((note IS NOT NULL) AND ((note)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_line_items_units_numericality CHECK ((units > 0)),
+    CONSTRAINT journey_line_items_wm_rate_numericality CHECK ((wm_rate > (0)::numeric))
+);
+
+
+--
+-- Name: journey_offer_results; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_offer_results (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    offer_id uuid,
+    result_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_offers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_offers (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_queries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_queries (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    creator_id uuid,
+    client_id uuid,
+    company_id uuid,
+    source_id uuid NOT NULL,
+    origin character varying NOT NULL,
+    destination character varying NOT NULL,
+    origin_coordinates public.geometry(Geometry,4326) NOT NULL,
+    destination_coordinates public.geometry(Geometry,4326) NOT NULL,
+    customs boolean DEFAULT false,
+    insurance boolean DEFAULT false,
+    cargo_ready_date timestamp without time zone NOT NULL,
+    delivery_date timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT delivery_after_cargo_ready_date CHECK ((delivery_date > cargo_ready_date)),
+    CONSTRAINT journey_queries_destination_coordinates_presence CHECK (((destination_coordinates IS NOT NULL) AND ((destination_coordinates)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_queries_origin_coordinates_presence CHECK (((origin_coordinates IS NOT NULL) AND ((origin_coordinates)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_queries_origin_presence CHECK (((origin IS NOT NULL) AND ((origin)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_result_sets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_result_sets (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    query_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_results; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_results (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    result_set_id uuid,
+    expiration_date timestamp without time zone NOT NULL,
+    issued_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: journey_route_points; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_route_points (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    function character varying NOT NULL,
+    name character varying NOT NULL,
+    coordinates public.geometry NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_route_points_function_presence CHECK (((function IS NOT NULL) AND ((function)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_route_points_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_route_sections; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_route_sections (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    from_id uuid,
+    to_id uuid,
+    result_id uuid,
+    carrier character varying NOT NULL,
+    service character varying NOT NULL,
+    "order" integer NOT NULL,
+    mode_of_transport public.journey_mode_of_transport,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_route_sections_carrier_presence CHECK (((carrier IS NOT NULL) AND ((carrier)::text !~ '^\s*$'::text))),
+    CONSTRAINT journey_route_sections_service_presence CHECK (((service IS NOT NULL) AND ((service)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_shipment_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_shipment_requests (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    result_id uuid,
+    client_id uuid,
+    company_id uuid,
+    preferred_voyage character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT journey_shipment_requests_preferred_voyage_presence CHECK (((preferred_voyage IS NOT NULL) AND ((preferred_voyage)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_shipments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_shipments (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    shipment_request_id uuid,
+    creator_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -6124,6 +6455,142 @@ ALTER TABLE ONLY public.itineraries
 
 
 --
+-- Name: journey_cargo_units journey_cargo_units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_cargo_units
+    ADD CONSTRAINT journey_cargo_units_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_commodity_infos journey_commodity_infos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_commodity_infos
+    ADD CONSTRAINT journey_commodity_infos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_contacts journey_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_contacts
+    ADD CONSTRAINT journey_contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_documents journey_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_documents
+    ADD CONSTRAINT journey_documents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_line_item_cargo_units journey_line_item_cargo_units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_cargo_units
+    ADD CONSTRAINT journey_line_item_cargo_units_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_line_item_sets journey_line_item_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_sets
+    ADD CONSTRAINT journey_line_item_sets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_line_items journey_line_items_line_item_set_id_route_section_id_route_poin; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_items
+    ADD CONSTRAINT journey_line_items_line_item_set_id_route_section_id_route_poin EXCLUDE USING gist (line_item_set_id WITH =, route_section_id WITH =, route_point_id WITH =, fee_code WITH =) DEFERRABLE;
+
+
+--
+-- Name: journey_line_items journey_line_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_items
+    ADD CONSTRAINT journey_line_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_offer_results journey_offer_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_results
+    ADD CONSTRAINT journey_offer_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_offers journey_offers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offers
+    ADD CONSTRAINT journey_offers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_queries journey_queries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT journey_queries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_result_sets journey_result_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_result_sets
+    ADD CONSTRAINT journey_result_sets_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_results journey_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_results
+    ADD CONSTRAINT journey_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_route_points journey_route_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_route_points
+    ADD CONSTRAINT journey_route_points_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_route_sections journey_route_sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_route_sections
+    ADD CONSTRAINT journey_route_sections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_shipment_requests journey_shipment_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipment_requests
+    ADD CONSTRAINT journey_shipment_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journey_shipments journey_shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipments
+    ADD CONSTRAINT journey_shipments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: layovers layovers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7933,6 +8400,216 @@ CREATE INDEX index_itineraries_on_sandbox_id ON public.itineraries USING btree (
 --
 
 CREATE INDEX index_itineraries_on_tenant_id ON public.itineraries USING btree (tenant_id);
+
+
+--
+-- Name: index_journey_cargo_units_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_cargo_units_on_query_id ON public.journey_cargo_units USING btree (query_id);
+
+
+--
+-- Name: index_journey_commodity_infos_on_cargo_unit_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_commodity_infos_on_cargo_unit_id ON public.journey_commodity_infos USING btree (cargo_unit_id);
+
+
+--
+-- Name: index_journey_contacts_on_shipment_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_contacts_on_shipment_request_id ON public.journey_contacts USING btree (shipment_request_id);
+
+
+--
+-- Name: index_journey_documents_on_kind; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_documents_on_kind ON public.journey_documents USING btree (kind);
+
+
+--
+-- Name: index_journey_documents_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_documents_on_query_id ON public.journey_documents USING btree (query_id);
+
+
+--
+-- Name: index_journey_documents_on_shipment_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_documents_on_shipment_request_id ON public.journey_documents USING btree (shipment_request_id);
+
+
+--
+-- Name: index_journey_line_item_cargo_units_on_cargo_unit_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_item_cargo_units_on_cargo_unit_id ON public.journey_line_item_cargo_units USING btree (cargo_unit_id);
+
+
+--
+-- Name: index_journey_line_item_cargo_units_on_line_item_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_item_cargo_units_on_line_item_id ON public.journey_line_item_cargo_units USING btree (line_item_id);
+
+
+--
+-- Name: index_journey_line_item_sets_on_result_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_item_sets_on_result_id ON public.journey_line_item_sets USING btree (result_id);
+
+
+--
+-- Name: index_journey_line_item_sets_on_shipment_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_item_sets_on_shipment_request_id ON public.journey_line_item_sets USING btree (shipment_request_id);
+
+
+--
+-- Name: index_journey_line_items_on_line_item_set_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_items_on_line_item_set_id ON public.journey_line_items USING btree (line_item_set_id);
+
+
+--
+-- Name: index_journey_line_items_on_route_point_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_items_on_route_point_id ON public.journey_line_items USING btree (route_point_id);
+
+
+--
+-- Name: index_journey_line_items_on_route_section_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_line_items_on_route_section_id ON public.journey_line_items USING btree (route_section_id);
+
+
+--
+-- Name: index_journey_offer_results_on_offer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_offer_results_on_offer_id ON public.journey_offer_results USING btree (offer_id);
+
+
+--
+-- Name: index_journey_offer_results_on_result_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_offer_results_on_result_id ON public.journey_offer_results USING btree (result_id);
+
+
+--
+-- Name: index_journey_queries_on_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_client_id ON public.journey_queries USING btree (client_id);
+
+
+--
+-- Name: index_journey_queries_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_company_id ON public.journey_queries USING btree (company_id);
+
+
+--
+-- Name: index_journey_queries_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_creator_id ON public.journey_queries USING btree (creator_id);
+
+
+--
+-- Name: index_journey_queries_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_organization_id ON public.journey_queries USING btree (organization_id);
+
+
+--
+-- Name: index_journey_result_sets_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_result_sets_on_query_id ON public.journey_result_sets USING btree (query_id);
+
+
+--
+-- Name: index_journey_results_on_result_set_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_results_on_result_set_id ON public.journey_results USING btree (result_set_id);
+
+
+--
+-- Name: index_journey_route_sections_on_from_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_route_sections_on_from_id ON public.journey_route_sections USING btree (from_id);
+
+
+--
+-- Name: index_journey_route_sections_on_mode_of_transport; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_route_sections_on_mode_of_transport ON public.journey_route_sections USING btree (mode_of_transport);
+
+
+--
+-- Name: index_journey_route_sections_on_result_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_route_sections_on_result_id ON public.journey_route_sections USING btree (result_id);
+
+
+--
+-- Name: index_journey_route_sections_on_to_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_route_sections_on_to_id ON public.journey_route_sections USING btree (to_id);
+
+
+--
+-- Name: index_journey_shipment_requests_on_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipment_requests_on_client_id ON public.journey_shipment_requests USING btree (client_id);
+
+
+--
+-- Name: index_journey_shipment_requests_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipment_requests_on_company_id ON public.journey_shipment_requests USING btree (company_id);
+
+
+--
+-- Name: index_journey_shipment_requests_on_result_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipment_requests_on_result_id ON public.journey_shipment_requests USING btree (result_id);
+
+
+--
+-- Name: index_journey_shipments_on_creator_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipments_on_creator_id ON public.journey_shipments USING btree (creator_id);
+
+
+--
+-- Name: index_journey_shipments_on_shipment_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipments_on_shipment_request_id ON public.journey_shipments USING btree (shipment_request_id);
 
 
 --
@@ -10973,6 +11650,22 @@ ALTER TABLE ONLY public.booking_queries
 
 
 --
+-- Name: journey_line_items fk_rails_195193f869; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_items
+    ADD CONSTRAINT fk_rails_195193f869 FOREIGN KEY (route_section_id) REFERENCES public.journey_route_sections(id) ON DELETE CASCADE;
+
+
+--
+-- Name: journey_queries fk_rails_1ac20a83e4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT fk_rails_1ac20a83e4 FOREIGN KEY (client_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: rms_data_books fk_rails_1bf082076e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11133,6 +11826,14 @@ ALTER TABLE ONLY public.booking_queries
 
 
 --
+-- Name: journey_shipments fk_rails_4028c4cb14; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipments
+    ADD CONSTRAINT fk_rails_4028c4cb14 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
+
+
+--
 -- Name: booking_queries fk_rails_411971da9a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11165,6 +11866,14 @@ ALTER TABLE ONLY public.cargo_cargos
 
 
 --
+-- Name: journey_offer_results fk_rails_455c8d50e7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_results
+    ADD CONSTRAINT fk_rails_455c8d50e7 FOREIGN KEY (offer_id) REFERENCES public.journey_offers(id) ON DELETE CASCADE;
+
+
+--
 -- Name: shipments_shipment_request_contacts fk_rails_45a83615f3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11178,6 +11887,14 @@ ALTER TABLE ONLY public.shipments_shipment_request_contacts
 
 ALTER TABLE ONLY public.shipments_shipments
     ADD CONSTRAINT fk_rails_45b1f0b520 FOREIGN KEY (destination_id) REFERENCES public.routing_terminals(id);
+
+
+--
+-- Name: journey_queries fk_rails_46beaf6bf6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT fk_rails_46beaf6bf6 FOREIGN KEY (company_id) REFERENCES public.companies_companies(id) ON DELETE CASCADE;
 
 
 --
@@ -11245,6 +11962,14 @@ ALTER TABLE ONLY public.booking_queries
 
 
 --
+-- Name: journey_shipment_requests fk_rails_58ba0dc412; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipment_requests
+    ADD CONSTRAINT fk_rails_58ba0dc412 FOREIGN KEY (company_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
+
+
+--
 -- Name: itineraries fk_rails_59620239e4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11258,6 +11983,22 @@ ALTER TABLE ONLY public.itineraries
 
 ALTER TABLE ONLY public.shipments
     ADD CONSTRAINT fk_rails_5fb975ea14 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_line_item_sets fk_rails_6186942462; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_sets
+    ADD CONSTRAINT fk_rails_6186942462 FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
+
+
+--
+-- Name: journey_result_sets fk_rails_6387719f4d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_result_sets
+    ADD CONSTRAINT fk_rails_6387719f4d FOREIGN KEY (query_id) REFERENCES public.journey_queries(id) ON DELETE CASCADE;
 
 
 --
@@ -11293,6 +12034,14 @@ ALTER TABLE ONLY public.migrator_unique_carrier_syncs
 
 
 --
+-- Name: journey_shipment_requests fk_rails_6686626367; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipment_requests
+    ADD CONSTRAINT fk_rails_6686626367 FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
+
+
+--
 -- Name: migrator_unique_trucking_location_syncs fk_rails_66dcfd389f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11314,6 +12063,14 @@ ALTER TABLE ONLY public.pricings_fees
 
 ALTER TABLE ONLY public.quotations_tenders
     ADD CONSTRAINT fk_rails_677ff1e7ae FOREIGN KEY (quotation_id) REFERENCES public.quotations_quotations(id);
+
+
+--
+-- Name: journey_shipments fk_rails_67ca424550; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipments
+    ADD CONSTRAINT fk_rails_67ca424550 FOREIGN KEY (creator_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
 
 
 --
@@ -11413,6 +12170,14 @@ ALTER TABLE ONLY public.shipments_shipments
 
 
 --
+-- Name: journey_documents fk_rails_7afcf001ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_documents
+    ADD CONSTRAINT fk_rails_7afcf001ae FOREIGN KEY (query_id) REFERENCES public.journey_queries(id) ON DELETE CASCADE;
+
+
+--
 -- Name: profiles_profiles fk_rails_7c1bb95722; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11437,6 +12202,14 @@ ALTER TABLE ONLY public.shipments_shipments
 
 
 --
+-- Name: journey_line_items fk_rails_7ecd925037; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_items
+    ADD CONSTRAINT fk_rails_7ecd925037 FOREIGN KEY (route_point_id) REFERENCES public.journey_route_points(id) ON DELETE CASCADE;
+
+
+--
 -- Name: quotations_tenders fk_rails_7fa9339f82; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11450,6 +12223,14 @@ ALTER TABLE ONLY public.quotations_tenders
 
 ALTER TABLE ONLY public.migrator_unique_tenant_vehicles_syncs
     ADD CONSTRAINT fk_rails_800bf534cc FOREIGN KEY (unique_tenant_vehicle_id) REFERENCES public.tenant_vehicles(id);
+
+
+--
+-- Name: journey_shipment_requests fk_rails_810ec0e77c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_shipment_requests
+    ADD CONSTRAINT fk_rails_810ec0e77c FOREIGN KEY (client_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
 
 
 --
@@ -11533,6 +12314,14 @@ ALTER TABLE ONLY public.rates_sections
 
 
 --
+-- Name: journey_cargo_units fk_rails_8be1f1fbb6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_cargo_units
+    ADD CONSTRAINT fk_rails_8be1f1fbb6 FOREIGN KEY (query_id) REFERENCES public.journey_queries(id) ON DELETE CASCADE;
+
+
+--
 -- Name: organizations_domains fk_rails_8c6c49b797; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11581,6 +12370,14 @@ ALTER TABLE ONLY public.shipments
 
 
 --
+-- Name: journey_contacts fk_rails_96dca9d5bc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_contacts
+    ADD CONSTRAINT fk_rails_96dca9d5bc FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
+
+
+--
 -- Name: rates_fees fk_rails_9867297d6a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11594,6 +12391,14 @@ ALTER TABLE ONLY public.rates_fees
 
 ALTER TABLE ONLY public.nexuses
     ADD CONSTRAINT fk_rails_98e7917902 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_offer_results fk_rails_998f64d3aa; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_results
+    ADD CONSTRAINT fk_rails_998f64d3aa FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
 
 
 --
@@ -11613,11 +12418,27 @@ ALTER TABLE ONLY public.cargo_cargos
 
 
 --
+-- Name: journey_line_items fk_rails_9c5fbc06ce; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_items
+    ADD CONSTRAINT fk_rails_9c5fbc06ce FOREIGN KEY (line_item_set_id) REFERENCES public.journey_line_item_sets(id) ON DELETE CASCADE;
+
+
+--
 -- Name: map_data fk_rails_9d184ecaed; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.map_data
     ADD CONSTRAINT fk_rails_9d184ecaed FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_queries fk_rails_a075bc20e4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT fk_rails_a075bc20e4 FOREIGN KEY (creator_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
 
 
 --
@@ -11693,6 +12514,14 @@ ALTER TABLE ONLY public.shipments_cargos
 
 
 --
+-- Name: journey_route_sections fk_rails_b0e689ba29; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_route_sections
+    ADD CONSTRAINT fk_rails_b0e689ba29 FOREIGN KEY (from_id) REFERENCES public.journey_route_points(id) ON DELETE CASCADE;
+
+
+--
 -- Name: shipments_documents fk_rails_b1608cd908; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11741,6 +12570,14 @@ ALTER TABLE ONLY public.tenant_incoterms
 
 
 --
+-- Name: journey_route_sections fk_rails_b9160f28bd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_route_sections
+    ADD CONSTRAINT fk_rails_b9160f28bd FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
+
+
+--
 -- Name: rates_sections fk_rails_bbae927883; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11749,11 +12586,35 @@ ALTER TABLE ONLY public.rates_sections
 
 
 --
+-- Name: journey_line_item_cargo_units fk_rails_bc005e370c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_cargo_units
+    ADD CONSTRAINT fk_rails_bc005e370c FOREIGN KEY (line_item_id) REFERENCES public.journey_line_items(id) ON DELETE CASCADE;
+
+
+--
+-- Name: journey_route_sections fk_rails_bea87acd56; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_route_sections
+    ADD CONSTRAINT fk_rails_bea87acd56 FOREIGN KEY (to_id) REFERENCES public.journey_route_points(id) ON DELETE CASCADE;
+
+
+--
 -- Name: rms_data_cells fk_rails_c5edb42f5f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.rms_data_cells
     ADD CONSTRAINT fk_rails_c5edb42f5f FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_commodity_infos fk_rails_c6e003215c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_commodity_infos
+    ADD CONSTRAINT fk_rails_c6e003215c FOREIGN KEY (cargo_unit_id) REFERENCES public.journey_cargo_units(id) ON DELETE CASCADE;
 
 
 --
@@ -11805,6 +12666,14 @@ ALTER TABLE ONLY public.shipments_cargos
 
 
 --
+-- Name: journey_results fk_rails_cf8579713a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_results
+    ADD CONSTRAINT fk_rails_cf8579713a FOREIGN KEY (result_set_id) REFERENCES public.journey_result_sets(id) ON DELETE CASCADE;
+
+
+--
 -- Name: tenant_cargo_item_types fk_rails_d26d6b4d72; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11842,6 +12711,14 @@ ALTER TABLE ONLY public.shipments
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT fk_rails_d7b9ff90af FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_queries fk_rails_dad02b35f7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT fk_rails_dad02b35f7 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id) ON DELETE CASCADE;
 
 
 --
@@ -11933,6 +12810,14 @@ ALTER TABLE ONLY public.cargo_units
 
 
 --
+-- Name: journey_line_item_sets fk_rails_f577c81f85; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_sets
+    ADD CONSTRAINT fk_rails_f577c81f85 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
+
+
+--
 -- Name: quotations fk_rails_f63036eec2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11957,11 +12842,27 @@ ALTER TABLE ONLY public.charge_breakdowns
 
 
 --
+-- Name: journey_line_item_cargo_units fk_rails_fbc95294b8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_line_item_cargo_units
+    ADD CONSTRAINT fk_rails_fbc95294b8 FOREIGN KEY (cargo_unit_id) REFERENCES public.journey_cargo_units(id) ON DELETE CASCADE;
+
+
+--
 -- Name: charge_breakdowns fk_rails_fe05304bf4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.charge_breakdowns
     ADD CONSTRAINT fk_rails_fe05304bf4 FOREIGN KEY (freight_tenant_vehicle_id) REFERENCES public.tenant_vehicles(id);
+
+
+--
+-- Name: journey_documents fk_rails_ff54d07ec6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_documents
+    ADD CONSTRAINT fk_rails_ff54d07ec6 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
 
 
 --
@@ -12604,6 +13505,22 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201015084121'),
 ('20201015084345'),
 ('20201015084420'),
+('20201103130935'),
+('20201103131410'),
+('20201103132612'),
+('20201103133017'),
+('20201103133458'),
+('20201103133641'),
+('20201103133732'),
+('20201103135019'),
+('20201103135453'),
+('20201103135644'),
+('20201103135808'),
+('20201103135909'),
+('20201103140639'),
+('20201103140815'),
+('20201103141118'),
+('20201103144141'),
 ('20201118173330');
 
 

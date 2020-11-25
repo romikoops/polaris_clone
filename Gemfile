@@ -112,4 +112,5 @@ group :default, :engines do
 end
 
 gem "money_cache", path: "gems/money_cache"
+gem "measured_itsmycargo", path: "gems/measured_itsmycargo"
 gem "shared-runtime", path: "gems/shared-runtime"

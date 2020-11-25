@@ -50,6 +50,7 @@ package "Data" {
   [address_book]
   [sequential]
   [booking]
+  [journey]
 }
 [organizations] -> [users]
 [address_book] -> [organizations]
