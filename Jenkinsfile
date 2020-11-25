@@ -85,7 +85,7 @@ pipeline {
                 containers: [
                   [
                     name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
-                    requests: [ memory: "1000Mi", cpu: "2000m" ],
+                    requests: [ memory: "1000Mi", cpu: "1000m" ],
                     env: [
                       [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
                       [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
@@ -99,9 +99,9 @@ pipeline {
                     requests: [ memory: "25Mi", cpu: "100m" ]
                   ],
                   [ name: "elasticsearch", image: "amazon/opendistro-for-elasticsearch:1.8.0",
-                    requests: [ memory: "1024Mi", cpu: "250m" ],
+                    requests: [ memory: "2000Mi", cpu: "250m" ],
                     env: [
-                      [ name: "ES_JAVA_OPTS", value: "-Xms512m -Xmx512m"],
+                      [ name: "ES_JAVA_OPTS", value: "-Xms1000m -Xmx1000m"],
                       [ name: "discovery.type", value: "single-node" ],
                       [ name: "opendistro_security.disabled", value: "true"],
                     ]
