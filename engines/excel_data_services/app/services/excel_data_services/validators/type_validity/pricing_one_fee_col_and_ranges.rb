@@ -21,7 +21,7 @@ module ExcelDataServices
           'rate_basis': ExcelDataServices::Validators::TypeValidity::Types::StringType,
           'range_min': ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
           'range_max': ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
-          'fee_code': ExcelDataServices::Validators::TypeValidity::Types::StringType,
+          'fee_code': ExcelDataServices::Validators::TypeValidity::Types::AnyType,
           'fee_name': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
           'currency': ExcelDataServices::Validators::TypeValidity::Types::StringType,
           'fee_min': ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericOrMoneyType,
