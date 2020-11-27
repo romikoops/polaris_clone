@@ -99,7 +99,7 @@ module ExcelDataServices
            cargo_class: row.load_type,
            load_type: load_type,
            tenant_vehicle: tenant_vehicle,
-           group_id: find_group_id(row),
+           group_id: find_group_id(row: row),
            wm_rate: row.wm_ratio,
            effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
            expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0)}

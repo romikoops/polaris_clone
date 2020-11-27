@@ -42,15 +42,15 @@ module ExcelDataServices
         }
       end
 
-      def find_group_id(row)
+      def find_group_id(row:)
         if group_id.present?
           group_id
         elsif row.group_id.present?
           row.group_id
-        elsif Groups::Group.exists?(organization: organization, name: row.group_name)
-          Groups::Group.find_by(organization: organization, name: row.group_name).id
         else
-          default_group.id
+          group = Groups::Group.find_by(organization: organization, name: row.group_name)
+          group ||= default_group
+          group.id
         end
       end
 

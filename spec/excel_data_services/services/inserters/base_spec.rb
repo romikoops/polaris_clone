@@ -8,19 +8,19 @@ RSpec.describe ExcelDataServices::Inserters::Base do
   let(:options) { {} }
   let(:arguments) { {organization: organization, data: data, options: options} }
 
-  describe ".get" do
+  describe "#get" do
     it "finds the correct child class" do
       expect(described_class.get("Pricing")).to eq(ExcelDataServices::Inserters::Pricing)
     end
   end
 
-  describe ".insert" do
+  describe "#insert" do
     it "raises a NotImplementedError" do
       expect { described_class.insert(arguments) }.to raise_error(NotImplementedError)
     end
   end
 
-  describe ".find_group_id" do
+  describe "#find_group_id" do
     let(:row_data) do
       {
         group_id: group_id,
@@ -32,7 +32,7 @@ RSpec.describe ExcelDataServices::Inserters::Base do
     let(:row) { ExcelDataServices::Rows::Pricing.new(row_data: row_data, organization: organization) }
     let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
     let!(:default_group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
-    let(:result_id) { described_class.new(arguments).send(:find_group_id, row) }
+    let(:result_id) { described_class.new(arguments).send(:find_group_id, {row: row}) }
 
     context "when group_id is on the row" do
       it "returns the correct group id" do
