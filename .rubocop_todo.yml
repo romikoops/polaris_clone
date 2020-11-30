@@ -113,9 +113,9 @@ Metrics/ModuleLength:
 
 RSpec/Pending:
   Exclude:
+    - 'engines/sequential/spec/models/sequential/sequence_spec.rb'
     - 'spec/mailers/account_mailer_spec.rb'
     - 'spec/requests/password_resets_request_spec.rb'
-    - 'spec/sequential/models/sequential/sequence_spec.rb'
 
 Rails/CreateTableWithTimestamps:
   Exclude:

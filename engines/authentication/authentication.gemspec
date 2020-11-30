@@ -23,6 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mjml-rails"
   spec.add_dependency "sorcery", "~> 0.15"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

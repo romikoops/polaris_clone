@@ -2,15 +2,16 @@
 **/config/environments/*
 **/db/migrate/*.rb
 **/factories/**/*.rb
+**/spec/support/*.rb
+**/spec_helper.rb
 *.rake
 Gemfile
 app/classes/**/*.rb
 config/routes.rb
 engines/*/Gemfile
 engines/*/lib/*/engine.rb
-engines/*/spec/internal/*
+engines/*/spec/**/*_spec.rb
 spec/**/*_spec.rb
-spec/*_helper.rb
 
 ./engines/legacy/app/models/legacy/itinerary.rb
 ./app/models/itinerary.rb

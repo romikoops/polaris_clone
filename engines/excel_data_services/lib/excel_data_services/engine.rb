@@ -15,14 +15,14 @@ module ExcelDataServices
   class Engine < ::Rails::Engine
     isolate_namespace ExcelDataServices
 
-    config.generators do |g|
-      g.test_framework :rspec
-      g.assets false
-      g.helper false
-      g.javascripts false
-      g.model_specs false
-      g.stylesheets false
-      g.view_specs false
+    config.generators do |generator|
+      generator.test_framework :rspec
+      generator.assets false
+      generator.helper false
+      generator.javascripts false
+      generator.model_specs false
+      generator.stylesheets false
+      generator.view_specs false
     end
 
     if defined?(FactoryBotRails)

@@ -142,7 +142,7 @@ pipeline {
       post {
         always {
           coverDiff()
-          reportCoverage()
+          reportCoverage(stash: "source")
         }
       }
     }
@@ -156,7 +156,7 @@ pipeline {
         }
       }
 
-      steps { buildDocker("polaris") }
+      steps { buildDocker("polaris", stash: "source") }
     }
 
     stage("Sentry") {

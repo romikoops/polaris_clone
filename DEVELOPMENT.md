@@ -6,6 +6,21 @@ This project uses Component-based Rails Application approach, which means all ne
 must be alwasy written inside separate engines. For more information and guidelines,
 please refer to dedicated documentation at [USAGE.md][0].
 
+## Running Specs
+
+All specs are designed to be runnable from to top-level only. To run whole app-suite,
+use following command:
+
+    # bundle exec rspec .
+
+To run only top-level app specs:
+
+    # bundle exec rspec spec
+
+To run specific engine (e.g. api) specs:
+
+    # bundle exec rspec engines/api/spec
+
 ## Git hooks
 
 We use [lefthook][1] for managing common Git

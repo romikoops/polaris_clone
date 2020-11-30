@@ -16,6 +16,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "bootstrap", "~> 4.4.1"
   spec.add_dependency "jquery-rails"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

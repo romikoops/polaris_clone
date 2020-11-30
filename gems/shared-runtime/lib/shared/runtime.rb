@@ -1,8 +1,11 @@
-require "activerecord-postgis-adapter"
+require "rails"
+
 require "active_storage/cascade"
+require "activerecord-postgis-adapter"
 require "audited"
 require "config"
 require "paper_trail"
 require "pg"
-require "rails"
+require "sidekiq"
+require "skylight"
 require "strong_migrations"

@@ -21,6 +21,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "money-open-exchange-rates"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

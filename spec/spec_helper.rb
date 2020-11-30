@@ -58,7 +58,17 @@ RSpec.configure do |config|
     require "rspec_junit_formatter"
     config.add_formatter(RspecJunitFormatter, File.expand_path("../junit.xml", __dir__))
   else
-    config.add_formatter("progress")
+    config.add_formatter("Fuubar")
+    config.fuubar_auto_refresh = true
+
+    require "pry"
+    Pry.config.hooks.add_hook(:before_session, :disable_fuubar_auto_refresh) do |_output, _binding, _pry|
+      RSpec.configuration.fuubar_auto_refresh = false
+    end
+
+    Pry.config.hooks.add_hook(:after_session, :restore_fuubar_auto_refresh) do |_output, _binding, _pry|
+      RSpec.configuration.fuubar_auto_refresh = true
+    end
   end
 
   if config.files_to_run.one?

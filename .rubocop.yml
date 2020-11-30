@@ -21,8 +21,8 @@ Layout/LineLength:
     - 'engines/locations/factories/locations_locations.rb'
     - 'engines/trucking/factories/trucking/coverages.rb'
     - 'engines/trucking/factories/trucking/google_directions_response.rb'
-    - 'spec/trucking/services/trucking/google_directions_spec.rb'
-    - 'spec/wheelhouse/services/wheelhouse/quotation_service_spec.rb'
+    - 'engines/trucking/spec/services/trucking/google_directions_spec.rb'
+    - 'engines/wheelhouse/spec/services/wheelhouse/quotation_service_spec.rb'
   IgnoredPatterns: ['\A\s*#']
 
 Metrics/AbcSize:
@@ -37,6 +37,7 @@ Metrics/BlockLength:
     - '**/*.rake'
     - '**/*/factories/**/*.rb'
     - '**/migrate/*.rb'
+    - 'engines/*/spec/**/*.rb'
     - 'spec/**/*.rb'
     - config/**/*.rb
 
@@ -53,4 +54,4 @@ Metrics/ModuleLength:
 
 RSpec/EmptyExampleGroup:
   Exclude:
-    - 'spec/**/api/*_spec.rb'
+    - 'engines/api/spec/**/api/*_spec.rb'

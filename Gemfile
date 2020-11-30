@@ -6,7 +6,6 @@ gem "activejob-traffic_control"
 gem "activerecord-import"
 gem "aws-sdk-s3", "~> 1.78.0"
 gem "aws-sdk-sqs", "~> 1.30.0"
-gem "bootsnap", ">= 1.1.0", require: false
 gem "chronic"
 gem "dalli"
 gem "devise", "~> 4.4.3"
@@ -52,10 +51,8 @@ gem "ruby-saml", "~> 1.11.0", require: "onelogin/ruby-saml"
 gem "sass-rails"
 gem "scientist"
 gem "sentry-raven"
-gem "sidekiq", "~> 6.1"
 gem "sidekiq-failures"
 gem "sidekiq_alive"
-gem "skylight"
 gem "sprockets", "~> 3.7.2"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "table_print"
@@ -94,6 +91,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "fuubar"
   gem "rspec-instafail"
   gem "rspec_count_formatter"
   gem "rspec_junit_formatter"
@@ -112,5 +110,5 @@ group :default, :engines do
 end
 
 gem "money_cache", path: "gems/money_cache"
-gem "measured_itsmycargo", path: "gems/measured_itsmycargo"
 gem "shared-runtime", path: "gems/shared-runtime"
+gem "measured-itsmycargo", path: "gems/measured-itsmycargo"

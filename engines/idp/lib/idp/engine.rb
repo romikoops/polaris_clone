@@ -7,16 +7,16 @@ module IDP
   class Engine < ::Rails::Engine
     isolate_namespace IDP
 
-    config.generators do |g|
-      g.orm false
-      g.fixture_replacement false
-      g.test_framework :rspec
-      g.assets false
-      g.helper false
-      g.javascripts false
-      g.model_specs false
-      g.stylesheets false
-      g.view_specs false
+    config.generators do |generator|
+      generator.orm false
+      generator.fixture_replacement false
+      generator.test_framework :rspec
+      generator.assets false
+      generator.helper false
+      generator.javascripts false
+      generator.model_specs false
+      generator.stylesheets false
+      generator.view_specs false
     end
 
     initializer "idp.automount" do |app|

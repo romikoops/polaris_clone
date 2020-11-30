@@ -17,6 +17,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "google_sign_in", "~> 1.1.2"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

@@ -25,6 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "roo-xls"
   spec.add_dependency "will_paginate"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "combustion"
-begin
-  Combustion.initialize!
-rescue => e
-  # Fail fast if application couldn't be loaded
-  $stdout.puts "Failed to load the app: #{e.message}\n#{e.backtrace.take(5).join("\n")}"
-  exit(1)
-end
-require "rails/commands"
+ENGINE_ROOT = File.expand_path('..', __dir__)
+ENGINE_PATH = File.expand_path('../lib/excel_data_services/engine', __dir__)
+APP_PATH = File.expand_path('../../../lib/spec/dummy/config/application', __dir__)
+
+# Set up gems listed in the Gemfile.
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
+require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
+
+require 'rails/all'
+require 'rails/engine/commands'

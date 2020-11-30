@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "shared-runtime"
-  spec.add_dependency "measured_itsmycargo"
+  spec.add_dependency "measured-itsmycargo"
 
   spec.add_dependency "rein"
   spec.add_dependency "date_validator"

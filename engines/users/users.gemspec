@@ -17,6 +17,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "acts_as_paranoid", "~> 0.6.3"
   spec.add_dependency "pg_search", "~> 2.3.0"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

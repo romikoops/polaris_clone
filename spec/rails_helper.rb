@@ -22,7 +22,9 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   config.infer_spec_type_from_file_location!
   config.use_transactional_fixtures = true
+
+  config.file_fixture_path = Dir[Rails.root.join("**", "spec", "fixtures", "files")]
 end
 
 # Shared context
-Dir[File.join(File.expand_path(__dir__), "**", "shared", "*.rb")].sort.each { |f| require f }
+Dir[Rails.root.join("**", "spec", "shared", "*.rb")].sort.each { |f| require f }

@@ -19,6 +19,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pricings"
   spec.add_dependency "quotations"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

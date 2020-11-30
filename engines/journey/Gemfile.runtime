@@ -1,3 +1,2 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
-
-gem "measured_itsmycargo", path: "../../gems/measured_itsmycargo"
+gem "measured-itsmycargo", path: "../../gems/measured-itsmycargo"

@@ -27,6 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "draper", "~> 4.0"
   spec.add_dependency "write_xlsx"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

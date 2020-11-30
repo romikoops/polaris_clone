@@ -21,6 +21,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "active_model_serializers", "~> 0.10", ">= 0.10.8"
   spec.add_dependency "doorkeeper", "~> 5.0.2"
 
-  spec.add_development_dependency "combustion", "~> 1.3"
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

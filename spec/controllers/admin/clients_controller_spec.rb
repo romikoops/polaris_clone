@@ -208,7 +208,7 @@ RSpec.describe Admin::ClientsController do
   describe "POST #agents" do
     let(:perform_request) { post :agents, params: {organization_id: organization, file: file} }
     let(:uploader) { double(perform: nil) }
-    let(:file) { fixture_file_upload("spec/fixtures/files/excel/dummy.xlsx") }
+    let(:file) { fixture_file_upload("spec/fixtures/files/dummy.xlsx") }
 
     it_behaves_like "uploading request async"
   end
