@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-COMMIT_PATTERN = %r{\A(((IMC-[[:digit:]]+)|((docs|fix|feat|chore|style|refactor|perf|test)(\(.*\))?))(: | - )(.*))|(Merge .*)}
+CLASSES = %r{(docs|fix|feat|chore|style|refactor|perf|test)}i
+TICKET = %r{(IMC-[[:digit:]]+)}
+COMMIT_PATTERN = %r{\A((#{TICKET}|(#{CLASSES}(\(.*\))?))(: | - )(.*))|(Merge .*)}
 
 remote, * = ARGV
 

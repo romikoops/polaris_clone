@@ -34,11 +34,7 @@ class Admin::GroupsController < Admin::AdminBaseController
     end
     params_members_ids = params[:addedMembers].values.flatten.map { |param| param[:id].to_s }
     group.memberships.each do |membership|
-      if membership.member.is_a?(Organizations::User)
-        membership.destroy unless params_members_ids.include?(membership.member&.id)
-      else
-        membership.destroy unless params_members_ids.include?(membership.member&.id)
-      end
+      membership.destroy unless params_members_ids.include?(membership.member&.id)
     end
     response_handler(for_show_json(group))
   end

@@ -46,5 +46,7 @@ module Imcr
     config.skylight.probes << "active_job"
     config.skylight.probes << "active_model_serializers"
     config.skylight.probes << "redis"
+
+    config.i18n.available_locales = %w[en]
   end
 end

@@ -60,8 +60,7 @@ module Authentication
       case Rails.env
       when "production" then "https://api.itsmycargo.com"
       when "review" then ENV["REVIEW_URL"]
-      when "development" then "http://localhost:3000"
-      when "test" then "http://localhost:3000"
+      when "development", "test" then "http://localhost:3000"
       end
     end
 
@@ -69,8 +68,7 @@ module Authentication
       case Rails.env
       when "production" then "https://#{default_domain}/"
       when "review" then ENV["REVIEW_URL"]
-      when "development" then "http://localhost:8080/"
-      when "test" then "http://localhost:8080/"
+      when "development", "test" then "http://localhost:8080/"
       end
     end
   end

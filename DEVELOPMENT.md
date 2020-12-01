@@ -6,6 +6,16 @@ This project uses Component-based Rails Application approach, which means all ne
 must be alwasy written inside separate engines. For more information and guidelines,
 please refer to dedicated documentation at [USAGE.md][0].
 
+## Data Migrations
+
+As application evolves, time to time there is a need to migrate data from older models
+to newer ones. This is handled as `Data Migration`. Data Migration is run after new code
+is deployed to the production environment in the background, leading smooth and easy
+way to handle any data backfilling needs.
+To generate data migration in your engine, simply run rails generator:
+
+    # rails generate data:migration create_admin_subscriptions
+
 ## Running Specs
 
 All specs are designed to be runnable from to top-level only. To run whole app-suite,

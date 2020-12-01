@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "sidekiq/web"
+require "sidekiq-status/web"
 if ENV["SIDEKIQ_USERNAME"] && ENV["SIDEKIQ_PASSWORD"]
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     ActiveSupport::SecurityUtils.secure_compare(

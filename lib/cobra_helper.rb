@@ -14,7 +14,7 @@ class CobraHelper
     end
 
     if (plantuml = `which plantuml`.strip)
-      (previous_sha == Digest::SHA256.file(output_file)) ||
+      (previous_sha == Digest::SHA256.file(output_file) && output.join("graph.svg").exist?) ||
         system("#{plantuml} -nometadata -duration -tsvg -o#{output} #{output_file}")
     else
       puts "Please install PlantUML (brew install plantuml) to generate graph"
@@ -38,7 +38,7 @@ class CobraHelper
       uml << ":User: --> [#{spec.name}]" if spec.metadata["type"] == "direct"
 
       spec.dependencies.select { |d| specs.key?(d.name) }.each do |d|
-        arrow = spec.metadata["type"] == specs[d.name].metadata["type"] ? "->" : "-->"
+        arrow = spec.metadata["type"] == specs[d.name].metadata["type"] ? "-->" : "->"
         uml << "[#{name}] #{arrow} [#{d.name}]"
       end
     end

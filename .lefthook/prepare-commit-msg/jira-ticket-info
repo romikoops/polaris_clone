@@ -11,7 +11,7 @@ ticket = JiraService.fetch_ticket(issue_source: :branch)
 
 commit_msg = File.read(file_path)
 File.open(file_path, "w") do |io|
-  io.puts "#{ticket[:key]}: #{ticket[:summary]}"
+  io.puts "#{ticket[:key]} - #{ticket[:summary]}"
   io.puts ""
   io.puts "# Assignee: #{ticket[:assignee]}"
   io.puts "#"

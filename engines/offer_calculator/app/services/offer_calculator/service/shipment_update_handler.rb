@@ -79,9 +79,7 @@ module OfferCalculator
           @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
         end
         Cargo::Creator.new(legacy_shipment: @shipment, quotation: @quotation).perform if @quotation.save
-      rescue ActiveRecord::RecordNotSaved
-        raise OfferCalculator::Errors::InvalidCargoUnit
-      rescue Cargo::Creator::Failure
+      rescue ActiveRecord::RecordNotSaved, Cargo::Creator::Failure
         raise OfferCalculator::Errors::InvalidCargoUnit
       end
 

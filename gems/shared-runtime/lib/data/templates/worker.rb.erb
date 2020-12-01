@@ -1,0 +1,13 @@
+<% module_namespacing do -%>
+class <%= class_name %>Worker
+  include Sidekiq::Worker
+  include Sidekiq::Status::Worker
+
+  def perform(*args)
+    # Class.find_each.with_index do |record, index|
+    #   at(index + 1)
+    #   ...
+    # end
+  end
+end
+<% end -%>
