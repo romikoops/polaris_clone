@@ -126,7 +126,7 @@ pipeline {
             """)
             sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
 
-            sh("bundle exec rspec")
+            sh("bundle exec rspec .")
 
           }
 
