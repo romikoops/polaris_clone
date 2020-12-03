@@ -126,7 +126,12 @@ pipeline {
             """)
             sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
 
-            sh("bundle exec rspec --exclude-pattern 'vendor/ruby/**/*_spec.rb' .")
+            sh("""
+              bundle exec rspec \
+                --exclude-pattern 'gems/**/*_spec.rb' \
+                --exclude-pattern 'vendor/ruby/**/*_spec.rb' \
+                .
+            """)
 
           }
 
