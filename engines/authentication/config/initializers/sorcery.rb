@@ -320,14 +320,14 @@ Rails.application.config.sorcery.configure do |config|
     # User activation mailer class.
     # Default: `nil`
     #
-    user.user_activation_mailer = Authentication::UserMailer
+    # user.user_activation_mailer =
 
     # When true, sorcery will not automatically
     # send the activation details email, and allow you to
     # manually handle how and when the email is sent.
     # Default: `false`
     #
-    # user.activation_mailer_disabled = false
+    user.activation_mailer_disabled = true
 
     # Method to send email related
     # options: `:deliver_later`, `:deliver_now`, `:deliver`
@@ -370,7 +370,7 @@ Rails.application.config.sorcery.configure do |config|
     # Password reset mailer class.
     # Default: `nil`
     #
-    user.reset_password_mailer = Authentication::UserMailer
+    # user.reset_password_mailer =
 
     # Reset password email method on your mailer class.
     # Default: `:reset_password_email`
@@ -382,7 +382,7 @@ Rails.application.config.sorcery.configure do |config|
     # manually handle how and when the email is sent
     # Default: `false`
     #
-    # user.reset_password_mailer_disabled =
+    user.reset_password_mailer_disabled = true
 
     # How many seconds before the reset request expires. nil for never expires.
     # Default: `nil`
@@ -419,7 +419,7 @@ Rails.application.config.sorcery.configure do |config|
     # Magic login mailer class.
     # Default: `nil`
     #
-    user.magic_login_mailer_class = Authentication::UserMailer
+    # user.magic_login_mailer_class =
 
     # Magic login email method on your mailer class.
     # Default: `:magic_login_email`
@@ -431,7 +431,7 @@ Rails.application.config.sorcery.configure do |config|
     # manually handle how and when the email is sent
     # Default: `true`
     #
-    # user.magic_login_mailer_disabled =
+    user.magic_login_mailer_disabled = true
 
     # How many seconds before the request expires. nil for never expires.
     # Default: `nil`
@@ -478,13 +478,13 @@ Rails.application.config.sorcery.configure do |config|
     # send email with the unlock token
     # Default: `false`
     #
-    # user.unlock_token_mailer_disabled = true
+    user.unlock_token_mailer_disabled = true
 
     # REQUIRED:
     # Unlock token mailer class.
     # Default: `nil`
     #
-    user.unlock_token_mailer = Authentication::UserMailer
+    # user.unlock_token_mailer =
 
     # -- activity logging --
     # Last login attribute name.

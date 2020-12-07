@@ -566,11 +566,6 @@ class ShippingTools
     ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
-  def shipper_welcome_email(user)
-    no_welcome_content = Legacy::Content.where(organization_id: user.organization_id, component: "WelcomeMail").empty?
-    WelcomeMailer.welcome_email(user).deliver_later unless no_welcome_content
-  end
-
   def shipper_confirmation_email(user, shipment)
     ShipmentMailer.shipper_confirmation(
       user,

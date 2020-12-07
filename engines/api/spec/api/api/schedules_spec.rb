@@ -25,7 +25,6 @@ RSpec.describe "Schedules" do
         start_date: base_date,
         end_date: base_date + 30.days)
     end
-    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
   path "/v1/organizations/{organization_id}/quotations/{quotation_id}/schedules/{id}" do

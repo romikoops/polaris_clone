@@ -139,7 +139,7 @@ end
 #  longitude        :float
 #  name             :string
 #  photo            :string
-#  point            :geometry         point, 4326
+#  point            :geometry         geometry, 0
 #  premise          :string
 #  province         :string
 #  street           :string

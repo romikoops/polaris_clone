@@ -23,6 +23,8 @@ class UploaderJob < ApplicationJob
       )
       .complete_email
       .deliver_later
+
+    result
   end
 
   private

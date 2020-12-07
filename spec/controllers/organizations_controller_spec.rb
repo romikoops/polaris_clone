@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe OrganizationsController do
-  let!(:user) { FactoryBot.create(:organizations_user, email: "user@itsmycargo.com") }
+  let(:user) { FactoryBot.create(:organizations_user, email: "user@itsmycargo.com") }
   let(:organization) { user.organization }
-  let(:domain) { FactoryBot.create(:organizations_domain, organization: organization, domain: "itsmycargo.example") }
+  let(:domain) { organization.domains.default }
 
   before do
     request.env["HTTP_REFERER"] = "http://#{domain.domain}"
-    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
   describe "GET #index" do

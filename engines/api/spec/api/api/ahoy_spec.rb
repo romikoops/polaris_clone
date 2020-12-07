@@ -7,8 +7,6 @@ RSpec.describe "Ahoy API" do
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
 
-  before { FactoryBot.create(:organizations_domain, organization: organization, default: true) }
-
   path "/v1/organizations/{organization_id}/ahoy" do
     get "Fetch Settings" do
       tags "Ahoy"

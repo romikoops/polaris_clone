@@ -1,0 +1,14 @@
+de:
+  layouts:
+    notifications:
+      mailer:
+        rights_reserved: Alle Rechte vorbehalten
+  notifications:
+    admin_mailer:
+      user_created:
+        subject: "[ItsMyCargo] Neuer Benutzer"
+    user_mailer:
+      activation_needed_email:
+        subject: "[%{company}] Bestätigen Sie Ihr Konto"
+      reset_password_email:
+        subject: "[%{company}] Passwort zurücksetzen"

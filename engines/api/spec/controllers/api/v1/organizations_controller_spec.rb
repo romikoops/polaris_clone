@@ -17,18 +17,15 @@ module Api
     let(:scope) { OrganizationManager::ScopeService.new(organization: organization, target: user).fetch }
 
     describe "GET #index" do
-      let(:organization_name) { "demo" }
-
       before do
         FactoryBot.create(:organizations_membership, organization: organization, user: user)
-        FactoryBot.create(:organizations_theme, organization: organization, name: organization_name)
       end
 
       it "renders the list of organizations successfully" do
         get :index, as: :json
         aggregate_failures do
           expect(response_data[0]["attributes"]["slug"]).to eq(organization.slug)
-          expect(response_data[0]["attributes"]["name"]).to eq(organization_name)
+          expect(response_data[0]["attributes"]["name"]).to eq(organization.theme.name)
         end
       end
     end

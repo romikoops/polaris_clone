@@ -7,7 +7,6 @@ RSpec.describe "PasswordResets", type: :request do
   before do
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
       .to_return(status: 200, body: "", headers: {})
-    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
   describe "POST /create" do
@@ -36,14 +35,6 @@ RSpec.describe "PasswordResets", type: :request do
         params: {redirect_url: "http://localhost:8080/password_reset"}
 
       expect(subject).to redirect_to("#{redirect_url}?reset_password_token=#{user.reset_password_token}")
-    end
-
-    context "when user not found by the reset token" do
-      it "returns not found" do
-        get edit_organization_password_reset_path(organization_id: organization.id, id: "123")
-
-        expect(response).to have_http_status(:unauthorized)
-      end
     end
   end
 

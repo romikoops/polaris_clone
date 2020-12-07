@@ -111,10 +111,6 @@ RSpec.describe Admin::ClientsController do
     let(:attributes) { user_attributes.merge(profile_attributes) }
     let(:created_profile_attrs) { Profiles::Profile.last.attributes }
 
-    before do
-      FactoryBot.create(:organizations_theme, organization: organization)
-    end
-
     it "returns an http status of success" do
       post :create, params: {organization_id: organization, new_client: attributes.to_json}
       expect(response).to have_http_status(:success)

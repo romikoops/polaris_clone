@@ -16,7 +16,6 @@ RSpec.describe Wheelhouse::PdfService do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, organization: organization)
     shipment.charge_breakdowns.map(&:tender).each do |tender|
       Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
                                   to: "USD", rate: 1.3,

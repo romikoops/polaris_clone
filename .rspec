@@ -1,0 +1,2 @@
+--exclude-pattern '{gems,vendor}/**/*_spec.rb'
+

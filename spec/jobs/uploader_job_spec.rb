@@ -1,16 +1,20 @@
 require "rails_helper"
 
 RSpec.describe UploaderJob, type: :job do
-  ActiveJob::Base.queue_adapter = :test
-
-  let(:document) { FactoryBot.create(:legacy_file) }
+  let(:document) do
+    FactoryBot.create(
+      :legacy_file,
+      file: Rack::Test::UploadedFile.new(
+        file_fixture("dummy.xlsx"),
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+      )
+  end
   let(:user) { FactoryBot.create(:organizations_user, organization: document.organization) }
 
-  describe "#perform_later" do
-    it "enqueues the job" do
-      expect {
-        UploaderJob.perform_later(document_id: document.id, options: {user_id: user.id})
-      }.to have_enqueued_job
+  describe "#perform_now" do
+    it "performs the job" do
+      result = UploaderJob.perform_now(document_id: document.id, options: {user_id: user.id})
+      expect(result[:has_errors]).to be true
     end
   end
 end

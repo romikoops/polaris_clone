@@ -71,7 +71,7 @@ pipeline {
         }
 
         stage("App") {
-          options { timeout(45) }
+          options { timeout(60) }
           environment {
             LC_ALL = "C.UTF-8"
             BUNDLE_PATH = "vendor/ruby"

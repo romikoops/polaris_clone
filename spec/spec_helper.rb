@@ -30,10 +30,11 @@ SimpleCov.start do
   end
 end
 
-require "rspec/instafail"
-require "webmock/rspec"
-require "timecop"
 require "factory_bot"
+require "rspec/instafail"
+require "rspec/retry"
+require "timecop"
+require "webmock/rspec"
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
@@ -81,4 +82,7 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
+
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
 end

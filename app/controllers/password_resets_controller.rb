@@ -8,7 +8,12 @@ class PasswordResetsController < ApplicationController
 
     if @user
       @user.organization_id = params[:organization_id] if @user.organization_id.blank?
-      @user.deliver_reset_password_instructions!
+      @user.generate_reset_password_token!
+      Notifications::UserMailer.with(
+        organization: ::Organizations::Organization.find(@user.organization_id),
+        user: @user,
+        profile: Profiles::Profile.find_by(user: @user)
+      ).reset_password_email.deliver_later
 
       response_handler(@user)
     else
@@ -20,12 +25,6 @@ class PasswordResetsController < ApplicationController
   def edit
     @token = params[:id]
     @redirect_url = params[:redirect_url]
-    @user = Authentication::User.load_from_reset_password_token(params[:id])
-
-    if @user.blank?
-      not_authenticated
-      return
-    end
 
     redirect_to("#{@redirect_url}?reset_password_token=#{@token}")
   end

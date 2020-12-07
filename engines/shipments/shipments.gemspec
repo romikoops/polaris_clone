@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
 
   # External gems
   spec.add_dependency "aasm"
+  spec.add_dependency "measured-rails"
   spec.add_dependency "money-rails", "~> 1.12"
 
   # pec Internal engines

@@ -55,7 +55,6 @@ RSpec.describe QuoteMailer, type: :mailer do
                                   created_at: tender.created_at - 30.seconds)
     end
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, :with_email_logo, emails: emails, organization: organization)
   end
 
   describe "quotation_email" do
@@ -173,7 +172,7 @@ RSpec.describe QuoteMailer, type: :mailer do
     let(:emails) { {sales: {general: ""}} }
 
     it "corrects to the default email", :aggregate_failures do
-      expect(mail.to).to eq(["itsmycargodev@gmail.com"])
+      expect(mail.to).to eq([organization.theme.emails["sales"]["general"]])
     end
   end
 

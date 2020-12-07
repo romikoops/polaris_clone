@@ -6,7 +6,7 @@ RSpec.describe UsersController do
   let(:addresses) { FactoryBot.create_list(:address, 5) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
-  let(:domain) { FactoryBot.create(:organizations_domain, organization: organization, domain: "itsmycargo.example") }
+  let(:domain) { organization.domains.default }
 
   before do
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
@@ -42,10 +42,6 @@ RSpec.describe UsersController do
   end
 
   describe "POST #create" do
-    before do
-      FactoryBot.create(:organizations_theme, organization: organization)
-    end
-
     let(:test_email) { "test@itsmycargo.com" }
     let(:created_user) { Organizations::User.find_by(email: test_email, organization: organization) }
 
@@ -105,7 +101,6 @@ RSpec.describe UsersController do
 
   describe "POST #passwordless_authentication" do
     before do
-      FactoryBot.create(:organizations_theme, organization: organization)
       FactoryBot.create(:organizations_scope, target: organization,
                                               content: {"signup_form_fields" => {"password" => false}})
     end

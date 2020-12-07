@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "shared-runtime"
+  spec.add_dependency "measured-itsmycargo"
 
   # External Gems
   spec.add_dependency "measured-rails"

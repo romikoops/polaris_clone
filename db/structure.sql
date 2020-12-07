@@ -618,7 +618,7 @@ CREATE TABLE public.addresses (
     address_line_1 character varying,
     address_line_2 character varying,
     address_line_3 character varying,
-    point public.geometry(Point,4326)
+    point public.geometry
 );
 
 
@@ -1217,77 +1217,6 @@ ALTER SEQUENCE public.containers_id_seq OWNED BY public.containers.id;
 
 
 --
--- Name: contents_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.contents_20200504 (
-    id bigint NOT NULL,
-    text jsonb DEFAULT '{}'::jsonb,
-    component character varying,
-    section character varying,
-    index integer,
-    tenant_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: contents_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.contents_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: contents_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.contents_20200504_id_seq OWNED BY public.contents_20200504.id;
-
-
---
--- Name: conversations_20200114; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.conversations_20200114 (
-    id bigint NOT NULL,
-    shipment_id integer,
-    tenant_id integer,
-    user_id integer,
-    manager_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    last_updated timestamp without time zone,
-    unreads integer
-);
-
-
---
--- Name: conversations_20200114_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.conversations_20200114_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: conversations_20200114_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.conversations_20200114_id_seq OWNED BY public.conversations_20200114.id;
-
-
---
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1318,39 +1247,6 @@ CREATE SEQUENCE public.countries_id_seq
 --
 
 ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
-
-
---
--- Name: couriers_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.couriers_20200504 (
-    id bigint NOT NULL,
-    name character varying,
-    tenant_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    sandbox_id uuid
-);
-
-
---
--- Name: couriers_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.couriers_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: couriers_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.couriers_20200504_id_seq OWNED BY public.couriers_20200504.id;
 
 
 --
@@ -1428,31 +1324,45 @@ ALTER SEQUENCE public.customs_fees_id_seq OWNED BY public.customs_fees.id;
 
 
 --
--- Name: documents_20200504; Type: TABLE; Schema: public; Owner: -
+-- Name: data_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.documents_20200504 (
-    id bigint NOT NULL,
-    user_id integer,
-    shipment_id integer,
-    doc_type character varying,
-    url character varying,
-    text character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    approved character varying,
-    approval_details jsonb,
-    tenant_id integer,
-    quotation_id integer,
-    sandbox_id uuid
+CREATE TABLE public.data_migrations (
+    version character varying NOT NULL
 );
 
 
 --
--- Name: documents_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: event_store_events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.documents_20200504_id_seq
+CREATE TABLE public.event_store_events (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    event_type character varying NOT NULL,
+    metadata bytea,
+    data bytea NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: event_store_events_in_streams; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.event_store_events_in_streams (
+    id bigint NOT NULL,
+    stream character varying NOT NULL,
+    "position" integer,
+    event_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: event_store_events_in_streams_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.event_store_events_in_streams_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1461,10 +1371,10 @@ CREATE SEQUENCE public.documents_20200504_id_seq
 
 
 --
--- Name: documents_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: event_store_events_in_streams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.documents_20200504_id_seq OWNED BY public.documents_20200504.id;
+ALTER SEQUENCE public.event_store_events_in_streams_id_seq OWNED BY public.event_store_events_in_streams.id;
 
 
 --
@@ -1501,41 +1411,6 @@ ALTER SEQUENCE public.exchange_rates_id_seq OWNED BY public.exchange_rates.id;
 
 
 --
--- Name: geometries_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.geometries_20200504 (
-    id bigint NOT NULL,
-    name_1 character varying,
-    name_2 character varying,
-    name_3 character varying,
-    name_4 character varying,
-    data public.geometry,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: geometries_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.geometries_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: geometries_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.geometries_20200504_id_seq OWNED BY public.geometries_20200504.id;
-
-
---
 -- Name: groups_groups; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1564,71 +1439,6 @@ CREATE TABLE public.groups_memberships (
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone
 );
-
-
---
--- Name: hub_truck_type_availabilities_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.hub_truck_type_availabilities_20200504 (
-    id bigint NOT NULL,
-    hub_id integer,
-    truck_type_availability_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: hub_truck_type_availabilities_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.hub_truck_type_availabilities_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: hub_truck_type_availabilities_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.hub_truck_type_availabilities_20200504_id_seq OWNED BY public.hub_truck_type_availabilities_20200504.id;
-
-
---
--- Name: hub_truckings_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.hub_truckings_20200504 (
-    id bigint NOT NULL,
-    hub_id integer,
-    trucking_destination_id integer,
-    trucking_pricing_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: hub_truckings_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.hub_truckings_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: hub_truckings_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.hub_truckings_20200504_id_seq OWNED BY public.hub_truckings_20200504.id;
 
 
 --
@@ -2589,42 +2399,6 @@ ALTER SEQUENCE public.local_charges_id_seq OWNED BY public.local_charges.id;
 
 
 --
--- Name: locations_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.locations_20200504 (
-    id bigint NOT NULL,
-    postal_code character varying,
-    suburb character varying,
-    neighbourhood character varying,
-    city character varying,
-    province character varying,
-    country character varying,
-    admin_level character varying,
-    bounds public.geometry
-);
-
-
---
--- Name: locations_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.locations_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: locations_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.locations_20200504_id_seq OWNED BY public.locations_20200504.id;
-
-
---
 -- Name: locations_locations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2793,42 +2567,6 @@ ALTER SEQUENCE public.max_dimensions_bundles_id_seq OWNED BY public.max_dimensio
 
 
 --
--- Name: messages_20200114; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.messages_20200114 (
-    id bigint NOT NULL,
-    title character varying,
-    message character varying,
-    conversation_id integer,
-    read boolean,
-    read_at timestamp without time zone,
-    sender_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: messages_20200114_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.messages_20200114_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: messages_20200114_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.messages_20200114_id_seq OWNED BY public.messages_20200114.id;
-
-
---
 -- Name: migrator_syncs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2905,42 +2643,6 @@ CREATE TABLE public.migrator_unique_trucking_syncs (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: mot_scopes_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mot_scopes_20200504 (
-    id bigint NOT NULL,
-    ocean_container boolean,
-    ocean_cargo_item boolean,
-    air_container boolean,
-    air_cargo_item boolean,
-    rail_container boolean,
-    rail_cargo_item boolean,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: mot_scopes_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.mot_scopes_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mot_scopes_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.mot_scopes_20200504_id_seq OWNED BY public.mot_scopes_20200504.id;
 
 
 --
@@ -3028,6 +2730,41 @@ ALTER SEQUENCE public.notes_id_seq OWNED BY public.notes.id;
 
 
 --
+-- Name: notifications_subscriptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.notifications_subscriptions (
+    id bigint NOT NULL,
+    event_type character varying,
+    filter json DEFAULT '"{}"'::json,
+    user_id uuid,
+    organization_id uuid,
+    email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: notifications_subscriptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.notifications_subscriptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notifications_subscriptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.notifications_subscriptions_id_seq OWNED BY public.notifications_subscriptions.id;
+
+
+--
 -- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3079,40 +2816,6 @@ CREATE TABLE public.oauth_applications (
     owner_id uuid,
     owner_type character varying
 );
-
-
---
--- Name: optin_statuses_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.optin_statuses_20200504 (
-    id bigint NOT NULL,
-    cookies boolean,
-    tenant boolean,
-    itsmycargo boolean,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    sandbox_id uuid
-);
-
-
---
--- Name: optin_statuses_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.optin_statuses_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: optin_statuses_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.optin_statuses_20200504_id_seq OWNED BY public.optin_statuses_20200504.id;
 
 
 --
@@ -3276,159 +2979,6 @@ CREATE SEQUENCE public.prices_id_seq
 --
 
 ALTER SEQUENCE public.prices_id_seq OWNED BY public.prices.id;
-
-
---
--- Name: pricing_details_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pricing_details_20200504 (
-    id bigint NOT NULL,
-    rate numeric,
-    rate_basis character varying,
-    min numeric,
-    hw_threshold numeric,
-    hw_rate_basis character varying,
-    shipping_type character varying,
-    range jsonb DEFAULT '[]'::jsonb,
-    currency_name character varying,
-    currency_id bigint,
-    priceable_type character varying,
-    priceable_id bigint,
-    tenant_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    sandbox_id uuid
-);
-
-
---
--- Name: pricing_details_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pricing_details_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pricing_details_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pricing_details_20200504_id_seq OWNED BY public.pricing_details_20200504.id;
-
-
---
--- Name: pricing_exceptions_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pricing_exceptions_20200504 (
-    id bigint NOT NULL,
-    effective_date timestamp without time zone,
-    expiration_date timestamp without time zone,
-    pricing_id bigint,
-    tenant_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: pricing_exceptions_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pricing_exceptions_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pricing_exceptions_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pricing_exceptions_20200504_id_seq OWNED BY public.pricing_exceptions_20200504.id;
-
-
---
--- Name: pricing_requests_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pricing_requests_20200504 (
-    id bigint NOT NULL,
-    pricing_id integer,
-    user_id integer,
-    tenant_id integer,
-    status character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: pricing_requests_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pricing_requests_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pricing_requests_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pricing_requests_20200504_id_seq OWNED BY public.pricing_requests_20200504.id;
-
-
---
--- Name: pricings_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pricings_20200504 (
-    id bigint NOT NULL,
-    wm_rate numeric,
-    effective_date timestamp without time zone,
-    expiration_date timestamp without time zone,
-    tenant_id bigint,
-    transport_category_id bigint,
-    user_id bigint,
-    itinerary_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    tenant_vehicle_id integer,
-    uuid uuid DEFAULT public.gen_random_uuid(),
-    sandbox_id uuid,
-    internal boolean DEFAULT false,
-    validity daterange
-);
-
-
---
--- Name: pricings_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pricings_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pricings_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pricings_20200504_id_seq OWNED BY public.pricings_20200504.id;
 
 
 --
@@ -4120,19 +3670,6 @@ CREATE TABLE public.routing_terminals (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     mode_of_transport integer DEFAULT 0
-);
-
-
---
--- Name: routing_transit_times_20191213111544; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.routing_transit_times_20191213111544 (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    route_line_service_id uuid,
-    days numeric,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -4923,42 +4460,6 @@ CREATE TABLE public.tenants_users (
 
 
 --
--- Name: transport_categories_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.transport_categories_20200504 (
-    id bigint NOT NULL,
-    vehicle_id integer,
-    mode_of_transport character varying,
-    name character varying,
-    cargo_class character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    load_type character varying,
-    sandbox_id uuid
-);
-
-
---
--- Name: transport_categories_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.transport_categories_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: transport_categories_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.transport_categories_20200504_id_seq OWNED BY public.transport_categories_20200504.id;
-
-
---
 -- Name: trips; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4998,39 +4499,6 @@ ALTER SEQUENCE public.trips_id_seq OWNED BY public.trips.id;
 
 
 --
--- Name: truck_type_availabilities_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.truck_type_availabilities_20200504 (
-    id bigint NOT NULL,
-    load_type character varying,
-    carriage character varying,
-    truck_type character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: truck_type_availabilities_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.truck_type_availabilities_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: truck_type_availabilities_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.truck_type_availabilities_20200504_id_seq OWNED BY public.truck_type_availabilities_20200504.id;
-
-
---
 -- Name: trucking_couriers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5057,42 +4525,6 @@ CREATE TABLE public.trucking_coverages (
     updated_at timestamp without time zone NOT NULL,
     sandbox_id uuid
 );
-
-
---
--- Name: trucking_destinations_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.trucking_destinations_20200504 (
-    id bigint NOT NULL,
-    zipcode character varying,
-    country_code character varying,
-    city_name character varying,
-    distance integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    location_id integer,
-    sandbox_id uuid
-);
-
-
---
--- Name: trucking_destinations_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.trucking_destinations_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: trucking_destinations_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.trucking_destinations_20200504_id_seq OWNED BY public.trucking_destinations_20200504.id;
 
 
 --
@@ -5129,79 +4561,6 @@ CREATE TABLE public.trucking_locations (
     query integer,
     country_id bigint
 );
-
-
---
--- Name: trucking_pricing_scopes_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.trucking_pricing_scopes_20200504 (
-    id bigint NOT NULL,
-    load_type character varying,
-    cargo_class character varying,
-    carriage character varying,
-    courier_id integer,
-    truck_type character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: trucking_pricing_scopes_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.trucking_pricing_scopes_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: trucking_pricing_scopes_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.trucking_pricing_scopes_20200504_id_seq OWNED BY public.trucking_pricing_scopes_20200504.id;
-
-
---
--- Name: trucking_pricings_20200504; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.trucking_pricings_20200504 (
-    id bigint NOT NULL,
-    load_meterage jsonb,
-    cbm_ratio integer,
-    modifier character varying,
-    tenant_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    rates jsonb,
-    fees jsonb,
-    identifier_modifier character varying,
-    trucking_pricing_scope_id integer
-);
-
-
---
--- Name: trucking_pricings_20200504_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.trucking_pricings_20200504_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: trucking_pricings_20200504_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.trucking_pricings_20200504_id_seq OWNED BY public.trucking_pricings_20200504.id;
 
 
 --
@@ -5245,42 +4604,6 @@ CREATE TABLE public.trucking_scopes (
 --
 
 CREATE TABLE public.trucking_truckings (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    hub_id integer,
-    location_id uuid,
-    rate_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    load_meterage jsonb,
-    cbm_ratio integer,
-    modifier character varying,
-    tenant_id integer,
-    rates jsonb,
-    fees jsonb,
-    identifier_modifier character varying,
-    load_type character varying,
-    cargo_class character varying,
-    carriage character varying,
-    courier_id uuid,
-    truck_type character varying,
-    legacy_user_id integer,
-    parent_id uuid,
-    group_id uuid,
-    sandbox_id uuid,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    organization_id uuid,
-    user_id uuid,
-    tenant_vehicle_id integer,
-    deleted_at timestamp without time zone,
-    validity daterange
-);
-
-
---
--- Name: trucking_truckings_20201005; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.trucking_truckings_20201005 (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     hub_id integer,
     location_id uuid,
@@ -5705,31 +5028,10 @@ ALTER TABLE ONLY public.containers ALTER COLUMN id SET DEFAULT nextval('public.c
 
 
 --
--- Name: contents_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.contents_20200504 ALTER COLUMN id SET DEFAULT nextval('public.contents_20200504_id_seq'::regclass);
-
-
---
--- Name: conversations_20200114 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.conversations_20200114 ALTER COLUMN id SET DEFAULT nextval('public.conversations_20200114_id_seq'::regclass);
-
-
---
 -- Name: countries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.countries_id_seq'::regclass);
-
-
---
--- Name: couriers_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.couriers_20200504 ALTER COLUMN id SET DEFAULT nextval('public.couriers_20200504_id_seq'::regclass);
 
 
 --
@@ -5747,10 +5049,10 @@ ALTER TABLE ONLY public.customs_fees ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: documents_20200504 id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: event_store_events_in_streams id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.documents_20200504 ALTER COLUMN id SET DEFAULT nextval('public.documents_20200504_id_seq'::regclass);
+ALTER TABLE ONLY public.event_store_events_in_streams ALTER COLUMN id SET DEFAULT nextval('public.event_store_events_in_streams_id_seq'::regclass);
 
 
 --
@@ -5758,27 +5060,6 @@ ALTER TABLE ONLY public.documents_20200504 ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY public.exchange_rates ALTER COLUMN id SET DEFAULT nextval('public.exchange_rates_id_seq'::regclass);
-
-
---
--- Name: geometries_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.geometries_20200504 ALTER COLUMN id SET DEFAULT nextval('public.geometries_20200504_id_seq'::regclass);
-
-
---
--- Name: hub_truck_type_availabilities_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hub_truck_type_availabilities_20200504 ALTER COLUMN id SET DEFAULT nextval('public.hub_truck_type_availabilities_20200504_id_seq'::regclass);
-
-
---
--- Name: hub_truckings_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hub_truckings_20200504 ALTER COLUMN id SET DEFAULT nextval('public.hub_truckings_20200504_id_seq'::regclass);
 
 
 --
@@ -5838,13 +5119,6 @@ ALTER TABLE ONLY public.local_charges ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: locations_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.locations_20200504 ALTER COLUMN id SET DEFAULT nextval('public.locations_20200504_id_seq'::regclass);
-
-
---
 -- Name: mandatory_charges id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5866,20 +5140,6 @@ ALTER TABLE ONLY public.max_dimensions_bundles ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- Name: messages_20200114 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.messages_20200114 ALTER COLUMN id SET DEFAULT nextval('public.messages_20200114_id_seq'::regclass);
-
-
---
--- Name: mot_scopes_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mot_scopes_20200504 ALTER COLUMN id SET DEFAULT nextval('public.mot_scopes_20200504_id_seq'::regclass);
-
-
---
 -- Name: nexuses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5894,10 +5154,10 @@ ALTER TABLE ONLY public.notes ALTER COLUMN id SET DEFAULT nextval('public.notes_
 
 
 --
--- Name: optin_statuses_20200504 id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notifications_subscriptions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.optin_statuses_20200504 ALTER COLUMN id SET DEFAULT nextval('public.optin_statuses_20200504_id_seq'::regclass);
+ALTER TABLE ONLY public.notifications_subscriptions ALTER COLUMN id SET DEFAULT nextval('public.notifications_subscriptions_id_seq'::regclass);
 
 
 --
@@ -5912,34 +5172,6 @@ ALTER TABLE ONLY public.ports ALTER COLUMN id SET DEFAULT nextval('public.ports_
 --
 
 ALTER TABLE ONLY public.prices ALTER COLUMN id SET DEFAULT nextval('public.prices_id_seq'::regclass);
-
-
---
--- Name: pricing_details_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_details_20200504 ALTER COLUMN id SET DEFAULT nextval('public.pricing_details_20200504_id_seq'::regclass);
-
-
---
--- Name: pricing_exceptions_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_exceptions_20200504 ALTER COLUMN id SET DEFAULT nextval('public.pricing_exceptions_20200504_id_seq'::regclass);
-
-
---
--- Name: pricing_requests_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_requests_20200504 ALTER COLUMN id SET DEFAULT nextval('public.pricing_requests_20200504_id_seq'::regclass);
-
-
---
--- Name: pricings_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricings_20200504 ALTER COLUMN id SET DEFAULT nextval('public.pricings_20200504_id_seq'::regclass);
 
 
 --
@@ -6034,45 +5266,10 @@ ALTER TABLE ONLY public.tenants ALTER COLUMN id SET DEFAULT nextval('public.tena
 
 
 --
--- Name: transport_categories_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.transport_categories_20200504 ALTER COLUMN id SET DEFAULT nextval('public.transport_categories_20200504_id_seq'::regclass);
-
-
---
 -- Name: trips id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.trips ALTER COLUMN id SET DEFAULT nextval('public.trips_id_seq'::regclass);
-
-
---
--- Name: truck_type_availabilities_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.truck_type_availabilities_20200504 ALTER COLUMN id SET DEFAULT nextval('public.truck_type_availabilities_20200504_id_seq'::regclass);
-
-
---
--- Name: trucking_destinations_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_destinations_20200504 ALTER COLUMN id SET DEFAULT nextval('public.trucking_destinations_20200504_id_seq'::regclass);
-
-
---
--- Name: trucking_pricing_scopes_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_pricing_scopes_20200504 ALTER COLUMN id SET DEFAULT nextval('public.trucking_pricing_scopes_20200504_id_seq'::regclass);
-
-
---
--- Name: trucking_pricings_20200504 id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_pricings_20200504 ALTER COLUMN id SET DEFAULT nextval('public.trucking_pricings_20200504_id_seq'::regclass);
 
 
 --
@@ -6303,35 +5500,11 @@ ALTER TABLE ONLY public.containers
 
 
 --
--- Name: contents_20200504 contents_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.contents_20200504
-    ADD CONSTRAINT contents_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: conversations_20200114 conversations_20200114_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.conversations_20200114
-    ADD CONSTRAINT conversations_20200114_pkey PRIMARY KEY (id);
-
-
---
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
-
-
---
--- Name: couriers_20200504 couriers_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.couriers_20200504
-    ADD CONSTRAINT couriers_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -6351,11 +5524,27 @@ ALTER TABLE ONLY public.customs_fees
 
 
 --
--- Name: documents_20200504 documents_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: data_migrations data_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.documents_20200504
-    ADD CONSTRAINT documents_20200504_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.data_migrations
+    ADD CONSTRAINT data_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: event_store_events_in_streams event_store_events_in_streams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_store_events_in_streams
+    ADD CONSTRAINT event_store_events_in_streams_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: event_store_events event_store_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_store_events
+    ADD CONSTRAINT event_store_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -6364,14 +5553,6 @@ ALTER TABLE ONLY public.documents_20200504
 
 ALTER TABLE ONLY public.exchange_rates
     ADD CONSTRAINT exchange_rates_pkey PRIMARY KEY (id);
-
-
---
--- Name: geometries_20200504 geometries_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.geometries_20200504
-    ADD CONSTRAINT geometries_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -6388,22 +5569,6 @@ ALTER TABLE ONLY public.groups_groups
 
 ALTER TABLE ONLY public.groups_memberships
     ADD CONSTRAINT groups_memberships_pkey PRIMARY KEY (id);
-
-
---
--- Name: hub_truck_type_availabilities_20200504 hub_truck_type_availabilities_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hub_truck_type_availabilities_20200504
-    ADD CONSTRAINT hub_truck_type_availabilities_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: hub_truckings_20200504 hub_truckings_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hub_truckings_20200504
-    ADD CONSTRAINT hub_truckings_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -6799,14 +5964,6 @@ ALTER TABLE ONLY public.local_charges
 
 
 --
--- Name: locations_20200504 locations_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.locations_20200504
-    ADD CONSTRAINT locations_20200504_pkey PRIMARY KEY (id);
-
-
---
 -- Name: locations_locations locations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6844,14 +6001,6 @@ ALTER TABLE ONLY public.map_data
 
 ALTER TABLE ONLY public.max_dimensions_bundles
     ADD CONSTRAINT max_dimensions_bundles_pkey PRIMARY KEY (id);
-
-
---
--- Name: messages_20200114 messages_20200114_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.messages_20200114
-    ADD CONSTRAINT messages_20200114_pkey PRIMARY KEY (id);
 
 
 --
@@ -6895,14 +6044,6 @@ ALTER TABLE ONLY public.migrator_unique_trucking_syncs
 
 
 --
--- Name: mot_scopes_20200504 mot_scopes_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mot_scopes_20200504
-    ADD CONSTRAINT mot_scopes_20200504_pkey PRIMARY KEY (id);
-
-
---
 -- Name: nexuses nexuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6916,6 +6057,14 @@ ALTER TABLE ONLY public.nexuses
 
 ALTER TABLE ONLY public.notes
     ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notifications_subscriptions notifications_subscriptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notifications_subscriptions
+    ADD CONSTRAINT notifications_subscriptions_pkey PRIMARY KEY (id);
 
 
 --
@@ -6940,14 +6089,6 @@ ALTER TABLE ONLY public.oauth_access_tokens
 
 ALTER TABLE ONLY public.oauth_applications
     ADD CONSTRAINT oauth_applications_pkey PRIMARY KEY (id);
-
-
---
--- Name: optin_statuses_20200504 optin_statuses_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.optin_statuses_20200504
-    ADD CONSTRAINT optin_statuses_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -7012,38 +6153,6 @@ ALTER TABLE ONLY public.ports
 
 ALTER TABLE ONLY public.prices
     ADD CONSTRAINT prices_pkey PRIMARY KEY (id);
-
-
---
--- Name: pricing_details_20200504 pricing_details_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_details_20200504
-    ADD CONSTRAINT pricing_details_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: pricing_exceptions_20200504 pricing_exceptions_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_exceptions_20200504
-    ADD CONSTRAINT pricing_exceptions_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: pricing_requests_20200504 pricing_requests_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricing_requests_20200504
-    ADD CONSTRAINT pricing_requests_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: pricings_20200504 pricings_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricings_20200504
-    ADD CONSTRAINT pricings_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -7276,14 +6385,6 @@ ALTER TABLE ONLY public.routing_routes
 
 ALTER TABLE ONLY public.routing_terminals
     ADD CONSTRAINT routing_terminals_pkey PRIMARY KEY (id);
-
-
---
--- Name: routing_transit_times_20191213111544 routing_transit_times_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.routing_transit_times_20191213111544
-    ADD CONSTRAINT routing_transit_times_pkey PRIMARY KEY (id);
 
 
 --
@@ -7559,27 +6660,11 @@ ALTER TABLE ONLY public.tenants_users
 
 
 --
--- Name: transport_categories_20200504 transport_categories_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.transport_categories_20200504
-    ADD CONSTRAINT transport_categories_20200504_pkey PRIMARY KEY (id);
-
-
---
 -- Name: trips trips_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.trips
     ADD CONSTRAINT trips_pkey PRIMARY KEY (id);
-
-
---
--- Name: truck_type_availabilities_20200504 truck_type_availabilities_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.truck_type_availabilities_20200504
-    ADD CONSTRAINT truck_type_availabilities_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -7596,14 +6681,6 @@ ALTER TABLE ONLY public.trucking_couriers
 
 ALTER TABLE ONLY public.trucking_coverages
     ADD CONSTRAINT trucking_coverages_pkey PRIMARY KEY (id);
-
-
---
--- Name: trucking_destinations_20200504 trucking_destinations_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_destinations_20200504
-    ADD CONSTRAINT trucking_destinations_20200504_pkey PRIMARY KEY (id);
 
 
 --
@@ -7631,22 +6708,6 @@ ALTER TABLE ONLY public.trucking_locations
 
 
 --
--- Name: trucking_pricing_scopes_20200504 trucking_pricing_scopes_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_pricing_scopes_20200504
-    ADD CONSTRAINT trucking_pricing_scopes_20200504_pkey PRIMARY KEY (id);
-
-
---
--- Name: trucking_pricings_20200504 trucking_pricings_20200504_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_pricings_20200504
-    ADD CONSTRAINT trucking_pricings_20200504_pkey PRIMARY KEY (id);
-
-
---
 -- Name: trucking_rates trucking_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7660,14 +6721,6 @@ ALTER TABLE ONLY public.trucking_rates
 
 ALTER TABLE ONLY public.trucking_scopes
     ADD CONSTRAINT trucking_scopes_pkey PRIMARY KEY (id);
-
-
---
--- Name: trucking_truckings_20201005 trucking_truckings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_truckings_20201005
-    ADD CONSTRAINT trucking_truckings_pkey PRIMARY KEY (id);
 
 
 --
@@ -7756,13 +6809,6 @@ ALTER TABLE ONLY public.vehicles
 
 ALTER TABLE ONLY public.versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
-
-
---
--- Name: foreign_keys; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX foreign_keys ON public.hub_truckings_20200504 USING btree (trucking_pricing_id, trucking_destination_id, hub_id);
 
 
 --
@@ -8186,34 +7232,6 @@ CREATE INDEX index_containers_on_sandbox_id ON public.containers USING btree (sa
 
 
 --
--- Name: index_contents_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contents_20200504_on_tenant_id ON public.contents_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_conversations_20200114_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_conversations_20200114_on_tenant_id ON public.conversations_20200114 USING btree (tenant_id);
-
-
---
--- Name: index_couriers_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_couriers_20200504_on_sandbox_id ON public.couriers_20200504 USING btree (sandbox_id);
-
-
---
--- Name: index_couriers_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_couriers_20200504_on_tenant_id ON public.couriers_20200504 USING btree (tenant_id);
-
-
---
 -- Name: index_currencies_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8242,17 +7260,45 @@ CREATE INDEX index_customs_fees_on_tenant_id ON public.customs_fees USING btree 
 
 
 --
--- Name: index_documents_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_event_store_events_in_streams_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_documents_20200504_on_sandbox_id ON public.documents_20200504 USING btree (sandbox_id);
+CREATE INDEX index_event_store_events_in_streams_on_created_at ON public.event_store_events_in_streams USING btree (created_at);
 
 
 --
--- Name: index_documents_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_event_store_events_in_streams_on_event_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_documents_20200504_on_tenant_id ON public.documents_20200504 USING btree (tenant_id);
+CREATE INDEX index_event_store_events_in_streams_on_event_id ON public.event_store_events_in_streams USING btree (event_id);
+
+
+--
+-- Name: index_event_store_events_in_streams_on_stream_and_event_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_event_store_events_in_streams_on_stream_and_event_id ON public.event_store_events_in_streams USING btree (stream, event_id);
+
+
+--
+-- Name: index_event_store_events_in_streams_on_stream_and_position; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_event_store_events_in_streams_on_stream_and_position ON public.event_store_events_in_streams USING btree (stream, "position");
+
+
+--
+-- Name: index_event_store_events_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_store_events_on_created_at ON public.event_store_events USING btree (created_at);
+
+
+--
+-- Name: index_event_store_events_on_event_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_event_store_events_on_event_type ON public.event_store_events USING btree (event_type);
 
 
 --
@@ -8316,13 +7362,6 @@ CREATE INDEX index_groups_memberships_on_group_id ON public.groups_memberships U
 --
 
 CREATE INDEX index_groups_memberships_on_member_type_and_member_id ON public.groups_memberships USING btree (member_type, member_id);
-
-
---
--- Name: index_hub_truckings_20200504_on_hub_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_hub_truckings_20200504_on_hub_id ON public.hub_truckings_20200504 USING btree (hub_id);
 
 
 --
@@ -9180,6 +8219,34 @@ CREATE INDEX index_notes_on_transshipment ON public.notes USING btree (transship
 
 
 --
+-- Name: index_notifications_subscriptions_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_subscriptions_on_email ON public.notifications_subscriptions USING btree (email);
+
+
+--
+-- Name: index_notifications_subscriptions_on_event_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_subscriptions_on_event_type ON public.notifications_subscriptions USING btree (event_type);
+
+
+--
+-- Name: index_notifications_subscriptions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_subscriptions_on_organization_id ON public.notifications_subscriptions USING btree (organization_id);
+
+
+--
+-- Name: index_notifications_subscriptions_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notifications_subscriptions_on_user_id ON public.notifications_subscriptions USING btree (user_id);
+
+
+--
 -- Name: index_oauth_access_grants_on_application_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9240,13 +8307,6 @@ CREATE INDEX index_oauth_applications_on_owner_id_and_owner_type ON public.oauth
 --
 
 CREATE UNIQUE INDEX index_oauth_applications_on_uid ON public.oauth_applications USING btree (uid);
-
-
---
--- Name: index_optin_statuses_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_optin_statuses_20200504_on_sandbox_id ON public.optin_statuses_20200504 USING btree (sandbox_id);
 
 
 --
@@ -9324,104 +8384,6 @@ CREATE UNIQUE INDEX index_organizations_themes_on_organization_id ON public.orga
 --
 
 CREATE INDEX index_prices_on_sandbox_id ON public.prices USING btree (sandbox_id);
-
-
---
--- Name: index_pricing_details_20200504_on_currency_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_details_20200504_on_currency_id ON public.pricing_details_20200504 USING btree (currency_id);
-
-
---
--- Name: index_pricing_details_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_details_20200504_on_sandbox_id ON public.pricing_details_20200504 USING btree (sandbox_id);
-
-
---
--- Name: index_pricing_details_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_details_20200504_on_tenant_id ON public.pricing_details_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_pricing_exceptions_20200504_on_pricing_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_exceptions_20200504_on_pricing_id ON public.pricing_exceptions_20200504 USING btree (pricing_id);
-
-
---
--- Name: index_pricing_exceptions_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_exceptions_20200504_on_tenant_id ON public.pricing_exceptions_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_pricing_requests_20200504_on_pricing_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_requests_20200504_on_pricing_id ON public.pricing_requests_20200504 USING btree (pricing_id);
-
-
---
--- Name: index_pricing_requests_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_requests_20200504_on_tenant_id ON public.pricing_requests_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_pricing_requests_20200504_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricing_requests_20200504_on_user_id ON public.pricing_requests_20200504 USING btree (user_id);
-
-
---
--- Name: index_pricings_20200504_on_itinerary_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricings_20200504_on_itinerary_id ON public.pricings_20200504 USING btree (itinerary_id);
-
-
---
--- Name: index_pricings_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricings_20200504_on_sandbox_id ON public.pricings_20200504 USING btree (sandbox_id);
-
-
---
--- Name: index_pricings_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricings_20200504_on_tenant_id ON public.pricings_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_pricings_20200504_on_transport_category_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricings_20200504_on_transport_category_id ON public.pricings_20200504 USING btree (transport_category_id);
-
-
---
--- Name: index_pricings_20200504_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pricings_20200504_on_user_id ON public.pricings_20200504 USING btree (user_id);
-
-
---
--- Name: index_pricings_20200504_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_pricings_20200504_on_uuid ON public.pricings_20200504 USING btree (uuid);
 
 
 --
@@ -10741,13 +9703,6 @@ CREATE INDEX index_tenants_users_on_unlock_token ON public.tenants_users USING b
 
 
 --
--- Name: index_transport_categories_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_transport_categories_20200504_on_sandbox_id ON public.transport_categories_20200504 USING btree (sandbox_id);
-
-
---
 -- Name: index_trips_on_closing_date; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10808,41 +9763,6 @@ CREATE INDEX index_trucking_coverages_on_bounds ON public.trucking_coverages USI
 --
 
 CREATE INDEX index_trucking_coverages_on_sandbox_id ON public.trucking_coverages USING btree (sandbox_id);
-
-
---
--- Name: index_trucking_destinations_20200504_on_city_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_destinations_20200504_on_city_name ON public.trucking_destinations_20200504 USING btree (city_name);
-
-
---
--- Name: index_trucking_destinations_20200504_on_country_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_destinations_20200504_on_country_code ON public.trucking_destinations_20200504 USING btree (country_code);
-
-
---
--- Name: index_trucking_destinations_20200504_on_distance; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_destinations_20200504_on_distance ON public.trucking_destinations_20200504 USING btree (distance);
-
-
---
--- Name: index_trucking_destinations_20200504_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_destinations_20200504_on_sandbox_id ON public.trucking_destinations_20200504 USING btree (sandbox_id);
-
-
---
--- Name: index_trucking_destinations_20200504_on_zipcode; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_destinations_20200504_on_zipcode ON public.trucking_destinations_20200504 USING btree (zipcode);
 
 
 --
@@ -10965,20 +9885,6 @@ CREATE UNIQUE INDEX index_trucking_locations_syncs_on_unique_id_and_duplicate_id
 
 
 --
--- Name: index_trucking_pricings_20200504_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_pricings_20200504_on_tenant_id ON public.trucking_pricings_20200504 USING btree (tenant_id);
-
-
---
--- Name: index_trucking_pricings_20200504_on_trucking_pricing_scope_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_pricings_20200504_on_trucking_pricing_scope_id ON public.trucking_pricings_20200504 USING btree (trucking_pricing_scope_id);
-
-
---
 -- Name: index_trucking_rates_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10997,97 +9903,6 @@ CREATE INDEX index_trucking_rates_on_tenant_id ON public.trucking_rates USING bt
 --
 
 CREATE INDEX index_trucking_rates_on_trucking_scope_id ON public.trucking_rates USING btree (scope_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_cargo_class; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_cargo_class ON public.trucking_truckings_20201005 USING btree (cargo_class);
-
-
---
--- Name: index_trucking_truckings_20201005_on_carriage; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_carriage ON public.trucking_truckings_20201005 USING btree (carriage);
-
-
---
--- Name: index_trucking_truckings_20201005_on_deleted_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_deleted_at ON public.trucking_truckings_20201005 USING btree (deleted_at);
-
-
---
--- Name: index_trucking_truckings_20201005_on_group_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_group_id ON public.trucking_truckings_20201005 USING btree (group_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_hub_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_hub_id ON public.trucking_truckings_20201005 USING btree (hub_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_load_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_load_type ON public.trucking_truckings_20201005 USING btree (load_type);
-
-
---
--- Name: index_trucking_truckings_20201005_on_location_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_location_id ON public.trucking_truckings_20201005 USING btree (location_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_organization_id ON public.trucking_truckings_20201005 USING btree (organization_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_sandbox_id ON public.trucking_truckings_20201005 USING btree (sandbox_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_tenant_id ON public.trucking_truckings_20201005 USING btree (tenant_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_tenant_vehicle_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_tenant_vehicle_id ON public.trucking_truckings_20201005 USING btree (tenant_vehicle_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_user_id ON public.trucking_truckings_20201005 USING btree (user_id);
-
-
---
--- Name: index_trucking_truckings_20201005_on_validity; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_truckings_20201005_on_validity ON public.trucking_truckings_20201005 USING gist (validity);
 
 
 --
@@ -11406,13 +10221,6 @@ CREATE INDEX ledger_rate_target_index ON public.ledger_rates USING btree (target
 
 
 --
--- Name: legacy_pricings_validity_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX legacy_pricings_validity_index ON public.pricings_20200504 USING gist (validity);
-
-
---
 -- Name: line_service_unique_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11483,41 +10291,6 @@ CREATE INDEX locations_names_to_tsvector_idx9 ON public.locations_names USING gi
 
 
 --
--- Name: locations_to_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX locations_to_tsvector_idx ON public.locations_20200504 USING gin (to_tsvector('english'::regconfig, (postal_code)::text));
-
-
---
--- Name: locations_to_tsvector_idx1; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX locations_to_tsvector_idx1 ON public.locations_20200504 USING gin (to_tsvector('english'::regconfig, (suburb)::text));
-
-
---
--- Name: locations_to_tsvector_idx2; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX locations_to_tsvector_idx2 ON public.locations_20200504 USING gin (to_tsvector('english'::regconfig, (neighbourhood)::text));
-
-
---
--- Name: locations_to_tsvector_idx3; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX locations_to_tsvector_idx3 ON public.locations_20200504 USING gin (to_tsvector('english'::regconfig, (city)::text));
-
-
---
--- Name: locations_to_tsvector_idx4; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX locations_to_tsvector_idx4 ON public.locations_20200504 USING gin (to_tsvector('english'::regconfig, (country)::text));
-
-
---
 -- Name: provider_uid_on_users_authentications; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11546,13 +10319,6 @@ CREATE UNIQUE INDEX routing_routes_index ON public.routing_routes USING btree (o
 
 
 --
--- Name: trucking_foreign_keys; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX trucking_foreign_keys ON public.trucking_truckings_20201005 USING btree (rate_id, location_id, hub_id);
-
-
---
 -- Name: trucking_hub_avilabilities_unique_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11564,13 +10330,6 @@ CREATE UNIQUE INDEX trucking_hub_avilabilities_unique_index ON public.trucking_h
 --
 
 CREATE UNIQUE INDEX trucking_type_availabilities_unique_index ON public.trucking_type_availabilities USING btree (carriage, load_type, country_id, truck_type, query_method) WHERE (deleted_at IS NULL);
-
-
---
--- Name: uniq_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uniq_index ON public.locations_20200504 USING btree (postal_code, suburb, neighbourhood, city, province, country);
 
 
 --
@@ -11690,6 +10449,14 @@ ALTER TABLE ONLY public.rates_sections
 
 
 --
+-- Name: notifications_subscriptions fk_rails_1d3dd3e417; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notifications_subscriptions
+    ADD CONSTRAINT fk_rails_1d3dd3e417 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+
+
+--
 -- Name: tenant_cargo_item_types fk_rails_1ee8e33ff7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11703,14 +10470,6 @@ ALTER TABLE ONLY public.tenant_cargo_item_types
 
 ALTER TABLE ONLY public.rates_sections
     ADD CONSTRAINT fk_rails_1eea053bc9 FOREIGN KEY (carrier_id) REFERENCES public.carriers(id);
-
-
---
--- Name: migrator_unique_trucking_syncs fk_rails_1fe5e5c59c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_syncs
-    ADD CONSTRAINT fk_rails_1fe5e5c59c FOREIGN KEY (duplicate_trucking_id) REFERENCES public.trucking_truckings_20201005(id);
 
 
 --
@@ -11754,14 +10513,6 @@ ALTER TABLE ONLY public.shipments_contacts
 
 
 --
--- Name: trucking_truckings_20201005 fk_rails_299447a288; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_truckings_20201005
-    ADD CONSTRAINT fk_rails_299447a288 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: trucking_truckings fk_rails_299447a288; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11791,14 +10542,6 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 ALTER TABLE ONLY public.companies_companies
     ADD CONSTRAINT fk_rails_2fb4c39109 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: migrator_unique_trucking_syncs fk_rails_359193b3ec; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_syncs
-    ADD CONSTRAINT fk_rails_359193b3ec FOREIGN KEY (unique_trucking_id) REFERENCES public.trucking_truckings_20201005(id);
 
 
 --
@@ -12370,6 +11113,14 @@ ALTER TABLE ONLY public.shipments
 
 
 --
+-- Name: notifications_subscriptions fk_rails_9679ae7ef8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notifications_subscriptions
+    ADD CONSTRAINT fk_rails_9679ae7ef8 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: journey_contacts fk_rails_96dca9d5bc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12639,14 +11390,6 @@ ALTER TABLE ONLY public.tenant_routing_connections
 
 ALTER TABLE ONLY public.legacy_files
     ADD CONSTRAINT fk_rails_c98708ee93 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
--- Name: trucking_truckings_20201005 fk_rails_c9b2b3a658; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_truckings_20201005
-    ADD CONSTRAINT fk_rails_c9b2b3a658 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
 --
@@ -13521,6 +12264,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201103140815'),
 ('20201103141118'),
 ('20201103144141'),
-('20201118173330');
+('20201118173330'),
+('20201123122102'),
+('20201123132340');
 
 

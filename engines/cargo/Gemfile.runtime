@@ -1,4 +1,5 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
+gem "measured-itsmycargo", path: "../../gems/measured-itsmycargo"
 
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"

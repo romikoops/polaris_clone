@@ -16,7 +16,6 @@ RSpec.describe Wheelhouse::ExcelWriterService do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, organization: organization)
   end
 
   describe ".quotation_sheet" do

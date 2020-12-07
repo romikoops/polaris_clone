@@ -167,7 +167,17 @@ module Api
       end
 
       def new_client
-        Organizations::User.create!(email: client_params[:email], organization_id: current_organization.id)
+        Organizations::User.create!(
+          email: client_params[:email],
+          organization_id: current_organization.id
+        ).tap do |user|
+          Rails.configuration.event_store.publish(
+            Users::UserCreated.new(
+              data: {user: user.to_global_id.to_s, organization_id: user.organization_id}
+            ),
+            stream_name: "Organization$#{user.organization_id}"
+          )
+        end
       end
 
       def create_user_associations(user:)

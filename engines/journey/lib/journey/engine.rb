@@ -2,6 +2,7 @@
 
 require "date_validator"
 require "measured/itsmycargo"
+require "measured-rails"
 require "rein"
 
 module Journey

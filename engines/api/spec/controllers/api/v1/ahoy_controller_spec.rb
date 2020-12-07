@@ -7,8 +7,6 @@ module Api
     routes { Engine.routes }
     let(:organization) { FactoryBot.create(:organizations_organization) }
 
-    before { FactoryBot.create(:organizations_domain, organization_id: organization.id, default: true) }
-
     describe "GET #settings" do
       it "returns the settings of the organization" do
         get :index, params: {organization_id: organization.id}, as: :json

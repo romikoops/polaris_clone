@@ -13,8 +13,6 @@ RSpec.describe "Clients" do
 
   before do
     Organizations.current_id = organization_id
-    FactoryBot.create(:organizations_theme, organization: organization, name: "Demo")
-    FactoryBot.create(:organizations_domain, default: true, organization: organization, domain: "demo")
 
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
       .to_return(status: 200)

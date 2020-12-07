@@ -92,9 +92,6 @@ RSpec.describe ShippingTools do
 
     before do
       FactoryBot.create(:legacy_quotation, original_shipment: shipment)
-      FactoryBot.create(:legacy_content, component: "WelcomeMail", section: "subject",
-                                         text: "WELCOME_EMAIL", organization_id: organization.id)
-      FactoryBot.create(:organizations_theme, organization: organization)
     end
 
     describe ".save_pdf_quotes" do
@@ -663,22 +660,6 @@ RSpec.describe ShippingTools do
       it "generates schedules from trips earlier than the specified trip" do
         result = described_class.new.view_more_schedules(trip.id, delta)
         expect(result[:schedules].first[:eta].to_date).to eq(earlier_trip.end_date.to_date)
-      end
-    end
-  end
-
-  describe ".shipper_welcome_email" do
-    context "with content" do
-      before do
-        welcome_mailer = double("WelcomeMailer", deliver_later: true)
-        FactoryBot.create(:legacy_content, component: "WelcomeMail", section: "subject",
-                                           text: "WELCOME_EMAIL", organization_id: organization.id)
-        allow(WelcomeMailer).to receive(:welcome_email).at_least(:once).and_return(welcome_mailer)
-        allow(welcome_mailer).to receive(:deliver_later)
-      end
-
-      it "calls the mailer when content is available" do
-        described_class.new.shipper_welcome_email(user)
       end
     end
   end

@@ -2,7 +2,9 @@
 
 FactoryBot.define do
   factory :organizations_theme, class: "Organizations::Theme" do
-    association :organization, factory: :organizations_organization
+    organization { association(:organizations_organization, theme: instance) }
+
+    sequence(:name) { |n| "Freight Spedetion ##{n}" }
 
     primary_color { "#F5F5F5" }
     secondary_color { "#F8F8F8" }
@@ -36,14 +38,7 @@ FactoryBot.define do
 
     email_links { {} }
 
-    trait :with_email_logo do
-      after(:build) do |theme|
-        theme.email_logo.attach(
-          io: File.open(Rails.root.join("spec", "fixtures", "files", "images", "test.jpg")),
-          filename: "test.jpeg", content_type: "image/jpeg"
-        )
-      end
-    end
+    email_logo { Rack::Test::UploadedFile.new(File.expand_path("../fixtures/logo-blue.png", __dir__), "image/png") }
   end
 end
 

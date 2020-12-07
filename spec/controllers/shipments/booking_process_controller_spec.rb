@@ -28,7 +28,6 @@ RSpec.describe Shipments::BookingProcessController do
                                   to: "USD", rate: 1.3,
                                   created_at: tender.created_at - 30.seconds)
     end
-    FactoryBot.create(:organizations_theme, organization: organization)
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "shipper")
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "consignee")
     FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "notifyee")

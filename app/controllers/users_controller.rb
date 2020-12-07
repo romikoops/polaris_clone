@@ -45,7 +45,6 @@ class UsersController < ApplicationController
     user = organization_user
     user.update(user_params)
     update_profile_from_params(user: user, params: user_profile_params)
-    # @user.send_confirmation_instructions if @user.valid? && !@user.guest && updating_guest_to_regular_user
 
     if params[:update][:address]
       address = Address.create_from_raw_params!(address_params)
@@ -69,6 +68,11 @@ class UsersController < ApplicationController
     ActiveRecord::Base.transaction do
       user.save!
       create_or_update_profile(user: user)
+
+      Rails.configuration.event_store.publish(
+        Users::UserCreated.new(data: {user: user.to_global_id, organization_id: user.organization_id}),
+        stream_name: "Organization$#{user.organization_id}"
+      )
     end
     response = generate_token_for(user: user, scope: "public")
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
@@ -126,8 +130,6 @@ class UsersController < ApplicationController
   def activate
     if (@user = Authentication::User.load_from_activation_token(params[:id]))
       @user.activate!
-      WelcomeMailer.welcome_email(@user).deliver_later
-      NewUserMailer.new_user_email(user: @user).deliver_later if current_scope[:email_on_registration]
 
       response_handler(@user)
     else

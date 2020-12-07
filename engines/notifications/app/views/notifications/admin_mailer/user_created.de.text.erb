@@ -1,0 +1,7 @@
+In Ihrem Online-Shop wurde soeben ein neuer Benutzer registriert:
+
+E-Mail: <%= @user.email %>
+Vollständiger Name: <%= @profile.full_name %>
+Unternehmen: <%= @profile.company_name %>
+
+Benutzer anzeigen bei <%= shop_url("/admin/clients/client/#{@user.id}")%>

@@ -155,10 +155,6 @@ RSpec.describe "Quotations" do
         }
       }
 
-      before do
-        FactoryBot.create(:organizations_theme, organization: organization)
-      end
-
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
         let(:id) { quotation.id }

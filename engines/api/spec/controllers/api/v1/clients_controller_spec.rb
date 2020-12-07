@@ -76,11 +76,6 @@ module Api
       }
       let(:profile) { Profiles::Profile.find_by(user_id: user.id) }
 
-      before do
-        FactoryBot.create(:organizations_theme, organization: organization, name: "Demo")
-        FactoryBot.create(:organizations_domain, default: true, organization: organization, domain: "demo")
-      end
-
       context "when request is successful" do
         let(:request_object) {
           patch :update, params: {organization_id: organization.id,
@@ -106,7 +101,7 @@ module Api
         it "updates the user email successfully" do
           perform_request
           user.reload
-          expect(user.activation_state).to eq("pending")
+          expect(user.activation_state).to eq("active")
           expect(user.email).to eq("bassam@itsmycargo.com")
         end
       end

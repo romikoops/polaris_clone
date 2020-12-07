@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
+require "measured/itsmycargo"
 require "measured-rails"
 require "money-rails"
-
-require "cargo/measured_units"
 
 module Cargo
   class Engine < ::Rails::Engine

@@ -32,7 +32,6 @@ RSpec.describe Pdf::TenderDecorator do
     Draper::ViewContext.controller = Pdf::ApplicationController.new
 
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_theme, organization: organization)
     FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
     shipment.charge_breakdowns.map(&:tender).each do |tender|
       Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,

@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :organizations_domain, class: "Organizations::Domain" do
-    domain { "MyString" }
-    organization { nil }
-    default { false }
+    domain { "#{organization.slug}.test" }
+    organization { association(:organizations_organization, domains: [instance]) }
+    default { true }
   end
 end
 

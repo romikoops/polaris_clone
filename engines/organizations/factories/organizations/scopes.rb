@@ -2,10 +2,12 @@
 
 FactoryBot.define do
   factory :organizations_scope, class: "Organizations::Scope" do
-    content { {"quote_notes" => "Quote Notes from the FactoryBot Factory"} }
+    content { {} }
 
-    trait :default do
-      content { Organizations::DEFAULT_SCOPE }
+    for_organization
+
+    trait :for_organization do
+      target { association(:organizations_organization, scope: instance) }
     end
   end
 end

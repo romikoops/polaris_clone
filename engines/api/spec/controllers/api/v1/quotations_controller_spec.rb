@@ -11,7 +11,6 @@ module Api
       {USD: 1.26, SEK: 8.26}.each do |currency, rate|
         FactoryBot.create(:legacy_exchange_rate, from: currency, to: "EUR", rate: rate)
       end
-      FactoryBot.create(:organizations_theme, organization: organization)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }

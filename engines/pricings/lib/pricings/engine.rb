@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "geocoder"
+require "measured/itsmycargo"
 require "measured-rails"
 
 module Pricings

@@ -13,6 +13,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "shared-runtime"
+  spec.add_dependency "measured-itsmycargo"
+
+  spec.add_dependency "geocoder"
+  spec.add_dependency "measured-rails"
 
   spec.add_dependency "companies"
   spec.add_dependency "groups"
@@ -20,8 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "organizations"
   spec.add_dependency "organization_manager"
   spec.add_dependency "trucking"
-
-  spec.add_dependency "geocoder"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

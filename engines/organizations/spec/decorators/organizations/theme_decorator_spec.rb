@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Organizations
   RSpec.describe ThemeDecorator do
-    let!(:theme) { FactoryBot.create(:organizations_theme) }
+    let(:theme) { FactoryBot.create(:organizations_theme) }
 
     context "with legacy format" do
       before do

@@ -50,6 +50,7 @@ package "Data" {
   [sequential]
   [booking]
   [journey]
+  [notifications]
 }
 [organizations] --> [users]
 [address_book] --> [organizations]
@@ -220,6 +221,9 @@ package "Data" {
 [integrations] --> [organization_manager]
 [integrations] --> [profiles]
 [integrations] --> [shipments]
+[notifications] --> [organizations]
+[notifications] -> [profiles]
+[notifications] --> [users]
 [rates] --> [cargo]
 [rates] -> [organizations]
 [rates] --> [routing]

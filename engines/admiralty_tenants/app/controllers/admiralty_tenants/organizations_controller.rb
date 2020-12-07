@@ -107,7 +107,6 @@ module AdmiraltyTenants
       %w[shipper@itsmycargo.com agent@itsmycargo.com].each do |email|
         ActiveRecord::Base.transaction do
           shipper = Authentication::User.create!(email: email,
-                                                 skip_activation_needed_email: true,
                                                  organization_id: organization.id,
                                                  password: Settings.passwords&.default,
                                                  type: "Organizations::User").tap do |user|

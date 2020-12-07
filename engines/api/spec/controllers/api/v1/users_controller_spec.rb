@@ -9,11 +9,6 @@ module Api
     let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:user) { FactoryBot.create(:organizations_user) }
-    let(:domain) {
-      FactoryBot.create(:organizations_domain,
-        domain: "itsmycargo.example",
-        organization: user.organization).domain
-    }
 
     before do
       FactoryBot.create(:profiles_profile, user_id: user.id)

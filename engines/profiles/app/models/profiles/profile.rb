@@ -21,6 +21,10 @@ module Profiles
     pg_search_scope :last_name_search, against: %i[last_name], using: {
       tsearch: {prefix: true}
     }
+
+    def full_name
+      [first_name, last_name].compact.join(" ")
+    end
   end
 end
 

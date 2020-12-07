@@ -58,10 +58,6 @@ module AdmiraltyTenants
     end
 
     describe "GET #edit" do
-      before do
-        FactoryBot.create(:organizations_theme, organization: organizations.first)
-      end
-
       it "renders page" do
         get :edit, params: {id: organizations.first.id}
 
@@ -92,10 +88,6 @@ module AdmiraltyTenants
     end
 
     describe "PATCH #update with invalid max dimensions" do
-      before do
-        FactoryBot.create(:organizations_theme, organization: organization)
-      end
-
       let(:organization) { organizations.first }
       let(:organization_params) { organization.attributes.slice("name", "slug").merge(scope: {foo: true}.to_json) }
       let(:updated_max_bundle) { {max_bundle.id => {width: -10}} }

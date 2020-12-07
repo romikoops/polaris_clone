@@ -4,6 +4,9 @@ FactoryBot.define do
   factory :organizations_organization, class: "Organizations::Organization" do
     sequence(:slug) { |n| "test_#{n}" }
 
+    domains { [association(:organizations_domain, default: true, organization: instance)] }
+    theme { association(:organizations_theme, organization: instance) }
+
     trait :with_max_dimensions do
       after(:create) do |organization, evaluator|
         FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)

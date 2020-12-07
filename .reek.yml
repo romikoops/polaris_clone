@@ -344,9 +344,6 @@ detectors:
     - ApplicationHelper#valid_price_hash?
     - TruckingMigrationJob#perform
     - UploaderJob#perform
-    - AccountMailer#confirmation_instructions
-    - AccountMailer#reset_password_instructions
-    - NewUserMailer#new_user_email
     - QuoteMailer#add_attachments
     - QuoteMailer#new_quotation_admin_email
     - QuoteMailer#new_quotation_email
@@ -354,7 +351,6 @@ detectors:
     - ShipmentMailer#shipper_notification
     - ShipmentMailer#tenant_notification
     - UploadMailer#complete_email
-    - WelcomeMailer#welcome_email
     - Addon#self.determine_addons
     - AggregatedCargo#set_chargeable_weight!
     - Country#self.geo_find_by_names
@@ -389,7 +385,6 @@ detectors:
     - Api::Routing::RoutingService#address
     - Api::Routing::RoutingService#itineraries_from_nexus_id
     - CreateDoorkeeperTables#change
-    - Authentication::UserMailer#activation_needed_email
     - Cargo::Creator#fcl_units
     - Cargo::Creator#item_attributes
     - ExcelDataServices::UploaderJob#perform
@@ -1053,8 +1048,6 @@ detectors:
     - PasswordResetsController
     - ShipmentsController
     - UsersController
-    - AccountMailer
-    - NewUserMailer
     - QuoteMailer
     - ShipmentMailer
     - UploadMailer
@@ -1063,8 +1056,6 @@ detectors:
     - IsModelValidator
     - ScopeValidator
     - ShipmentMailerPreview
-    - AccountMailerPreview
-    - NewUserMailerPreview
     - QuoteMailerPreview
     - ShipmentMailerClientPreview
     - WelcomeMailerPreview
@@ -1072,8 +1063,6 @@ detectors:
     - AdmiraltyReports::StatsController
     - AdmiraltyTenants::OrganizationsController
     - Api::ApiController
-    - Authentication::ApplicationMailer
-    - Authentication::UserMailer
     - ExcelDataServices::DataFrames::Coordinators::Base
     - ExcelDataServices::DataFrames::DataProviders::Base
     - ExcelDataServices::DataFrames::Sanitizers::Base
@@ -1304,7 +1293,6 @@ detectors:
     - UsersController#user_params
     - ApplicationHelper#asset_data_base64
     - ApplicationHelper#format_to_price
-    - NewUserMailer#new_user_email
     - Address#get_zip_code
     - Address#sanitize_zip_code!
     - Address#self.create_and_geocode
@@ -1432,8 +1420,6 @@ detectors:
     - Admin::DashboardController
     - Admin::DiscountsController
     - Admin::ShipmentsController
-    - AccountMailer
-    - NewUserMailer
     - QuoteMailer
     - ShipmentMailer
     - UploadMailer
@@ -1443,7 +1429,6 @@ detectors:
     - Api::DashboardService
     - Api::Routing::LegacyRoutingService
     - Api::Routing::RoutingService
-    - Authentication::UserMailer
     - Cargo::Creator
     - ExcelDataServices::DataFrames::DataProviders::Cell
     - ExcelDataServices::FileParser
@@ -1538,14 +1523,10 @@ detectors:
     - UsersController#create
     - UsersController#passwordless_authentication
     - ApplicationHelper#line_wrap
-    - AccountMailer#confirmation_instructions
-    - AccountMailer#reset_password_instructions
-    - NewUserMailer#new_user_email
     - QuoteMailer#from
     - ShipmentMailer#shipper_confirmation
     - ShipmentMailer#shipper_notification
     - ShipmentMailer#tenant_notification
-    - WelcomeMailer#welcome_email
     - Contact
     - Hub#self.update_all!
     - Itinerary#prep_schedules
@@ -1571,7 +1552,6 @@ detectors:
     - Api::V1::QuotationsController#modified_cargo_item_params
     - Api::V1::QuotationsController#show
     - CreateDoorkeeperTables#change
-    - Authentication::UserMailer#from
     - CreateBookingQueries#change
     - CreateBookingOffers#change
     - Cargo::Specification
@@ -1777,7 +1757,6 @@ detectors:
     - ExcelTools#debug_message
     - ShippingTools#save_pdf_quotes
     - Admin::ClientsController#sort_response_clients
-    - AccountMailer#base_url
     - Itinerary#as_pricing_json
     - ExcelDataServices::Inserters::Pricing#find_or_initialize_stops
     - Integrations::ChainIo::Builder#initialize
@@ -1831,7 +1810,6 @@ detectors:
     - ShippingTools#shipment_hubs_response
     - ShippingTools#shipper_confirmation_email
     - ShippingTools#shipper_notification_email
-    - ShippingTools#shipper_welcome_email
     - ShippingTools#tenant_notification_email
     - ShippingTools#update_quotation_owner
     - ShippingTools#update_shipment_trucking_info
@@ -1888,7 +1866,6 @@ detectors:
     - MigratorJob#perform
     - TruckingMigrationJob#perform
     - UploaderJob#perform
-    - AccountMailer#base_server_url
     - ApplicationMailer#mail_target_interceptor
     - ApplicationMailer#set_current_id
     - QuoteMailer#mot_icon
@@ -1915,8 +1892,6 @@ detectors:
     - Api::V1::ClientsController#restore_user_associations
     - Api::V1::QuotationsController#sanitize_direction
     - Api::UserRestorationService#restore_group_memberships
-    - Authentication::ApplicationMailer#set_organization
-    - Authentication::UserMailer#base_server_url
     - ExcelDataServices::UploaderJob#perform
     - ExcelDataServices::DataFrames::Combinators::Base#combined_state_errors
     - ExcelDataServices::DataFrames::Combinators::Base#combined_state_frames

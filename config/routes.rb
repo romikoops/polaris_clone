@@ -22,13 +22,7 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine, at: "/docs"
   mount Rswag::Api::Engine, at: "/docs"
 
-  constraints subdomain: "api" do
-    namespace :saml do
-      get :init
-      get :metadata
-      post :consume
-    end
-  end
+  mount RailsEventStore::Browser => "/res" if Rails.env.development?
 
   resource :user, only: [:show, :create] do
     collection do
@@ -630,9 +624,7 @@ end
 #                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
-#                                                    saml_init GET    /saml/init(.:format)                                                                               saml#init {:subdomain=>"api"}
-#                                                saml_metadata GET    /saml/metadata(.:format)                                                                           saml#metadata {:subdomain=>"api"}
-#                                                 saml_consume POST   /saml/consume(.:format)                                                                            saml#consume {:subdomain=>"api"}
+#                                 ruby_event_store_browser_app        /res                                                                                               RubyEventStore::Browser::App
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
 #                                                         user GET    /user(.:format)                                                                                    users#show
 #                                                              POST   /user(.:format)                                                                                    users#create

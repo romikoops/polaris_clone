@@ -3,11 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ApiAuth::TokensController, type: :request do
-  let(:organization) do
-    FactoryBot.create(:organizations_organization).tap do |org|
-      FactoryBot.create(:organizations_theme, organization_id: org.id)
-    end
-  end
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:email) { "agent@itsmycargo.com" }
   let(:password) { "IMC123456789" }
   let(:params) do

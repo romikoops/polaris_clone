@@ -96,7 +96,6 @@ translation_overrides: false
 offer_disclaimers: false
 closed_after_map: false
 feature_uploaders: true
-email_on_registration: true
 dedicated_pricings_only: false
 quote_card:
   sub_totals:

@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "paper_trail", "~> 10.3"
   spec.add_dependency "pg", ">= 0.18", "< 2.0"
   spec.add_dependency "rails", rails_version
+  spec.add_dependency "rails_event_store", "~> 1.2.2"
   spec.add_dependency "sidekiq", "~> 6.1"
   spec.add_dependency "sidekiq-status", "~> 1.1.4"
   spec.add_dependency "skylight"
