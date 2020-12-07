@@ -54,11 +54,5 @@ RSpec.describe Locations::Finders::PostalCode do
         expect(result).to eq(target_location_name)
       end
     end
-
-    context "when nothing is found available" do
-      it "returns nil" do
-        expect(result).to eq(nil)
-      end
-    end
   end
 end
