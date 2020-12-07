@@ -10,7 +10,8 @@ module Companies
     has_one :country, through: :address, class_name: "Legacy::Country"
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
 
-    validates :name, :external_id, uniqueness: {scope: :organization_id}
+    validates :name, uniqueness: {scope: :organization_id}
+    validates :external_id, uniqueness: {scope: [:name, :organization_id]}, allow_nil: true
 
     pg_search_scope :name_search, against: %i[name], using: {
       tsearch: {prefix: true}
