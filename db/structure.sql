@@ -454,8 +454,6 @@ SET default_table_access_method = heap;
 CREATE TABLE public.active_storage_attachments (
     id bigint NOT NULL,
     name character varying NOT NULL,
-    record_type_20200211 character varying,
-    record_id_20200211 bigint,
     blob_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     record_id uuid NOT NULL,
@@ -2567,85 +2565,6 @@ ALTER SEQUENCE public.max_dimensions_bundles_id_seq OWNED BY public.max_dimensio
 
 
 --
--- Name: migrator_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_syncs (
-    users_user_id uuid,
-    tenants_user_id uuid,
-    user_id integer,
-    organizations_organization_id uuid,
-    tenants_tenant_id uuid,
-    tenant_id integer
-);
-
-
---
--- Name: migrator_unique_carrier_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_unique_carrier_syncs (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    unique_carrier_id bigint,
-    duplicate_carrier_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: migrator_unique_locations_locations_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_unique_locations_locations_syncs (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    unique_location_location_id uuid,
-    duplicate_location_location_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: migrator_unique_tenant_vehicles_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_unique_tenant_vehicles_syncs (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    unique_tenant_vehicle_id bigint,
-    duplicate_tenant_vehicle_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: migrator_unique_trucking_location_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_unique_trucking_location_syncs (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    unique_trucking_location_id uuid,
-    duplicate_trucking_location_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: migrator_unique_trucking_syncs; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.migrator_unique_trucking_syncs (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    unique_trucking_id uuid,
-    duplicate_trucking_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: nexuses; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4748,10 +4667,6 @@ CREATE TABLE public.users (
     image character varying,
     email character varying,
     tenant_id integer,
-    company_name_20200207 character varying,
-    first_name_20200207 character varying,
-    last_name_20200207 character varying,
-    phone_20200207 character varying,
     tokens json,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -6004,46 +5919,6 @@ ALTER TABLE ONLY public.max_dimensions_bundles
 
 
 --
--- Name: migrator_unique_carrier_syncs migrator_unique_carrier_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_carrier_syncs
-    ADD CONSTRAINT migrator_unique_carrier_syncs_pkey PRIMARY KEY (id);
-
-
---
--- Name: migrator_unique_locations_locations_syncs migrator_unique_locations_locations_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
-    ADD CONSTRAINT migrator_unique_locations_locations_syncs_pkey PRIMARY KEY (id);
-
-
---
--- Name: migrator_unique_tenant_vehicles_syncs migrator_unique_tenant_vehicles_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_tenant_vehicles_syncs
-    ADD CONSTRAINT migrator_unique_tenant_vehicles_syncs_pkey PRIMARY KEY (id);
-
-
---
--- Name: migrator_unique_trucking_location_syncs migrator_unique_trucking_location_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_location_syncs
-    ADD CONSTRAINT migrator_unique_trucking_location_syncs_pkey PRIMARY KEY (id);
-
-
---
--- Name: migrator_unique_trucking_syncs migrator_unique_trucking_syncs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_syncs
-    ADD CONSTRAINT migrator_unique_trucking_syncs_pkey PRIMARY KEY (id);
-
-
---
 -- Name: nexuses nexuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7064,13 +6939,6 @@ CREATE INDEX index_carriers_on_sandbox_id ON public.carriers USING btree (sandbo
 
 
 --
--- Name: index_carriers_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_carriers_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_carrier_syncs USING btree (unique_carrier_id, duplicate_carrier_id);
-
-
---
 -- Name: index_charge_breakdowns_on_deleted_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7939,13 +7807,6 @@ CREATE INDEX index_local_charges_on_validity ON public.local_charges USING gist 
 
 
 --
--- Name: index_location_locations_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_location_locations_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_locations_locations_syncs USING btree (unique_location_location_id, duplicate_location_location_id);
-
-
---
 -- Name: index_locations_locations_on_bounds; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8069,90 +7930,6 @@ CREATE INDEX index_max_dimensions_bundles_on_tenant_id ON public.max_dimensions_
 --
 
 CREATE INDEX index_max_dimensions_bundles_on_tenant_vehicle_id ON public.max_dimensions_bundles USING btree (tenant_vehicle_id);
-
-
---
--- Name: index_migrator_duplicate_location_location_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_migrator_duplicate_location_location_id ON public.migrator_unique_locations_locations_syncs USING btree (duplicate_location_location_id);
-
-
---
--- Name: index_migrator_syncs_on_organization_id_and_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_migrator_syncs_on_organization_id_and_tenant_id ON public.migrator_syncs USING btree (organizations_organization_id, tenant_id);
-
-
---
--- Name: index_migrator_syncs_on_organizations_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_organizations_organization_id ON public.migrator_syncs USING btree (organizations_organization_id);
-
-
---
--- Name: index_migrator_syncs_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_tenant_id ON public.migrator_syncs USING btree (tenant_id);
-
-
---
--- Name: index_migrator_syncs_on_tenants_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_tenants_tenant_id ON public.migrator_syncs USING btree (tenants_tenant_id);
-
-
---
--- Name: index_migrator_syncs_on_tenants_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_tenants_user_id ON public.migrator_syncs USING btree (tenants_user_id);
-
-
---
--- Name: index_migrator_syncs_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_user_id ON public.migrator_syncs USING btree (user_id);
-
-
---
--- Name: index_migrator_syncs_on_users_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_syncs_on_users_user_id ON public.migrator_syncs USING btree (users_user_id);
-
-
---
--- Name: index_migrator_syncs_on_users_user_id_and_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_migrator_syncs_on_users_user_id_and_user_id ON public.migrator_syncs USING btree (users_user_id, user_id);
-
-
---
--- Name: index_migrator_unique_carrier_syncs_on_duplicate_carrier_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_unique_carrier_syncs_on_duplicate_carrier_id ON public.migrator_unique_carrier_syncs USING btree (duplicate_carrier_id);
-
-
---
--- Name: index_migrator_unique_carrier_syncs_on_unique_carrier_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_unique_carrier_syncs_on_unique_carrier_id ON public.migrator_unique_carrier_syncs USING btree (unique_carrier_id);
-
-
---
--- Name: index_migrator_unique_location_location_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_migrator_unique_location_location_id ON public.migrator_unique_locations_locations_syncs USING btree (unique_location_location_id);
 
 
 --
@@ -9549,27 +9326,6 @@ CREATE INDEX index_tenant_vehicles_on_tenant_id ON public.tenant_vehicles USING 
 
 
 --
--- Name: index_tenant_vehicles_syncs_on_duplicate_tenant_vehicle_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_tenant_vehicles_syncs_on_duplicate_tenant_vehicle_id ON public.migrator_unique_tenant_vehicles_syncs USING btree (duplicate_tenant_vehicle_id);
-
-
---
--- Name: index_tenant_vehicles_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_tenant_vehicles_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_tenant_vehicles_syncs USING btree (unique_tenant_vehicle_id, duplicate_tenant_vehicle_id);
-
-
---
--- Name: index_tenant_vehicles_syncs_on_unique_tenant_vehicle_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_tenant_vehicles_syncs_on_unique_tenant_vehicle_id ON public.migrator_unique_tenant_vehicles_syncs USING btree (unique_tenant_vehicle_id);
-
-
---
 -- Name: index_tenants_companies_on_sandbox_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9864,27 +9620,6 @@ CREATE INDEX index_trucking_locations_on_zipcode ON public.trucking_locations US
 
 
 --
--- Name: index_trucking_locations_syncs_on_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_trucking_locations_syncs_on_duplicate_id ON public.migrator_unique_trucking_location_syncs USING btree (duplicate_trucking_location_id);
-
-
---
--- Name: index_trucking_locations_syncs_on_unique_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_locations_syncs_on_unique_id ON public.migrator_unique_trucking_location_syncs USING btree (unique_trucking_location_id);
-
-
---
--- Name: index_trucking_locations_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_trucking_locations_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_trucking_location_syncs USING btree (unique_trucking_location_id, duplicate_trucking_location_id);
-
-
---
 -- Name: index_trucking_rates_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10015,27 +9750,6 @@ CREATE INDEX index_truckings_on_tenant_vehicle_id ON public.trucking_truckings U
 --
 
 CREATE INDEX index_truckings_on_validity ON public.trucking_truckings USING gist (validity);
-
-
---
--- Name: index_truckings_syncs_on_duplicate_trucking_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_truckings_syncs_on_duplicate_trucking_id ON public.migrator_unique_trucking_syncs USING btree (duplicate_trucking_id);
-
-
---
--- Name: index_truckings_syncs_on_unique_id_and_duplicate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_truckings_syncs_on_unique_id_and_duplicate_id ON public.migrator_unique_trucking_syncs USING btree (unique_trucking_id, duplicate_trucking_id);
-
-
---
--- Name: index_truckings_syncs_on_unique_trucking_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_truckings_syncs_on_unique_trucking_id ON public.migrator_unique_trucking_syncs USING btree (unique_trucking_id);
 
 
 --
@@ -10553,14 +10267,6 @@ ALTER TABLE ONLY public.pricings_details
 
 
 --
--- Name: migrator_syncs fk_rails_38afafc368; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_syncs
-    ADD CONSTRAINT fk_rails_38afafc368 FOREIGN KEY (users_user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: booking_queries fk_rails_3f5db632f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10582,14 +10288,6 @@ ALTER TABLE ONLY public.journey_shipments
 
 ALTER TABLE ONLY public.booking_queries
     ADD CONSTRAINT fk_rails_411971da9a FOREIGN KEY (customer_id) REFERENCES public.users_users(id);
-
-
---
--- Name: migrator_syncs fk_rails_4324903b61; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_syncs
-    ADD CONSTRAINT fk_rails_4324903b61 FOREIGN KEY (organizations_organization_id) REFERENCES public.organizations_organizations(id);
 
 
 --
@@ -10646,14 +10344,6 @@ ALTER TABLE ONLY public.journey_queries
 
 ALTER TABLE ONLY public.shipments
     ADD CONSTRAINT fk_rails_4acecd6f16 FOREIGN KEY (destination_nexus_id) REFERENCES public.nexuses(id) ON DELETE SET NULL;
-
-
---
--- Name: migrator_unique_trucking_location_syncs fk_rails_4b22a0f2ac; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_location_syncs
-    ADD CONSTRAINT fk_rails_4b22a0f2ac FOREIGN KEY (unique_trucking_location_id) REFERENCES public.trucking_locations(id);
 
 
 --
@@ -10769,27 +10459,11 @@ ALTER TABLE ONLY public.organizations_saml_metadata
 
 
 --
--- Name: migrator_unique_carrier_syncs fk_rails_66792fc750; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_carrier_syncs
-    ADD CONSTRAINT fk_rails_66792fc750 FOREIGN KEY (unique_carrier_id) REFERENCES public.carriers(id);
-
-
---
 -- Name: journey_shipment_requests fk_rails_6686626367; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.journey_shipment_requests
     ADD CONSTRAINT fk_rails_6686626367 FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
-
-
---
--- Name: migrator_unique_trucking_location_syncs fk_rails_66dcfd389f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_trucking_location_syncs
-    ADD CONSTRAINT fk_rails_66dcfd389f FOREIGN KEY (duplicate_trucking_location_id) REFERENCES public.trucking_locations(id);
 
 
 --
@@ -10961,14 +10635,6 @@ ALTER TABLE ONLY public.quotations_tenders
 
 
 --
--- Name: migrator_unique_tenant_vehicles_syncs fk_rails_800bf534cc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_tenant_vehicles_syncs
-    ADD CONSTRAINT fk_rails_800bf534cc FOREIGN KEY (unique_tenant_vehicle_id) REFERENCES public.tenant_vehicles(id);
-
-
---
 -- Name: journey_shipment_requests fk_rails_810ec0e77c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11030,14 +10696,6 @@ ALTER TABLE ONLY public.hubs
 
 ALTER TABLE ONLY public.shipments_shipment_requests
     ADD CONSTRAINT fk_rails_88d801b1b8 FOREIGN KEY (tender_id) REFERENCES public.quotations_tenders(id);
-
-
---
--- Name: migrator_unique_locations_locations_syncs fk_rails_8a1314387e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
-    ADD CONSTRAINT fk_rails_8a1314387e FOREIGN KEY (duplicate_location_location_id) REFERENCES public.locations_locations(id);
 
 
 --
@@ -11289,14 +10947,6 @@ ALTER TABLE ONLY public.shipments_shipments
 
 
 --
--- Name: migrator_unique_locations_locations_syncs fk_rails_b22a3ed5ed; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_locations_locations_syncs
-    ADD CONSTRAINT fk_rails_b22a3ed5ed FOREIGN KEY (unique_location_location_id) REFERENCES public.locations_locations(id);
-
-
---
 -- Name: user_managers fk_rails_b2547992da; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11465,27 +11115,11 @@ ALTER TABLE ONLY public.journey_queries
 
 
 --
--- Name: migrator_unique_tenant_vehicles_syncs fk_rails_dba125f20a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_tenant_vehicles_syncs
-    ADD CONSTRAINT fk_rails_dba125f20a FOREIGN KEY (duplicate_tenant_vehicle_id) REFERENCES public.tenant_vehicles(id);
-
-
---
 -- Name: booking_offers fk_rails_e222960bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.booking_offers
     ADD CONSTRAINT fk_rails_e222960bb6 FOREIGN KEY (query_id) REFERENCES public.booking_queries(id);
-
-
---
--- Name: migrator_unique_carrier_syncs fk_rails_e2fa167585; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.migrator_unique_carrier_syncs
-    ADD CONSTRAINT fk_rails_e2fa167585 FOREIGN KEY (duplicate_carrier_id) REFERENCES public.carriers(id);
 
 
 --
@@ -12266,6 +11900,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201103144141'),
 ('20201118173330'),
 ('20201123122102'),
-('20201123132340');
+('20201123132340'),
+('20201208195413');
 
 
