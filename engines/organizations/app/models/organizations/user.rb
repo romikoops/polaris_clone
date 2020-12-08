@@ -2,9 +2,35 @@
 
 module Organizations
   class User < ::Users::User
-    default_scope { where(organization_id: ::Organizations.current_id) }
-
     belongs_to :organization
+
+    default_scope { where(organization_id: ::Organizations.current_id) }
+    PROFILE_ATTRIBUTES = ["first_name", "last_name", "phone"]
+
+    filterrific(
+      default_filter_params: {sorted_by: "email_asc"},
+      available_filters: [
+        :sorted_by
+      ]
+    )
+
+    scope :sorted_by, lambda { |sort_by, direction|
+      if sort_by == "email"
+        order(sanitize_sql_for_order("email #{direction}"))
+      elsif sort_by == "role"
+        joins("INNER JOIN organizations_memberships ON users_users.id = organizations_memberships.user_id")
+          .order(sanitize_sql_for_order("role #{direction}"))
+      elsif sort_by == "company_name"
+        joins("INNER JOIN companies_memberships ON users_users.id = companies_memberships.member_id
+               INNER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id")
+          .order(sanitize_sql_for_order("name #{direction}"))
+      elsif PROFILE_ATTRIBUTES.include?(sort_by)
+        joins("INNER JOIN profiles_profiles ON users_users.id = profiles_profiles.user_id")
+          .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+      else
+        raise(ArgumentError, "Invalid sort option: #{sort_by.inspect}")
+      end
+    }
   end
 end
 

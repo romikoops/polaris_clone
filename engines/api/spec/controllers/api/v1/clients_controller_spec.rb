@@ -27,19 +27,35 @@ module Api
     end
 
     describe "GET #index" do
-      let(:request_object) do
-        get :index, params: {organization_id: organization.id}, as: :json
-      end
-
       before do
         FactoryBot.create_list(:organizations_user, 5, :with_profile, organization: organization)
       end
 
-      it "renders the list of users successfully" do
-        perform_request
-        aggregate_failures do
-          expect(response).to be_successful
-          expect(response_data).not_to be_empty
+      context "when no sorting params passed" do
+        let(:request_object) do
+          get :index, params: {organization_id: organization.id}, as: :json
+        end
+
+        it "renders the list of users successfully" do
+          perform_request
+          aggregate_failures do
+            expect(response).to be_successful
+            expect(response_data).not_to be_empty
+          end
+        end
+      end
+
+      context "when sorting params passed" do
+        let(:request_object) do
+          get :index, params: {organization_id: organization.id, sort_by: "phone", direction: "asc"}, as: :json
+        end
+
+        it "renders the list of users successfully" do
+          perform_request
+          aggregate_failures do
+            expect(response).to be_successful
+            expect(response_data).not_to be_empty
+          end
         end
       end
     end

@@ -99,7 +99,7 @@ module Api
       end
 
       def index_params
-        params.permit(:q, :page, :per_page)
+        params.permit(:q, :page, :per_page, :sort_by, :direction)
       end
 
       def query
@@ -144,7 +144,13 @@ module Api
           clients = clients.where(id: by_profile | by_email)
         end
 
-        paginated = paginate(clients)
+        clients = initialize_filterrific(
+          clients,
+          sort_by: index_params[:sort_by],
+          direction: index_params[:direction].to_s.upcase == "DESC" ? "DESC" : "ASC"
+        ) || return
+
+        paginated = paginate(clients.model_class)
         UserDecorator.decorate_collection(paginated, {context: {links: pagination_links(paginated)}})
       end
 
