@@ -32,6 +32,7 @@ end
 # Table name: organizations_organizations
 #
 #  id         :uuid             not null, primary key
+#  live       :boolean          default(FALSE)
 #  slug       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

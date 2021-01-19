@@ -19,6 +19,10 @@
           <dt class="col-sm-5">Tenant Name</dt>
           <dd class="col-sm-7"><%= ftheme.text_field :name %></dd>
         <% end %>
+
+        <dt class="col-sm-5">Live Organization</dt>
+        <dd class="col-sm-7"><%= f.check_box :live %></dd>
+
         <dt class="col-sm-5">Tenant Slug</dt>
         <dd class="col-sm-7"><%= f.text_field :slug %></dd>
         <% if @organization.errors.present? %>

@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :organizations_organization, class: "Organizations::Organization" do
     sequence(:slug) { |n| "test_#{n}" }
+    live { true }
 
     domains { [association(:organizations_domain, default: true, organization: instance)] }
     theme { association(:organizations_theme, organization: instance) }

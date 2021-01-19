@@ -9,6 +9,7 @@ module OfferCalculator
       def initialize(shipment:, params:, quotation:, wheelhouse: false)
         @params = params
         @quotation = quotation
+        @organization = shipment.organization
         super(shipment: shipment, quotation: quotation)
       end
 
@@ -57,7 +58,7 @@ module OfferCalculator
         email = @shipment.user&.email || ""
         internal_domain = scope.fetch(:internal_domains).find { |domain| email.include?(domain) }
 
-        billing = if excluded_emails(organization: shipment.organization).include? email
+        billing = if !@organization.live || excluded_emails(organization: @organization).include?(email)
           :test
         elsif internal_domain.present? || wheelhouse
           :internal

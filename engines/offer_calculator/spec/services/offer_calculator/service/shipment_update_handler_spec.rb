@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, live: live) }
+  let(:live) { true }
   let(:email) { "test@itsmycargo.example" }
   let(:user) { FactoryBot.create(:organizations_user, organization: organization, email: email) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
@@ -285,14 +286,25 @@ RSpec.describe OfferCalculator::Service::ShipmentUpdateHandler do
             expect(base_shipment.billing).to eq("test")
           end
         end
+
+        context "when organization is not live" do
+          let(:live) { false }
+
+          it "updates the billing attribute when external" do
+            service.update_billing
+            expect(base_shipment.billing).to eq("test")
+          end
+        end
       end
 
       context "when external" do
         let(:email) { "xxxx@external.com" }
 
-        it "updates the billing attribute when external" do
-          service.update_billing
-          expect(base_shipment.billing).to eq("external")
+        context "when organization is live" do
+          it "updates the billing attribute when external" do
+            service.update_billing
+            expect(base_shipment.billing).to eq("external")
+          end
         end
       end
     end

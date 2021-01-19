@@ -2774,7 +2774,8 @@ CREATE TABLE public.organizations_organizations (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     slug character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    live boolean DEFAULT false
 );
 
 
@@ -11901,6 +11902,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201118173330'),
 ('20201123122102'),
 ('20201123132340'),
-('20201208195413');
+('20201208195413'),
+('20210113164927');
 
 

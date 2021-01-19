@@ -6,8 +6,9 @@ RSpec.describe UploaderJob, type: :job do
       :legacy_file,
       file: Rack::Test::UploadedFile.new(
         file_fixture("dummy.xlsx"),
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       )
+    )
   end
   let(:user) { FactoryBot.create(:organizations_user, organization: document.organization) }
 

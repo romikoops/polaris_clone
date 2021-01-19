@@ -42,7 +42,10 @@ module AdmiraltyTenants
     end
 
     def update
-      @organization.update(slug: organization_params[:slug])
+      @organization.update(
+        slug: organization_params[:slug],
+        live: organization_params[:live]
+      )
       @theme = @organization.theme
       @theme.update(organization_params[:theme]) if organization_params[:theme].present?
       @scope.update(content: remove_default_values)
@@ -75,6 +78,7 @@ module AdmiraltyTenants
     def organization_params
       params.require(:organization)
         .permit(
+          :live,
           :slug,
           :scope,
           :max_dimensions_bundle,
