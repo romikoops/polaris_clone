@@ -20,25 +20,7 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def create
-    args = {
-      itinerary_ids: params[:itinerary_ids],
-      hub_ids: params[:hub_ids],
-      cargo_classes: params[:cargo_classes],
-      tenant_vehicle_ids: params[:tenant_vehicle_ids],
-      pricing_id: params[:pricing_id],
-      selectedHubDirection: params[:selectedHubDirection],
-      marginType: params[:marginType],
-      organization_id: params[:organization_id],
-      groupId: params[:groupId],
-      directions: params[:hub_direction],
-      operand: params[:operand],
-      attached_to: params[:attached_to],
-      marginValue: params[:marginValue],
-      fineFeeValues: params[:fineFeeValues],
-      effective_date: params[:effective_date],
-      expiration_date: params[:expiration_date]
-    }
-    margins = Pricings::MarginCreator.new(args).perform
+    margins = Pricings::MarginCreator.new(create_params.to_h.deep_symbolize_keys).perform
 
     response_handler(margins.map { |m| for_list_json(m) })
   end
@@ -321,6 +303,29 @@ class Admin::MarginsController < Admin::AdminBaseController
       :selectedCargoClass,
       selectedOriginTrucking: %i[lat lng],
       selectedDestinationTrucking: %i[lat lng]
+    )
+  end
+
+  def create_params
+    params.permit(
+      :pricing_id,
+      :selectedHubDirection,
+      :marginType,
+      :organization_id,
+      :groupId,
+      :attached_to,
+      :marginValue,
+      :effective_date,
+      :expiration_date,
+      operand: {},
+      counterpart_hub: {},
+      directions: [],
+      cargo_classes: [],
+      hub_ids: [],
+      fineFeeValues: {},
+      hub_direction: [],
+      itinerary_ids: [],
+      tenant_vehicle_ids: []
     )
   end
 end

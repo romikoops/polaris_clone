@@ -240,6 +240,44 @@ RSpec.describe Admin::MarginsController, type: :controller do
     end
   end
 
+  describe "Post #create" do
+    let(:itinerary) do
+      FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
+    end
+    let(:group) do
+      FactoryBot.create(:groups_group, organization: organization)
+    end
+    let(:params) do
+      {
+        organization_id: organization.id,
+        query: "Hamburg",
+        itinerary_ids: [itinerary.id],
+        hub_ids: [],
+        cargo_classes: ["lcl"],
+        marginType: "freight",
+        groupId: group.id,
+        directions: ["export"],
+        operand: {value: "+"},
+        attached_to: "itinerary",
+        marginValue: 10,
+        fineFeeValues: {"BAS - Basic Freight" => {value: 10, operand: {value: "+"}}},
+        effective_date: Time.zone.now,
+        expiration_date: Time.zone.now + 6.months
+      }
+    end
+    let(:new_margin) { json_response.dig("data").first }
+
+    it "returns the newly created Margin" do
+      post :create, params: params
+      aggregate_failures do
+        expect(new_margin.dig("cargoClass")).to eq(params[:cargo_classes].first)
+        expect(new_margin.dig("operator")).to eq(params.dig(:operand, :value))
+        expect(new_margin.dig("marginDetails").length).to eq(1)
+        expect(new_margin.dig("marginDetails", 0, "value")).to eq("10.0")
+      end
+    end
+  end
+
   describe "Get #fee_data" do
     let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
 
