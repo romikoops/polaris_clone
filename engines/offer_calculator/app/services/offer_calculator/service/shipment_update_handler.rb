@@ -55,10 +55,13 @@ module OfferCalculator
       end
 
       def update_billing
-        email = @shipment.user&.email || ""
-        internal_domain = scope.fetch(:internal_domains).find { |domain| email.include?(domain) }
+        user_email = @shipment.user&.email || ""
+        creator_email = quotation.creator&.email || ""
 
-        billing = if !@organization.live || excluded_emails(organization: @organization).include?(email)
+        internal_domain = scope.fetch(:internal_domains).find { |domain| user_email.include?(domain) }
+        blacklisted_emails = excluded_emails(organization: shipment.organization)
+
+        billing = if !@organization.live || (blacklisted_emails & [user_email, creator_email]).any?
           :test
         elsif internal_domain.present? || wheelhouse
           :internal

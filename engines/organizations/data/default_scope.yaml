@@ -161,6 +161,7 @@ blacklisted_emails:
   - shipper@itsmycargo.com
   - agent@itsmycargo.com
   - test@itsmycargo.com
+  - shopadmin@itsmycargo.com
 validity_logic: vatos
 transport_insurance_rate: 0
 hs_fee: 0
