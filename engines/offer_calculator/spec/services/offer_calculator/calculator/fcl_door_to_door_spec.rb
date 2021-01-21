@@ -151,6 +151,7 @@ RSpec.describe OfferCalculator::Calculator do
         aggregate_failures do
           expect { service }.to raise_error(OfferCalculator::Errors::OfferBuilder)
           expect(quotation.error_class).to eq("OfferCalculator::Errors::OfferBuilder")
+          expect(quotation.completed).to be false
         end
       end
     end
