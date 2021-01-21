@@ -1,5 +1,6 @@
 aws:
   bucket:
+  ingest_bucket:
 
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>

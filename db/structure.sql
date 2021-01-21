@@ -2753,6 +2753,22 @@ CREATE TABLE public.organizations_domains (
 
 
 --
+-- Name: organizations_integration_tokens; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.organizations_integration_tokens (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    token uuid,
+    scope character varying,
+    description character varying,
+    expires_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: organizations_memberships; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5976,6 +5992,14 @@ ALTER TABLE ONLY public.organizations_domains
 
 
 --
+-- Name: organizations_integration_tokens organizations_integration_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_integration_tokens
+    ADD CONSTRAINT organizations_integration_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: organizations_memberships organizations_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8099,6 +8123,13 @@ CREATE UNIQUE INDEX index_organizations_domains_on_domain ON public.organization
 --
 
 CREATE INDEX index_organizations_domains_on_organization_id ON public.organizations_domains USING btree (organization_id);
+
+
+--
+-- Name: index_organizations_integration_tokens_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_organizations_integration_tokens_on_organization_id ON public.organizations_integration_tokens USING btree (organization_id);
 
 
 --
@@ -10252,6 +10283,14 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 
 --
+-- Name: organizations_integration_tokens fk_rails_2e029f7c1e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.organizations_integration_tokens
+    ADD CONSTRAINT fk_rails_2e029f7c1e FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: companies_companies fk_rails_2fb4c39109; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11903,6 +11942,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201123122102'),
 ('20201123132340'),
 ('20201208195413'),
-('20210113164927');
+('20210113164927'),
+('20210118124755');
 
 

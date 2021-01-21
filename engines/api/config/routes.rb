@@ -5,6 +5,7 @@ Api::Engine.routes.draw do
 
   namespace :v1 do
     resource :me, controller: :users, only: :show
+    resource :uploads, only: :create
 
     resources :organizations, only: :index do
       member do

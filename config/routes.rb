@@ -900,6 +900,7 @@ end
 # Routes for Api::Engine:
 #                                    api_auth        /                                                                                        ApiAuth::Engine
 #                                       v1_me GET    /v1/me(.:format)                                                                         api/v1/users#show
+#                                  v1_uploads POST   /v1/uploads(.:format)                                                                    api/v1/uploads#create
 #                       scope_v1_organization GET    /v1/organizations/:id/scope(.:format)                                                    api/v1/organizations#scope
 #                   countries_v1_organization GET    /v1/organizations/:id/countries(.:format)                                                api/v1/organizations#countries
 #                   v1_organization_dashboard GET    /v1/organizations/:organization_id/dashboard(.:format)                                   api/v1/dashboard#show
