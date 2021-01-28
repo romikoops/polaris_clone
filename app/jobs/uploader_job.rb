@@ -2,14 +2,16 @@ class UploaderJob < ApplicationJob
   queue_as :default
 
   def perform(document_id:, options:)
-    user = Users::User.find(options[:user_id])
     document = Legacy::File.find(document_id)
+    organization = document.organization
 
+    return if document.created_at < latest_created_at(organization: organization, doc_type: document.doc_type)
+
+    user = Users::User.find(options[:user_id])
     options = {
-      organization: document.organization,
+      organization: organization,
       options: options.merge({user: user})
     }
-
     result = Processor.new(blob: document.file.blob).process { |file|
       ExcelDataServices::Loaders::Uploader.new(options.merge(file_or_path: file)).perform
     }
@@ -17,7 +19,7 @@ class UploaderJob < ApplicationJob
     UploadMailer
       .with(
         user_id: user.id,
-        organization: document.organization,
+        organization: organization,
         result: JSON.parse(result.to_json),
         file: document.file.blob.filename.sanitized
       )
@@ -28,6 +30,14 @@ class UploaderJob < ApplicationJob
   end
 
   private
+
+  def latest_created_at(organization:, doc_type:)
+    Legacy::File
+      .where(organization: organization, doc_type: doc_type)
+      .order(:created_at)
+      .last
+      .created_at
+  end
 
   class Processor
     include ActiveStorage::Downloading
