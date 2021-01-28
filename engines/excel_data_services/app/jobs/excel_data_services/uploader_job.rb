@@ -1,12 +1,14 @@
 module ExcelDataServices
   class UploaderJob < ApplicationJob
-    concurrency 1, drop: false
     queue_as :default
 
     def perform(document_id:, options:)
-      user = Users::User.find(options[:user_id])
       document = Legacy::File.find(document_id)
+      organization = document.organization
 
+      return if document.created_at < latest_created_at(organization: organization, doc_type: document.doc_type)
+
+      user = Users::User.find(options[:user_id])
       options = {
         organization: document.organization,
         options: options.merge({user: user})
@@ -28,6 +30,14 @@ module ExcelDataServices
     end
 
     private
+
+    def latest_created_at(organization:, doc_type:)
+      Legacy::File
+        .where(organization: organization, doc_type: doc_type)
+        .order(:created_at)
+        .last
+        .created_at
+    end
 
     class Processor
       include ActiveStorage::Downloading
