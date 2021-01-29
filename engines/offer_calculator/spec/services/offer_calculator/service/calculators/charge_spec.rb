@@ -7,23 +7,13 @@ RSpec.describe OfferCalculator::Service::Calculators::Charge do
   let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization) }
   let(:pricing_fee) { pricing.fees.first }
   let(:charge_category) { pricing_fee.charge_category }
-  let(:quotation) { FactoryBot.create(:quotations_quotation) }
-  let(:cargo) do
-    FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-      FactoryBot.create(:lcl_unit, cargo: tapped_cargo)
-    end
-  end
   let(:manipulated_result) do
     FactoryBot.build(:manipulator_result,
       original: pricing,
       result: pricing.as_json)
   end
   let(:measures) do
-    OfferCalculator::Service::Measurements::Unit.new(
-      cargo: cargo.units.first,
-      scope: {},
-      object: manipulated_result
-    )
+    FactoryBot.build(:measurements_cargo, scope: {}, manipulated_result: manipulated_result)
   end
   let(:fee) do
     FactoryBot.build(:rate_builder_fee,
@@ -31,7 +21,7 @@ RSpec.describe OfferCalculator::Service::Calculators::Charge do
       raw_fee: pricing_fee.fee_data,
       min_value: min_value,
       measures: measures,
-      target: cargo.units.first)
+      targets: measures.cargo_units)
   end
   let(:value) { Money.new(2500, "USD") }
   let(:rate) { Money.new(pricing_fee.rate * 100.0, pricing_fee.currency_name) }
@@ -50,8 +40,8 @@ RSpec.describe OfferCalculator::Service::Calculators::Charge do
       expect(charge.charge_category).to eq(charge_category)
     end
 
-    it "returns the target" do
-      expect(charge.cargo).to eq(cargo.units.first)
+    it "returns the targets" do
+      expect(charge.targets).to eq(measures.cargo_units)
     end
 
     it "returns the min value" do

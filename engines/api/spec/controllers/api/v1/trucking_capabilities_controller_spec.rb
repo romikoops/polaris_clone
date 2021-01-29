@@ -11,7 +11,7 @@ module Api
     let(:destination_hub) { itinerary.destination_hub }
     let(:user) { FactoryBot.create(:users_user, email: "test@example.com", organization_id: organization.id) }
 
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:params) { {load_type: "cargo_item", organization_id: organization.id} }
 

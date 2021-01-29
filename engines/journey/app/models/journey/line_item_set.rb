@@ -1,7 +1,7 @@
 module Journey
   class LineItemSet < ApplicationRecord
-    has_many :line_items
-    belongs_to :result
+    has_many :line_items, inverse_of: :line_item_set
+    belongs_to :result, inverse_of: :line_item_sets
     belongs_to :shipment_request, optional: true
   end
 end

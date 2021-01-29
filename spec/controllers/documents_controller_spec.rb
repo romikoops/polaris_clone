@@ -3,9 +3,8 @@
 require "rails_helper"
 
 RSpec.describe DocumentsController, type: :controller do
-  let(:org_user) { FactoryBot.create(:organizations_user) }
-  let(:user) { org_user.becomes(Authentication::User) }
-  let(:document) { FactoryBot.create(:legacy_file, :with_file, user: org_user) }
+  let(:user) { FactoryBot.create(:users_client) }
+  let(:document) { FactoryBot.create(:legacy_file, :with_file, user: user) }
 
   before do
     append_token_header

@@ -9,10 +9,15 @@ RSpec.describe Trucking::Queries::Hubs do
       latitude: latitude,
       longitude: longitude,
       name: "Distance",
+      country: country,
       organization: organization)
   end
-  let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: "Zipcode", organization: organization) }
-  let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: "Location", organization: organization) }
+  let(:zipcode_hub) {
+    FactoryBot.create(:legacy_hub, name: "Zipcode", organization: organization, country: country)
+  }
+  let(:location_hub) {
+    FactoryBot.create(:legacy_hub, name: "Location", organization: organization, country: country)
+  }
 
   let(:trucking_location_zipcode) {
     FactoryBot.create(:trucking_location, :zipcode, country: country, data: zipcode)
@@ -39,10 +44,10 @@ RSpec.describe Trucking::Queries::Hubs do
   let(:carriage) { "pre" }
   let(:distance) { 55 }
   let(:country_code) { "SE" }
-  let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
+  let!(:country) { factory_country_from_code(code: country_code) }
 
   let(:address) do
-    FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
+    FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude, country: country)
   end
 
   let(:hubs_service) do
@@ -57,7 +62,7 @@ RSpec.describe Trucking::Queries::Hubs do
     %i[distance location zipcode].each do |query_method|
       FactoryBot.create(:trucking_hub_availability,
         hub: distance_hub,
-        type_availability: FactoryBot.create(:trucking_type_availability, query_method: query_method))
+        type_availability: FactoryBot.create(:trucking_type_availability, query_method: query_method, country: country))
     end
   end
 

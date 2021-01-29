@@ -4,6 +4,7 @@ require "shared/runtime"
 
 require "acts_as_paranoid"
 require "pg_search"
+require "sorcery"
 
 module Users
   class Engine < ::Rails::Engine

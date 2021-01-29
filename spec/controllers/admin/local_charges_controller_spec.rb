@@ -134,7 +134,6 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
         expiration_date: Date.parse("Fri, 24 Jan 2020"),
         user_id: nil
       )
-      FactoryBot.create(:organizations_scope, target: organization, content: {"base_pricing" => true})
     end
 
     it "returns error with messages when an error is raised" do

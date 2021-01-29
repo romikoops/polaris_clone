@@ -129,6 +129,7 @@ module Trucking
         @validated_truckings ||= ::Trucking::Trucking.joins(:hub, :location)
           .merge(tenant_hubs)
           .where(organization_id: organization_id)
+          .current
           .where(cargo_class_condition)
           .where(load_type_condition)
           .where(truck_type_condition)

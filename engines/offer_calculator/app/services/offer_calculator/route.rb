@@ -42,13 +42,13 @@ module OfferCalculator
 
     def self.attributes_from_hub_and_itinerary_ids(
       query:,
-      shipment:,
+      request:,
       date_range:,
-      scope:
+      scope: {}
     )
       OfferCalculator::Queries::ValidRoutes.new(
         query: query,
-        shipment: shipment,
+        request: request,
         date_range: date_range,
         scope: scope
       ).perform

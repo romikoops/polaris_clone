@@ -2,7 +2,7 @@ module Journey
   class ShipmentRequest < ApplicationRecord
     belongs_to :result
     belongs_to :company, class_name: "Companies::Company"
-    belongs_to :client, class_name: "Users::User"
+    belongs_to :client, class_name: "Users::Client"
     has_many :documents
     has_many :contacts
     has_one :shipment
@@ -31,7 +31,6 @@ end
 #
 # Foreign Keys
 #
-#  fk_rails_...  (client_id => users_users.id) ON DELETE => cascade
-#  fk_rails_...  (company_id => users_users.id) ON DELETE => cascade
+#  fk_rails_...  (company_id => companies_companies.id) ON DELETE => cascade
 #  fk_rails_...  (result_id => journey_results.id) ON DELETE => cascade
 #

@@ -9,7 +9,8 @@ module OfferCalculator
 
         delegate :code, :name, to: :charge_category
         delegate :section, :load_type, :cargo_class, :validity, :itinerary_id, :tenant_vehicle_id,
-          :pricing_id, :stackability, :target, :charge_category, :truck_type, :hub_id, :object, to: :fee
+          :pricing_id, :stackability, :targets, :charge_category, :truck_type, :hub_id, :object,
+          :quantity, :wm_rate, to: :fee
 
         def initialize(value:, fee:, fee_component:)
           @value = value
@@ -28,8 +29,6 @@ module OfferCalculator
         def tenant_vehicle
           Legacy::TenantVehicle.find(tenant_vehicle_id)
         end
-
-        alias_method :cargo, :target
       end
     end
   end

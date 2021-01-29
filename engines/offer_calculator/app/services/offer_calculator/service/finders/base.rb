@@ -4,29 +4,31 @@ module OfferCalculator
   module Service
     module Finders
       class Base
-        def self.prices(shipment:, quotation:, schedules:)
-          new(shipment: shipment, quotation: quotation, schedules: schedules).perform
+        def self.prices(request:, schedules:)
+          new(request: request, schedules: schedules).perform
         end
 
-        def initialize(shipment:, quotation:, schedules:)
-          @user = shipment.user
-          @organization = shipment.organization
-          @quotation = quotation
+        def initialize(request:, schedules:)
+          @request = request
           @schedules = schedules
-          @shipment = shipment
-          @scope = ::OrganizationManager::ScopeService.new(target: @user, organization: @organization).fetch
-          @hierarchy = OrganizationManager::GroupsService.new(
-            target: @user, organization: @organization, exclude_default: exclude_default
-          ).fetch
+
           raise OfferCalculator::Errors::NoValidSchedules if schedules.empty?
         end
 
         private
 
-        attr_reader :schedules, :shipment, :organization, :hierarchy, :scope, :quotation, :user
+        attr_reader :schedules, :request
 
-        def cargo_classes
-          @cargo_classes ||= shipment.cargo_classes
+        delegate :client, :organization, :cargo_classes, :load_type, to: :request
+
+        def scope
+          @scope ||= ::OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
+        end
+
+        def hierarchy
+          @hierarchy ||= OrganizationManager::GroupsService.new(
+            target: client, organization: organization, exclude_default: exclude_default
+          ).fetch
         end
 
         def end_date

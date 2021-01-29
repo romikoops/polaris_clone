@@ -22,7 +22,3 @@ end
 #  index_user_addresses_on_deleted_at  (deleted_at)
 #  index_user_addresses_on_user_id     (user_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
-#

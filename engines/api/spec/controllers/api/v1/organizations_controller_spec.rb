@@ -12,13 +12,13 @@ module Api
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_user) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:scope) { OrganizationManager::ScopeService.new(organization: organization, target: user).fetch }
 
     describe "GET #index" do
       before do
-        FactoryBot.create(:organizations_membership, organization: organization, user: user)
+        FactoryBot.create(:users_membership, organization: organization, user: user)
       end
 
       it "renders the list of organizations successfully" do

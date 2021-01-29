@@ -14,7 +14,9 @@ end
 #  id          :uuid             not null, primary key
 #  coordinates :geometry         not null, geometry, 0
 #  function    :string           not null
+#  locode      :string
 #  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  geo_id      :string
 #

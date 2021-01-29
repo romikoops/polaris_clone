@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Legacy
   RSpec.describe UserAddress, type: :model do
-    let(:user) { FactoryBot.create(:organizations_user) }
+    let(:user) { FactoryBot.create(:users_client) }
     let(:primary_user_address) { FactoryBot.create(:legacy_user_address, primary: true, user: user) }
 
     describe "validity" do

@@ -2,10 +2,10 @@
 
 require "swagger_helper"
 
-RSpec.describe "Ahoy API" do
+RSpec.describe "Ahoy API", type: :request, swagger_doc: "v1/swagger.json" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
 
   path "/v1/organizations/{organization_id}/ahoy" do
     get "Fetch Settings" do

@@ -19,7 +19,7 @@ FactoryBot.define do
       street_number { "88" }
       geocoded_address { "88 Henan Middle Road, Shanghai" }
       city { "Shanghai" }
-      association :country, factory: :country_cn
+      country { factory_country_from_code(code: "CN") }
     end
 
     trait :gothenburg do
@@ -29,7 +29,7 @@ FactoryBot.define do
       zip_code { "43813" }
       geocoded_address { "438 80 Landvetter, Sweden" }
       city { "Gothenburg" }
-      association :country, factory: :country_se
+      country { factory_country_from_code(code: "SE") }
     end
 
     trait :felixstowe do
@@ -39,7 +39,7 @@ FactoryBot.define do
       zip_code { "IP11 2DX" }
       geocoded_address { "" }
       city { "Felixstowe" }
-      association :country, factory: :country_uk
+      country { factory_country_from_code(code: "UK") }
     end
 
     trait :hamburg do
@@ -51,14 +51,14 @@ FactoryBot.define do
       street_number { "7" }
       geocoded_address { "Brooktorkai 7, Hamburg, 20457, Germany" }
       city { "Hamburg" }
-      association :country, factory: :country_de
+      country { factory_country_from_code(code: "DE") }
     end
 
     trait :dusseldorf do
       name { "Düsseldorf" }
       city { "Düsseldorf" }
       street { "Dorf Street" }
-      association :country, factory: :country_de
+      country { factory_country_from_code(code: "DE") }
     end
 
     factory :hamburg_address, traits: [:hamburg]

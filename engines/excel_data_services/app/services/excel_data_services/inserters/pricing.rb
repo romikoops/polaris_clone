@@ -133,7 +133,7 @@ module ExcelDataServices
         new_pricings = []
         pricings_with_actions.slice(:destroy).values.each do |pricings|
           pricings.each do |pricing|
-            pricing_details = scope["base_pricing"] ? pricing.fees : pricing.pricing_details
+            pricing_details = pricing.fees
             pricing_details.each do |pricing_detail|
               pricing_detail.destroy
               add_stats(pricing_detail, row_nr)

@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::BookingCount, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let(:clients) { FactoryBot.create_list(:organizations_user, 2, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
+  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
   let(:result) {

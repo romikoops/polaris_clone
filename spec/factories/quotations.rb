@@ -2,11 +2,12 @@
 
 FactoryBot.define do
   factory :quotation do
-    association :user, factory: :organizations_user
     transient do
       shipment_count { 1 }
       load_type { "cargo_item" }
     end
+
+    user { assocation(:users_client) }
 
     target_email { "john@example.test" }
     name { "NAME" }

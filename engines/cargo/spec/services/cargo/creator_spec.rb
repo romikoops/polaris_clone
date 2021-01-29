@@ -6,7 +6,7 @@ module Cargo
   RSpec.describe Creator, type: :model do
     describe "Mapping legacy cargo to cargo" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
-      let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:user) { FactoryBot.create(:users_client, organization: organization) }
       let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
       let(:tender) { FactoryBot.create(:quotations_tender, quotation: quotation) }
       let(:cargo) { ::Cargo::Cargo.find_by(quotation_id: tender.quotation_id) }

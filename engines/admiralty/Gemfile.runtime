@@ -1,17 +1,5 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 
-gem "admiralty_assets", path: "../admiralty_assets"
-eval_gemfile "../admiralty_assets/Gemfile.runtime"
-
-gem "admiralty_auth", path: "../admiralty_auth"
-eval_gemfile "../admiralty_auth/Gemfile.runtime"
-
-gem "admiralty_reports", path: "../admiralty_reports"
-eval_gemfile "../admiralty_reports/Gemfile.runtime"
-
-gem "admiralty_tenants", path: "../admiralty_tenants"
-eval_gemfile "../admiralty_tenants/Gemfile.runtime"
-
 gem "legacy", path: "../legacy"
 eval_gemfile "../legacy/Gemfile.runtime"
 

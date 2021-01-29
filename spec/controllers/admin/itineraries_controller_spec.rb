@@ -5,9 +5,6 @@ require "rails_helper"
 RSpec.describe Admin::ItinerariesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_user) }
-  let(:organizations_membership) {
-    FactoryBot.create(:organizations_membership, role: :admin, organization: organization, member: user)
-  }
   let!(:itineraries) do
     [
       FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization),

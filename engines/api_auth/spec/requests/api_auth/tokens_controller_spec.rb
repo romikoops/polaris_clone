@@ -19,7 +19,7 @@ RSpec.describe ApiAuth::TokensController, type: :request do
   end
 
   describe "unauthorized" do
-    let(:user) { FactoryBot.create(:authentication_user) }
+    let(:user) { FactoryBot.create(:users_client) }
 
     it "should return unauthorized" do
       post "/oauth/token", params: params
@@ -33,9 +33,8 @@ RSpec.describe ApiAuth::TokensController, type: :request do
 
     context "when organization user" do
       let!(:user) {
-        FactoryBot.create(:authentication_user,
-          :organizations_user, activation_state: "active",
-                               organization_id: organization.id, email: email, password: password)
+        FactoryBot.create(:users_client,
+          organization_id: organization.id, email: email, password: password)
       }
 
       it "generates new token" do
@@ -48,9 +47,8 @@ RSpec.describe ApiAuth::TokensController, type: :request do
 
     context "when admin user" do
       let(:user) do
-        FactoryBot.create(:authentication_user, :users_user, activation_state: "active",
-                                                             email: email, password: password).tap do |user|
-          FactoryBot.create(:organizations_membership, organization: organization, user: user)
+        FactoryBot.create(:users_user, email: email, password: password).tap do |user|
+          FactoryBot.create(:users_membership, organization: organization, user: user)
         end
       end
 

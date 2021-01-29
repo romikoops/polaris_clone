@@ -18,7 +18,7 @@ FactoryBot.define do
           FactoryBot.create(:trucking_location,
             :with_location,
             data: postal_code,
-            country: FactoryBot.create(:legacy_country, code: "GB"),
+            country: factory_country_from_code(code: "GB"),
             location: FactoryBot.create(:locations_location, name: postal_code, country_code: "GB"))
         end
         Locations::Name.reindex

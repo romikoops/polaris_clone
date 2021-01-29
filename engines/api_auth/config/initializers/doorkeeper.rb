@@ -16,8 +16,13 @@ require "api_auth/resource_helper"
 
   resource_owner_from_credentials do
     ::Organizations.current_id = params[:organization_id] if params[:organization_id]
-    resource = ApiAuth::ResourceHelper.resource_for_login(client: server.client)
-    resource.authenticate(params[:email], params[:password]) || nil
+    resources = ApiAuth::ResourceHelper.resource_for_login(client: server.client)
+    user = nil
+    resources.each do |resource|
+      user = resource.authenticate(params[:email], params[:password])
+      break if user
+    end
+    user
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for

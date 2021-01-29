@@ -10,16 +10,21 @@ Gem::Specification.new do |spec|
     financial reports.
   SUMMARY
 
+  spec.metadata["package"] = "admiralty"
   spec.metadata["type"] = "direct"
 
   spec.files = Dir["{app,config,lib}/**/*"]
 
   spec.add_dependency "shared-runtime"
 
-  spec.add_dependency "admiralty_assets"
-  spec.add_dependency "admiralty_auth"
-  spec.add_dependency "admiralty_reports"
-  spec.add_dependency "admiralty_tenants"
+  spec.add_dependency "google_sign_in", "~> 1.2.0"
+  spec.add_dependency "trestle", "~> 0.9.4"
+  spec.add_dependency "trestle-active_storage", "~> 3.0.1"
+  spec.add_dependency "trestle-auth", "~> 0.4.1"
+  spec.add_dependency "trestle-search", "~> 0.4.3"
+  spec.add_dependency "trestle-sidekiq", "~> 0.1.1"
+  spec.add_dependency "trestle-rails_event_store"
+
   spec.add_dependency "legacy"
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"

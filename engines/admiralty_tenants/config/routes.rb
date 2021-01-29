@@ -1,5 +1,0 @@
-# frozen_string_literal: true
-
-AdmiraltyTenants::Engine.routes.draw do
-  resources :organizations, only: %i[index show new create edit update]
-end

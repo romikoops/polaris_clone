@@ -2,7 +2,7 @@
 
 module IDP
   class SamlDataBuilder
-    attr_reader :user, :saml_response, :organization_id
+    attr_reader :saml_response, :organization_id
 
     def initialize(saml_response:, organization_id:)
       @saml_response = saml_response
@@ -10,8 +10,6 @@ module IDP
     end
 
     def perform
-      @user = find_or_create_user
-      find_or_create_profile(user: user)
       attach_to_groups
       attach_to_company
       token = create_token
@@ -19,19 +17,31 @@ module IDP
       token.merge(userId: user.id, organizationId: organization_id)
     end
 
-    def find_or_create_user
-      Authentication::User.find_or_create_by!(
-        type: "Organizations::User",
+    private
+
+    def user
+      @user ||= Users::Client.find_or_initialize_by(
         organization_id: organization_id,
         email: saml_response.email || saml_response.name_id
-      )
+      ).tap do |saml_user|
+        update_or_create_profile(saml_user: saml_user)
+        update_or_create_settings(saml_user: saml_user)
+        saml_user.save!
+      end
     end
 
-    def find_or_create_profile(user:)
-      Profiles::ProfileService.create_or_update_profile(
-        user: user,
-        **saml_response.profile_attributes
-      )
+    def update_or_create_profile(saml_user:)
+      if saml_user.profile.present?
+        saml_user.profile.assign_attributes(saml_response.profile_attributes)
+      else
+        saml_user.profile_attributes = saml_response.profile_attributes
+      end
+    end
+
+    def update_or_create_settings(saml_user:)
+      return if saml_user.profile.present?
+
+      saml_user.settings_attributes = { currency: default_currency }
     end
 
     def attach_to_groups
@@ -68,8 +78,6 @@ module IDP
       Doorkeeper::OAuth::TokenResponse.new(token).body
     end
 
-    private
-
     def refresh_token
       loop do
         token = SecureRandom.hex(32)
@@ -82,6 +90,10 @@ module IDP
         country: Legacy::Country.find_by(code: saml_response.country),
         **saml_response.address_attributes
       )
+    end
+
+    def default_currency
+      Organizations::Scope.find_by(target_id: organization_id, target_type: "Organizations::Organization").content.dig(:default_currency)
     end
   end
 end

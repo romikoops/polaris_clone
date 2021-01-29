@@ -5,7 +5,7 @@ require "roo"
 
 RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let!(:hub) do
     FactoryBot.create(:gothenburg_hub,

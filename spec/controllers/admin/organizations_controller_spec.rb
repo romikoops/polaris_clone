@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::OrganizationsController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:json_response) { JSON.parse(response.body) }
 
   before do

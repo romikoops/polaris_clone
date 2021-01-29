@@ -6,7 +6,7 @@ RSpec.describe OrganizationManager::ScopeService do
   describe "#fetch" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let!(:member) { FactoryBot.create(:companies_membership, member: user, company: company) }
 
     let(:content) { {} }

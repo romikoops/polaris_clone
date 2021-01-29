@@ -10,13 +10,6 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
   }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let(:shipment) do
-    FactoryBot.create(:legacy_shipment,
-      load_type: "cargo_item",
-      user: user,
-      desired_start_date: Time.zone.tomorrow,
-      organization: organization)
-  end
   let(:tenant_vehicle) {
     FactoryBot.create(:legacy_tenant_vehicle, organization: organization)
   }
@@ -38,7 +31,7 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
   end
   let(:scope_content) { {} }
   let(:results) {
-    described_class.new(shipment: shipment, quotation: quotation).perform(routes, hubs)
+    described_class.new(request: request).perform(routes, hubs)
   }
 
   before do
@@ -118,8 +111,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
         google_directions = instance_double("Trucking::GoogleDirections",
           driving_time_in_seconds: 10_000, driving_time_in_seconds_for_trucks: 14_000)
         allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
-        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(shipment).to receive(:pickup_address).and_return(pickup_address)
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:pickup_address).and_return(pickup_address)
       end
 
       let(:pickup_address) { FactoryBot.create(:gothenburg_address) }

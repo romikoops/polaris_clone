@@ -4,11 +4,16 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: "cargo_item", organization: organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:measures) do
+    OfferCalculator::Service::Measurements::Request.new(
+      request: request,
+      scope: scope.with_indifferent_access,
+      object: object
+    )
+  end
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:cbm_ratio) { 250 }
   let(:trucking_pricing) { FactoryBot.create(:trucking_trucking, organization: organization, cbm_ratio: cbm_ratio) }
-  let(:cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let!(:puf_charge_category) { FactoryBot.create(:puf_charge, organization: organization) }
   let!(:trucking_lcl_charge_category) {
     FactoryBot.create(:legacy_charge_categories, organization: organization, code: "trucking_lcl")
@@ -16,11 +21,6 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
   let(:puf_original_fee) { trucking_pricing.fees["PUF"] }
   let(:trucking_original_fee) { trucking_pricing.rates.dig("kg", 0, "rate") }
   let(:scope) { {} }
-  let(:measures) {
-    OfferCalculator::Service::Measurements::Cargo.new(
-      cargo: cargo, scope: scope.with_indifferent_access, object: object
-    )
-  }
   let(:breakdowns) do
     breakdown_array = []
     trucking_pricing.fees.each do |key, fee|
@@ -47,10 +47,22 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
   let(:trucking_fee) { results.find { |f| f.charge_category == trucking_lcl_charge_category } }
   let(:puf_component) { puf_fee.components.first }
   let(:trucking_component) { trucking_fee.components.first }
+  let(:cargo_units) do
+    [FactoryBot.create(:journey_cargo_unit,
+      width_value: 1.20,
+      length_value: 0.80,
+      height_value: 1.40,
+      weight_value: 500,
+      quantity: 1)]
+  end
+
+  before do
+    allow(request).to receive(:cargo_units).and_return(cargo_units)
+  end
 
   describe ".perform" do
     context "with freight pricing (no consolidation)" do
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -80,19 +92,21 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
     end
 
     context "with hard trucking limit" do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-          FactoryBot.create(:lcl_unit,
-            weight_value: 100_000,
-            cargo: tapped_cargo)
-        end
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          width_value: 1.20,
+          length_value: 0.80,
+          height_value: 1.40,
+          weight_value: 100_000,
+          quantity: 1)]
       end
       let(:scope) { {hard_trucking_limit: true} }
+      let(:errors) { described_class.fees(request: request, measures: measures) }
+      let(:journey_error) { Journey::Error.find_by(code: OfferCalculator::Errors::LoadMeterageExceeded.new.code) }
 
-      it "raises and error when above the limit" do
-        expect {
-          described_class.fees(quotation: quotation, measures: measures)
-        }.to raise_error(OfferCalculator::Errors::LoadMeterageExceeded)
+      it "creates a Journey::Error and raises and error when above the limit" do
+        expect { errors }.to raise_error(OfferCalculator::Errors::LoadMeterageExceeded)
+        expect(journey_error).to be_present
       end
     end
 
@@ -100,16 +114,17 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
       let(:trucking_pricing) {
         FactoryBot.create(:trucking_trucking, :unit_and_kg, organization: organization, cbm_ratio: cbm_ratio, fees: {})
       }
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-          FactoryBot.create(:lcl_unit,
-            weight_value: 2100,
-            cargo: tapped_cargo)
-        end
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 2100,
+          width_value: 1.20,
+          length_value: 0.80,
+          height_value: 1.40,
+          quantity: 1)]
       end
-      let(:scope) { {hard_trucking_limit: true} }
+      let(:scope) { {hard_trucking_limit: true}.with_indifferent_access }
 
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees as one range is valid" do
         aggregate_failures do
@@ -120,14 +135,15 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
     end
 
     context "without hard trucking limit" do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-          FactoryBot.create(:lcl_unit,
-            weight_value: 100_000,
-            cargo: tapped_cargo)
-        end
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 100_000,
+          width_value: 1.20,
+          length_value: 0.80,
+          height_value: 1.40,
+          quantity: 1)]
       end
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees" do
         aggregate_failures do
@@ -139,19 +155,16 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
     end
 
     context "when below range" do
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-          FactoryBot.create(:lcl_unit,
-            weight_value: 0.001,
-            height_value: 0.001,
-            width_value: 0.001,
-            length_value: 0.001,
-            stackable: true,
-            cargo: tapped_cargo)
-        end
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 0.001,
+          height_value: 0.001,
+          width_value: 0.001,
+          length_value: 0.001,
+          quantity: 1)]
       end
       let(:cbm_ratio) { 1 }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees" do
         aggregate_failures do
@@ -163,7 +176,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
 
     context "with unit_in_kg fees" do
       let(:trucking_pricing) { FactoryBot.create(:trucking_with_unit_and_kg, organization: organization) }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees" do
         aggregate_failures do
@@ -175,7 +188,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
 
     context "with wm fees" do
       let(:trucking_pricing) { FactoryBot.create(:trucking_with_wm_rates, organization: organization) }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees" do
         aggregate_failures do
@@ -185,16 +198,14 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Truckings do
       end
     end
 
-    context "with fcl_40 cargo" do
+    context "with fcl_20 cargo" do
       let(:trucking_pricing) { FactoryBot.create(:fcl_20_unit_trucking, organization: organization) }
-      let(:cargo) do
-        FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-          FactoryBot.create(:fcl_20_unit,
-            quantity: 2,
-            cargo: tapped_cargo)
-        end
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          cargo_class: "fcl_20",
+          quantity: 2)]
       end
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns fees" do
         aggregate_failures do

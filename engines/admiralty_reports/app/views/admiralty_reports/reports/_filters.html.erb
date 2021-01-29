@@ -1,5 +1,0 @@
-<%= form_tag @stats.overview, method: 'get' do %>
-  <%= select_tag :month, options_for_select(AdmiraltyReports::ReportsController::MONTH_LOOKUP, selected: params[:month]) %>
-  <%= select_tag :year, options_for_select(@stats.find_years, selected: params[:year]) %>
-  <%= submit_tag 'filter'%>
-<% end %>

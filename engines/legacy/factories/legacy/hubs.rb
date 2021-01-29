@@ -2,11 +2,8 @@
 
 FactoryBot.define do
   factory :legacy_hub, class: "Legacy::Hub" do
-    trait :with_lat_lng do
-      latitude { "57.694253" }
-      longitude { "11.854048" }
-    end
-
+    latitude { "57.694253" }
+    longitude { "11.854048" }
     name { "Gothenburg" }
     hub_type { "ocean" }
     hub_status { "active" }
@@ -14,8 +11,13 @@ FactoryBot.define do
     free_out { false }
     association :organization, factory: :organizations_organization
     association :address, factory: :legacy_address
-    association :nexus, factory: :legacy_nexus
     association :mandatory_charge, factory: :legacy_mandatory_charge
+
+    nexus do
+      factory_nexus_from_locode(
+        locode: instance.hub_code, organization: instance.organization
+      )
+    end
 
     trait :gothenburg do
       name { "Gothenburg" }
@@ -25,7 +27,6 @@ FactoryBot.define do
       latitude { "57.694253" }
       longitude { "11.854048" }
       association :address, factory: :gothenburg_address
-      association :nexus, factory: :gothenburg_nexus
     end
 
     trait :shanghai do
@@ -36,7 +37,6 @@ FactoryBot.define do
       latitude { "31.2231338" }
       longitude { "120.9162975" }
       association :address, factory: :shanghai_address
-      association :nexus, factory: :shanghai_nexus
     end
 
     trait :hamburg do
@@ -47,7 +47,6 @@ FactoryBot.define do
       latitude { "53.55" }
       longitude { "9.927" }
       association :address, factory: :hamburg_address
-      association :nexus, factory: :hamburg_nexus
     end
 
     trait :felixstowe do
@@ -58,14 +57,12 @@ FactoryBot.define do
       latitude { "51.96" }
       longitude { "1.3277" }
       association :address, factory: :felixstowe_address
-      association :nexus, factory: :felixstowe_nexus
     end
 
     factory :gothenburg_hub, traits: [:gothenburg]
     factory :shanghai_hub, traits: [:shanghai]
     factory :hamburg_hub, traits: [:hamburg]
     factory :felixstowe_hub, traits: [:felixstowe]
-    # association :mandatory_charge
   end
 end
 

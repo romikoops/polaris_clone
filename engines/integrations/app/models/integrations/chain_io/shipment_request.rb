@@ -19,9 +19,7 @@ module Integrations
         super || ""
       end
 
-      def user_profile
-        Profiles::ProfileService.fetch(user_id: user_id)
-      end
+      delegate :profile, to: :user, prefix: true
     end
   end
 end
@@ -64,5 +62,4 @@ end
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
 #  fk_rails_...  (tender_id => quotations_tenders.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

@@ -5,7 +5,7 @@ module Pricings
     attr_reader :result, :breakdowns, :original, :flat_margins
     delegate :id, :organization, :tenant_vehicle_id, to: :original
 
-    def initialize(original:, result:, breakdowns:, flat_margins:)
+    def initialize(original:, result:, breakdowns: [], flat_margins: {})
       @original = original
       @result = result
       @breakdowns = initial_breakdowns + breakdowns
@@ -16,6 +16,10 @@ module Pricings
       return nil if original.is_a?(::Pricings::Pricing)
       return original.carriage == "pre" ? "export" : "import" if original.is_a?(Trucking::Trucking)
       return original.direction if original.is_a?(::Legacy::LocalCharge)
+    end
+
+    def service
+      @service ||= original.tenant_vehicle
     end
 
     def validity
@@ -136,7 +140,7 @@ module Pricings
       original.fees.map do |fee|
         Pricings::ManipulatorBreakdown.new(
           data: fee.fee_data,
-          metadata: fee.metadata,
+          metadata: fee.metadata.merge(rate_origin_data),
           charge_category: fee.charge_category,
           delta: nil
         )
@@ -148,7 +152,7 @@ module Pricings
         charge_category = charge_category(key: fee_key)
         Pricings::ManipulatorBreakdown.new(
           data: fee_data,
-          metadata: original.metadata,
+          metadata: original.metadata.merge(rate_origin_data),
           charge_category: charge_category,
           delta: nil
         )
@@ -162,7 +166,7 @@ module Pricings
       )
       [Pricings::ManipulatorBreakdown.new(
         data: original.rates,
-        metadata: original.metadata,
+        metadata: rate_origin_data.merge(original.metadata || {}),
         charge_category: charge_category,
         delta: nil
       )]
@@ -181,6 +185,13 @@ module Pricings
       when "Trucking::Trucking"
         original.hub.hub_type
       end
+    end
+
+    def rate_origin_data
+      {
+        id: original.id,
+        type: original.class.to_s
+      }
     end
   end
 end

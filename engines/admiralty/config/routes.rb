@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
-Admiralty::Engine.routes.draw do
-  mount AdmiraltyAuth::Engine, at: "/"
-  mount AdmiraltyReports::Engine, at: "/"
-  mount AdmiraltyTenants::Engine, at: "/"
+Trestle::Engine.routes.draw do
+  resources :organizations, only: %i[new edit], module: "organizations_admin", controller: "admin"
+  resources :themes, only: %i[new edit], module: "themes_admin", controller: "admin"
 
-  root to: "dashboard#index"
+  controller "trestle/auth/sessions" do
+    get "signin" => :create
+  end
+end
+
+Admiralty::Engine.routes.draw do
+  root to: redirect("/admin", status: 301)
 end

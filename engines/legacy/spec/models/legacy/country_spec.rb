@@ -42,7 +42,7 @@ module Legacy
       end
 
       it "returns the correct country" do
-        country = FactoryBot.create(:legacy_country)
+        country = FactoryBot.create(:country_se)
         expect(Country.geo_find_by_name("sweden")).to eq(country)
       end
     end

@@ -3,7 +3,7 @@ require "rails_helper"
 module Companies
   RSpec.describe Membership, type: :model do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let!(:membership) { FactoryBot.create(:companies_membership, company: company, member: user) }
 

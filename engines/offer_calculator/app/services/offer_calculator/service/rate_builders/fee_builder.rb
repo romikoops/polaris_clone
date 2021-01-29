@@ -6,15 +6,14 @@ module OfferCalculator
       class FeeBuilder < Base
         delegate :object, to: :measures
 
-        def self.fee(quotation:, fee:, code:, measures:)
-          new(quotation: quotation, fee: fee, code: code, measures: measures).perform
+        def self.fee(request:, fee:, code:, measures:)
+          new(request: request, fee: fee, code: code, measures: measures).perform
         end
 
-        def initialize(quotation:, fee:, code:, measures:)
-          @quotation = quotation
-          @measures = measures
+        def initialize(request:, fee:, code:, measures:)
           @fee = fee
           @code = code.downcase
+          super(request: request, measures: measures)
         end
 
         def perform
@@ -24,7 +23,7 @@ module OfferCalculator
             min_value: min_value,
             max_value: max_value,
             measures: measures,
-            target: determine_target(rate_basis: fee.fetch("rate_basis"))
+            targets: determine_targets(rate_basis: fee.fetch("rate_basis"))
           )
 
           OfferCalculator::Service::RateBuilders::Fee.new(inputs: fee_inputs)
@@ -32,7 +31,7 @@ module OfferCalculator
 
         private
 
-        attr_reader :quotation, :measures, :code, :fee
+        attr_reader :request, :measures, :code, :fee
 
         def find_charge_category_from_breakdowns
           object.breakdowns.find { |breakdown| breakdown.code == code }&.charge_category

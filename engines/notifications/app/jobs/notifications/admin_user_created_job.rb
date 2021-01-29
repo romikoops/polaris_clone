@@ -13,7 +13,7 @@ module Notifications
         AdminMailer.with(
           organization: subscription.organization,
           user: user,
-          profile: Profiles::Profile.find_by(user: user),
+          profile: user.profile,
           recipient: subscription.email || subscription.user.email
         ).user_created.deliver_later
       end

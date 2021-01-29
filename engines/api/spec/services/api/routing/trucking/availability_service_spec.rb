@@ -7,10 +7,10 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:cargo_classes) { ["lcl"] }
   let(:load_type) { "cargo_item" }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
-  let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:group) {
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
       FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
@@ -113,7 +113,7 @@ RSpec.describe Api::Routing::Trucking::AvailabilityService, type: :service do
 
     context "when trucking is not available for a group" do
       let(:no_group_client) {
-        FactoryBot.create(:organizations_user, organization: organization)
+        FactoryBot.create(:users_client, organization: organization)
       }
       let(:no_group_args) {
         {coordinates: {lat: lat, lng: lng}, load_type: "cargo_item",

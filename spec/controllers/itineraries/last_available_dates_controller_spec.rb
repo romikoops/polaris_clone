@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Itineraries::LastAvailableDatesController do
   describe "GET #show" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let!(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
     let(:itineraries) do

@@ -99,7 +99,7 @@ module Legacy
 
     def default_generate_schedules(end_date:, base_pricing: true)
       finish_date = end_date || DateTime.now + 21.days
-      association = base_pricing ? rates : pricings
+      association = rates
       tenant_vehicle_ids = association.pluck(:tenant_vehicle_id).uniq
       stops_in_order = stops.order(:index)
       tenant_vehicle_ids.each do |tv_id|

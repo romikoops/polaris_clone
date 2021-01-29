@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe UsersController do
   let(:addresses) { FactoryBot.create_list(:address, 5) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:domain) { organization.domains.default }
 
   before do
@@ -15,7 +15,6 @@ RSpec.describe UsersController do
     request.env["HTTP_REFERER"] = "http://#{domain.domain}"
     Organizations.current_id = organization.id
     append_token_header
-    FactoryBot.create(:profiles_profile, user_id: user.id)
     addresses.each do |address|
       FactoryBot.create(:legacy_user_address, user_id: user.id, address: address)
     end
@@ -43,7 +42,9 @@ RSpec.describe UsersController do
 
   describe "POST #create" do
     let(:test_email) { "test@itsmycargo.com" }
-    let(:created_user) { Organizations::User.find_by(email: test_email, organization: organization) }
+    let(:created_user) { Users::Client.find_by(email: test_email, organization: organization) }
+
+    before { FactoryBot.create(:companies_company, organization: organization, name: "default") }
 
     it "creates a new user" do
       params = {
@@ -76,7 +77,7 @@ RSpec.describe UsersController do
         post :create, params: params
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(Profiles::Profile.exists?(user: created_user)).to be_truthy
+          expect(Users::ClientProfile.exists?(user: created_user)).to be_truthy
         end
       end
     end
@@ -120,7 +121,7 @@ RSpec.describe UsersController do
 
         aggregate_failures do
           expect(json[:data][:access_token]).to be_present
-          expect(Organizations::User.find_by(email: test_email)).to be_present
+          expect(Users::Client.find_by(email: test_email)).to be_present
         end
       end
     end
@@ -240,7 +241,7 @@ RSpec.describe UsersController do
 
     it "changes the user default currency" do
       post :set_currency, params: {organization_id: organization.id, user_id: user.id, currency: "BRL"}
-      currency = Users::Settings.find_by(user_id: user.id).currency
+      currency = Users::ClientSettings.find_by(user_id: user.id).currency
       expect(currency).to eq("BRL")
     end
   end

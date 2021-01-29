@@ -24,7 +24,3 @@ end
 #  index_quotations_on_sandbox_id  (sandbox_id)
 #  index_quotations_on_user_id     (user_id)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
-#

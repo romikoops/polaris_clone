@@ -1,10 +1,16 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 
-gem "users", path: "../users"
-eval_gemfile "../users/Gemfile.runtime"
+gem "companies", path: "../companies"
+eval_gemfile "../companies/Gemfile.runtime"
 
-gem "profiles", path: "../profiles"
-eval_gemfile "../profiles/Gemfile.runtime"
+gem "journey", path: "../journey"
+eval_gemfile "../journey/Gemfile.runtime"
 
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "pdf", path: "../pdf"
+eval_gemfile "../pdf/Gemfile.runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"

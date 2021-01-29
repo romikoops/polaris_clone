@@ -3,8 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Wheelhouse::QuotationService do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:scope) { {} }
+  let(:organization) { FactoryBot.create(:organizations_organization, scope_attributes: {content: scope}) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
   let(:air_itinerary) {
     FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
@@ -57,7 +58,6 @@ RSpec.describe Wheelhouse::QuotationService do
      load_type: load_type,
      selected_date: Time.zone.today}
   end
-  let!(:scope) { FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true}) }
   let(:port_to_port_input) do
     input[:origin] = {nexus_id: origin_hub.nexus_id}
     input[:destination] = {nexus_id: destination_hub.nexus_id}
@@ -108,12 +108,20 @@ RSpec.describe Wheelhouse::QuotationService do
   }
   let(:quotation_details) { port_to_port_input }
   let(:shipping_info) { base_shipping_info }
+  let(:source) { FactoryBot.create(:application) }
   let(:service) {
-    described_class.new(organization: organization, quotation_details: quotation_details.with_indifferent_access,
-                        shipping_info: shipping_info)
+    described_class.new(
+      organization: organization,
+      quotation_details: quotation_details.with_indifferent_access,
+      shipping_info: shipping_info,
+      source: source
+    )
   }
-  let(:results) { service.tenders }
-  let(:quotation) { service.result }
+  let(:query) { service.result }
+  let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+  let(:carta_double) { double("Carta::Api") }
+  let(:results) { query.result_sets.order(:created_at).last.results }
 
   before do
     [itinerary, air_itinerary].product(%w[container cargo_item]).each do |it, load|
@@ -125,6 +133,9 @@ RSpec.describe Wheelhouse::QuotationService do
         start_date: 10.days.from_now,
         end_date: 30.days.from_now)
     end
+    allow(Carta::Api).to receive(:new).and_return(carta_double)
+    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
+    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
     FactoryBot.create(:legacy_tenant_cargo_item_type, cargo_item_type: pallet, organization: organization)
     FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
@@ -157,7 +168,6 @@ RSpec.describe Wheelhouse::QuotationService do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(100)
         end
       end
     end
@@ -169,7 +179,6 @@ RSpec.describe Wheelhouse::QuotationService do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(25_000)
         end
       end
     end
@@ -193,21 +202,18 @@ RSpec.describe Wheelhouse::QuotationService do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(203414)
-          expect(service.result.estimated).to be_truthy
         end
       end
     end
 
     context "when port to port (defaults & quote & container)" do
-      before { scope.update(content: {base_pricing: true, closed_quotation_tool: true}) }
+      let(:scope) { {closed_quotation_tool: true} }
 
       let(:load_type) { "container" }
 
       it "perform a quote calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(25_000)
         end
       end
     end
@@ -222,7 +228,6 @@ RSpec.describe Wheelhouse::QuotationService do
       it "perform a booking calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.amount_cents).to eq(2880)
         end
       end
     end
@@ -253,8 +258,9 @@ RSpec.describe Wheelhouse::QuotationService do
             described_class.new(
               organization: organization,
               quotation_details: port_to_port_input.with_indifferent_access,
-              shipping_info: shipping_info
-            ).tenders
+              shipping_info: shipping_info,
+              source: source
+            ).result
           }.to raise_error(Wheelhouse::ApplicationError, message)
         end
       end

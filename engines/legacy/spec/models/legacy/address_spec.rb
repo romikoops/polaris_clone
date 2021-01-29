@@ -5,7 +5,7 @@ require "rails_helper"
 module Legacy
   RSpec.describe Address, type: :model do
     let(:lat_lng) { {latitude: 57.7072326, longitude: 11.9670171} }
-    let(:address) { FactoryBot.create(:legacy_address) }
+    let(:address) { FactoryBot.create(:legacy_address, :gothenburg) }
     let(:address_with_lat_lng) { FactoryBot.create(:legacy_address, **lat_lng) }
 
     before do

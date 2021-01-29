@@ -8,6 +8,7 @@ FactoryBot.define do
     cbm_ratio { 460 }
     modifier { "kg" }
     load_meterage { {"ratio" => 1850.0, "height_limit" => 130}.freeze }
+    validity { Range.new(Time.zone.yesterday, 3.months.from_now) }
     rates do
       {
         kg: [

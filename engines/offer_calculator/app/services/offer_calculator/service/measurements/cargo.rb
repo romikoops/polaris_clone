@@ -3,82 +3,112 @@
 module OfferCalculator
   module Service
     module Measurements
-      class Cargo < OfferCalculator::Service::Measurements::Base
+      class Cargo
+        attr_reader :engine, :weight, :volume, :height, :width, :length, :km, :object,
+          :scope, :children
         attr_accessor :stackability
 
-        def quantity
-          1
+        delegate :cargo_unit, :quantity, :volumetric_weight, :total_weight, :height, :width, :length,
+          :total_area, :total_volume, :id, :consolidated?, :stackable?, :stowage_factor, :lcl?, :weight,
+          :height, :volume, :valid?, :load_meterage_weight, :cargo_class, :load_type, :cbm_ratio,
+          :load_meterage_ratio, :load_meterage_limit, :section, :load_meterage_type, :type, :km,
+          :load_meterage_hard_limit, :load_meterage_stacking, :stacked_area, :targets,
+          :area_for_load_meters, :dynamic_volumetric_weight, :cargo_units,
+          :trucking_chargeable_weight_by_area, to: :engine
+        delegate :service, to: :object
+
+        def initialize(engine:, scope:, object:)
+          @engine = engine
+          @scope = scope
+          @object = object
+          @stackability = stackable?
         end
 
-        def volumetric_weight
-          children.sum(Measured::Weight.new(0, "kg"), &:volumetric_weight)
+        def weight_in_tons
+          total_weight.convert_to("t")
         end
 
-        def dynamic_volumetric_weight
-          children.sum(Measured::Weight.new(0, "kg"), &:dynamic_volumetric_weight)
+        def chargeable_weight_in_tons
+          chargeable_weight.convert_to("t")
         end
 
-        def stacked_area
-          children.sum(Measured::Area.new(0, "m2"), &:stacked_area)
+        def shipment
+          Measured::Quantity.new(1, "pcs")
         end
 
-        def load_meterage_weight
-          @load_meterage_weight ||=
-            if consolidated?
-              determine_singular_load_meterage_weight
+        def unit
+          Measured::Quantity.new(quantity, "pcs")
+        end
+
+        def weight_measure
+          @weight_measure ||= Measured::WeightMeasure.new(
+            [total_weight, volumetric_weight].max.convert_to("t").value,
+            "t/m3"
+          )
+        end
+
+        def chargeable_weight
+          @chargeable_weight ||=
+            if lcl?
+              lcl_chargeable_weight.max
             else
-              determine_consolidated_load_meterage_weight
+              total_weight
             end
         end
 
-        def children
-          @children ||=
-            if scope.dig("consolidation", "cargo", "backend").present? && lcl?
-              [OfferCalculator::Service::Measurements::Consolidated.new(
-                cargo: cargo, object: object, scope: scope
-              )]
-            else
-              cargo_children
-            end
+        def lcl_chargeable_weight
+          return [total_weight] if type == "Legacy::LocalCharge"
+
+          [
+            total_weight,
+            load_meterage_weight,
+            volumetric_weight
+          ]
         end
+
+        alias_method :wm, :weight_measure
+        alias_method :kg, :chargeable_weight
+        alias_method :ton, :chargeable_weight_in_tons
+        alias_method :cbm, :total_volume
 
         private
 
-        def determine_consolidated_load_meterage_weight
-          case consolidated_load_meterage_type
-          when "load_meterage_only"
-            consolidated_load_meterage
-          when "comparative"
-            comparative_load_meterage
-          when "calculation"
-            determine_singular_load_meterage_weight
-          else
-            children.sum(Measured::Weight.new(0, "kg"), &:load_meterage_weight)
-          end
+        def determine_singular_load_meterage_weight
+          return volumetric_weight if load_meterage_ratio.blank?
+          return load_meterage_by_area if !stackable? && area_limit_violated
+
+          over_limit = height_limit_violated || area_limit_violated
+
+          over_limit ? load_meterage_by_area : volumetric_weight
         end
 
-        def consolidated_load_meterage
-          if check_load_meter_limit(amount: total_area.value) || !stackable?
-            @stackability = false
-
-            return children.sum(Measured::Weight.new(0, "kg"), &:trucking_chargeable_weight_by_area)
-          end
-
-          dynamic_volumetric_weight
-        end
-
-        def comparative_load_meterage
-          total_load_meterage_weight = children.sum(Measured::Weight.new(0, "kg")) { |child|
-            child.trucking_chargeable_weight_by_area
-          }
-
-          total_load_meters = total_load_meterage_weight.value / load_meterage_ratio
-          if check_load_meter_limit(amount: total_load_meters)
-            @stackability = false
-            [total_load_meterage_weight, volumetric_weight].max
-          else
+        def load_meterage_by_area
+          [
+            trucking_chargeable_weight_by_area,
+            total_weight,
             volumetric_weight
-          end
+          ].max
+        end
+
+        def height_limit_violated
+          load_meterage_type == "height_limit" && check_load_meter_limit(amount: engine.height.value)
+        end
+
+        def area_limit_violated
+          load_meterage_type == "area_limit" && check_load_meter_limit(amount: area_for_load_meters)
+        end
+
+        def consolidated_load_meterage_type
+          scope.dig("consolidation", "trucking")&.key(true)
+        end
+
+        def check_load_meter_limit(amount:)
+          return false if load_meterage_limit.blank?
+
+          past_limit = amount > load_meterage_limit
+          raise OfferCalculator::Errors::LoadMeterageExceeded if load_meterage_hard_limit && past_limit
+
+          past_limit
         end
       end
     end

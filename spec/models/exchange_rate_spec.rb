@@ -10,9 +10,10 @@ RSpec.describe ExchangeRate, type: :model do
   context "class methods" do
     let(:currencies) { %w[USD AUD GBP] }
     let(:base) { "EUR" }
+    let(:prior_rate_dates) { [2.days.ago, 1.day.ago] }
 
     before do
-      [2.days.ago, 1.day.ago, 30.minutes.ago].each do |timestamp|
+      prior_rate_dates.each do |timestamp|
         currencies.each do |currency|
           FactoryBot.create(:exchange_rate, from: base, to: currency, created_at: timestamp)
         end

@@ -22,7 +22,3 @@ end
 #  index_users_authentications_on_user_id  (user_id)
 #  provider_uid_on_users_authentications   (provider,uid)
 #
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
-#

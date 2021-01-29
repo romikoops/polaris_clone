@@ -87,7 +87,7 @@ module Shipments
     def addressbook_contact(legacy_shipment_contact:)
       legacy_contact = legacy_shipment_contact.contact
       address = legacy_contact.address
-      user = Organizations::User.unscoped.find(legacy_contact.user_id)
+      user = Users::Client.unscoped.find(legacy_contact.user_id)
       legacy_contact_attrs = legacy_contact.attributes
         .merge(address.attributes)
         .symbolize_keys

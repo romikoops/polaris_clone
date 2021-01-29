@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:country) { FactoryBot.create(:country_se) }
   let(:location_1) { FactoryBot.create(:zipcode_location, :zipcode, data: "00001", country: country) }
   let(:location_2) { FactoryBot.create(:zipcode_location, :zipcode, data: "00002", country: country) }
@@ -18,7 +18,7 @@ RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
     let(:destination_hub) { itinerary.destination_hub }
 
     before do
-      FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
+      FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: country)
       FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: location_1)
       FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub, location: location_2)
 
@@ -32,10 +32,10 @@ RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
     end
 
     context "with cross country trucking" do
-      let(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
+      let(:germany) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
       before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: country)
+        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: germany)
       end
 
       it "renders the list correct list of countries" do

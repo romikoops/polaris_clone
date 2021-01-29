@@ -38,5 +38,9 @@ module Api
         config.page_method_name = :paginate_api
       end
     end
+
+    if defined?(FactoryBotRails)
+      config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)]
+    end
   end
 end

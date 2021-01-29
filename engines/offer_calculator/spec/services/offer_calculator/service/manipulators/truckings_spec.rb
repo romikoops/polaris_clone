@@ -4,13 +4,19 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
   let(:load_type) { "cargo_item" }
   let(:origin_hub) { itinerary_1.origin_hub }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: load_type) }
+  let(:request) do
+    FactoryBot.create(:offer_calculator_request,
+      organization: organization,
+      client: user,
+      creator: user,
+      cargo_trait: :lcl)
+  end
   let(:trips) do
     [
       FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1)
@@ -23,7 +29,7 @@ RSpec.describe OfferCalculator::Service::Manipulators::Truckings do
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
   let(:results) {
-    described_class.results(association: Trucking::Trucking.all, shipment: shipment, schedules: schedules)
+    described_class.results(association: Trucking::Trucking.all, request: request, schedules: schedules)
   }
 
   before do

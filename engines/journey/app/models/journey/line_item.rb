@@ -1,10 +1,12 @@
 module Journey
   class LineItem < ApplicationRecord
-    has_many :line_item_cargo_units, dependent: :destroy
+    has_many :line_item_cargo_units, dependent: :destroy, inverse_of: :line_item
     has_many :cargo_units, through: :line_item_cargo_units
-    belongs_to :line_item_set
+    belongs_to :line_item_set, inverse_of: :line_items
     belongs_to :route_section
     belongs_to :route_point
+    has_one :result, through: :line_item_set
+    
     monetize :total_cents
     monetize :unit_price_cents
 
@@ -41,10 +43,9 @@ end
 #
 # Indexes
 #
-#  index_journey_line_items_on_line_item_set_id                     (line_item_set_id)
-#  index_journey_line_items_on_route_point_id                       (route_point_id)
-#  index_journey_line_items_on_route_section_id                     (route_section_id)
-#  journey_line_items_line_item_set_id_route_section_id_route_poin  (line_item_set_id,route_section_id,route_point_id,fee_code) USING gist
+#  index_journey_line_items_on_line_item_set_id  (line_item_set_id)
+#  index_journey_line_items_on_route_point_id    (route_point_id)
+#  index_journey_line_items_on_route_section_id  (route_section_id)
 #
 # Foreign Keys
 #

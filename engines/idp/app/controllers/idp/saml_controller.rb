@@ -1,6 +1,7 @@
 module IDP
   class SamlController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:consume]
+    before_action :set_current_organization_id, only: [:consume]
 
     def metadata
       render xml: OneLogin::RubySaml::Metadata.new.generate(saml_settings), content_type: "application/samlmetadata+xml"
@@ -76,6 +77,10 @@ module IDP
 
     def saml_params
       params.require(:SAMLResponse)
+    end
+
+    def set_current_organization_id
+      Organizations.current_id = organization_id
     end
   end
 end

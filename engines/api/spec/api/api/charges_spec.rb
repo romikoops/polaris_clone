@@ -2,36 +2,25 @@
 
 require "swagger_helper"
 
-RSpec.describe "Charges" do
+RSpec.describe "Charges", type: :request, swagger_doc: "v1/swagger.json" do
+  include_context "journey_pdf_setup"
+
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
-  let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
-  let(:tender) { shipment.charge_breakdowns.first.tender }
-  let(:shipment) {
-    FactoryBot.create(:legacy_shipment,
-      with_full_breakdown: true, with_tenders: true, trip: trip, organization: organization, user: user)
-  }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
-    shipment.charge_breakdowns.map(&:tender).each do |tender|
-      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
-                                  to: "USD", rate: 1.3,
-                                  created_at: tender.created_at - 30.seconds)
-    end
+    Treasury::ExchangeRate.create(from: "USD",
+                                  to: "EUR", rate: 1.3,
+                                  created_at: result.created_at - 30.seconds)
   end
 
   path "/v1/organizations/{organization_id}/quotations/{quotation_id}/charges/{id}" do
-    let(:quotation_id) { quotation.id }
-    let(:id) { tender.id }
+    let(:quotation_id) { query.id }
+    let(:id) { result.id }
 
     get "Fetch tender charges" do
       tags "Quote"

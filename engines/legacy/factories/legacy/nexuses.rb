@@ -8,7 +8,7 @@ FactoryBot.define do
     association :organization, factory: :organizations_organization
     association :country, factory: :legacy_country
 
-    trait :gothenburg do
+    trait :segot do
       name { "Gothenburg" }
       locode { "SEGOT" }
       latitude { "57.694253" }
@@ -16,7 +16,7 @@ FactoryBot.define do
       association :country, factory: :country_se
     end
 
-    trait :shanghai do
+    trait :cnsha do
       name { "Shanghai" }
       locode { "CNSHA" }
       latitude { "31.2231338" }
@@ -24,7 +24,7 @@ FactoryBot.define do
       association :country, factory: :country_cn
     end
 
-    trait :hamburg do
+    trait :deham do
       name { "Hamburg" }
       locode { "DEHAM" }
       latitude { "53.55" }
@@ -32,7 +32,7 @@ FactoryBot.define do
       association :country, factory: :country_de
     end
 
-    trait :felixstowe do
+    trait :gbfxt do
       name { "Felixstowe" }
       locode { "GBFXT" }
       latitude { "51.96" }
@@ -40,11 +40,20 @@ FactoryBot.define do
       association :country, factory: :country_uk
     end
 
-    factory :gothenburg_nexus, traits: [:gothenburg]
-    factory :shanghai_nexus, traits: [:shanghai]
-    factory :hamburg_nexus, traits: [:hamburg]
-    factory :felixstowe_nexus, traits: [:felixstowe]
+    factory :gothenburg_nexus, traits: [:segot]
+    factory :shanghai_nexus, traits: [:cnsha]
+    factory :hamburg_nexus, traits: [:deham]
+    factory :felixstowe_nexus, traits: [:gbfxt]
   end
+end
+
+def factory_nexus_from_locode(locode:, organization:)
+  nexus = Legacy::Nexus.find_by(locode: locode, organization: organization)
+  nexus || if locode && %w[segot cnsha deham gbfxt].include?(locode.downcase)
+             FactoryBot.build(:legacy_nexus, locode.downcase.to_sym, organization: organization)
+           else
+             FactoryBot.build(:legacy_nexus, locode: locode, organization: organization)
+           end
 end
 
 # == Schema Information

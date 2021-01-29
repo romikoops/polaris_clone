@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::MembershipsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
 
   before do
     ::Organizations.current_id = organization.id
@@ -15,7 +15,7 @@ RSpec.describe Admin::MembershipsController, type: :controller do
   describe "POST #bulk_edit" do
     let(:group_a) { FactoryBot.create(:groups_group, organization: organization, name: "Group A") }
     let(:group_b) { FactoryBot.create(:groups_group, organization: organization, name: "Group B") }
-    let!(:user_a) { FactoryBot.create(:organizations_user, organization: organization) }
+    let!(:user_a) { FactoryBot.create(:users_client, organization: organization) }
     let(:company_a) { FactoryBot.create(:companies_company, organization: organization) }
     let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
     let!(:membership_a) { FactoryBot.create(:groups_membership, group: group_a, member: user_a) }
@@ -27,7 +27,7 @@ RSpec.describe Admin::MembershipsController, type: :controller do
         targetType: "user",
         memberships:
          [{id: membership_a.id,
-           member_type: "Organizations::User",
+           member_type: "Users::Client",
            member_id: user.id,
            group_id: group_a.id,
            priority: 2,
@@ -54,7 +54,7 @@ RSpec.describe Admin::MembershipsController, type: :controller do
 
   describe "DELETE #destroy" do
     let(:group) { FactoryBot.create(:groups_group, organization: organization, name: "Discount") }
-    let(:membership_user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:membership_user) { FactoryBot.create(:users_client, organization: organization) }
     let(:membership) { FactoryBot.create(:groups_membership, group: group, member: membership_user) }
 
     it "destroys the membership" do

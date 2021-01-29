@@ -7,8 +7,8 @@ module Quotations
     subject { FactoryBot.build :quotations_quotation }
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user_one) { FactoryBot.create(:organizations_user, organization: organization) }
-    let(:user_two) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user_one) { FactoryBot.create(:users_client, organization: organization) }
+    let(:user_two) { FactoryBot.create(:users_client, organization: organization) }
     let(:itinerary_one) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
     let(:itinerary_two) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
     let(:origin_nexus_one) { itinerary_one.origin_hub.nexus }
@@ -75,10 +75,9 @@ module Quotations
 
     context "sorted by user last name" do
       let(:sort_key) { "last_name" }
-
       before do
-        FactoryBot.create(:profiles_profile, user: user_one, last_name: "1")
-        FactoryBot.create(:profiles_profile, user: user_two, last_name: "2")
+        asc_quotation
+        desc_quotation
       end
 
       context "sorted by user last name asc" do

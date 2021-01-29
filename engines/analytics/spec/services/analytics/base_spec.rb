@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe Analytics::Base, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:mots) { %w[air ocean] }
-  let(:clients) { FactoryBot.create_list(:organizations_user, 2, organization: organization) }
-  let(:blacklisted_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
+  let(:blacklisted_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:start_date) { 1.month.ago }
   let(:end_date) { Time.zone.now }
   let(:service) {
@@ -72,7 +72,7 @@ RSpec.describe Analytics::Base, type: :service do
     it "returns all the clients made in the period" do
       aggregate_failures do
         expect(service.clients.count).to eq(3)
-        expect(service.clients.first).to be_a(Organizations::User)
+        expect(service.clients.first).to be_a(Users::Client)
       end
     end
   end

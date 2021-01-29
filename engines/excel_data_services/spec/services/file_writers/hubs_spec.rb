@@ -5,7 +5,7 @@ require "roo"
 
 RSpec.describe ExcelDataServices::FileWriters::Hubs do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:hubs) do
     FactoryBot.create(:gothenburg_hub,
       free_out: false,

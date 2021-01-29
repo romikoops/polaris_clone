@@ -15,15 +15,11 @@ RSpec.describe OfferCalculator::Service::RateBuilder do
       truckings: [FactoryBot.build(:manipulator_result, original: trucking, result: trucking.as_json)]
     }
   end
-  let(:results) { described_class.fees(shipment: shipment, quotation: quotation, inputs: inputs) }
-
-  before do
-    FactoryBot.create(:cloned_cargo, quotation_id: quotation.id)
-  end
+  let(:results) { described_class.fees(request: request, inputs: inputs) }
 
   context "with only freight rates" do
     before do
-      allow(quotation).to receive(:pickup_address).and_return(FactoryBot.create(:gothenburg_address))
+      allow(request).to receive(:pickup_address).and_return(FactoryBot.create(:gothenburg_address))
     end
 
     it "returns the charges" do

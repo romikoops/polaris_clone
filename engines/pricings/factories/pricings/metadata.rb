@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :pricings_metadatum, class: "Pricings::Metadatum" do
     association :organization, factory: :organizations_organization
     association :charge_breakdown, factory: :legacy_charge_breakdown
+    result_id { SecureRandom.uuid }
 
     after(:create) do |metadatum|
       cargo_units = metadatum.charge_breakdown.shipment.cargo_units

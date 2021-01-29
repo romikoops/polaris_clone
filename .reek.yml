@@ -477,8 +477,8 @@ detectors:
     - Legacy::Charge#deconstruct_tree_into_schedule_charge
     - Legacy::Charge#update_edited_price!
     - Legacy::Country#self.geo_find_by_names
-    - Legacy::ExchangeRate#self.current
-    - Legacy::ExchangeRate#self.for_date
+    - Treasury::ExchangeRate#self.current
+    - Treasury::ExchangeRate#self.for_date
     - Legacy::Itinerary#default_generate_schedules
     - Legacy::Itinerary#detailed_hash
     - Legacy::Itinerary#generate_schedules_from_sheet
@@ -553,7 +553,7 @@ detectors:
     - Organizations::ThemeDecorator#email_for
     - Organizations::ThemeDecorator#legacy_format
     - BackfillBlacklistedEmails#change
-    - Pdf::CargoDecorator#size_class
+    - ResultFormatter::CargoDecorator#size_class
     - Pdf::CarrierServiceInfo#operator
     - Pdf::HiddenValueService#hide_total_args
     - Pdf::Service#logo

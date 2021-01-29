@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :rates_discount, class: "Rates::Discount" do
     association :organization, factory: :organizations_organization
-    association :applicable_to, factory: :organizations_user
+    association :applicable_to, factory: :users_client
     cargo_class { "00" }
     rate_basis { :cbm }
     cargo_type { "GP" }
@@ -37,7 +37,7 @@ FactoryBot.define do
     end
 
     trait :user do
-      association :applicable_to, factory: :organizations_user
+      association :applicable_to, factory: :users_client
     end
 
     trait :addition do

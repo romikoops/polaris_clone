@@ -1,7 +1,7 @@
 module Journey
   class LineItemCargoUnit < ApplicationRecord
-    belongs_to :line_item
-    belongs_to :cargo_unit
+    belongs_to :line_item, inverse_of: :line_item_cargo_units
+    belongs_to :cargo_unit, inverse_of: :line_item_cargo_units
   end
 end
 

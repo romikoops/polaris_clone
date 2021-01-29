@@ -5,7 +5,7 @@ require "rails_helper"
 module Wheelhouse
   RSpec.describe EquipmentService, type: :service do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let(:itinerary) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
     let(:fcl_40_hq_itinerary) { FactoryBot.create(:shanghai_hamburg_itinerary, organization: organization) }
     let(:gothenburg) { itinerary.hubs.find_by(name: "Gothenburg") }

@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :legacy_country, class: "Legacy::Country" do
-    name { "Sweden" }
-    code { "SE" }
-    flag { "https://restcountries.eu/data/swe.svg" }
+    name { "United States of America" }
+    code { "US" }
+    flag { "https://restcountries.eu/data/usa.svg" }
 
     trait :cn do
       name { "China" }
@@ -18,7 +18,7 @@ FactoryBot.define do
       flag { "https://restcountries.eu/data/sek.svg" }
     end
 
-    trait :uk do
+    trait :gb do
       name { "United Kingdom" }
       code { "GB" }
       flag { "https://restcountries.eu/data/gbp.svg" }
@@ -36,21 +36,22 @@ FactoryBot.define do
       flag { "https://restcountries.eu/data/nl.svg" }
     end
 
-    to_create do |instance|
-      instance.attributes = Legacy::Country.create_with(code: instance.code)
-        .find_or_create_by(
-          name: instance.name,
-          flag: instance.flag
-        )
-        .attributes
-      instance.reload
-    end
-
     factory :country_cn, traits: [:cn]
-    factory :country_uk, traits: [:uk]
+    factory :country_uk, traits: [:gb]
     factory :country_de, traits: [:de]
     factory :country_se, traits: [:se]
     factory :country_nl, traits: [:nl]
+  end
+end
+
+def factory_country_from_code(code:)
+  existing_country = Legacy::Country.find_by(code: code.upcase)
+  return existing_country if existing_country.present?
+
+  if %w[cn gb de se nl].include?(code.downcase)
+    FactoryBot.create(:legacy_country, code.downcase.to_sym)
+  else
+    FactoryBot.create(:legacy_country, code: code.upcase)
   end
 end
 

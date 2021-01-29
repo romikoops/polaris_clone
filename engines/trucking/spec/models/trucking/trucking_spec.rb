@@ -10,9 +10,10 @@ RSpec.describe Trucking::Trucking, class: "Trucking::Trucking", type: :model do
   context "with class methods" do
     describe ".find_by_hub_id" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
-      let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, organization: organization) }
+      let(:hub) { FactoryBot.create(:legacy_hub, country: country, organization: organization) }
       let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
       let(:courier) { FactoryBot.create(:trucking_courier) }
+      let(:country) { FactoryBot.create(:legacy_country) }
       let(:trucking_rate) { FactoryBot.create(:trucking_trucking, organization: organization) }
 
       context "basic tests" do
@@ -25,7 +26,7 @@ RSpec.describe Trucking::Trucking, class: "Trucking::Trucking", type: :model do
         it "returns empty array if no pricings were found" do
           FactoryBot.create(:trucking_trucking,
             hub: hub,
-            location: FactoryBot.create(:trucking_location, :with_location))
+            location: FactoryBot.create(:trucking_location, :with_location, country: country))
 
           expect(::Trucking::Trucking.find_by_hub_id(hub_id: -1)).to eq([])
         end
@@ -33,18 +34,15 @@ RSpec.describe Trucking::Trucking, class: "Trucking::Trucking", type: :model do
 
       context "zipcode identifier" do
         it "finds the correct pricing and destinations" do
-          trucking_location = FactoryBot.create(:trucking_location, zipcode: "30001")
+          trucking_location = FactoryBot.create(:trucking_location, zipcode: "30001", country: country)
           target = FactoryBot.create(:trucking_trucking, organization: organization, hub: hub,
                                                          location: trucking_location)
 
           truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id, options: {group_id: default_group.id})
             .map(&:as_index_result)
-
           expect(truckings.first["zipCode"]).to eq("30001")
-          expect(truckings.first["countryCode"]).to eq("SE")
-          expect(
-            truckings.first["truckingPricing"].except("created_at", "updated_at")
-          ).to include(target.as_json.except("created_at", "updated_at"))
+          expect(truckings.first["countryCode"]).to eq(country.code)
+          expect(truckings.dig(0, "truckingPricing", "id")).to eq(target.id)
         end
       end
 
@@ -54,16 +52,14 @@ RSpec.describe Trucking::Trucking, class: "Trucking::Trucking", type: :model do
             target = FactoryBot.create(:trucking_trucking,
               hub: hub,
               organization: organization,
-              location: FactoryBot.create(:trucking_location, :with_location))
+              location: FactoryBot.create(:trucking_location, :with_location, country: country))
 
             truckings = ::Trucking::Trucking.find_by_hub_id(hub_id: hub.id, options: {group_id: default_group.id})
               .map(&:as_index_result)
 
             expect(truckings.first["city"]).to eq("Gothenburg")
-            expect(truckings.first["countryCode"]).to eq("SE")
-            expect(
-              truckings.first["truckingPricing"].except("created_at", "updated_at")
-            ).to include(target.as_json.except("created_at", "updated_at"))
+            expect(truckings.first["countryCode"]).to eq(country.code)
+            expect(truckings.dig(0, "truckingPricing", "id")).to eq(target.id)
           end
         end
       end

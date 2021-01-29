@@ -3,15 +3,13 @@ require "rails_helper"
 module Notifications
   RSpec.describe UserMailer, type: :mailer do
     let(:organization) { FactoryBot.build(:organizations_organization) }
-    let(:user) { FactoryBot.build(:organizations_user, organization: organization) }
-    let(:profile) { FactoryBot.build(:profiles_profile, user: user) }
+    let(:user) { FactoryBot.build(:users_client, organization: organization) }
 
     describe "activation_needed_email" do
       let(:mail) do
         UserMailer.with(
           organization: organization,
-          user: user,
-          profile: profile
+          user: user
         ).activation_needed_email
       end
 
@@ -24,7 +22,7 @@ module Notifications
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).to match("Hello #{profile.full_name}")
+        expect(mail.body.encoded).to match("Hello #{user.profile.name}")
       end
     end
 
@@ -32,8 +30,7 @@ module Notifications
       let(:mail) do
         UserMailer.with(
           organization: organization,
-          user: user,
-          profile: profile
+          user: user
         ).reset_password_email
       end
 
@@ -46,7 +43,7 @@ module Notifications
       end
 
       it "renders the body" do
-        expect(mail.body.encoded).to match("Hello #{profile.full_name}")
+        expect(mail.body.encoded).to match("Hello #{user.profile.name}")
       end
     end
   end

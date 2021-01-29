@@ -1,8 +1,5 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 
-gem "authentication", path: "../authentication"
-eval_gemfile "../authentication/Gemfile.runtime"
-
 gem "companies", path: "../companies"
 eval_gemfile "../companies/Gemfile.runtime"
 

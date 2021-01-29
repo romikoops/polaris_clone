@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe Api::Routing::RoutingService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) {
-    FactoryBot.create(:organizations_user, email: "test@example.com",
-                                           password: "veryspeciallysecurehorseradish", organization: organization)
+    FactoryBot.create(:users_client, email: "test@example.com",
+                                     password: "veryspeciallysecurehorseradish", organization: organization)
   }
   let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
   let(:origin_hub) { itinerary.origin_hub }
@@ -35,7 +35,7 @@ RSpec.describe Api::Routing::RoutingService, type: :service do
       let!(:result) { described_class.nexuses(args) }
 
       let(:origins) {
-        Legacy::Itinerary.where(organization_id: organization.id).map { |itin| itin.first_nexus.name }.sort
+        Legacy::Itinerary.where(organization_id: organization.id).map { |itin| itin.origin_hub.nexus.name }.sort
       }
 
       it "Renders an array of all origins when location params are empty" do
@@ -44,7 +44,7 @@ RSpec.describe Api::Routing::RoutingService, type: :service do
     end
 
     context "when targeting the origin with search query" do
-      let(:args) { default_args.merge(query: "Shan", target: :destination_origin) }
+      let(:args) { default_args.merge(query: destination_nexus.name[0..2], target: :destination_origin) }
       let!(:result) { described_class.nexuses(args) }
 
       it "Renders a json of destinations when query matches destination name" do

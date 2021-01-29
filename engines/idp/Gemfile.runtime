@@ -1,8 +1,5 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 
-gem "authentication", path: "../authentication"
-eval_gemfile "../authentication/Gemfile.runtime"
-
 gem "organization_manager", path: "../organization_manager"
 eval_gemfile "../organization_manager/Gemfile.runtime"
 

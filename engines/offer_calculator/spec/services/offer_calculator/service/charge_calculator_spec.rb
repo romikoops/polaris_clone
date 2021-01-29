@@ -4,26 +4,16 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization) }
-  let(:quotation) {
-    FactoryBot.create(:quotations_quotation, organization: organization, legacy_shipment_id: shipment.id)
-  }
-  let(:cargo_cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
-  let(:lcl_unit) do
-    FactoryBot.create(:lcl_unit,
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
+  let(:cargo_unit) do
+    FactoryBot.build(:journey_cargo_unit,
       width_value: 1.20,
       height_value: 1.40,
       length_value: 0.8,
       quantity: 2,
-      weight_value: 1200,
-      cargo: cargo_cargo)
+      weight_value: 1200)
   end
-  let(:fcl_20_unit) do
-    FactoryBot.create(:fcl_20_unit,
-      quantity: 2,
-      weight_value: 12_000,
-      cargo: cargo_cargo)
-  end
+
   let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization) }
   let(:manipulated_result) do
     FactoryBot.build(:manipulator_result,
@@ -32,29 +22,35 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       flat_margins: flat_margins)
   end
   let(:flat_margins) { {} }
+  let(:engine) do
+    OfferCalculator::Service::Measurements::Engines::Unit.new(
+      cargo_unit: cargo_unit,
+      scope: {},
+      object: manipulated_result
+    )
+  end
   let(:measures) do
-    OfferCalculator::Service::Measurements::Unit.new(
-      cargo: target_cargo,
+    OfferCalculator::Service::Measurements::Cargo.new(
+      engine: engine,
       scope: {},
       object: manipulated_result
     )
   end
   let(:min_value) { Money.new(0, "USD") }
   let(:max_value) { Money.new(1e12, "USD") }
-  let(:target_cargo) { lcl_unit }
   let(:fee_data) { fee.fee_data }
   let(:rate_builder_fee) do
     FactoryBot.build(:rate_builder_fee,
       min_value: min_value,
       max_value: max_value,
       rate_basis: fee.rate_basis.internal_code,
-      target: target_cargo,
+      targets: measures.cargo_units,
       measures: measures,
       charge_category: fee.charge_category,
       raw_fee: fee_data)
   end
   let(:fees) { [rate_builder_fee] }
-  let(:results) { described_class.charges(shipment: shipment, quotation: quotation, fees: fees) }
+  let(:results) { described_class.charges(request: request, fees: fees) }
 
   context "when calculating per_wm fee" do
     let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
@@ -83,7 +79,12 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
 
   context "when calculating per_container fee" do
     let(:fee) { FactoryBot.create(:fee_per_container, pricing: pricing) }
-    let(:target_cargo) { fcl_20_unit }
+    let(:cargo_unit) do
+      FactoryBot.build(:journey_cargo_unit,
+        cargo_class: "fcl_20",
+        quantity: 2,
+        weight_value: 12_000)
+    end
 
     it "calculates the per_container fee correctly" do
       aggregate_failures do
@@ -179,7 +180,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       fees << FactoryBot.build(:rate_builder_fee,
         min_value: min_value,
         rate_basis: "PERCENTAGE",
-        target: nil,
+        targets: nil,
         measures: measures,
         charge_category: FactoryBot.create(:puf_charge),
         raw_fee: {rate: 0.1, rate_basis: "PERCENTAGE"})
@@ -201,7 +202,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       fees << FactoryBot.build(:rate_builder_fee,
         min_value: min_value,
         rate_basis: "PERCENTAGE",
-        target: nil,
+        targets: nil,
         measures: measures,
         charge_category: FactoryBot.create(:puf_charge),
         raw_fee: {rate: 0.1, rate_basis: "PERCENTAGE"})

@@ -10,7 +10,7 @@ RSpec.describe Pricings::Preview do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let(:lcl_pricing) { pricings.first }
-  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:args) do
     {
       selectedOriginHub: origin_hub.id,
@@ -47,7 +47,6 @@ RSpec.describe Pricings::Preview do
     end
     FactoryBot.create(:solas_charge, organization: organization)
     FactoryBot.create(:puf_charge, organization: organization)
-    FactoryBot.create(:profiles_profile, user_id: user.id)
   end
 
   describe ".perform" do

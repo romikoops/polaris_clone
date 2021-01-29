@@ -28,7 +28,7 @@ module OfferCalculator
         def arguments(object:)
           {
             cargo_class: object.load_type,
-            cargo_class_count: shipment.cargo_classes.count,
+            cargo_class_count: cargo_class_count,
             dates: margin_dates(local_charge: object),
             local_charge: object
           }

@@ -6,20 +6,26 @@ RSpec.describe MoneyCache::Converter do
   let(:money_cache) { described_class.new(config: config, klass: klass) }
   let(:config) { {bank_app_id: "TEST_ID"} }
   let(:import_double) { double(failed_instances: []) }
-  let(:klass) { double(import: import_double, current: []) }
-
-  before do
-    fixture_path = File.join(Dir.pwd, "/spec/fixtures/files/oxr_rates.json")
-    file_response = File.read(fixture_path)
-    stub_request(:get, /openexchangerates/)
-      .to_return(status: 200, body: file_response, headers: {})
-    allow(klass).to receive(:where).and_return(double(exists?: false))
+  let(:klass) { double(import: import_double, current: rates) }
+  let(:currency_rates) do
+    {
+      USD: 1.164415,
+      GBP: 1.075166,
+      CNY: 8.242079,
+      EUR: 1,
+      AED: 4.277129
+    }
+  end
+  let(:rates) do
+    currency_rates.map do |currency, rate|
+      double("Treasury::ExchangeRate", from: "EUR", to: currency, rate: rate)
+    end
   end
 
   context "with rates in store" do
     it "uses the rates existing in the store (database) to convert currencies" do
-      rate = money_cache.get_rate("USD", "GBP")
-      expect(rate.to_f).to eq(1.075166)
+      rate = money_cache.get_rate("EUR", "GBP")
+      expect(rate.to_f).to eq(currency_rates[:GBP])
     end
   end
 

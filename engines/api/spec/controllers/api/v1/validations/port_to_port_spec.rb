@@ -6,8 +6,8 @@ module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
-    let(:organizations_user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:organizations_user) { FactoryBot.create(:users_client, organization_id: organization.id) }
     let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
     let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
@@ -15,7 +15,7 @@ module Api
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
     let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: organizations_user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: organizations_user.id) }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:shipping_info) { {trucking_info: {pre_carriage: :pre}} }
     let(:cargo_item_id) { SecureRandom.uuid }
@@ -57,6 +57,10 @@ module Api
     let(:origin) { {nexus_id: origin_hub.nexus_id} }
     let(:destination) { {nexus_id: destination_hub.nexus_id} }
 
+    before do
+      ::Organizations.current_id = user.organization_id
+    end
+
     describe "post #create" do
       context "when port to port complete request (no pricings)" do
         let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
@@ -73,6 +77,7 @@ module Api
 
         before do
           request.headers["Authorization"] = token_header
+          FactoryBot.create(:fcl_20_pricing, organization: organization)
           post :create, params: params
         end
 
@@ -101,6 +106,7 @@ module Api
 
         before do
           FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers["Authorization"] = token_header
           post :create, params: params
         end
@@ -255,7 +261,7 @@ module Api
               "height" => 0,
               "quantity" => 1,
               "dangerous_goods" => false,
-              "stackable" => true
+              "size_class" => "fcl_20"
             }
           ]
         end

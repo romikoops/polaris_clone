@@ -1,0 +1,22 @@
+Hi,
+
+A new offer has been generated through your online shop!
+                        
+Ref: <%= @results.map(&:imc_reference).join(" ") %>
+Created at: <% @query.created_at.strftime('%Y%d%m') %>
+
+Description Amount
+
+<% @results.each do |result| -%>
+  <%= [result.routing, result.total].join(" ") %>
+<% end -%>
+
+If you have any questions about your quotes, simply reply to this email or reach out to our support team for help at <%= current_organization.theme.emails.dig("support", "general")%>
+
+Regards,
+
+The <%= current_organization.theme.name %> Team
+
+© 2020 ItsmyCargo ApS. All rights reserved.
+
+ItsmyCargo ApS

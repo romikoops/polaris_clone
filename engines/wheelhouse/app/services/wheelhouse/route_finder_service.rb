@@ -47,9 +47,10 @@ module Wheelhouse
 
     def hubs_from_coordinates(target:)
       carriage = target == origin ? "pre" : "on"
+
       ::Trucking::Queries::Hubs.new(
         organization_id: organization.id,
-        address: address(target.slice(:latitude, :longitude)),
+        address: address(target.slice(:latitude, :longitude).symbolize_keys),
         carriage: carriage,
         groups: user_groups,
         load_type: load_type

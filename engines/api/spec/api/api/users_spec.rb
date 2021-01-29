@@ -2,15 +2,11 @@
 
 require "swagger_helper"
 
-RSpec.describe "Users" do
+RSpec.describe "Users", type: :request, swagger_doc: "v1/swagger.json" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-
-  before do
-    FactoryBot.create(:profiles_profile, user_id: user.id)
-  end
 
   path "/v1/me" do
     get "Fetch information of current user" do
@@ -31,7 +27,7 @@ RSpec.describe "Users" do
                        type: :object,
                        properties: {
                          email: {type: :string},
-                         organizationId: {type: :string},
+                         organizationId: {type: :string, nullable: true},
                          firstName: {type: :string},
                          lastName: {type: :string},
                          phone: {type: :string},

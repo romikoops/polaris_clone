@@ -5,20 +5,21 @@ module OfferCalculator
     class Base
       CARRIAGE_MAP = {"export" => "pre", "import" => "on"}.freeze
 
-      def initialize(quotation:, shipment: false)
-        @shipment = shipment
-        @quotation = quotation
-        @organization = Organizations::Organization.find(@shipment.organization_id)
-        @creator = @params&.dig(:shipment, :creator)
-        @scope = OrganizationManager::ScopeService.new(
-          target: Users::User.find_by(id: @shipment.user_id),
+      def initialize(request:)
+        @request = request
+      end
+
+      attr_reader :request
+      delegate :organization, :client, :creator, to: :request
+
+      private
+
+      def scope
+        @scope ||= OrganizationManager::ScopeService.new(
+          target: client,
           organization: organization
         ).fetch
       end
-
-      attr_reader :scope, :organization, :wheelhouse, :shipment, :quotation
-
-      private
 
       def check_for_fee_type(type:, results:)
         return check_for_freight(results: results) if type == :pricings
@@ -27,7 +28,7 @@ module OfferCalculator
 
         %w[export import].each do |direction|
           carriage = CARRIAGE_MAP[direction]
-          next unless shipment.has_carriage?(carriage)
+          next unless request.has_carriage?(carriage: carriage)
 
           error = error_for_fee_type(
             results: results,
@@ -35,7 +36,6 @@ module OfferCalculator
             fee_type_name: fee_type_map[type],
             direction: direction
           )
-
           raise error if error
         end
       end

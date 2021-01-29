@@ -18,9 +18,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "shared-runtime"
 
   spec.add_dependency "cargo"
+  spec.add_dependency "carta"
+  spec.add_dependency "journey"
   spec.add_dependency "legacy"
   spec.add_dependency "offer_calculator"
   spec.add_dependency "pdf"
+  spec.add_dependency "result_formatter"
   spec.add_dependency "organizations"
   spec.add_dependency "organization_manager"
 

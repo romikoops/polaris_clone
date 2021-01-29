@@ -8,7 +8,7 @@ FactoryBot.define do
     effective_date { Time.zone.today.beginning_of_day }
     expiration_date { 6.months.from_now.end_of_day }
     association :organization, factory: :organizations_organization
-    association :applicable, factory: :organizations_user
+    association :applicable, factory: :users_client
 
     trait :freight do
       margin_type { :freight_margin }
@@ -31,7 +31,7 @@ FactoryBot.define do
     end
 
     trait :user do
-      association :applicable, factory: :organizations_user
+      association :applicable, factory: :users_client
     end
 
     trait :group do

@@ -144,7 +144,7 @@ class Admin::MarginsController < Admin::AdminBaseController
     when "company"
       Companies::Company.find_by(id: id)
     when "user"
-      Organizations::User.find_by(id: id)
+      Users::Client.find_by(id: id)
     end
   end
 
@@ -253,7 +253,7 @@ class Admin::MarginsController < Admin::AdminBaseController
         )
       when "user"
         query = query.where(
-          applicable: Organizations::User.find_by(id: params[:target_id])
+          applicable: Users::Client.find_by(id: params[:target_id])
         )
       when "tenant"
         query = query.where(

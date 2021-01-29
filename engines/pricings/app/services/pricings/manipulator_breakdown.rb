@@ -18,9 +18,9 @@ module Pricings
     end
 
     def target_name
-      return applicable.try(:name) unless applicable.is_a?(Organizations::User)
+      return applicable.try(:name) unless applicable.is_a?(Users::Client)
 
-      Profiles::ProfileService.fetch(user_id: applicable.id)&.full_name
+      applicable.profile.full_name
     end
   end
 end

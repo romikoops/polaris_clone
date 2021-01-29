@@ -6,13 +6,16 @@ RSpec.describe OfferCalculator::Calculator do
   let(:load_type) { "cargo_item" }
   let(:truck_type) { "default" }
   let(:cargo_classes) { ["lcl"] }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:source) { FactoryBot.create(:application) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
       load_type: load_type,
       destination_hub: nil,
       origin_hub: nil,
+      destination_nexus: nil,
+      origin_nexus: nil,
       desired_start_date: Time.zone.today + 4.days,
       user: user,
       trucking: {
@@ -44,103 +47,54 @@ RSpec.describe OfferCalculator::Calculator do
     ]
   end
   let(:params) do
-    ActionController::Parameters.new(
-      "shipment" => {
-        "id" => shipment.id,
-        "direction" => "export",
-        "selected_day" => 4.days.from_now.beginning_of_day.to_s,
-        "cargo_items_attributes" => cargo_items_attributes,
-        "containers_attributes" => [],
-        "trucking" => {
-          "pre_carriage" => {
-            address_id: pickup_address.id,
-            truck_type: truck_type
-          },
-          "on_carriage" => {
-            address_id: delivery_address.id,
-            truck_type: truck_type
-          }
-        },
-        "origin" => {
-          "latitude" => pickup_address.latitude,
-          "longitude" => pickup_address.longitude,
-          "nexus_name" => origin_hub.nexus.name,
-          "country" => origin_hub.nexus.country.code,
-          "full_address" => pickup_address.geocoded_address
-        },
-        "destination" => {
-          "latitude" => delivery_address.latitude,
-          "longitude" => delivery_address.longitude,
-          "nexus_name" => destination_hub.nexus.name,
-          "country" => destination_hub.nexus.country.code,
-          "full_address" => delivery_address.geocoded_address
-        },
-        "incoterm" => {},
-        "aggregated_cargo_attributes" => nil
-      }
-    )
+    FactoryBot.build(:journey_request_params,
+      pickup_truck_type: truck_type,
+      delivery_address: delivery_address,
+      delivery_truck_type: truck_type,
+      pickup_address: pickup_address,
+      direction: "export",
+      load_type: load_type,
+      selected_day: 4.days.from_now.beginning_of_day.to_s,
+      aggregated_cargo_attributes: [],
+      cargo_item_type_id: pallet.id,
+      cargo_items_attributes: cargo_items_attributes)
   end
-  let(:origin_address_params) do
-    {
-      latitude: pickup_address.latitude,
-      longitude: pickup_address.longitude,
-      zip_code: pickup_address.zip_code,
-      country: pickup_address.country.name,
-      geocoded_address: pickup_address.geocoded_address,
-      street_number: pickup_address.street_number
-    }.with_indifferent_access
-  end
-  let(:destination_address_params) do
-    {
-      latitude: delivery_address.latitude,
-      longitude: delivery_address.longitude,
-      zip_code: delivery_address.zip_code,
-      country: delivery_address.country.name,
-      geocoded_address: delivery_address.geocoded_address,
-      street_number: delivery_address.street_number
-    }.with_indifferent_access
-  end
-  let(:quotation) { Quotations::Quotation.first }
-  let(:creator) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:creator) { FactoryBot.create(:users_client, organization: organization) }
   let(:service) {
-    described_class.new(shipment: shipment, params: params, user: user, creator: creator).perform
+    described_class.new(
+      params: params,
+      client: user,
+      creator: creator,
+      source: source
+    ).perform
   }
+  let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+  let(:carta_double) { double("Carta::Api") }
+  let(:result_set) { service.result_sets.order(:created_at).last }
+  let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+  let(:carta_double) { double("Carta::Api") }
 
   include_context "complete_route_with_trucking"
 
   before do
     Organizations.current_id = organization.id
+    FactoryBot.create(:companies_membership, member: user)
     FactoryBot.create(:organizations_scope, target: organization, content: {closed_quotation_tool: true})
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
-      .with(:origin).and_return(origin_address_params)
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
-      .with(:destination).and_return(destination_address_params)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
+    allow(Carta::Api).to receive(:new).and_return(carta_double)
+    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
   end
 
   describe ".perform" do
-    context "with single trucking Availability" do
-      let!(:legacy_results) { service.detailed_schedules }
+    let(:results) { result_set.results }
 
+    context "with single trucking Availability" do
       it "perform a booking calculation" do
         aggregate_failures do
-          expect(legacy_results.length).to eq(1)
-          expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
-        end
-      end
-
-      it "creates the Quotation correctly" do
-        aggregate_failures do
-          expect(Quotations::Quotation.count).to be(1)
-          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
-          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
-        end
-      end
-
-      it "creates the Tenders correctly" do
-        tenders = Quotations::Tender.all
-        aggregate_failures do
-          expect(tenders.count).to be(1)
+          expect(results.length).to eq(1)
         end
       end
     end
@@ -171,7 +125,6 @@ RSpec.describe OfferCalculator::Calculator do
       end
 
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id],
@@ -183,26 +136,7 @@ RSpec.describe OfferCalculator::Calculator do
 
       it "perform a booking calculation" do
         aggregate_failures do
-          expect(legacy_results.length).to eq(4)
-          expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
-        end
-      end
-
-      it "creates the Quotation correctly" do
-        aggregate_failures do
-          expect(Quotations::Quotation.count).to be(1)
-          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
-          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
-        end
-      end
-
-      it "creates the Tenders correctly" do
-        tenders = Quotations::Tender.all
-        aggregate_failures do
-          expect(tenders.count).to be(4)
-          expect(
-            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq
-          ).to match_array(desired_tenant_vehicle_combos)
+          expect(results.length).to eq(4)
         end
       end
     end
@@ -249,7 +183,6 @@ RSpec.describe OfferCalculator::Calculator do
 
       let!(:itinerary_2) { FactoryBot.create(:default_itinerary, organization: organization) }
       let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id, itinerary.id],
@@ -259,29 +192,7 @@ RSpec.describe OfferCalculator::Calculator do
 
       it "perform a booking calculation" do
         aggregate_failures do
-          expect(legacy_results.length).to eq(2)
-          expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
-        end
-      end
-
-      it "creates the Quotation correctly" do
-        aggregate_failures do
-          expect(Quotations::Quotation.count).to be(1)
-          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
-          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
-          expect(quotation.creator).to eq(creator)
-        end
-      end
-
-      it "creates the Tenders correctly" do
-        tenders = Quotations::Tender.all
-        aggregate_failures do
-          expect(tenders.count).to be(2)
-          expect(
-            tenders.map { |t|
-              [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id, t.itinerary_id]
-            }.uniq
-          ).to match_array(desired_tenant_vehicle_combos)
+          expect(results.length).to eq(2)
         end
       end
     end

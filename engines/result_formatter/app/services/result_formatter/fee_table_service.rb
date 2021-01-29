@@ -4,17 +4,15 @@ module ResultFormatter
   class FeeTableService
     SECTIONS = Quotations::LineItem.sections.keys
 
-    def initialize(tender:, scope:, type: :table)
-      @tender = tender
-      @base_currency = tender.amount.currency
-      @charge_breakdown = @tender.charge_breakdown
+    def initialize(result:, scope:, type: :table)
+      @result = result
       @type = type
       @scope = scope
       @rows = [
         default_values.merge(
-          value: value_with_currency(tender.amount),
-          originalValue: value_with_currency(tender.original_amount),
-          tenderId: tender.id,
+          value: value_with_currency(value(items: current_line_item_set.line_items)),
+          originalValue: value_with_currency(value(items: original_line_item_set.line_items)),
+          tenderId: result.id,
           order: 0,
           level: 0
         )
@@ -28,58 +26,61 @@ module ResultFormatter
 
     private
 
-    attr_reader :tender, :rows, :scope, :charge_breakdown, :base_currency
+    attr_reader :result, :rows, :scope, :charge_breakdown
+    delegate :main_freight_section, to: :result
 
     def create_rows
-      sections_in_order.each do |section|
-        items = tender.line_items.where(section: section)
-        next if items.empty?
+      sections_in_order.each do |route_section|
+        current_items = current_line_item_set.line_items.where(route_section: route_section)
+        original_items = original_line_item_set.line_items.where(route_section: route_section)
+        next if current_items.empty?
 
-        charge_category = applicable_charge_category(section: section)
+        charge_category = applicable_charge_category(route_section: route_section)
         section_row = default_values.merge(
           description: charge_category.name,
-          value: value_with_currency(value(items: items)),
-          originalValue: value_with_currency(original_value(items: items)),
-          tenderId: tender.id,
-          order: section_order(section: section),
-          section: section,
+          value: value_with_currency(value(items: current_items)),
+          originalValue: value_with_currency(original_value(items: original_items)),
+          tenderId: result.id,
+          order: route_section.order,
+          section: charge_category.name,
           level: 1,
           chargeCategoryId: charge_category&.id
         )
 
         @rows << section_row
-        if scope.dig(:quote_card, :sections, section.gsub("_section", ""))
-          create_cargo_section_rows(row: section_row, items: items)
+        if scope.dig(:quote_card, :sections, charge_category.code)
+          create_cargo_section_rows(row: section_row, items: current_items)
         end
       end
     end
 
     def create_cargo_section_rows(row:, items:)
-      return create_cargo_currency_section_rows(row: row, items: items, cargo: nil, level: 3) if consolidated_cargo?
+      return create_cargo_currency_section_rows(row: row, items: items, level: 3) if consolidated_cargo?
 
-      items.group_by(&:cargo).each do |cargo, items_by_cargo|
+      items.group_by { |item| item.cargo_units.ids }.each do |cargo_unit_ids, items_by_cargo|
         fee_value = value(items: items_by_cargo)
-        original_fee_value = original_value(items: items_by_cargo)
+        original_fee_value = original_value(items: items_by_cargo) # Not sure how to handle this properly
         cargo_row = default_values.merge(
-          editId: cargo&.id,
-          description: cargo_description(cargo: cargo),
+          editId: cargo_unit_ids.join,
+          description: cargo_description(cargo_units: items_by_cargo.first.cargo_units),
           value: value_with_currency(fee_value),
           originalValue: value_with_currency(original_fee_value),
           order: 0,
           parentId: row[:id],
-          tenderId: tender.id,
-          section: items_by_cargo.first.section,
+          tenderId: result.id,
+          section: section_code(route_section: items_by_cargo.first.route_section),
           level: 2,
-          chargeCategoryId: applicable_charge_category(cargo: cargo)&.id
+          chargeCategoryId: ""
         )
+
         @rows << cargo_row
-        create_cargo_currency_section_rows(row: cargo_row, items: items_by_cargo, cargo: cargo, level: 3)
+        create_cargo_currency_section_rows(row: cargo_row, items: items_by_cargo, level: 3)
       end
     end
 
-    def create_cargo_currency_section_rows(row:, items:, cargo:, level:)
+    def create_cargo_currency_section_rows(row:, items:, level:)
       sorted_currency_items = sorted_items_for_currency_sections(items: items)
-      if sorted_currency_items.keys.length == 1 && sorted_currency_items.first.first == base_currency.iso_code
+      if sorted_currency_items.keys.length == 1 && sorted_currency_items.first.first == base_currency
         return create_fee_rows(row: row, items: items, level: level)
       end
 
@@ -93,8 +94,8 @@ module ResultFormatter
           order: 0,
           parentId: row[:id],
           lineItemId: nil,
-          tenderId: tender.id,
-          section: items_by_currency.first.section,
+          tenderId: result.id,
+          section: section_code(route_section: items_by_currency.first.route_section),
           level: level
         )
         @rows << currency_row
@@ -103,36 +104,53 @@ module ResultFormatter
     end
 
     def create_fee_rows(row:, items:, level:)
+      fee_section_code = section_code(route_section: items.first.route_section)
       sorted_items_for_section(items: items).each do |item|
-        decorated_line_item = ::ResultFormatter::LineItemDecorator.new(item, context: {scope: scope})
+        decorated_line_item = ::ResultFormatter::LineItemDecorator.new(
+          item,
+          context: {scope: scope, mode_of_transport: main_freight_section.mode_of_transport}
+        )
+
         @rows << default_values.merge(
           editId: item.id,
           description: decorated_line_item.description,
           originalValue: value_with_currency(decorated_line_item.original_total),
-          value: decorated_line_item.fee_context.merge(value_with_currency(item.amount)),
+          value: decorated_line_item.fee_context.merge(value_with_currency(item.total)),
           order: 0,
           parentId: row[:id],
           lineItemId: item.id,
-          tenderId: tender.id,
-          section: item.section,
+          tenderId: result.id,
+          section: fee_section_code,
           level: level,
-          code: item.code,
+          code: item.fee_code,
           chargeCategoryId: applicable_charge_category(item: item)&.id
         )
       end
     end
 
-    def applicable_charge_category(item: nil, cargo: nil, section: nil)
-      if item
-        item.charge_category
-      elsif item.nil? && section.present?
-        section_code = section.sub("_section", "")
-        org_charge_categories.find_by(code: section_code)
+    def applicable_charge_category(item: nil, route_section: nil)
+      org_charge_categories.find_by(code: item&.fee_code || section_code(route_section: route_section))
+    end
+
+    def section_code(route_section:)
+      if route_section.mode_of_transport == "carriage"
+        code_from_carriage_section(route_section: route_section)
       else
-        org_charge_categories.find_by(
-          cargo_unit_id: cargo&.id,
-          code: shipment_or_cargo_unit_code(cargo: cargo)
-        )
+        handle_non_carriage_section_code(route_section: route_section)
+      end
+    end
+
+    def code_from_carriage_section(route_section:)
+      route_section.order == 0 ? "trucking_pre" : "trucking_on"
+    end
+
+    def handle_non_carriage_section_code(route_section:)
+      if route_section.from != route_section.to
+        "cargo"
+      elsif route_section.from == result.origin_route_point
+        "export"
+      else
+        "import"
       end
     end
 
@@ -148,24 +166,26 @@ module ResultFormatter
       "Fees charged in #{currency}:"
     end
 
-    def cargo_description(cargo:)
-      return "Shipment" if cargo.blank?
+    def cargo_description(cargo_units:)
+      return "Shipment" if cargo_units.empty?
 
-      return "Consolidated Cargo" if cargo.is_a?(Legacy::AggregatedCargo)
+      return "Consolidated Cargo" if cargo_units.map(&:cargo_class).include?("aggregated_lcl") || cargo_units.length > 1
 
-      "#{cargo.quantity} x #{cargo_class_string(cargo: cargo)}"
-    end
-
-    def cargo_class_string(cargo:)
-      if cargo.is_a?(Legacy::Container)
-        cargo.cargo_class.humanize
-      else
-        cargo.cargo_item_type.description
-      end
+      cargo = cargo_units.first
+      description = (cargo.cargo_class == "lcl" ? cargo.colli_type.to_s : cargo.cargo_class).humanize
+      "#{cargo.quantity} x #{description}"
     end
 
     def sections_in_order
-      SECTIONS.sort_by { |section| section_order(section: section) }
+      scope.dig(:quote_card, :order).map { |key|
+        {
+          "trucking_pre" => result.pre_carriage_section,
+          "export" => result.origin_transfer_section,
+          "cargo" => result.main_freight_section,
+          "import" => result.destination_transfer_section,
+          "trucking_on" => result.on_carriage_section
+        }[key]
+      }.compact
     end
 
     def section_order(section:)
@@ -175,13 +195,13 @@ module ResultFormatter
 
     def value(items:, currency: base_currency)
       items.inject(Money.new(0, currency, bank)) do |sum, item|
-        sum + Money.new(item.amount_cents, item.amount_currency, bank)
+        sum + Money.new(item.total_cents, item.total_currency, bank)
       end
     end
 
     def original_value(items:, currency: base_currency)
       items.inject(Money.new(0, currency, bank)) do |sum, item|
-        sum + Money.new(item.original_amount_cents, item.original_amount_currency, bank)
+        sum + Money.new(item.total_cents, item.total_currency, bank)
       end
     end
 
@@ -195,22 +215,22 @@ module ResultFormatter
     end
 
     def sorted_items_for_section(items:)
-      return items if primary_code.blank? || items.first.section != "cargo_section"
+      return items if primary_code.blank? || items.first.route_section != main_freight_section
 
       primary_item = primary_item(items: items)
-      items.reject { |item| item == primary_item }.sort_by { |item| -item.amount }.unshift(primary_item).compact
+      items.reject { |item| item == primary_item }.sort_by { |item| -item.total }.unshift(primary_item).compact
     end
 
     def sorted_items_for_currency_sections(items:)
-      if primary_code.blank? || items.first.section != "cargo_section"
+      if primary_code.blank? || items.first.route_section != main_freight_section
         return group_by_item_currency(items: items)
       end
 
       primary_item = primary_item(items: items)
       return group_by_item_currency(items: items) if primary_item.nil?
 
-      primary_currency = primary_item.amount.currency.iso_code
-      primary_currency_items = items.select { |item| item.amount.currency.iso_code == primary_currency }
+      primary_currency = primary_item.total.currency.iso_code
+      primary_currency_items = items.select { |item| item.total.currency.iso_code == primary_currency }
       {
         primary_currency => primary_currency_items
       }.merge(
@@ -219,11 +239,11 @@ module ResultFormatter
     end
 
     def group_by_item_currency(items:)
-      items.group_by { |line_item| line_item.amount.currency.iso_code }
+      items.group_by { |line_item| line_item.total.currency.iso_code }
     end
 
     def primary_item(items:)
-      items.find { |item| item.code == primary_code.downcase }
+      items.find { |item| item.fee_code == primary_code.downcase }
     end
 
     def primary_code
@@ -237,7 +257,7 @@ module ResultFormatter
         order: 0,
         parentId: nil,
         lineItemId: nil,
-        tenderId: tender.id,
+        tenderId: result.id,
         code: nil,
         chargeCategoryId: nil,
         description: nil,
@@ -246,26 +266,40 @@ module ResultFormatter
     end
 
     def consolidated_cargo?
-      tender.load_type == "cargo_item" && scope.dig(:consolidation, :cargo, :backend)
+      cargo_units.exists?(cargo_class: ["lcl", "aggregated_lcl"]) && scope.dig(:consolidation, :cargo, :backend)
     end
 
     def org_charge_categories
       Legacy::ChargeCategory.where(organization: organization)
     end
 
-    def organization
-      @organization ||= tender.quotation.organization
+    def query
+      @query ||= result.result_set.query
     end
+
+    delegate :organization, :client, :cargo_units, to: :query
 
     def bank
       @bank ||= begin
         store = MoneyCache::Converter.new(
-          klass: Legacy::ExchangeRate,
-          date: tender.created_at,
+          klass: Treasury::ExchangeRate,
+          date: result.created_at,
           config: {bank_app_id: Settings.open_exchange_rate&.app_id || ""}
         )
         Money::Bank::VariableExchange.new(store)
       end
+    end
+
+    def base_currency
+      @base_currency ||= Users::Settings.find_by(user: client)&.currency || scope.dig(:default_currency)
+    end
+
+    def current_line_item_set
+      @current_line_item_set ||= Journey::LineItemSet.where(result: result).order(created_at: :desc).first
+    end
+
+    def original_line_item_set
+      @original_line_item_set ||= Journey::LineItemSet.where(result: result).order(created_at: :desc).first
     end
   end
 end

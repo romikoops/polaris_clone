@@ -7,10 +7,10 @@ module Analytics
 
       def data
         @data ||= requests_with_profiles
-          .group("profiles_profiles.id")
+          .group("users_client_profiles.id")
           .order("count DESC")
           .limit(TOP_USERS)
-          .pluck("CONCAT(profiles_profiles.first_name, ' ', profiles_profiles.last_name), COUNT(*) AS count")
+          .pluck("CONCAT(users_client_profiles.first_name, ' ', users_client_profiles.last_name), COUNT(*) AS count")
           .map { |label, count| {label: label, count: count} }
       end
     end

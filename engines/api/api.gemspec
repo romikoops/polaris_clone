@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["ItsMyCargo"]
   spec.summary = "Improved API for new frontend code."
 
+  spec.metadata["package"] = "api"
   spec.metadata["type"] = "direct"
 
   spec.files = Dir["{lib}/**/*"]
@@ -22,14 +23,16 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "analytics"
   spec.add_dependency "api_auth"
-  spec.add_dependency "authentication"
   spec.add_dependency "cargo"
+  spec.add_dependency "carta"
+  spec.add_dependency "journey"
   spec.add_dependency "organizations"
   spec.add_dependency "organization_manager"
   spec.add_dependency "pricings"
   spec.add_dependency "profiles"
   spec.add_dependency "result_formatter"
   spec.add_dependency "cms_data"
+  spec.add_dependency "treasury"
   spec.add_dependency "trucking"
   spec.add_dependency "users"
   spec.add_dependency "wheelhouse"

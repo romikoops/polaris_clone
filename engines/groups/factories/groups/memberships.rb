@@ -2,9 +2,11 @@ FactoryBot.define do
   factory :groups_membership, class: "Groups::Membership" do
     priority { 1 }
     group { nil }
+    member { nil }
 
-    trait :user do
-      association :member, factory: [:organizations_user, :with_profile]
+    for_user
+    trait :for_user do
+      member { association(:users_client) }
     end
   end
 end

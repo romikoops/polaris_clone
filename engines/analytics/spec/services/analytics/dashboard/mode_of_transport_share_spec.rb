@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::ModeOfTransportShare, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:carrier_a) { FactoryBot.create(:legacy_carrier, name: "A", code: "a") }
   let(:carrier_b) { FactoryBot.create(:legacy_carrier, name: "B", code: "b") }
   let(:tenant_vehicle_a) {
@@ -15,7 +15,7 @@ RSpec.describe Analytics::Dashboard::ModeOfTransportShare, type: :service do
   }
   let(:trip_a) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_a) }
   let(:trip_b) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_b) }
-  let(:clients) { FactoryBot.create_list(:organizations_user, 2, organization: organization) }
+  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
   let(:result) {

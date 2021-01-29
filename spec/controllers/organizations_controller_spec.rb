@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe OrganizationsController do
-  let(:user) { FactoryBot.create(:organizations_user, email: "user@itsmycargo.com") }
+  let(:user) { FactoryBot.create(:users_client, email: "user@itsmycargo.com") }
   let(:organization) { user.organization }
   let(:domain) { organization.domains.default }
 

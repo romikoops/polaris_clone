@@ -1,6 +1,9 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 gem "money_cache", path: "../../gems/money_cache"
 
+gem "journey", path: "../journey"
+eval_gemfile "../journey/Gemfile.runtime"
+
 gem "legacy", path: "../legacy"
 eval_gemfile "../legacy/Gemfile.runtime"
 
@@ -9,3 +12,6 @@ eval_gemfile "../pricings/Gemfile.runtime"
 
 gem "quotations", path: "../quotations"
 eval_gemfile "../quotations/Gemfile.runtime"
+
+gem "treasury", path: "../treasury"
+eval_gemfile "../treasury/Gemfile.runtime"

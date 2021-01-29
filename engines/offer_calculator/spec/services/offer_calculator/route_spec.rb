@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Route do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:itinerary_2) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
@@ -16,9 +16,7 @@ RSpec.describe OfferCalculator::Route do
   let(:other_tenant_vehicle) {
     FactoryBot.create(:legacy_tenant_vehicle, name: "bother", organization: organization, carrier: carrier)
   }
-  let(:shipment) {
-    FactoryBot.create(:legacy_shipment, user: user, organization: organization, load_type: "cargo_item")
-  }
+  let(:request) { FactoryBot.build(:offer_calculator_request, client: user, organization: organization) }
   let(:date_range) { (Time.zone.today..Time.zone.today + 20.days) }
 
   before do
@@ -58,9 +56,9 @@ RSpec.describe OfferCalculator::Route do
           origin_hub_ids: Legacy::Stop.where(index: 0).map(&:hub_id),
           destination_hub_ids: Legacy::Stop.where(index: 1).map(&:hub_id)
         },
-        shipment: shipment,
+        request: request,
         date_range: date_range,
-        scope: {base_pricing: true}
+        scope: {}
       }
     end
 

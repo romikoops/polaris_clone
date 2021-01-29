@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary_1) {
     FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)
   }
@@ -18,15 +18,20 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       FactoryBot.create(:groups_membership, member: user, group: tapped_group)
     end
   end
-  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: load_type) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:request) do
+    FactoryBot.create(:offer_calculator_request,
+      organization: organization,
+      client: user,
+      creator: user,
+      cargo_trait: :lcl)
+  end
   let(:trips) do
     [
       FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1)
     ]
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:finder) { described_class.new(shipment: shipment, quotation: quotation, schedules: schedules) }
+  let(:finder) { described_class.new(request: request, schedules: schedules) }
   let(:results) { finder.perform }
 
   describe ".perform" do
@@ -34,6 +39,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before do
         FactoryBot.create(:legacy_local_charge,
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
+        allow(request).to receive(:has_pre_carriage?).and_return(false)
+        allow(request).to receive(:has_on_carriage?).and_return(false)
       end
 
       it "returns the one pricing" do
@@ -50,7 +57,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
       }
 
-      before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
+      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
         aggregate_failures do
@@ -77,7 +84,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
         ]
       end
 
-      before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
+      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
         aggregate_failures do
@@ -100,8 +107,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       }
 
       before do
-        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(shipment).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:has_on_carriage?).and_return(true)
       end
 
       it "returns the one pricing" do
@@ -127,8 +134,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before do
         FactoryBot.create(:legacy_local_charge,
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(shipment).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:has_on_carriage?).and_return(true)
       end
 
       it "returns the one pricing" do

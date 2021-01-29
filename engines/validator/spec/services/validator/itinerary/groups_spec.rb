@@ -4,13 +4,11 @@ require "rails_helper"
 
 RSpec.describe Validator::Itinerary do
   describe "#perform" do
-    let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-    let!(:scope) do
-      FactoryBot.create(:organizations_scope,
-        target: user,
-        content: {base_pricing: true, dedicated_pricings_only: dedicated_pricings_only})
+    let(:organization) do
+      FactoryBot.create(:organizations_organization,
+        scope_attributes: {content: {dedicated_pricings_only: dedicated_pricings_only}})
     end
+    let!(:user) { FactoryBot.create(:users_client, organization: organization) }
     let(:dedicated_pricings_only) { false }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:carrier_1) { FactoryBot.create(:legacy_carrier, name: "TCR") }

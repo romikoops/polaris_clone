@@ -72,7 +72,7 @@ class Admin::GroupsController < Admin::AdminBaseController
   def create_member_from_type(group:, type:, member:)
     case type
     when "clients"
-      user = ::Organizations::User.find_by(id: member[:id])
+      user = ::Users::Client.find_by(id: member[:id])
       return nil unless user
 
       ::Groups::Membership.find_or_create_by(group_id: group.id, member: user)
@@ -116,7 +116,7 @@ class Admin::GroupsController < Admin::AdminBaseController
           .where(groups_memberships: {member_type: "Groups::Group", member_id: search_params[:target_id]})
       when "user"
         query = query.joins(:memberships)
-          .where(groups_memberships: {member_type: "Users::User", member_id: search_params[:target_id]})
+          .where(groups_memberships: {member_type: "Users::Client", member_id: search_params[:target_id]})
       end
     end
     query = query.order(name: search_params[:name_desc] == "true" ? :desc : :asc) if search_params[:name_desc]
@@ -171,9 +171,9 @@ class Admin::GroupsController < Admin::AdminBaseController
 
   def member_info(membership:)
     case membership.member_type
-    when "Users::User"
+    when "Users::Client"
       {
-        member_name: Profiles::ProfileService.fetch(user_id: membership.member_id).full_name,
+        member_name: membership.member.profile.full_name,
         human_type: "client",
         member_email: membership.member.email,
         original_member_id: membership.member_id

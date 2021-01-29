@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Legacy::HubNexusMatchValidator do
-  let(:user) { FactoryBot.create(:organizations_user) }
+  let(:user) { FactoryBot.create(:users_client) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: user.organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }

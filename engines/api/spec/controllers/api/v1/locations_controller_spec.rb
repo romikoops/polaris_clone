@@ -12,9 +12,9 @@ module Api
       ::Organizations.current_id = organization.id
     end
 
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:user) { FactoryBot.create(:organizations_user, email: "test@example.com", organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:users_client, email: "test@example.com", organization_id: organization.id) }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:origin_nexus) { origin_hub.nexus }
     let(:destination_nexus) { destination_hub.nexus }
@@ -48,7 +48,7 @@ module Api
       let(:origin_location) do
         FactoryBot.create(:locations_location,
           bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
-          country_code: "se")
+          country_code: origin_hub.country.code.downcase)
       end
       let(:origin_trucking_location) {
         FactoryBot.create(:trucking_location, :with_location, location: origin_location, country: origin_hub.country)
@@ -70,7 +70,11 @@ module Api
       end
 
       it "Renders a json of destinations when query matches destination name" do
-        get :destinations, params: {organization_id: organization.id, q: "Shan", load_type: load_type}
+        get :destinations, params: {
+          organization_id: organization.id,
+          q: destination_nexus.name[0..3],
+          load_type: load_type
+        }
 
         expect(response_data[0]["attributes"]["name"]).to eq(destination_nexus.name)
       end

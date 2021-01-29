@@ -10,25 +10,37 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
   }
   let(:result) do
     described_class.errors(
-      modes_of_transport: modes_of_transport,
-      cargo: cargo,
-      itinerary_ids: itinerary_ids,
-      tenant_vehicle_ids: tenant_vehicle_ids,
+      request: request,
+      pricings: pricings,
       final: final
     )
   end
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:final) { false }
   let(:itinerary_ids) { [itinerary.id] }
   let(:tenant_vehicle_ids) { [tenant_vehicle.id] }
   let(:modes_of_transport) { ["ocean"] }
-  let(:cargo) { FactoryBot.build(:cargo_cargo, organization: organization, units: cargos) }
+  let(:cargo_units) do
+    [FactoryBot.build(:journey_cargo_unit,
+      cargo_class: "fcl_20",
+      weight_value: 500,
+      quantity: 1)]
+  end
+  let(:pricings) do
+    Pricings::Pricing.all
+  end
 
   before do
+    allow(request).to receive(:cargo_units).and_return(cargo_units)
     Organizations::Organization.current_id = organization.id
   end
 
   context "with max dimensions" do
     before do
+      FactoryBot.create(:fcl_20_pricing,
+        organization: organization,
+        itinerary: itinerary,
+        tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:legacy_max_dimensions_bundle,
         organization: organization,
         mode_of_transport: "ocean",
@@ -37,14 +49,13 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is complete and valid" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
+          cargo_class: "fcl_20",
           weight_value: 120)]
       end
-      let(:tenant_vehicle_ids) { nil }
 
       it "returns an empty array" do
         expect(result).to be_empty
@@ -52,14 +63,13 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is incomplete and valid" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
+          cargo_class: "fcl_20",
           weight_value: 0)]
       end
-      let(:tenant_vehicle_ids) { nil }
 
       it "returns an empty array" do
         expect(result).to be_empty
@@ -67,14 +77,13 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is incomplete and valid (final)" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
+          cargo_class: "fcl_20",
           weight_value: 0)]
       end
-      let(:tenant_vehicle_ids) { nil }
       let(:final) { true }
       let(:expected_help_text) do
         ["Weight is required."]
@@ -93,14 +102,13 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is invalid (negative values)" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
+          cargo_class: "fcl_20",
           weight_value: -1.0)]
       end
-      let(:tenant_vehicle_ids) { nil }
       let(:expected_help_text) do
         ["Weight must be positive."]
       end
@@ -118,11 +126,11 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is complete and all attrs are invalid" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
+          cargo_class: "fcl_20",
           weight_value: 12_000)]
       end
       let(:modes_of_transport) { ["ocean"] }
@@ -143,11 +151,11 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
     end
 
     context "when the object is incomplete and invalid" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 0,
+          cargo_class: "fcl_20",
           weight_value: 999_999)]
       end
       let(:modes_of_transport) { ["ocean"] }
@@ -173,18 +181,16 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
       end
 
       let(:modes_of_transport) { %w[air ocean] }
-      let(:cargos) do
+      let(:cargo_units) do
         [
-          FactoryBot.build(:fcl_20_unit,
-            organization: organization,
+          FactoryBot.build(:journey_cargo_unit,
             id: SecureRandom.uuid,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
             weight_value: 120),
-          FactoryBot.build(:fcl_20_unit,
-            organization: organization,
+          FactoryBot.build(:journey_cargo_unit,
             id: SecureRandom.uuid,
             quantity: 1,
             width_value: 1,
@@ -204,11 +210,18 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
 
   context "without max dimensions" do
     context "when the object is complete and valid" do
-      let(:cargos) do
-        [FactoryBot.build(:fcl_20_unit,
+      before do
+        FactoryBot.create(:fcl_20_pricing,
           organization: organization,
+          itinerary: itinerary,
+          tenant_vehicle: tenant_vehicle)
+      end
+
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
-          quantity: 1,
+          quantity: 0,
+          cargo_class: "fcl_20",
           weight_value: 120)]
       end
 

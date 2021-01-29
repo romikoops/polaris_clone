@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :calculators_result_from_raw, class: "OfferCalculator::Service::Calculators::Result" do
     skip_create
     raw_object { {} }
-    cargo { {} }
     transient do
+      request {}
       rate_builder_result {}
     end
 
@@ -13,8 +13,8 @@ FactoryBot.define do
       object = FactoryBot.build(:manipulator_result,
         original: raw_object,
         result: raw_object.as_json)
-      measures = OfferCalculator::Service::Measurements::Cargo.new(
-        cargo: cargo,
+      measures = OfferCalculator::Service::Measurements::Request.new(
+        request: request,
         scope: {},
         object: object
       )

@@ -6,16 +6,18 @@ module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
     include_context "complete_route_with_trucking"
+    let(:app) { FactoryBot.create(:application) }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
-    let(:organizations_user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: organizations_user.id, scopes: "public") }
+    let(:organizations_user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: organizations_user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:load_type) { "cargo_item" }
     let(:cargo_classes) { ["lcl"] }
     let(:shipping_info) { {trucking_info: {pre_carriage: :pre}} }
     let(:params) do
       {
+        redirect_uri: app.redirect_uri,
         organization_id: organization.id,
         quote: {
           organization_id: organization.id,
@@ -60,9 +62,11 @@ module Api
             "code" => 4008
           }]
         end
+        let!(:pricings) do
+          [FactoryBot.create(:pricings_pricing, organization: organization)]
+        end
 
         before do
-          Pricings::Pricing.destroy_all
           request.headers["Authorization"] = token_header
           post :create, params: params
         end

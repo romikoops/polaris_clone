@@ -9,8 +9,8 @@ module Api
     let(:organization) { FactoryBot.create(:organizations_organization) }
 
     describe "GET #itineraries" do
-      let(:user) { FactoryBot.create(:organizations_user, email: "test@example.com", organization: organization) }
-      let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+      let(:user) { FactoryBot.create(:users_client, email: "test@example.com", organization: organization) }
+      let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
       let(:token_header) { "Bearer #{access_token.token}" }
       let(:itinerary_subject) do
         request.headers["Authorization"] = token_header

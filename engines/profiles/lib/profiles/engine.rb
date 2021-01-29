@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "draper"
 require "paranoia"
 require "pg_search"
 

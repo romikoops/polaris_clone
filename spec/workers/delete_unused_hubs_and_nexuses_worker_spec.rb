@@ -2,14 +2,14 @@ require "rails_helper"
 RSpec.describe DeleteUnusedHubsAndNexusesWorker, type: :worker do
   context "when hub has no hub_code" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:hub) { FactoryBot.create(:legacy_hub, hub_code: nil) }
-    let!(:legacy_itinerary) { FactoryBot.create(:legacy_itinerary, :default, origin_hub: hub) }
+    let(:hub) { FactoryBot.create(:legacy_hub, hub_code: nil, organization: organization) }
+    let!(:legacy_itinerary) { FactoryBot.create(:legacy_itinerary, :default, origin_hub: hub, destination_hub: hub) }
     let!(:local_charges) { FactoryBot.create(:legacy_local_charge, hub: hub, organization: organization) }
 
     it "deletes hubs" do
       described_class.new.perform
 
-      expect(Legacy::Hub.all).to be_empty
+      expect(Legacy::Hub.exists?(id: hub.id)).to be(false)
     end
 
     it "deletes hub itineraries" do
@@ -46,7 +46,7 @@ RSpec.describe DeleteUnusedHubsAndNexusesWorker, type: :worker do
   end
 
   context "when nexus has locode" do
-    let!(:nexus) { FactoryBot.create(:legacy_nexus, :gothenburg) }
+    let!(:nexus) { FactoryBot.create(:legacy_nexus, :segot) }
 
     it "doesn't delete nexuses" do
       described_class.new.perform

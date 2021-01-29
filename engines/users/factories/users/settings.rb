@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :users_setting, class: "Users::Settings" do
+  factory :users_settings, class: "Users::Settings" do
     currency { "EUR" }
-    association :user, factory: :users_user
+
+    user { association(:users_user, settings: instance) }
   end
 end
 

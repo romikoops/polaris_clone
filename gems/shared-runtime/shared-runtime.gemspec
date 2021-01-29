@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activerecord-postgis-adapter", "~> 5.2.2"
+  spec.add_dependency "activerecord-safer_migrations", "~> 3.0"
   spec.add_dependency "activestorage-cascade", "~> 0.1.1"
   spec.add_dependency "audited", "~> 4.9"
   spec.add_dependency "bootsnap", ">= 1.1.0"

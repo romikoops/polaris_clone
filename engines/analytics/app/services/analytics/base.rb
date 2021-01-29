@@ -59,7 +59,7 @@ module Analytics
     end
 
     def clients
-      @clients ||= Organizations::User.where(organization: organization).where.not(email: blacklisted_emails)
+      @clients ||= Users::Client.where(organization: organization).where.not(email: blacklisted_emails)
     end
 
     private
@@ -83,20 +83,20 @@ module Analytics
 
     def profile_join(reference:)
       <<~SQL
-        INNER JOIN users_users
-          ON #{reference}.user_id = users_users.id
-        INNER JOIN profiles_profiles
-          ON users_users.id = profiles_profiles.user_id
+        INNER JOIN users_clients
+          ON #{reference}.user_id = users_clients.id
+        INNER JOIN users_client_profiles
+          ON users_clients.id = users_client_profiles.user_id
       SQL
     end
 
     def companies_join(reference:)
       <<~SQL
-        INNER JOIN users_users
-          ON #{reference}.user_id = users_users.id
+        INNER JOIN users_clients
+          ON #{reference}.user_id = users_clients.id
         INNER JOIN companies_memberships
-          ON companies_memberships.member_id = users_users.id
-          AND companies_memberships.member_type = 'Users::User'
+          ON companies_memberships.member_id = users_clients.id
+          AND companies_memberships.member_type = 'Users::Client'
         INNER JOIN companies_companies
           ON companies_memberships.company_id = companies_companies.id
       SQL

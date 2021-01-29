@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe Api::Routing::NexusRoutingService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) {
-    FactoryBot.create(:organizations_user, email: "test@example.com",
-                                           password: "veryspeciallysecurehorseradish", organization: organization)
+    FactoryBot.create(:users_client, email: "test@example.com",
+                                     password: "veryspeciallysecurehorseradish", organization: organization)
   }
   let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
   let(:origin_hub) { itinerary.origin_hub }

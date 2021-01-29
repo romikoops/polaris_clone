@@ -7,11 +7,14 @@ eval_gemfile "../analytics/Gemfile.runtime"
 gem "api_auth", path: "../api_auth"
 eval_gemfile "../api_auth/Gemfile.runtime"
 
-gem "authentication", path: "../authentication"
-eval_gemfile "../authentication/Gemfile.runtime"
-
 gem "cargo", path: "../cargo"
 eval_gemfile "../cargo/Gemfile.runtime"
+
+gem "carta", path: "../carta"
+eval_gemfile "../carta/Gemfile.runtime"
+
+gem "journey", path: "../journey"
+eval_gemfile "../journey/Gemfile.runtime"
 
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"
@@ -30,6 +33,9 @@ eval_gemfile "../result_formatter/Gemfile.runtime"
 
 gem "cms_data", path: "../cms_data"
 eval_gemfile "../cms_data/Gemfile.runtime"
+
+gem "treasury", path: "../treasury"
+eval_gemfile "../treasury/Gemfile.runtime"
 
 gem "trucking", path: "../trucking"
 eval_gemfile "../trucking/Gemfile.runtime"

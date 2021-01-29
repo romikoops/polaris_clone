@@ -50,7 +50,7 @@ class Admin::MembershipsController < Admin::AdminBaseController
       when "group"
         Groups::Group.find(params[:targetId])
       when "user"
-        Organizations::User.find(params[:targetId])
+        Users::Client.find(params[:targetId])
       end
     end
   end
@@ -62,9 +62,9 @@ class Admin::MembershipsController < Admin::AdminBaseController
 
   def member_info(membership:)
     case membership.member_type
-    when "Users::User"
+    when "Users::Client"
       {
-        member_name: Profiles::ProfileService.fetch(user_id: membership.member_id).full_name,
+        member_name: membership.member.profile.full_name,
         human_type: "client",
         member_email: membership.member.email,
         original_member_id: membership.member_id

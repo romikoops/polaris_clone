@@ -90,7 +90,7 @@ RSpec.describe Address do
   end
 
   describe ".primary_for?" do
-    let(:user) { FactoryBot.create(:organizations_user) }
+    let(:user) { FactoryBot.create(:users_client) }
     let(:addresses) { FactoryBot.create_list(:address, 2) }
 
     before do

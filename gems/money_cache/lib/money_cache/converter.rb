@@ -9,10 +9,10 @@ module MoneyCache
   class Converter
     def initialize(ttl: 6.hours, klass: nil, date: nil, config: {})
       @ttl = ttl
-      @last_updated_at = DateTime.now
       @date = date
       @klass = klass
       @config = config
+      @last_updated_at = Time.at(0).utc
     end
 
     def get_rate(from_currency, to_currency)
@@ -23,60 +23,35 @@ module MoneyCache
       @store ||= Money::RatesStore::Memory.new
     end
 
-    delegate :add_rate, to: :store
-
     private
 
-    attr_reader :klass, :date, :last_updated_at
-
-    def bank
-      @bank ||= Money::Bank::OpenExchangeRatesBank.new(store).tap do |bank|
-        bank.app_id = @config.dig(:bank_app_id)
-      end
-    end
-
-    def refresh_rates
-      bank.update_rates
-      new_rates = bank.rates.map { |key, rate|
-        from, to = key.split("_TO_")
-        expand_rate(from_currency: from, to_currency: to, rate: rate)
-      }
-      import_result = klass.import(new_rates)
-      @last_updated_at = DateTime.now if import_result.failed_instances.empty?
-    end
-
-    def expand_rate(from_currency:, to_currency:, rate:)
-      {
-        from: from_currency,
-        to: to_currency,
-        rate: rate,
-        created_at: last_updated_at,
-        updated_at: last_updated_at
-      }
-    end
-
-    def rates
-      @rates ||= if date.present?
-        klass.for_date(date: date)
-      else
-        klass.current
-      end
-    end
+    attr_reader :klass, :date, :config, :last_updated_at
 
     def current_store
-      @current_store ||= begin
-        refresh_rates if should_refresh_rates?
+      rates = if date.present?
+        klass.for_date(date: date)
+      elsif last_updated_at < cache_time_window
+        klass.current
+      end
 
+      if rates.present?
         rates.each do |exchange_rate|
           store.add_rate(exchange_rate.from, exchange_rate.to, exchange_rate.rate)
         end
+        @last_updated_at = DateTime.now.utc
+      end
 
-        store
+      store
+    end
+
+    def bank
+      Money::Bank::OpenExchangeRatesBank.new(store).tap do |bank|
+        bank.app_id = config.dig(:bank_app_id)
       end
     end
 
-    def should_refresh_rates?
-      date.blank? && !klass.where("created_at > ?", 1.minute.ago).exists?
+    def cache_time_window
+      DateTime.now.utc - 24.hours
     end
   end
 end

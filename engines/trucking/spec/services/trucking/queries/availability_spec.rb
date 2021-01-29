@@ -5,21 +5,21 @@ require "rails_helper"
 RSpec.describe Trucking::Queries::Availability do
   describe ".perform" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:hub) { FactoryBot.create(:legacy_hub, latitude: latitude, longitude: longitude, organization: organization) }
+    let(:hub) { FactoryBot.create(:legacy_hub, :gothenburg, latitude: latitude, longitude: longitude, organization: organization) }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
-    let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
-    let(:trucking_location_geometry) { FactoryBot.create(:trucking_location, :with_location) }
-    let(:trucking_location_distance) { FactoryBot.create(:trucking_location, :distance) }
+    let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode, country: hub.country) }
+    let(:trucking_location_geometry) { FactoryBot.create(:trucking_location, :with_location, country: hub.country) }
+    let(:trucking_location_distance) { FactoryBot.create(:trucking_location, :distance, country: hub.country) }
 
     let(:zipcode) { "15211" }
     let(:latitude) { "57.000000" }
     let(:longitude) { "11.100000" }
     let(:load_type) { "cargo_item" }
     let(:carriage) { "pre" }
-    let(:country_code) { "SE" }
+    let(:country_code) { hub.address.country.code }
 
     let(:address) do
-      FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
+      FactoryBot.create(:legacy_address, country: hub.address.country, zip_code: zipcode, latitude: latitude, longitude: longitude)
     end
     let(:trucking_results) { described_class.new(args).perform }
     let(:query_type) { :zipcode }

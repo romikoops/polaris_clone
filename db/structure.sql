@@ -80,6 +80,25 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: journey_colli_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.journey_colli_type AS ENUM (
+    'barrel',
+    'bottle',
+    'carton',
+    'case',
+    'crate',
+    'drum',
+    'package',
+    'pallet',
+    'roll',
+    'skid',
+    'stack'
+);
+
+
+--
 -- Name: journey_document_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -102,6 +121,16 @@ CREATE TYPE public.journey_document_type AS ENUM (
 
 
 --
+-- Name: journey_load_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.journey_load_type AS ENUM (
+    'lcl',
+    'fcl'
+);
+
+
+--
 -- Name: journey_mode_of_transport; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -111,6 +140,18 @@ CREATE TYPE public.journey_mode_of_transport AS ENUM (
     'rail',
     'truck',
     'carriage'
+);
+
+
+--
+-- Name: journey_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.journey_status AS ENUM (
+    'queued',
+    'running',
+    'completed',
+    'failed'
 );
 
 
@@ -750,45 +791,6 @@ ALTER SEQUENCE public.alternative_names_id_seq OWNED BY public.alternative_names
 CREATE TABLE public.ar_internal_metadata (
     key character varying NOT NULL,
     value character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: booking_offers; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.booking_offers (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    organization_id uuid,
-    query_id uuid,
-    shipper_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: booking_queries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.booking_queries (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    organization_id uuid,
-    customer_id uuid,
-    creator_id uuid,
-    company_id uuid,
-    desired_start_date timestamp without time zone,
-    origin_type character varying,
-    origin_id uuid,
-    destination_type character varying,
-    destination_id uuid,
-    legacy_origin_type character varying,
-    legacy_origin_id bigint,
-    legacy_destination_type character varying,
-    legacy_destination_id bigint,
-    category integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1706,16 +1708,17 @@ CREATE TABLE public.journey_cargo_units (
     height_value numeric(20,5) DEFAULT 0.0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    colli_type public.journey_colli_type,
     CONSTRAINT journey_cargo_units_cargo_class_presence CHECK (((cargo_class IS NOT NULL) AND ((cargo_class)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_cargo_units_height_unit_presence CHECK (((height_unit IS NOT NULL) AND ((height_unit)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_cargo_units_height_value_numericality CHECK ((height_value > (0)::numeric)),
+    CONSTRAINT journey_cargo_units_height_value_numericality CHECK ((height_value >= (0)::numeric)),
     CONSTRAINT journey_cargo_units_length_unit_presence CHECK (((length_unit IS NOT NULL) AND ((length_unit)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_cargo_units_length_value_numericality CHECK ((length_value > (0)::numeric)),
+    CONSTRAINT journey_cargo_units_length_value_numericality CHECK ((length_value >= (0)::numeric)),
     CONSTRAINT journey_cargo_units_quantity_numericality CHECK ((quantity > 0)),
     CONSTRAINT journey_cargo_units_weight_unit_presence CHECK (((weight_unit IS NOT NULL) AND ((weight_unit)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_cargo_units_weight_value_numericality CHECK ((weight_value > (0)::numeric)),
     CONSTRAINT journey_cargo_units_width_unit_presence CHECK (((width_unit IS NOT NULL) AND ((width_unit)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_cargo_units_width_value_numericality CHECK ((width_value > (0)::numeric))
+    CONSTRAINT journey_cargo_units_width_value_numericality CHECK ((width_value >= (0)::numeric))
 );
 
 
@@ -1783,6 +1786,26 @@ CREATE TABLE public.journey_documents (
 
 
 --
+-- Name: journey_errors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_errors (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    result_set_id uuid,
+    cargo_unit_id uuid,
+    code integer,
+    service character varying,
+    carrier character varying,
+    mode_of_transport character varying,
+    property character varying,
+    value character varying,
+    "limit" character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: journey_line_item_cargo_units; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1832,7 +1855,6 @@ CREATE TABLE public.journey_line_items (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT journey_line_items_fee_code_presence CHECK (((fee_code IS NOT NULL) AND ((fee_code)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_line_items_note_presence CHECK (((note IS NOT NULL) AND ((note)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_line_items_units_numericality CHECK ((units > 0)),
     CONSTRAINT journey_line_items_wm_rate_numericality CHECK ((wm_rate > (0)::numeric))
 );
@@ -1858,7 +1880,8 @@ CREATE TABLE public.journey_offer_results (
 CREATE TABLE public.journey_offers (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    query_id uuid
 );
 
 
@@ -1883,6 +1906,9 @@ CREATE TABLE public.journey_queries (
     delivery_date timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    creator_type character varying,
+    billable boolean DEFAULT false,
+    load_type public.journey_load_type,
     CONSTRAINT delivery_after_cargo_ready_date CHECK ((delivery_date > cargo_ready_date)),
     CONSTRAINT journey_queries_destination_coordinates_presence CHECK (((destination_coordinates IS NOT NULL) AND ((destination_coordinates)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
@@ -1899,7 +1925,10 @@ CREATE TABLE public.journey_result_sets (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     query_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    currency character varying NOT NULL,
+    status public.journey_status,
+    CONSTRAINT journey_result_sets_currency_presence CHECK (((currency IS NOT NULL) AND ((currency)::text !~ '^\s*$'::text)))
 );
 
 
@@ -1928,6 +1957,8 @@ CREATE TABLE public.journey_route_points (
     coordinates public.geometry NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    locode character varying,
+    geo_id character varying,
     CONSTRAINT journey_route_points_function_presence CHECK (((function IS NOT NULL) AND ((function)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_route_points_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text)))
 );
@@ -1948,6 +1979,7 @@ CREATE TABLE public.journey_route_sections (
     mode_of_transport public.journey_mode_of_transport,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    transit_time integer NOT NULL,
     CONSTRAINT journey_route_sections_carrier_presence CHECK (((carrier IS NOT NULL) AND ((carrier)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_route_sections_service_presence CHECK (((service IS NOT NULL) AND ((service)::text !~ '^\s*$'::text)))
 );
@@ -1961,10 +1993,10 @@ CREATE TABLE public.journey_shipment_requests (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     result_id uuid,
     client_id uuid,
-    company_id uuid,
     preferred_voyage character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    company_id uuid,
     CONSTRAINT journey_shipment_requests_preferred_voyage_presence CHECK (((preferred_voyage IS NOT NULL) AND ((preferred_voyage)::text !~ '^\s*$'::text)))
 );
 
@@ -2218,7 +2250,8 @@ CREATE TABLE public.legacy_files (
     user_id uuid,
     organization_id uuid,
     target_type character varying,
-    target_id uuid
+    target_id uuid,
+    user_type character varying
 );
 
 
@@ -2769,20 +2802,6 @@ CREATE TABLE public.organizations_integration_tokens (
 
 
 --
--- Name: organizations_memberships; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.organizations_memberships (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    user_id uuid,
-    organization_id uuid,
-    role integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
 -- Name: organizations_organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2939,7 +2958,8 @@ CREATE TABLE public.pricings_breakdowns (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     source_type character varying,
-    source_id uuid
+    source_id uuid,
+    line_item_id uuid
 );
 
 
@@ -3030,7 +3050,8 @@ CREATE TABLE public.pricings_metadata (
     tenant_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    organization_id uuid
+    organization_id uuid,
+    result_id uuid
 );
 
 
@@ -3074,25 +3095,6 @@ CREATE TABLE public.pricings_rate_bases (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     sandbox_id uuid
-);
-
-
---
--- Name: profiles_profiles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.profiles_profiles (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    first_name character varying DEFAULT ''::character varying NOT NULL,
-    last_name character varying DEFAULT ''::character varying NOT NULL,
-    company_name character varying,
-    phone character varying,
-    legacy_user_id uuid,
-    deleted_at timestamp without time zone,
-    external_id character varying,
-    user_id uuid,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -3179,7 +3181,8 @@ CREATE TABLE public.quotations_quotations (
     completed boolean DEFAULT false,
     error_class character varying,
     creator_id uuid,
-    estimated boolean
+    estimated boolean,
+    creator_type character varying
 );
 
 
@@ -4396,6 +4399,20 @@ CREATE TABLE public.tenants_users (
 
 
 --
+-- Name: treasury_exchange_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.treasury_exchange_rates (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    "from" character varying,
+    "to" character varying,
+    rate numeric,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: trips; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4705,6 +4722,23 @@ CREATE TABLE public.users (
 
 
 --
+-- Name: users_admins; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_admins (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    email character varying NOT NULL,
+    crypted_password character varying,
+    salt character varying,
+    last_login_at timestamp without time zone,
+    last_activity_at timestamp without time zone,
+    last_login_from_ip_address character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: users_authentications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4713,6 +4747,72 @@ CREATE TABLE public.users_authentications (
     user_id uuid,
     provider character varying NOT NULL,
     uid character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_client_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_client_profiles (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    user_id uuid,
+    first_name character varying,
+    last_name character varying,
+    company_name character varying,
+    phone character varying,
+    deleted_at timestamp without time zone,
+    external_id character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_client_settings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_client_settings (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    user_id uuid,
+    locale character varying DEFAULT 'en-GB'::character varying,
+    language character varying DEFAULT 'en-GB'::character varying,
+    currency character varying DEFAULT 'EUR'::character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_clients; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_clients (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    deleted_at timestamp without time zone,
+    email character varying NOT NULL,
+    crypted_password character varying,
+    salt character varying,
+    last_login_at timestamp without time zone,
+    last_logout_at timestamp without time zone,
+    last_activity_at timestamp without time zone,
+    last_login_from_ip_address character varying,
+    unlock_token character varying,
+    failed_logins_count integer DEFAULT 0,
+    lock_expires_at timestamp without time zone,
+    magic_login_token character varying,
+    magic_login_token_expires_at timestamp without time zone,
+    magic_login_email_sent_at timestamp without time zone,
+    reset_password_token character varying,
+    reset_password_token_expires_at timestamp without time zone,
+    reset_password_email_sent_at timestamp without time zone,
+    access_count_to_reset_password_page integer DEFAULT 0,
+    activation_token character varying,
+    activation_state character varying,
+    activation_token_expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -4735,6 +4835,39 @@ CREATE SEQUENCE public.users_id_seq
 --
 
 ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: users_memberships; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_memberships (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    user_id uuid,
+    organization_id uuid,
+    role integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: users_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users_profiles (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    first_name character varying DEFAULT ''::character varying NOT NULL,
+    last_name character varying DEFAULT ''::character varying NOT NULL,
+    company_name character varying,
+    phone character varying,
+    legacy_user_id uuid,
+    deleted_at timestamp without time zone,
+    external_id character varying,
+    user_id uuid,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
 
 
 --
@@ -5312,22 +5445,6 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: booking_offers booking_offers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_offers
-    ADD CONSTRAINT booking_offers_pkey PRIMARY KEY (id);
-
-
---
--- Name: booking_queries booking_queries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_queries
-    ADD CONSTRAINT booking_queries_pkey PRIMARY KEY (id);
-
-
---
 -- Name: cargo_units cargo_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5584,6 +5701,14 @@ ALTER TABLE ONLY public.journey_documents
 
 
 --
+-- Name: journey_errors journey_errors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_errors
+    ADD CONSTRAINT journey_errors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: journey_line_item_cargo_units journey_line_item_cargo_units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5597,14 +5722,6 @@ ALTER TABLE ONLY public.journey_line_item_cargo_units
 
 ALTER TABLE ONLY public.journey_line_item_sets
     ADD CONSTRAINT journey_line_item_sets_pkey PRIMARY KEY (id);
-
-
---
--- Name: journey_line_items journey_line_items_line_item_set_id_route_section_id_route_poin; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.journey_line_items
-    ADD CONSTRAINT journey_line_items_line_item_set_id_route_section_id_route_poin EXCLUDE USING gist (line_item_set_id WITH =, route_section_id WITH =, route_point_id WITH =, fee_code WITH =) DEFERRABLE;
 
 
 --
@@ -6000,10 +6117,10 @@ ALTER TABLE ONLY public.organizations_integration_tokens
 
 
 --
--- Name: organizations_memberships organizations_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users_memberships organizations_memberships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.organizations_memberships
+ALTER TABLE ONLY public.users_memberships
     ADD CONSTRAINT organizations_memberships_pkey PRIMARY KEY (id);
 
 
@@ -6112,10 +6229,10 @@ ALTER TABLE ONLY public.pricings_rate_bases
 
 
 --
--- Name: profiles_profiles profiles_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users_profiles profiles_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.profiles_profiles
+ALTER TABLE ONLY public.users_profiles
     ADD CONSTRAINT profiles_profiles_pkey PRIMARY KEY (id);
 
 
@@ -6560,6 +6677,14 @@ ALTER TABLE ONLY public.tenants_users
 
 
 --
+-- Name: treasury_exchange_rates treasury_exchange_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.treasury_exchange_rates
+    ADD CONSTRAINT treasury_exchange_rates_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: trips trips_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6664,11 +6789,43 @@ ALTER TABLE ONLY public.user_managers
 
 
 --
+-- Name: users_admins users_admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_admins
+    ADD CONSTRAINT users_admins_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_authentications users_authentications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users_authentications
     ADD CONSTRAINT users_authentications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_client_profiles users_client_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_client_profiles
+    ADD CONSTRAINT users_client_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_client_settings users_client_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_client_settings
+    ADD CONSTRAINT users_client_settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_clients users_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_clients
+    ADD CONSTRAINT users_clients_pkey PRIMARY KEY (id);
 
 
 --
@@ -6800,83 +6957,6 @@ CREATE INDEX index_agencies_on_tenant_id ON public.agencies USING btree (tenant_
 --
 
 CREATE INDEX index_aggregated_cargos_on_sandbox_id ON public.aggregated_cargos USING btree (sandbox_id);
-
-
---
--- Name: index_booking_offers_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_offers_on_organization_id ON public.booking_offers USING btree (organization_id);
-
-
---
--- Name: index_booking_offers_on_query_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_offers_on_query_id ON public.booking_offers USING btree (query_id);
-
-
---
--- Name: index_booking_offers_on_shipper_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_offers_on_shipper_id ON public.booking_offers USING btree (shipper_id);
-
-
---
--- Name: index_booking_queries_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_company_id ON public.booking_queries USING btree (company_id);
-
-
---
--- Name: index_booking_queries_on_creator_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_creator_id ON public.booking_queries USING btree (creator_id);
-
-
---
--- Name: index_booking_queries_on_customer_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_customer_id ON public.booking_queries USING btree (customer_id);
-
-
---
--- Name: index_booking_queries_on_destination_type_and_destination_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_destination_type_and_destination_id ON public.booking_queries USING btree (destination_type, destination_id);
-
-
---
--- Name: index_booking_queries_on_legacy_destination; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_legacy_destination ON public.booking_queries USING btree (legacy_destination_type, legacy_destination_id);
-
-
---
--- Name: index_booking_queries_on_legacy_origin; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_legacy_origin ON public.booking_queries USING btree (legacy_origin_type, legacy_origin_id);
-
-
---
--- Name: index_booking_queries_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_organization_id ON public.booking_queries USING btree (organization_id);
-
-
---
--- Name: index_booking_queries_on_origin_type_and_origin_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_booking_queries_on_origin_type_and_origin_id ON public.booking_queries USING btree (origin_type, origin_id);
 
 
 --
@@ -7066,6 +7146,13 @@ CREATE INDEX index_companies_companies_on_address_id ON public.companies_compani
 --
 
 CREATE INDEX index_companies_companies_on_organization_id ON public.companies_companies USING btree (organization_id);
+
+
+--
+-- Name: index_companies_companies_on_organization_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_companies_on_organization_id_and_name ON public.companies_companies USING btree (organization_id, name);
 
 
 --
@@ -7377,6 +7464,20 @@ CREATE INDEX index_journey_documents_on_shipment_request_id ON public.journey_do
 
 
 --
+-- Name: index_journey_errors_on_cargo_unit_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_errors_on_cargo_unit_id ON public.journey_errors USING btree (cargo_unit_id);
+
+
+--
+-- Name: index_journey_errors_on_result_set_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_errors_on_result_set_id ON public.journey_errors USING btree (result_set_id);
+
+
+--
 -- Name: index_journey_line_item_cargo_units_on_cargo_unit_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7440,6 +7541,20 @@ CREATE INDEX index_journey_offer_results_on_result_id ON public.journey_offer_re
 
 
 --
+-- Name: index_journey_offers_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_offers_on_query_id ON public.journey_offers USING btree (query_id);
+
+
+--
+-- Name: index_journey_queries_on_billable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_billable ON public.journey_queries USING btree (billable);
+
+
+--
 -- Name: index_journey_queries_on_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7454,10 +7569,10 @@ CREATE INDEX index_journey_queries_on_company_id ON public.journey_queries USING
 
 
 --
--- Name: index_journey_queries_on_creator_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_journey_queries_on_creator_id_and_creator_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_journey_queries_on_creator_id ON public.journey_queries USING btree (creator_id);
+CREATE INDEX index_journey_queries_on_creator_id_and_creator_type ON public.journey_queries USING btree (creator_id, creator_type);
 
 
 --
@@ -7738,6 +7853,13 @@ CREATE INDEX index_legacy_files_on_tenant_id ON public.legacy_files USING btree 
 --
 
 CREATE INDEX index_legacy_files_on_user_id ON public.legacy_files USING btree (user_id);
+
+
+--
+-- Name: index_legacy_files_on_user_id_and_user_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_legacy_files_on_user_id_and_user_type ON public.legacy_files USING btree (user_id, user_type);
 
 
 --
@@ -8133,34 +8255,6 @@ CREATE INDEX index_organizations_integration_tokens_on_organization_id ON public
 
 
 --
--- Name: index_organizations_memberships_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_organizations_memberships_on_organization_id ON public.organizations_memberships USING btree (organization_id);
-
-
---
--- Name: index_organizations_memberships_on_role; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_organizations_memberships_on_role ON public.organizations_memberships USING btree (role);
-
-
---
--- Name: index_organizations_memberships_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_organizations_memberships_on_user_id ON public.organizations_memberships USING btree (user_id);
-
-
---
--- Name: index_organizations_memberships_on_user_id_and_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_organizations_memberships_on_user_id_and_organization_id ON public.organizations_memberships USING btree (user_id, organization_id);
-
-
---
 -- Name: index_organizations_organizations_on_slug; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8518,20 +8612,6 @@ CREATE INDEX index_pricings_rate_bases_on_sandbox_id ON public.pricings_rate_bas
 
 
 --
--- Name: index_profiles_profiles_on_legacy_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_profiles_profiles_on_legacy_user_id ON public.profiles_profiles USING btree (legacy_user_id);
-
-
---
--- Name: index_profiles_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_profiles_profiles_on_user_id ON public.profiles_profiles USING btree (user_id);
-
-
---
 -- Name: index_quotations_line_items_on_cargo_type_and_cargo_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8564,6 +8644,13 @@ CREATE INDEX index_quotations_on_sandbox_id ON public.quotations USING btree (sa
 --
 
 CREATE INDEX index_quotations_on_user_id ON public.quotations USING btree (user_id);
+
+
+--
+-- Name: index_quotations_quotations_on_creator_id_and_creator_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quotations_quotations_on_creator_id_and_creator_type ON public.quotations_quotations USING btree (creator_id, creator_type);
 
 
 --
@@ -9491,6 +9578,27 @@ CREATE INDEX index_tenants_users_on_unlock_token ON public.tenants_users USING b
 
 
 --
+-- Name: index_treasury_exchange_rates_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_treasury_exchange_rates_on_created_at ON public.treasury_exchange_rates USING btree (created_at);
+
+
+--
+-- Name: index_treasury_exchange_rates_on_from; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_treasury_exchange_rates_on_from ON public.treasury_exchange_rates USING btree ("from");
+
+
+--
+-- Name: index_treasury_exchange_rates_on_to; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_treasury_exchange_rates_on_to ON public.treasury_exchange_rates USING btree ("to");
+
+
+--
 -- Name: index_trips_on_closing_date; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9806,10 +9914,108 @@ CREATE INDEX index_user_managers_on_user_id ON public.user_managers USING btree 
 
 
 --
+-- Name: index_users_admins_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_admins_on_email ON public.users_admins USING btree (email);
+
+
+--
 -- Name: index_users_authentications_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_authentications_on_user_id ON public.users_authentications USING btree (user_id);
+
+
+--
+-- Name: index_users_client_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_client_profiles_on_user_id ON public.users_client_profiles USING btree (user_id);
+
+
+--
+-- Name: index_users_client_settings_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_client_settings_on_user_id ON public.users_client_settings USING btree (user_id);
+
+
+--
+-- Name: index_users_clients_on_activation_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_activation_token ON public.users_clients USING btree (activation_token) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_clients_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_email ON public.users_clients USING btree (email) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_clients_on_email_and_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_clients_on_email_and_organization_id ON public.users_clients USING btree (email, organization_id);
+
+
+--
+-- Name: index_users_clients_on_magic_login_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_magic_login_token ON public.users_clients USING btree (magic_login_token) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_clients_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_organization_id ON public.users_clients USING btree (organization_id);
+
+
+--
+-- Name: index_users_clients_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_reset_password_token ON public.users_clients USING btree (reset_password_token) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_clients_on_unlock_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_clients_on_unlock_token ON public.users_clients USING btree (unlock_token) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_memberships_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_memberships_on_organization_id ON public.users_memberships USING btree (organization_id);
+
+
+--
+-- Name: index_users_memberships_on_role; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_memberships_on_role ON public.users_memberships USING btree (role);
+
+
+--
+-- Name: index_users_memberships_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_memberships_on_user_id ON public.users_memberships USING btree (user_id);
+
+
+--
+-- Name: index_users_memberships_on_user_id_and_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_memberships_on_user_id_and_organization_id ON public.users_memberships USING btree (user_id, organization_id);
 
 
 --
@@ -9873,6 +10079,20 @@ CREATE INDEX index_users_on_tenant_id ON public.users USING btree (tenant_id);
 --
 
 CREATE UNIQUE INDEX index_users_on_uid_and_provider ON public.users USING btree (uid, provider);
+
+
+--
+-- Name: index_users_profiles_on_legacy_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_profiles_on_legacy_user_id ON public.users_profiles USING btree (legacy_user_id);
+
+
+--
+-- Name: index_users_profiles_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_profiles_on_user_id ON public.users_profiles USING btree (user_id);
 
 
 --
@@ -10086,6 +10306,13 @@ CREATE UNIQUE INDEX uniq_index_1 ON public.locations_names USING btree (language
 
 
 --
+-- Name: users_clients_activity; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX users_clients_activity ON public.users_clients USING btree (last_logout_at, last_activity_at) WHERE (deleted_at IS NULL);
+
+
+--
 -- Name: users_users_activity; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10123,11 +10350,19 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 
 --
--- Name: organizations_memberships fk_rails_0becb5aad6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: users_memberships fk_rails_0becb5aad6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.organizations_memberships
+ALTER TABLE ONLY public.users_memberships
     ADD CONSTRAINT fk_rails_0becb5aad6 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+
+
+--
+-- Name: users_client_profiles fk_rails_10b9398b35; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_client_profiles
+    ADD CONSTRAINT fk_rails_10b9398b35 FOREIGN KEY (user_id) REFERENCES public.users_clients(id) ON DELETE CASCADE;
 
 
 --
@@ -10147,27 +10382,11 @@ ALTER TABLE ONLY public.legacy_transit_times
 
 
 --
--- Name: booking_queries fk_rails_17316b3ec3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_queries
-    ADD CONSTRAINT fk_rails_17316b3ec3 FOREIGN KEY (company_id) REFERENCES public.companies_companies(id);
-
-
---
 -- Name: journey_line_items fk_rails_195193f869; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.journey_line_items
     ADD CONSTRAINT fk_rails_195193f869 FOREIGN KEY (route_section_id) REFERENCES public.journey_route_sections(id) ON DELETE CASCADE;
-
-
---
--- Name: journey_queries fk_rails_1ac20a83e4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.journey_queries
-    ADD CONSTRAINT fk_rails_1ac20a83e4 FOREIGN KEY (client_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
 
 
 --
@@ -10227,14 +10446,6 @@ ALTER TABLE ONLY public.trucking_couriers
 
 
 --
--- Name: user_addresses fk_rails_2718c5b54a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_addresses
-    ADD CONSTRAINT fk_rails_2718c5b54a FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: charge_breakdowns fk_rails_271edacff3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10259,14 +10470,6 @@ ALTER TABLE ONLY public.shipments_contacts
 
 
 --
--- Name: trucking_truckings fk_rails_299447a288; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_truckings
-    ADD CONSTRAINT fk_rails_299447a288 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: organizations_themes fk_rails_29dc7fb43d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10280,6 +10483,14 @@ ALTER TABLE ONLY public.organizations_themes
 
 ALTER TABLE ONLY public.shipments_shipment_requests
     ADD CONSTRAINT fk_rails_2d66d5e56e FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_errors fk_rails_2d9661ddf7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_errors
+    ADD CONSTRAINT fk_rails_2d9661ddf7 FOREIGN KEY (cargo_unit_id) REFERENCES public.journey_cargo_units(id) ON DELETE CASCADE;
 
 
 --
@@ -10307,35 +10518,11 @@ ALTER TABLE ONLY public.pricings_details
 
 
 --
--- Name: booking_queries fk_rails_3f5db632f7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_queries
-    ADD CONSTRAINT fk_rails_3f5db632f7 FOREIGN KEY (creator_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: journey_shipments fk_rails_4028c4cb14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.journey_shipments
     ADD CONSTRAINT fk_rails_4028c4cb14 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
-
-
---
--- Name: booking_queries fk_rails_411971da9a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_queries
-    ADD CONSTRAINT fk_rails_411971da9a FOREIGN KEY (customer_id) REFERENCES public.users_users(id);
-
-
---
--- Name: shipments_shipment_requests fk_rails_437327dee3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.shipments_shipment_requests
-    ADD CONSTRAINT fk_rails_437327dee3 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -10395,27 +10582,11 @@ ALTER TABLE ONLY public.groups_memberships
 
 
 --
--- Name: local_charges fk_rails_4fc4a67616; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.local_charges
-    ADD CONSTRAINT fk_rails_4fc4a67616 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: tenant_routing_routes fk_rails_505fa01ce8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tenant_routing_routes
     ADD CONSTRAINT fk_rails_505fa01ce8 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: address_book_contacts fk_rails_50a34db7c5; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.address_book_contacts
-    ADD CONSTRAINT fk_rails_50a34db7c5 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -10427,19 +10598,11 @@ ALTER TABLE ONLY public.tenant_vehicles
 
 
 --
--- Name: booking_queries fk_rails_53ef0f7af3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_queries
-    ADD CONSTRAINT fk_rails_53ef0f7af3 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
 -- Name: journey_shipment_requests fk_rails_58ba0dc412; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.journey_shipment_requests
-    ADD CONSTRAINT fk_rails_58ba0dc412 FOREIGN KEY (company_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_58ba0dc412 FOREIGN KEY (company_id) REFERENCES public.companies_companies(id) ON DELETE CASCADE;
 
 
 --
@@ -10547,22 +10710,6 @@ ALTER TABLE ONLY public.pricings_pricings
 
 
 --
--- Name: shipments fk_rails_71a7b88fec; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.shipments
-    ADD CONSTRAINT fk_rails_71a7b88fec FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
--- Name: booking_offers fk_rails_7219a43f02; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_offers
-    ADD CONSTRAINT fk_rails_7219a43f02 FOREIGN KEY (shipper_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: itineraries fk_rails_73157e6dfb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10635,10 +10782,10 @@ ALTER TABLE ONLY public.journey_documents
 
 
 --
--- Name: profiles_profiles fk_rails_7c1bb95722; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: users_profiles fk_rails_7c1bb95722; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.profiles_profiles
+ALTER TABLE ONLY public.users_profiles
     ADD CONSTRAINT fk_rails_7c1bb95722 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
@@ -10675,14 +10822,6 @@ ALTER TABLE ONLY public.quotations_tenders
 
 
 --
--- Name: journey_shipment_requests fk_rails_810ec0e77c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.journey_shipment_requests
-    ADD CONSTRAINT fk_rails_810ec0e77c FOREIGN KEY (client_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
-
-
---
 -- Name: legacy_transit_times fk_rails_83ef2a5f36; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10699,10 +10838,10 @@ ALTER TABLE ONLY public.legacy_contents
 
 
 --
--- Name: organizations_memberships fk_rails_84f4e71154; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: users_memberships fk_rails_84f4e71154; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.organizations_memberships
+ALTER TABLE ONLY public.users_memberships
     ADD CONSTRAINT fk_rails_84f4e71154 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
@@ -10739,14 +10878,6 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 
 --
--- Name: shipments_shipments fk_rails_8b183ef30a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.shipments_shipments
-    ADD CONSTRAINT fk_rails_8b183ef30a FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: rates_sections fk_rails_8bbc8da44e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10768,14 +10899,6 @@ ALTER TABLE ONLY public.journey_cargo_units
 
 ALTER TABLE ONLY public.organizations_domains
     ADD CONSTRAINT fk_rails_8c6c49b797 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: contacts fk_rails_8d2134e55e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.contacts
-    ADD CONSTRAINT fk_rails_8d2134e55e FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -10883,35 +11006,11 @@ ALTER TABLE ONLY public.map_data
 
 
 --
--- Name: journey_queries fk_rails_a075bc20e4; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.journey_queries
-    ADD CONSTRAINT fk_rails_a075bc20e4 FOREIGN KEY (creator_id) REFERENCES public.users_users(id) ON DELETE CASCADE;
-
-
---
 -- Name: remarks fk_rails_a7725ab891; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.remarks
     ADD CONSTRAINT fk_rails_a7725ab891 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: booking_offers fk_rails_a7ba0fc710; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_offers
-    ADD CONSTRAINT fk_rails_a7ba0fc710 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: quotations_quotations fk_rails_a7ea76ad6d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.quotations_quotations
-    ADD CONSTRAINT fk_rails_a7ea76ad6d FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -10987,14 +11086,6 @@ ALTER TABLE ONLY public.shipments_shipments
 
 
 --
--- Name: user_managers fk_rails_b2547992da; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_managers
-    ADD CONSTRAINT fk_rails_b2547992da FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: oauth_access_grants fk_rails_b4b53e07b8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11043,6 +11134,14 @@ ALTER TABLE ONLY public.journey_route_sections
 
 
 --
+-- Name: users_client_settings fk_rails_c191a9e642; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users_client_settings
+    ADD CONSTRAINT fk_rails_c191a9e642 FOREIGN KEY (user_id) REFERENCES public.users_clients(id) ON DELETE CASCADE;
+
+
+--
 -- Name: rms_data_cells fk_rails_c5edb42f5f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11059,11 +11158,11 @@ ALTER TABLE ONLY public.journey_commodity_infos
 
 
 --
--- Name: users_authentications fk_rails_c7c48cb74f; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: journey_offers fk_rails_c7cf09400f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.users_authentications
-    ADD CONSTRAINT fk_rails_c7c48cb74f FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+ALTER TABLE ONLY public.journey_offers
+    ADD CONSTRAINT fk_rails_c7cf09400f FOREIGN KEY (query_id) REFERENCES public.journey_queries(id);
 
 
 --
@@ -11072,14 +11171,6 @@ ALTER TABLE ONLY public.users_authentications
 
 ALTER TABLE ONLY public.tenant_routing_connections
     ADD CONSTRAINT fk_rails_c8925af1c0 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: legacy_files fk_rails_c98708ee93; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.legacy_files
-    ADD CONSTRAINT fk_rails_c98708ee93 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -11155,14 +11246,6 @@ ALTER TABLE ONLY public.journey_queries
 
 
 --
--- Name: booking_offers fk_rails_e222960bb6; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.booking_offers
-    ADD CONSTRAINT fk_rails_e222960bb6 FOREIGN KEY (query_id) REFERENCES public.booking_queries(id);
-
-
---
 -- Name: customs_fees fk_rails_e4008c2f77; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11171,19 +11254,19 @@ ALTER TABLE ONLY public.customs_fees
 
 
 --
--- Name: pricings_pricings fk_rails_e5e8b26009; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pricings_pricings
-    ADD CONSTRAINT fk_rails_e5e8b26009 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
 -- Name: pricings_margins fk_rails_e63b427b7b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pricings_margins
     ADD CONSTRAINT fk_rails_e63b427b7b FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_errors fk_rails_e919efdd24; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_errors
+    ADD CONSTRAINT fk_rails_e919efdd24 FOREIGN KEY (result_set_id) REFERENCES public.journey_result_sets(id) ON DELETE CASCADE;
 
 
 --
@@ -11232,22 +11315,6 @@ ALTER TABLE ONLY public.cargo_units
 
 ALTER TABLE ONLY public.journey_line_item_sets
     ADD CONSTRAINT fk_rails_f577c81f85 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id) ON DELETE CASCADE;
-
-
---
--- Name: quotations fk_rails_f63036eec2; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.quotations
-    ADD CONSTRAINT fk_rails_f63036eec2 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
-
-
---
--- Name: quotations_quotations fk_rails_f83422e04e; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.quotations_quotations
-    ADD CONSTRAINT fk_rails_f83422e04e FOREIGN KEY (creator_id) REFERENCES public.users_users(id) NOT VALID;
 
 
 --
@@ -11941,8 +12008,44 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201118173330'),
 ('20201123122102'),
 ('20201123132340'),
+('20201125125500'),
+('20201126093013'),
+('20201203085537'),
+('20201207154023'),
+('20201207155947'),
+('20201207170756'),
+('20201208000244'),
+('20201208132436'),
+('20201208132454'),
+('20201208141130'),
+('20201208141136'),
+('20201208141200'),
+('20201208141224'),
+('20201208141233'),
+('20201208141234'),
+('20201208141235'),
+('20201208141236'),
+('20201208141921'),
+('20201208181852'),
 ('20201208195413'),
+('20201209001010'),
+('20201209104618'),
+('20201209111052'),
+('20201215172635'),
+('20210104104843'),
+('20210106142800'),
+('20210107124521'),
+('20210108153200'),
 ('20210113164927'),
-('20210118124755');
+('20210114100514'),
+('20210118124755'),
+('20210118131428'),
+('20210120104101'),
+('20210121134241'),
+('20210122161319'),
+('20210122163838'),
+('20210125161336'),
+('20210128140153'),
+('20210129160626');
 
 

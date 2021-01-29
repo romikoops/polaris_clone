@@ -2,10 +2,12 @@
 
 module ResultFormatter
   class ExchangeRateService
-    attr_reader :tender
+    attr_reader :base_currency, :currencies, :timestamp
 
-    def initialize(tender:)
-      @tender = tender
+    def initialize(base_currency:, currencies:, timestamp: Time.zone.now)
+      @base_currency = base_currency
+      @currencies = currencies
+      @timestamp = timestamp
     end
 
     def perform
@@ -19,21 +21,11 @@ module ResultFormatter
 
     private
 
-    def base_currency
-      @base_currency ||= tender.amount.currency.iso_code
-    end
-
-    def currencies
-      @currencies ||= tender.line_items.pluck(:amount_currency).uniq
-    end
-
     def bank
-      return Money.default_bank if (1.minute.ago...Time.zone.now).cover?(tender.created_at)
-
       app_id = Settings.open_exchange_rate&.app_id || ""
       @bank ||= MoneyCache::Converter.new(
-        klass: Legacy::ExchangeRate,
-        date: tender.created_at,
+        klass: Treasury::ExchangeRate,
+        date: timestamp,
         config: {bank_app_id: app_id}
       )
     end

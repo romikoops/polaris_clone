@@ -2,27 +2,29 @@
 
 module Notes
   class Service
-    attr_reader :tender, :remarks, :charge_breakdown, :organization, :itinerary
+    attr_reader :tenant_vehicle, :remarks, :organization, :itinerary
 
-    def initialize(tender:, remarks: false)
-      @tender = tender
+    def initialize(itinerary:, tenant_vehicle:, remarks: false)
+      @tenant_vehicle = tenant_vehicle
       @remarks = remarks
-      @charge_breakdown = tender.charge_breakdown
-      @organization = tender.quotation.organization
-      @itinerary = tender.itinerary
+      @organization = itinerary.organization
+      @itinerary = itinerary
     end
 
     def fetch
-      note_association = Legacy::Note.where(organization_id: organization.id, remarks: remarks)
       note_association.where(target: hubs | nexii | countries | [itinerary])
         .or(note_association.where(pricings_pricing_id: pricing_ids))
         .or(note_association.where(target: nil, pricings_pricing_id: nil))
-        .select("DISTINCT ON (body) body, *")
         .order(:body)
+        .select("DISTINCT ON (body) body, *")
+    end
+
+    def note_association
+      @note_association ||= Legacy::Note.where(organization_id: organization.id, remarks: remarks)
     end
 
     def hubs
-      @hubs ||= [tender.origin_hub, tender.destination_hub]
+      @hubs ||= [itinerary.origin_hub, itinerary.destination_hub]
     end
 
     def nexii
@@ -34,7 +36,7 @@ module Notes
     end
 
     def pricing_ids
-      Pricings::Pricing.where(itinerary: tender.itinerary, tenant_vehicle: tender.tenant_vehicle)
+      Pricings::Pricing.where(itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     end
   end
 end

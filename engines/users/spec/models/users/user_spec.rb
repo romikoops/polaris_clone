@@ -7,12 +7,6 @@ module Users
     subject { FactoryBot.build(:users_user) }
 
     it { is_expected.to be_valid }
-
-    context "with activation" do
-      subject { FactoryBot.build(:users_user, activate: true) }
-
-      it { is_expected.to be_valid }
-    end
   end
 end
 
@@ -50,7 +44,7 @@ end
 # Indexes
 #
 #  index_users_users_on_activation_token        (activation_token) WHERE (deleted_at IS NULL)
-#  index_users_users_on_conflict_organizations  (email,organization_id) UNIQUE WHERE ((type)::text = 'Organizations::User'::text)
+#  index_users_users_on_conflict_organizations  (email,organization_id) UNIQUE WHERE ((type)::text = 'Users::Client'::text)
 #  index_users_users_on_conflict_users          (email) UNIQUE WHERE ((type)::text = 'Users::User'::text)
 #  index_users_users_on_email                   (email) WHERE (deleted_at IS NULL)
 #  index_users_users_on_magic_login_token       (magic_login_token) WHERE (deleted_at IS NULL)

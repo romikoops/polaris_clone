@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "required": [
+    "total",
+    "edited_total",
+    "name",
+    "cargo",
+    "trucking_pre",
+    "export",
+    "import",
+    "trucking_on"
+  ],
+  "properties": {
+    "total": {
+      "type": "object",
+      "required": [
+        "value",
+        "currency"
+      ],
+      "properties": {
+        "value": {"type": "number"},
+        "currency": {"type": "string"}
+      }
+    },
+    "edited_total": {
+      "type": "null"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+    "additionalProperties": {
+      "type": "object",
+      "required": [
+        "total",
+        "edited_total",
+        "name"
+      ],
+      "properties": {
+        "total": {
+          "type": "object",
+          "required": [
+            "value",
+            "currency"
+          ],
+          "properties": {
+            "value": {"type": "number"},
+            "currency": {"type": "string"}
+          }
+        },
+        "edited_total": {
+          "type": "null"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "object",
+            "required": [
+              "value",
+              "currency"
+            ],
+            "properties": {
+              "value": {"type": "number"},
+              "currency": {"type": "string"}
+            }
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string"},
+            "value": {"type": "number"},
+            "currency": {"type": "string"}
+          }
+        }
+      }
+    }
+  }

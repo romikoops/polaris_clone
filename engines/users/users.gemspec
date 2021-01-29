@@ -8,14 +8,18 @@ Gem::Specification.new do |spec|
   spec.summary = ""
 
   spec.metadata["type"] = "data"
+  spec.metadata["package"] = "core"
 
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "shared-runtime"
 
+  spec.add_dependency "organizations"
+
   spec.add_dependency "acts_as_paranoid", "~> 0.6.3"
   spec.add_dependency "pg_search", "~> 2.3.0"
+  spec.add_dependency "sorcery", "~> 0.15"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

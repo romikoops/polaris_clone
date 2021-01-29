@@ -53,8 +53,22 @@ Api::Engine.routes.draw do
           end
         end
       end
+    end
+  end
 
-      resources :widgets, only: %i[index create update destroy]
+  namespace :v2 do
+    resources :organizations, only: :index do
+      resources :queries, only: [:create, :show] do
+        get "result_set"
+      end
+      resources :result_sets, only: [:show] do
+        resources :results, only: [:index]
+        resources :errors, only: [:index]
+      end
+      resources :results, only: [:show] do
+        resources :charges, only: [:index]
+      end
+      resources :offers, only: [:create]
     end
   end
 end

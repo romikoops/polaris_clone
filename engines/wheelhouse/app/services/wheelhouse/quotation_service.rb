@@ -6,13 +6,13 @@ module Wheelhouse
     CONAINER_CARGO_CLASS = "fcl_20"
     CARGO_ITEM_TYPE = "Pallet"
 
-    attr_reader :estimated, :organization
+    attr_reader :estimated, :organization, :source, :load_type
     include Wheelhouse::ErrorHandler
 
-    def initialize(organization:, quotation_details:, shipping_info:, async: false)
+    def initialize(organization:, quotation_details:, shipping_info:, source:, async: false)
       @user_id = quotation_details[:user_id]
-      @creator = Users::User.find(quotation_details[:creator_id])
-      @user = Organizations::User.find_by(id: @user_id)
+      @creator = Users::User.find_by(id: quotation_details[:creator_id]) || Users::Client.find_by(id: quotation_details[:creator_id])
+      @user = Users::Client.find_by(id: @user_id)
       @origin = quotation_details.fetch(:origin)
       @destination = quotation_details.fetch(:destination)
       @load_type = quotation_details.fetch(:load_type)
@@ -20,37 +20,27 @@ module Wheelhouse
       @shipping_info = shipping_info.to_h.deep_symbolize_keys
       @organization = organization
       @async = async
-      @shipment = Legacy::Shipment.new(user_id: @user_id, load_type: @load_type, organization_id: @organization.id)
+      @source = source
+      @shipment = Legacy::Shipment.new(user_id: @user_id, load_type: load_type, organization_id: @organization.id)
       @estimated = false
     end
 
     def result
       offer_calculator.perform
-      offer_calculator.quotation
     rescue OfferCalculator::Errors::Failure => error
       handle_error(error: error)
     rescue ArgumentError
       raise ApplicationError::InternalError
     end
 
-    def tenders
-      result.tenders.map do |tender|
-        Wheelhouse::TenderDecorator.new(tender, context: {estimated: estimated})
-      end
-    end
-
     private
 
     def offer_calculator
-      @params ||= ActionController::Parameters.new(
-        shipment: shipping_params, estimated: @estimated, async: async
-      )
       @offer_calculator ||= OfferCalculator::Calculator.new(
-        shipment: shipment,
-        params: @params,
-        user: user,
+        params: shipping_params.merge(estimated: @estimated, async: async),
+        client: user,
         creator: creator,
-        wheelhouse: true
+        source: source
       )
     end
 
@@ -62,7 +52,8 @@ module Wheelhouse
         selected_day: selected_date.to_s,
         origin: @origin,
         destination: @destination,
-        trucking: trucking_info
+        trucking: trucking_info,
+        load_type: load_type
       }
     end
 
@@ -76,13 +67,13 @@ module Wheelhouse
         {carriage: :pre_carriage, hub: @origin},
         {carriage: :on_carriage, hub: @destination}
       ].each_with_object({}) do |carriage_hub, hash|
-        truck_type = @load_type == "cargo_item" ? "default" : "chassis"
+        truck_type = load_type == "cargo_item" ? "default" : "chassis"
         hash[carriage_hub[:carriage]] = {truck_type: carriage_hub[:hub][:nexus_id] ? "" : truck_type}
       end
     end
 
     def cargo_units
-      case @load_type
+      case load_type
       when "cargo_item"
         cargo_item_default
       when "container"
@@ -152,9 +143,12 @@ module Wheelhouse
       cargo_item_types.find_by(description: CARGO_ITEM_TYPE) || cargo_item_types.take
     end
 
+    def scope
+      @scope ||= OrganizationManager::ScopeService.new(target: user, organization: organization)
+    end
+
     def dedicated_pricings_only
-      OrganizationManager::ScopeService.new(target: user,
-                                            organization: organization).fetch(:dedicated_pricings_only)
+      scope.fetch(:dedicated_pricings_only)
     end
   end
 end

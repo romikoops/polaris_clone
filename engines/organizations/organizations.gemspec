@@ -8,13 +8,12 @@ Gem::Specification.new do |spec|
   spec.summary = ""
 
   spec.metadata["type"] = "data"
+  spec.metadata["package"] = "core"
 
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency "shared-runtime"
-
-  spec.add_dependency "users"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
 end

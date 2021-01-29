@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) {
-    FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: "user@itsmycargo.com")
+    FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
   }
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
@@ -37,8 +37,8 @@ RSpec.describe Admin::GroupsController, type: :controller do
 
     context "with member count sorting" do
       before do
-        FactoryBot.create_list(:groups_membership, 4, :user, group: group)
-        FactoryBot.create_list(:groups_membership, 3, :user, group: other_group)
+        FactoryBot.create_list(:groups_membership, 4, :for_user, group: group)
+        FactoryBot.create_list(:groups_membership, 3, :for_user, group: other_group)
         FactoryBot.create_list(:groups_group, 2, organization: organization)
       end
 
@@ -56,7 +56,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
     end
 
     context "when search target is a user" do
-      let(:user_2) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+      let(:user_2) { FactoryBot.create(:users_client, organization: organization) }
       let(:user_group) { FactoryBot.create(:groups_group, organization: organization, name: "Test Group 2") }
 
       before do
@@ -101,12 +101,11 @@ RSpec.describe Admin::GroupsController, type: :controller do
   end
 
   describe "POST #edit_members" do
-    let!(:user_a) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
-    let!(:user_b) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let!(:user_a) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:user_b) { FactoryBot.create(:users_client, organization: organization) }
     let(:company_a) { FactoryBot.create(:companies_company, organization: organization) }
     let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
 
-    let(:profile) { FactoryBot.build(:profiles_profile) }
     let(:edit_params) do
       {"addedMembers" =>
         {"clients" =>

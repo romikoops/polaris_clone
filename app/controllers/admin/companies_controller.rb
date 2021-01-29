@@ -19,7 +19,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
       user = membership.member
       ProfileTools.merge_profile(
         target: user.as_json,
-        profile: Profiles::ProfileService.fetch(user_id: user.id)
+        profile: user.profile
       )
     }
     groups = Groups::Membership.where(member: company).map { |membership|
@@ -38,7 +38,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
     )
 
     if create_params[:addedMembers].present?
-      ::Organizations::User.where(id: create_params[:addedMembers]).each do |user|
+      ::Users::Client.where(id: create_params[:addedMembers]).each do |user|
         ::Companies::Membership.create!(member: user, company: new_company)
       end
     end
@@ -64,7 +64,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
     Companies::Membership.where(company: company).where.not(member_id: params[:addedMembers].pluck(:id)).destroy_all
     if params[:addedMembers].present?
       params[:addedMembers].each do |user|
-        Companies::Membership.find_or_create_by(company: company, member: ::Organizations::User.find(user[:id]))
+        Companies::Membership.find_or_create_by(company: company, member: ::Users::Client.find(user[:id]))
       end
     end
     response_handler(company)

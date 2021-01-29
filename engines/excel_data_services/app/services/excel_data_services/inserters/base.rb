@@ -15,7 +15,7 @@ module ExcelDataServices
         @organization = organization
         @scope = ::OrganizationManager::ScopeService.new(
           organization: organization,
-          target: ::Organizations::User.find_by(id: options[:user]&.id)
+          target: ::Users::Client.find_by(id: options[:user]&.id)
         ).fetch
         @data = data
         @klass_identifier = self.class.name.split("::").last

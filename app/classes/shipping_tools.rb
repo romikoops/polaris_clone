@@ -9,8 +9,6 @@ class ShippingTools
   DataMappingError = Class.new(StandardError)
   ContactsRedundancyError = Class.new(StandardError)
 
-  include Wheelhouse::ErrorHandler
-
   attr_reader :current_organization
 
   def initialize
@@ -62,35 +60,6 @@ class ShippingTools
       max_aggregate_dimensions: max_aggregate_dimensions,
       last_available_date: Time.zone.today
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-  end
-
-  def get_offers(params, current_user)
-    scope = OrganizationManager::ScopeService.new(
-      target: current_user,
-      organization: current_organization
-    ).fetch
-
-    raise ApplicationError::NotLoggedIn if scope[:closed_after_map] && current_user.blank?
-
-    shipment = Legacy::Shipment.find(params[:shipment_id]).tap do |tapped_shipment|
-      tapped_shipment.update(user: current_user) if tapped_shipment.user_id.nil?
-    end
-
-    offer_calculator = OfferCalculator::Calculator.new(
-      shipment: shipment,
-      params: params,
-      user: current_user,
-      creator: current_user,
-      wheelhouse: false
-    )
-
-    offer_results = offer_calculator.perform
-
-    QuotationDecorator.new(offer_results.quotation, context: {scope: scope}).legacy_json
-  rescue OfferCalculator::Errors::Failure => e
-    handle_error(error: e)
-  rescue ArgumentError
-    raise ApplicationError::InternalError
   end
 
   def update_shipment(params, current_user)
@@ -515,42 +484,6 @@ class ShippingTools
       tenant_vehicle_id: trip.tenant_vehicle_id,
       finalResults: final_results
     }
-  end
-
-  def save_pdf_quotes(shipment, organization, schedules)
-    tender_ids = schedules.map { |sched| sched.dig("meta", "tender_id") }
-    tenders = Quotations::Tender.where(id: tender_ids)
-    quotation = tenders.first.quotation
-    send_on_download = ::OrganizationManager::ScopeService.new(
-      target: shipment.user,
-      organization: shipment.organization
-    ).fetch(:send_email_on_quote_download)
-    QuoteMailer.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later if send_on_download
-    Pdf::Quotation::Client.new(
-      quotation: quotation,
-      tender_ids: tenders.ids
-    ).file
-  end
-
-  def save_and_send_quotes(shipment, schedules, email)
-    quotations_quotation = quotations_quotation(shipment: shipment)
-    tender_ids = schedules.map { |sched| sched.dig("meta", "tender_id") }
-    QuoteMailer.new_quotation_email(
-      shipment: shipment,
-      tender_ids: tender_ids,
-      quotation: quotations_quotation,
-      email: email
-    ).deliver_later
-    send_on_quote = ::OrganizationManager::ScopeService.new(
-      target: shipment.user,
-      organization: shipment.organization
-    ).fetch(:send_email_on_quote_email)
-    if send_on_quote
-      QuoteMailer.new_quotation_admin_email(
-        quotation: quotations_quotation,
-        shipment: shipment
-      ).deliver_later
-    end
   end
 
   def quotations_quotation(shipment:)

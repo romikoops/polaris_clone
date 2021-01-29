@@ -3,18 +3,37 @@
 require "will_paginate/array"
 
 class Admin::ShipmentsController < Admin::AdminBaseController
-  before_action :do_for_show, only: :show
-
   def index
-    quotation_tool? ? get_quote_index : get_booking_index
+    response = Rails.cache.fetch("#{filtered_results.cache_key}/quote_index", expires_in: 12.hours) {
+      per_page = params.fetch(:per_page, 4).to_f
+
+      @results = filtered_results.order(updated_at: :desc)
+        .paginate(page: params[:quoted_page], per_page: per_page)
+      response = {
+        quoted: decorate(shipments: @results),
+        pages: {
+          quoted: params[:quoted_page]
+        },
+        nexuses: {
+          quoted: {
+            origin_nexuses: Legacy::Nexus.where(organization: current_organization),
+            destination_nexuses: Legacy::Nexus.where(organization: current_organization)
+          }
+        },
+        num_shipment_pages: {
+          quoted: @results.total_pages
+        }
+      }
+    }
+    response_handler(response)
   end
 
   def delta_page_handler
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = target_shipments.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
+    shipments = filtered_results.order(updated_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: decorate_shipments(shipments: shipments),
+      shipments: decorate(shipments: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -22,19 +41,18 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def show
-    response = Rails.cache.fetch("#{@shipment.cache_key}/view_shipment", expires_in: 12.hours) {
-      prepare_response
+    response = Rails.cache.fetch("#{result.cache_key}/view_shipment", expires_in: 12.hours) {
       {
-        shipment: shipment_as_json,
-        cargoItems: @cargo_items.map(&:with_cargo_type),
-        containers: @containers,
-        aggregatedCargo: @shipment.aggregated_cargo,
-        contacts: contacts,
-        documents: @documents,
+        shipment: decorated_shipment,
+        cargoItems: cargo_items,
+        containers: containers,
+        aggregatedCargo: aggregated_cargo,
+        contacts: [],
+        documents: [],
         addresses: addresses,
         cargoItemTypes: cargo_item_types,
-        accountHolder: @shipment.user,
-        pricingBreakdowns: pricing_breakdowns(shipment: @shipment)
+        accountHolder: query.client,
+        pricingBreakdowns: pricing_breakdowns(result: result)
       }.as_json
     }
 
@@ -42,67 +60,24 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def search_shipments
-    index_search_results = Legacy::Shipment.where(id: target_shipments).index_search(params[:query])
-    # pgsearch issue requires this will be solved in shipment refactor
-    user_search_results = target_shipments.user_search(params[:query])
-    results = index_search_results | user_search_results
+    results = filtered_results
+
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = results.sort_by(&:updated_at).paginate(page: params[:page], per_page: per_page)
+    results = results.sort_by(&:updated_at).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: decorate_shipments(shipments: shipments),
-      num_shipment_pages: shipments.total_pages,
+      shipments: decorate(shipments: results),
+      num_shipment_pages: results.total_pages,
       target: params[:target],
       page: params[:page]
     )
   end
 
-  def edit_price
-    response_handler(update_shipment.with_address_options_json)
-  end
-
-  def edit_service_price
-    @shipment = Shipment.find_by(id: params[:id])
-    new_price = Legacy::Price.new(price_params)
-    charge = edit_service_charge_breakdown.charge(params["charge_category"])
-    tender = edit_service_charge_breakdown.tender
-    tender.amount += (new_price.money - charge.price.money)
-    charge.edited_price = new_price
-
-    if charge.save
-      tender.save
-      update_charge_parent(charge)
-      response_handler(
-        Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope})
-                                 .legacy_json(
-                                   offer_args: Pdf::HiddenValueService.new(user: organization_user).hide_total_args
-                                 )
-      )
-    else
-      response_handler(resp_error)
-    end
-  end
-
-  def edit_time
-    response_handler(update_schedule_shipment.with_address_options_json)
-  end
-
-  def edit
-    @shipment = Shipment.find_by(id: params[:id])
-    @containers = Container.where(shipment_id: @shipment.id)
-    @container_descriptions = CONTAINER_DESCRIPTIONS.invert
-    @all_hubs = Address.all_hubs_prepared
-  end
-
   def upload_client_document
-    @shipment = Shipment.find(params[:shipment_id])
     if params[:file]
-      document = Legacy::File.create!(
-        shipment: @shipment,
-        text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, "_"),
-        doc_type: params[:type],
-        user: @shipment.user,
-        organization: current_organization,
+      document = Journey::Document.create!(
+        query: query,
+        kind: params[:type],
         file: params[:file]
       )
 
@@ -119,26 +94,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     shipment_action if params[:shipment_action]
   end
 
-  def document_action
-    @document = Legacy::File.find_by(id: params[:id])
-    @user = @document.user
-    decide_document_action
-
-    signed_url = if @document.file.attached?
-      Rails.application.routes.url_helpers.rails_blob_url(@document.file, disposition: "attachment")
-    end
-    response_handler(@document.as_json.merge(signed_url: signed_url))
-  end
-
-  def document_delete
-    @document = Legacy::File.find(params[:id])
-    @document.destroy
-
-    response_handler(id: params[:id])
-  end
-
-  def pricing_breakdowns(shipment:)
-    metadatum = Pricings::Metadatum.find_by(charge_breakdown_id: shipment.charge_breakdowns.selected&.id)
+  def pricing_breakdowns(result:)
+    metadatum = Pricings::Metadatum.find_by(result_id: result.id)
     return [] if metadatum.blank?
 
     metadatum.breakdowns.map do |breakdown|
@@ -156,110 +113,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   private
 
-  def decide_document_action
-    case params[:type]
-    when "approve"
-      @document.approved = "approved"
-      @document.save!
-      approved_document_message
-    when "reject"
-      @document.approved = "rejected"
-      @document.save!
-      rejected_document_message
-    end
-  end
-
-  def get_booking_index
-    response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) {
-      per_page = params.fetch(:per_page, 4).to_f
-      r_shipments = requested_shipments.order(updated_at: :desc)
-        .paginate(page: params[:requested_page], per_page: per_page)
-      o_shipments = open_shipments.order(updated_at: :desc)
-        .paginate(page: params[:open_page], per_page: per_page)
-      f_shipments = finished_shipments.order(updated_at: :desc)
-        .paginate(page: params[:finished_page], per_page: per_page)
-      rj_shipments = rejected_shipments.order(updated_at: :desc)
-        .paginate(page: params[:rejected_page], per_page: per_page)
-      a_shipments = archived_shipments.order(updated_at: :desc)
-        .paginate(page: params[:archived_page], per_page: per_page)
-      num_pages = {
-        finished: f_shipments.total_pages,
-        requested: r_shipments.total_pages,
-        open: o_shipments.total_pages,
-        rejected: rj_shipments.total_pages,
-        archived: a_shipments.total_pages
-      }
-      {
-        requested: decorate_shipments(shipments: r_shipments),
-        open: decorate_shipments(shipments: o_shipments),
-        finished: decorate_shipments(shipments: f_shipments),
-        rejected: decorate_shipments(shipments: rj_shipments),
-        archived: decorate_shipments(shipments: a_shipments),
-        pages: {
-          open: params[:open_page],
-          finished: params[:finished_page],
-          requested: params[:requested_page],
-          rejected: params[:rejected_page],
-          archived: params[:archived_page]
-        },
-        nexuses: {
-          open: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.open.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.open.distinct.pluck(:destination_nexus_id))
-          },
-          requested: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.requested.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.requested.distinct.pluck(:destination_nexus_id))
-          },
-          rejected: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.rejected.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.rejected.distinct.pluck(:destination_nexus_id))
-          },
-          finished: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.finished.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.finished.distinct.pluck(:destination_nexus_id))
-          },
-          archived: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:destination_nexus_id))
-          }
-        },
-        num_shipment_pages: num_pages
-      }
-    }
-    response_handler(response)
-  end
-
-  def get_quote_index
-    response = Rails.cache.fetch("#{quoted_shipments.cache_key}/quote_index", expires_in: 12.hours) {
-      per_page = params.fetch(:per_page, 4).to_f
-
-      quoted = quoted_shipments.order(updated_at: :desc)
-        .paginate(page: params[:quoted_page], per_page: per_page)
-      num_pages = {
-        quoted: quoted.total_pages
-      }
-      {
-        quoted: decorate_shipments(shipments: quoted),
-        pages: {
-          quoted: params[:quoted_page]
-        },
-        nexuses: {
-          quoted: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.quoted.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.quoted.distinct.pluck(:destination_nexus_id))
-          },
-          archived: {
-            origin_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:origin_nexus_id)),
-            destination_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:destination_nexus_id))
-          }
-        },
-        num_shipment_pages: num_pages
-      }
-    }
-    response_handler(response)
-  end
-
   def resp_error
     ApplicationError.new(
       http_code: 400,
@@ -275,84 +128,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
   end
 
-  def edit_service_charge_breakdown
-    @shipment.charge_breakdowns.selected
-  end
-
-  def shipment_action
-    case params[:shipment_action]
-    when "accept"
-      @shipment.confirm!
-      ShippingTools.new.shipper_confirmation_email(@shipment.user, @shipment)
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    when "decline"
-      @shipment.decline!
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    when "ignore"
-      @shipment.ignore!
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    when "archive"
-      @shipment.archive!
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    when "finished"
-      @shipment.finish!
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    when "requested"
-      @shipment.request!
-      response_handler(Legacy::ShipmentDecorator.new(@shipment).legacy_address_json)
-    else
-      raise "Unknown action!"
-    end
-  end
-
-  def update_schedule_shipment
-    if @shipment
-      @shipment
-    else
-      shipment = Shipment.find_by(id: params[:id])
-      shipment.planned_eta = new_eta
-      shipment.planned_etd = new_etd
-      shipment.planned_origin_drop_off_date = new_planned_origin_drop_off_date
-      shipment.planned_destination_collection_date = new_planned_destination_collection_date
-      shipment.planned_delivery_date = new_planned_delivery_date
-      shipment.planned_pickup_date = new_planned_pickup_date
-      shipment.save!
-      @shipment = shipment
-    end
-  end
-
-  def new_etd
-    DateTime.parse(params[:timeObj]["newEtd"])
-  end
-
-  def new_eta
-    DateTime.parse(params[:timeObj]["newEta"])
-  end
-
-  def new_planned_origin_drop_off_date
-    return if params[:timeObj]["newOriginDropOffDate"] == "Invalid date"
-
-    DateTime.parse(params[:timeObj]["newOriginDropOffDate"])
-  end
-
-  def new_planned_destination_collection_date
-    return if params[:timeObj]["newDestinationCollectionDate"] == "Invalid date"
-
-    DateTime.parse(params[:timeObj]["newDestinationCollectionDate"])
-  end
-
-  def new_planned_delivery_date
-    return if params[:timeObj]["newDeliveryDate"] == "Invalid date"
-
-    DateTime.parse(params[:timeObj]["newDeliveryDate"])
-  end
-
-  def new_planned_pickup_date
-    return if params[:timeObj]["newPickupDate"] == "Invalid date"
-
-    DateTime.parse(params[:timeObj]["newPickupDate"])
-  end
-
   def update_shipment
     if @shipment
       @shipment
@@ -364,23 +139,14 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
   end
 
-  def prepare_response
-    add_cargo_item_types
-    add_hs_code
-    populate_contacts
-    populate_documents
-  end
-
-  def shipment_as_json
-    hidden_args = Pdf::HiddenValueService.new(user: @shipment.user).admin_args
-    Legacy::ShipmentDecorator.new(@shipment, context: {scope: current_scope})
-      .legacy_address_json(offer_args: hidden_args)
+  def decorated_shipment
+    Api::V1::ResultDecorator.new(result, context: {scope: current_scope, admin: true}).legacy_address_json
   end
 
   def addresses
     @addresses ||= {
-      origin: @shipment.origin_nexus,
-      destination: @shipment.destination_nexus
+      origin: {name: query.origin},
+      destination: {name: query.destination}
     }
   end
 
@@ -390,20 +156,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       include: [{destination_nexus: {}},
         {origin_nexus: {}}]
     }
-  end
-
-  def populate_documents
-    @documents = @shipment.files.select { |doc| doc.file.attached? }.map { |doc|
-      doc.as_json.merge(
-        signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: "attachment")
-      )
-    }
-  end
-
-  def do_for_show
-    @shipment = Shipment.find_by(id: params[:id])
-    @cargo_items = @shipment.cargo_items
-    @containers = @shipment.containers
   end
 
   def populate_contacts
@@ -417,32 +169,13 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
   end
 
-  def cargo_item_types
-    @cargo_item_types ||= {}
-  end
-
   def hs_codes
     @hs_codes ||= []
   end
 
-  def add_cargo_item_types
-    @cargo_items.each do |ci|
-      if ci&.hs_codes
-        ci.hs_codes.each do |hs|
-          hs_codes << hs
-        end
-      end
-      cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)
-    end
-  end
-
-  def add_hs_code
-    @containers.each do |cn|
-      next unless cn&.hs_codes
-
-      cn.hs_codes.each do |hs|
-        hs_codes << hs
-      end
+  def cargo_item_types
+    Legacy::TenantCargoItemType.where(organization: current_organization).each_with_object({}) do |type, types|
+      types[type.cargo_item_type_id] = type.cargo_item_type
     end
   end
 
@@ -450,188 +183,137 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @contacts ||= []
   end
 
-  def tenant_shipments
-    @tenant_shipments ||= begin
-      association = Legacy::Shipment.where(organization_id: current_organization.id)
-        .left_joins(:user).where(users_users: {deleted_at: nil})
-      test_user? ? association : association.excluding_tests
-    end
-  end
-
-  def filtered_tenant_shipments
-    @filtered_tenant_shipments ||= begin
-      @filtered_tenant_shipments = tenant_shipments
+  def filtered_results
+    @filtered_results ||= begin
+      @filtered_results = organization_results
 
       if params[:origin_nexus]
-        @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus]
-                                                              .split(","))
+        nexus = Legacy::Nexus.find(params[:origin_nexus])
+        route_points = Journey::RoutePoint.where(locode: nexus.locode)
+
+        @filtered_results = @filtered_results
+          .joins(:route_sections).where(journey_route_sections: {from_id: route_points.ids}).distinct
       end
 
       if params[:destination_nexus]
-        @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus]
-                                                              .split(","))
+        nexus = Legacy::Nexus.find(params[:destination_nexus])
+        route_points = Journey::RoutePoint.where(locode: nexus.locode)
+
+        @filtered_results = @filtered_results
+          .joins(:route_sections).where(journey_route_sections: {to_id: route_points.ids}).distinct
       end
 
-      if params[:hub_type] && params[:hub_type] != ""
-
+      if params[:hub_type].present?
         hub_type_array = params[:hub_type].split(",")
 
-        @filtered_tenant_shipments = @filtered_tenant_shipments.modes_of_transport(*hub_type_array)
+        @filtered_results = @filtered_results
+          .joins(:route_sections)
+          .where(
+            journey_route_sections: {mode_of_transport: hub_type_array}
+          ).distinct
       end
 
       if params[:clients]
-        @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients]
-                                                              .split(","))
+        @filtered_results = @filtered_results
+          .where(journey_queries: {client_id: params[:clients].split(",")})
       end
 
-      @filtered_tenant_shipments
+      if params[:target_client_id]
+        @filtered_results = @filtered_results
+          .where(journey_queries: {client_id: params[:target_client_id]})
+      end
+
+      if params[:query]
+        by_client = Users::Client.joins(:profile).where(
+          email: params[:query]
+        ).or(
+          Users::Client.joins(:profile).where(
+            users_client_profiles:
+            {
+              first_name: params[:query]
+            }
+          )
+        ).or(
+          Users::Client.joins(:profile).where(
+            users_client_profiles:
+            {
+              last_name: params[:query]
+            }
+          ).or(
+            Users::Client.joins(:profile).where(
+              users_client_profiles:
+              {
+                company_name: params[:query]
+              }
+            )
+          )
+        ).select(:id)
+
+        @filtered_results = @filtered_results.where(
+          journey_queries: {
+            origin: params[:query]
+          }
+        ).or(
+          @filtered_results.where(
+            journey_queries: {
+              destination: params[:query]
+            }
+          ).or(
+            @filtered_results.where(
+              journey_queries: {
+                client_id: by_client
+              }
+            )
+          )
+        )
+      end
+
+      @filtered_results
     end
   end
 
-  def requested_shipments
-    @requested_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.requested.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.requested
+  def decorate(shipments:)
+    shipments.map do |shipment|
+      Api::V1::ResultDecorator.decorate(
+        shipment,
+        context: {scope: current_scope}
+      ).legacy_index_json
     end
   end
 
-  def open_shipments
-    @open_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.open.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.open
+  def result
+    @result ||= Journey::Result.find_by(id: params[:id])
+  end
+
+  def cargo_units
+    Journey::CargoUnit.where(query: query)
+  end
+
+  def cargo_items
+    @cargo_items ||= cargo_units.where(cargo_class: "lcl").map { |cargo_item|
+      Api::V1::LegacyCargoUnitDecorator.decorate(cargo_item).legacy_format
+    }
+  end
+
+  def containers
+    @containers ||= cargo_units.where.not(cargo_class: ["aggregated_lcl", "lcl"]).map { |container|
+      Api::V1::LegacyCargoUnitDecorator.decorate(container).legacy_format
+    }
+  end
+
+  def aggregated_cargo
+    @aggregated_cargo ||= begin
+      agg_units = cargo_units.where(cargo_class: "aggregated_lcl")
+      return nil if agg_units.empty?
+
+      agg_units.map do |agg|
+        Api::V1::LegacyCargoUnitDecorator.decorate(agg).legacy_format
+      end
     end
   end
 
-  def quoted_shipments
-    @quoted_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.quoted.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.quoted
-    end
-  end
-
-  def finished_shipments
-    @finished_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.finished.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.finished
-    end
-  end
-
-  def rejected_shipments
-    @rejected_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.rejected.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.rejected
-    end
-  end
-
-  def archived_shipments
-    @archived_shipments ||= if params[:target_user_id]
-      filtered_tenant_shipments.archived.where(user_id: params[:target_user_id])
-    else
-      filtered_tenant_shipments.archived
-    end
-  end
-
-  def documents
-    @documents ||= {
-      "requested_shipments" => Legacy::File.where(
-        shipment_id: tenant_shipments.requested.select(:id)
-      ).group_by(&:doc_type),
-      "open_shipments" => Legacy::File.where(
-        shipment_id: tenant_shipments.open.select(:id)
-      ).group_by(&:doc_type),
-      "finished_shipments" => Legacy::File.where(
-        shipment_id: tenant_shipments.finished.select(:id)
-      ).group_by(&:doc_type),
-      "rejected_shipments" => Legacy::File.where(
-        shipment_id: tenant_shipments.rejected.select(:id)
-      ).group_by(&:doc_type),
-      "archived_shipments" => Legacy::File.where(
-        shipment_id: tenant_shipments.archived.select(:id)
-      ).group_by(&:doc_type)
-    }
-  end
-
-  def target_shipments
-    @target_shipments ||= send("#{params[:target]}_shipments".to_sym)
-  end
-
-  def shipment_params
-    params.require(:shipment).permit(
-      :total_price, :planned_pickup_date, :planned_delivery_date,
-      :planned_origin_drop_off_date, :planned_destination_collection_date, :origin_id,
-      :destination_id
-    )
-  end
-
-  def price_params
-    params.require(:price).permit(:value, :currency)
-  end
-
-  def approved_document_message
-    {
-      title: "Document Approved",
-      message: "Your document #{@document.text} was approved",
-      shipmentRef: @document.shipment.imc_reference
-    }
-  end
-
-  def rejected_document_message
-    {
-      title: "Document Rejected",
-      message: "Your document #{@document.text} was rejected: #{params[:text]}",
-      shipmentRef: @document.shipment.imc_reference
-    }
-  end
-
-  def price_message
-    {
-      title: "Shipment Price Change",
-      message: "Your shipment #{update_shipment.imc_reference} has an updated price. \
-        Your new total is #{params[:priceObj]["currency"]} #{params[:priceObj]["value"]}. \
-        For any issues, please contact your support agent.",
-      shipmentRef: update_shipment.imc_reference
-    }
-  end
-
-  def schedule_message
-    {
-      title: "Shipment Schedule Updated",
-      message: "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
-        Your new estimated departure is #{params[:timeObj]["newEtd"]}, estimated to \
-        arrive at #{params[:timeObj]["newEta"]}. For any issues, please contact your \
-        support agent.",
-      shipmentRef: update_schedule_shipment.imc_reference
-    }
-  end
-
-  def booking_accepted_message
-    {
-      title: "Booking Accepted",
-      message: "Your booking has been accepted! If you have any further questions or \
-        edits to your booking please contact the support department.",
-      shipmentRef: @shipment.imc_reference
-    }
-  end
-
-  def booking_declined_message
-    {
-      title: "Booking Declined",
-      message: "Your booking has been declined! This could be due to a number of \
-        reasons including cargo size/weight and goods type. For more info contact \
-        us through the support channels.",
-      shipmentRef: @shipment.imc_reference
-    }
-  end
-
-  def decorate_shipments(shipments:)
-    Legacy::ShipmentDecorator.decorate_collection(
-      shipments,
-      context: {scope: current_scope}
-    ).map(&:legacy_index_json)
+  def query
+    @query ||= ::Journey::Query.joins(result_sets: :results)
+      .find_by("journey_results.id = ?", result.id)
   end
 end

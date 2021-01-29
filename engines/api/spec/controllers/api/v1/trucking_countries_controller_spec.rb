@@ -12,10 +12,10 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let!(:user) { FactoryBot.create(:users_client, organization: organization) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:country) { FactoryBot.create(:country_se) }
+    let(:country) { origin_hub.country }
     let(:cargo_classes) { ["lcl"] }
     let(:load_type) { "cargo_item" }
 
@@ -32,7 +32,7 @@ module Api
             organization_id: organization.id, load_type: "cargo_item", location_type: "destination"
           }, as: :json
 
-          expect(country_codes).to match_array(["Sweden"])
+          expect(country_codes).to match_array([country.name])
         end
       end
 
@@ -49,7 +49,7 @@ module Api
             organization_id: organization.id, load_type: "cargo_item", location_type: "destination"
           }, as: :json
 
-          expect(country_codes).to match_array(["Sweden", "Germany"])
+          expect(country_codes).to match_array([country.name, other_country.name])
         end
       end
     end

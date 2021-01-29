@@ -6,17 +6,17 @@ module Api
   module V1
     class ChargesController < ApiController
       def show
-        decorated_tender = TenderDecorator.decorate(tender, context: {scope: current_scope})
-        render json: QuotationTenderSerializer.new(decorated_tender, params: {scope: current_scope})
+        decorated_result = ResultDecorator.decorate(result, context: {scope: current_scope})
+        render json: DetailedResultSerializer.new(decorated_result, params: {scope: current_scope})
       end
 
       private
 
-      def tender
-        Quotations::Tender.find(tender_params[:id])
+      def result
+        Journey::Result.find(result_params[:id])
       end
 
-      def tender_params
+      def result_params
         params.permit(:id)
       end
     end

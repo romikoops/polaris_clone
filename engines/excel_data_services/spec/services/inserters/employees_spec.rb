@@ -23,7 +23,7 @@ RSpec.describe ExcelDataServices::Inserters::Employees do
   describe ".insert" do
     it "inserts correctly and returns correct stats" do
       stats = described_class.insert(options)
-      expect(stats[:'organizations/users'][:number_created]).to eq(1)
+      expect(stats[:'users/clients'][:number_created]).to eq(1)
     end
   end
 end

@@ -16,10 +16,6 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe "GET #route" do
-    before do
-      allow(controller).to receive(:current_scope).at_least(:once).and_return("base_pricing" => true)
-    end
-
     let!(:pricings) do
       [
         FactoryBot.create(:pricings_pricing, organization: organization, itinerary_id: itinerary.id),
@@ -153,10 +149,6 @@ RSpec.describe Admin::PricingsController, type: :controller do
       FactoryBot.create(:tenant_vehicle, organization: organization)
     end
 
-    before do
-      FactoryBot.create(:organizations_scope, target: organization, content: {"base_pricing" => true})
-    end
-
     context "when calculating cargo_item" do
       before do
         FactoryBot.create(:lcl_pricing)
@@ -193,9 +185,6 @@ RSpec.describe Admin::PricingsController, type: :controller do
   describe "DELETE #destroy" do
     context "when base_pricing" do
       before do
-        allow(controller).to receive(:current_scope)
-          .at_least(:once)
-          .and_return({base_pricing: true}.with_indifferent_access)
         delete :destroy, params: {"id" => base_pricing.id, :organization_id => organization.id}
       end
 
@@ -282,10 +271,6 @@ RSpec.describe Admin::PricingsController, type: :controller do
         effective_date: DateTime.now - 29.days,
         expiration_date: DateTime.now + 31.days)
     }
-
-    before do
-      FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
-    end
 
     context "with base params" do
       before do

@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+require "google_sign_in"
+require "trestle"
+require "trestle/active_storage"
+require "trestle/auth"
+require "trestle/rails_event_store"
+require "trestle/search"
+require "trestle/sidekiq"
+
 module Admiralty
   class Engine < ::Rails::Engine
     isolate_namespace Admiralty
@@ -19,6 +27,10 @@ module Admiralty
       app.routes.prepend do
         mount Admiralty::Engine, at: "/admiralty"
       end
+    end
+
+    initializer "admiralty.assets" do |app|
+      app.config.assets.precompile += %w[logo.png]
     end
   end
 end

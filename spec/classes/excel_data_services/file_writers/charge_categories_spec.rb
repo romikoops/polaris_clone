@@ -5,7 +5,7 @@ require "roo"
 
 RSpec.describe ExcelDataServices::FileWriters::ChargeCategories do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:charge_category) { FactoryBot.create(:bas_charge, organization: organization) }
   let!(:charge_category_headers) do
     %w[fee_code

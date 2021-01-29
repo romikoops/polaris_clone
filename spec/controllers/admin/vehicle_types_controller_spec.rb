@@ -5,9 +5,6 @@ require "rails_helper"
 RSpec.describe Admin::VehicleTypesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_user) }
-  let(:organizations_membership) {
-    FactoryBot.create(:organizations_membership, role: :admin, organization: organization, member: user)
-  }
 
   before do
     append_token_header

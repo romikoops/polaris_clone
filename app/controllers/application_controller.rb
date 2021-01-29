@@ -100,16 +100,16 @@ class ApplicationController < Api::ApiController
 
   def role_for(user:)
     if user.organization_id.nil? &&
-        Organizations::Membership.where(organization_id: current_organization.id, user_id: user.id).exists?
+        ::Users::Membership.where(organization_id: current_organization.id, user_id: user.id).exists?
       "admin"
     else
       "shipper"
     end
   end
 
-  def decorate_shipments(shipments:)
-    Legacy::ShipmentDecorator.decorate_collection(
-      shipments,
+  def decorate_results(results:)
+    Api::V1::LegacyResultDecorator.decorate_collection(
+      results,
       context: {scope: current_scope}
     )
   end

@@ -4,11 +4,12 @@ module Pricings
   class Breakdown < ApplicationRecord
     belongs_to :source, polymorphic: true, optional: true
     belongs_to :metadatum
-    belongs_to :charge, class_name: "Legacy::Charge"
+    belongs_to :charge, class_name: "Legacy::Charge", optional: true
     belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
     belongs_to :cargo_unit, polymorphic: true, optional: true
     belongs_to :target, polymorphic: true, optional: true
     validates :source_id, uniqueness: {scope: %i[charge_id charge_category_id metadatum_id]}
+    validates :line_item_id, uniqueness: true, presence: true
 
     belongs_to :margin, optional: true
     deprecate margin: "Converted to source"
@@ -18,9 +19,9 @@ module Pricings
     end
 
     def target_name
-      return target.try(:name) unless target.is_a?(Organizations::User)
+      return target.try(:name) unless target.is_a?(Users::Client)
 
-      Profiles::ProfileDecorator.new(Profiles::Profile.find_by(user: target)).full_name
+      target.profile.full_name
     end
   end
 end
@@ -42,6 +43,7 @@ end
 #  cargo_unit_id      :bigint
 #  charge_category_id :integer
 #  charge_id          :integer
+#  line_item_id       :uuid
 #  margin_id          :uuid
 #  metadatum_id       :uuid             not null
 #  pricing_id         :string

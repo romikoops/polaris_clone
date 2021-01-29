@@ -4,7 +4,8 @@ require "rails_helper"
 
 module Pricings
   RSpec.describe Metadatum, type: :model do
-    let(:metadatum) { FactoryBot.build(:pricings_metadatum) }
+    let(:metadatum) { FactoryBot.build(:pricings_metadatum, result_id: result.id) }
+    let(:result) { FactoryBot.create(:journey_result) }
 
     describe "#valid?" do
       context "when valid" do
@@ -29,13 +30,12 @@ module Pricings
 
       context "when invalid" do
         let(:metadatum) {
-          FactoryBot.build(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown)
+          FactoryBot.build(:pricings_metadatum, organization: organization, result_id: result.id)
         }
-        let(:charge_breakdown) { FactoryBot.build(:legacy_charge_breakdown) }
         let(:organization) { FactoryBot.build(:organizations_organization) }
 
         before do
-          FactoryBot.create(:pricings_metadatum, organization: organization, charge_breakdown: charge_breakdown)
+          FactoryBot.create(:pricings_metadatum, organization: organization, result_id: result.id)
         end
 
         it "build valid object" do

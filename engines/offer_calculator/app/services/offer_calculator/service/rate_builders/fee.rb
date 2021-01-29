@@ -5,12 +5,13 @@ module OfferCalculator
     module RateBuilders
       class Fee
         LCL_TRUCKING_CODES = %w[stackable non_stackable].freeze
-        attr_reader :charge_category, :code, :name, :min_value, :target, :rate_basis,
+        FCL_WM_RATE = 0.0001
+        attr_reader :charge_category, :code, :name, :min_value, :targets, :rate_basis,
           :max_value, :measures
         attr_accessor :components
 
         delegate :code, to: :charge_category
-        delegate :object, :stackability, to: :measures
+        delegate :object, :stackability, :quantity, to: :measures
         delegate :section, :load_type, :cargo_class, :validity, :itinerary_id,
           :tenant_vehicle_id, :truck_type, :hub_id, to: :object
 
@@ -20,7 +21,7 @@ module OfferCalculator
           @charge_category = inputs.charge_category
           @min_value = inputs.min_value
           @max_value = inputs.max_value
-          @target = inputs.target
+          @targets = inputs.targets
           @measures = inputs.measures
         end
 
@@ -42,6 +43,12 @@ module OfferCalculator
         def flat_margin
           margin_value = (object.flat_margins.dig(code) || 0) * 100
           Money.new(margin_value, max_value.currency)
+        end
+
+        def wm_rate
+          return FCL_WM_RATE if /fcl/.match?(cargo_class)
+
+          @measures.chargeable_weight_in_tons.value / @measures.volume.value
         end
       end
     end

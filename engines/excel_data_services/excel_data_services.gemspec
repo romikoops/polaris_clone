@@ -22,7 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sentry-raven"
   spec.add_dependency "write_xlsx"
 
-  spec.add_dependency "authentication"
   spec.add_dependency "companies"
   spec.add_dependency "groups"
   spec.add_dependency "legacy"

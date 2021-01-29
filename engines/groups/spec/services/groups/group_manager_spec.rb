@@ -5,15 +5,19 @@ require "rails_helper"
 RSpec.describe Groups::GroupManager do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let(:group) { FactoryBot.create(:groups_group, organization: organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:company) { FactoryBot.create(:companies_company, organization: organization) }
   let(:member_group) { FactoryBot.create(:groups_group, organization: organization, name: "Member Group") }
+
+  before do
+    ::Organizations.current_id = organization.id
+  end
 
   describe ".perform" do
     context "when adding" do
       it "adds the user to the group" do
         described_class.new(group_id: group.id, actions: {add: [user]}).perform
-        expect(group.members).to eq([user])
+        expect(group.memberships.map(&:member)).to match_array([user])
       end
 
       it "adds the company to the group" do

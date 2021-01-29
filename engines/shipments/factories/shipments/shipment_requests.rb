@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :shipments_shipment_request, class: "Shipments::ShipmentRequest" do
-    association :user, factory: :organizations_user
+    association :user, factory: :users_client
     association :organization, factory: :organizations_organization
     association :tender, factory: :quotations_tender
 

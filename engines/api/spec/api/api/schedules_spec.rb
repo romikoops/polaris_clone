@@ -2,17 +2,17 @@
 
 require "swagger_helper"
 
-RSpec.describe "Schedules" do
+RSpec.describe "Schedules", type: :request, swagger_doc: "v1/swagger.json" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tender) {
     FactoryBot.create(:quotations_tender, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: "cargo_item")
   }
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do

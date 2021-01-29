@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Queries::FullAttributesFromItineraryIds do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:itinerary_2) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }

@@ -2,9 +2,9 @@
 
 require "swagger_helper"
 
-RSpec.describe "Organizations" do
+RSpec.describe "Organizations", type: :request, swagger_doc: "v1/swagger.json" do
+  let(:user) { FactoryBot.create(:users_user) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 

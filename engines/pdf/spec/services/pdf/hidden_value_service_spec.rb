@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Pdf::HiddenValueService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:scope) { FactoryBot.create(:organizations_scope, target: user, content: {}) }
   let(:klass) { described_class.new(user: user) }
 

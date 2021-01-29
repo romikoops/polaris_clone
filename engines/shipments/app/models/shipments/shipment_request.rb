@@ -10,7 +10,7 @@ module Shipments
 
     belongs_to :tender, class_name: "Quotations::Tender"
     belongs_to :organization, class_name: "Organizations::Organization"
-    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :user, class_name: "Users::Client"
     belongs_to :tender, class_name: "Quotations::Tender"
     has_many :documents, as: :attachable
     has_many :notifyees, class_name: "ShipmentRequestContacts::Notifyee"
@@ -63,5 +63,4 @@ end
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
 #  fk_rails_...  (tender_id => quotations_tenders.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

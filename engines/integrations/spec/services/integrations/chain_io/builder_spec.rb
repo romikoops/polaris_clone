@@ -8,9 +8,11 @@ module Integrations
       describe "Preparing the json for chain.io" do
         let(:organization) { FactoryBot.create(:organizations_organization) }
         let(:currency) { FactoryBot.create(:legacy_currency) }
-        let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-        let(:profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
-        let(:tender) { FactoryBot.create(:quotations_tender) }
+        let(:origin_hub) { FactoryBot.create(:gothenburg_hub, organization: organization) }
+        let(:destination_hub) { FactoryBot.create(:shanghai_hub, organization: organization) }
+        let(:tender) { FactoryBot.create(:quotations_tender, origin_hub: origin_hub, destination_hub: destination_hub) }
+        let(:user) { FactoryBot.create(:users_client, organization: organization) }
+        let(:profile) { user.profile }
         let(:fcl_legacy_shipment) {
           FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id)
         }
@@ -41,7 +43,7 @@ module Integrations
           end
 
           it "has the correct lading port" do
-            expect(json_shipment["lading_port"]).to match(unlocode: "", description: "Gothenburg, SE")
+            expect(json_shipment["lading_port"]).to match(unlocode: "SEGOT", description: "Gothenburg, SE")
           end
 
           it "has the correct departure estimated date" do
@@ -49,7 +51,7 @@ module Integrations
           end
 
           it "has the correct arrival port" do
-            expect(json_shipment["arrival_port"]).to match(unlocode: "", description: "Gothenburg, SE")
+            expect(json_shipment["arrival_port"]).to match(unlocode: "CNSHA", description: "Shanghai, CN")
           end
 
           it "has the correct arrival port estimated date" do

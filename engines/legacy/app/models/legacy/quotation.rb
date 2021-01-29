@@ -6,7 +6,7 @@ module Legacy
 
     has_many :shipments, class_name: "Legacy::Shipment"
     has_many :files, class_name: "Legacy::File", dependent: :destroy
-    belongs_to :user, class_name: "Organizations::User", optional: true
+    belongs_to :user, class_name: "Users::Client", optional: true
     belongs_to :original_shipment, class_name: "Legacy::Shipment"
 
     enum billing: {external: 0, internal: 1, test: 2}
@@ -33,8 +33,4 @@ end
 #
 #  index_quotations_on_sandbox_id  (sandbox_id)
 #  index_quotations_on_user_id     (user_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
 #

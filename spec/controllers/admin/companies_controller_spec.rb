@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::CompaniesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) {
-    FactoryBot.create(:organizations_user, :with_profile, organization: organization, email: "user@itsmycargo.com")
+    FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
   }
 
   before do
@@ -183,7 +183,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
 
   describe "GET #show" do
     before do
-      FactoryBot.create_list(:organizations_user, 5, :with_profile, organization: organization).each do |employee|
+      FactoryBot.create_list(:users_client, 5, organization: organization).each do |employee|
         FactoryBot.create(:companies_membership, company: company, member: employee)
       end
     end
@@ -210,7 +210,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
 
   describe "DELETE #destroy" do
     before do
-      FactoryBot.create_list(:organizations_user, 5, :with_profile, organization: organization).each do |employee|
+      FactoryBot.create_list(:users_client, 5, organization: organization).each do |employee|
         FactoryBot.create(:companies_membership, company: company, member: employee)
       end
     end
@@ -231,16 +231,16 @@ RSpec.describe Admin::CompaniesController, type: :controller do
 
   describe "POST #edit_employees" do
     let!(:user_a) {
-      FactoryBot.create(:organizations_user, :with_profile, organization: organization).tap do |employee|
+      FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, member: employee)
       end
     }
     let!(:user_b) {
-      FactoryBot.create(:organizations_user, :with_profile, organization: organization).tap do |employee|
+      FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, member: employee)
       end
     }
-    let!(:user_c) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let!(:user_c) { FactoryBot.create(:users_client, organization: organization) }
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:params) { {organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json)} }
     let(:result) { json.dig(:data) }

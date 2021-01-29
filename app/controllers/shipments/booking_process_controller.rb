@@ -2,18 +2,34 @@
 
 class Shipments::BookingProcessController < ApplicationController
   skip_before_action :doorkeeper_authorize!, only: [:create_shipment, :get_offers]
+  before_action :confirm_request_eligibility, only: [:get_offers]
+  before_action :attach_user_to_shipment, only: [:get_offers, :choose_offer]
+
+  include Wheelhouse::ErrorHandler
 
   def create_shipment
-    resp = ShippingTools.new.create_shipment(params[:details], organization_user)
-    response_handler(resp)
+    response_handler(
+      ShippingTools.new.create_shipment(params[:details], organization_user)
+    )
   end
 
   def get_offers
-    resp = ShippingTools.new.get_offers(params, organization_user)
-    Skylight.instrument title: "Serialize Results" do
-      resp = resp.to_json if params[:async].blank?
-    end
+    offer_query = OfferCalculator::Calculator.new(
+      source: doorkeeper_application,
+      client: organization_user,
+      creator: organization_user,
+      params: offer_calculator_params
+    ).perform
+    resp = Api::V1::LegacyQueryDecorator.new(
+      offer_query,
+      context: {scope: current_scope}
+    ).legacy_json
+    resp = resp.to_json if params[:async].blank?
     response_handler(resp)
+  rescue OfferCalculator::Errors::Failure => error
+    handle_error(error: error)
+  rescue ArgumentError
+    raise ApplicationError::InternalError
   end
 
   def choose_offer
@@ -23,9 +39,11 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def send_quotes
-    ShippingTools.new.save_and_send_quotes(shipment,
-      save_and_send_params[:quotes].map(&:to_h),
-      organization_user.email)
+    Notifications::ClientMailer.with(
+      organization: current_organization,
+      offer: offer_from_results,
+      user: current_user
+    ).offer_email.deliver_now
     response_handler(params)
   end
 
@@ -46,10 +64,9 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_quotations
-    document = ShippingTools.new.save_pdf_quotes(shipment, current_organization, result_params[:quotes].map(&:to_h))
     response_handler(
       key: "quotations",
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
+      url: Rails.application.routes.url_helpers.rails_blob_url(offer_from_results.file, disposition: "attachment")
     )
   end
 
@@ -90,13 +107,15 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def result_params
-    params.require(:options).permit(quotes:
+    params.permit(options: {
+      quotes:
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
           :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
-      ])
+      ]
+    })
   end
 
   def save_and_send_params
@@ -107,5 +126,26 @@ class Shipments::BookingProcessController < ApplicationController
           :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
       ])
+  end
+
+  def confirm_request_eligibility
+    raise ApplicationError::NotLoggedIn if current_scope[:closed_after_map] && current_user.blank?
+  end
+
+  def attach_user_to_shipment
+    shipment.update(user: organization_user)
+  end
+
+  def offer_calculator_params
+    params.permit(shipment: {})[:shipment].to_h.merge(async: params[:async])
+  end
+
+  def offer_from_results
+    Wheelhouse::OfferBuilder.offer(results: Journey::Result.where(id: offer_result_ids))
+  end
+
+  def offer_result_ids
+    (result_params.dig(:options, :quotes) || save_and_send_params[:quotes])
+      .map { |result| result.dig("meta", "tender_id") }
   end
 end

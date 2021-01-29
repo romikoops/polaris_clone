@@ -7,12 +7,12 @@ FactoryBot.define do
     max_value { Money.new(1e12, "USD") }
     rate_basis { {} }
     charge_category { {} }
-    target { {} }
+    targets { [] }
     measures { {} }
     transient do
       raw_fee {}
     end
-    Struct.new("FeeInputs", :charge_category, :rate_basis, :min_value, :max_value, :measures, :target)
+    Struct.new("FeeInputs", :charge_category, :rate_basis, :min_value, :max_value, :measures, :targets)
     initialize_with do
       fee_inputs = Struct::FeeInputs.new(
         charge_category,
@@ -20,7 +20,7 @@ FactoryBot.define do
         min_value,
         max_value,
         measures,
-        target
+        targets
       )
       OfferCalculator::Service::RateBuilders::Fee.new(inputs: fee_inputs)
     end

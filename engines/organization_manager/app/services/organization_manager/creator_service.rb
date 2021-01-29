@@ -18,7 +18,7 @@ module OrganizationManager
 
     def organization
       @organization ||= Organizations::Organization.new(slug: organization_params[:slug]).tap do |organization|
-        organization.scope = Organizations::Scope.new(target: organization, content: JSON.parse(scope_params))
+        organization.scope = Organizations::Scope.new(target: organization, content: JSON.parse(scope_params || "{}"))
         organization.domains.new(default: true, domain: "#{organization.slug}.itsmycargo.shop")
         organization.theme = Organizations::Theme.new(theme_params.merge(organization_id: organization.id))
         organization.save

@@ -7,7 +7,7 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let(:user) { FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:origin_location) do
     FactoryBot.create(:locations_location,
       bounds: FactoryBot.build(:legacy_bounds, lat: origin_hub.latitude, lng: origin_hub.longitude, delta: 0.4),
@@ -20,10 +20,10 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
       country_code: "cn")
   end
   let(:origin_trucking_location) {
-    FactoryBot.create(:trucking_location, location: origin_location, country_code: "SE")
+    FactoryBot.create(:trucking_location, location: origin_location, country: origin_hub.country)
   }
   let(:destination_trucking_location) {
-    FactoryBot.create(:trucking_location, location: destination_location, country_code: "CN")
+    FactoryBot.create(:trucking_location, location: destination_location, country: destination_hub.country)
   }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
@@ -40,7 +40,6 @@ RSpec.describe TruckingAvailabilityController, type: :controller do
 
   before do
     allow(controller).to receive(:current_user).and_return(user)
-    FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
     FactoryBot.create(:trucking_trucking,

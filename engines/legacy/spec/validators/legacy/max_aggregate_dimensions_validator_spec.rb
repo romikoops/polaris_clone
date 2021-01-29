@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Legacy::MaxAggregateDimensionsValidator do
-  let(:user) { FactoryBot.create(:organizations_user) }
+  let(:user) { FactoryBot.create(:users_client) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: user.organization) }
   let(:tenant_vehicle) { FactoryBot.build(:legacy_tenant_vehicle, organization: user.organization) }
   let(:trip) { FactoryBot.build(:legacy_trip, tenant_vehicle: tenant_vehicle) }

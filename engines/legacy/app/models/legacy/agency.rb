@@ -6,8 +6,8 @@ module Legacy
 
     has_paper_trail
 
-    has_many :users, class_name: "Organizations::User"
-    belongs_to :agency_manager, class_name: "Organizations::User", optional: true
+    has_many :users, class_name: "Users::Client"
+    belongs_to :agency_manager, class_name: "Users::Client", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
   end
 end

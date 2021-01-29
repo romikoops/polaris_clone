@@ -2,12 +2,22 @@
 
 FactoryBot.define do
   factory :legacy_shipment, class: "Legacy::Shipment" do
-    association :user, factory: :organizations_user
-    association :origin_hub, factory: :legacy_hub
-    association :destination_hub, factory: :legacy_hub
-    association :trip, factory: :legacy_trip
+    transient do
+      with_breakdown { false }
+      with_full_breakdown { false }
+      with_tenders { false }
+      with_aggregated_cargo { false }
+      custom_cargo_classes {}
+      completed { false }
+      breakdown_count { 1 }
+    end
 
-    association :organization, factory: :organizations_organization
+    user { association(:users_client) }
+    origin_hub { association(:legacy_hub) }
+    destination_hub { association(:legacy_hub) }
+    trip { association(:legacy_trip) }
+    organization { association(:organizations_organization) }
+
     load_type { :container }
     booking_placed_at { Time.zone.today }
     planned_etd { Date.tomorrow + 7.days + 2.hours }
@@ -22,16 +32,6 @@ FactoryBot.define do
         value: 100,
         currency: :EUR
       }
-    end
-
-    transient do
-      with_breakdown { false }
-      with_full_breakdown { false }
-      with_tenders { false }
-      with_aggregated_cargo { false }
-      custom_cargo_classes {}
-      completed { false }
-      breakdown_count { 1 }
     end
 
     trait :with_contacts do

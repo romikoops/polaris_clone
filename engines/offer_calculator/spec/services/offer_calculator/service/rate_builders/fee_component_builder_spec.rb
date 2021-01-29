@@ -8,13 +8,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
   let(:rate_basis) { "PER_WM" }
   let(:target) { nil }
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:quotation) { FactoryBot.create(:quotations_quotation) }
   let(:charge_category) { pricing.fees.first.charge_category }
-  let(:cargo) do
-    FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |tapped_cargo|
-      FactoryBot.create(:cargo_unit, cargo: tapped_cargo)
-    end
-  end
   let(:margin) do
     FactoryBot.create(:pricings_margin,
       organization: organization,
@@ -28,9 +22,26 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
       result: pricing.as_json,
       margins: [margin])
   end
+  let(:cargo_unit) do
+    FactoryBot.create(:journey_cargo_unit,
+      cargo_class: "lcl",
+      weight_value: 1000,
+      height_value: 1,
+      width_value: 1,
+      length_value: 1,
+      quantity: 1,
+      stackable: true)
+  end
+  let(:scope) { {} }
+  let(:engine) do
+    FactoryBot.create(:measurements_engine_unit,
+      scope: scope,
+      manipulated_result: manipulated_result,
+      cargo_unit: cargo_unit)
+  end
   let(:measures) do
-    OfferCalculator::Service::Measurements::Unit.new(
-      cargo: cargo.units.first,
+    OfferCalculator::Service::Measurements::Cargo.new(
+      engine: engine,
       scope: {},
       object: manipulated_result
     )
@@ -160,7 +171,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
       it "returns the properly set up Fee Component" do
         aggregate_failures do
           expect(fee_components.length).to eq(1)
-          expect(fee_components.first.value).to eq(Money.new(1200, "EUR"))
+          expect(fee_components.first.value).to eq(Money.new(800, "EUR"))
           expect(fee_components.first.modifier).to eq(:shipment)
           expect(fee_components.first.base).to eq(default_base)
         end
@@ -177,7 +188,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
       it "returns the properly set up Fee Component" do
         aggregate_failures do
           expect(fee_components.length).to eq(1)
-          expect(fee_components.first.value).to eq(Money.new(1200, "EUR"))
+          expect(fee_components.first.value).to eq(Money.new(800, "EUR"))
           expect(fee_components.first.modifier).to eq(:wm)
           expect(fee_components.first.base).to eq(default_base)
         end

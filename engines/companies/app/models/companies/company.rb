@@ -59,9 +59,10 @@ end
 #
 # Indexes
 #
-#  index_companies_companies_on_address_id          (address_id)
-#  index_companies_companies_on_organization_id     (organization_id)
-#  index_companies_companies_on_tenants_company_id  (tenants_company_id)
+#  index_companies_companies_on_address_id                (address_id)
+#  index_companies_companies_on_organization_id           (organization_id)
+#  index_companies_companies_on_organization_id_and_name  (organization_id,name) UNIQUE
+#  index_companies_companies_on_tenants_company_id        (tenants_company_id)
 #
 # Foreign Keys
 #

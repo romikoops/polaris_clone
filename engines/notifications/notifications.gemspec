@@ -14,8 +14,13 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "shared-runtime"
 
+  spec.add_dependency "draper"
+  spec.add_dependency "liquid"
+
+  spec.add_dependency "companies"
+  spec.add_dependency "journey"
   spec.add_dependency "organizations"
-  spec.add_dependency "profiles"
+  spec.add_dependency "pdf"
   spec.add_dependency "users"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"

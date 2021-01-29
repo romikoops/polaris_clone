@@ -1,0 +1,39 @@
+<tr>
+  <td class="content-cell" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding: 45px;">
+    <div class="f-fallback">
+      <h1 style="margin-top: 0; color: #333333; font-size: 22px; font-weight: bold; text-align: left;" align="left">Hi</h1>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">A new offer has been generated through your online shop!</p>
+      <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 35px 0;">
+        <tr>
+          <td style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Ref: <%= @results.map(&:imc_reference).join(" ") %></h3></td>
+          <td style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <h3 class="align-right" style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: right;" align="right"><% @query.created_at.strftime('%Y%d%m') %></h3></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+              <tr>
+                <th class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-bottom: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Description</p>
+                </th>
+                <th class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-bottom: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Amount</p>
+                </th>
+              </tr>
+              <% @results.each do |result|%>
+                <tr>
+                  <td width="80%" class="purchase_item" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 15px; color: #51545E; line-height: 18px; padding: 10px 0;"><span class="f-fallback"> <%= result.routing %></span></td>
+                  <td class="align-right" width="20%" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; text-align: right;" align="right"><span class="f-fallback"> <%=result.total %></span></td>
+                </tr>
+                <% end %>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">If you have any questions about your quotes, simply reply to this email or reach out to our <a href="support@itsmycargo.com" style="color: #3869D4;">support team</a> for help.</p>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">Regards,
+        <br />The ItsMyCargo Team</p>
+    </div>
+  </td>
+</tr>

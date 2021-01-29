@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe Trucking::Queries::TruckTypes do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:distance_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: "Distance", organization: organization) }
-  let(:zipcode_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: "Zipcode", organization: organization) }
-  let(:location_hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, name: "Location", organization: organization) }
+  let(:distance_hub) { FactoryBot.create(:legacy_hub, name: "Distance", organization: organization, country: country) }
+  let(:zipcode_hub) { FactoryBot.create(:legacy_hub, name: "Zipcode", organization: organization, country: country) }
+  let(:location_hub) { FactoryBot.create(:legacy_hub, name: "Location", organization: organization, country: country) }
 
   let(:trucking_location_zipcode) {
     FactoryBot.create(:trucking_location, :zipcode, country: country, data: zipcode)
@@ -30,10 +30,10 @@ RSpec.describe Trucking::Queries::TruckTypes do
   let(:carriage) { "pre" }
   let(:distance) { 179 }
   let(:country_code) { "SE" }
-  let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
+  let(:country) { factory_country_from_code(code: country_code) }
 
   let(:address) do
-    FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
+    FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude, country: country)
   end
 
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }

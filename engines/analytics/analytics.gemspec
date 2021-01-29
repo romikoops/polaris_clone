@@ -9,6 +9,8 @@ Gem::Specification.new do |spec|
     Analytics service engine for pulling in and manipulating data for use
     in the Bridge analytics page
   SUMMARY
+
+  spec.metadata["package"] = "analytics"
   spec.metadata["type"] = "service"
 
   spec.files = Dir["{lib}/**/*"]

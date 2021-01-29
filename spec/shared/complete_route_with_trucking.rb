@@ -5,8 +5,8 @@ RSpec.shared_context "complete_route_with_trucking" do
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:pickup_address) { FactoryBot.create(:hamburg_address) }
-  let(:delivery_address) { FactoryBot.create(:shanghai_address) }
+  let(:pickup_address) { FactoryBot.create(:hamburg_address, country: origin_hub.address.country) }
+  let(:delivery_address) { FactoryBot.create(:shanghai_address, country: destination_hub.address.country) }
   let(:carrier_lock) { false }
   let(:carrier) { FactoryBot.create(:legacy_carrier, name: "IMC", code: "imc") }
   let(:tenant_vehicle) {
@@ -116,13 +116,15 @@ RSpec.shared_context "complete_route_with_trucking" do
     short_load_type = load_type == "cargo_item" ? "lcl" : "fcl"
     [
       FactoryBot.create("#{short_load_type}_pre_carriage_availability".to_sym,
-        hub: itinerary.origin_hub,
+        hub: origin_hub,
         query_type: :location,
-        custom_truck_type: truck_type),
+        custom_truck_type: truck_type,
+        country: origin_hub.country),
       FactoryBot.create("#{short_load_type}_on_carriage_availability".to_sym,
-        hub: itinerary.destination_hub,
+        hub: destination_hub,
         query_type: :location,
-        custom_truck_type: truck_type)
+        custom_truck_type: truck_type,
+        country: destination_hub.country)
     ]
   end
 

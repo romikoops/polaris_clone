@@ -60,7 +60,7 @@ en:
       http_code: 400
       code: 1005
       message: "Unable to determine trucking directions. Please check the address and try again."
-    no_trucking_time:
+    no_driving_time:
       http_code: 400
       code: 1006
       message: "Unable to calculate trucking time with the given date"
@@ -76,7 +76,10 @@ en:
       http_code: 400
       code: 1009
       message: 'Cargo Units entered are invalid. Please reenter shipment data and if the problem persists, restart shipment.'
-
+    invalid_direction:
+      http_code: 400
+      code: 1010
+      message: "Direction must be either 'import' or 'export'"
     # Pricing : Code prefix 2
     no_valid_pricings:
       http_code: 400
@@ -94,7 +97,7 @@ en:
       http_code: 400
       code: 2004
       message: "The system was unable to calculate a valid set of freight charges for this booking."
-    no_valid_local_charges:
+    invalid_local_charges:
       http_code: 400
       code: 2005
       message: "There are no local charges valid for this timeframe."

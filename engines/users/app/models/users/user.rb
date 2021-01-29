@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 module Users
-  class User < ApplicationRecord
-    include PgSearch::Model
+  class User < Base
+    self.inheritance_column = nil
 
-    pg_search_scope :search, against: %i[email], using: {
-      tsearch: {prefix: true}
-    }
-    has_many :authentications, foreign_key: :user_id, dependent: :destroy
-    accepts_nested_attributes_for :authentications
+    has_one :profile, inverse_of: :user, foreign_key: :user_id, required: true, dependent: :destroy
+    accepts_nested_attributes_for :profile
 
-    validates :email, presence: true, uniqueness: {scope: :organization_id},
-                      format: {with: URI::MailTo::EMAIL_REGEXP}
+    has_one :settings, inverse_of: :user, foreign_key: :user_id, required: true, dependent: :destroy
+    accepts_nested_attributes_for :settings
+
+    has_many :memberships, dependent: :destroy, inverse_of: :user
+    accepts_nested_attributes_for :memberships
+
+    validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
 
     acts_as_paranoid
-
-    has_paper_trail skip: %i[last_activity_at unlock_token magic_login_token reset_password_token activation_token]
   end
 end
 

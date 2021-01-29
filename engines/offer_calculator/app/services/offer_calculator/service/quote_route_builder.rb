@@ -25,7 +25,7 @@ module OfferCalculator
       def generate_trip(itinerary:, tenant_vehicle_id:)
         transit_time = Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle_id: tenant_vehicle_id)
         itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id,
-                                           load_type: @shipment.load_type,
+                                           load_type: request.load_type,
                                            start_date: start_date,
                                            end_date: end_date(transit_time: transit_time),
                                            closing_date: closing_date)

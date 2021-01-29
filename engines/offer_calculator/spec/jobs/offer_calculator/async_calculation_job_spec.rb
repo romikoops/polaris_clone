@@ -5,27 +5,26 @@ require "rails_helper"
 module OfferCalculator
   RSpec.describe AsyncCalculationJob, type: :job do
     ActiveJob::Base.queue_adapter = :test
+    let(:query) { FactoryBot.create(:journey_query) }
 
     describe "#perform_later" do
       let(:perform_latter) do
         described_class.perform_later(
-          shipment_id: 1, quotation_id: SecureRandom.uuid, user_id: SecureRandom.uuid, wheelhouse: false
+          query: query, params: {}
         )
       end
 
       it "enqueues the job" do
-        expect { perform_latter }.to have_enqueued_job
+        expect { perform_latter }.to have_enqueued_job.with(query: query, params: {})
       end
     end
 
     describe "#perform_now" do
-      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
-      let!(:shipment) { FactoryBot.create(:completed_legacy_shipment, with_breakdown: true, with_tenders: true) }
-      let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+      let(:params) { {} }
       let(:offer_calculator_results) { instance_double(OfferCalculator::Results) }
       let(:result) do
         described_class.perform_now(
-          shipment_id: shipment.id, quotation_id: quotation.id, user_id: shipment.user_id, wheelhouse: false
+          query: query, params: params
         )
       end
 

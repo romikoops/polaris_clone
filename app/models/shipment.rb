@@ -276,5 +276,4 @@ end
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
-#  fk_rails_...  (user_id => users_users.id)
 #

@@ -33,9 +33,7 @@ FactoryBot.define do
             index: index,
             hub: build(:legacy_hub,
               organization: itinerary.organization,
-              hub_type: itinerary.mode_of_transport,
-              nexus: build(:legacy_nexus,
-                organization: itinerary.organization)))
+              hub_type: itinerary.mode_of_transport))
           index += 1
         end
       end
@@ -72,25 +70,19 @@ FactoryBot.define do
                                          hub_type: itinerary.mode_of_transport,
                                          name: "Gothenburg",
                                          organization: itinerary.organization)
-        shanghai_nexus = Legacy::Nexus.find_by(locode: "CNSHA")
-        gothenburg_nexus = Legacy::Nexus.find_by(locode: "SEGOT")
 
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 0,
           hub: gothenburg || build(:gothenburg_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: gothenburg_nexus || build(:gothenburg_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: (shanghai || build(:shanghai_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: shanghai_nexus || build(:shanghai_nexus,
-              organization: itinerary.organization))))
+            hub_type: itinerary.mode_of_transport)))
       end
     end
 
@@ -110,17 +102,13 @@ FactoryBot.define do
           index: 0,
           hub: shanghai || build(:shanghai_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:shanghai_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: gothenburg || build(:gothenburg_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:gothenburg_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
       end
     end
 
@@ -140,17 +128,13 @@ FactoryBot.define do
           index: 0,
           hub: felixstowe || build(:felixstowe_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:felixstowe_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: (shanghai || build(:shanghai_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:shanghai_nexus,
-              organization: itinerary.organization))))
+            hub_type: itinerary.mode_of_transport)))
       end
     end
 
@@ -170,17 +154,13 @@ FactoryBot.define do
           index: 0,
           hub: shanghai || build(:shanghai_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:shanghai_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: felixstowe || build(:felixstowe_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:felixstowe_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
       end
     end
 
@@ -200,17 +180,13 @@ FactoryBot.define do
           index: 0,
           hub: hamburg || build(:hamburg_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:hamburg_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: (shanghai || build(:shanghai_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:shanghai_nexus,
-              organization: itinerary.organization))))
+            hub_type: itinerary.mode_of_transport)))
       end
     end
 
@@ -230,17 +206,13 @@ FactoryBot.define do
           index: 0,
           hub: shanghai || build(:shanghai_hub,
             hub_type: itinerary.mode_of_transport,
-            organization: itinerary.organization,
-            nexus: build(:shanghai_nexus,
-              organization: itinerary.organization)))
+            organization: itinerary.organization))
         itinerary.stops << build(:legacy_stop,
           itinerary: itinerary,
           index: 1,
           hub: hamburg || build(:hamburg_hub,
             organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport,
-            nexus: build(:hamburg_nexus,
-              organization: itinerary.organization)))
+            hub_type: itinerary.mode_of_transport))
       end
     end
 

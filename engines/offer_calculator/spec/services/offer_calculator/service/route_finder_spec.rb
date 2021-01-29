@@ -9,8 +9,6 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
     FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
     FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
 
-    FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
-
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: "container")
     FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
@@ -21,18 +19,12 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
   end
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:shipment) do
-    FactoryBot.create(:legacy_shipment,
-      load_type: "cargo_item",
-      user: user,
-      organization: organization)
-  end
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:request) { FactoryBot.build(:offer_calculator_request, client: user, organization: organization) }
   let(:hubs) do
     {
       origin: Legacy::Hub.where(id: origin_hub.id),
@@ -41,7 +33,7 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
   end
   let(:date_range) { (Time.zone.today..Time.zone.today + 20.days) }
   let(:results) {
-    described_class.routes(shipment: shipment, quotation: quotation, hubs: hubs, date_range: date_range)
+    described_class.routes(request: request, hubs: hubs, date_range: date_range)
   }
 
   describe ".perform", :vcr do

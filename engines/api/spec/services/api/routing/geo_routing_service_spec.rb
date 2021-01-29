@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   include_context "complete_route_with_trucking"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:cargo_classes) { ["lcl"] }
   let(:load_type) { "cargo_item" }
   let(:query) { nil }
@@ -29,7 +29,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   describe ".nexuses" do
     context "when targeting the origin with destination lat lng" do
       let(:expected_results) do
-        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }
+        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }.uniq
       end
       let(:lat) { delivery_address.latitude }
       let(:lng) { delivery_address.longitude }
@@ -42,7 +42,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
 
     context "when targeting the origin with destination lat lng and groups" do
       let(:expected_results) do
-        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }
+        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }.uniq
       end
       let(:lat) { delivery_address.latitude }
       let(:lng) { delivery_address.longitude }

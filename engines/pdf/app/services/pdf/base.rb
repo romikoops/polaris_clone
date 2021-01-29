@@ -1,11 +1,12 @@
 module Pdf
   class Base
-    attr_reader :organization, :user, :scope, :theme
+    attr_reader :organization, :user, :scope, :theme, :query, :offer
 
-    def initialize(quotation:)
-      @quotation = quotation
-      @organization = quotation.organization
-      @user = quotation.user
+    def initialize(offer:)
+      @offer = offer
+      @query = offer.query
+      @organization = query.organization
+      @user = query.client
       @theme = @organization.theme
       @scope = ::OrganizationManager::ScopeService.new(
         target: user,

@@ -3,17 +3,18 @@
 class UsersController < ApplicationController
   skip_before_action :doorkeeper_authorize!, only: [:create, :activate, :passwordless_authentication]
 
+  DASH_LIMIT = 3
+
   def home
-    current_shipments = organization_user_shipments
-    response = Rails.cache.fetch("#{current_shipments.cache_key}/dashboard_index", expires_in: 12.hours) {
-      @contacts = Legacy::Contact.where(user: organization_user).limit(6).map { |contact|
+    response = Rails.cache.fetch("#{client_results.cache_key}/dashboard_index", expires_in: 12.hours) {
+      @contacts = Legacy::Contact.where(user: current_user).limit(6).map { |contact|
         contact.as_json(
           include: {address: {include: {country: {only: :name}},
                               except: %i[created_at updated_at country_id]}},
           except: %i[created_at updated_at address_id]
         )
       }
-      user_locs = Legacy::UserAddress.where(user: organization_user)
+      user_locs = Legacy::UserAddress.where(user: current_user)
       addresses = user_locs.map { |ul|
         {user: ul, address: ul.address.to_custom_hash}
       }
@@ -21,7 +22,7 @@ class UsersController < ApplicationController
       {
         shipments: shipments_hash,
         contacts: @contacts,
-        num_contact_pages: (Legacy::Contact.where(user: organization_user).count.to_f / 6).to_f.ceil,
+        num_contact_pages: (Legacy::Contact.where(user: current_user).count.to_f / 6).to_f.ceil,
         addresses: addresses
       }
     }
@@ -29,22 +30,21 @@ class UsersController < ApplicationController
   end
 
   def show
-    response = complete_user_response(user: organization_user)
+    response = complete_user_response(user: current_user)
     response[:organization_id] ||= Organizations.current_id
     response_handler(response)
   end
 
   def account
-    user = organization_user
+    user = current_user
     @addresses = Legacy::UserAddress.where(user: user).map(&:address)
 
     {addresses: @addresses}
   end
 
   def update
-    user = organization_user
-    user.update(user_params)
-    update_profile_from_params(user: user, params: user_profile_params)
+    user = current_user
+    user.update(user_params.merge(profile_attributes: user_profile_params.merge(id: user.profile.id)))
 
     if params[:update][:address]
       address = Address.create_from_raw_params!(address_params)
@@ -62,18 +62,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = Authentication::User.new(new_user_params).tap do |u|
-      u.type = "Organizations::User"
-    end
-    ActiveRecord::Base.transaction do
-      user.save!
-      create_or_update_profile(user: user)
-
-      Rails.configuration.event_store.publish(
-        Users::UserCreated.new(data: {user: user.to_global_id, organization_id: user.organization_id}),
-        stream_name: "Organization$#{user.organization_id}"
-      )
-    end
+    user = Api::ClientCreationService.new(
+      client_attributes: new_user_params,
+      profile_attributes: profile_params,
+      settings_attributes: {currency: current_scope[:default_currency]}
+    ).perform
     response = generate_token_for(user: user, scope: "public")
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
   rescue ActiveRecord::RecordInvalid => e
@@ -91,13 +84,11 @@ class UsersController < ApplicationController
     end
     raise ActiveRecord::RecordInvalid if passwordless_new_user_params[:email].blank?
 
-    user = Authentication::User.find_by(passwordless_new_user_params)
-    user ||= Authentication::User.new(passwordless_new_user_params).tap do |org_user|
-      org_user.type = "Organizations::User"
-    end
+    user = Users::Client.find_by(passwordless_new_user_params)
+    user ||= Users::Client.new(passwordless_new_user_params.merge(profile_attributes: profile_params))
+    user.settings = Users::ClientSettings.new(currency: current_scope.dig(:default_currency)) if user.settings.nil?
     ActiveRecord::Base.transaction do
       user.save!
-      create_or_update_profile(user: user)
       response = generate_token_for(user: user, scope: "public")
       response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
     end
@@ -111,24 +102,26 @@ class UsersController < ApplicationController
   end
 
   def download_gdpr
-    url = DocumentService::GdprWriter.new(user_id: organization_user.id).perform
+    url = DocumentService::GdprWriter.new(user_id: current_user.id).perform
     response_handler(url: url, key: "gdpr")
   end
 
   def set_currency
-    Users::Settings.find_by(user: organization_user)&.update(currency: params[:currency])
-    response = complete_user_response(user: organization_user)
+    Users::ClientSettings.find_by(user: current_user)&.update(currency: params[:currency])
+    response = complete_user_response(user: current_user)
     response_handler(user: response)
   end
 
   def hubs
-    @hubs = Hub.prepped(organization_user)
+    @hubs = Hub.prepped(current_user)
 
     response_handler(@hubs)
   end
 
   def activate
-    if (@user = Authentication::User.load_from_activation_token(params[:id]))
+    @user = ::Users::User.load_from_activation_token(params[:id]) ||
+      ::Users::Client.load_from_activation_token(params[:id])
+    if @user
       @user.activate!
 
       response_handler(@user)
@@ -138,16 +131,6 @@ class UsersController < ApplicationController
   end
 
   private
-
-  def create_or_update_profile(user:)
-    Profiles::ProfileService.create_or_update_profile(
-      user: user,
-      first_name: profile_params[:first_name],
-      last_name: profile_params[:last_name],
-      company_name: profile_params[:company_name],
-      phone: profile_params[:phone]
-    )
-  end
 
   def not_authenticated
     render json: {success: false}, status: :unauthorized
@@ -189,45 +172,14 @@ class UsersController < ApplicationController
   end
 
   def merge_profile(user:)
-    ProfileTools.merge_profile(target: user.attributes)
+    ProfileTools.merge_profile(target: user)
   end
 
   def shipments_hash
-    if quotation_tool?
-      {
-        quoted: decorate_shipments(shipments: quoted_shipments.order(booking_placed_at: :desc).limit(3))
-          .map(&:legacy_index_json)
-      }
-    else
-      {
-        requested: decorate_shipments(shipments: requested_shipments.order(booking_placed_at: :desc).limit(3))
-          .map(&:legacy_index_json)
-      }
-    end
-  end
-
-  def requested_shipments
-    @requested_shipments ||= organization_user_shipments.requested
-  end
-
-  def quoted_shipments
-    @quoted_shipments ||= organization_user_shipments.quoted
-  end
-
-  def open_shipments
-    @open_shipments ||= organization_user_shipments.open
-  end
-
-  def rejected_shipments
-    @rejected_shipments ||= organization_user_shipments.rejected
-  end
-
-  def archived_shipments
-    @archived_shipments ||= organization_user_shipments.archived
-  end
-
-  def finished_shipments
-    @finished_shipments ||= organization_user_shipments.finished
+    {
+      quoted: decorate_results(results: client_results.order(created_at: :desc).limit(DASH_LIMIT))
+        .map(&:legacy_index_json)
+    }
   end
 
   def address_params
@@ -236,13 +188,9 @@ class UsersController < ApplicationController
     )
   end
 
-  def organization_user_shipments
-    @organization_user_shipments ||= Legacy::Shipment.where(user: organization_user)
-  end
-
   def complete_user_response(user:)
     role = {name: role_for(user: user)}
-    currency = Users::Settings.find_by(user_id: user.id)&.currency
+    currency = user.settings&.currency
     user_metadata = {role: role, inactivityLimit: inactivity_limit, currency: currency}
     merge_profile(user: user).merge(user_metadata)
   end

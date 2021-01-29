@@ -4,15 +4,15 @@ module OfferCalculator
   module Service
     module OfferCreators
       class Offer < OfferCalculator::Service::OfferCreators::Base
-        attr_reader :shipment, :quotation, :result, :schedules
+        attr_reader :request, :result, :schedules
 
-        delegate :load_type, to: :shipment
+        delegate :load_type, to: :request
 
-        def initialize(offer:, shipment:, quotation:, schedules:)
-          @quotation = quotation
+        def initialize(offer:, request:, schedules:)
+          @request = request
           @schedules = schedules
           @result = offer
-          super(shipment: shipment)
+          super(request: request)
         end
 
         def charges
@@ -21,9 +21,10 @@ module OfferCalculator
 
         def valid_until
           @valid_until ||= begin
-            return scope.dig(:validity_period).days.from_now.to_date if scope.dig(:validity_period)
+            return scope.fetch(:validity_period).days.from_now.to_date if scope.dig(:validity_period).present?
 
-            charges.map { |charge_section| charge_section.validity.last }.min
+            charges.map { |charge_section| charge_section.validity.last }
+              .select { |date| date > Time.zone.today.end_of_day }.min
           end
         end
 
@@ -39,6 +40,10 @@ module OfferCalculator
 
         def sections
           result.values
+        end
+
+        def section_keys
+          result.keys
         end
 
         def section(key:)

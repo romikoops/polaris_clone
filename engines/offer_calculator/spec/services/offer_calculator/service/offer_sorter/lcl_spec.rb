@@ -8,17 +8,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
 
   let(:cargo_classes) { ["lcl"] }
   let(:load_type) { "cargo_item" }
-  let(:cargo_cargo) do
-    FactoryBot.create(:cargo_cargo, quotation_id: quotation.id).tap do |cargo|
-      FactoryBot.create(:lcl_unit,
-        cargo: cargo,
-        width_value: 1.20,
-        height_value: 1.40,
-        length_value: 0.8,
-        quantity: 2,
-        weight_value: 1200)
-    end
-  end
+  let(:cargo_trait) { :lcl }
+  let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
 
   let(:pricing_1) do
     FactoryBot.create(:lcl_pricing,
@@ -44,13 +35,13 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     raw_objects.flat_map do |raw_object|
       FactoryBot.build(:calculators_result_from_raw,
         raw_object: raw_object,
-        cargo: cargo_cargo)
+        request: request)
     end
   end
 
   let(:schedules) { trips[:trips].map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
   let(:results) {
-    described_class.sorted_offers(shipment: shipment, quotation: quotation, charges: charges, schedules: schedules)
+    described_class.sorted_offers(request: request, charges: charges, schedules: schedules)
   }
 
   context "with no valid responses" do
@@ -72,6 +63,11 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
         itineraries: [itinerary],
         tenant_vehicles: [tenant_vehicle],
         days: [1, 7, 10, 15])
+    end
+
+    before do
+      allow(request).to receive(:has_pre_carriage?).and_return(false)
+      allow(request).to receive(:has_on_carriage?).and_return(false)
     end
 
     it "returns two sorted offers" do
@@ -96,8 +92,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-      allow(shipment).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:has_on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do
@@ -167,8 +163,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-      allow(shipment).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:has_on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do

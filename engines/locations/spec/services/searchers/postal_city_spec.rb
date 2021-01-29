@@ -75,11 +75,5 @@ RSpec.describe Locations::Searchers::PostalCity do
         expect(result).to eq(postal_location.id)
       end
     end
-
-    context "when nothing is found available" do
-      it "returns nil" do
-        expect(result).to eq(nil)
-      end
-    end
   end
 end

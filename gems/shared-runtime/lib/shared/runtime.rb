@@ -2,6 +2,7 @@ require "rails"
 
 require "active_storage/cascade"
 require "activerecord-postgis-adapter"
+require "activerecord-safer_migrations"
 require "audited"
 require "config"
 require "data_migrate"

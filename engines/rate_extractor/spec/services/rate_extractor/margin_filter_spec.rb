@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe RateExtractor::MarginFilter do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:path) { FactoryBot.create_list(:routing_route_line_service, 3) }
   let(:quotations_tender) { FactoryBot.create(:quotations_tender) }
   let(:quotation) { quotations_tender.quotation }

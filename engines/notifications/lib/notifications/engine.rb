@@ -41,6 +41,9 @@ module Notifications
       config.to_prepare do
         Rails.configuration.event_store.subscribe(AdminUserCreatedJob, to: [Users::UserCreated])
         Rails.configuration.event_store.subscribe(UserCreatedJob, to: [Users::UserCreated])
+
+        # Offer created notifications
+        Rails.configuration.event_store.subscribe(OfferCreated::AdminNotifierJob, to: [Journey::OfferCreated])
       end
     end
   end

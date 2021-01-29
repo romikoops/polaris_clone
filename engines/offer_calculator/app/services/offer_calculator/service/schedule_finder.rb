@@ -9,8 +9,8 @@ module OfferCalculator
           routes,
           current_etd_in_search(hubs),
           delay_in_days,
-          @shipment.load_type,
-          @scope.fetch(:departure_query_type)
+          request.load_type,
+          scope.fetch(:departure_query_type)
         )
       end
 
@@ -20,22 +20,22 @@ module OfferCalculator
         trucking_time = longest_trucking_time(hubs).seconds
         if trucking_time != 0
           trucking_time_upper_limit = 129_600
-          pre_carriage = @shipment.trucking["pre_carriage"]
+          pre_carriage = request.trucking_params["pre_carriage"]
           pre_carriage["trucking_time_in_seconds"] = [trucking_time, trucking_time_upper_limit].max
         end
-        @shipment.desired_start_date + trucking_time
+        request.cargo_ready_date + trucking_time
       end
 
       def longest_trucking_time(hubs)
-        return 0 unless @shipment.has_pre_carriage?
+        return 0 unless request.has_pre_carriage?
 
-        hubs_by_distance = @shipment.pickup_address.furthest_hubs(hubs[:origin])
+        hubs_by_distance = request.pickup_address.furthest_hubs(hubs[:origin])
 
         hubs_by_distance.each do |hub|
           google_directions = Trucking::GoogleDirections.new(
-            @shipment.pickup_address.lat_lng_string,
+            request.pickup_address.lat_lng_string,
             hub.lat_lng_string,
-            @shipment.desired_start_date.to_i
+            request.cargo_ready_date.to_i
           )
 
           driving_time = google_directions.driving_time_in_seconds

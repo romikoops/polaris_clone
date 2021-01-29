@@ -1,28 +1,12 @@
 # frozen_string_literal: true
 
-require "sidekiq/web"
-require "sidekiq-status/web"
-if ENV["SIDEKIQ_USERNAME"] && ENV["SIDEKIQ_PASSWORD"]
-  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    ActiveSupport::SecurityUtils.secure_compare(
-      ::Digest::SHA256.hexdigest(username),
-      ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_USERNAME"])
-    ) &
-      ActiveSupport::SecurityUtils.secure_compare(
-        ::Digest::SHA256.hexdigest(password),
-        ::Digest::SHA256.hexdigest(ENV["SIDEKIQ_PASSWORD"])
-      )
-  end
-end
-
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
   get "/healthz", to: "application#health"
-  mount Sidekiq::Web, at: "/sidekiq"
   mount Rswag::Ui::Engine, at: "/docs"
   mount Rswag::Api::Engine, at: "/docs"
 
-  mount RailsEventStore::Browser => "/res" if Rails.env.development?
+  get "/sidekiq", to: redirect("/admin/sidekiq", status: 301)
 
   resource :user, only: [:show, :create] do
     collection do
@@ -616,15 +600,15 @@ end
 #
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
+#                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
+#                                                      trestle        /admin                                                                                             Trestle::Engine
 #                                                    admiralty        /admiralty                                                                                         Admiralty::Engine
 #                                                          api        /                                                                                                  Api::Engine
-#                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                  sidekiq_web        /sidekiq                                                                                           Sidekiq::Web
 #                                                     rswag_ui        /docs                                                                                              Rswag::Ui::Engine
 #                                                    rswag_api        /docs                                                                                              Rswag::Api::Engine
-#                                 ruby_event_store_browser_app        /res                                                                                               RubyEventStore::Browser::App
+#                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
 #                                                         user GET    /user(.:format)                                                                                    users#show
 #                                                              POST   /user(.:format)                                                                                    users#create
@@ -865,30 +849,40 @@ end
 # metadata_saml GET  /saml/:id/metadata(.:format) idp/saml#metadata {:subdomain=>"idp"}
 #  consume_saml POST /saml/:id/consume(.:format)  idp/saml#consume {:subdomain=>"idp"}
 #
-# Routes for AdmiraltyAuth::Engine:
-#        login GET    /login(.:format)        admiralty_auth/logins#new
-# create_login GET    /login/create(.:format) admiralty_auth/logins#create
-# delete_login DELETE /login(.:format)        admiralty_auth/logins#destroy
+# Routes for GoogleSignIn::Engine:
+# authorization POST /authorization(.:format) google_sign_in/authorizations#create
+#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
-# Routes for AdmiraltyReports::Engine:
-#        reports GET  /reports(.:format)        admiralty_reports/reports#index
-#         report GET  /reports/:id(.:format)    admiralty_reports/reports#show
-# download_stats GET  /stats/download(.:format) admiralty_reports/stats#download
-#
-# Routes for AdmiraltyTenants::Engine:
-#     organizations GET   /organizations(.:format)          admiralty_tenants/organizations#index
-#                   POST  /organizations(.:format)          admiralty_tenants/organizations#create
-#  new_organization GET   /organizations/new(.:format)      admiralty_tenants/organizations#new
-# edit_organization GET   /organizations/:id/edit(.:format) admiralty_tenants/organizations#edit
-#      organization GET   /organizations/:id(.:format)      admiralty_tenants/organizations#show
-#                   PATCH /organizations/:id(.:format)      admiralty_tenants/organizations#update
-#                   PUT   /organizations/:id(.:format)      admiralty_tenants/organizations#update
+# Routes for Trestle::Engine:
+#                                  new_organization GET    /organizations/new(.:format)      organizations_admin/admin#new
+#                                 edit_organization GET    /organizations/:id/edit(.:format) organizations_admin/admin#edit
+#                                         new_theme GET    /themes/new(.:format)             themes_admin/admin#new
+#                                        edit_theme GET    /themes/:id/edit(.:format)        themes_admin/admin#edit
+#                                            signin GET    /signin(.:format)                 trestle/auth/sessions#create
+#                                       sidekiq_web        /sidekiq/web                      Sidekiq::Web
+#                                                   GET    /sidekiq/web(.:format)            redirect(302, login)
+#                      ruby_event_store_browser_app        /rails_event_store                RubyEventStore::Browser::App
+#                                 rails_event_store GET    /rails_event_store(.:format)      redirect(302, login)
+#                                             login GET    /login(.:format)                  trestle/auth/sessions#new
+#                                                   POST   /login(.:format)                  trestle/auth/sessions#create
+#                                            logout GET    /logout(.:format)                 trestle/auth/sessions#destroy
+#                         organizations_admin_index GET    /organizations(.:format)          organizations_admin/admin#index
+#                                                   POST   /organizations(.:format)          organizations_admin/admin#create
+#                               organizations_admin GET    /organizations/:id(.:format)      organizations_admin/admin#show
+#                                                   PATCH  /organizations/:id(.:format)      organizations_admin/admin#update
+#                                                   PUT    /organizations/:id(.:format)      organizations_admin/admin#update
+#                                themes_admin_index GET    /themes(.:format)                 themes_admin/admin#index
+#                                                   POST   /themes(.:format)                 themes_admin/admin#create
+#                                      themes_admin GET    /themes/:id(.:format)             themes_admin/admin#show
+#                                                   PATCH  /themes/:id(.:format)             themes_admin/admin#update
+#                                                   PUT    /themes/:id(.:format)             themes_admin/admin#update
+#                                                   DELETE /themes/:id(.:format)             themes_admin/admin#destroy
+#                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                trestle/sidekiq/sidekiq_admin/admin#index
+# trestle_rails_event_store_rails_event_store_admin GET    /rails_event_store(.:format)      trestle/rails_event_store/rails_event_store_admin/admin#index
+#                                              root GET    /                                 trestle/dashboard#index
 #
 # Routes for Admiralty::Engine:
-#    admiralty_auth      /           AdmiraltyAuth::Engine
-# admiralty_reports      /           AdmiraltyReports::Engine
-# admiralty_tenants      /           AdmiraltyTenants::Engine
-#              root GET  /           admiralty/dashboard#index
+#   root GET  /           redirect(301, /admin)
 #
 # Routes for ApiAuth::Engine:
 #      oauth_token POST   /oauth/token(.:format)      api_auth/tokens#create
@@ -940,16 +934,17 @@ end
 # enabled_v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
 #         v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
 #                 v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
-#                     v1_organization_widgets GET    /v1/organizations/:organization_id/widgets(.:format)                                     api/v1/widgets#index
-#                                             POST   /v1/organizations/:organization_id/widgets(.:format)                                     api/v1/widgets#create
-#                      v1_organization_widget PATCH  /v1/organizations/:organization_id/widgets/:id(.:format)                                 api/v1/widgets#update
-#                                             PUT    /v1/organizations/:organization_id/widgets/:id(.:format)                                 api/v1/widgets#update
-#                                             DELETE /v1/organizations/:organization_id/widgets/:id(.:format)                                 api/v1/widgets#destroy
 #                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
-#
-# Routes for GoogleSignIn::Engine:
-# authorization POST /authorization(.:format) google_sign_in/authorizations#create
-#      callback GET  /callback(.:format)      google_sign_in/callbacks#show
+#            v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
+#                     v2_organization_queries POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
+#                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
+#          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
+#           v2_organization_result_set_errors GET    /v2/organizations/:organization_id/result_sets/:result_set_id/errors(.:format)           api/v2/errors#index
+#                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
+#              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
+#                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
+#                      v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
+#                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index

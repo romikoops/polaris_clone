@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ContactsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:contacts) { FactoryBot.create_list(:legacy_contact, 5, user: user) }
 
   before do
@@ -104,7 +104,7 @@ RSpec.describe ContactsController do
 
   describe "GET #show" do
     let(:contact) { contacts.first }
-    let(:shipment_user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+    let(:shipment_user) { FactoryBot.create(:users_client, organization: organization) }
     let(:shipment) { FactoryBot.create(:completed_legacy_shipment, organization: organization, user: shipment_user) }
 
     before { FactoryBot.create(:legacy_shipment_contact, shipment: shipment, contact: contact) }

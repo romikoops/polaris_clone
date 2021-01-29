@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:carrier_a) { FactoryBot.create(:legacy_carrier, name: "A", code: "a") }
   let(:carrier_b) { FactoryBot.create(:legacy_carrier, name: "B", code: "b") }
   let(:tenant_vehicle_a) {
@@ -16,13 +16,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
   let(:trip_a) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_a) }
   let(:trip_b) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_b) }
 
-  let(:clients) do
-    %w[John Jane].map do |name|
-      user = FactoryBot.create(:organizations_user, organization: organization, last_login_at: Time.zone.now)
-      FactoryBot.create(:profiles_profile, user_id: user.id, first_name: name, last_name: "User")
-      user
-    end
-  end
+  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization, last_login_at: Time.zone.now) }
 
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
@@ -30,6 +24,10 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
   let(:result) {
     described_class.data(user: user, organization: organization, start_date: start_date, end_date: end_date)
   }
+  let(:client_a) { clients.first }
+  let(:client_b) { clients.last }
+  let(:client_a_label) { [client_a.profile.first_name, client_a.profile.last_name].join(" ") }
+  let(:client_b_label) { [client_b.profile.first_name, client_b.profile.last_name].join(" ") }
 
   before do
     Organizations.current_id = organization.id
@@ -59,8 +57,6 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
       organization: organization,
       with_breakdown: true,
       with_tenders: true)
-
-    FactoryBot.create(:profiles_profile, user: user)
   end
 
   context "when a quote shop" do
@@ -68,7 +64,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
 
     describe "data" do
       it "returns an array of bookings per user for the period" do
-        expect(result).to eq([{count: 2, label: "John User"}, {count: 1, label: "Jane User"}])
+        expect(result).to eq([{count: 2, label: client_a_label}, {count: 1, label: client_b_label}])
       end
     end
   end
@@ -87,7 +83,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
 
     describe "data" do
       it "returns an array of bookings per user for the period" do
-        expect(result).to eq([{count: 2, label: "John User"}, {count: 1, label: "Jane User"}])
+        expect(result).to eq([{count: 2, label: client_a_label}, {count: 1, label: client_b_label}])
       end
     end
   end

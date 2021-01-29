@@ -62,5 +62,8 @@ if Rails.env.development? && !ENV.has_key?("ANNOTATE_SKIP_ON_DB_MIGRATE")
     Rake::Task["db:migrate"].enhance do
       Rake::Task["annotate_models"].invoke
     end
+    Rake::Task["db:migrate:with_data"].enhance do
+      Rake::Task["annotate_models"].invoke
+    end
   end
 end

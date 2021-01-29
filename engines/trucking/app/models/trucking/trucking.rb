@@ -33,6 +33,7 @@ module Trucking
           "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
         }
       }
+    scope :current, -> { where("validity @> CURRENT_DATE") }
     MODIFIERS = %w[cbm_kg unit km unit_in_kg unit cbm wm kg].freeze
 
     acts_as_paranoid
@@ -128,5 +129,4 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (organization_id => organizations_organizations.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

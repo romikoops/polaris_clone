@@ -5,11 +5,11 @@ module OfferCalculator
     module Validations
       class CargoItemValidationService < OfferCalculator::Service::Validations::CargoValidationService
         def perform
-          cargo.units.each do |cargo_unit|
-            cargo_unit.valid?
+          cargo_units.each do |cargo_unit|
             validate_cargo(cargo_unit: cargo_unit)
             handle_error_expansion(cargo_unit: cargo_unit)
           end
+
           validate_aggregate
           expand_aggregate
           errors
@@ -33,7 +33,7 @@ module OfferCalculator
             next if errors.any? { |match_error| match_error.matches?(cargo: cargo_unit, attr: attribute) }
 
             errors << OfferCalculator::Service::Validations::Error.new(
-              id: cargo_unit.id,
+              id: cargo_unit.id || SecureRandom.uuid,
               message: error.message,
               attribute: attribute,
               limit: error.limit,
@@ -55,14 +55,14 @@ module OfferCalculator
           volume_error = aggregate_errors.find { |error| error.attribute == :volume }
           return unless volume_error && errors.find { |error| error.attribute == :volume }.blank?
 
-          expand_attr_errors(units: cargo.units, attributes: VOLUME_DIMENSIONS, error: volume_error)
+          expand_attr_errors(units: cargo_units, attributes: VOLUME_DIMENSIONS, error: volume_error)
         end
 
         def expand_aggregate_chargeable
           chargeable_error = aggregate_errors.find { |error| error.attribute == :chargeable_weight }
           return unless chargeable_error && errors.find { |error| error.attribute == :chargeable_weight }.blank?
 
-          expand_attr_errors(units: cargo.units, attributes: STANDARD_ATTRIBUTES, error: chargeable_error)
+          expand_attr_errors(units: cargo_units, attributes: STANDARD_ATTRIBUTES, error: chargeable_error)
         end
 
         def expand_aggregate_payload
@@ -77,11 +77,11 @@ module OfferCalculator
 
           return if payload_error.blank?
 
-          cargo.units.each do |cargo_unit|
+          cargo_units.each do |cargo_unit|
             next if errors.any? { |error| error.matches?(cargo: cargo_unit, attr: :payload_in_kg) }
 
             errors << OfferCalculator::Service::Validations::Error.new(
-              id: cargo_unit.id,
+              id: cargo_unit.id || SecureRandom.uuid,
               message: payload_error.message,
               attribute: :payload_in_kg,
               limit: payload_error.limit,
@@ -99,39 +99,28 @@ module OfferCalculator
               max_dimensions: aggregate_max_dimensions,
               id: "aggregate",
               attribute: attribute,
-              measurement: cargo.send(CARGO_DIMENSION_LOOKUP[attribute]),
-              cargo: cargo
+              measurement: measured_request.send(CARGO_DIMENSION_LOOKUP[attribute]),
+              cargo: nil
             )
           end
-          return unless cargo.units.all?(&:valid?)
 
           validate_attribute(
             max_dimensions: aggregate_max_dimensions,
             id: "aggregate",
             attribute: :chargeable_weight,
-            measurement: chargeable_weight(object: cargo),
-            cargo: cargo
+            measurement: measured_request.chargeable_weight,
+            cargo: nil
           )
         end
 
         def keys_for_aggregate_validation
           AGGREGATE_ATTRIBUTES.reject do |key|
-            cargo.units.all? { |cargo| cargo.send(CARGO_DIMENSION_LOOKUP[key]).value.zero? }
+            cargo_units.all? { |cargo| cargo.send(CARGO_DIMENSION_LOOKUP[key]).value.zero? }
           end
-        end
-
-        def chargeable_weight(object:)
-          weight = [object.volume.scale(conversion_ratio).value, object.weight.value].max
-          Measured::Weight.new(weight, "kg")
         end
 
         def conversion_ratio
-          ratio = if modes_of_transport.length == 1
-            Legacy::CargoItem::EFFECTIVE_TONNAGE_PER_CUBIC_METER[modes_of_transport.first]
-          else
-            Legacy::CargoItem::EFFECTIVE_TONNAGE_PER_CUBIC_METER.values.max
-          end
-          ratio ? ratio * 1_000 : DEFAULT_CONVERSION_RATIO
+          pricings.order(wm_rate: :desc).first.wm_rate
         end
 
         def validation_attributes

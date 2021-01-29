@@ -2,7 +2,7 @@
 
 RSpec.shared_context "completed_quotation" do
   include_context "organization"
-  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:trip) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier) }
   let(:carrier) { FactoryBot.create(:legacy_carrier, code: "saco", name: "SACO") }
@@ -21,7 +21,7 @@ RSpec.shared_context "completed_quotation" do
 
   before do
     quotations_quotation.tenders.each do |tender|
-      Legacy::ExchangeRate.create(from: tender.amount.currency.iso_code,
+      Treasury::ExchangeRate.create(from: tender.amount.currency.iso_code,
                                   to: "USD", rate: 1.3,
                                   created_at: tender.created_at - 30.seconds)
     end

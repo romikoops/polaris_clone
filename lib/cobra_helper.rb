@@ -5,6 +5,13 @@ require "digest"
 require "fileutils"
 
 class CobraHelper
+  TYPE = {
+    "api" => "(A,red)",
+    "service" => "(S,yellow)",
+    "data" => "(D,orange)",
+    "direct" => "(*,blue)"
+  }
+
   def self.uml(output: Pathname.new("../doc/engines").expand_path(__dir__))
     FileUtils.mkdir output unless File.directory?(output)
     output_file = output.join("graph.puml")
@@ -25,21 +32,21 @@ class CobraHelper
     uml = []
     uml << "@startuml"
 
-    %w[direct api service data].each do |type|
-      uml << "package \"#{type.capitalize}\" {"
-      groups[type].each do |spec|
-        uml << "  [#{spec.name}]"
+    packages.each do |package, specs|
+      uml << "package \"#{package}\" {"
+
+      specs.each do |spec|
+        uml << "  class #{spec.name} << #{TYPE[spec.metadata["type"]]} >>"
       end
+
       uml << "}"
     end
 
     # Dependencies
     specs.each do |name, spec|
-      uml << ":User: --> [#{spec.name}]" if spec.metadata["type"] == "direct"
-
       spec.dependencies.select { |d| specs.key?(d.name) }.each do |d|
-        arrow = spec.metadata["type"] == specs[d.name].metadata["type"] ? "-->" : "->"
-        uml << "[#{name}] #{arrow} [#{d.name}]"
+        arrow = spec.metadata["type"] == specs[d.name].metadata["type"] ? "*-->" : "-->"
+        uml << "#{name} #{arrow} #{d.name}"
       end
     end
 
@@ -60,7 +67,7 @@ class CobraHelper
       .to_h
   end
 
-  def groups
-    @groups ||= specs.values.group_by { |s| s.metadata["type"] }
+  def packages
+    @packages ||= specs.values.group_by { |s| s.metadata.fetch("package") { s.metadata.fetch("type") } }
   end
 end

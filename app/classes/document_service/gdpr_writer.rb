@@ -10,12 +10,12 @@ module DocumentService
       :user_shipments, :user_messages, :user_addresses, :user_sheet, :contacts_sheet, :shipment_sheet
 
     def initialize(options)
-      @user = Users::User.find(options[:user_id])
-      @organization = Organizations::Organization.find_by(id: user.organization_id)
+      @user = Users::User.find_by(id: options[:user_id]) || Users::Client.find_by(id: options[:user_id])
+      @organization = Organizations::Organization.find_by(id: @user.organization_id)
       @user_contacts = Legacy::Contact.where(user: @user)
       @user_shipments = Legacy::Shipment.where(user: @user).where.not(status: "booking_process_started")
       @user_addresses = Legacy::UserAddress.where(user: @user)
-      @filename = "#{user_profile.first_name}_#{user_profile.last_name}_GDPR.xlsx"
+      @filename = "#{user_profile.name}_GDPR.xlsx"
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
       header_format = @workbook.add_format
@@ -133,7 +133,7 @@ module DocumentService
     end
 
     def user_profile
-      @user_profile ||= Profiles::Profile.find_by(user_id: user.id)
+      @user_profile ||= user.profile
     end
 
     def section_total(tender:, section: nil)

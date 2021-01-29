@@ -6,21 +6,24 @@ module Pdf
     attr_reader :organization, :user, :url
 
     def file
-      @file ||= existing_document || new_file
+      @file ||= begin
+        offer.file.attach(file_arguments)
+        offer
+      end
     end
 
     delegate :attachment, to: :file
 
-    def decorated_quotation
-      @decorated_quotation = Pdf::QuotationDecorator.decorate(quotation, context: {scope: scope})
+    def decorated_query
+      @decorated_query = ResultFormatter::QueryDecorator.decorate(query, context: {scope: scope})
     end
 
     def decorated_company
-      Pdf::CompanyDecorator.decorate(decorated_quotation.company)
+      ResultFormatter::CompanyDecorator.decorate(decorated_query.company)
     end
 
-    def decorated_tenders
-      @decorated_tenders ||= Pdf::TenderDecorator.decorate_collection(tenders, context: {scope: scope})
+    def decorated_results
+      @decorated_results ||= ResultFormatter::ResultDecorator.decorate_collection(offer.results, context: {scope: scope})
     end
 
     def logo
@@ -41,8 +44,8 @@ module Pdf
 
     def locals_for_generation
       {
-        quotation: decorated_quotation,
-        tenders: decorated_tenders,
+        query: decorated_query,
+        results: decorated_results,
         company: decorated_company,
         address: decorated_company.object.present? ? decorated_company.address : nil,
         logo: logo,
@@ -54,24 +57,11 @@ module Pdf
 
     private
 
-    def new_file
-      @new_file ||= begin
-        args = file_arguments.merge(file_target)
-        Legacy::File.create!(args)
-      end
-    end
-
     def file_arguments
       {
-        text: file_text,
-        doc_type: doc_type,
-        user: user,
-        organization: organization,
-        file: {
-          io: StringIO.new(pdf),
-          filename: "#{file_text}.pdf",
-          content_type: "application/pdf"
-        }
+        io: StringIO.new(pdf),
+        filename: "#{file_text}.pdf",
+        content_type: "application/pdf"
       }
     end
   end

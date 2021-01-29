@@ -13,7 +13,7 @@ MoneyRails.configure do |config|
   #
   # Example:
   store_config = {bank_app_id: Settings.open_exchange_rate.app_id}
-  store = MoneyCache::Converter.new(klass: ExchangeRate, config: store_config)
+  store = MoneyCache::Converter.new(klass: Treasury::ExchangeRate, config: store_config)
   config.default_bank = Money::Bank::VariableExchange.new(store)
 
   # Add exchange rates to current money bank object.

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::PricingTools do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:membership) { FactoryBot.create(:groups_membership, group: group, member: _user) }
   let(:shipment) {
     FactoryBot.create(:legacy_shipment, load_type: "cargo_item", user: user, organization: organization)

@@ -16,6 +16,7 @@ end
 #  id                   :uuid             not null, primary key
 #  billing              :integer          default("external")
 #  completed            :boolean          default(FALSE)
+#  creator_type         :string
 #  error_class          :string
 #  estimated            :boolean
 #  selected_date        :datetime
@@ -37,17 +38,16 @@ end
 #
 # Indexes
 #
-#  index_quotations_quotations_on_destination_nexus_id  (destination_nexus_id)
-#  index_quotations_quotations_on_legacy_user_id        (legacy_user_id)
-#  index_quotations_quotations_on_organization_id       (organization_id)
-#  index_quotations_quotations_on_origin_nexus_id       (origin_nexus_id)
-#  index_quotations_quotations_on_sandbox_id            (sandbox_id)
-#  index_quotations_quotations_on_tenant_id             (tenant_id)
-#  index_quotations_quotations_on_user_id               (user_id)
+#  index_quotations_quotations_on_creator_id_and_creator_type  (creator_id,creator_type)
+#  index_quotations_quotations_on_destination_nexus_id         (destination_nexus_id)
+#  index_quotations_quotations_on_legacy_user_id               (legacy_user_id)
+#  index_quotations_quotations_on_organization_id              (organization_id)
+#  index_quotations_quotations_on_origin_nexus_id              (origin_nexus_id)
+#  index_quotations_quotations_on_sandbox_id                   (sandbox_id)
+#  index_quotations_quotations_on_tenant_id                    (tenant_id)
+#  index_quotations_quotations_on_user_id                      (user_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (creator_id => users_users.id)
 #  fk_rails_...  (organization_id => organizations_organizations.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

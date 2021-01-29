@@ -28,11 +28,11 @@ module OfferCalculator
         end
 
         def validation_combos
-          itineraries.ids.product(tenant_vehicles.ids, [shipment.cargo_classes])
+          itineraries.ids.product(tenant_vehicles.ids, [request.cargo_classes])
         end
 
         def organization_pricings
-          pricings_association.for_load_type(shipment.load_type)
+          pricings_association.for_load_type(request.load_type)
         end
 
         def itineraries
@@ -48,7 +48,7 @@ module OfferCalculator
             internal: false,
             tenant_vehicle_id: tenant_vehicles,
             itinerary: itineraries,
-            organization_id: shipment.organization_id
+            organization_id: request.organization.id
           ).for_dates(start_date, end_date)
         end
 

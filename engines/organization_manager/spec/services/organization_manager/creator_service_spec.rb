@@ -9,10 +9,7 @@ RSpec.describe OrganizationManager::CreatorService do
         secondary_color: "#000002",
         bright_primary_color: "#000003",
         bright_secondary_color: "#000004"
-      },
-      scope: {
-        base_pricing: true
-      }.to_json.to_s
+      }
     }
   end
   let!(:organization) { described_class.new(params: params).perform }
@@ -22,7 +19,6 @@ RSpec.describe OrganizationManager::CreatorService do
     it "creates a new organization and all the required data" do
       aggregate_failures do
         expect(organization.slug).to eq("tester")
-        expect(organization.scope.content["base_pricing"]).to eq(true)
       end
     end
 

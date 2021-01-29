@@ -2,13 +2,13 @@
 
 require "swagger_helper"
 
-RSpec.describe "TruckingCountries" do
+RSpec.describe "TruckingCountries", type: :request, swagger_doc: "v1/swagger.json" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:location) { FactoryBot.create(:zipcode_location, zipcode: "00001", country_code: "SE") }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do

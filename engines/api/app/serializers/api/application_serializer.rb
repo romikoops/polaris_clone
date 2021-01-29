@@ -41,7 +41,7 @@ module Api
       end
 
       def meta(object)
-        if object.respond_to? :total_pages
+        if object.respond_to?(:pages)
           {
             page: object.page,
             per_page: object.per_page,

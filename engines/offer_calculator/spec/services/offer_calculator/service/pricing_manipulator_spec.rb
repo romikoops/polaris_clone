@@ -10,15 +10,14 @@ RSpec.describe OfferCalculator::Service::PricingManipulator do
   let(:schedules) { [OfferCalculator::Schedule.from_trip(trip)] }
   let(:results) {
     described_class.manipulated_pricings(
-      shipment: shipment,
-      quotation: quotation,
+      request: request,
       associations: associations,
       schedules: schedules
     )
   }
 
   context "when no trucking exists" do
-    before { allow(shipment).to receive(:has_pre_carriage?).and_return(true) }
+    before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
 
     let(:associations) { {truckings: Trucking::Trucking.none} }
 
@@ -29,7 +28,7 @@ RSpec.describe OfferCalculator::Service::PricingManipulator do
 
   context "when no export local charges exists" do
     before do
-      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:has_pre_carriage?).and_return(true)
       allow(OfferCalculator::Service::Manipulators::Truckings).to receive(:results).and_return([trucking_result])
     end
 

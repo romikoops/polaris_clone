@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Trucking::Queries::Base do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:hub) { FactoryBot.create(:hamburg_hub, :hamburg, :with_lat_lng, organization: organization) }
+  let(:hub) { FactoryBot.create(:hamburg_hub, :hamburg, organization: organization) }
   let(:location) do
     FactoryBot.create(:locations_location,
       bounds: FactoryBot.build(:legacy_bounds, lat: hub.latitude, lng: hub.longitude, delta: 0.4),

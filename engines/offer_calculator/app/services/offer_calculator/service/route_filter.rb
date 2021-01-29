@@ -24,14 +24,44 @@ module OfferCalculator
       end
 
       def valid_for_route?(route:)
-        "OfferCalculator::Service::Validations::#{shipment.load_type.camelize}ValidationService".constantize
+        pricings = route_pricings(route: route)
+        errors = route_errors(pricings: pricings)
+        persist_errors(errors: errors, pricings: pricings)
+        errors.empty?
+      end
+
+      def route_errors(pricings:)
+        "OfferCalculator::Service::Validations::#{request.load_type.camelize}ValidationService".constantize
           .errors(
-            cargo: quotation.cargo,
-            modes_of_transport: [route.mode_of_transport],
-            itinerary_ids: [route.itinerary_id],
-            tenant_vehicle_ids: [route.tenant_vehicle_id],
+            request: request,
+            pricings: pricings,
             final: true
-          ).empty?
+          )
+      end
+
+      def route_pricings(route:)
+        Pricings::Pricing.joins(:itinerary).where(
+          itineraries: {mode_of_transport: route.mode_of_transport},
+          itinerary_id: route.itinerary_id,
+          tenant_vehicle_id: route.tenant_vehicle_id
+        ).current
+      end
+
+      def persist_errors(errors:, pricings:)
+        service = pricings.first.tenant_vehicle
+        errors.each do |error|
+          Journey::Error.create(
+            result_set: request.result_set,
+            cargo_unit_id: error.id,
+            code: error.code,
+            service: service.name,
+            carrier: service.carrier&.name,
+            mode_of_transport: service.mode_of_transport,
+            property: error.attribute,
+            limit: error.limit,
+            value: error.value
+          )
+        end
       end
     end
   end

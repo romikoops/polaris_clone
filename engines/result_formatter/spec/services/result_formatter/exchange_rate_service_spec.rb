@@ -11,14 +11,20 @@ module ResultFormatter
     let(:euro_us_rate) { 1.34 }
 
     before do
-      Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code,
+      Treasury::ExchangeRate.create(from: tender_amount.currency.iso_code,
                                   to: line_item_amount.currency.iso_code,
                                   rate: euro_us_rate)
       FactoryBot.create_list(:quotations_line_item, 5, tender: tender, amount: line_item_amount)
     end
 
     describe ".perform" do
-      let(:klass) { described_class.new(tender: tender) }
+      let(:klass) do
+        described_class.new(
+          base_currency: tender.amount.currency.iso_code,
+          currencies: tender.line_items.pluck(:amount_currency),
+          timestamp: tender.created_at
+        )
+      end
 
       context "when line items and the tender have differing currencies" do
         it "returns a hash containing the currency rates of line items" do
@@ -45,7 +51,7 @@ module ResultFormatter
 
         before do
           rates.each do |rate|
-            Legacy::ExchangeRate.create(from: tender_amount.currency.iso_code,
+            Treasury::ExchangeRate.create(from: tender_amount.currency.iso_code,
                                         to: "USD", rate: rate[:rate],
                                         created_at: rate[:created_at])
           end

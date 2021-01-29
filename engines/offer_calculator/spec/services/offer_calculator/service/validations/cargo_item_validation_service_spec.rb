@@ -9,8 +9,9 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       mode_of_transport: "ocean",
       volume: 1000)
     Organizations::Organization.current_id = organization.id
+    allow(request).to receive(:cargo_units).and_return(cargo_units)
   end
-
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:itinerary) {
@@ -18,10 +19,8 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
   }
   let(:result) do
     described_class.errors(
-      modes_of_transport: modes_of_transport,
-      cargo: cargo,
-      itinerary_ids: itinerary_ids,
-      tenant_vehicle_ids: tenant_vehicle_ids,
+      request: request,
+      pricings: pricings,
       final: final
     )
   end
@@ -29,21 +28,35 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
   let(:final) { false }
   let(:itinerary_ids) { [itinerary.id] }
   let(:tenant_vehicle_ids) { [tenant_vehicle.id] }
-  let(:cargo) { FactoryBot.build(:cargo_cargo, organization: organization, units: cargos) }
+  let(:pricings) do
+    Pricings::Pricing.all
+  end
+  let(:cargo_units) do
+    [FactoryBot.build(:journey_cargo_unit,
+      width_value: 1.20,
+      length_value: 0.80,
+      height_value: 1.40,
+      weight_value: 500,
+      quantity: 1)]
+  end
 
   describe ".perform" do
+    before do
+      FactoryBot.create(:pricings_pricing,
+        organization: organization,
+        itinerary: itinerary,
+        tenant_vehicle: tenant_vehicle)
+    end
+
     context "when the object is complete and valid" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 1,
           width_value: 1.2,
           length_value: 1.2,
           height_value: 1.2,
           weight_value: 120)]
       end
-      let(:tenant_vehicle_ids) { nil }
 
       it "returns an empty array" do
         expect(result).to be_empty
@@ -51,9 +64,8 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is complete and valid except for trucking" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           id: SecureRandom.uuid,
           quantity: 1,
           width_value: 1.2,
@@ -67,9 +79,9 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       let(:expected_error_codes) do
         [4005]
       end
-      let(:modes_of_transport) { %w[ocean truck_carriage] }
 
       before do
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
         FactoryBot.create(:legacy_max_dimensions_bundle,
           aggregate: false,
           mode_of_transport: "truck_carriage",
@@ -84,17 +96,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is incomplete and valid" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 1,
           width_value: 1.2,
           length_value: 0,
           height_value: 0,
           weight_value: 0)]
       end
-      let(:tenant_vehicle_ids) { nil }
 
       it "returns an empty array" do
         expect(result).to be_empty
@@ -102,17 +111,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is incomplete and valid (final)" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 0,
           width_value: 1.2,
           length_value: 0,
           height_value: 0,
           weight_value: 0)]
       end
-      let(:tenant_vehicle_ids) { nil }
       let(:final) { true }
       let(:expected_help_text) do
         ["Length is required.",
@@ -133,10 +139,8 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is invalid (negative values)" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 1,
           width_value: -1.2,
           length_value: -1.0,
@@ -158,7 +162,7 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
       it "returns an an array of missing values" do
         aggregate_failures do
-          expect(result.length).to eq(8)
+          expect(result.length).to eq(9)
           expect(result.map(&:message).uniq).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array(expected_error_codes)
         end
@@ -166,10 +170,8 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is complete and all attrs are invalid" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 1,
           width_value: 12,
           length_value: 12,
@@ -198,10 +200,8 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     end
 
     context "when the object is incomplete and invalid" do
-      let(:cargos) do
-        [FactoryBot.build(:lcl_unit,
-          organization: organization,
-          id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
           quantity: 1,
           width_value: 12,
           length_value: 0,
@@ -229,25 +229,19 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
           chargeable_weight: 500)
       end
 
-      let(:cargos) do
-        [
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          quantity: 1,
+          width_value: 1,
+          length_value: 1,
+          height_value: 1,
+          weight_value: 120),
+          FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 120),
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
-            quantity: 1,
-            width_value: 1,
-            length_value: 1,
-            height_value: 1,
-            weight_value: 400)
-        ]
+            weight_value: 400)]
       end
       let(:expected_help_text) do
         [
@@ -274,25 +268,19 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
           payload_in_kg: 500)
       end
 
-      let(:cargos) do
-        [
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          quantity: 1,
+          width_value: 1,
+          length_value: 1,
+          height_value: 1,
+          weight_value: 1.2),
+          FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 1.2),
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
-            quantity: 1,
-            width_value: 1,
-            length_value: 1,
-            height_value: 1,
-            weight_value: 500)
-        ]
+            weight_value: 500)]
       end
       let(:expected_help_text) do
         [
@@ -319,25 +307,19 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
           volume: 15)
       end
 
-      let(:cargos) do
-        [
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          quantity: 1,
+          width_value: 5,
+          length_value: 2,
+          height_value: 1,
+          weight_value: 1.2),
+          FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 5,
             length_value: 2,
             height_value: 1,
-            weight_value: 1.2),
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
-            quantity: 1,
-            width_value: 5,
-            length_value: 2,
-            height_value: 1,
-            weight_value: 1.2)
-        ]
+            weight_value: 1.2)]
       end
       let(:expected_help_text) do
         [
@@ -348,7 +330,7 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
       it "returns an array of errors for each input when aggregate fails validation" do
         aggregate_failures do
-          expect(result.length).to eq(8)
+          expect(result.length).to eq(14)
           expect(result.map(&:message).uniq).to match_array(expected_help_text)
           expect(result.map(&:code).uniq).to match_array([4006, 4019])
         end
@@ -371,25 +353,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       }
       let(:itinerary_ids) { [itinerary, air_itinerary].map(&:id) }
       let(:modes_of_transport) { %w[ocean air] }
-      let(:cargos) do
-        [
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
+
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          quantity: 1,
+          width_value: 1,
+          length_value: 1,
+          height_value: 1,
+          weight_value: 120),
+          FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 120),
-          FactoryBot.build(:lcl_unit,
-            organization: organization,
-            id: SecureRandom.uuid,
-            quantity: 1,
-            width_value: 1,
-            length_value: 1,
-            height_value: 1,
-            weight_value: 500)
-        ]
+            weight_value: 500)]
       end
 
       it "returns an array of errors for each input when aggregate fails validation" do

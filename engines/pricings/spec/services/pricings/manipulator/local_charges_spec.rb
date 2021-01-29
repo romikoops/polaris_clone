@@ -7,7 +7,7 @@ RSpec.describe Pricings::Manipulator do
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization).tap do |group|
       FactoryBot.create(:groups_membership, member: user, group: group)
@@ -59,8 +59,6 @@ RSpec.describe Pricings::Manipulator do
   let(:manipulated_results) { klass.perform }
 
   before do
-    FactoryBot.create(:profiles_profile, user_id: user.id)
-    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     FactoryBot.create(:thc_charge, organization: organization)
     %w[ocean trucking local_charge].flat_map do |mot|
       [

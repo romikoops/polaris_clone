@@ -5,17 +5,17 @@ module OfferCalculator
     module Manipulators
       class Base
         TRUCKING_BUFFER_DAYS = 2.days
-        def self.results(association:, shipment:, schedules:)
-          new(association: association, shipment: shipment, schedules: schedules).perform
+        def self.results(association:, request:, schedules:)
+          new(association: association, request: request, schedules: schedules).perform
         end
 
-        def initialize(association:, schedules:, shipment:)
+        def initialize(association:, schedules:, request:)
           @association = association
           @schedules = schedules
-          @shipment = shipment
-          @user = shipment.user
-          @organization = shipment.organization
-          @scope = ::OrganizationManager::ScopeService.new(target: @user,
+          @request = request
+          @client = request.client
+          @organization = request.organization
+          @scope = ::OrganizationManager::ScopeService.new(target: @client,
                                                            organization: @organization).fetch
         end
 
@@ -23,7 +23,7 @@ module OfferCalculator
           association.flat_map do |object|
             ::Pricings::Manipulator.new(
               type: margin_type(object: object),
-              target: user,
+              target: client,
               organization: organization,
               args: arguments(object: object)
             ).perform
@@ -32,14 +32,14 @@ module OfferCalculator
 
         private
 
-        attr_reader :association, :schedules, :shipment, :user, :organization, :scope
+        attr_reader :association, :schedules, :request, :client, :organization, :scope
 
         def validity_service
           @validity_service ||= OfferCalculator::ValidityService.new(
             logic: scope.fetch("validity_logic"),
             schedules: schedules,
             direction: "export",
-            booking_date: shipment.desired_start_date
+            booking_date: request.cargo_ready_date
           )
         end
 
@@ -74,6 +74,10 @@ module OfferCalculator
             start_date: validity_service.start_date,
             end_date: validity_service.end_date
           }
+        end
+
+        def cargo_class_count
+          @cargo_class_count ||= request.cargo_classes.count
         end
       end
     end

@@ -1,3 +1,7 @@
+# Status
+require "sidekiq-status/web"
+require "sidekiq/cron/web"
+
 # ActiveJob
 ActiveJob::TrafficControl.client = ConnectionPool.new(size: 5, timeout: 5) { Redis.new }
 

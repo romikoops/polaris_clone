@@ -6,13 +6,11 @@ module Api
   RSpec.describe V1::UsersController, type: :controller do
     routes { Engine.routes }
 
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:user) { FactoryBot.create(:organizations_user) }
+    let(:user) { FactoryBot.create(:users_user) }
 
     before do
-      FactoryBot.create(:profiles_profile, user_id: user.id)
-
       request.headers["Authorization"] = token_header
       request.env["HTTP_REFERER"] = "http://itsmycargo.example"
     end
@@ -27,7 +25,7 @@ module Api
       end
 
       context "when id is wrong" do
-        let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: "wrong_id", scopes: "public") }
+        let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: "wrong_id", scopes: "public") }
 
         it "returns 404" do
           get :show

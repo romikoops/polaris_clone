@@ -4,16 +4,14 @@ module Notifications
     def activation_needed_email
       UserMailer.with(
         organization: organization,
-        user: user,
-        profile: profile
+        user: user
       ).activation_needed_email
     end
 
     def reset_password_email
       UserMailer.with(
         organization: organization,
-        user: user,
-        profile: profile
+        user: user
       ).reset_password_email
     end
 
@@ -24,11 +22,7 @@ module Notifications
     end
 
     def user
-      FactoryBot.build(:organizations_user, organization: organization)
-    end
-
-    def profile
-      FactoryBot.build(:profiles_profile, user: user)
+      FactoryBot.build(:users_client, organization: organization)
     end
   end
 end

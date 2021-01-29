@@ -3,6 +3,12 @@ gem "shared-runtime", path: "../../gems/shared-runtime"
 gem "cargo", path: "../cargo"
 eval_gemfile "../cargo/Gemfile.runtime"
 
+gem "carta", path: "../carta"
+eval_gemfile "../carta/Gemfile.runtime"
+
+gem "journey", path: "../journey"
+eval_gemfile "../journey/Gemfile.runtime"
+
 gem "legacy", path: "../legacy"
 eval_gemfile "../legacy/Gemfile.runtime"
 
@@ -11,6 +17,9 @@ eval_gemfile "../offer_calculator/Gemfile.runtime"
 
 gem "pdf", path: "../pdf"
 eval_gemfile "../pdf/Gemfile.runtime"
+
+gem "result_formatter", path: "../result_formatter"
+eval_gemfile "../result_formatter/Gemfile.runtime"
 
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"

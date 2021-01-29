@@ -16,7 +16,7 @@ module MoneyCache
     end
 
     def perform
-      (get_stored_rate || get_inverse_rate || get_calcluated_rate).round(6)
+      (get_stored_rate || get_inverse_rate || get_calculated_rate).round(6)
     end
 
     private
@@ -35,7 +35,7 @@ module MoneyCache
       store.add_rate(from_currency, to_currency, rate)
     end
 
-    def get_calcluated_rate
+    def get_calculated_rate
       return unless to_base_rate && from_base_rate
 
       rate = to_base_rate.to_d / from_base_rate

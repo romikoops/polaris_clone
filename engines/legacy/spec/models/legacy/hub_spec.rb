@@ -5,7 +5,7 @@ require "rails_helper"
 module Legacy
   RSpec.describe Hub, type: :model do
     describe ".lat_lng_string" do
-      let(:hub) { FactoryBot.build(:legacy_hub, :with_lat_lng) }
+      let(:hub) { FactoryBot.build(:legacy_hub) }
 
       it "returns a string" do
         expect(hub.lat_lng_string).to eql("57.694253,11.854048")
@@ -13,8 +13,8 @@ module Legacy
     end
 
     describe ".distance_to" do
-      let(:hub) { FactoryBot.build(:legacy_hub, :with_lat_lng) }
-      let(:loc) { FactoryBot.build(:legacy_hub, :with_lat_lng) }
+      let(:hub) { FactoryBot.build(:legacy_hub) }
+      let(:loc) { FactoryBot.build(:legacy_hub) }
 
       it "returns a string" do
         expect(hub.distance_to(loc)).to be(0.0)
@@ -22,7 +22,7 @@ module Legacy
     end
 
     describe ".lng_lat_array" do
-      let(:hub) { FactoryBot.build(:legacy_hub, :with_lat_lng) }
+      let(:hub) { FactoryBot.build(:legacy_hub) }
 
       it "returns a string" do
         expect(hub.lng_lat_array).to eql([11.854048, 57.694253])
@@ -30,7 +30,7 @@ module Legacy
     end
 
     describe ".geo_point" do
-      let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, address: address) }
+      let(:hub) { FactoryBot.create(:legacy_hub, address: address) }
       let(:address) { FactoryBot.create(:legacy_address) }
 
       it "returns the Rgeo WKT point of the hub" do

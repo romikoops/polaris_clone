@@ -4,6 +4,7 @@ module OfferCalculator
   class Schedule
     include ActiveModel::Model
 
+    DURATION = 25
     attr_accessor :id, :origin_hub_id, :destination_hub_id,
       :origin_hub_name, :destination_hub_name, :mode_of_transport,
       :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
@@ -34,7 +35,7 @@ module OfferCalculator
     end
 
     def self.quote_trip_end_date
-      31.days.from_now.beginning_of_day
+      (quote_trip_start_date + DURATION.days).beginning_of_day
     end
 
     def self.quote_trip_start_date
@@ -114,11 +115,15 @@ module OfferCalculator
         ]
       )
       results = ActiveRecord::Base.connection.exec_query(sanitized_query).to_a
-      raise OfferCalculator::Errors::NoValidSchedules if results.empty?
+      handle_no_schedules if results.empty?
 
       results.map do |attributes|
         OfferCalculator::Schedule.new(attributes.merge(id: SecureRandom.uuid))
       end
+    end
+
+    def self.handle_no_schedules
+      raise OfferCalculator::Errors::NoValidSchedules
     end
 
     def self.from_trip(trip)

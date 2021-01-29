@@ -69,7 +69,7 @@ RSpec.describe MaxDimensionsController, type: :controller do
         allow(controller).to receive(:organization_user).and_return(user)
       end
 
-      let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:user) { FactoryBot.create(:users_client, organization: organization) }
 
       it "returns the default max dimensions" do
         get :index, params: default_params.except(:load_type)

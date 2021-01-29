@@ -5,7 +5,7 @@ require "rails_helper"
 module Api
   RSpec.describe DashboardService, type: :service do
     let(:quote_organization) { FactoryBot.create(:organizations_organization) }
-    let(:quote_user) { FactoryBot.create(:organizations_user, organization_id: quote_organization.id) }
+    let(:quote_user) { FactoryBot.create(:users_client, organization_id: quote_organization.id) }
     let(:start_date) { DateTime.new(2020, 2, 10) }
     let(:end_date) { DateTime.new(2020, 3, 10) }
 

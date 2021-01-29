@@ -7,7 +7,7 @@ RSpec.describe Wheelhouse::RouteFinderService, type: :service do
 
   let(:load_type) { "cargo_item" }
   let(:cargo_classes) { %w[lcl] }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:origin_hub) { itinerary.origin_hub }
   let(:air_itinerary) {
     FactoryBot.create(

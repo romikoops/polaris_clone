@@ -3,8 +3,8 @@
 module OfferCalculator
   module Service
     class RouteFinder < Base
-      def self.routes(shipment:, quotation:, hubs:, date_range:)
-        new(shipment: shipment, quotation: quotation).perform(hubs: hubs, date_range: date_range)
+      def self.routes(request:, hubs:, date_range:)
+        new(request: request).perform(hubs: hubs, date_range: date_range)
       end
 
       def perform(hubs:, date_range:)
@@ -15,8 +15,8 @@ module OfferCalculator
         routes_attributes = OfferCalculator::Route.attributes_from_hub_and_itinerary_ids(
           date_range: date_range,
           query: query_data,
-          shipment: @shipment,
-          scope: @scope
+          request: request,
+          scope: scope
         )
 
         raise OfferCalculator::Errors::NoRoute if routes_attributes.nil?

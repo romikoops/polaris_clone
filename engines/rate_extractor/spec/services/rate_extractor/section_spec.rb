@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe RateExtractor::Section do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:path) { FactoryBot.create_list(:routing_route_line_service, 3) }
 
   let(:service) { described_class.new(organization: organization, user: user, path: path) }

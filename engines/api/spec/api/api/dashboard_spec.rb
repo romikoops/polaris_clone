@@ -2,16 +2,16 @@
 
 require "swagger_helper"
 
-RSpec.describe "Dashboard" do
+RSpec.describe "Dashboard", type: :request, swagger_doc: "v1/swagger.json" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:organizations_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
 
   let(:start_date) { Time.zone.local(2020, 2, 10) }
   let(:shipment_date) { Time.zone.local(2020, 2, 20) }
   let(:end_date) { Time.zone.local(2020, 3, 10) }
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   path "/v1/organizations/{organization_id}/dashboard" do

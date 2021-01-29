@@ -8,7 +8,7 @@
           fee[:code].present? &&
           !['import', 'export'].include?(fee[:code])
         %>
-          <%== tender.chargeable_weight_string(section: fee[:code]) %>
+          <%== result.chargeable_weight_string(section: fee[:code]) %>
         <% end %>
     </p>
   </td>

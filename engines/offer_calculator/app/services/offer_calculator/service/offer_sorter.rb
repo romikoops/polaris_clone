@@ -6,14 +6,14 @@ module OfferCalculator
       EXPORT_SECTIONS = %w[trucking_pre export cargo].freeze
       TRUCKING_SECTIONS = %w[trucking_pre trucking_on].freeze
 
-      def self.sorted_offers(shipment:, quotation:, charges:, schedules:)
-        new(shipment: shipment, quotation: quotation, charges: charges, schedules: schedules).perform
+      def self.sorted_offers(request:, charges:, schedules:)
+        new(request: request, charges: charges, schedules: schedules).perform
       end
 
-      def initialize(shipment:, quotation:, charges:, schedules:)
+      def initialize(request:, charges:, schedules:)
         @charges = charges
         @schedules = schedules
-        super(shipment: shipment, quotation: quotation)
+        super(request: request)
       end
 
       def perform
@@ -43,7 +43,7 @@ module OfferCalculator
 
       private
 
-      attr_reader :shipment, :quotation, :charges, :schedules
+      attr_reader :request, :charges, :schedules
 
       def group_schedules_and_results(schedules_and_results:)
         groupings = schedules_and_results.compact.group_by { |schedule_and_result|
@@ -54,8 +54,7 @@ module OfferCalculator
           results << OfferCalculator::Service::OfferCreators::Offer.new(
             offer: offer,
             schedules: grouped.pluck(:schedule),
-            shipment: shipment,
-            quotation: quotation
+            request: request
           )
         end
       end
@@ -143,7 +142,7 @@ module OfferCalculator
         charge.section == section &&
           charge.tenant_vehicle_id == tenant_vehicle_id &&
           charge.validity.cover?(date) &&
-          shipment.cargo_classes.include?(charge.cargo_class) &&
+          request.cargo_classes.include?(charge.cargo_class) &&
           charge.itinerary_id == itinerary_id
       end
 
@@ -152,7 +151,7 @@ module OfferCalculator
           charge.hub_id == hub_id &&
           charge.tenant_vehicle_id == tenant_vehicle_id &&
           charge.validity.cover?(date) &&
-          shipment.cargo_classes.include?(charge.cargo_class)
+          request.cargo_classes.include?(charge.cargo_class)
       end
 
       def trucking_result_matcher(section:, date:, grouping_keys:)
@@ -177,11 +176,11 @@ module OfferCalculator
 
       def required_sections(grouping_keys:)
         [
-          shipment.has_pre_carriage? ? "trucking_pre" : nil,
+          request.has_pre_carriage? ? "trucking_pre" : nil,
           local_charge_required?(direction: "export", grouping_keys: grouping_keys) ? "export" : nil,
           "cargo",
           local_charge_required?(direction: "import", grouping_keys: grouping_keys) ? "import" : nil,
-          shipment.has_on_carriage? ? "trucking_on" : nil
+          request.has_on_carriage? ? "trucking_on" : nil
         ].compact
       end
 
@@ -189,9 +188,9 @@ module OfferCalculator
         sections.each_with_object({}) do |section, hash|
           direction = EXPORT_SECTIONS.include?(section) ? "export" : "import"
           hash[section] = OfferCalculator::ValidityService.new(
-            logic: @scope.fetch("validity_logic"),
+            logic: scope.fetch("validity_logic"),
             direction: direction,
-            booking_date: @shipment.desired_start_date,
+            booking_date: request.cargo_ready_date,
             schedules: [schedule]
           ).start_date
         end
@@ -203,7 +202,7 @@ module OfferCalculator
         carriage = direction == "export" ? "pre" : "on"
         mandatory_and_exists = hub.mandatory_charge.send("#{direction}_charges") &&
           hub.local_charges.current.exists?(tenant_vehicle_id: grouping_keys[:tenant_vehicle_id], direction: direction)
-        shipment.has_carriage?(carriage) || mandatory_and_exists
+        request.has_carriage?(carriage: carriage) || mandatory_and_exists
       end
 
       def schedules_groupings(schedules:)

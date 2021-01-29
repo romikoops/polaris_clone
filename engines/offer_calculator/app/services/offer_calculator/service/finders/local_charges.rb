@@ -16,7 +16,7 @@ module OfferCalculator
 
         def organization_local_charges
           @organization_local_charges ||=
-            Legacy::LocalCharge.where(organization: shipment.organization, load_type: cargo_classes)
+            Legacy::LocalCharge.where(organization: organization, load_type: cargo_classes)
               .for_dates(start_date, end_date)
         end
 
@@ -75,7 +75,7 @@ module OfferCalculator
 
         def hub_pairings
           @hub_pairings ||= uniq_route_schedules.flat_map { |schedule|
-            shipment.cargo_classes.map do |cargo_class|
+            cargo_classes.map do |cargo_class|
               [
                 cargo_class,
                 schedule.origin_hub_id,
@@ -109,11 +109,11 @@ module OfferCalculator
         end
 
         def export_required?
-          shipment.has_pre_carriage? || origin_mandatory_charges
+          request.has_pre_carriage? || origin_mandatory_charges
         end
 
         def import_required?
-          shipment.has_on_carriage? || destination_mandatory_charges
+          request.has_on_carriage? || destination_mandatory_charges
         end
 
         def origin_mandatory_charges

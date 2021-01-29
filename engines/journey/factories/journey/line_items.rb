@@ -8,7 +8,7 @@ FactoryBot.define do
     unit_price_cents { 1000 }
     unit_price_currency { "USD" }
     units { 3 }
-    fee_code { "BAS" }
+    sequence(:fee_code) { |n| "Fee #{n}" }
     note { "" }
     description { "" }
     included { false }

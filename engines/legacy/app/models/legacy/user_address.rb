@@ -3,7 +3,7 @@
 module Legacy
   class UserAddress < ApplicationRecord
     self.table_name = "user_addresses"
-    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :user, class_name: "Users::Client"
     belongs_to :address, class_name: "Legacy::Address"
 
     before_validation :set_primary
@@ -37,8 +37,4 @@ end
 #
 #  index_user_addresses_on_deleted_at  (deleted_at)
 #  index_user_addresses_on_user_id     (user_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
 #

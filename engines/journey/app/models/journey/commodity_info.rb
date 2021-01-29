@@ -1,11 +1,34 @@
 module Journey
   class CommodityInfo < ApplicationRecord
+    VALID_IMO_CLASSES = %w[
+      0
+      1.1
+      1.2
+      1.3
+      1.4
+      1.5
+      1.6
+      2.1
+      2.2
+      2.3
+      3
+      4.1
+      4.2
+      4.3
+      5.1
+      5.2
+      6.1
+      6.2
+      7.1
+      7.2
+      7.3
+      7.4
+      8
+      9
+    ].freeze
     belongs_to :cargo_unit
 
-    validates :hs_code, presence: true
-    validates :imo_class, presence: true, format: {
-      with: /\A[1-9]\z|\A[1-9].[1-7]\z/
-    }
+    validates :imo_class, inclusion: {in: VALID_IMO_CLASSES, message: "%{value} is not a valid IMO Class"}
     validates :description, presence: true
   end
 end

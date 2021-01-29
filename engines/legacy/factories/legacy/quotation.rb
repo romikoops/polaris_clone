@@ -2,12 +2,13 @@
 
 FactoryBot.define do
   factory :legacy_quotation, class: "Legacy::Quotation" do
-    association :user, factory: :organizations_user
-    association :original_shipment, factory: :legacy_shipment
     transient do
       shipment_count { 1 }
       load_type { "cargo_item" }
     end
+
+    user { association(:users_client) }
+    original_shipment { association(:legacy_shipment) }
 
     target_email { "john@example.test" }
     name { "NAME" }

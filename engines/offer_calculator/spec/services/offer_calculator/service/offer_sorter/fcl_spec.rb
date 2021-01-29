@@ -8,6 +8,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
 
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
   let(:load_type) { "container" }
+  let(:cargo_trait) { :fcl }
+  let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
   let(:cargo_cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let(:pricing_group_1) do
     cargo_classes.map do |cargo_class|
@@ -38,7 +40,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     raw_objects.flat_map do |raw_object|
       FactoryBot.build(:calculators_result_from_raw,
         raw_object: raw_object,
-        cargo: cargo_cargo)
+        request: request)
     end
   end
   let(:trips) do
@@ -53,12 +55,17 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     trips[:trips].map { |trip| OfferCalculator::Schedule.from_trip(trip) }
   }
   let(:results) {
-    described_class.sorted_offers(shipment: shipment, quotation: quotation,
+    described_class.sorted_offers(request: request,
                                   charges: charges, schedules: schedules)
   }
 
   context "with only freight and pricings split over period" do
     let(:raw_objects) { pricing_group_1 | pricing_group_2 }
+
+    before do
+      allow(request).to receive(:has_pre_carriage?).and_return(false)
+      allow(request).to receive(:has_on_carriage?).and_return(false)
+    end
 
     it "returns two sorted offers" do
       aggregate_failures do
@@ -75,8 +82,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-      allow(shipment).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:has_on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do
@@ -118,8 +125,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-      allow(shipment).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:has_on_carriage?).and_return(true)
     end
 
     context "with end to end and pricings and all permutations" do
@@ -128,8 +135,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       }
 
       before do
-        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(shipment).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:has_on_carriage?).and_return(true)
       end
 
       it "returns two sorted offers" do
@@ -144,8 +151,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       let(:carrier_lock) { true }
 
       before do
-        allow(shipment).to receive(:has_pre_carriage?).and_return(true)
-        allow(shipment).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:has_on_carriage?).and_return(true)
       end
 
       it "returns two sorted offers" do

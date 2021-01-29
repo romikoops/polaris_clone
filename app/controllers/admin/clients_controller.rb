@@ -2,19 +2,13 @@
 
 class Admin::ClientsController < Admin::AdminBaseController
   # Return all clients and managers for dashboard
+  DEFAULT_PAGE_SIZE = 50
 
   def index
-    clients, profiles = handle_search(params)
-    paginated_clients = clients.paginate(pagination_options)
-    response_clients = if search_params[:email_desc].present? || profiles.blank?
-      paginated_clients.map { |client| merge_profile(user: client) }
-    else
-      sort_response_clients(clients: paginated_clients, profiles: profiles)
-    end
-
+    paginated_clients = handle_search(params).paginate(pagination_options)
     response_handler(
       pagination_options.merge(
-        clientData: response_clients,
+        clientData: sort_response_clients(query: paginated_clients),
         numPages: paginated_clients.total_pages
       )
     )
@@ -23,11 +17,11 @@ class Admin::ClientsController < Admin::AdminBaseController
   # Return selected User, assigned managers, shipments made and user addresses
 
   def show
-    client = Users::User.find_by(organization_id: params[:organization_id], id: params[:id])
+    client = Users::Client.find_by(organization_id: params[:organization_id], id: params[:id])
     addresses = Address.joins(:user_addresses).where(user_addresses: {user_id: client.id})
     groups = target_groups(target: client).map { |g| group_index_json(g) }
     manager_assignments = UserManager.where(user_id: client.id)
-    profile = Profiles::Profile.find_by(user_id: client.id).as_json(except: %i[user_id id])
+    profile = client.profile.as_json(except: %i[user_id id])
     client_data = client.as_json.merge(profile)
     resp = {clientData: client_data, addresses: addresses, managerAssignments: manager_assignments, groups: groups}
     response_handler(resp)
@@ -39,8 +33,7 @@ class Admin::ClientsController < Admin::AdminBaseController
       email: new_client_params["email"],
       password: new_client_params["password"],
       password_confirmation: new_client_params["password_confirmation"],
-      organization_id: current_organization.id,
-      type: "Organizations::User"
+      organization_id: current_organization.id
     }
     ActiveRecord::Base.transaction do
       user = restorable_client ? restore_client(user_data: user_data) : create_client(user_data: user_data)
@@ -71,10 +64,9 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   def destroy
     ActiveRecord::Base.transaction do
-      user = Users::User.find_by(id: params[:id])
+      user = Users::Client.find_by(id: params[:id])
       Groups::Membership.where(member: user).destroy_all
       Companies::Membership.where(member: user).destroy_all
-      Profiles::Profile.find_by(user: user).destroy!
       user.destroy!
     end
 
@@ -88,14 +80,18 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def clients
-    @clients ||= Users::User.where(organization_id: current_organization.id)
+    @clients ||= Users::Client.where(organization_id: current_organization.id)
       .order(updated_at: :desc)
+  end
+
+  def profiles
+    @profiles ||= Users::ClientProfile.where(user: clients)
   end
 
   def pagination_options
     {
       page: current_page,
-      per_page: (params[:page_size] || params[:per_page])&.to_f
+      per_page: (params[:page_size] || params[:per_page] || DEFAULT_PAGE_SIZE)&.to_f
     }.compact
   end
 
@@ -104,47 +100,16 @@ class Admin::ClientsController < Admin::AdminBaseController
   end
 
   def handle_search(params)
-    user_query = clients
-    user_query = user_query.search(params[:query]) if params[:query]
-    user_query = user_query.search(params[:email]) if params[:email]
-    profile_query = handle_profile_search(clients: clients)
-    if params[:company_name]
-      companies = Companies::Company.where(
-        organization: current_organization
-      ).name_search(params[:company_name])
-
-      user_ids =
-        Companies::Membership.where(company: companies)
-          .where(member_type: "Users::User")
-          .pluck(:member_id)
-
-      profile_query = profile_query.where(user_id: user_ids)
-    end
-    # merge results from Tenant::User search and Profiles Search into one list
-    clients = merge_search_results(users_search_results: user_query,
-                                   profiles_search_results: profile_query)
-    [clients, profile_query]
-  end
-
-  def handle_profile_search(clients:)
-    return [] if params[:email] || params[:email_desc]
-
-    query = Profiles::Profile.where(user: clients)
+    query = profiles
     query = query.search(params[:query]) if params[:query]
-    query = query.first_name_search(params[:first_name]) if params[:first_name]
-    query = query.last_name_search(params[:last_name]) if params[:last_name]
-    query
-  end
+    query = query.search(params[:email]) if params[:email]
+    query = clients.where(id: query.select(:user_id)).joins(:profile)
+    return query if params[:company_name].blank?
 
-  def merge_search_results(users_search_results:, profiles_search_results:)
-    user_ids = Organizations::User.where(id: profiles_search_results.pluck(:user_id)).ids
-    email_params_present = %i[email email_desc query].any? { |key| params[key] }
-    users_search_results_ids = email_params_present ? users_search_results.pluck(:id) : []
-    results = clients.where(id: [*user_ids, *users_search_results_ids].uniq)
-    if search_params[:email_desc].present?
-      results = results.reorder(email: search_params[:email_desc] == "true" ? :desc : :asc)
-    end
-    results
+    query.joins(
+      "JOIN companies_memberships ON companies_memberships.member_id = users_clients.id
+        JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
+    ).where("companies_companies.name ILIKE ?", "%#{params[:company_name]}")
   end
 
   def upload_params
@@ -162,12 +127,6 @@ class Admin::ClientsController < Admin::AdminBaseController
     )
   end
 
-  def merge_profile(user:, profile: nil)
-    ProfileTools
-      .merge_profile(target: user.as_json, profile: profile)
-      .deep_transform_keys { |key| key.to_s.camelize(:lower) }
-  end
-
   def search_params
     params.permit(
       :first_name_desc,
@@ -183,35 +142,38 @@ class Admin::ClientsController < Admin::AdminBaseController
     )
   end
 
-  def sort_response_clients(clients:, profiles:)
-    sort_keys = %i[first_name_desc last_name_desc company_name_desc]
-    if sort_keys.any? { |key| params[key].present? }
-      # fetch & order the profiles per the params first then match the clients accordingly
-      sort_keys.each do |order_key|
+  def sort_response_clients(query:)
+    order_clauses = {
+      first_name_desc: "users_client_profiles.first_name",
+      last_name_desc: "users_client_profiles.last_name",
+      company_name_desc: "companies_companies.name",
+      email_desc: "users_client.email"
+    }
+    if order_clauses.keys.any? { |key| params[key].present? }
+      order_clauses.each do |order_key, order_clause|
         next if search_params[order_key].blank?
 
-        key = order_key.to_s.gsub("_desc", "")
-        order_params = {key => search_params[order_key] == "true" ? :desc : :asc}
-        profiles = profiles.reorder(order_params)
+        query = query.reorder(
+          "#{order_clause} #{search_params[order_key] == "true" ? "DESC" : "ASC"}"
+        )
       end
+      query
     end
 
-    profiles.joins(:user).map do |profile|
-      profile = profile.as_json.merge!(profile.user.as_json)
-      profile.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    query.map do |user|
+      user.as_json.merge!(user.profile.as_json.except("id"))
+        .deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
   end
 
   def create_client(user_data:)
-    Authentication::User.create!(user_data).tap do |user|
-      create_user_profile(user: user)
-    end
+    Users::Client.create!(user_data.merge(profile_attributes: profile_params, settings_attributes: {}))
   end
 
   def restorable_client
     @restorable_client ||= begin
       email = new_client_params.dig("email")
-      Organizations::User.only_deleted.find_by(email: email)
+      Users::Client.only_deleted.find_by(email: email)
     end
   end
 
@@ -220,12 +182,8 @@ class Admin::ClientsController < Admin::AdminBaseController
                           organization_id: current_organization.id,
                           params: profile_params}
     Api::UserRestorationService.new(**restoration_params).restore.tap do |user|
-      Authentication::User.find(user.id).update(user_data.slice(:password, :password_confirmation))
+      Users::Client.find(user.id).update(user_data.slice(:password, :password_confirmation))
     end
-  end
-
-  def create_user_profile(user:)
-    Profiles::ProfileService.create_or_update_profile(profile_params.merge(user: user))
   end
 
   def new_client_params

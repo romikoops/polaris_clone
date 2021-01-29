@@ -8,7 +8,7 @@ module AddressBook
       tsearch: {prefix: true}
     }
 
-    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :user, class_name: "Users::Client"
     has_many :shipment_request_contacts, class_name: "Shipments::ShipmentRequestContact"
 
     # Validations
@@ -55,5 +55,4 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

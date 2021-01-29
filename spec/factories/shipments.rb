@@ -2,10 +2,17 @@
 
 FactoryBot.define do
   factory :shipment do
-    association :user, factory: :organizations_user
-    association :origin_hub, factory: :hub
-    association :destination_hub, factory: :hub
-    association :trip
+    transient do
+      with_breakdown { false }
+      with_full_breakdown { false }
+      with_aggregated_cargo { false }
+    end
+
+    user { association(:users_client) }
+    origin_hub { association(:hub) }
+    destination_hub { association(:hub) }
+    trip { association(:trip) }
+
     load_type { :container }
     booking_placed_at { Time.zone.today }
     planned_etd { Time.zone.today + 8.days + 2.hours }
@@ -17,12 +24,6 @@ FactoryBot.define do
         value: 100,
         currency: :EUR
       }
-    end
-
-    transient do
-      with_breakdown { false }
-      with_full_breakdown { false }
-      with_aggregated_cargo { false }
     end
 
     trait :with_contacts do

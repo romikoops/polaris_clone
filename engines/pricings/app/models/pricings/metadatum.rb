@@ -3,9 +3,9 @@
 module Pricings
   class Metadatum < ApplicationRecord
     belongs_to :organization, class_name: "Organizations::Organization"
-    belongs_to :charge_breakdown, class_name: "Legacy::ChargeBreakdown"
+    belongs_to :charge_breakdown, class_name: "Legacy::ChargeBreakdown", optional: true
     has_many :breakdowns, dependent: :destroy
-    validates_uniqueness_of :charge_breakdown_id, scope: %i[organization_id]
+    validates_uniqueness_of :result_id
   end
 end
 
@@ -20,6 +20,7 @@ end
 #  charge_breakdown_id :integer
 #  organization_id     :uuid
 #  pricing_id          :uuid
+#  result_id           :uuid
 #  tenant_id           :uuid
 #
 # Indexes

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :legacy_contact, class: "Legacy::Contact" do
-    association :user, factory: :organizations_user
+    association :user, factory: :users_client
     association :address, factory: :legacy_address
     company_name { "Example Company" }
     sequence(:first_name) { |n| "John#{n}" }

@@ -3,8 +3,7 @@
 require "rails_helper"
 
 RSpec.describe UploadMailer, type: :mailer do
-  let(:user) { FactoryBot.create(:organizations_user) }
-  let(:organization) { user.organization }
+  let(:user) { FactoryBot.create(:users_user) }
 
   before do
     stub_request(:get, "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png")
@@ -19,14 +18,13 @@ RSpec.describe UploadMailer, type: :mailer do
     let(:mail) {
       described_class.with(
         user_id: user.id,
-        organization: organization,
         result: {"errors" => []},
         file: "test.xlsx"
       ).complete_email
     }
 
     it "renders", :aggregate_failures do
-      expect(mail.subject).to eq("[#{organization.slug}] test.xlsx uploaded successfully")
+      expect(mail.subject).to eq("[ItsMyCargo] test.xlsx uploaded successfully")
       expect(mail.from).to eq(["notifications@itsmycargo.shop"])
       expect(mail.to).to eq([user.email])
     end

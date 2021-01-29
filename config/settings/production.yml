@@ -1,6 +1,10 @@
 aws:
   bucket: assets.itsmycargo.com
 
+carta:
+  token: <%= Rails.application.credentials.dig(:production, :carta, :token) %>
+  url: https://geo.itsmycargo.com/v1
+
 elasticsearch:
   url: <%= Rails.application.credentials.dig(:production, :elasticsearch, :url) %>
 

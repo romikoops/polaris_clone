@@ -7,10 +7,10 @@ module Api
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:organization_group) { Organizations::Group.create(organization: organization) }
     let(:user) {
-      FactoryBot.create(:organizations_user, email: "test@example.com",
-                                             password: "veryspeciallysecurehorseradish", organization: organization)
+      FactoryBot.create(:users_client, email: "test@example.com",
+                                       password: "veryspeciallysecurehorseradish", organization: organization)
     }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:cargo_item_type) { FactoryBot.create(:legacy_cargo_item_type) }
 

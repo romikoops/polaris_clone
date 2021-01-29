@@ -4,20 +4,13 @@ module OfferCalculator
   class AsyncCalculationJob < ApplicationJob
     queue_as :critical
 
-    def perform(shipment_id:, quotation_id:, user_id:, wheelhouse:, mailer: nil)
-      @shipment = Legacy::Shipment.find(shipment_id)
-      @quotation = Quotations::Quotation.find(quotation_id)
-      @user = Organizations::User.find_by(id: user_id)
+    def perform(query:, params:, shipment_id: nil, quotation_id: nil, user_id: nil, wheelhouse: nil, mailer: nil)
+      return if shipment_id.present?
 
-      Organizations.current_id = @shipment.organization_id
-
+      Organizations.current_id = query.organization_id
       OfferCalculator::Results.new(
-        shipment: @shipment,
-        quotation: @quotation,
-        user: @user,
-        wheelhouse: wheelhouse,
-        async: true,
-        mailer: mailer
+        query: query,
+        params: params
       ).perform
     end
   end

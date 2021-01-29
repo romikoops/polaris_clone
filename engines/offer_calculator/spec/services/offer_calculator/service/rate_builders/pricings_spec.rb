@@ -4,16 +4,20 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: "cargo_item", organization: organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:measures) do
+    OfferCalculator::Service::Measurements::Request.new(
+      request: request,
+      scope: scope.with_indifferent_access,
+      object: object
+    )
+  end
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization) }
-  let(:cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let(:baf_charge_category) { FactoryBot.create(:baf_charge, organization: organization) }
   let(:bas_charge_category) { FactoryBot.create(:bas_charge, organization: organization) }
   let(:bas_fee) { pricing.fees.find_by(charge_category: bas_charge_category) }
   let(:scope) { organization_scope.content }
   let(:organization_scope) { FactoryBot.create(:organizations_scope, target: organization) }
-  let(:measures) { OfferCalculator::Service::Measurements::Cargo.new(cargo: cargo, scope: scope, object: object) }
   let(:breakdowns) do
     pricing.fees.map do |fee|
       Pricings::ManipulatorBreakdown.new(
@@ -27,13 +31,24 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
   let(:object) {
     FactoryBot.build(:manipulator_result, original: pricing, result: pricing.as_json, breakdowns: breakdowns)
   }
+  let(:cargo_units) do
+    [FactoryBot.create(:journey_cargo_unit,
+      weight_value: 200,
+      width_value: 0.2,
+      length_value: 0.2,
+      height_value: 0.2,
+      quantity: 1)]
+  end
+
+  before do
+    allow(request).to receive(:cargo_units).and_return(cargo_units)
+  end
 
   describe ".perform" do
     context "with freight pricing (no consolidation)" do
-      let(:target_cargo) { cargo.units.first }
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -53,13 +68,20 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
     end
 
     context "with freight pricing (multiple fees & no consolidation)" do
-      let(:target_cargo) { cargo.units.first }
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1)]
+      end
       let(:bas_fee_result) { results.find { |f| f.charge_category == bas_charge_category } }
       let(:baf_fee_result) { results.find { |f| f.charge_category == baf_charge_category } }
       let(:first_component) { bas_fee_result.components.first }
       let(:second_component) { baf_fee_result.components.first }
       let!(:baf_fee) { FactoryBot.create(:fee_per_wm, charge_category: baf_charge_category, pricing: pricing) }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -90,14 +112,14 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
       let(:fee) { results.first }
       let(:component) { fee.components.first }
       let(:scope) { {consolidation: {cargo: {backend: true}}}.with_indifferent_access }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
           expect(fee).to be_a(OfferCalculator::Service::RateBuilders::Fee)
           expect(results.length).to eq(1)
           expect(fee.charge_category).to eq(pricing.fees.first.charge_category)
-          expect(fee.target).to eq(cargo)
+          expect(fee.targets).to eq(cargo_units)
         end
       end
 
@@ -114,7 +136,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
       let(:pricing) { FactoryBot.create(:lcl_range_pricing, organization: organization) }
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -129,7 +151,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
           expect(component).to be_a(OfferCalculator::Service::RateBuilders::FeeComponent)
           expect(fee.components.length).to eq(1)
           target_range = pricing.fees.first.range.find { |range|
-            (range["min"]..range["max"]).cover?(measures.kg.value)
+            (range["min"]..range["max"]).cover?(measures.targets.first.kg.value)
           }
           expect(component.value).to eq(Money.new(target_range["rate"] * 100, pricing.fees.first.currency_name))
         end
@@ -137,41 +159,62 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
     end
 
     context "with freight pricing (ranges & multiple cargos)" do
-      before do
-        FactoryBot.create(:legacy_cargo_item, shipment: shipment, payload_in_kg: 100)
-        shipment.cargo_items.reload
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1),
+          FactoryBot.create(:journey_cargo_unit,
+            weight_value: 100,
+            width_value: 0.2,
+            length_value: 0.2,
+            height_value: 0.2,
+            quantity: 1)]
       end
-
       let(:pricing) { FactoryBot.create(:lcl_range_pricing, organization: organization) }
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
           expect(fee).to be_a(OfferCalculator::Service::RateBuilders::Fee)
           expect(results.length).to eq(2)
-          expect(results.map(&:target)).to eq(cargo.units)
+          expect(results.flat_map(&:targets)).to eq(cargo_units)
         end
       end
     end
 
     context "with freight pricing (per shipment fee & multiple cargos)" do
       before do
-        FactoryBot.create(:legacy_cargo_item, shipment: shipment, payload_in_kg: 100)
-        shipment.cargo_items.reload
         FactoryBot.create(:fee_per_shipment, charge_category: baf_charge_category, pricing: pricing)
       end
 
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1),
+          FactoryBot.create(:journey_cargo_unit,
+            weight_value: 100,
+            width_value: 0.2,
+            length_value: 0.2,
+            height_value: 0.2,
+            quantity: 1)]
+      end
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
           expect(fee).to be_a(OfferCalculator::Service::RateBuilders::Fee)
           expect(results.length).to eq(4)
-          expect(results.map(&:target)).to match_array(cargo.units + [cargo, cargo])
+          expect(results.flat_map(&:targets)).to match_array(cargo_units)
           expect(results.count { |result| result.charge_category == baf_charge_category }).to eq(2)
         end
       end

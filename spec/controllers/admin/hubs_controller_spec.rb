@@ -5,9 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::HubsController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:gothenburg) { FactoryBot.create(:gothenburg_hub, organization: organization) }
-  let!(:user) {
-    FactoryBot.create(:authentication_user, :organizations_user, organization_id: organization.id)
-  }
+  let!(:user) { FactoryBot.create(:users_user) }
   let!(:felixstowe) { FactoryBot.create(:felixstowe_hub, organization: organization) }
   let!(:shanghai) { FactoryBot.create(:shanghai_hub, organization: organization) }
 

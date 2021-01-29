@@ -5,8 +5,9 @@ FactoryBot.define do
       longitude { 11.854048 }
     end
 
-    coordinates { RGeo::Cartesian.factory.point(longitude, latitude) }
+    coordinates { RGeo::Geos.factory(srid: 4326).point(longitude, latitude) }
     function { "ocean" }
     name { "Hamburg" }
+    locode { "DEHAM" }
   end
 end

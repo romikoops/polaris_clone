@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "required": [
+    "total",
+    "edited_total",
+    "name",
+    "cargo"
+  ],
+  "properties": {
+    "total": {
+      "type": "null"
+    },
+    "edited_total": {
+      "type": "null"
+    },
+    "name": {
+      "type": "string"
+    },
+    "cargo": {
+      "type": "object",
+      "required": [
+        "total",
+        "edited_total",
+        "name"
+      ],
+      "properties": {
+        "total": {
+          "type": "null"
+        },
+        "edited_total": {
+          "type": "null"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "null"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string"},
+            "value": {"type": "number"},
+            "currency": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

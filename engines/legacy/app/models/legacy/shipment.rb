@@ -23,7 +23,7 @@ module Legacy
 
     acts_as_paranoid
 
-    belongs_to :user, -> { with_deleted }, class_name: "Organizations::User", optional: true
+    belongs_to :user, -> { with_deleted }, class_name: "Users::Client", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :origin_nexus, class_name: "Legacy::Nexus", optional: true
     belongs_to :destination_nexus, class_name: "Legacy::Nexus", optional: true
@@ -104,14 +104,14 @@ module Legacy
       }
 
     scope :user_name, lambda { |query|
-      user_ids = Profiles::Profile
+      user_ids = Users::Profile
         .where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%")
         .pluck(:user_id)
       where(user_id: user_ids)
     }
 
     scope :company_name, lambda { |query|
-      user_ids = Profiles::Profile.where("company_name ILIKE ? ", "%#{query}%").pluck(:user_id)
+      user_ids = Users::Profile.where("company_name ILIKE ? ", "%#{query}%").pluck(:user_id)
       where(user_id: user_ids)
     }
 
@@ -283,10 +283,7 @@ module Legacy
     delegate :company_name, to: :shipment_user_profile, allow_nil: true
 
     def shipment_user_profile
-      profile = Profiles::Profile.find_by(user_id: user_id)
-      return if profile.nil?
-
-      Profiles::ProfileDecorator.new(profile)
+      user&.profile
     end
 
     def with_address_options_json(options = {})
@@ -422,5 +419,4 @@ end
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_hub_id => hubs.id) ON DELETE => nullify
 #  fk_rails_...  (origin_nexus_id => nexuses.id) ON DELETE => nullify
-#  fk_rails_...  (user_id => users_users.id)
 #

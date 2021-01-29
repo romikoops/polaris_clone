@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "users"
   spec.add_dependency "organizations"
-  spec.add_dependency "authentication"
 
   spec.add_dependency "active_model_serializers", "~> 0.10", ">= 0.10.8"
   spec.add_dependency "doorkeeper", "~> 5.0.2"

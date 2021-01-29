@@ -3,15 +3,27 @@
 require "rails_helper"
 
 RSpec.describe Pdf::CarrierServiceInfo, type: :service do
-  let(:tender) { FactoryBot.create(:quotations_tender, pickup_tenant_vehicle: tenant_vehicle) }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle) }
+  let(:result) { FactoryBot.create(:journey_result) }
+  let(:decorated_result) { ResultFormatter::ResultDecorator.new(FactoryBot.create(:journey_result)) }
+  let(:pre_carriage_section) do
+    FactoryBot.create(:journey_route_section,
+      result: result,
+      mode_of_transport: "carriage",
+      order: 0,
+      service: "standard",
+      carrier: "Hapag Lloyd")
+  end
   let(:carriage) { "pre" }
   let(:voyage_info) { {} }
-  let(:result) { described_class.new(tender: tender, voyage_info: voyage_info, carriage: carriage).operator }
+  let(:operator_string) { described_class.new(result: decorated_result, voyage_info: voyage_info, carriage: carriage).operator }
+
+  before do
+    allow(decorated_result).to receive(:pre_carriage_section).and_return(pre_carriage_section)
+  end
 
   context "with default settings" do
     it "limits the quotes returned when tender ids are provided" do
-      expect(result).to eq("")
+      expect(operator_string).to eq("")
     end
   end
 
@@ -19,7 +31,7 @@ RSpec.describe Pdf::CarrierServiceInfo, type: :service do
     let(:voyage_info) { {"pre_carriage_carrier" => true} }
 
     it "returns the carrier info in the correct format" do
-      expect(result).to eq("Hapag Lloyd")
+      expect(operator_string).to eq("Hapag Lloyd")
     end
   end
 
@@ -27,7 +39,7 @@ RSpec.describe Pdf::CarrierServiceInfo, type: :service do
     let(:voyage_info) { {"pre_carriage_service" => true} }
 
     it "returns the carrier info in the correct format" do
-      expect(result).to eq("standard")
+      expect(operator_string).to eq("standard")
     end
   end
 
@@ -35,7 +47,7 @@ RSpec.describe Pdf::CarrierServiceInfo, type: :service do
     let(:voyage_info) { {"pre_carriage_service" => true, "pre_carriage_carrier" => true} }
 
     it "returns the carrier info in the correct format" do
-      expect(result).to eq("Hapag Lloyd(standard)")
+      expect(operator_string).to eq("Hapag Lloyd(standard)")
     end
   end
 end

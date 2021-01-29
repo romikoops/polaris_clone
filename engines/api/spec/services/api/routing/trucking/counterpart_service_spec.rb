@@ -7,10 +7,10 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:cargo_classes) { ["lcl"] }
   let(:load_type) { "cargo_item" }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:wrong_lat) { 10.00 }
   let(:wrong_lng) { 60.50 }
-  let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:group) {
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
       FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
@@ -31,7 +31,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
     Api::Routing::Trucking::DetailsService.new(coordinates: nil, nexus_id: origin_hub.nexus_id, load_type: "cargo_item")
   }
   let(:default_args) { {organization: organization, target: target} }
-  let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:group_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:group) {
     FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
       FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
@@ -63,7 +63,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
             expect(data[:truckTypes]).to match_array([trucking_availbilities.second.truck_type])
-            expect(data[:countryCodes]).to eq(["cn"])
+            expect(data[:countryCodes]).to eq([destination_hub.country.code.downcase])
           end
         end
       end
@@ -76,7 +76,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
             expect(data[:truckTypes]).to match_array([trucking_availbilities.second.truck_type])
-            expect(data[:countryCodes]).to eq(["cn"])
+            expect(data[:countryCodes]).to eq([destination_hub.country.code.downcase])
           end
         end
       end
@@ -95,7 +95,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
             expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
-            expect(data[:countryCodes]).to eq(["se"])
+            expect(data[:countryCodes]).to eq([origin_hub.country.code.downcase])
           end
         end
       end
@@ -108,7 +108,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
           aggregate_failures do
             expect(data[:truckingAvailable]).to eq true
             expect(data[:truckTypes]).to eq([trucking_availbilities.first.truck_type])
-            expect(data[:countryCodes]).to eq(["se"])
+            expect(data[:countryCodes]).to eq([origin_hub.country.code.downcase])
           end
         end
       end
@@ -138,7 +138,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
       end
 
       context "when trucking is not available for a group" do
-        let(:no_group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+        let(:no_group_client) { FactoryBot.create(:users_client, organization: organization) }
         let(:args) { default_args.merge(trucking_details: coordinate_trucking_details, user: no_group_client) }
         let!(:data) { described_class.counterpart_availabilities(args) }
 
@@ -168,7 +168,7 @@ RSpec.describe Api::Routing::Trucking::CounterpartService, type: :service do
       end
 
       context "when trucking is not available for a group" do
-        let(:no_group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+        let(:no_group_client) { FactoryBot.create(:users_client, organization: organization) }
         let(:args) { default_args.merge(trucking_details: coordinate_trucking_details, user: no_group_client) }
         let!(:data) { described_class.counterpart_availabilities(args) }
 

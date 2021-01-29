@@ -10,9 +10,19 @@ module Notifications
 
     def user_created
       @user = params[:user]
-      @profile = params[:profile]
+      @profile = @user.profile
 
       mail to: params[:recipient]
+    end
+
+    def offer_created
+      @offer = params[:offer]
+      @query = @offer.query
+      @user = Users::Client.unscoped.find_by(id: @query.client_id, organization: params[:organization])
+      @profile = @user&.profile || Users::ClientProfile.new
+      @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
+      subject_line = Notifications::OfferSubjectLine.new(offer: @offer, scope: current_scope(user: @user)).subject_line
+      mail to: params[:recipient], subject: subject_line
     end
 
     protected

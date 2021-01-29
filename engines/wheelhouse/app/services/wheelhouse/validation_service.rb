@@ -2,21 +2,16 @@
 
 module Wheelhouse
   class ValidationService
-    attr_reader :errors
+    attr_reader :errors, :request
 
-    def initialize(user:, organization:, routing:, cargo:, load_type:, final: false)
-      @user = user
-      @organization = organization
-      @routing = routing
-      @cargo = cargo
-      @load_type = load_type
+    def initialize(request:, final: false)
+      @request = request
+      @routing = request.params.slice(:origin, :destination)
       @errors = []
       @final = final
-      @scope = OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
-      @groups = OrganizationManager::GroupsService.new(
-        target: user, organization: organization, exclude_default: scope[:dedicated_pricings_only]
-      ).fetch
     end
+
+    delegate :client, :creator, :organization, :cargo_units, :load_type, to: :request
 
     def validate
       @errors << routing_info_errors if final.present?
@@ -28,10 +23,20 @@ module Wheelhouse
 
     private
 
-    attr_reader :user, :organization, :routing, :cargo, :load_type, :scope, :final, :groups
+    attr_reader :routing, :final
+
+    def scope
+      @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
+    end
+
+    def groups
+      @groups ||= OrganizationManager::GroupsService.new(
+        target: client, organization: organization, exclude_default: scope[:dedicated_pricings_only]
+      ).fetch
+    end
 
     def cargo_validations
-      return [] if cargo.units.empty?
+      return [] if cargo_units.empty?
 
       validation_klass =
         "OfferCalculator::Service::Validations::#{load_type.camelize}ValidationService".safe_constantize
@@ -39,10 +44,8 @@ module Wheelhouse
 
       convert_error_class(
         errors: validation_klass.errors(
-          cargo: cargo,
-          modes_of_transport: modes_of_transport,
-          itinerary_ids: itinerary_ids,
-          tenant_vehicle_ids: tenant_vehicle_ids,
+          request: request,
+          pricings: pricings,
           final: final
         )
       )
@@ -121,7 +124,7 @@ module Wheelhouse
         origin: routing[:origin],
         destination: routing[:destination],
         load_type: load_type,
-        user: user
+        user: client
       )
     end
 

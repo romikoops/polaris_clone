@@ -30,7 +30,7 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
           organization_id: organization.id, load_type: "cargo_item", target: "destination"
         }, as: :json
 
-        expect(data).to match_array(["SE"])
+        expect(data).to match_array([origin_hub.country.code])
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
           organization_id: organization.id, load_type: "cargo_item", target: "destination"
         }, as: :json
 
-        expect(data).to match_array(["SE", "DE"])
+        expect(data).to match_array([origin_hub.country.code, country.code])
       end
     end
   end

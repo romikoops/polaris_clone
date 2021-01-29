@@ -3,13 +3,13 @@
 module OfferCalculator
   module Service
     class ChargeCalculator < Base
-      def self.charges(shipment:, quotation:, fees:)
-        new(shipment: shipment, quotation: quotation, fees: fees).perform
+      def self.charges(request:, fees:)
+        new(request: request, fees: fees).perform
       end
 
-      def initialize(shipment:, quotation:, fees:)
+      def initialize(request:, fees:)
         @fees = fees
-        super(shipment: shipment, quotation: quotation)
+        super(request: request)
       end
 
       def perform

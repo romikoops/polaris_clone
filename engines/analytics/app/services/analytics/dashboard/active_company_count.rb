@@ -15,12 +15,10 @@ module Analytics
       private
 
       def companies_join
-        # Polymorphic association with member doesn't allow the type get set correctly
-        # so Organizations::User will be stored as member_type: Users::User.
         <<-SQL
           INNER JOIN companies_memberships
-            ON companies_memberships.member_id = users_users.id
-            AND companies_memberships.member_type = 'Users::User'
+            ON companies_memberships.member_id = users_clients.id
+            AND companies_memberships.member_type = 'Users::Client'
         SQL
       end
     end

@@ -7,7 +7,7 @@ FactoryBot.define do
     sequence(:phone) { |n| "1234567#{n}" }
     sequence(:email) { |n| "email#{n}@example.com" }
 
-    association :user, factory: :organizations_user
+    association :user, factory: :users_client
   end
 end
 

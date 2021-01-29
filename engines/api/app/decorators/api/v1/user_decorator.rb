@@ -8,12 +8,16 @@ module Api
       delegate_all
       delegate :first_name, :last_name, :phone, :company_name, to: :profile
 
-      def profile
-        @profile ||= Profiles::Profile.with_deleted.find_by(user_id: id)
+      def email
+        object.email.to_s
+      end
+
+      def organization_id
+        object.organization_id
       end
 
       def membership
-        Organizations::Membership.find_by(user_id: object.id)
+        Users::Membership.find_by(user_id: id)
       end
     end
   end

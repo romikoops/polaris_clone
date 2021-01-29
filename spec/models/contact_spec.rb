@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Contact, type: :model do
   context "validations" do
-    let(:user) { FactoryBot.build(:organizations_user) }
+    let(:user) { FactoryBot.build(:users_client) }
 
     let!(:contact_one) {
       FactoryBot.create(:contact,

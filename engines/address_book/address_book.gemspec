@@ -10,6 +10,7 @@ Gem::Specification.new do |spec|
     eg: consignee, consignor, notifyees.
   SUMMARY
 
+  spec.metadata["package"] = "bookings"
   spec.metadata["type"] = "data"
 
   spec.files = Dir["{lib}/**/*"]

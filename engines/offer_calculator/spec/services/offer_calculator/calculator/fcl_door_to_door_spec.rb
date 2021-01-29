@@ -5,7 +5,8 @@ require "rails_helper"
 RSpec.describe OfferCalculator::Calculator do
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
   let(:load_type) { "container" }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
+  let(:source) { FactoryBot.create(:application) }
   let(:shipment) do
     FactoryBot.create(:legacy_shipment,
       load_type: "container",
@@ -48,41 +49,15 @@ RSpec.describe OfferCalculator::Calculator do
     ]
   end
   let(:params) do
-    ActionController::Parameters.new(
-      "shipment" => {
-        "id" => shipment.id,
-        "direction" => "export",
-        "selected_day" => 4.days.from_now.beginning_of_day.to_s,
-        "cargo_items_attributes" => [],
-        "containers_attributes" => container_attributes,
-        "trucking" => {
-          "pre_carriage" => {
-            address_id: pickup_address.id,
-            truck_type: "chassis"
-          },
-          "on_carriage" => {
-            address_id: delivery_address.id,
-            truck_type: "chassis"
-          }
-        },
-        "origin" => {
-          "latitude" => pickup_address.latitude,
-          "longitude" => pickup_address.longitude,
-          "nexus_name" => origin_hub.nexus.name,
-          "country" => origin_hub.nexus.country.code,
-          "full_address" => pickup_address.geocoded_address
-        },
-        "destination" => {
-          "latitude" => delivery_address.latitude,
-          "longitude" => delivery_address.longitude,
-          "nexus_name" => destination_hub.nexus.name,
-          "country" => destination_hub.nexus.country.code,
-          "full_address" => delivery_address.geocoded_address
-        },
-        "incoterm" => {},
-        "aggregated_cargo_attributes" => nil
-      }
-    )
+    FactoryBot.build(:journey_request_params,
+      pickup_truck_type: "chassis",
+      delivery_address: delivery_address,
+      delivery_truck_type: "chassis",
+      pickup_address: pickup_address,
+      direction: "export",
+      load_type: load_type,
+      selected_day: 4.days.from_now.beginning_of_day.to_s,
+      container_attributes: container_attributes)
   end
   let(:origin_address_params) do
     {
@@ -105,79 +80,50 @@ RSpec.describe OfferCalculator::Calculator do
     }.with_indifferent_access
   end
   let(:quotation) { Quotations::Quotation.last }
-  let(:creator) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:creator) { FactoryBot.create(:users_client, organization: organization) }
   let(:service) do
-    described_class.new(shipment: shipment, params: params, user: user, creator: creator).perform
+    described_class.new(
+      params: params,
+      client: user,
+      source: source,
+      creator: creator
+    ).perform
   end
+  let(:result_set) { service.result_sets.order(:created_at).last }
+  let(:results) { result_set.results }
+  let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+  let(:carta_double) { double("Carta::Api") }
 
   include_context "complete_route_with_trucking"
 
   before do
+    FactoryBot.create(:companies_membership, member: user)
     Organizations.current_id = organization.id
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
-      .with(:origin).and_return(origin_address_params)
-    allow_any_instance_of(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:address_params)
-      .with(:destination).and_return(destination_address_params)
+    allow(Carta::Api).to receive(:new).and_return(carta_double)
+    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
   end
 
   describe ".perform" do
-    context "with calculator errors" do
-      let(:shipment_update_handler) {
-        instance_double(OfferCalculator::Service::ShipmentUpdateHandler, update_trucking: nil, update_nexuses: nil)
-      }
-
-      before do
-        allow(OfferCalculator::Service::ShipmentUpdateHandler).to receive(:new).and_return(shipment_update_handler)
-        allow(shipment_update_handler).to receive(:update_trucking)
-          .and_raise(OfferCalculator::Errors::InvalidPickupAddress)
-      end
-
-      it "set the error class on the quotation" do
-        aggregate_failures do
-          expect { service }.to raise_error(OfferCalculator::Errors::InvalidPickupAddress)
-          expect(quotation.error_class).to eq("OfferCalculator::Errors::InvalidPickupAddress")
-        end
-      end
-    end
-
-    context "with offer creator errors" do
-      before do
-        allow(OfferCalculator::Service::OfferCreator).to receive(:offers)
-          .and_raise(OfferCalculator::Errors::OfferBuilder)
-      end
-
-      it "set the error class on the quotation" do
-        aggregate_failures do
-          expect { service }.to raise_error(OfferCalculator::Errors::OfferBuilder)
-          expect(quotation.error_class).to eq("OfferCalculator::Errors::OfferBuilder")
-          expect(quotation.completed).to be false
-        end
-      end
-    end
-
     context "with single trucking Availability" do
-      let!(:results) { service.detailed_schedules }
-
       it "perform a booking calulation" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.keys).to match_array(%i[quote schedules meta notes])
         end
       end
+    end
 
-      it "creates the Quotation correctly" do
-        aggregate_failures do
-          expect(Quotations::Quotation.count).to be(1)
-          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
-          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
-        end
+    context "with offer creator errors with a blacklisted user" do
+      before do
+        FactoryBot.create(:organizations_scope, target: organization, content: {blacklisted_emails: [creator.email]})
       end
 
-      it "creates the Tenders correctly" do
-        tenders = Quotations::Tender.all
+      it "set the Query billable as false" do
         aggregate_failures do
-          expect(tenders.count).to be(1)
+          expect(result_set.status).to eq("completed")
+          expect(result_set.query.billable).to be(false)
         end
       end
     end
@@ -204,9 +150,7 @@ RSpec.describe OfferCalculator::Calculator do
             carriage: "on")
         end
       end
-
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
-      let!(:legacy_results) { service.detailed_schedules }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id],
@@ -218,30 +162,7 @@ RSpec.describe OfferCalculator::Calculator do
 
       it "perform a booking calulation" do
         aggregate_failures do
-          expect(legacy_results.length).to eq(4)
-          expect(
-            legacy_results.map { |result| result.dig(:meta, :tender_id) }
-          ).to match_array(Quotations::Tender.order(:amount_cents).ids)
-          expect(legacy_results.first.keys).to match_array(%i[quote schedules meta notes])
-        end
-      end
-
-      it "creates the Quotation correctly" do
-        aggregate_failures do
-          expect(Quotations::Quotation.count).to be(1)
-          expect(quotation.pickup_address_id).to eq(service.shipment.pickup_address.id)
-          expect(quotation.delivery_address_id).to eq(service.shipment.delivery_address.id)
-          expect(quotation.creator).to eq(creator)
-        end
-      end
-
-      it "creates the Tenders correctly" do
-        tenders = Quotations::Tender.all
-        aggregate_failures do
-          expect(tenders.count).to be(4)
-          expect(
-            tenders.map { |t| [t.pickup_tenant_vehicle_id, t.tenant_vehicle_id, t.delivery_tenant_vehicle_id] }.uniq
-          ).to match_array(desired_tenant_vehicle_combos)
+          expect(results.length).to eq(4)
         end
       end
     end

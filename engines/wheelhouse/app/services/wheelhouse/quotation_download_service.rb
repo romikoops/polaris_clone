@@ -4,9 +4,8 @@ module Wheelhouse
   class QuotationDownloadService
     XLSX = "xlsx"
     PDF = "pdf"
-    def initialize(quotation_id:, tender_ids:, format:, scope: {})
-      @quotation_id = quotation_id
-      @tender_ids = tender_ids
+    def initialize(result_ids:, format:, scope: {})
+      @results = Journey::Result.where(id: result_ids)
       @format = format
       @scope = scope
     end
@@ -24,19 +23,23 @@ module Wheelhouse
 
     private
 
-    attr_reader :quotation_id, :tender_ids, :format, :scope
+    attr_reader :results, :format, :scope
+
+    def offer
+      @offer ||= Wheelhouse::OfferBuilder.offer(results: results)
+    end
 
     def pdf_download
-      PdfService.new(
-        tender_ids: tender_ids,
-        quotation_id: quotation_id
-      ).download
+      offer
+    end
+
+    def query
+      @query ||= results.first.query
     end
 
     def xlsx_download
       ExcelWriterService.new(
-        tender_ids: tender_ids,
-        quotation_id: quotation_id,
+        offer: offer,
         scope: scope
       ).quotation_sheet
     end

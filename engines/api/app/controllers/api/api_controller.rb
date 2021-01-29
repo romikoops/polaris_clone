@@ -19,7 +19,10 @@ module Api
     private
 
     def current_user
-      @current_user ||= ::Authentication::User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
+      @current_user ||= if doorkeeper_token
+        user_id = doorkeeper_token.resource_owner_id
+        ::Users::User.find_by(id: user_id) || ::Users::Client.find_by(id: user_id)
+      end
     end
 
     def organization_id
@@ -41,7 +44,7 @@ module Api
     end
 
     def organization_user
-      current_user&.becomes(::Organizations::User)
+      current_user&.becomes(::Users::Client)
     end
 
     def current_organization
@@ -49,13 +52,11 @@ module Api
     end
 
     def user_organization
-      current_user.organization if current_user.is_a? Organizations::User
+      current_user.organization if current_user.is_a? Users::Client
     end
 
     def default_organization
-      Organizations::Organization
-        .joins(:memberships)
-        .where(organizations_memberships: {user_id: current_user}).first
+      current_user.memberships.first
     end
 
     def current_scope
@@ -63,14 +64,6 @@ module Api
         target: current_user,
         organization: current_organization
       ).fetch
-    end
-
-    def update_profile_from_params(user:, params:)
-      Profiles::ProfileService.create_or_update_profile(user: user,
-                                                        first_name: params[:first_name],
-                                                        last_name: params[:last_name],
-                                                        external_id: params[:external_id],
-                                                        company_name: params[:company_name])
     end
 
     def doorkeeper_authorize!
@@ -107,6 +100,23 @@ module Api
 
     def target_groups(target:)
       OrganizationManager::GroupsService.new(target: target, organization: current_organization).fetch
+    end
+
+    def doorkeeper_application
+      @doorkeeper_application ||= Doorkeeper::Application.find_by(request.params.slice(:redirect_uri))
+    end
+
+    def organization_results
+      @organization_results ||= Journey::Result.joins(result_set: :query)
+        .where(
+          journey_result_sets: {status: "completed"},
+          journey_queries: {billable: true, organization_id: current_organization.id}
+        )
+    end
+
+    def client_results
+      @client_results ||= organization_results
+        .where(journey_queries: {client_id: organization_user})
     end
   end
 end

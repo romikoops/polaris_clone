@@ -8,13 +8,13 @@ module OfferCalculator
         @itinerary_ids = args.dig(:query, :itinerary_ids)
         @origin_hub_ids = args.dig(:query, :origin_hub_ids)
         @destination_hub_ids = args.dig(:query, :destination_hub_ids)
-        @shipment = args[:shipment]
+        @request = args[:request]
         @scope = args[:scope]
-        @cargo_classes = @shipment.cargo_classes
-        @user = Organizations::User.find_by(id: @shipment.user_id)
+        @cargo_classes = @request.cargo_classes
+        @user = @request.client
         @date_range = args[:date_range] || (Time.zone.today..1.month.from_now)
         @user_groups = OrganizationManager::GroupsService.new(
-          organization: @shipment.organization,
+          organization: @request.organization,
           target: @user,
           exclude_default: @scope[:dedicated_pricings_only]
         ).fetch
@@ -29,12 +29,12 @@ module OfferCalculator
 
       def binds
         {
-          organization_id: @shipment.organization_id,
+          organization_id: @request.organization.id,
           origin_hub_ids: @origin_hub_ids,
           destination_hub_ids: @destination_hub_ids,
           cargo_classes: @cargo_classes,
           group_ids: @user_groups.pluck(:id),
-          load_type: @shipment.load_type
+          load_type: @request.load_type
         }.merge(date_range_values)
       end
 
@@ -95,7 +95,7 @@ module OfferCalculator
       end
 
       def origin_local_charges
-        return unless @shipment.has_pre_carriage?
+        return unless @request.has_pre_carriage?
 
         "JOIN local_charges AS origin_local_charges
           ON origin_local_charges.hub_id = origin_hubs.id
@@ -107,7 +107,7 @@ module OfferCalculator
       end
 
       def destination_local_charges
-        return unless @shipment.has_on_carriage?
+        return unless @request.has_on_carriage?
 
         "JOIN local_charges AS destination_local_charges
           ON destination_local_charges.hub_id = destination_hubs.id

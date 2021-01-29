@@ -4,7 +4,6 @@ class UploadMailer < ApplicationMailer
 
   def complete_email
     @user = Users::User.find(params[:user_id])
-    @organization = params[:organization]
     @result = params[:result]
     @result["errors"] ||= []
     @file = params[:file]
@@ -12,8 +11,8 @@ class UploadMailer < ApplicationMailer
     @has_errors = @result["errors"].present?
 
     verdict = @has_errors ? "with errors" : "successfully"
-    @notification_title = "Upload of #{@file} for #{@organization.slug} completed #{verdict}."
+    @notification_title = "Upload of #{@file} completed #{verdict}."
 
-    mail(to: @user.email, subject: "[#{@organization.slug}] #{@file} uploaded #{verdict}")
+    mail(to: @user.email, subject: "[ItsMyCargo] #{@file} uploaded #{verdict}")
   end
 end

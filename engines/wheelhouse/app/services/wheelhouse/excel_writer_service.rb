@@ -31,8 +31,8 @@ module Wheelhouse
 
     attr_reader :work_book
 
-    def initialize(quotation_id:, tender_ids:, scope: {})
-      @quotation = Quotations::Quotation.find(quotation_id)
+    def initialize(offer:, scope: {})
+      @offer = offer
       @tender_ids = tender_ids.presence || quotation.tenders.ids
       @tempfile = Tempfile.new([file_name, ".xlsx"])
       @scope = scope
@@ -137,7 +137,11 @@ module Wheelhouse
     end
 
     def write_exchange_rates(tender:, sheet:)
-      exchange_rates = ResultFormatter::ExchangeRateService.new(tender: tender).perform
+      exchange_rates = ResultFormatter::ExchangeRateService.new(
+        base_currency: tender.amount_currency,
+        currencies: tender.line_items.select(:amount_currency).uniq,
+        timestamp: tender.created_at
+      ).perform
       return if exchange_rates.blank?
 
       target_row = remarks_index + tender.remarks.count + (base_spacing * 3)
@@ -177,8 +181,8 @@ module Wheelhouse
 
     def selected_tenders
       @selected_tenders ||= begin
-        tenders = Quotations::Tender.where(id: tender_ids)
-        Wheelhouse::TenderDecorator.decorate_collection(tenders)
+        # tenders = Quotations::Tender.where(id: tender_ids)
+        []
       end
     end
 
@@ -190,7 +194,7 @@ module Wheelhouse
     end
 
     def quotation_tenders
-      @quotation_tenders ||= Wheelhouse::TenderDecorator.decorate_collection(quotation.tenders)
+      @quotation_tenders ||= []
     end
 
     def header_format

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Quotations::Filter do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user) }
+  let(:user) { FactoryBot.create(:users_client) }
 
   describe "#perform" do
     context "when filtering by organization" do

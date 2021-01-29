@@ -27,7 +27,7 @@ module Api
 
       def client
         client_id = trucking_params[:client]
-        Organizations::User.find(client_id) if client_id
+        Users::Client.find(client_id) if client_id
       end
 
       def coordinates

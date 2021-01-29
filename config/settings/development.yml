@@ -1,6 +1,10 @@
 aws:
   bucket: assets.itsmycargo.com
 
+carta:
+  token: <%= Rails.application.credentials.dig(:development, :carta, :token) %>
+  url: https://geo.itsmycargo.com/v1
+
 emails:
   domain: itsmycargo.tech
   booking: test@itsmycargo.tech

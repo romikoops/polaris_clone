@@ -3,7 +3,7 @@
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
     organization = Organizations::Organization.find_by(slug: "lclsaco")
-    user = Users::User.find_by(organization_id: organization.id, email: "agent@itsmycargo.com")
+    user = Users::Client.find_by(organization_id: organization.id, email: "agent@itsmycargo.com")
     quotation = Legacy::Quotation.where(user: user).last
     @shipments = Legacy::Shipment.where(quotation_id: quotation.id)
     @shipment = Legacy::Shipment.find(quotation.original_shipment_id)

@@ -7,7 +7,7 @@ RSpec.describe Pricings::Manipulator do
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
-  let!(:user) { FactoryBot.create(:organizations_user, :with_profile, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:lcl_shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user) }
   let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
   let(:trips) do

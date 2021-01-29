@@ -8,7 +8,7 @@ module Notifications
       end
 
       @user = params[:user]
-      @profile = params[:profile]
+      @profile = @user.profile
       @support_url = begin
         encoded_email_address = ERB::Util.url_encode(
           current_organization.theme.emails["support"]["general"]

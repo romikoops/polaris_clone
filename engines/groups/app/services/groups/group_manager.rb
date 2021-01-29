@@ -9,6 +9,7 @@ module Groups
 
     def perform
       handle_actions
+      @group.save
     end
 
     def handle_actions
@@ -24,14 +25,12 @@ module Groups
 
     def add_to_group(members)
       members.each do |member|
-        ::Groups::Membership.find_or_create_by(member: member, group: @group)
+        @group.memberships.build(member: member) unless @group.members.include?(member)
       end
     end
 
     def remove_from_group(members)
-      members.each do |member|
-        ::Groups::Membership.find_by(member: member, group: @group)&.destroy
-      end
+      @group.memberships.where(member: members).destroy_all
     end
   end
 end

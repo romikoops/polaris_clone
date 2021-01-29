@@ -8,12 +8,14 @@ module OfferCalculator
           return ::Trucking::Trucking.none if targets.empty?
 
           first_target = targets.first
-          base_query = carriage_association(carriage: first_target, groups: hierarchy,
-                                            hub_ids: hub_ids_by_carriage(target: first_target))
+          base_query = carriage_association(
+            carriage: first_target,
+            hub_ids: hub_ids_by_carriage(target: first_target)
+          )
           return base_query if targets.length == 1
           last_target = targets.last
           base_query.or(
-            carriage_association(carriage: last_target, groups: hierarchy,
+            carriage_association(carriage: last_target,
                                  hub_ids: hub_ids_by_carriage(target: last_target))
           )
         end
@@ -22,8 +24,8 @@ module OfferCalculator
 
         def targets
           @targets ||= {
-            "pre" => shipment.has_pre_carriage? ? true : nil,
-            "on" => shipment.has_on_carriage? ? true : nil
+            "pre" => request.has_pre_carriage? ? true : nil,
+            "on" => request.has_on_carriage? ? true : nil
           }.compact.keys
         end
 
@@ -31,16 +33,16 @@ module OfferCalculator
           target == "pre" ? schedules.map(&:origin_hub_id) : schedules.map(&:destination_hub_id)
         end
 
-        def carriage_association(carriage:, hub_ids:, groups:)
+        def carriage_association(carriage:, hub_ids:)
           args = {
             address: address_for_carriage(carriage: carriage),
-            load_type: shipment.load_type,
-            organization_id: shipment.organization_id,
+            load_type: load_type,
+            organization_id: request.organization.id,
             cargo_classes: cargo_classes,
             carriage: carriage,
             hub_ids: hub_ids,
             order_by: "group_id",
-            groups: groups
+            groups: hierarchy
           }
 
           results = ::Trucking::Queries::Availability.new(args).perform
@@ -64,14 +66,6 @@ module OfferCalculator
                 cargo_class: cargo_class
               )
             end
-            target_trucking ||= results.find_by(
-              group_id: nil,
-              hub_id: hub_id,
-              truck_type: truck_type,
-              tenant_vehicle_id: tenant_vehicle_id,
-              cargo_class: cargo_class
-            )
-
             target_trucking&.id
           }.compact
         end
@@ -85,11 +79,11 @@ module OfferCalculator
         end
 
         def cargo_classes
-          @cargo_classes ||= @shipment.cargo_classes
+          @cargo_classes ||= request.cargo_classes
         end
 
         def trucking_details
-          @trucking_details ||= @shipment.trucking
+          @trucking_details ||= request.trucking_params
         end
 
         def valid_hub_ids(results:)
@@ -106,14 +100,14 @@ module OfferCalculator
         end
 
         def default_truck_types
-          @shipment.fcl? ? Trucking::Trucking::FCL_TRUCK_TYPES : Trucking::Trucking::LCL_TRUCK_TYPES
+          load_type == "container" ? Trucking::Trucking::FCL_TRUCK_TYPES : Trucking::Trucking::LCL_TRUCK_TYPES
         end
 
         def address_for_carriage(carriage:)
           if carriage == "pre"
-            quotation.pickup_address
+            request.pickup_address
           else
-            quotation.delivery_address
+            request.delivery_address
           end
         end
 

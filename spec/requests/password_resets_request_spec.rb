@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "PasswordResets", type: :request do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:authentication_user, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
 
   before do
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
@@ -42,7 +42,8 @@ RSpec.describe "PasswordResets", type: :request do
     it "returns http success" do
       user.generate_reset_password_token!
 
-      patch organization_password_reset_path(organization_id: organization.id, id: user.reset_password_token)
+      patch organization_password_reset_path(organization_id: organization.id, id: user.reset_password_token),
+        params: {password: "1234567890", password_confirmation: "1234567890"}
 
       expect(response).to have_http_status(:success)
     end

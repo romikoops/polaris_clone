@@ -2,6 +2,7 @@ module Journey
   class RouteSection < ApplicationRecord
     belongs_to :from, class_name: "Journey::RoutePoint"
     belongs_to :to, class_name: "Journey::RoutePoint"
+    belongs_to :result, class_name: "Journey::Result", inverse_of: :route_sections
     has_many :line_items
     enum mode_of_transport: {
       ocean: "ocean",
@@ -27,6 +28,7 @@ end
 #  mode_of_transport :enum
 #  order             :integer          not null
 #  service           :string           not null
+#  transit_time      :integer          not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  from_id           :uuid

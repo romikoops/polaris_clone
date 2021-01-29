@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :legacy_user_address, class: "Legacy::UserAddress" do
-    association :user, factory: :organizations_user
-    association :address, factory: :legacy_address
+    user { association(:users_client) }
+    address { association(:legacy_address) }
   end
 end
 

@@ -1,4 +1,0 @@
-gem "shared-runtime", path: "../../gems/shared-runtime"
-
-gem "admiralty_assets", path: "../admiralty_assets"
-eval_gemfile "../admiralty_assets/Gemfile.runtime"

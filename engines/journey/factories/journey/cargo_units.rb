@@ -7,6 +7,16 @@ FactoryBot.define do
     height_value { 1.40 }
     stackable { false }
     cargo_class { "lcl" }
+    colli_type { "pallet" }
     association :query, factory: :journey_query
+
+    trait :fcl do
+      cargo_class { "fcl_20" }
+      quantity { 2 }
+      weight_value { 3000 }
+      width_value { 0 }
+      length_value { 0 }
+      height_value { 0 }
+    end
   end
 end

@@ -1,0 +1,22 @@
+Hallo,
+
+Über Ihren Online-Shop wurden neue Quotierungen erstellt.
+
+References: <%= @query.references.join(" ") %>
+Erstellungsdatum:: <% @query.created_at.strftime('%Y%d%m') %>
+
+Beschreibung  Betrag
+
+<% @results.each do |result| -%>
+  <%= [result.routing, result.total].join(" ") %>
+<% end -%>
+
+Wenn Sie eine Frage bzgl. Ihrer Quotierung haben, antworten Sie einfach auf diese Email oder schreiben Sie unserem Support Team: <%= @support_email %>
+
+Mit freundlichen Grüßen,
+
+Ihr <%= @theme.name %> Team
+  
+© 2020 ItsmyCargo ApS. All rights reserved.
+
+ItsmyCargo ApS

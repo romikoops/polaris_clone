@@ -5,7 +5,7 @@ FactoryBot.define do
     name { "Agency Name" }
 
     association :organization, factory: :organizations_organization
-    association :agency_manager, factory: :organizations_user
+    association :agency_manager, factory: :users_client
   end
 end
 

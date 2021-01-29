@@ -4,59 +4,70 @@ module OfferCalculator
   module Service
     module OfferCreators
       class RateOverview
-        def self.overview(offer:)
-          new(offer: offer).perform
+        BUFFER = 5
+        def self.overview(result:)
+          new(result: result).perform
         end
 
-        def initialize(offer:)
-          @offer = offer
+        def initialize(result:)
+          @result = result
         end
 
         def perform
-          (rates | manipulated_pricings)
-            .each_with_object({}) do |rate, result|
-              result[rate.cargo_class] = rate.fees
-            end
+          manipulated_pricings.each_with_object({}) { |rate, result| result[rate.cargo_class] = rate.fees }
         end
 
         private
 
-        attr_reader :offer
+        attr_reader :result
 
-        def rates
-          @rates ||= offer.section(key: "cargo").map(&:object).uniq
-        end
+        delegate :itinerary, :legacy_service, :transit_time, :load_type, :issued_at, :query, to: :result
 
         def pricings
           @pricings ||= Pricings::Pricing.where(
             itinerary: itinerary,
             load_type: load_type,
-            tenant_vehicle_id: tenant_vehicle_id
+            tenant_vehicle: legacy_service
           ).for_dates(
-            rates.first.effective_date, rates.first.expiration_date
-          ).where.not(
-            cargo_class: rates.map(&:cargo_class)
+            issued_at, (issued_at + BUFFER.days)
           )
-        end
-
-        def itinerary
-          @itinerary ||= offer.itinerary
-        end
-
-        def tenant_vehicle_id
-          @tenant_vehicle_id ||= offer.tenant_vehicle(section_key: "cargo")
-        end
-
-        def load_type
-          @load_type ||= offer.load_type
         end
 
         def manipulated_pricings
+          return [] if pricings.empty?
+
           OfferCalculator::Service::Manipulators::Pricings.results(
             association: pricings,
-            shipment: offer.shipment,
-            schedules: [offer.schedules.first]
+            request: request,
+            schedules: [temp_schedule]
           )
+        end
+
+        def temp_schedule
+          OfferCalculator::Schedule.new(
+            id: SecureRandom.uuid,
+            mode_of_transport: itinerary.mode_of_transport,
+            transshipment: itinerary.transshipment,
+            eta: issued_at + transit_time.days,
+            etd: issued_at + 1.day,
+            closing_date: issued_at,
+            origin_hub_id: itinerary.origin_hub_id,
+            destination_hub_id: itinerary.destination_hub_id,
+            origin_hub_name: itinerary.origin_hub.name,
+            destination_hub_name: itinerary.destination_hub.name,
+            vehicle_name: legacy_service.name,
+            carrier_name: legacy_service&.carrier&.name,
+            trip_id: SecureRandom.uuid,
+            itinerary_id: itinerary.id,
+            tenant_vehicle_id: legacy_service.id,
+            load_type: load_type,
+            carrier_lock: legacy_service.carrier_lock,
+            carrier_id: legacy_service.carrier_id
+          )
+        end
+
+        def request
+          OfferCalculator::Request.new(query: query.object, params: {})
         end
       end
     end

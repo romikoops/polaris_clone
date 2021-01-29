@@ -4,8 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Measurements::Cargo do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation) }
-  let(:cargo) { FactoryBot.create(:cargo_cargo, quotation_id: quotation.id) }
+
   let(:trucking_location) { FactoryBot.create(:trucking_location, :distance, data: distance) }
   let(:distance) { 15 }
   let(:trucking_pricing) do
@@ -24,23 +23,40 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
   let(:target_cargo) { cargo }
   let(:cbm_ratio) { 250 }
   let(:load_meterage) { {} }
+  let(:cargo_unit) do
+    FactoryBot.create(:journey_cargo_unit,
+      cargo_class: "lcl",
+      weight_value: 1000,
+      height: 1,
+      width_value: 1,
+      length_value: 1,
+      quantity: 1,
+      stackable: true)
+  end
+  let(:engine) do
+    FactoryBot.create(:measurements_engine_unit,
+      scope: scope,
+      manipulated_result: manipulated_result,
+      cargo_unit: cargo_unit)
+  end
   let(:measure) do
     described_class.new(
-      cargo: target_cargo,
+      engine: engine,
       scope: scope.with_indifferent_access,
       object: manipulated_result
     )
   end
 
-  describe "when asking for chargeeable weight" do
+  describe "when asking for chargeable weight" do
     context "without load_meterage" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_unit) do
+        FactoryBot.create(:journey_cargo_unit,
+          cargo_class: "lcl",
           weight_value: 1000,
           height_value: 1,
           width_value: 1,
           length_value: 1,
+          quantity: 1,
           stackable: true)
       end
 
@@ -52,27 +68,40 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         end
       end
     end
+  end
+
+  describe "when consolidated" do
+    let(:request) do
+      FactoryBot.create(:offer_calculator_request)
+    end
+    let(:engine) do
+      FactoryBot.create(:measurements_engines_consolidated,
+        scope: scope.with_indifferent_access,
+        object: manipulated_result,
+        request: request)
+    end
+
+    before do
+      allow(request).to receive(:cargo_units).and_return(cargo_units)
+    end
 
     context "with scope consolidation.trucking.calculation" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           weight_value: 200,
           height_value: 1.4,
           width_value: 1.2,
           length_value: 0.8,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 2,
-          weight_value: 400,
-          height_value: 1.5,
-          width_value: 1.2,
-          length_value: 0.8,
-          stackable: true)
+          stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 2,
+            weight_value: 400,
+            height_value: 1.5,
+            width_value: 1.2,
+            length_value: 0.8,
+            stackable: true)]
       end
-
       let(:scope) { {consolidation: {trucking: {calculation: true}}} }
 
       it "returns the correct weight" do
@@ -85,31 +114,28 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with  scope consolidation.trucking.comparative" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 45,
           weight_value: 30.0 / 45.0,
           height_value: 0.15,
           width_value: 0.1,
           length_value: 0.2,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 15,
-          weight_value: 36.0 / 15.0,
-          height_value: 0.25,
-          width_value: 0.3,
-          length_value: 0.3,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 32,
-          weight_value: 168.0 / 32.0,
-          height_value: 0.2,
-          width_value: 0.25,
-          length_value: 0.25,
-          stackable: true)
+          stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 15,
+            weight_value: 36.0 / 15.0,
+            height_value: 0.25,
+            width_value: 0.3,
+            length_value: 0.3,
+            stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 32,
+            weight_value: 168.0 / 32.0,
+            height_value: 0.2,
+            width_value: 0.25,
+            length_value: 0.25,
+            stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
@@ -118,7 +144,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
 
       it "returns the correct weight" do
         aggregate_failures do
-          expect(measure.kg.value).to eq(234.015)
+          expect(measure.kg.value).to eq(234.00015)
           expect(measure.kg.unit.name).to eq("kg")
           expect(measure.stackability).to eq(true)
         end
@@ -132,31 +158,28 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with  scope consolidation.trucking.comparative" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 45,
           weight_value: 30.0 / 45.0,
           height_value: 0.15,
           width_value: 0.1,
           length_value: 0.2,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 15,
-          weight_value: 36.0 / 15.0,
-          height_value: 0.25,
-          width_value: 0.3,
-          length_value: 0.3,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 32,
-          weight_value: 168.0 / 32.0,
-          height_value: 0.2,
-          width_value: 0.25,
-          length_value: 0.25,
-          stackable: true)
+          stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 15,
+            weight_value: 36.0 / 15.0,
+            height_value: 0.25,
+            width_value: 0.3,
+            length_value: 0.3,
+            stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 32,
+            weight_value: 168.0 / 32.0,
+            height_value: 0.2,
+            width_value: 0.25,
+            length_value: 0.25,
+            stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
@@ -165,7 +188,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
 
       it "returns the correct weight" do
         aggregate_failures do
-          expect(measure.kg.value).to eq(234.015)
+          expect(measure.kg.value).to eq(234.00015)
           expect(measure.kg.unit.name).to eq("kg")
           expect(measure.stackability).to eq(true)
         end
@@ -179,31 +202,28 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with scope consolidation.trucking.comparative (non-stackable)" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 45,
           weight_value: 30.0 / 45.0,
           height_value: 0.15,
           width_value: 0.1,
           length_value: 0.2,
-          stackable: false)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 15,
-          weight_value: 36.0 / 15.0,
-          height_value: 0.25,
-          width_value: 0.3,
-          length_value: 0.25,
-          stackable: false)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 32,
-          weight_value: 168.0 / 32.0,
-          height_value: 0.2,
-          width_value: 0.25,
-          length_value: 0.25,
-          stackable: false)
+          stackable: false),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 15,
+            weight_value: 36.0 / 15.0,
+            height_value: 0.25,
+            width_value: 0.3,
+            length_value: 0.25,
+            stackable: false),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 32,
+            weight_value: 168.0 / 32.0,
+            height_value: 0.2,
+            width_value: 0.25,
+            length_value: 0.25,
+            stackable: false)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'comparative': true}}} }
@@ -226,13 +246,14 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with scope consolidation.trucking.calculation with agg cargo" do
-      before do
-        FactoryBot.create(:aggregated_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           weight_value: 3000,
-          volume_value: 1.5,
-          stackable: true)
+          height_value: 1,
+          width_value: 1,
+          length_value: 1.5,
+          stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'calculation': true}}} }
@@ -249,23 +270,21 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with scope consolidation.trucking.load_meterage_only" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           weight_value: 200,
           height_value: 1.4,
           width_value: 1.2,
           length_value: 0.8,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 2,
-          weight_value: 400,
-          height_value: 1.5,
-          width_value: 1.2,
-          length_value: 0.8,
-          stackable: true)
+          stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 2,
+            weight_value: 400,
+            height_value: 1.5,
+            width_value: 1.2,
+            length_value: 0.8,
+            stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'load_meterage_only': true}}} }
@@ -282,23 +301,21 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
     end
 
     context "with consolidation.trucking.load_meterage_only (low limit)" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           weight_value: 200,
           height_value: 1.4,
           width_value: 1.2,
           length_value: 0.8,
-          stackable: true)
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
-          quantity: 2,
-          weight_value: 400,
-          height_value: 1.5,
-          width_value: 1.2,
-          length_value: 0.8,
-          stackable: true)
+          stackable: true),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 2,
+            weight_value: 400,
+            height_value: 1.5,
+            width_value: 1.2,
+            length_value: 0.8,
+            stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'load_meterage_only': true}}} }
@@ -309,21 +326,19 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         aggregate_failures do
           expect(measure.kg.value).to eq(1200)
           expect(measure.kg.unit.name).to eq("kg")
-          expect(measure.stackability).to eq(false)
         end
       end
     end
 
     context "with hard load meterage limit" do
-      before do
-        FactoryBot.create(:lcl_unit,
-          cargo: cargo,
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           weight_value: 200,
           height_value: 1.4,
           width_value: 1.2,
           length_value: 0.8,
-          stackable: true)
+          stackable: true)]
       end
 
       let(:scope) { {'consolidation': {'trucking': {'load_meterage_only': true}}} }

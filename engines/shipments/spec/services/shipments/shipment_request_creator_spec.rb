@@ -7,7 +7,7 @@ module Shipments
     describe "Mapping a legacy shipment to shipment request" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:currency) { FactoryBot.create(:legacy_currency) }
-      let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:user) { FactoryBot.create(:users_client, organization: organization) }
       let(:legacy_shipment) {
         FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id)
       }
@@ -62,7 +62,7 @@ module Shipments
           consignee = shipment_request.consignee.contact
           legacy_consignee = legacy_shipment.shipment_contacts.find_by(contact_type: "consignee").contact
           aggregate_failures do
-            expect(consignee.user_id).to eql Organizations::User.unscoped.find(legacy_consignee.user_id).id
+            expect(consignee.user_id).to eql Users::Client.unscoped.find(legacy_consignee.user_id).id
             expect(consignee.company_name).to eql legacy_consignee.company_name
             expect(consignee.first_name).to eql legacy_consignee.first_name
             expect(consignee.last_name).to eql legacy_consignee.last_name

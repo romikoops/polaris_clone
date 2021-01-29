@@ -4,16 +4,20 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:shipment) { FactoryBot.create(:legacy_shipment, load_type: "cargo_item", organization: organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
   let(:local_charge) { FactoryBot.create(:legacy_local_charge, organization: organization) }
-  let(:cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
+  let(:measures) do
+    OfferCalculator::Service::Measurements::Request.new(
+      request: request,
+      scope: scope.with_indifferent_access,
+      object: object
+    )
+  end
+  let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let!(:solas_charge_category) { FactoryBot.create(:solas_charge, organization: organization) }
   let!(:qdf_charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: "qdf") }
   let(:solas_fee) { local_charge.fees["SOLAS"] }
   let(:qdf_fee) { local_charge.fees["QDF"] }
   let(:scope) { {} }
-  let(:measures) { OfferCalculator::Service::Measurements::Cargo.new(cargo: cargo, scope: scope, object: object) }
   let(:breakdowns) do
     local_charge.fees.map do |key, fee|
       Pricings::ManipulatorBreakdown.new(
@@ -28,11 +32,23 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
     FactoryBot.build(:manipulator_result, original: local_charge, result: local_charge.as_json, breakdowns: breakdowns)
   }
 
+  before do
+    allow(request).to receive(:cargo_units).and_return(cargo_units)
+  end
+
   describe ".perform" do
     context "with (no consolidation)" do
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1)]
+      end
       let(:fee) { results.first }
       let(:component) { fee.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -52,17 +68,26 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
     end
 
     context "with (multiple fees & ranges & no consolidation)" do
-      before do
-        FactoryBot.create(:legacy_cargo_item, shipment: shipment, payload_in_kg: 100)
-        shipment.cargo_items.reload
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1),
+          FactoryBot.create(:journey_cargo_unit,
+            weight_value: 100,
+            width_value: 0.2,
+            length_value: 0.2,
+            height_value: 0.2,
+            quantity: 1)]
       end
-
       let(:local_charge) { FactoryBot.create(:legacy_local_charge, :multiple_fees, organization: organization) }
       let(:solas_fee_result) { results.find { |f| f.charge_category == solas_charge_category } }
       let(:qdf_fee_result) { results.find { |f| f.charge_category == qdf_charge_category } }
       let(:first_component) { solas_fee_result.components.first }
       let(:second_component) { qdf_fee_result.components.first }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do
@@ -91,10 +116,24 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
     end
 
     context "with (consolidation)" do
+      let(:cargo_units) do
+        [FactoryBot.create(:journey_cargo_unit,
+          weight_value: 200,
+          width_value: 0.2,
+          length_value: 0.2,
+          height_value: 0.2,
+          quantity: 1),
+          FactoryBot.create(:journey_cargo_unit,
+            weight_value: 100,
+            width_value: 0.2,
+            length_value: 0.2,
+            height_value: 0.2,
+            quantity: 1)]
+      end
       let(:fee) { results.first }
       let(:component) { fee.components.first }
       let(:scope) { {consolidation: {cargo: {backend: true}}} }
-      let!(:results) { described_class.fees(quotation: quotation, measures: measures) }
+      let!(:results) { described_class.fees(request: request, measures: measures) }
 
       it "returns the correct fees" do
         aggregate_failures do

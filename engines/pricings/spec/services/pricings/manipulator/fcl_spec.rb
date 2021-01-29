@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Pricings::Manipulator do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let(:group) do
@@ -78,8 +78,6 @@ RSpec.describe Pricings::Manipulator do
   let(:manipulated_results) { klass.perform }
 
   before do
-    FactoryBot.create(:profiles_profile, user_id: user.id)
-    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin,

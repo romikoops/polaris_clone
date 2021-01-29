@@ -15,7 +15,7 @@ module Pricings
     belongs_to :organization, class_name: "Organizations::Organization"
 
     belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle"
-    belongs_to :user, class_name: "Organizations::User", optional: true
+    belongs_to :user, class_name: "Users::Client", optional: true
     has_many :fees, class_name: "Pricings::Fee", dependent: :destroy
     has_many :margins, class_name: "Pricings::Margin"
     belongs_to :group, class_name: "Groups::Group", optional: true
@@ -139,5 +139,4 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (organization_id => organizations_organizations.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
 module ResultFormatter
-  class LineItemDecorator < Draper::Decorator
+  class LineItemDecorator < ApplicationDecorator
     delegate_all
-    delegate :code, :name, to: :charge_category
-    delegate :mode_of_transport, to: :tender
-
-    def total
-      amount
-    end
 
     def original_total
-      original_amount
+      total
     end
 
     def description
@@ -20,23 +14,23 @@ module ResultFormatter
 
     def fee_context
       {
-        included: included_fee?,
-        excluded: excluded_fee?
+        included: included,
+        excluded: optional
       }
     end
 
     private
 
+    def code
+      fee_code
+    end
+
+    def mode_of_transport
+      context.dig(:mode_of_transport)
+    end
+
     def scope
       context[:scope]
-    end
-
-    def included_fee?
-      code.include? "included"
-    end
-
-    def excluded_fee?
-      code.include? "unknown"
     end
 
     def adjusted_key
@@ -45,19 +39,27 @@ module ResultFormatter
     end
 
     def adjusted_name
-      if section == "cargo_section" && scope["consolidated_cargo"] && mode_of_transport == "ocean"
+      if freight_fee? && scope["consolidated_cargo"] && mode_of_transport == "ocean"
         "Ocean Freight"
-      elsif section == "cargo_section" && scope["consolidated_cargo"]
+      elsif freight_fee? && scope["consolidated_cargo"]
         "Consolidated Freight Rate"
-      elsif section == "cargo_section" && !scope["fine_fee_detail"]
+      elsif freight_fee? && !scope["fine_fee_detail"]
         "#{mode_of_transport&.capitalize} Freight Rate"
       else
-        name
+        object.description
       end
     end
 
+    def transfer_fee?
+      route_section.from == route_section.to
+    end
+
+    def freight_fee?
+      route_section.mode_of_transport != :carriage? && !transfer_fee?
+    end
+
     def determine_render_string
-      return adjusted_name if %w[trucking_on_section trucking_pre_section].include?(section)
+      return adjusted_name if route_section.mode_of_transport == :carriage?
 
       case scope["fee_detail"]
       when "key"

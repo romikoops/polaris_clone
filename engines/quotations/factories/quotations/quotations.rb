@@ -4,11 +4,12 @@ FactoryBot.define do
   factory :quotations_quotation, class: "Quotations::Quotation" do
     selected_date { Time.zone.today }
 
-    association :origin_nexus, factory: :legacy_nexus
-    association :destination_nexus, factory: :legacy_nexus
-    association :user, factory: :organizations_user
-    association :creator, factory: :users_user
-    association :organization, factory: :organizations_organization
+    origin_nexus { association(:legacy_nexus) }
+    destination_nexus { association(:legacy_nexus) }
+    user { association(:users_client) }
+    creator { user }
+    organization { association(:organizations_organization) }
+
     billing { :external }
 
     trait :container do

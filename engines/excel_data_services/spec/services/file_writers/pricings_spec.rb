@@ -8,7 +8,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary) }
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:static_pricing_headers) do
     described_class::HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys
       .map { |header| header.to_s.upcase }

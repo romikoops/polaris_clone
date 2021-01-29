@@ -17,7 +17,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "doorkeeper"
   spec.add_dependency "ruby-saml", "~> 1.11.0"
 
-  spec.add_dependency "authentication"
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"
   spec.add_dependency "profiles"

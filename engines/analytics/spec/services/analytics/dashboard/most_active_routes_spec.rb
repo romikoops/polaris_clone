@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:company) { FactoryBot.create(:companies_company, organization: organization, name: "Company Name") }
-  let(:clients) { FactoryBot.create_list(:organizations_user, 2, organization: organization) }
+  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
   let(:result) {
@@ -45,7 +45,7 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
     before do
       Quotations::Tender.find_each do |tender|
         FactoryBot.create(:shipments_shipment_request,
-          user: Organizations::User.unscoped.find(tender.quotation.user_id), # Find a better way for this
+          user: Users::Client.unscoped.find(tender.quotation.user_id), # Find a better way for this
           organization: organization,
           tender: tender,
           created_at: tender.quotation.created_at)

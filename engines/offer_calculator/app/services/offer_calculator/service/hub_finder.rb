@@ -15,32 +15,32 @@ module OfferCalculator
       private
 
       def hubs_for_target(target, carriage)
-        if @shipment.has_carriage?(carriage)
-          trucking_hubs(carriage)
+        if request.has_carriage?(carriage: carriage)
+          trucking_hubs(carriage: carriage, target: target)
         else
-          Legacy::Hub.where(organization_id: @shipment.organization_id,
-                            nexus_id: @shipment["#{target}_nexus_id"])
+          Legacy::Hub.where(organization: organization,
+                            nexus_id: request.nexus_id(target: target))
         end
       end
 
-      def trucking_hubs(carriage)
-        trucking_details = @shipment.trucking["#{carriage}_carriage"]
+      def trucking_hubs(carriage:, target:)
+        trucking_details = request.trucking_params["#{carriage}_carriage"]
         args = {
-          address: Legacy::Address.find(trucking_details["address_id"]),
-          load_type: @shipment.load_type,
-          organization_id: @shipment.organization_id,
+          address: carriage == "pre" ? request.pickup_address : request.delivery_address,
+          load_type: request.load_type,
+          organization_id: organization.id,
           truck_type: trucking_details["truck_type"],
           carriage: carriage,
-          cargo_classes: @shipment.cargo_classes,
-          order_by: "group_id",
+          cargo_classes: request.cargo_classes,
           groups: groups
         }
+
         Trucking::Queries::Hubs.new(args).perform
       end
 
       def groups
         OrganizationManager::GroupsService.new(
-          target: @shipment.user, organization: @shipment.organization
+          target: client, organization: organization
         ).fetch
       end
     end

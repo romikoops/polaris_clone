@@ -6,17 +6,18 @@ module Api
   module V1
     class QuotationsController < ApiController
       SORTING_ATTRIBUTES = ["selected_date", "load_type", "last_name", "origin", "destination"]
+
       def index
         sort_by = SORTING_ATTRIBUTES.include?(index_params[:sort_by]) ? index_params[:sort_by] : "selected_date"
-        quotations = quotations_filter.perform.sorted(sort_by: sort_by,
-                                                      direction: sanitize_direction(index_params[:direction]))
+        quotations = filtered_quotations.sorted(sort_by: sort_by,
+                                                direction: sanitize_direction(index_params[:direction]))
 
         paginated = paginate(quotations)
 
-        decorated_quotations = QuotationDecorator.decorate_collection(paginated,
+        decorated_quotations = Api::V1::ResultDecorator.decorate_collection(paginated,
           {context: {links: pagination_links(paginated)}})
 
-        render json: QuotationListSerializer.new(decorated_quotations, params: {scope: current_scope})
+        render json: ResultListSerializer.new(decorated_quotations, params: {scope: current_scope}).serialized_json
       end
 
       def create
@@ -24,17 +25,21 @@ module Api
           return render json: ValidationErrorSerializer.new(validation.errors), status: :expectation_failed
         end
 
-        decorated_quotation = QuotationDecorator.decorate(quotation_service.result)
-        render json: QuotationSerializer.new(decorated_quotation, params: {scope: current_scope})
+        render json: QuerySerializer.new(
+          Api::V1::QueryDecorator.new(
+            quotation_service.result,
+            context: {scope: current_scope, load_type: load_type}
+          ),
+          params: {scope: current_scope}
+        )
       rescue Wheelhouse::ApplicationError => e
         render json: {error: e.message}, status: :unprocessable_entity
       end
 
       def show
-        handle_async_error if quotation.error_class.present?
-
-        decorated_quotation = QuotationDecorator.decorate(quotation)
-        render json: QuotationSerializer.new(decorated_quotation, params: {scope: current_scope})
+        check_for_errors
+        decorated_query = QueryDecorator.decorate(query)
+        render json: QuerySerializer.new(decorated_query, params: {scope: current_scope})
       rescue OfferCalculator::Errors::Failure => e
         render json: {error: e.message}, status: :unprocessable_entity
       end
@@ -53,17 +58,15 @@ module Api
 
       private
 
-      def safe_tender_ids
-        download_params[:tender_ids] || download_params[:tenders]
+      def result_ids
+        return download_params[:tenders] if download_params[:tenders].present?
+
+        query.result_sets.order(created_at: :desc).first.results.ids
       end
 
       def validation
         validator = Wheelhouse::ValidationService.new(
-          user: user,
-          organization: current_organization,
-          cargo: cargo,
-          routing: routing,
-          load_type: load_type,
+          request: query_request,
           final: true
         )
         validator.validate
@@ -84,19 +87,40 @@ module Api
         Quotations::Quotation.find(params[:id])
       end
 
+      def query
+        @query ||= Journey::Query.find(params[:id] || params[:quotation_id])
+      end
+
       def quotation_service
         @quotation_service ||= Wheelhouse::QuotationService.new(
           organization: current_organization,
           quotation_details: quotation_details,
           shipping_info: modified_shipment_params,
-          async: async?
+          async: async?,
+          source: doorkeeper_application
         )
+      end
+
+      def query_request
+        @query_request ||= OfferCalculator::Request.new(
+          query: request_query,
+          params: validation_params
+        )
+      end
+
+      def request_query
+        @request_query ||= OfferCalculator::Service::QueryGenerator.new(
+          source: doorkeeper_application,
+          client: user,
+          creator: organization_user,
+          params: validation_params,
+          persist: false
+        ).query
       end
 
       def download_service
         Wheelhouse::QuotationDownloadService.new(
-          quotation_id: download_params[:quotation_id],
-          tender_ids: safe_tender_ids,
+          result_ids: result_ids,
           format: download_params[:format],
           scope: current_scope
         )
@@ -134,7 +158,8 @@ module Api
 
         {cargo_items_attributes: modified_cargo_item_params,
          container_attributes: shipment_params[:container_attributes],
-         trucking_info: shipment_params[:trucking_info]}
+         trucking_info: shipment_params[:trucking_info],
+         scale: "m"}.to_h
       end
 
       def shipment_params
@@ -172,53 +197,46 @@ module Api
         direction.to_s.upcase == "DESC" ? "DESC" : "ASC"
       end
 
-      def cargo
-        Cargo::Cargo.new(
-          organization: current_organization,
-          units: load_type == "container" ? containers : cargo_items
-        )
-      end
-
-      def cargo_items
-        modified_shipment_params.fetch(:cargo_items_attributes, []).map do |attrs|
-          Cargo::Unit.new(
-            id: attrs[:id],
-            organization_id: current_organization.id,
-            cargo_class: "00",
-            cargo_type: "LCL",
-            organization: current_organization,
-            width_value: attrs[:width].to_f / 100,
-            height_value: attrs[:height].to_f / 100,
-            length_value: attrs[:length].to_f / 100,
-            weight_value: attrs[:payload_in_kg].to_f,
-            quantity: attrs[:quantity]
-          )
-        end
-      end
-
-      def containers
-        modified_shipment_params.fetch(:containers_attributes, []).map do |attrs|
-          Cargo::Unit.new(
-            id: attrs[:id],
-            cargo_class: Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER[attrs[[:cargo_class]]],
-            cargo_type: "GP",
-            organization: current_organization,
-            weight_value: attrs[:payload_in_kg].to_f,
-            quantity: attrs[:quantity]
-          )
-        end
-      end
-
       def user
-        Users::User.find_by(id: quotation_params[:user_id]) || current_user
+        Users::Client.find_by(id: quotation_params[:user_id])
       end
 
       def async?
         params[:async]
       end
 
-      def handle_async_error
-        raise quotation.error_class.constantize
+      def check_for_errors
+        return if result_set_errors.empty?
+        return if latest_result_set.results.present?
+
+        raise OfferCalculator::Errors.from_code(code: result_set_errors.first.code)
+      end
+
+      def result_set_errors
+        @result_set_errors ||= Journey::Error.where(result_set: latest_result_set)
+      end
+
+      def latest_result_set
+        @latest_result_set ||= query.result_sets.order(:created_at).last
+      end
+
+      def validation_params
+        quotation_params.to_h.merge(modified_shipment_params.to_h)
+      end
+
+      def filtered_quotations
+        quotations = Journey::Result.joins(result_set: :query).where(
+          journey_result_sets: {status: "completed"},
+          journey_queries: {organization_id: current_organization.id}
+        )
+
+        if index_params[:start_date].present?
+          quotations = quotations.where("cargo_ready_date >= ?", index_params[:start_date])
+        end
+        if index_params[:end_date].present?
+          quotations = quotations.where("cargo_ready_date <= ?", index_params[:end_date])
+        end
+        quotations
       end
     end
   end

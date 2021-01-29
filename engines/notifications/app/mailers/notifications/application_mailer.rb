@@ -18,5 +18,18 @@ module Notifications
       params[:organization]
     end
     helper_method :current_organization
+
+    def current_scope(user:)
+      OrganizationManager::ScopeService.new(target: user, organization: current_organization).fetch
+    end
+    helper_method :current_scope
+
+    def organization_from_email(mode_of_transport:)
+      emails = current_organization.theme.emails
+      emails.dig("sales", mode_of_transport) ||
+        emails.dig("sales", "general") ||
+        "no-reply@itsmycargo.shop"
+    end
+    helper_method :current_organization
   end
 end

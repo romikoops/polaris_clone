@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Finders::Pricings do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
@@ -14,15 +14,20 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
       FactoryBot.create(:groups_membership, member: user, group: tapped_group)
     end
   end
-  let(:shipment) { FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: load_type) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id) }
+  let(:request) do
+    FactoryBot.create(:offer_calculator_request,
+      organization: organization,
+      client: user,
+      creator: user,
+      cargo_trait: :lcl)
+  end
   let(:trips) do
     [
       FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1)
     ]
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:pricing_finder) { described_class.new(shipment: shipment, quotation: quotation, schedules: schedules) }
+  let(:pricing_finder) { described_class.new(request: request, schedules: schedules) }
   let(:results) { pricing_finder.perform }
 
   before do
@@ -129,7 +134,7 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
       let(:load_type) { "container" }
 
       before do
-        allow(shipment).to receive(:cargo_classes).and_return(["fcl_20", "fcl_40"])
+        allow(request).to receive(:cargo_classes).and_return(["fcl_20", "fcl_40"])
         FactoryBot.create(:fcl_20_pricing,
           itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
         FactoryBot.create(:fcl_40_pricing,

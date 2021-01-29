@@ -4,7 +4,7 @@ module Legacy
   class File < ApplicationRecord
     has_one_attached :file
     belongs_to :shipment, optional: true
-    belongs_to :user, class_name: "Organizations::User", optional: true
+    belongs_to :user, polymorphic: true, optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :quotation, optional: true
     belongs_to :target, polymorphic: true, optional: true
@@ -30,6 +30,7 @@ end
 #  target_type      :string
 #  text             :string
 #  url              :string
+#  user_type        :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  legacy_user_id   :integer
@@ -50,9 +51,9 @@ end
 #  index_legacy_files_on_target_type_and_target_id  (target_type,target_id)
 #  index_legacy_files_on_tenant_id                  (tenant_id)
 #  index_legacy_files_on_user_id                    (user_id)
+#  index_legacy_files_on_user_id_and_user_type      (user_id,user_type)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (organization_id => organizations_organizations.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Api::Routing::LegacyRoutingService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
   let(:load_type) { "container" }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }

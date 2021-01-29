@@ -89,5 +89,4 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (organization_id => organizations_organizations.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

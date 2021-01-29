@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :shipments_shipment, class: "Shipments::Shipment" do
-    association :user, factory: :organizations_user
+    association :user, factory: :users_client
     association :organization, factory: :organizations_organization
     association :origin, factory: :routing_terminal
     association :destination, factory: :routing_terminal

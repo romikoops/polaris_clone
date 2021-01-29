@@ -2,56 +2,29 @@
 
 require "swagger_helper"
 
-RSpec.describe "Quotations" do
+RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
+  include_context "journey_pdf_setup"
+  include_context "complete_route_with_trucking"
+  let(:load_type) { "container" }
+  let(:cargo_classes) { ["fcl_20"] }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:organizations_user, :with_profile, organization_id: organization.id) }
-  let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
-  let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
-  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
-  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:trips) do
-    [
-      FactoryBot.create(:trip_with_layovers,
-        itinerary: itinerary, load_type: "container", tenant_vehicle: tenant_vehicle),
-      FactoryBot.create(:trip_with_layovers,
-        itinerary: itinerary, load_type: "container", tenant_vehicle: tenant_vehicle_2)
-    ]
-  end
-  let(:shipment) {
-    FactoryBot.create(:legacy_shipment,
-      with_breakdown: true, with_tenders: true, organization: organization, user: user)
-  }
-  let(:quotation) do
-    Quotations::Quotation.find_by(legacy_shipment_id: shipment.id)
-  end
-
-  let(:quotation_2) do
-    FactoryBot.create(:quotations_quotation, legacy_shipment_id: shipment.id, user: user).tap do |tapped_quotation|
-      FactoryBot.create(:cargo_cargo, quotation_id: tapped_quotation.id)
-    end
-  end
+  let(:source) { FactoryBot.create(:application) }
+  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+  let(:carta_double) { double("Carta::Api") }
 
   before do
+    allow(controller).to receive(:doorkeeper_application).and_return(FactoryBot.create(:application))
+    allow(Carta::Api).to receive(:new).and_return(carta_double)
+    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     ::Organizations.current_id = organization.id
     FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
-    [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
-      FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
-    end
-    OfferCalculator::Schedule.from_trips(trips)
-    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle, organization: organization)
-    FactoryBot.create(:freight_margin,
-      default_for: "ocean", organization: organization, applicable: organization, value: 0)
-    shipment.charge_breakdowns.update(tender_id: quotation.tenders.first.id)
-
-    FactoryBot.create(:legacy_charge_breakdown, with_tender: true, quotation: quotation_2)
-    FactoryBot.create(:legacy_exchange_rate, from: "EUR", to: "USD", created_at: quotation.created_at)
   end
 
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   path "/v1/organizations/{organization_id}/quotations" do
@@ -125,7 +98,7 @@ RSpec.describe "Quotations" do
 
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
-        let(:id) { quotation_2.id }
+        let(:id) { query.id }
 
         run_test!
       end
@@ -157,8 +130,8 @@ RSpec.describe "Quotations" do
 
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
-        let(:id) { quotation.id }
-        let(:params) { {tenders: [quotation.tenders.first.id], format: format} }
+        let(:id) { query.id }
+        let(:params) { {tenders: [result.id], format: format} }
         let(:format) { "pdf" }
 
         run_test!

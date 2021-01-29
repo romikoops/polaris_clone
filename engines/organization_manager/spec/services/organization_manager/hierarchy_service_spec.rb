@@ -6,7 +6,7 @@ RSpec.describe OrganizationManager::HierarchyService do
   describe "#perform" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
 
     context "user is nil" do
       let(:user) { nil }

@@ -8,7 +8,6 @@ RSpec.describe Locations::Searchers::Point do
     let(:row) { {city: "Vastra Volunda", province: "Gothenburg", country_code: "SE"} }
 
     before do
-      Locations::Name.reindex
       Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE", [
         "address_components" => [{"types" => ["premise"]}],
         "address" => "Vastra Volunda Gothenburg, Sweden",

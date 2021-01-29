@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::TruckingController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:json_response) { JSON.parse(response.body) }
 

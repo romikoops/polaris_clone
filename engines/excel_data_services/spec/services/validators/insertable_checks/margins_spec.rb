@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:options) do
     {
       organization: organization,

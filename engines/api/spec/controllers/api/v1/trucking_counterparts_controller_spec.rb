@@ -10,7 +10,7 @@ module Api
     let(:user) { FactoryBot.create(:users_user, email: "test@example.com", organization_id: organization.id) }
     let(:cargo_classes) { ["lcl"] }
     let(:load_type) { "cargo_item" }
-    let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:data) { JSON.parse(response.body) }
     let(:wrong_lat) { 10.00 }
@@ -45,7 +45,7 @@ module Api
               expect(response).to be_successful
               expect(data["truckingAvailable"]).to eq true
               expect(data["truckTypes"]).to match_array([trucking_availbilities.second.truck_type])
-              expect(data["countryCodes"]).to eq(["cn"])
+              expect(data["countryCodes"]).to eq([destination_hub.country.code.downcase])
             end
           end
         end
@@ -63,7 +63,7 @@ module Api
               expect(response).to be_successful
               expect(data["truckingAvailable"]).to eq true
               expect(data["truckTypes"]).to match_array([trucking_availbilities.second.truck_type])
-              expect(data["countryCodes"]).to eq(["cn"])
+              expect(data["countryCodes"]).to eq([destination_hub.country.code.downcase])
             end
           end
         end
@@ -84,7 +84,7 @@ module Api
               expect(response).to be_successful
               expect(data["truckingAvailable"]).to eq true
               expect(data["truckTypes"]).to eq([trucking_availbilities.first.truck_type])
-              expect(data["countryCodes"]).to eq(["se"])
+              expect(data["countryCodes"]).to eq([origin_hub.country.code.downcase])
             end
           end
         end
@@ -103,7 +103,7 @@ module Api
               expect(response).to be_successful
               expect(data["truckingAvailable"]).to eq true
               expect(data["truckTypes"]).to eq([trucking_availbilities.first.truck_type])
-              expect(data["countryCodes"]).to eq(["se"])
+              expect(data["countryCodes"]).to eq([origin_hub.country.code.downcase])
             end
           end
         end
@@ -111,8 +111,8 @@ module Api
     end
 
     context "with user" do
-      let(:group_client) { FactoryBot.create(:organizations_user, organization: organization) }
-      let(:no_group_client) { FactoryBot.create(:organizations_user, organization: organization) }
+      let(:group_client) { FactoryBot.create(:users_client, organization: organization) }
+      let(:no_group_client) { FactoryBot.create(:users_client, organization: organization) }
       let(:group) {
         FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
           FactoryBot.create(:groups_membership, member: group_client, group: tapped_group)
@@ -141,7 +141,7 @@ module Api
               expect(response).to be_successful
               expect(data["truckingAvailable"]).to eq true
               expect(data["truckTypes"]).to match_array([trucking_availbilities.second.truck_type])
-              expect(data["countryCodes"]).to eq(["cn"])
+              expect(data["countryCodes"]).to eq([destination_hub.country.code.downcase])
             end
           end
         end

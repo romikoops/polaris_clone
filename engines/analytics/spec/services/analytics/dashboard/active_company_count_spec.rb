@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::ActiveCompanyCount, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+  let(:user) { FactoryBot.create(:users_client, organization: organization, last_login_at: 2.days.ago) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
   let(:company) { FactoryBot.create(:companies_company, organization: organization) }
@@ -14,9 +14,6 @@ RSpec.describe Analytics::Dashboard::ActiveCompanyCount, type: :service do
 
   before do
     ::Organizations.current_id = organization.id
-    user = FactoryBot.create(:organizations_user,
-      organization: organization,
-      last_login_at: 2.days.ago)
     FactoryBot.create(:companies_membership, company: company, member: user)
   end
 

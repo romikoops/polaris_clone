@@ -10,13 +10,12 @@ RSpec.describe Admin::MarginsController, type: :controller do
   let(:organization_vehicle_2) {
     FactoryBot.create(:tenant_vehicle, name: "faster", organization: organization)
   }
-  let!(:user) { FactoryBot.create(:organizations_user, organization: organization) }
-  let!(:currency) { Users::Settings.find_by(user: user).currency }
-  let!(:user_profile) { FactoryBot.create(:profiles_profile, user_id: user.id) }
+  let!(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
+  let!(:currency) { user.settings.currency }
   let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:company) { FactoryBot.create(:companies_company, name: "Test", organization: organization) }
   let!(:membership) { FactoryBot.create(:companies_membership, company: company, member: user) }
-
+  let(:client) { FactoryBot.create(:users_client, organization: organization) }
   let(:group) do
     group = FactoryBot.create(:groups_group, organization: organization)
     FactoryBot.create(:groups_membership, member: user, group: group)
@@ -83,7 +82,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
 
     context "Searching for user margins" do
       it_should_behave_like "a searchable margin target" do
-        let(:target) { user }
+        let(:target) { client }
         let(:target_type) { "user" }
       end
     end
@@ -121,8 +120,8 @@ RSpec.describe Admin::MarginsController, type: :controller do
 
     it "returns http success for a User target" do
       user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing,
-                                                       organization: organization, applicable: user)
-      params = args.merge(targetId: user.id, targetType: "user")
+                                                       organization: organization, applicable: client)
+      params = args.merge(targetId: client.id, targetType: "user")
 
       post :test, params: params
 
@@ -133,7 +132,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
           results.first
         ).to include(
           FactoryBot.build(:margin_preview_result,
-            target: user, target_name: "#{user_profile.first_name} #{user_profile.last_name}",
+            target: client, target_name: "#{client.profile.first_name} #{client.profile.last_name}",
             margin: user_margin, service_level: organization_vehicle_1)
         )
       end

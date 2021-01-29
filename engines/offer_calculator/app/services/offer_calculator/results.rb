@@ -2,84 +2,83 @@
 
 module OfferCalculator
   class Results
-    attr_reader :shipment, :quotation, :wheelhouse, :user, :detailed_schedules, :async, :mailer
+    attr_reader :query, :wheelhouse, :params, :offer
 
-    def initialize(shipment:, quotation:, **kwargs)
-      @shipment = shipment
-      @quotation = quotation
-      @user = kwargs[:user]
-      @wheelhouse = kwargs[:wheelhouse]
-      @async = kwargs[:async]
-      @mailer = kwargs[:mailer] || nil
+    def initialize(query:, params:)
+      @query = query
+      @params = params
     end
 
     def perform
-      shipment_update_handler.set_trucking_nexuses(hubs: hubs)
-      @detailed_schedules = OfferCalculator::Service::OfferCreator.offers(
-        shipment: shipment, quotation: quotation, offers: sorted_offers, wheelhouse: wheelhouse, async: async
-      )
-      handle_quoted_shipments
-    rescue => e
-      quotation.update(error_class: e.class.to_s)
-      raise e unless async
+      OfferCalculator::Service::OfferCreators::ResultBuilder.results(
+        request: request, offers: sorted_offers
+      ).tap do |offer|
+        update_status(status: "completed")
+      end
+    rescue OfferCalculator::Errors::Failure => error
+      persist_error(error: error)
+      update_status(status: "failed")
+      raise error unless async
     end
 
     def hubs
-      @hubs ||= OfferCalculator::Service::HubFinder.new(shipment: shipment, quotation: quotation).perform
+      @hubs ||= OfferCalculator::Service::HubFinder.new(request: request).perform
     end
 
     private
 
+    def request
+      @request ||= OfferCalculator::Request.new(
+        query: query,
+        params: params
+      )
+    end
+
+    delegate :async, :organization, :client, :creator, :delay, :cargo_ready_date, :result_set, to: :request
+
     def sorted_offers
       @sorted_offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
-        shipment: shipment, quotation: quotation, charges: charges, schedules: schedules
+        request: request, charges: charges, schedules: schedules
       )
     end
 
     def charges
       @charges ||= OfferCalculator::Service::ChargeCalculator.charges(
-        shipment: shipment, quotation: quotation, fees: fees
+        request: request, fees: fees
       )
     end
 
     def schedules
-      @schedules ||=
-        if quotation_tool?
-          OfferCalculator::Service::QuoteRouteBuilder.new(shipment: shipment, quotation: quotation)
-            .perform(routes, hubs)
-        else
-          OfferCalculator::Service::ScheduleFinder.new(shipment: shipment, quotation: quotation)
-            .perform(routes, @delay, hubs)
-        end
+      @schedules ||= OfferCalculator::Service::QuoteRouteBuilder.new(request: request).perform(routes, hubs)
     end
 
     def fees
       @fees ||= OfferCalculator::Service::RateBuilder.fees(
-        shipment: shipment, quotation: quotation, inputs: manipulated_rates
+        request: request, inputs: manipulated_rates
       )
     end
 
     def manipulated_rates
       @manipulated_rates ||= OfferCalculator::Service::PricingManipulator.manipulated_pricings(
-        shipment: shipment, quotation: quotation, schedules: schedules, associations: valid_rates
+        request: request, schedules: schedules, associations: valid_rates
       )
     end
 
     def routes
       @routes ||= OfferCalculator::Service::RouteFilter.new(
-        shipment: shipment, quotation: quotation
+        request: request
       ).perform(unfiltered_routes)
     end
 
     def valid_rates
       @valid_rates ||= OfferCalculator::Service::PricingFinder.pricings(
-        shipment: shipment, quotation: quotation, schedules: schedules
+        request: request, schedules: schedules
       )
     end
 
     def unfiltered_routes
       OfferCalculator::Service::RouteFinder.routes(
-        shipment: shipment, quotation: quotation, hubs: hubs, date_range: date_range
+        request: request, hubs: hubs, date_range: date_range
       )
     end
 
@@ -89,41 +88,24 @@ module OfferCalculator
 
     def scope
       @scope ||= ::OrganizationManager::ScopeService.new(
-        target: @user, organization: shipment.organization
+        target: client, organization: organization
       ).fetch
     end
 
-    def shipment_update_handler
-      @shipment_update_handler ||= OfferCalculator::Service::ShipmentUpdateHandler.new(shipment: shipment,
-                                                                                       params: {},
-                                                                                       quotation: quotation,
-                                                                                       wheelhouse: wheelhouse)
-    end
-
     def date_range
-      (shipment.desired_start_date..(shipment.desired_start_date + sanitized_delay_in_days))
-    end
-
-    def sanitized_delay_in_days
-      (@delay ? @delay.try(:to_i) : default_delay_in_days).days
+      (cargo_ready_date..(cargo_ready_date + default_delay_in_days))
     end
 
     def default_delay_in_days
-      60
+      60.days
     end
 
-    def send_admin_email
-      send_email = scope.fetch(:email_all_quotes) && shipment.billing == "external"
-      return if mailer.blank? || send_email.blank?
-
-      mailer.to_s.constantize.new_quotation_admin_email(quotation: quotation, shipment: shipment).deliver_later
+    def persist_error(error:)
+      Journey::Error.create(result_set: request.result_set, code: error.code, property: error.message)
     end
 
-    def handle_quoted_shipments
-      return unless scope["open_quotation_tool"] || scope["closed_quotation_tool"]
-      send_admin_email
-
-      OfferCalculator::QuotedShipmentsJob.perform_later(shipment_id: shipment.id)
+    def update_status(status:)
+      request.result_set.update(status: status)
     end
   end
 end

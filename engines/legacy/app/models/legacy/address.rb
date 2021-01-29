@@ -12,7 +12,7 @@ module Legacy
     after_validation :reverse_geocode, if: proc { |address| address.country.nil? }
 
     has_many :user_addresses, class_name: "Legacy::UserAddress"
-    has_many :users, class_name: "Organizations::User", through: :user_addresses, dependent: :destroy
+    has_many :users, class_name: "Users::Client", through: :user_addresses, dependent: :destroy
     has_many :shipments
     before_validation :set_point
 
@@ -29,7 +29,7 @@ module Legacy
         address.city = geo.city
         address.zip_code = geo.postal_code
 
-        address.country = Country.find_by(code: geo.country_code)
+        address.country = Legacy::Country.find_by(code: geo.country_code)
       end
 
       address

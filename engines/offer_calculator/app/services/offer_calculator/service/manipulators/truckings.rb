@@ -9,7 +9,7 @@ module OfferCalculator
         def arguments(object:)
           {
             dates: margin_dates(trucking: object),
-            cargo_class_count: shipment.cargo_classes.count,
+            cargo_class_count: cargo_class_count,
             trucking_pricing: object
           }
         end

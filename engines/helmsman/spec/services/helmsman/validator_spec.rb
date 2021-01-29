@@ -6,7 +6,7 @@ RSpec.describe Helmsman::Validator do
   context "validating routes for the target organization" do
     describe "perform" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
-      let(:user) { FactoryBot.create(:organizations_user) }
+      let(:user) { FactoryBot.create(:users_client) }
       let!(:hub_locations) do
         %w[Gothenburg Shanghai Ningbo Hamburg Rotterdam Veracruz].map do |name|
           FactoryBot.create("#{name.downcase}_location".to_sym, all_mots: true)

@@ -320,9 +320,11 @@ module Pricings
     end
 
     def margin_target_name(applicable)
-      return applicable.try(:name) unless applicable.is_a?(Organizations::User)
-
-      Profiles::ProfileService.fetch(user_id: applicable.id)&.full_name
+      if applicable.respond_to?(:name)
+        applicable.try(:name)
+      elsif applicable.respond_to?(:profile)
+        applicable.profile&.full_name
+      end
     end
 
     def update_meta(manipulated_pricing)

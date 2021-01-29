@@ -4,7 +4,7 @@ class UserAddressesController < ApplicationController
   skip_before_action :doorkeeper_authorize!
 
   def index
-    user = Organizations::User.find(params[:user_id])
+    user = Users::Client.find(params[:user_id])
     user_addresses = addresses_for_user(user: user)
     resp = user_addresses.map { |user_address|
       loc = user_address.address
@@ -16,7 +16,7 @@ class UserAddressesController < ApplicationController
   end
 
   def create
-    user = Organizations::User.find_by(id: params[:user_id])
+    user = Users::Client.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
     address = Address.create_from_raw_params!(JSON.parse(params[:new_address]))
     user_addresses.create!(primary: false, address_id: address.id)
@@ -29,7 +29,7 @@ class UserAddressesController < ApplicationController
   end
 
   def update
-    user = Organizations::User.find_by(id: params[:user_id])
+    user = Users::Client.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
     primary_uls = user_addresses.where(primary: true)
     primary_uls.each do |ul|
@@ -47,7 +47,7 @@ class UserAddressesController < ApplicationController
   end
 
   def edit
-    user = Organizations::User.find_by(id: params[:user_id])
+    user = Users::Client.find_by(id: params[:user_id])
     user_addresses = addresses_for_user(user: user)
     address_data = JSON.parse(params[:edit_address])
     address_data.delete("id")

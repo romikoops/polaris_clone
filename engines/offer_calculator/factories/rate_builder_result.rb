@@ -21,9 +21,9 @@ FactoryBot.define do
         rate_basis = fee_data.dig("rate_basis")
         result.fees << FactoryBot.build(:rate_builder_fee,
           charge_category: charge_category,
-          measures: result.measures.children.first,
+          measures: result.measures.targets.first,
           raw_fee: fee_data,
-          target: rate_basis == "PER_SHIPMENT" ? nil : result.measures.children.first.cargo)
+          targets: rate_basis == "PER_SHIPMENT" ? nil : result.measures.targets.first.cargo_units)
       end
     end
   end

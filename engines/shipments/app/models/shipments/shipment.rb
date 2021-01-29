@@ -7,7 +7,7 @@ module Shipments
     belongs_to :destination, class_name: "Routing::Terminal"
     belongs_to :origin, class_name: "Routing::Terminal"
     belongs_to :organization, class_name: "Organizations::Organization"
-    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :user, class_name: "Users::Client"
 
     has_many :documents, as: :attachable
     has_many :notifyees, class_name: "Contact"
@@ -56,5 +56,4 @@ end
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #  fk_rails_...  (origin_id => routing_terminals.id)
 #  fk_rails_...  (sandbox_id => tenants_sandboxes.id)
-#  fk_rails_...  (user_id => users_users.id)
 #

@@ -6,7 +6,7 @@ RSpec.describe OrganizationManager::GroupsService do
   describe "#perform" do
     let!(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
-    let(:user) { FactoryBot.create(:organizations_user, organization: organization) }
+    let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
     let(:target) { user }
     let(:exclude_default) { false }

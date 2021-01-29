@@ -63,23 +63,17 @@ module OfferCalculator
         DEFAULT_MOT = "general"
         DEFAULT_CONVERSION_RATIO = 1_000
 
-        def self.errors(modes_of_transport:, cargo:, itinerary_ids:, tenant_vehicle_ids:, final: false)
+        def self.errors(request:, pricings:, final: false)
           new(
-            modes_of_transport: modes_of_transport,
-            cargo: cargo,
-            itinerary_ids: itinerary_ids,
-            tenant_vehicle_ids: tenant_vehicle_ids,
+            request: request,
+            pricings: pricings,
             final: final
           ).perform
         end
 
-        def initialize(modes_of_transport:, cargo:, tenant_vehicle_ids:, itinerary_ids: [], final: false)
-          @modes_of_transport = modes_of_transport
-          @cargo = cargo
-          @max_dimensions_bundles = ::Legacy::MaxDimensionsBundle.where(organization_id: organization.id)
-          @itinerary_ids = itinerary_ids
-          @tenant_vehicle_ids = tenant_vehicle_ids
-          @carrier_ids = Legacy::TenantVehicle.where(id: @tenant_vehicle_ids).pluck(:carrier_id)
+        def initialize(request:, pricings:, final: false)
+          @request = request
+          @pricings = pricings
           @aggregate_errors = []
           @errors = []
           @final = final
@@ -87,15 +81,82 @@ module OfferCalculator
 
         private
 
-        attr_reader :max_dimensions_bundles, :cargo, :itinerary_ids, :carrier_ids,
-          :tenant_vehicle_ids, :errors, :aggregate_errors, :final, :modes_of_transport
+        attr_reader :errors, :aggregate_errors, :final, :pricings, :request
 
-        def organization
-          @organization ||= Organizations::Organization.current
+        delegate :organization, :load_type, :client, :creator, to: :request
+
+        def modes_of_transport
+          @modes_of_transport ||= begin
+            return pricing_modes_of_transport unless trucking_involved?
+
+            pricing_modes_of_transport + ["truck_carriage"]
+          end
+        end
+
+        def pricing_modes_of_transport
+          @pricing_modes_of_transport ||= pricings.joins(:itinerary)
+            .select("itineraries.mode_of_transport")
+            .distinct
+            .pluck(:mode_of_transport)
+        end
+
+        def trucking_involved?
+          request.has_pre_carriage? || request.has_on_carriage?
+        end
+
+        def itinerary_ids
+          @itinerary_ids ||= pricings.select(:itinerary_id).distinct
+        end
+
+        def tenant_vehicle_ids
+          @tenant_vehicle_ids ||= pricings.select(:tenant_vehicle_id).distinct
+        end
+
+        def carrier_ids
+          @carrier_ids ||= Legacy::TenantVehicle.where(id: @tenant_vehicle_ids).pluck(:carrier_id)
+        end
+
+        def cargo_units
+          measured_request.targets
+        end
+
+        def largest_ratio_rate
+          pricing = pricings_for_rate.order(wm_rate: :desc).first
+
+          Pricings::ManipulatorResult.new(
+            original: pricing,
+            result: pricing.as_json,
+            breakdowns: [],
+            flat_margins: {}
+          )
+        end
+
+        def pricings_for_rate
+          return pricings if pricings.present?
+
+          Pricings::Pricing.where(organization: organization).order(wm_rate: :desc).limit(1)
+        end
+
+        def measured_request
+          OfferCalculator::Service::Measurements::Request.new(
+            request: request, scope: scope, object: largest_ratio_rate
+          )
+        end
+
+        def scope
+          @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
+        end
+
+        def max_dimensions_bundles
+          @max_dimensions_bundles ||= ::Legacy::MaxDimensionsBundle.where(organization_id: organization.id)
+        end
+
+        def cargo_class_from_unit(unit:)
+          unit.cargo_class.include?("lcl") ? "lcl" : unit.cargo_class
         end
 
         def validate_cargo(cargo_unit:)
-          cargo_class = cargo_unit_class(cargo_unit: cargo_unit)
+          cargo_class = cargo_class_from_unit(unit: cargo_unit)
           max_dimensions_by_cargo_class = filtered_max_dimensions.where(cargo_class: cargo_class)
           lcl_max_dimensions = filtered_max_dimensions.where(cargo_class: "lcl")
           attributes = keys_for_validation(cargo_unit: cargo_unit)
@@ -116,7 +177,7 @@ module OfferCalculator
               max_dimensions: lcl_max_dimensions,
               id: cargo_unit.id,
               attribute: :chargeable_weight,
-              measurement: chargeable_weight(object: cargo_unit),
+              measurement: cargo_unit.chargeable_weight,
               cargo: cargo_unit
             )
           end
@@ -131,7 +192,7 @@ module OfferCalculator
             max_dimensions: lcl_max_dimensions,
             id: cargo_unit.id,
             attribute: :volume,
-            measurement: cargo_unit.volume,
+            measurement: cargo_unit.total_volume,
             cargo: cargo_unit
           )
         end
@@ -140,19 +201,11 @@ module OfferCalculator
           (VOLUME_DIMENSIONS - attributes).empty?
         end
 
-        def cargo_unit_class(cargo_unit:)
-          return "lcl" if cargo_unit.cargo_class_00?
-
-          Cargo::Creator::CARGO_CLASS_LEGACY_MAPPER.key(cargo_unit.cargo_class) || "fcl_20"
-        end
-
         def load_type
-          @load_type ||= cargo.units.first.cargo_class_00? ? :cargo_item : :container
+          @load_type ||= cargo_units.first.cargo_class == "lcl" ? :cargo_item : :container
         end
 
         def final_validation(cargo_unit:)
-          return if cargo_unit.valid?
-
           validation_attributes.each do |attribute|
             next if cargo_unit.send(CARGO_DIMENSION_LOOKUP[attribute]).value.positive?
 
@@ -183,12 +236,13 @@ module OfferCalculator
             handle_negative_value(id: id, attribute: attribute)
             return
           end
-
           limit = si_attribute_limit(max_dimensions: max_dimensions, attribute: attribute)
-          return build_error(attribute: attribute, limit: limit, id: id, cargo: cargo) if limit < measurement
+          return if limit >= measurement
+          
+          build_error(attribute: attribute, limit: limit, id: id, cargo: cargo, measurement: measurement)
         end
 
-        def build_error(attribute:, limit:, id:, cargo:)
+        def build_error(attribute:, limit:, id:, cargo:, measurement:)
           message = "#{HUMANIZED_DIMENSION_LOOKUP[attribute]} exceeds the limit of #{limit}"
           message = "Aggregate " + message if id == "aggregate"
           code = ERROR_CODE_DIMENSION_LOOKUP[attribute]
@@ -200,7 +254,8 @@ module OfferCalculator
             attribute: attribute,
             limit: dynamic_limit(limit: limit, attribute: attribute),
             section: "cargo_item",
-            code: code
+            code: code,
+            value: measurement.format
           )
 
           return if errors.any? do |match_error|

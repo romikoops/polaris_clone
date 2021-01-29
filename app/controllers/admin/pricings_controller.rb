@@ -57,7 +57,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     itinerary = Itinerary.find_by(id: params[:id])
 
     pricings = pricings_based_on_scope(itinerary)
-    if current_user.is_a? Organizations::User
+    if current_user.is_a? Users::Client
       # Filter out all pricings that have a user with `internal == true`, but keep the ones that don't have a user
       pricings = pricings.left_outer_joins(:user)
         .where.not(users_users: {organization_id: nil})

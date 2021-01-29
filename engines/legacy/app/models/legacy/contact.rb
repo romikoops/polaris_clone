@@ -4,7 +4,7 @@ module Legacy
   class Contact < ApplicationRecord
     self.table_name = "contacts"
 
-    belongs_to :user, class_name: "Organizations::User"
+    belongs_to :user, class_name: "Users::Client"
     has_many :shipment_contacts
     belongs_to :address, optional: true
   end
@@ -32,8 +32,4 @@ end
 #
 #  index_contacts_on_sandbox_id  (sandbox_id)
 #  index_contacts_on_user_id     (user_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (user_id => users_users.id)
 #
