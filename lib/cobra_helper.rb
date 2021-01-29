@@ -62,12 +62,14 @@ class CobraHelper
 
   def specs
     @specs ||= definition.specs
-      .select { |s| s.source.respond_to?(:path) && s.source.path.to_s[/engines/] }
-      .map { |s| [s.name, s] }
+      .select { |spec| spec.source.respond_to?(:path) && spec.source.path.to_s[/engines/] }
+      .map { |spec| [spec.name, spec] }
       .to_h
   end
 
   def packages
-    @packages ||= specs.values.group_by { |s| s.metadata.fetch("package") { s.metadata.fetch("type") } }
+    @packages ||= specs.values.group_by do |spec|
+      spec.metadata.fetch("package") { spec.metadata.fetch("type") }
+    end
   end
 end
