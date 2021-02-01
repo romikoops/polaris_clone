@@ -39,9 +39,9 @@ module IDP
     end
 
     def update_or_create_settings(saml_user:)
-      return if saml_user.profile.present?
+      return if saml_user.settings.present?
 
-      saml_user.settings_attributes = { currency: default_currency }
+      saml_user.settings_attributes = {currency: default_currency}
     end
 
     def attach_to_groups
@@ -93,7 +93,9 @@ module IDP
     end
 
     def default_currency
-      Organizations::Scope.find_by(target_id: organization_id, target_type: "Organizations::Organization").content.dig(:default_currency)
+      Organizations::Scope.find_by(
+        target_id: organization_id, target_type: "Organizations::Organization"
+      ).content.dig(:default_currency)
     end
   end
 end

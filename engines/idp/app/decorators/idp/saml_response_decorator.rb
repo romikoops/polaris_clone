@@ -9,7 +9,7 @@ module IDP
       {
         first_name: attributes.single(:firstName),
         last_name: attributes.single(:lastName),
-        phone: attributes.single(:phone),
+        phone: attributes.single(:phoneNumber),
         external_id: attributes.single(:customerID)
       }
     end
