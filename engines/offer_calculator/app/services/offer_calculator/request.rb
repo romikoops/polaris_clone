@@ -73,7 +73,7 @@ module OfferCalculator
     end
 
     def cargo_classes
-      @cargo_classes ||= cargo_units.pluck(:cargo_class)
+      @cargo_classes ||= cargo_units.pluck(:cargo_class).uniq
     end
 
     def persist_cargo?

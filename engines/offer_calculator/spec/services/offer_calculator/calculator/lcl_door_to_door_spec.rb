@@ -99,6 +99,31 @@ RSpec.describe OfferCalculator::Calculator do
       end
     end
 
+    context "with single trucking Availability and multiple cargo units" do
+      let(:cargo_items_attributes) do
+        [
+          {
+            "payload_in_kg" => 120,
+            "total_volume" => 0,
+            "total_weight" => 0,
+            "width" => 120,
+            "length" => 80,
+            "height" => 120,
+            "quantity" => 1,
+            "cargo_item_type_id" => pallet.id,
+            "dangerous_goods" => false,
+            "stackable" => true
+          }
+        ] * 2
+      end
+
+      it "perform a booking calculation" do
+        aggregate_failures do
+          expect(results.length).to eq(1)
+        end
+      end
+    end
+
     context "with multiple trucking Availability" do
       before do
         cargo_classes.each do |cargo_class|
