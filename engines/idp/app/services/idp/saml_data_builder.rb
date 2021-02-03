@@ -21,7 +21,7 @@ module IDP
 
     def user
       @user ||= Users::Client.find_or_initialize_by(
-        organization_id: organization_id,
+        organization: organization,
         email: saml_response.email || saml_response.name_id
       ).tap do |saml_user|
         update_or_create_profile(saml_user: saml_user)
@@ -40,14 +40,14 @@ module IDP
     end
 
     def update_or_create_settings(saml_user:)
-      saml_user.settings.currency = default_currency
+      saml_user.settings.update(currency: default_currency)
     end
 
     def attach_to_groups
       group_names = saml_response.groups
       return if group_names.blank?
 
-      groups = Groups::Group.where(name: group_names, organization_id: organization_id)
+      groups = Groups::Group.where(name: group_names, organization: organization)
       return if groups.empty?
 
       Groups::Membership.where(member: user).where.not(group: groups)&.destroy_all
@@ -61,7 +61,7 @@ module IDP
       name = company_attributes[:name]
       return if id.blank?
 
-      company = Companies::Company.find_or_initialize_by(external_id: id, organization_id: organization_id)
+      company = Companies::Company.find_or_initialize_by(external_id: id, organization: organization)
       company.name = name
       company.address = address
       company.save!
@@ -93,9 +93,13 @@ module IDP
     end
 
     def default_currency
-      Organizations::Scope.find_by(
-        target_id: organization_id, target_type: "Organizations::Organization"
-      ).content.dig(:default_currency)
+      OrganizationManager::ScopeService.new(
+        target: nil, organization: organization
+      ).fetch(:default_currency)
+    end
+
+    def organization
+      @organization ||= Organizations::Organization.find(organization_id)
     end
   end
 end

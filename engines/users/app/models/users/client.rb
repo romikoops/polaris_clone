@@ -28,14 +28,14 @@ module Users
     def settings
       super || Users::ClientSettings.new(
         currency: organization_currency,
-        user_id: id
+        user: self
       )
     end
 
     def organization_currency
       return Organizations::DEFAULT_SCOPE["default_currency"] if organization.nil? || organization.scope.nil?
 
-      organization.scope.content["default_currency"]
+      organization.scope.content["default_currency"] || Organizations::DEFAULT_SCOPE["default_currency"]
     end
   end
 end

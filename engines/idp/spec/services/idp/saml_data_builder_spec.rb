@@ -6,24 +6,28 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
   let(:organization) {
     FactoryBot.create(:organizations_organization,
       domains: [organizations_domain],
-      theme: FactoryBot.build(:organizations_theme))
+      theme: FactoryBot.build(:organizations_theme),
+      scope: scope)
   }
-
+  let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content)}
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:organizations_domain) { FactoryBot.create(:organizations_domain, domain: "test.host", default: true) }
   let(:user_groups) {
     OrganizationManager::GroupsService.new(target: created_user, organization: organization).fetch
   }
-  let(:currency) { organization.scope.content[:default_currency] }
+  let(:currency) { "USD" }
   let(:email) { "test@itsmycargo.com" }
   let(:created_user) { Users::Client.unscoped.find_by(email: email, organization_id: organization.id) }
   let(:attributes) do
     {"firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "customerID" => ["ABCDE"]}
   end
+  let(:scope_content) { { default_currency: currency } }
   let(:saml_attributes) { OneLogin::RubySaml::Attributes.new(attributes) }
   let(:one_login) { double("OneLogin::RubySaml::Response", is_valid?: true) }
   let(:decorated_saml_response) { IDP::SamlResponseDecorator.new(one_login) }
-  let(:saml_data_builder) { described_class.new(saml_response: decorated_saml_response, organization_id: organization.id) }
+  let(:saml_data_builder) {
+    described_class.new(saml_response: decorated_saml_response, organization_id: organization.id)
+  }
 
   before do
     FactoryBot.create(:application, name: "dipper")
@@ -54,6 +58,15 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       it "creates a Settings object for the user", :aggregated_failures do
         expect(created_user.settings).to be_present
         expect(created_user.settings.currency).to eq(currency)
+      end
+
+      context "when Org scope does not have default currency defined" do
+        let(:scope_content) { {} }
+
+        it "creates a Settings object for the user", :aggregated_failures do
+          expect(created_user.settings).to be_present
+          expect(created_user.settings.currency).to eq(Organizations::DEFAULT_SCOPE["default_currency"])
+        end
       end
     end
 
