@@ -8,7 +8,7 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
   let(:cargo_classes) { ["lcl"] }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:source) { FactoryBot.create(:application) }
+  let(:source) { FactoryBot.create(:application, name: "siren") }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }

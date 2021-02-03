@@ -45,9 +45,13 @@ module Api
         Wheelhouse::QueryService.new(
           creator: mock_user,
           client: mock_user,
-          source: doorkeeper_application,
+          source: mock_doorkeeper_application,
           params: query_params.to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym }
         )
+      end
+
+      def mock_doorkeeper_application
+        Doorkeeper::Application.find_by(name: "siren")
       end
 
       def query_params

@@ -17,7 +17,8 @@ module Api
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
+    let(:source) { FactoryBot.create(:application, name: "siren") }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: source) }
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe "POST #create" do
