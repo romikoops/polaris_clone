@@ -103,7 +103,7 @@ module Api
     end
 
     def doorkeeper_application
-      @doorkeeper_application ||= Doorkeeper::Application.find_by(request.params.slice(:redirect_uri))
+      @doorkeeper_application ||= doorkeeper_token.application
     end
 
     def organization_results

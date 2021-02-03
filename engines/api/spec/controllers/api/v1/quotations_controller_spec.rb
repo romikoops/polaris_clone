@@ -16,7 +16,13 @@ module Api
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
+    let(:source) { FactoryBot.create(:application, name: "bridge") }
+    let(:access_token) {
+      FactoryBot.create(:access_token,
+        resource_owner_id: user.id,
+        scopes: "public",
+        application: source)
+    }
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe "POST #create" do
@@ -35,8 +41,6 @@ module Api
         FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container",
                                                tenant_vehicle: tenant_vehicle_2)
       }
-      let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
-      let(:token_header) { "Bearer #{access_token.token}" }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) do
         [tenant_vehicle, tenant_vehicle_2].flat_map do |tv|
@@ -72,6 +76,7 @@ module Api
       let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
       let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
       let(:carta_double) { double("Carta::Api") }
+      let(:query) { Journey::Query.find(response_data.dig("id")) }
 
       context "with available tenders" do
         before do
@@ -97,7 +102,7 @@ module Api
           amounts = response_data.dig("attributes", "tenders", "data").map { |i|
             i.dig("attributes", "total", "amount")
           }
-
+          expect(query.source_id).to eq(source.id)
           expect(amounts).to eq(["170.0", "190.0"])
           expect(response_data.dig("attributes", "loadType")).to eq("container")
         end

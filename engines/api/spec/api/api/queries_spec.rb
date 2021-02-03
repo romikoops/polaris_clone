@@ -14,8 +14,8 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
   let(:carta_double) { double("Carta::Api") }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
+
   before do
-    allow(controller).to receive(:doorkeeper_application).and_return(FactoryBot.create(:application))
     ::Organizations.current_id = organization.id
     FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
     allow(Carta::Api).to receive(:new).and_return(carta_double)
@@ -35,8 +35,14 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
       destinationId: destinationId
     }
   }
-  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) do
+    FactoryBot.create(:access_token,
+      resource_owner_id: user.id,
+      scopes: "public",
+      application: source)
+  end
   let(:Authorization) { "Bearer #{access_token.token}" }
+
   path "/v2/organizations/{organization_id}/queries" do
     post "Create new query" do
       tags "Query"
