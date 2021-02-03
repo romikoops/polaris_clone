@@ -4,8 +4,12 @@ require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Measurements::Request do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:quotation) { FactoryBot.create(:quotations_quotation) }
-  let(:request) { FactoryBot.create(:offer_calculator_request, cargo_trait: cargo_trait) }
+  let(:query) {
+    FactoryBot.build(:journey_query,
+      organization: organization,
+      load_type: cargo_trait)
+  }
+  let(:request) { FactoryBot.create(:offer_calculator_request, query: query, cargo_trait: cargo_trait) }
   let(:cargo_trait) { :lcl }
   let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization, wm_rate: 2000) }
   let(:manipulated_result) do

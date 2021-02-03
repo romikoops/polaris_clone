@@ -19,10 +19,17 @@ module Wheelhouse
       ]
     end
     let(:scope_content) { {} }
+    let(:query) {
+      FactoryBot.build(:journey_query,
+        client: user,
+        organization: organization,
+        load_type: load_type == "cargo_item" ? "lcl" : "fcl")
+    }
     let(:request) do
       FactoryBot.build(:offer_calculator_request,
         organization: organization,
         params: request_params,
+        query: query,
         client: user)
     end
     let(:request_params) do

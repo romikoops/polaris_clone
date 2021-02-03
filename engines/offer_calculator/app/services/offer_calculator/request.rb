@@ -68,8 +68,7 @@ module OfferCalculator
     end
 
     def load_type
-      @load_type ||= params["load_type"] ||
-        (cargo_classes.first.include?("fcl") ? "container" : "cargo_item")
+      @load_type ||= query.load_type == "fcl" ? "container" : "cargo_item"
     end
 
     def cargo_classes
