@@ -73,6 +73,7 @@ module IDP
     def create_token
       token = Doorkeeper::AccessToken.create!(resource_owner_id: user.id,
                                               refresh_token: refresh_token,
+                                              application: Doorkeeper::Application.find_by(name: "dipper"),
                                               expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
                                               scopes: "public")
       Doorkeeper::OAuth::TokenResponse.new(token).body

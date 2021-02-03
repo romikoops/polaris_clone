@@ -26,6 +26,7 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
   let(:saml_data_builder) { described_class.new(saml_response: decorated_saml_response, organization_id: organization.id) }
 
   before do
+    FactoryBot.create(:application, name: "dipper")
     Organizations.current_id = organization.id
     FactoryBot.create(:organizations_scope, target: organization)
     allow(OneLogin::RubySaml::Response).to receive(:new).and_return(one_login)

@@ -21,6 +21,7 @@ RSpec.describe IDP::SamlController, type: :request do
   let(:one_login) { double("OneLogin::RubySaml::Response", is_valid?: true) }
 
   before do
+    FactoryBot.create(:application, name: "dipper")
     host! "idp.itsmycargo.test"
   end
 
