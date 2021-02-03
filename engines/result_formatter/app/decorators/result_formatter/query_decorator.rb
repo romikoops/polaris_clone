@@ -101,7 +101,7 @@ module ResultFormatter
     end
 
     def currency
-      return scope[:default_currency] if client.nil?
+      return scope[:default_currency] if client_id.nil?
 
       client.settings.currency
     end

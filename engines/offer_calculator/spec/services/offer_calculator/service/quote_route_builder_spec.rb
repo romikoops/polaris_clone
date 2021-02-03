@@ -36,7 +36,7 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
+    organization.scope.update(content: scope_content)
   end
 
   describe ".perform" do

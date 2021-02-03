@@ -53,13 +53,13 @@ RSpec.describe Shipments::BookingProcessController do
 
     describe ".save_and_send_quotes" do
       it "successfully calls the mailer and return the quote Document" do
-        post :send_quotes, params: {organization_id: organization.id, shipment_id: result.id, quotes: quotes}
+        post :send_quotes, params: {organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}}
       end
     end
 
     describe ".download_quotations" do
       it "successfully calls the mailer and return the quote Document" do
-        post :download_quotations, params: {organization_id: organization.id, shipment_id: result.id, quotes: quotes}
+        post :download_quotations, params: {organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}}
         expect(response_data.dig("url")).to include("active_storage/blobs")
       end
     end

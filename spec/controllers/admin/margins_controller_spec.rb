@@ -28,7 +28,6 @@ RSpec.describe Admin::MarginsController, type: :controller do
     ::Organizations.current_id = organization.id
     append_token_header
     FactoryBot.create(:groups_group, :default, organization: organization)
-    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     %w[ocean air rail truck trucking local_charge].map do |mot|
       [
         FactoryBot.create(

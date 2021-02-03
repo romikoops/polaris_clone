@@ -34,7 +34,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
 
     context "with custom period" do
       before do
-        FactoryBot.create(:organizations_scope, target: organization, content: {validity_period: 14})
+        organization.scope.update(content: {validity_period: 14})
       end
 
       it "returns a the valid until date" do

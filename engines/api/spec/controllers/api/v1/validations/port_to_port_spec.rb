@@ -105,7 +105,7 @@ module Api
         end
 
         before do
-          FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+          organization.scope.update(content: {dedicated_pricings_only: true})
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers["Authorization"] = token_header
           post :create, params: params

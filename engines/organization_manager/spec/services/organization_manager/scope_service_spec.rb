@@ -4,17 +4,18 @@ require "rails_helper"
 
 RSpec.describe OrganizationManager::ScopeService do
   describe "#fetch" do
-    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:organization) { FactoryBot.create(:organizations_organization, scope: organizations_scope) }
+    let(:organizations_scope) { FactoryBot.build(:organizations_scope, content: content) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let!(:member) { FactoryBot.create(:companies_membership, member: user, company: company) }
 
     let(:content) { {} }
 
-    let(:scope) { described_class.new(target: user) }
+    let(:scope) { described_class.new(target: user, organization: organization) }
 
     before do
-      FactoryBot.create(:organizations_scope, target: user, content: content)
+      Organizations.current_id = organization.id
     end
 
     context "when no key given" do

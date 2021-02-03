@@ -124,7 +124,7 @@ module Api
         context "when no client is provided" do
           before do
             params[:quote][:user_id] = nil
-            FactoryBot.create(:organizations_scope, target: organization, content: {default_currency: "usd"})
+            organization.scope.update(content: {default_currency: "usd"})
           end
 
           it "returns prices with default margins" do
@@ -333,34 +333,33 @@ module Api
     end
 
     describe "GET #index" do
-      include_context "journey_query"
-      include_context "journey_result"
-
-      let(:user) { query.client }
-
       before do
         Organizations.current_id = organization.id
       end
 
       context "when quotations exist" do
-        before do
-          multiple_results
+        let!(:queries) do
+          FactoryBot.create_list(:journey_query, 3, organization: organization).tap do |queries|
+            queries.each do |query|
+              FactoryBot.create(:journey_result_set, query: query)
+            end
+          end
         end
 
         it "renders a list of quotations" do
           get :index, params: {organization_id: organization.id}
 
-          aggregate_failures do
-            expect(response_data.map { |q| q["id"] }).to match multiple_results.pluck(:id)
-          end
+          expected_response = Journey::Query.order("created_at DESC").pluck(:id)
+
+          expect(response_data.map { |q| q["id"] }).to match expected_response
         end
 
         it "paginates results" do
           get :index, params: {organization_id: organization.id, per_page: 2}
 
-          aggregate_failures do
-            expect(response_data.map { |q| q["id"] }).to match_array multiple_results.pluck(:id)[0..1]
-          end
+          expected_response = Journey::Query.order("created_at DESC").pluck(:id)[0..1]
+
+          expect(response_data.map { |q| q["id"] }).to match_array expected_response
         end
       end
 
@@ -401,8 +400,16 @@ module Api
           get :index, params: {organization_id: organization.id, sort_by: "selected_date", direction: "desc"}
 
           aggregate_failures do
-            expect(response_data.first["id"]).to eq newer_result_set.results.first.id
-            expect(response_data.last["id"]).to eq older_result_set.results.first.id
+            expect(response_data.first["id"]).to eq newer_query.id
+            expect(response_data.last["id"]).to eq older_query.id
+          end
+        end
+
+        it "filters by cargo_ready_date desc" do
+          get :index, params: {organization_id: organization.id, start_date: 1.minute.ago, end_date: 36.hours.from_now}
+
+          aggregate_failures do
+            expect(response_data.pluck("id")).to eq [older_query.id]
           end
         end
       end

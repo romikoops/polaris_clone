@@ -30,7 +30,6 @@ RSpec.describe Pricings::Preview do
   end
 
   before do
-    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     %w[ocean air rail truck trucking local_charge].flat_map do |mot|
       [
         FactoryBot.create(:freight_margin,

@@ -27,9 +27,10 @@ module Api
     attr_reader :client_attributes, :profile_attributes, :settings_attributes, :address_attributes, :group_id
 
     def client
-      @client ||= Users::Client.new(client_attributes.merge(
-        profile_attributes: profile_attributes, settings_attributes: settings_attributes
-      ))
+      @client ||= Users::Client.new(client_attributes).tap do |new_user|
+        new_user.profile = Users::ClientProfile.new(profile_attributes)
+        new_user.settings = Users::ClientSettings.new(settings_attributes)
+      end
     end
 
     def company

@@ -7,6 +7,7 @@ FactoryBot.define do
 
     domains { [association(:organizations_domain, default: true, organization: instance)] }
     theme { association(:organizations_theme, organization: instance) }
+    scope { association(:organizations_scope, target: instance) }
 
     trait :with_max_dimensions do
       after(:create) do |organization, evaluator|

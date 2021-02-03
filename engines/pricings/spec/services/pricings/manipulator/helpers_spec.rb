@@ -48,7 +48,6 @@ RSpec.describe Pricings::Manipulator do
   }
 
   before do
-    FactoryBot.create(:organizations_scope, content: {}, target: organization)
     FactoryBot.create(:freight_margin,
       default_for: "ocean", organization: organization, applicable: organization, value: 0)
   end

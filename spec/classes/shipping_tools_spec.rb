@@ -12,10 +12,11 @@ RSpec.describe ShippingTools do
       .to_return(status: 200, body: "", headers: {})
   end
 
-  let!(:organization) do
-    FactoryBot.create(:organizations_organization,
-      scope_attributes: {content: {send_email_on_quote_download: true, send_email_on_quote_email: true}})
-  end
+  let!(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
+  let(:scope) {
+    FactoryBot.build(:organizations_scope,
+      content: {send_email_on_quote_download: true, send_email_on_quote_email: true})
+  }
   let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:itinerary_2) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
   let(:trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id) }
@@ -57,7 +58,6 @@ RSpec.describe ShippingTools do
       }
     }.with_indifferent_access
   end
-  let(:scope) { organization.scope }
 
   describe ".request_shipment" do
     let(:completed) { true }

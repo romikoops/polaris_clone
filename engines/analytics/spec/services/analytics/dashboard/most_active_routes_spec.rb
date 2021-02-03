@@ -32,7 +32,7 @@ RSpec.describe Analytics::Dashboard::MostActiveRoutes, type: :service do
   end
 
   context "when a quote shop" do
-    before { FactoryBot.create(:organizations_scope, target: organization, content: {closed_quotation_tool: true}) }
+    before { organization.scope.update(content: {closed_quotation_tool: true}) }
 
     describe ".data" do
       it "returns an array with the itinerary count for the time period" do

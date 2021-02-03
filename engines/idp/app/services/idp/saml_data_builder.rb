@@ -26,22 +26,21 @@ module IDP
       ).tap do |saml_user|
         update_or_create_profile(saml_user: saml_user)
         update_or_create_settings(saml_user: saml_user)
+
         saml_user.save!
       end
     end
 
     def update_or_create_profile(saml_user:)
-      if saml_user.profile.present?
+      if saml_user.profile.user_id.present?
         saml_user.profile.assign_attributes(saml_response.profile_attributes)
       else
-        saml_user.profile_attributes = saml_response.profile_attributes
+        saml_user.profile = Users::ClientProfile.new(saml_response.profile_attributes)
       end
     end
 
     def update_or_create_settings(saml_user:)
-      return if saml_user.settings.present?
-
-      saml_user.settings_attributes = {currency: default_currency}
+      saml_user.settings.currency = default_currency
     end
 
     def attach_to_groups

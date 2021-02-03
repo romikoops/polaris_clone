@@ -42,7 +42,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerDay, type: :service do
   end
 
   context "when a quote shop" do
-    before { FactoryBot.create(:organizations_scope, target: organization, content: {closed_quotation_tool: true}) }
+    before { organization.scope.update(content: {closed_quotation_tool: true}) }
 
     describe ".data" do
       it "returns a count of requests and their date times" do

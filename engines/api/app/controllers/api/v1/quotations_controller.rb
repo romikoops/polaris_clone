@@ -8,16 +8,12 @@ module Api
       SORTING_ATTRIBUTES = ["selected_date", "load_type", "last_name", "origin", "destination"]
 
       def index
-        sort_by = SORTING_ATTRIBUTES.include?(index_params[:sort_by]) ? index_params[:sort_by] : "selected_date"
-        quotations = filtered_quotations.sorted(sort_by: sort_by,
-                                                direction: sanitize_direction(index_params[:direction]))
+        paginated = paginate(filtered_queries)
 
-        paginated = paginate(quotations)
-
-        decorated_quotations = Api::V1::ResultDecorator.decorate_collection(paginated,
+        decorated_queries = Api::V1::QueryDecorator.decorate_collection(paginated,
           {context: {links: pagination_links(paginated)}})
 
-        render json: ResultListSerializer.new(decorated_quotations, params: {scope: current_scope}).serialized_json
+        render json: QueryListSerializer.new(decorated_queries, params: {scope: current_scope}).serialized_json
       end
 
       def create
@@ -224,19 +220,35 @@ module Api
         quotation_params.to_h.merge(modified_shipment_params.to_h)
       end
 
-      def filtered_quotations
-        quotations = Journey::Result.joins(result_set: :query).where(
-          journey_result_sets: {status: "completed"},
-          journey_queries: {organization_id: current_organization.id}
+      def filterrific_params
+        filters = {}
+        if index_params[:sort_by].present?
+          filters[:sorted_by] = [index_params[:sort_by], index_params[:direction]].join("_")
+        end
+
+        filters
+      end
+
+      def filtered_queries
+        queries = Api::Query.joins(:result_sets).where(
+          billable: true,
+          organization_id: current_organization.id,
+          journey_result_sets: {status: "completed"}
         )
 
         if index_params[:start_date].present?
-          quotations = quotations.where("cargo_ready_date >= ?", index_params[:start_date])
+          queries = queries.where("cargo_ready_date >= ?", index_params[:start_date])
         end
         if index_params[:end_date].present?
-          quotations = quotations.where("cargo_ready_date <= ?", index_params[:end_date])
+          queries = queries.where("cargo_ready_date <= ?", index_params[:end_date])
         end
-        quotations
+
+        @filterrific = initialize_filterrific(
+          queries,
+          filterrific_params
+        ) || return
+
+        queries.filterrific_find(@filterrific)
       end
     end
   end

@@ -86,7 +86,6 @@ class UsersController < ApplicationController
 
     user = Users::Client.find_by(passwordless_new_user_params)
     user ||= Users::Client.new(passwordless_new_user_params.merge(profile_attributes: profile_params))
-    user.settings = Users::ClientSettings.new(currency: current_scope.dig(:default_currency)) if user.settings.nil?
     ActiveRecord::Base.transaction do
       user.save!
       response = generate_token_for(user: user, scope: "public")

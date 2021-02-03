@@ -98,7 +98,7 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
       before do
         FactoryBot.create(:lcl_pricing,
           itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+        organization.scope.update(content: {dedicated_pricings_only: true})
       end
 
       it "returns the no pricings" do
@@ -115,7 +115,7 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
           itinerary: itinerary_1, organization: organization, group_id: group.id, tenant_vehicle: tenant_vehicle_1)
         FactoryBot.create(:lcl_pricing,
           itinerary: itinerary_1, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
-        FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+        organization.scope.update(content: {dedicated_pricings_only: true})
       end
 
       it "returns the two pricings" do
@@ -140,7 +140,7 @@ RSpec.describe OfferCalculator::Service::Finders::Pricings do
         FactoryBot.create(:fcl_40_pricing,
           itinerary: itinerary_1, organization: organization, group_id: other_group.id,
           tenant_vehicle: tenant_vehicle_1)
-        FactoryBot.create(:organizations_scope, target: organization, content: {dedicated_pricings_only: true})
+        organization.scope.update(content: {dedicated_pricings_only: true})
       end
 
       it "returns no pricings" do

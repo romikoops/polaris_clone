@@ -20,7 +20,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
     Draper::ViewContext.controller = Pdf::ApplicationController.new
 
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
+    organization.scope.update(content: scope_content)
     allow(klass).to receive(:pre_carriage_section).and_return(pre_carriage_section)
     allow(klass).to receive(:on_carriage_section).and_return(on_carriage_section)
   end

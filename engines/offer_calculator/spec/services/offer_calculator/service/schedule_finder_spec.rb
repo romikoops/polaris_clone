@@ -53,9 +53,7 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
         itinerary: itinerary,
         organization: organization,
         tenant_vehicle: tenant_vehicle)
-      FactoryBot.create(:organizations_scope,
-        target: organization,
-        content: {departure_query_type: departure_type})
+        organization.scope.update(content: {departure_query_type: departure_type})
       allow(request).to receive(:pickup_address).and_return(address)
     end
 

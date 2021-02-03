@@ -6,6 +6,6 @@ RSpec.shared_context "organization" do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
+    organization.scope.update(content: scope_content)
   end
 end

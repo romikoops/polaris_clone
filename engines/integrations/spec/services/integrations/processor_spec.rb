@@ -8,17 +8,16 @@ module Integrations
     let(:organization) { FactoryBot.create(:organizations_organization) }
 
     context "when chain.io integration is enabled for the organization" do
-      let!(:scope) {
-        FactoryBot.create(:organizations_scope, target: organization,
-                                                content: {
-                                                  integrations: {
-                                                    chainio: {
-                                                      flow_id: "test_flow_id",
-                                                      api_key: "test_api_key"
-                                                    }
-                                                  }
-                                                })
-      }
+      before do
+        organization.scope.update(content: {
+          integrations: {
+            chainio: {
+              flow_id: "test_flow_id",
+              api_key: "test_api_key"
+            }
+          }
+        })
+      end
 
       it "processes the chain_io integration" do
         expect(ChainIo::Processor).to receive(:process)
@@ -29,17 +28,16 @@ module Integrations
     end
 
     context "when chain.io integration is disabled for the organization" do
-      let!(:scope) {
-        FactoryBot.create(:organizations_scope, target: organization,
-                                                content: {
-                                                  integrations: {
-                                                    chainio: {
-                                                      flow_id: "",
-                                                      api_key: ""
-                                                    }
-                                                  }
-                                                })
-      }
+      before do
+        organization.scope.update(content: {
+          integrations: {
+            chainio: {
+              flow_id: "",
+              api_key: ""
+            }
+          }
+        })
+      end
 
       it "does not process the chain_io integration" do
         allow(ChainIo::Processor).to receive(:process)

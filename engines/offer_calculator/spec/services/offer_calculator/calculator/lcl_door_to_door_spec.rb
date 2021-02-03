@@ -81,7 +81,7 @@ RSpec.describe OfferCalculator::Calculator do
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:companies_membership, member: user)
-    FactoryBot.create(:organizations_scope, target: organization, content: {closed_quotation_tool: true})
+    organization.scope.update(content: {closed_quotation_tool: true})
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
     allow(Carta::Api).to receive(:new).and_return(carta_double)
     allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)

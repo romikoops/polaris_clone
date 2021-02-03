@@ -25,18 +25,12 @@ module Api
           "planned_eta": query.delivery_date,
           "planned_etd": query.cargo_ready_date,
           "cargo_count": cargo_units.count,
-          "client_name": client_name
+          "client_name": client.profile.full_name
         }
       end
 
       def client
         Api::V1::UserDecorator.new(query.client)
-      end
-
-      def client_name
-        return "" if client.blank?
-
-        client.profile.full_name
       end
 
       def legacy_address_json

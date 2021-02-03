@@ -1,42 +1,34 @@
-module Journey
-  class Query < ApplicationRecord
-    include PgSearch::Model
+# frozen_string_literal: true
 
-    pg_search_scope :search,
-      associated_against: {
-        company: :name,
-        client: %i[first_name last_name phone]
-      }
+module Api
+  class Query < ::Journey::Query
+    filterrific(
+      default_filter_params: {sorted_by: "created_at_desc"},
+      available_filters: [
+        :sorted_by
+      ]
+    )
 
-    has_many :cargo_units
-    has_many :documents
-    has_many :result_sets
-    has_many :offers, inverse_of: :query
+    scope :sorted_by, lambda { |sort_option|
+      direction = /desc$/.match?(sort_option) ? "desc" : "asc"
+      case sort_option.to_s
 
-    belongs_to :company, class_name: "Companies::Company", optional: true
-    belongs_to :creator, polymorphic: true, optional: true
-    belongs_to :client, class_name: "Users::Client", optional: true
-    belongs_to :organization, class_name: "Organizations::Organization"
-
-    validates :source_id, presence: true
-    validates :cargo_ready_date, presence: true
-    validates :delivery_date, presence: true
-    validates :destination, presence: true
-    validates :destination_coordinates, presence: true
-    validates :origin, presence: true
-    validates :origin_coordinates, presence: true
-
-    validates :delivery_date, date: {after: :cargo_ready_date}
-    validates :cargo_ready_date, date: {after: proc { Time.zone.now }}
-
-    enum load_type: {
-      lcl: "lcl",
-      fcl: "fcl"
+      when /^load_type_/
+        order(sanitize_sql_for_order("load_type #{direction}"))
+      when /^last_name_/
+        joins(client: :profile).order(sanitize_sql_for_order("last_name #{direction}"))
+      when /^origin_/
+        order(sanitize_sql_for_order("origin #{direction}"))
+      when /^destination_/
+        order(sanitize_sql_for_order("destination #{direction}"))
+      when /^selected_date_/
+        order(sanitize_sql_for_order("cargo_ready_date #{direction}"))
+      when /^created_at_/
+        order(sanitize_sql_for_order("created_at #{direction}"))
+      else
+        raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
+      end
     }
-
-    def client
-      super || Users::Client.new
-    end
   end
 end
 

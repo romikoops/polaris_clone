@@ -17,7 +17,7 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
+    organization.scope.update(content: {base_pricing: true})
     allow(Carta::Api).to receive(:new).and_return(carta_double)
     allow(carta_double).to receive(:lookup).with(id: origin.id).and_return(origin)
     allow(carta_double).to receive(:lookup).with(id: destination.id).and_return(destination)

@@ -21,7 +21,7 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
     allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
     allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope, target: organization, content: {base_pricing: true})
+    organization.scope.update(content: {base_pricing: true})
   end
 
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }

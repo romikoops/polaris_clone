@@ -3,8 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Wheelhouse::QuotationService do
-  let(:scope) { {} }
-  let(:organization) { FactoryBot.create(:organizations_organization, scope_attributes: {content: scope}) }
+  let(:scope_content) { {} }
+  let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content) }
+  let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
   let(:air_itinerary) {
@@ -207,7 +208,7 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context "when port to port (defaults & quote & container)" do
-      let(:scope) { {closed_quotation_tool: true} }
+      let(:scope_content) { {closed_quotation_tool: true} }
 
       let(:load_type) { "container" }
 

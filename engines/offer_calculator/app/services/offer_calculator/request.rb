@@ -85,9 +85,9 @@ module OfferCalculator
     end
 
     def currency
-      return scope.dig(:default_currency) if client.nil?
+      client_currency = client.settings&.currency
 
-      client.settings.currency
+      client_currency || scope.dig(:default_currency)
     end
 
     def persist?

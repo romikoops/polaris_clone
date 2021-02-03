@@ -9,7 +9,10 @@ RSpec.shared_context "journey_query" do
   let(:destination_longitude) { 121.4867159 }
   let(:destination_text) { "88 Henan Middle Road, Shanghai" }
   let(:destination_coordinates) { RGeo::Geos.factory(srid: 4326).point(destination_longitude, destination_latitude) }
-  let(:client) { FactoryBot.create(:users_client, organization: organization) }
+  let(:client) { FactoryBot.build(:users_client, organization: organization) }
+  let(:cargo_units) { [] }
+  let(:journey_load_type) { "lcl" }
+
   let(:query) do
     FactoryBot.create(:journey_query,
       origin_coordinates: origin_coordinates,
@@ -22,7 +25,4 @@ RSpec.shared_context "journey_query" do
       load_type: journey_load_type,
       result_sets: [])
   end
-  let(:client) { FactoryBot.build(:users_client, organization: organization) }
-  let(:cargo_units) { [] }
-  let(:journey_load_type) { "lcl" }
 end

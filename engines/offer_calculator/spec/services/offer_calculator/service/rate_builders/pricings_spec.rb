@@ -16,8 +16,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Pricings do
   let(:baf_charge_category) { FactoryBot.create(:baf_charge, organization: organization) }
   let(:bas_charge_category) { FactoryBot.create(:bas_charge, organization: organization) }
   let(:bas_fee) { pricing.fees.find_by(charge_category: bas_charge_category) }
-  let(:scope) { organization_scope.content }
-  let(:organization_scope) { FactoryBot.create(:organizations_scope, target: organization) }
+  let(:scope) { organization.scope.content }
   let(:breakdowns) do
     pricing.fees.map do |fee|
       Pricings::ManipulatorBreakdown.new(

@@ -41,9 +41,7 @@ RSpec.describe Analytics::Base, type: :service do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:organizations_scope,
-      target: organization,
-      content: {blacklisted_emails: [blacklisted_client.email]})
+    organization.scope.update(content: {blacklisted_emails: [blacklisted_client.email]})
   end
 
   describe "quotations" do

@@ -119,7 +119,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def save_and_send_params
-    params.permit(quotes:
+    params.require(:options).permit(quotes:
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,

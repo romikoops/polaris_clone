@@ -62,7 +62,7 @@ module Wheelhouse
 
     describe ".perform" do
       before do
-        FactoryBot.create(:organizations_scope, target: organization, content: scope_content)
+        organization.scope.update(content: scope_content)
       end
 
       context "when port to port complete request (no pricings)" do

@@ -92,7 +92,7 @@ module Api
       end
 
       def base_currency
-        return scope.dig(:default_currency) if user.nil?
+        return scope.dig(:default_currency) if query.client_id.nil?
 
         client.settings.currency
       end

@@ -117,7 +117,7 @@ RSpec.describe OfferCalculator::Calculator do
 
     context "with offer creator errors with a blacklisted user" do
       before do
-        FactoryBot.create(:organizations_scope, target: organization, content: {blacklisted_emails: [creator.email]})
+        organization.scope.update(content: {blacklisted_emails: [creator.email]})
       end
 
       it "set the Query billable as false" do

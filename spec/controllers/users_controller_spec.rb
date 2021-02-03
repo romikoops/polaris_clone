@@ -102,8 +102,7 @@ RSpec.describe UsersController do
 
   describe "POST #passwordless_authentication" do
     before do
-      FactoryBot.create(:organizations_scope, target: organization,
-                                              content: {"signup_form_fields" => {"password" => false}})
+      organization.scope.update(content: {"signup_form_fields" => {"password" => false}})
     end
 
     context "when user does not exist" do

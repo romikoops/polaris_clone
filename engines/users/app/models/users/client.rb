@@ -20,6 +20,23 @@ module Users
                       format: {with: URI::MailTo::EMAIL_REGEXP}
 
     acts_as_paranoid
+
+    def profile
+      super || Users::ClientProfile.new(first_name: "", last_name: "")
+    end
+
+    def settings
+      super || Users::ClientSettings.new(
+        currency: organization_currency,
+        user_id: id
+      )
+    end
+
+    def organization_currency
+      return Organizations::DEFAULT_SCOPE["default_currency"] if organization.nil? || organization.scope.nil?
+
+      organization.scope.content["default_currency"]
+    end
   end
 end
 
