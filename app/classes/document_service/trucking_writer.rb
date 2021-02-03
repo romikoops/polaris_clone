@@ -28,7 +28,7 @@ module DocumentService
       @zone_sheet = add_sheet("Zones")
       @fees_sheet = add_sheet("Fees")
       @pages = {}
-      @zones = Hash.new { |h, k| h[k] = [] }
+      @zones = Hash.new { |hash, key| hash[key] = [] }
     end
 
     def perform
@@ -45,8 +45,8 @@ module DocumentService
     def load_trucking_locations(pricings)
       query = trucking_pricings.where(pricings.first.slice(:carriage, :truck_type, :cargo_class, :load_type))
       locations = Trucking::Location.where(id: pricings.pluck(:location_id)).order(:city_name)
-      separated_locations = locations.slice_when { |a, b|
-        query.find_by(location_id: a.id)&.parent_id != query.find_by(location_id: b.id)&.parent_id
+      separated_locations = locations.slice_when { |location_a, location_b|
+        query.find_by(location_id: location_a.id)&.parent_id != query.find_by(location_id: location_b.id)&.parent_id
       }
 
       separated_locations.each do |loc_arr|
@@ -117,7 +117,7 @@ module DocumentService
 
     def write_zone_to_sheet
       header_values = ["ZONE", *identifiers_to_write, "COUNTRY_CODE"]
-      header_values.each_with_index { |hv, i| zone_sheet.write(0, i, hv, header_format) }
+      header_values.each_with_index { |header_value, index| zone_sheet.write(0, index, header_value, header_format) }
       zone_row = 1
       zones.values.each_with_index do |zone_array, zone|
         zone_array.each do |zone_data|
@@ -185,7 +185,9 @@ module DocumentService
 
     def write_fees_to_sheet
       row = 1
-      fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format) }
+      fee_header_values.each_with_index do |header_value, index|
+        fees_sheet.write(0, index, header_value, header_format)
+      end
       dir_fees.deep_symbolize_keys!
       dir_fees.each do |carriage_dir, truck_type_and_fees|
         truck_type_and_fees.each do |truck_type, fees|
@@ -226,14 +228,14 @@ module DocumentService
     end
 
     def write_rates_to_sheet
-      pages.values.each_with_index do |page, i|
-        rates_sheet = workbook.add_worksheet(i.to_s)
+      pages.values.each_with_index do |page, index|
+        rates_sheet = workbook.add_worksheet(index.to_s)
         rates_sheet.write(3, 0, "ZONE")
         rates_sheet.write(3, 1, "MIN")
         rates_sheet.write(4, 0, "MIN")
         minimums = {}
         row = 5
-        x = 2
+        col = 2
         meta_x = 0
         page[:meta].each do |key, value|
           rates_sheet.write(0, meta_x, key.upcase)
@@ -245,16 +247,16 @@ module DocumentService
           rates_array.each do |rate|
             next unless rate
 
-            rates_sheet.write(2, x, key.downcase)
-            rates_sheet.write(3, x, "#{rate["min_#{key}"]} - #{rate["max_#{key}"]}")
-            x += 1
+            rates_sheet.write(2, col, key.downcase)
+            rates_sheet.write(3, col, "#{rate["min_#{key}"]} - #{rate["max_#{key}"]}")
+            col += 1
           end
         end
-        page[:pricings].values.each_with_index do |result, pi|
-          rates_sheet.write(row, 0, pi)
+        page[:pricings].values.each_with_index do |result, pricing_info|
+          rates_sheet.write(row, 0, pricing_info)
           rates_sheet.write(row, 1, result["rates"].first[1][0]["min_value"])
-          minimums[pi] = result["rates"].first[1][0]["min_value"]
-          x = 2
+          minimums[pricing_info] = result["rates"].first[1][0]["min_value"]
+          col = 2
           result["rates"].each do |_key, rates_array|
             rates_array.each do |rate|
               next unless rate
@@ -264,8 +266,8 @@ module DocumentService
               else
                 rates_sheet.write(row, 1, 0)
               end
-              rates_sheet.write(row, x, rate["rate"]["value"].round(2))
-              x += 1
+              rates_sheet.write(row, col, rate["rate"]["value"].round(2))
+              col += 1
             end
           end
           row += 1
@@ -275,10 +277,10 @@ module DocumentService
 
     def extract_number_array(array:, alpha: nil, numeric: nil)
       if alpha.present? && numeric.present?
-        array.map do |s|
+        array.map do |zone_row|
           {
-            city_name: s[:city_name].gsub(alpha, ""),
-            country_code: s[:country_code]
+            city_name: zone_row[:city_name].gsub(alpha, ""),
+            country_code: zone_row[:country_code]
           }
         end
       else
@@ -287,9 +289,11 @@ module DocumentService
     end
 
     def consecutive_arrays(list_of_postal_codes)
-      alpha_groups = list_of_postal_codes.group_by { |s| {alpha: s[:city_name].tr("^A-Z", ""), country: s[:country_code]} }
+      alpha_groups = list_of_postal_codes.group_by do |postal_code|
+        {alpha: postal_code[:city_name].tr("^A-Z", ""), country: postal_code[:country_code]} 
+      end
       alpha_groups.flat_map do |alpha_and_country, array|
-        numeric = array.all? { |s| s[:city_name].tr("^0-9", "").present? }
+        numeric = array.all? { |postal_code| postal_code[:city_name].tr("^0-9", "").present? }
         next list_of_postal_codes if alpha_and_country[:alpha].present? && numeric.blank?
 
         num_array = extract_number_array(array: array, alpha: alpha_and_country[:alpha], numeric: numeric)
