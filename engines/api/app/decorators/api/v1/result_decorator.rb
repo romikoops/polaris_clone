@@ -64,10 +64,6 @@ module Api
         ResultFormatter::FeeTableService.new(result: self, scope: context[:scope]).perform
       end
 
-      def load_type
-        cargo_units.any?(&:lcl?) ? "cargo_item" : "container"
-      end
-
       def carrier
         @carrier ||= main_freight_section.carrier
       end

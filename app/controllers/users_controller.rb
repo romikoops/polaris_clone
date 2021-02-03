@@ -193,4 +193,12 @@ class UsersController < ApplicationController
     user_metadata = {role: role, inactivityLimit: inactivity_limit, currency: currency}
     merge_profile(user: user).merge(user_metadata)
   end
+
+  def client_results
+    @client_results ||= Journey::Result.joins(result_set: :query)
+      .where(
+        journey_result_sets: {status: "completed"},
+        journey_queries: {client_id: current_user.id, organization_id: current_organization.id}
+      )
+  end
 end

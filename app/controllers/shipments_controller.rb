@@ -11,7 +11,7 @@ class ShipmentsController < ApplicationController
       }
 
       {
-        quoted: decorate(results: quoted),
+        quoted: result_table_list(results: quoted),
         pages: {
           quoted: params[:quoted_page]
         },
@@ -24,10 +24,10 @@ class ShipmentsController < ApplicationController
 
   def delta_page_handler
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = client_results.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
+    shipments = client_results.order(created_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      results: shipment_table_list(results: shipments),
+      shipments: result_table_list(results: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -43,7 +43,7 @@ class ShipmentsController < ApplicationController
     shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      results: shipment_table_list(results: shipments),
+      results: result_table_list(results: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -223,5 +223,13 @@ class ShipmentsController < ApplicationController
 
   def result_table_list(results:)
     decorate_results(results: results).map(&:legacy_index_json)
+  end
+
+  def client_results
+    @client_results ||= Journey::Result.joins(result_set: :query)
+      .where(
+        journey_result_sets: {status: "completed"},
+        journey_queries: {client_id: current_user.id, organization_id: current_organization.id}
+      )
   end
 end

@@ -113,10 +113,5 @@ module Api
           journey_queries: {billable: true, organization_id: current_organization.id}
         )
     end
-
-    def client_results
-      @client_results ||= organization_results
-        .where(journey_queries: {client_id: organization_user})
-    end
   end
 end

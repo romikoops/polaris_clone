@@ -6,18 +6,18 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   include_context "journey_complete_request"
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { query.client }
+  let(:user) { client }
   let(:json_response) { JSON.parse(response.body) }
   let!(:origin_nexus) {
     FactoryBot.create(:legacy_nexus,
       locode: freight_section.from.locode,
       organization: organization)
-    }
+  }
   let!(:destination_nexus) {
     FactoryBot.create(:legacy_nexus,
       locode: freight_section.to.locode,
       organization: organization)
-    }
+  }
   let(:route_sections) { [freight_section] }
   let(:line_items) { freight_line_items_with_cargo }
 
@@ -40,7 +40,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
       end
 
       it "returns an http status of success" do
-        get :index, params: {organization_id: organization.id}
+        get :index, params: {organization_id: organization}
 
         expect(response).to have_http_status(:success)
       end
@@ -97,7 +97,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
     end
 
     context "when a destination_nexus is given" do
-      let(:nexus) { FactoryBot.create(:legacy_nexus, locode: destination_locode)}
+      let(:nexus) { FactoryBot.create(:legacy_nexus, locode: destination_locode) }
 
       it "returns an http status of success" do
         get :index, params: {organization_id: organization.id, destination_nexus: nexus.id}

@@ -35,6 +35,15 @@ RSpec.describe ShipmentsController do
     end
   end
 
+  describe "GET #delta_page_handler" do
+    it "returns the results for the page in question", :aggregate_failures do
+      get :delta_page_handler, params: {organization_id: organization.id, page: 1, per_page: 1, target: "quoted"}
+
+      expect(response_data["shipments"].count).to eq(1)
+      expect(response_data["page"]).to eq("1")
+    end
+  end
+
   describe "GET #show" do
     let!(:target_exchange_rate) { FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD") }
     it "returns requested shipment" do
