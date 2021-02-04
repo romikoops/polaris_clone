@@ -54,7 +54,7 @@ pipeline {
             unstash(name: "source")
 
             dir("gems/money_cache") {
-              withCache(["vendor/ruby=gems/money_cache/money_cache.gemspec"]) {
+              withCache(dir: "vendor/ruby", key: "gems/money_cache/money_cache.gemspec") {
                 sh("bundle check || bundle install")
               }
 
@@ -113,7 +113,7 @@ pipeline {
 
           steps {
             unstash(name: "source")
-            withCache(["vendor/ruby=Gemfile.lock"]) {
+            withCache(dir: "vendor/ruby", key: "Gemfile.lock") {
               sh(label: "Bundle Install", script: "bundle check || bundle install")
             }
 
@@ -127,7 +127,6 @@ pipeline {
             sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
 
             sh("bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' .")
-
           }
 
           post {
