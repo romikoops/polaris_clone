@@ -72,11 +72,6 @@ pipeline {
 
         stage("App") {
           options { timeout(60) }
-          environment {
-            LC_ALL = "C.UTF-8"
-            BUNDLE_PATH = "vendor/ruby"
-            RAILS_ENV = "test"
-          }
 
           agent {
             kubernetes {
@@ -113,20 +108,24 @@ pipeline {
 
           steps {
             unstash(name: "source")
-            withCache(dir: "vendor/ruby", key: "Gemfile.lock") {
-              sh(label: "Bundle Install", script: "bundle check || bundle install")
+
+            withEnv(["LC_ALL=C.UTF-8", "BUNDLE_PATH=vendor/ruby", "RAILS_ENV=test"]) {
+              sh(label: "Install Postgres 12 Client", script: """
+                    apt-get install curl ca-certificates gnupg \
+                    && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+                    && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
+                    && apt-get update \
+                    && apt install -y postgresql-client-12
+              """)
+
+              withCache(dir: "vendor/ruby", key: "Gemfile.lock") {
+                sh("bundle check || bundle install")
+              }
+
+              sh("bin/rails db:test:prepare && bin/rails db:migrate")
+
+              sh("bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' .")
             }
-
-            sh(label: "Install Postgres 12 Client", script: """
-                  apt-get install curl ca-certificates gnupg \
-                  && curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-                  && sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
-                  && apt-get update \
-                  && apt install -y postgresql-client-12
-            """)
-            sh(label: "Test Database", script: "bin/rails db:test:prepare && bin/rails db:migrate")
-
-            sh("bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' .")
           }
 
           post {
