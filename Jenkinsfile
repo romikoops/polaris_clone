@@ -4,8 +4,7 @@ defaultBuild()
 
 pipeline {
   options {
-    lock(env.BRANCH_NAME)
-    podTemplate(inheritFrom: "default")
+    lock("${jobName()}/${env.BRANCH_NAME}")
     skipDefaultCheckout()
   }
 
@@ -76,33 +75,30 @@ pipeline {
           agent {
             kubernetes {
               defaultContainer "ruby"
-              yaml podSpec(
-                containers: [
-                  [
-                    name: "ruby", image: "itsmycargo/builder:ruby-2.6", interactive: true,
-                    requests: [ memory: "1000Mi", cpu: "1000m" ],
-                    env: [
-                      [ name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test" ],
-                      [ name: "ELASTICSEARCH_URL", value: "http://localhost:9200"]
-                    ]
-                  ],
-                  [ name: "postgis", image: "postgis/postgis:12-3.0-alpine",
-                    requests: [ memory: "512Mi", cpu: "250m" ],
-                    env: [[name: "POSTGRES_HOST_AUTH_METHOD", value: "trust"]]
-                  ],
-                  [ name: "redis", image: "redis",
-                    requests: [ memory: "25Mi", cpu: "100m" ]
-                  ],
-                  [ name: "elasticsearch", image: "amazon/opendistro-for-elasticsearch:1.8.0",
-                    requests: [ memory: "2000Mi", cpu: "1000m" ],
-                    env: [
-                      [ name: "ES_JAVA_OPTS", value: "-Xms1000m -Xmx1000m"],
-                      [ name: "discovery.type", value: "single-node" ],
-                      [ name: "opendistro_security.disabled", value: "true"],
-                    ]
-                  ]
-                ]
-              )
+              inheritFrom "default postgis redis elasticsearch"
+              yaml """
+              kind: Pod
+              spec:
+                containers:
+                - name: ruby
+                  image: itsmycargo/builder:ruby-2.6
+                  imagePullPolicy: Always
+                  command:
+                  - cat
+                  tty: true
+                  resources:
+                    requests:
+                      cpu: 1000m
+                      memory: 1000Mi
+                    limits:
+                      cpu: 1000m
+                      memory: 1000Mi
+                  env:
+                  - name: DATABASE_URL
+                    value: postgis://postgres:@localhost/polaris_test
+                  - name: ELASTICSEARCH_URL
+                    value: http://localhost:9200
+              """
             }
           }
 
@@ -161,7 +157,7 @@ pipeline {
       options { timeout(5) }
       when { branch "master" }
 
-      steps { sentryRelease(projects: ["polaris"]) }
+      steps { sentryRelease(project: "polaris", repository: "itsmycargo/imc-react-api") }
     }
   }
 
