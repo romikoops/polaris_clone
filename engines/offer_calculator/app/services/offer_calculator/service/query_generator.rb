@@ -55,13 +55,13 @@ module OfferCalculator
       end
 
       def origin_string
-        @origin_string ||= params.dig(:origin, :address) ||
-          has_pre_carriage? ? origin.geocoded_address : origin.name
+        @origin_string ||= params.dig(:origin, :address).presence ||
+          (has_pre_carriage? ? origin.geocoded_address : origin.name)
       end
 
       def destination_string
-        @destination_string ||= params.dig(:destination, :address) ||
-          has_on_carriage? ? destination.geocoded_address : destination.name
+        @destination_string ||= params.dig(:destination, :address).presence ||
+          (has_on_carriage? ? destination.geocoded_address : destination.name)
       end
 
       def origin_coordinates

@@ -103,6 +103,17 @@ module Api
           expect(response_data.dig("id")).to be_present
         end
       end
+
+      context "when LOCODE doesnt match Legacy::Nexus" do
+        let(:destination) {
+          FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: "ZACPT")
+        }
+
+        it "successfuly triggers the job and returns the query" do
+          post :create, params: params, as: :json
+          expect(response_data.dig("id")).to be_present
+        end
+      end
     end
 
     describe "GET #show" do

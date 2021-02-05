@@ -87,11 +87,13 @@ module Wheelhouse
           longitude: target.longitude,
           country: target.country,
           full_address: target.address,
+          address: target.address,
           id: target.id
         }
       else
         {
           nexus_id: nexus_id(locode: target.address),
+          address: target.address,
           id: target.id
         }
       end
