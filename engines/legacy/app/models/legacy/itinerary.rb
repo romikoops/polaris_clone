@@ -25,6 +25,7 @@ module Legacy
     belongs_to :origin_hub, class_name: "Legacy::Hub"
     belongs_to :destination_hub, class_name: "Legacy::Hub"
     has_many :map_data, class_name: "Legacy::MapDatum", dependent: :destroy
+    has_many :transit_times, class_name: "Legacy::TransitTime", dependent: :destroy
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
     scope :for_organization, ->(organization_id) { where(organization_id: organization_id) }
 

@@ -33,7 +33,7 @@ module OfferCalculator
 
       def end_date(transit_time:)
         if transit_time
-          start_date + transit_time.duration.days
+          start_date + [transit_time.duration, 1].max.days
         else
           OfferCalculator::Schedule.quote_trip_end_date
         end

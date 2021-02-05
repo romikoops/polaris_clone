@@ -10,6 +10,7 @@ module Legacy
     belongs_to :vehicle, optional: true
     belongs_to :carrier, optional: true
     has_many :pricings, class_name: "Pricings::Pricing"
+    has_many :transit_times, class_name: "Legacy::TransitTime", dependent: :destroy
 
     validates_uniqueness_of :name, scope: [:organization_id, :carrier_id, :mode_of_transport]
 

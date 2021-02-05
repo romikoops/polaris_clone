@@ -7,6 +7,10 @@ module Legacy
     it "creates a valid transit time" do
       expect(FactoryBot.build(:legacy_transit_time)).to be_valid
     end
+
+    it "is invalid with a duration of zero" do
+      expect(FactoryBot.build(:legacy_transit_time, duration: 0)).not_to be_valid
+    end
   end
 end
 
