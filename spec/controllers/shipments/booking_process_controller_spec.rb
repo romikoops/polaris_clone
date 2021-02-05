@@ -55,7 +55,7 @@ RSpec.describe Shipments::BookingProcessController do
 
     describe ".save_and_send_quotes" do
       it "successfully calls the mailer and return the quote Document" do
-        post :send_quotes, params: {organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}}
+        post :send_quotes, params: {organization_id: organization.id, shipment_id: result.id, quotes: quotes}
       end
     end
 

@@ -107,7 +107,7 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def result_params
-    params.permit(options: {
+    params.require(:options).permit(
       quotes:
       [
         quote: {},
@@ -115,11 +115,11 @@ class Shipments::BookingProcessController < ApplicationController
           :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
       ]
-    })
+    )
   end
 
   def save_and_send_params
-    params.require(:options).permit(quotes:
+    params.permit(quotes:
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
@@ -150,8 +150,8 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def offer_result_ids
-    (result_params.dig(:options, :quotes) || save_and_send_params[:quotes])
-      .map { |result| result.dig("meta", "tender_id") }
+    dynamic_params = params[:options].present? ? result_params : save_and_send_params
+    dynamic_params[:quotes].map { |result| result.dig("meta", "tender_id") }
   end
 
   def source
