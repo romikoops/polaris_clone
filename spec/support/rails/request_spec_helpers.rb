@@ -9,7 +9,10 @@ module RequestSpecHelpers
 
   module TokenHelper
     def append_token_header
-      access_token = Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public")
+      application = FactoryBot.create(:application, name: "dipper")
+      access_token = Doorkeeper::AccessToken.create(
+        resource_owner_id: user.id, scopes: "public", application: application
+      )
       token_header = "Bearer #{access_token.token}"
       request.headers["Authorization"] = token_header
     end

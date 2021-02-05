@@ -15,7 +15,7 @@ class Shipments::BookingProcessController < ApplicationController
 
   def get_offers
     offer_query = OfferCalculator::Calculator.new(
-      source: doorkeeper_application,
+      source: source,
       client: organization_user,
       creator: organization_user,
       params: offer_calculator_params
@@ -129,7 +129,8 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def confirm_request_eligibility
-    raise ApplicationError::NotLoggedIn if current_scope[:closed_after_map] && current_user.blank?
+    guest_ineligible = current_scope.values_at(:closed_shop, :closed_after_map, :closed_quotation_tool).any?(&:present?)
+    raise ApplicationError::NotLoggedIn if guest_ineligible && current_user.blank?
   end
 
   def attach_user_to_shipment
@@ -147,5 +148,9 @@ class Shipments::BookingProcessController < ApplicationController
   def offer_result_ids
     (result_params.dig(:options, :quotes) || save_and_send_params[:quotes])
       .map { |result| result.dig("meta", "tender_id") }
+  end
+
+  def source
+    current_user.present? ? doorkeeper_application : Doorkeeper::Application.find_by(name: "dipper")
   end
 end

@@ -3,7 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Shipments::BookingProcessController do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
+  let(:scope) { FactoryBot.create(:organizations_scope, content: scope_content) }
+  let(:scope_content) { {} }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:shipment) {
     FactoryBot.create(:completed_legacy_shipment,
@@ -105,7 +107,7 @@ RSpec.describe Shipments::BookingProcessController do
       allow(offer_calculator_double).to receive(:perform).and_return(query)
     end
 
-    it "returns an http status of success" do
+    it "returns the desired result" do
       post :get_offers, params: {
         organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
       }
@@ -114,6 +116,41 @@ RSpec.describe Shipments::BookingProcessController do
         expect(response).to have_http_status(:success)
         expect(json_result.dig("quotationId")).to eq(query.id)
         expect(json_result.dig("completed")).to be_truthy
+      end
+    end
+
+    context "when user is nil" do
+      before do
+        allow(controller).to receive(:current_user).and_return(nil)
+      end
+
+      it "returns the desired result when user is nil" do
+        post :get_offers, params: {
+          organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
+        }
+
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_result.dig("quotationId")).to eq(query.id)
+          expect(json_result.dig("completed")).to be_truthy
+        end
+      end
+    end
+    context "when user is nil and is ineligible" do
+      before do
+        allow(controller).to receive(:current_user).and_return(nil)
+      end
+
+      let(:scope_content) { {closed_quotation_tool: true} }
+
+      it "returns the desired result when user is nil" do
+        post :get_offers, params: {
+          organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
+        }
+
+        aggregate_failures do
+          expect(response).to have_http_status(400)
+        end
       end
     end
   end
