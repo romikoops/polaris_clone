@@ -68,7 +68,6 @@ RSpec.describe Shipments::BookingProcessController do
   end
 
   describe "POST #get_offers" do
-    let(:query) { FactoryBot.create(:journey_query, organization: organization) }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id) }
     let(:origin_hub) { itinerary.origin_hub }
@@ -96,26 +95,29 @@ RSpec.describe Shipments::BookingProcessController do
           quantity: 1,
           payload_in_kg: 12,
           dangerous_goods: false
-        }]
-      )
+          }]
+        )
     end
-    let(:offer_calculator_double) { double(OfferCalculator::Calculator) }
-    let(:json_result) { JSON.parse(json[:data]) }
-
-    before do
-      allow(OfferCalculator::Calculator).to receive(:new).and_return(offer_calculator_double)
-      allow(offer_calculator_double).to receive(:perform).and_return(query)
+    let(:params) do
+      {
+        organization_id: shipment.organization,
+        shipment_id: shipment.id,
+        shipment: shipment_params,
+        async: true
+      }
     end
+    let(:json_result) { json[:data] }
+    let(:query) { Journey::Query.find(json_result.dig(:quotationId)) }
 
     it "returns the desired result" do
-      post :get_offers, params: {
-        organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
-      }
+      post :get_offers, params: params
 
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        expect(json_result.dig("quotationId")).to eq(query.id)
-        expect(json_result.dig("completed")).to be_truthy
+        expect(query).to be_present
+        expect(query.load_type).to eq("fcl")
+        expect(json_result.dig(:shipment, :load_type)).to eq("container")
+        expect(json_result.dig(:completed)).to be_truthy
       end
     end
 
@@ -125,14 +127,12 @@ RSpec.describe Shipments::BookingProcessController do
       end
 
       it "returns the desired result when user is nil" do
-        post :get_offers, params: {
-          organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
-        }
+        post :get_offers, params: params
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(json_result.dig("quotationId")).to eq(query.id)
-          expect(json_result.dig("completed")).to be_truthy
+          expect(json_result.dig(:quotationId)).to eq(query.id)
+          expect(json_result.dig(:completed)).to be_truthy
         end
       end
     end
@@ -144,9 +144,7 @@ RSpec.describe Shipments::BookingProcessController do
       let(:scope_content) { {closed_quotation_tool: true} }
 
       it "returns the desired result when user is nil" do
-        post :get_offers, params: {
-          organization_id: shipment.organization, shipment_id: shipment.id, shipment: shipment_params
-        }
+        post :get_offers, params: params
 
         aggregate_failures do
           expect(response).to have_http_status(400)

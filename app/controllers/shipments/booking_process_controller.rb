@@ -138,7 +138,11 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def offer_calculator_params
-    params.permit(shipment: {})[:shipment].to_h.merge(async: params[:async])
+    params.permit(shipment: {})[:shipment].to_h.merge(async: params[:async], load_type: load_type)
+  end
+
+  def load_type
+    params.dig(:shipment, :containers_attributes).present? ? "container" : "cargo_item"
   end
 
   def offer_from_results
