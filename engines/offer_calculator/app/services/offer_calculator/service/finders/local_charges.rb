@@ -28,7 +28,7 @@ module OfferCalculator
         def selected_origin_local_charge_ids(target:)
           return [] unless local_charges_required(target: target)
 
-          hub_pairings.map do |cargo_class, origin, destination, tenant_vehicle_id|
+          hub_pairings.flat_map do |cargo_class, origin, destination, tenant_vehicle_id|
             hub = target == "export" ? origin : destination
             counterpart = target == "export" ? destination : origin
             charges = association_for_target(target: target).where(
@@ -43,7 +43,7 @@ module OfferCalculator
 
             target_group = hierarchy.find { |group| charges.exists?(group_id: group.id) }
 
-            charges.find_by(group_id: target_group&.id)&.id
+            charges.where(group_id: target_group&.id).ids
           end
         end
 

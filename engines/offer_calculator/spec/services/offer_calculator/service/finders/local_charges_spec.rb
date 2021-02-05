@@ -44,10 +44,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       end
 
       it "returns the one pricing" do
-        aggregate_failures do
-          expect(results).to be_a(ActiveRecord::Relation)
-          expect(results.count).to eq(0)
-        end
+        expect(results).to be_empty
       end
     end
 
@@ -60,11 +57,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
-        aggregate_failures do
-          expect(results).to be_a(ActiveRecord::Relation)
-          expect(results.count).to eq(1)
-          expect(results.pluck(:id)).to match_array([local_charge].map(&:id))
-        end
+        expect(results).to match_array([local_charge])
       end
     end
 
@@ -87,11 +80,37 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
-        aggregate_failures do
-          expect(results).to be_a(ActiveRecord::Relation)
-          expect(results.count).to eq(2)
-          expect(results.pluck(:id)).to match_array([local_charge, local_charge_2].map(&:id))
-        end
+        expect(results).to match_array([local_charge, local_charge_2])
+      end
+    end
+
+    context "when only origin local charge required, multiple validities are available" do
+      let!(:local_charge) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle_1,
+          effective_date: 1.day.ago.beginning_of_day,
+          expiration_date: 7.days.from_now.end_of_day)
+      }
+      let!(:local_charge_2) {
+        FactoryBot.create(:legacy_local_charge,
+          hub: origin_1,
+          organization: organization,
+          tenant_vehicle: tenant_vehicle_1,
+          effective_date: 8.days.from_now.beginning_of_day,
+          expiration_date: 2.weeks.from_now.end_of_day)
+      }
+      let(:trips) do
+        [
+          FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1)
+        ]
+      end
+
+      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
+
+      it "returns the one pricing" do
+        expect(results).to match_array([local_charge, local_charge_2])
       end
     end
 
@@ -112,11 +131,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       end
 
       it "returns the one pricing" do
-        aggregate_failures do
-          expect(results).to be_a(ActiveRecord::Relation)
-          expect(results.count).to eq(2)
-          expect(results.pluck(:id)).to match_array([import, export].map(&:id))
-        end
+        expect(results).to match_array([import, export])
       end
     end
 
@@ -139,11 +154,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       end
 
       it "returns the one pricing" do
-        aggregate_failures do
-          expect(results).to be_a(ActiveRecord::Relation)
-          expect(results.count).to eq(2)
-          expect(results.pluck(:id)).to match_array([import, export].map(&:id))
-        end
+        expect(results).to match_array([import, export])
       end
     end
   end

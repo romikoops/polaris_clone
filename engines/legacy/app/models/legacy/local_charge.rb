@@ -17,7 +17,7 @@ module Legacy
     scope :for_dates, (lambda do |start_date, end_date|
       where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
-    scope :current, -> { where("expiration_date > ?", 7.days.ago) }
+    scope :current, -> { where("validity::daterange @> ?::date", Time.zone.now) }
 
     before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
     before_validation :set_validity
