@@ -6,13 +6,13 @@ pipeline {
   options {
     lock("${jobName()}/${env.BRANCH_NAME}")
     skipDefaultCheckout()
+    timeout(90)
   }
 
   agent none
 
   stages {
     stage("Checkout") {
-      options { timeout(5) }
       agent { kubernetes true }
 
       steps {
@@ -24,12 +24,10 @@ pipeline {
     stage("Test") {
       parallel {
         stage("Wolfhound") {
-          options { timeout(15) }
           steps { wolfhound(stash: "source") }
         }
 
         stage("Gems") {
-          options { timeout(15) }
           environment {
             LC_ALL = "C.UTF-8"
             BUNDLE_PATH = "vendor/ruby"
@@ -70,8 +68,6 @@ pipeline {
         }
 
         stage("App") {
-          options { timeout(60) }
-
           agent {
             kubernetes {
               defaultContainer "ruby"
@@ -142,7 +138,6 @@ pipeline {
     }
 
     stage("Build") {
-      options { timeout(25) }
       when {
         anyOf {
           branch "master"
@@ -154,7 +149,6 @@ pipeline {
     }
 
     stage("Sentry") {
-      options { timeout(5) }
       when { branch "master" }
 
       steps { sentryRelease(project: "polaris", repository: "itsmycargo/imc-react-api") }
