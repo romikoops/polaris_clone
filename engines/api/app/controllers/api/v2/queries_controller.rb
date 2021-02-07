@@ -27,7 +27,7 @@ module Api
       private
 
       def query
-        Journey::Query.find(params[:id] || params[:query_id])
+        @query ||= Journey::Query.find(params[:id] || params[:query_id])
       end
 
       def mock_user
@@ -78,6 +78,14 @@ module Api
             :length,
             commodities: [:id, :code]
           ]
+        )
+      end
+
+      def request_params
+        params.permit(
+          :mode_of_transport,
+          :query_id,
+          :note
         )
       end
     end

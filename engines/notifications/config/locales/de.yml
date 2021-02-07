@@ -12,3 +12,6 @@ de:
         subject: "[%{company}] Bestätigen Sie Ihr Konto"
       reset_password_email:
         subject: "[%{company}] Passwort zurücksetzen"
+    request_mailer:
+      request_created:
+        dimensions_key: (LxBxH)

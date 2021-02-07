@@ -1,0 +1,40 @@
+Hallo,
+
+Ein Kunde Ihres Web Shops hat eine Quotierung angefragt!
+
+Kunde:
+  Name: <%= @client.profile.full_name %> 
+  Email: <%= @client.email %>
+  Telefon: <%= @client.profile.phone %>
+  Firma: <%= @client.profile.company_name %>
+
+Routing:
+  Herkunft: <%= @query.origin %>
+  Ziel: <%= @query.destination %>
+  Verkehrsträger: <%= @mode_of_transport %>
+
+Fracht:
+<% @cargo_units.each do |cargo| -%>
+  <%= cargo.quantity %> x <%= cargo.cargo_class %> <%= cargo.dimensions %>
+  <% if cargo.commodity_codes.present? %>
+    Frachtinformationen:
+    <% cargo.hs_codes.each do |hs_code| %>
+      <%= hs_code %>
+    <% end %>
+  <% end %>
+  <% if cargo.imo_classes.present? %>
+    Gefahrgut:
+    <% cargo.imo_classes.each do |imo| %>
+      <%= imo.imo_class %> <%= imo.description %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @note.present? -%>
+Bemerkungen:
+  <%= @note %>
+<% end %>
+
+Mit freundlichen Grüßen,
+
+Das ItsMyCargo Team

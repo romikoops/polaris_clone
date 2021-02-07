@@ -119,20 +119,18 @@ module Api
     describe "GET #show" do
       include_context "journey_pdf_setup"
 
-      let(:params) { {id: query.id, organization_id: organization.id } }
+      let(:params) { {id: query.id, organization_id: organization.id} }
       context "when lcl" do
-
         it "successfuly returns the query object", :aggregate_failures do
           get :show, params: params, as: :json
           expect(response_data.dig("id")).to be_present
         end
       end
-
     end
 
     describe "GET #result_set" do
       include_context "journey_pdf_setup"
-      let(:params)  { {query_id: query.id, organization_id: organization.id } }
+      let(:params) { {query_id: query.id, organization_id: organization.id} }
 
       it "successfuly returns the latest ResultSet", :aggregate_failures do
         get :result_set, params: params, as: :json

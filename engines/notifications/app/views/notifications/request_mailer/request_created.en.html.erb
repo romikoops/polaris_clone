@@ -1,0 +1,172 @@
+<tr>
+  <td class="content-cell" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding: 45px;">
+    <div class="f-fallback">
+      <h1 style="margin-top: 0; color: #333333; font-size: 22px; font-weight: bold; text-align: left;" align="left">Hi</h1>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">A client on your web shop has requested a quotation!</p>
+      <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 35px 0;">
+        <tr>
+          <td colspan="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+              <tr>
+              <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Client</h3>
+              </th>
+              </tr>
+              <tr>
+                <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Name:</p>
+                </td>
+                <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @client.profile.full_name %> </p>
+                </td>
+              </tr>
+              <tr>
+                <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Email:</p>
+                </td>
+                <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @client.email %> </p>
+                </td>
+              </tr>
+              <tr>
+                <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Phone:</p>
+                </td>
+                <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @client.profile.phone %> </p>
+                </td>
+              </tr>
+              <tr>
+                <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Company:</p>
+                </td>
+                <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @client.profile.company_name %> </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+              <tr>
+              <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Routing:</h3>
+              </th>
+              </tr>
+              <tr>
+                <th class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Origin:</p>
+                </th>
+                <th class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @query.origin %> </p>
+                </th>
+              </tr>
+              <tr>
+                <th class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Destination:</p>
+                </th>
+                <th class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @query.destination %> </p>
+                </th>
+              </tr>
+              <tr>
+                <th class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;">Mode of Transport:</p>
+                </th>
+                <th class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @mode_of_transport.humanize %> </p>
+                </th>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+              <tr>
+              <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Cargo:</h3>
+              </th>
+              </tr>
+              <% @cargo_units.each do |cargo|%>
+                <tr>
+                  <th class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                    <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= cargo.quantity %> x <%= cargo.cargo_type %></p>
+                  </th>
+                  <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                    <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= cargo.dimensions %> </p>
+                  </td>
+                </tr>
+                <% if cargo.commodity_codes.present? %>
+                  <tr>
+                    <td>
+                     <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+                      <tr>
+                      <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                        <h4 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Commodity Info:</h4>
+                      </th>
+                      </tr>
+                        <% cargo.commodity_codes.each do |commodity_code|%>
+                          <tr>
+                            <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                              <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= commodity_code.hs_code %></p>
+                            </td>
+                            <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                              <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= commodity_code.description %> </p>
+                            </td>
+                          </tr>
+                        <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+                <% if cargo.imo_classes.present? %>
+                 <tr>
+                    <td>
+                     <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+                      <tr>
+                      <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                        <h4 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Dangerous Goods:</h4>
+                      </th>
+                      </tr>
+                        <% cargo.imo_classes.each do |imo|%>
+                          <tr>
+                            <td class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                              <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= imo.imo_class %></p>
+                            </td>
+                            <td class="purchase_heading" align="right" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                              <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= imo.description %> </p>
+                            </td>
+                          </tr>
+                        <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+         <tr>
+          <td colspan="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+            <table class="purchase_content" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 25px 0 0;">
+              <tr>
+              <th col-span="2" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;" align="left">Notes:</h3>
+              </th>
+              </tr>
+              <tr>
+                <td colspan="2" class="purchase_heading" align="left" style="font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding-top: 8px; border-bottom-width: 1px; border-bottom-color: #EAEAEC; border-bottom-style: solid;">
+                  <p class="f-fallback" style="font-size: 12px; line-height: 1.625; color: #85878E; margin: 0;"><%= @note %></p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        
+      </table>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">Regards,
+        <br />The ItsMyCargo Team</p>
+    </div>
+  </td>
+</tr>

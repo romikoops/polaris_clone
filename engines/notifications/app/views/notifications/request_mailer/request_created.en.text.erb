@@ -1,0 +1,40 @@
+Hi,
+
+A client on your web shop has requested a quotation!
+
+Client:
+  Name: <%= @client.profile.full_name %> 
+  Email: <%= @client.email %>
+  Phone: <%= @client.profile.phone %>
+  Company: <%= @client.profile.company_name %> 
+
+Routing:
+  Origin: <%= @query.origin %>
+  Destination: <%= @query.destination %>
+  Mode of Transport: <%= @mode_of_transport %>
+
+Cargo:
+<% @cargo_units.each do |cargo| -%>
+  <%= cargo.quantity %> x <%= cargo.cargo_type %> <%= cargo.dimensions %>
+  <% if cargo.commodity_codes.present? %>
+    Commodity Info:
+    <% cargo.commodity_codes.each do |commodity_code| %>
+      <%= commodity_code.hs_code %> <%= commodity_code.description %>
+    <% end %>
+  <% end %>
+  <% if cargo.imo_classes.present? %>
+    Dangerous Goods: 
+      <% cargo.imo_classes.each do |imo| %>
+      <%= imo.imo_class %> <%= imo.description %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if @note.present? -%>
+Extra Notes:
+  <%= @note %>
+<% end %>
+
+Regards,
+
+The ItsMyCargo Team
