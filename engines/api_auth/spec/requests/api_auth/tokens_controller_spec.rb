@@ -48,7 +48,7 @@ RSpec.describe ApiAuth::TokensController, type: :request do
     context "when admin user" do
       let(:user) do
         FactoryBot.create(:users_user, email: email, password: password).tap do |user|
-          FactoryBot.create(:users_membership, organization: organization, user: user)
+          FactoryBot.create(:users_membership, organization: organization, user: user, role: :admin)
         end
       end
 

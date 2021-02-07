@@ -11,7 +11,7 @@ RSpec.describe ApiAuth::ResourceHelper do
   end
 
   describe ".resource_for_login" do
-    describe "admin authentication for bridge" do
+    context "admin authentication for bridge" do
       let(:client) { double("client", name: "bridge") }
 
       context "when a user with membership exists" do
@@ -37,15 +37,44 @@ RSpec.describe ApiAuth::ResourceHelper do
       end
     end
 
-    describe "non-admin authentication" do
-      let(:client) { nil }
+    context "dipper authentication" do
+      let(:client) { double("client", name: "dipper") }
 
-      context "when organization user exists" do
+      context "when user is a Users::Client" do
         let!(:user) { FactoryBot.create(:users_client, organization: organization) }
 
         it "finds users for the current organization" do
           expect(resource_for_login.flat_map(&:ids)).to eq [user.id]
         end
+      end
+
+      context "when user is a Users::User" do
+        let!(:user) { FactoryBot.create(:users_user) }
+
+        before { FactoryBot.create(:users_membership, organization: organization, user: user, role: :admin) }
+
+        it "finds users for the current organization" do
+          expect(resource_for_login.flat_map(&:ids)).to eq [user.id]
+        end
+      end
+
+      context "when user is a Users::User without a Admin membership for the shop in question" do
+        let!(:user) { FactoryBot.create(:users_user) }
+
+        before { FactoryBot.create(:users_membership, user: user) }
+
+        it "finds users for the current organization" do
+          expect(resource_for_login.flat_map(&:ids)).to be_empty
+        end
+      end
+    end
+
+    context "siren authentication" do
+      let(:client) { double("client", name: "siren") }
+      let!(:user) { FactoryBot.create(:users_client, organization: organization) }
+
+      it "finds users for the current organization" do
+        expect(resource_for_login.flat_map(&:ids)).to eq [user.id]
       end
     end
   end
