@@ -27,7 +27,7 @@ RSpec.describe Api::V1::LegacyResultDecorator do
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD")
   end
 
-  describe ".legacy_json" do
+  describe ".legacy_format" do
     let(:meta_keys) do
       %i[
         mode_of_transport

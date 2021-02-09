@@ -18,14 +18,16 @@ module Api
           "planned_pickup_date": selected_date,
           "has_pre_carriage": query.has_pre_carriage?,
           "has_on_carriage": query.has_on_carriage?,
-          "destination_nexus": query.destination_nexus.as_json,
-          "origin_nexus": query.origin_nexus.as_json,
+          "destination_nexus": destination_hub.nexus.as_json,
+          "origin_nexus": origin_hub.nexus.as_json,
           "origin_hub": origin_hub,
           "destination_hub": destination_hub,
           "planned_eta": query.delivery_date,
           "planned_etd": query.cargo_ready_date,
           "cargo_count": cargo_units.count,
-          "client_name": client.profile.full_name
+          "client_name": client.profile.full_name,
+          "booking_placed_at": query.created_at,
+          "imc_reference": imc_reference
         }
       end
 

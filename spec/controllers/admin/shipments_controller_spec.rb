@@ -62,12 +62,16 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
     end
 
     context "when a user id is given" do
+      let(:other_query) { FactoryBot.create(:journey_query, organization: organization) }
+      let!(:other_result) { FactoryBot.create(:journey_result_set, result_count: 1, query: other_query) }
+      let(:result_ids) { json.dig(:data, :quoted).pluck(:id) }
+
       it "returns an http status of success" do
         get :index, params: {organization_id: organization.id, target_user_id: query.client_id}
 
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(json.dig(:data, :quoted).pluck(:id)).to include(result.id)
+          expect(result_ids).to match_array([result.id])
         end
       end
     end

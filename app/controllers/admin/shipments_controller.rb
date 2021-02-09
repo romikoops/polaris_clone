@@ -51,12 +51,17 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         documents: [],
         addresses: addresses,
         cargoItemTypes: cargo_item_types,
-        accountHolder: query.client,
+        accountHolder: account_holder_format,
         pricingBreakdowns: pricing_breakdowns(result: result)
       }.as_json
     }
 
     response_handler(response)
+  end
+
+  def account_holder_format
+    client = query.client
+    client.profile.as_json.merge(email: client.email)
   end
 
   def search_shipments
@@ -218,9 +223,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
           .where(journey_queries: {client_id: params[:clients].split(",")})
       end
 
-      if params[:target_client_id]
+      if params[:target_user_id]
         @filtered_results = @filtered_results
-          .where(journey_queries: {client_id: params[:target_client_id]})
+          .where(journey_queries: {client_id: params[:target_user_id]})
       end
 
       if params[:query]
