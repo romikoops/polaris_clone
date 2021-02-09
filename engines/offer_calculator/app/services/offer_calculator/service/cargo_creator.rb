@@ -31,6 +31,7 @@ module OfferCalculator
 
       def journey_cargo(unit_params:)
         return if unit_params.blank?
+
         Journey::CargoUnit.new(
           id: unit_params_id(unit_params: unit_params),
           weight_value: unit_params.dig("payload_in_kg") || 0,
@@ -38,7 +39,7 @@ module OfferCalculator
           length_value: dimension_from_params(unit_params: unit_params, dimension: "length"),
           height_value: dimension_from_params(unit_params: unit_params, dimension: "height"),
           quantity: unit_params.dig("quantity") || 1,
-          stackable: unit_params.dig(:stackable).present?,
+          stackable: unit_params.dig("stackable").present?,
           query: query,
           colli_type: colli_type(unit_params: unit_params),
           cargo_class: cargo_class_from_params(unit_params: unit_params)
@@ -50,7 +51,7 @@ module OfferCalculator
       end
 
       def cargo_class_from_params(unit_params:)
-        unit_params.dig("size_class") || "lcl"
+        unit_params.dig("size_class") || unit_params.dig("cargo_class") || "lcl"
       end
 
       def colli_type(unit_params:)

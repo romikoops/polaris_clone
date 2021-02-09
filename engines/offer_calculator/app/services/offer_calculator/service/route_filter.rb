@@ -43,7 +43,8 @@ module OfferCalculator
         Pricings::Pricing.joins(:itinerary).where(
           itineraries: {mode_of_transport: route.mode_of_transport},
           itinerary_id: route.itinerary_id,
-          tenant_vehicle_id: route.tenant_vehicle_id
+          tenant_vehicle_id: route.tenant_vehicle_id,
+          cargo_class: request.cargo_classes
         ).current
       end
 

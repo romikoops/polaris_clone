@@ -60,9 +60,9 @@ module Wheelhouse
 
     def container_id_lookup
       {
-        'ee9b339d-6aee-466a-b8d4-b1c08a4731d4': "fcl_20",
-        '999b255d-9f2d-4399-93a4-deab4e9b8705': "fcl_40",
-        '7931fbf4-a45c-4c0a-af1d-e7bc3dcfefc2': "fcl_40_hq"
+        "ee9b339d-6aee-466a-b8d4-b1c08a4731d4" => "fcl_20",
+        "999b255d-9f2d-4399-93a4-deab4e9b8705" => "fcl_40",
+        "7931fbf4-a45c-4c0a-af1d-e7bc3dcfefc2" => "fcl_40_hq"
       }
     end
 

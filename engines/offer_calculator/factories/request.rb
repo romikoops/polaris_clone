@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :offer_calculator_request, class: "OfferCalculator::Request" do
     skip_create
 
-    query { FactoryBot.create(:journey_query, organization: organization, client: client, creator: creator) }
+    query { FactoryBot.create(:journey_query, organization: organization, client: client, creator: creator, load_type: cargo_trait) }
     params { FactoryBot.build(:journey_request_params, cargo_trait) }
 
     transient do
