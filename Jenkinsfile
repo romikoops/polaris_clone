@@ -39,7 +39,7 @@ pipeline {
               yaml podSpec(
                 containers: [
                   [
-                    name: "ruby", image: "ruby:2.6", interactive: true,
+                    name: "ruby", image: "ruby:2.6", command: ["cat"], tty: true,
                     requests: [ memory: "200Mi", cpu: "250m" ]
                   ]
                 ]
@@ -71,30 +71,19 @@ pipeline {
           agent {
             kubernetes {
               defaultContainer "ruby"
-              inheritFrom "default postgis redis elasticsearch"
-              yaml """
-              kind: Pod
-              spec:
-                containers:
-                - name: ruby
-                  image: itsmycargo/builder:ruby-2.6
-                  imagePullPolicy: Always
-                  command:
-                  - cat
-                  tty: true
-                  resources:
-                    requests:
-                      cpu: 1000m
-                      memory: 1000Mi
-                    limits:
-                      cpu: 1000m
-                      memory: 1000Mi
-                  env:
-                  - name: DATABASE_URL
-                    value: postgis://postgres:@localhost/polaris_test
-                  - name: ELASTICSEARCH_URL
-                    value: http://localhost:9200
-              """
+              inheritFrom "default elasticsearch postgis redis"
+              yaml podSpec(
+                containers: [
+                  [
+                    name: "ruby", image: "itsmycargo/builder:ruby-2.6", command: ["cat"], tty: true,
+                    requests: [ memory: "1Gi", cpu: "1000m" ],
+                    env: [
+                      [name: "DATABASE_URL", value: "postgis://postgres:@localhost/polaris_test"],
+                      [name: "ELASTICSEARCH_URL", value: "http://localhost:9200"],
+                    ]
+                  ]
+                ]
+              )
             }
           }
 
