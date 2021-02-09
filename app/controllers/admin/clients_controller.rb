@@ -29,15 +29,8 @@ class Admin::ClientsController < Admin::AdminBaseController
 
   # Api end point to create a new User through the Admin Dashboard
   def create
-    user_data = {
-      email: new_client_params["email"],
-      password: new_client_params["password"],
-      password_confirmation: new_client_params["password_confirmation"],
-      organization_id: current_organization.id
-    }
     ActiveRecord::Base.transaction do
-      user = restorable_client ? restore_client(user_data: user_data) : create_client(user_data: user_data)
-      user_response = serialized_user(user: user)
+      user_response = serialized_user(user: new_client)
       response_handler(user_response)
     end
   rescue ActiveRecord::RecordInvalid => e
@@ -104,6 +97,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     query = query.search(params[:query]) if params[:query]
     query = query.search(params[:email]) if params[:email]
     query = clients.where(id: query.select(:user_id)).joins(:profile)
+
     return query if params[:company_name].blank?
 
     query.joins(
@@ -166,24 +160,16 @@ class Admin::ClientsController < Admin::AdminBaseController
     end
   end
 
-  def create_client(user_data:)
-    Users::Client.create!(user_data.merge(profile_attributes: profile_params, settings_attributes: {}))
-  end
-
-  def restorable_client
-    @restorable_client ||= begin
-      email = new_client_params.dig("email")
-      Users::Client.only_deleted.find_by(email: email)
-    end
-  end
-
-  def restore_client(user_data:)
-    restoration_params = {user_id: restorable_client.id,
-                          organization_id: current_organization.id,
-                          params: profile_params}
-    Api::UserRestorationService.new(**restoration_params).restore.tap do |user|
-      Users::Client.find(user.id).update(user_data.slice(:password, :password_confirmation))
-    end
+  def new_client
+    Api::ClientCreationService.new(
+      client_attributes: {
+        email: new_client_params["email"],
+        organization_id: current_organization.id
+      },
+      profile_attributes: profile_params,
+      settings_attributes: {currency: current_scope[:default_currency]},
+      group_id: params[:group_id]
+    ).perform
   end
 
   def new_client_params

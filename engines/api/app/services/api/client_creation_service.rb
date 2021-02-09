@@ -27,7 +27,7 @@ module Api
     attr_reader :client_attributes, :profile_attributes, :settings_attributes, :address_attributes, :group_id
 
     def client
-      @client ||= Users::Client.new(client_attributes).tap do |new_user|
+      @client ||= new_or_restored_client.tap do |new_user|
         new_user.profile = Users::ClientProfile.new(profile_attributes)
         new_user.settings = Users::ClientSettings.new(settings_attributes)
       end
@@ -76,6 +76,17 @@ module Api
       return if company.blank?
 
       Companies::Membership.create!(member: client, company: company)
+    end
+
+    def restorable_client
+      @restorable_client ||= begin
+        email = client_attributes.dig("email")
+        Users::Client.only_deleted.find_by(email: email)&.restore
+      end
+    end
+
+    def new_or_restored_client
+      (restorable_client || Users::Client.new(client_attributes))
     end
   end
 end

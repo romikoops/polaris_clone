@@ -85,11 +85,18 @@ RSpec.describe Admin::ClientsController do
     let(:profile_params) { FactoryBot.attributes_for(:users_profile) }
     let(:profile_attributes) { profile_params.deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
-    let(:created_profile_attrs) { Users::Profile.last.attributes }
+    let(:created_profile) { Users::ClientProfile.find_by(user_id: response_data.dig("data", "id")) }
+    let(:created_settings) { Users::ClientSettings.find_by(user_id: response_data.dig("data", "id")) }
+    let(:profile_response) {
+      created_profile.attributes.slice("first_name", "last_name", "phone", "company_name").symbolize_keys
+    }
 
-    it "returns an http status of success" do
+    it "creates the user, profile and settings correctly", :aggregate_failures do
       post :create, params: {organization_id: organization, new_client: attributes.to_json}
       expect(response).to have_http_status(:success)
+      expect(response_data.dig("data", "attributes", "email")).to eq(email)
+      expect(profile_response).to eq(profile_params.except(:user))
+      expect(created_settings.currency).to eq(Organizations::DEFAULT_SCOPE["default_currency"])
     end
 
     context "when creating client with email belonging to a soft deleted user" do
