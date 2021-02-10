@@ -48,22 +48,6 @@ module Api
         route_sections.sum(&:transit_time)
       end
 
-      def origin_hub
-        @origin_hub ||= itinerary.origin_hub
-      end
-
-      def destination_hub
-        @destination_hub ||= itinerary.destination_hub
-      end
-
-      def itinerary
-        @itinerary ||= freight_pricing.itinerary
-      end
-
-      def freight_pricing
-        @freight_pricing ||= Pricings::Pricing.find(metadata_pricing_id)
-      end
-
       def metadatum
         @metadatum ||= Pricings::Metadatum.find_by(result_id: id)
       end

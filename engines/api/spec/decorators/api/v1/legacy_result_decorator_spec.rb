@@ -57,5 +57,13 @@ RSpec.describe Api::V1::LegacyResultDecorator do
         expect(legacy_format.dig(:notes)).to eq([note])
       end
     end
+
+    context "when pricing is destroyed" do
+      before { pricing.destroy }
+
+      it "returns the legacy response format" do
+        expect(legacy_format.dig(:quote)).to match_response_schema("legacy/simple_quote")
+      end
+    end
   end
 end
