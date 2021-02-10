@@ -18,10 +18,10 @@ module Api
           "planned_pickup_date": selected_date,
           "has_pre_carriage": query.has_pre_carriage?,
           "has_on_carriage": query.has_on_carriage?,
-          "destination_nexus": destination_hub.nexus.as_json,
-          "origin_nexus": origin_hub.nexus.as_json,
-          "origin_hub": origin_hub,
-          "destination_hub": destination_hub,
+          "destination_nexus": legacy_destination_hub.nexus.as_json,
+          "origin_nexus": legacy_origin_hub.nexus.as_json,
+          "origin_hub": legacy_origin_hub,
+          "destination_hub": legacy_destination_hub,
           "planned_eta": query.delivery_date,
           "planned_etd": query.cargo_ready_date,
           "cargo_count": cargo_units.count,
@@ -88,14 +88,6 @@ module Api
 
       def on_carriage_service
         @on_carriage_service ||= on_carriage_section&.service
-      end
-
-      def origin_hub
-        @origin_hub ||= Legacy::HubDecorator.new(itinerary.origin_hub, context: {scope: scope})
-      end
-
-      def destination_hub
-        @destination_hub ||= Legacy::HubDecorator.new(itinerary.destination_hub, context: {scope: scope})
       end
 
       def remarks

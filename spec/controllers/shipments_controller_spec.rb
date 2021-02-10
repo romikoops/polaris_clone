@@ -8,15 +8,23 @@ RSpec.describe ShipmentsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { query.client }
   let(:json_response) { JSON.parse(response.body) }
-  let!(:origin_nexus) {
-    FactoryBot.create(:legacy_nexus,
-      locode: origin_locode,
+  let(:origin_hub) {
+    FactoryBot.create(:legacy_hub,
+      hub_code: freight_section.from.locode,
+      hub_type: freight_section.mode_of_transport,
       organization: organization)
   }
-  let!(:destination_nexus) {
-    FactoryBot.create(:legacy_nexus,
-      locode: destination_locode,
+  let(:destination_hub) {
+    FactoryBot.create(:legacy_hub,
+      hub_code: freight_section.to.locode,
+      hub_type: freight_section.mode_of_transport,
       organization: organization)
+  }
+  let!(:origin_nexus) {
+    origin_hub.nexus
+  }
+  let!(:destination_nexus) {
+    destination_hub.nexus
   }
   let(:route_sections) { [freight_section] }
   let(:line_items) { freight_line_items_with_cargo }

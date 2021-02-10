@@ -5,7 +5,7 @@ module ResultFormatter
     delegate_all
 
     delegate :pickup_address, :delivery_address, :client,
-      :planned_delivery_date, :planned_pickup_date, :cargo_units, to: :query
+      :planned_delivery_date, :planned_pickup_date, :cargo_units, :organization, to: :query
 
     def valid_until
       @valid_until ||= expiration_date
@@ -130,11 +130,11 @@ module ResultFormatter
     end
 
     def origin_hub
-      @origin_hub ||= Legacy::HubDecorator.decorate(itinerary.origin_hub, context: {scope: scope})
+      @origin_hub ||= Legacy::HubDecorator.decorate(legacy_origin_hub, context: {scope: scope})
     end
 
     def destination_hub
-      @destination_hub ||= Legacy::HubDecorator.decorate(itinerary.destination_hub, context: {scope: scope})
+      @destination_hub ||= Legacy::HubDecorator.decorate(legacy_destination_hub, context: {scope: scope})
     end
 
     def origin
@@ -233,7 +233,9 @@ module ResultFormatter
     end
 
     def itinerary
-      @itinerary ||= freight_pricing.itinerary || Legacy::Itinerary.new
+      @itinerary ||= freight_pricing.itinerary || Legacy::Itinerary.new(
+        origin_hub: legacy_origin_hub, destination_hub: legacy_destination_hub
+      )
     end
 
     def freight_pricing
@@ -259,33 +261,33 @@ module ResultFormatter
     end
 
     def pre_carriage_section
-      @pre_carriage_section ||= route_sections_in_order.find do |section|
+      @pre_carriage_section ||= route_sections_in_order.find { |section|
         section.mode_of_transport == "carriage" && section.to == origin_route_point
-      end
+      }
     end
 
     def on_carriage_section
-      @on_carriage_section ||= route_sections_in_order.find do |section|
+      @on_carriage_section ||= route_sections_in_order.find { |section|
         section.mode_of_transport == "carriage" && section.from == destination_route_point
-      end
+      }
     end
 
     def origin_transfer_section
-      @origin_transfer_section ||= route_sections_in_order.find do |section|
+      @origin_transfer_section ||= route_sections_in_order.find { |section|
         section.from == origin_route_point && section.to == origin_route_point
-      end
+      }
     end
 
     def destination_transfer_section
-      @destination_transfer_section ||= route_sections_in_order.find do |section|
+      @destination_transfer_section ||= route_sections_in_order.find { |section|
         section.from == destination_route_point && section.to == destination_route_point
-      end
+      }
     end
 
     def main_freight_section
-      @main_freight_section ||= route_sections_in_order.find do |section|
+      @main_freight_section ||= route_sections_in_order.find { |section|
         section.from != section.to && section.mode_of_transport != "carriage"
-      end
+      }
     end
 
     def current_line_item_set
@@ -341,6 +343,22 @@ module ResultFormatter
 
     def load_type
       query.load_type == "fcl" ? "container" : "cargo_item"
+    end
+
+    def legacy_origin_hub
+      @legacy_origin_hub ||= Legacy::Hub.find_by(
+        hub_code: origin_route_point.locode,
+        hub_type: mode_of_transport,
+        organization: organization
+      )
+    end
+
+    def legacy_destination_hub
+      @legacy_destination_hub ||= Legacy::Hub.find_by(
+        hub_code: destination_route_point.locode,
+        hub_type: mode_of_transport,
+        organization: organization
+      )
     end
   end
 end

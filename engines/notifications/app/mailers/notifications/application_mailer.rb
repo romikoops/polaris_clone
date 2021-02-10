@@ -30,6 +30,6 @@ module Notifications
         emails.dig("sales", "general") ||
         "no-reply@itsmycargo.shop"
     end
-    helper_method :current_organization
+    helper_method :organization_from_email
   end
 end

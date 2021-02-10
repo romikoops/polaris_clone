@@ -3,15 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::ResultDecorator do
-  let!(:result) { FactoryBot.build(:journey_result) }
+  let!(:result) { FactoryBot.build(:journey_result, query: query) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
-  let(:decorated_query) { described_class.new(result, context: {scope: scope}) }
-  let(:legacy_json) { decorated_query.legacy_json }
+  let(:decorated_result) { described_class.new(result, context: {scope: scope}) }
+  let(:legacy_json) { decorated_result.legacy_json }
   let(:note) { FactoryBot.create(:legacy_note) }
   let(:note_service_dummy) { double("Notes::Service", fetch: [note]) }
-  let(:query) { result.query }
+  let(:query) { FactoryBot.create(:journey_query, organization: organization, client: user) }
   let(:metadatum) { FactoryBot.create(:pricings_metadatum, result_id: result.id) }
   let(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization) }
   let!(:line_item) { FactoryBot.create(:journey_line_item, route_section: result.route_sections.first) }
@@ -35,6 +35,20 @@ RSpec.describe Api::V1::ResultDecorator do
       imc_reference
     ]
   end
+  let(:origin_hub) {
+    FactoryBot.create(:legacy_hub,
+      hub_code: line_item.route_section.to.locode,
+      hub_type: line_item.route_section.mode_of_transport,
+      organization: organization)
+  }
+  let(:destination_hub) {
+    FactoryBot.create(:legacy_hub,
+      hub_code: line_item.route_section.from.locode,
+      hub_type: line_item.route_section.mode_of_transport,
+      organization: organization)
+  }
+  let!(:origin_nexus) { origin_hub.nexus }
+  let!(:destination_nexus) { destination_hub.nexus }
 
   before do
     FactoryBot.create(:pricings_breakdown,
@@ -42,17 +56,13 @@ RSpec.describe Api::V1::ResultDecorator do
       rate_origin: {type: "Pricings::Pricing", id: pricing.id},
       order: 0,
       line_item_id: line_item.id)
+    Organizations.current_id = organization.id
     allow(Notes::Service).to receive(:new).and_return(note_service_dummy)
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD")
   end
 
   describe ".legacy_json" do
     let(:expected_keys) { base_keys }
-    let(:itinerary) { pricing.itinerary }
-    let(:origin_hub) { itinerary.origin_hub }
-    let(:destination_hub) { itinerary.destination_hub }
-    let(:origin_nexus) { origin_hub.nexus }
-    let(:destination_nexus) { destination_hub.nexus }
 
     it "returns the legacy response format" do
       aggregate_failures do
@@ -63,10 +73,10 @@ RSpec.describe Api::V1::ResultDecorator do
         expect(legacy_json[:planned_pickup_date]).to eq(query.cargo_ready_date)
         expect(legacy_json[:has_pre_carriage]).to eq(false)
         expect(legacy_json[:has_on_carriage]).to eq(false)
-        expect(legacy_json[:destination_nexus]["id"]).to eq(destination_nexus.id)
-        expect(legacy_json[:origin_nexus]["id"]).to eq(origin_nexus.id)
-        expect(legacy_json[:origin_hub]).to eq(origin_hub)
-        expect(legacy_json[:destination_hub]).to eq(destination_hub)
+        expect(legacy_json[:destination_nexus]["locode"]).to eq(destination_nexus.locode)
+        expect(legacy_json[:origin_nexus]["locode"]).to eq(origin_nexus.locode)
+        expect(legacy_json[:origin_hub]["hub_code"]).to eq(origin_hub.hub_code)
+        expect(legacy_json[:destination_hub]["hub_code"]).to eq(destination_hub.hub_code)
         expect(legacy_json[:planned_eta]).to eq(query.delivery_date)
         expect(legacy_json[:planned_etd]).to eq(query.cargo_ready_date)
         expect(legacy_json[:cargo_count]).to eq(query.cargo_units.count)
@@ -90,7 +100,7 @@ RSpec.describe Api::V1::ResultDecorator do
     end
 
     describe ".legacy_address_json" do
-      let(:legacy_address_json) { decorated_query.legacy_address_json }
+      let(:legacy_address_json) { decorated_result.legacy_address_json }
       let(:expected_keys) { base_keys + %i[pickup_address delivery_address selected_offer] }
 
       before do
@@ -108,7 +118,7 @@ RSpec.describe Api::V1::ResultDecorator do
     end
 
     describe ".legacy_index_json" do
-      let(:legacy_index_json) { decorated_query.legacy_index_json }
+      let(:legacy_index_json) { decorated_result.legacy_index_json }
       let(:expected_keys) { base_keys + %i[pickup_address delivery_address] }
 
       it "returns the legacy response format for the index list" do

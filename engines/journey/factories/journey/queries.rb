@@ -24,11 +24,11 @@ FactoryBot.define do
     origin_coordinates { RGeo::Geos.factory(srid: 4326).point(origin_longitude, origin_latitude) }
     destination { "Shanghai Airport" }
     destination_coordinates { RGeo::Geos.factory(srid: 4326).point(destination_longitude, destination_latitude) }
-    cargo_ready_date { Time.zone.tomorrow }
-    delivery_date { Time.zone.today + 3.weeks }
+    cargo_ready_date { Time.zone.tomorrow.change(usec: 0) }
+    delivery_date { (Time.zone.today + 3.weeks).change(usec: 0) }
     customs { false }
     insurance { false }
-    created_at { DateTime.now }
+    created_at { DateTime.now.change(usec: 0) }
     billable { true }
     load_type { "lcl" }
   end

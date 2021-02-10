@@ -290,19 +290,31 @@ module Api
       end
 
       context "when origin and destinations are nexuses" do
-        let!(:origin_nexus) { FactoryBot.create(:legacy_nexus, locode: origin_locode, organization: organization) }
-        let!(:destination_nexus) { FactoryBot.create(:legacy_nexus, locode: destination_locode, organization: organization) }
+        let!(:origin_hub) { 
+          FactoryBot.create(:legacy_hub,
+            hub_code: origin_locode,
+            hub_type: freight_section.mode_of_transport,
+            organization: organization)
+        }
+        let!(:destination_hub) { 
+          FactoryBot.create(:legacy_hub,
+            hub_code: destination_locode,
+            hub_type: freight_section.mode_of_transport,
+            organization: organization)
+        }
+        let!(:origin_nexus) { origin_hub.nexus }
+        let!(:destination_nexus) { destination_hub.nexus }
         let(:route_sections) { [freight_section] }
         it "renders origin and destination as nexus objects" do
           get :show, params: {organization_id: organization.id, id: query.id}
 
           aggregate_failures do
             expect(
-              response_data.dig("attributes", "origin", "data", "id").to_i
-            ).to eq origin_nexus.id
+              response_data.dig("attributes", "origin", "data", "id")
+            ).to eq origin_nexus.id.to_s
             expect(
-              response_data.dig("attributes", "destination", "data", "id").to_i
-            ).to eq destination_nexus.id
+              response_data.dig("attributes", "destination", "data", "id")
+            ).to eq destination_nexus.id.to_s
           end
         end
       end
