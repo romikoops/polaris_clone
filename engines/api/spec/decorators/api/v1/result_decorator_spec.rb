@@ -59,6 +59,15 @@ RSpec.describe Api::V1::ResultDecorator do
     Organizations.current_id = organization.id
     allow(Notes::Service).to receive(:new).and_return(note_service_dummy)
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD")
+    %w[
+      trucking_pre
+      trucking_on
+      cargo
+      export
+      import
+    ].each do |code|
+      FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
+    end
   end
 
   describe ".legacy_json" do

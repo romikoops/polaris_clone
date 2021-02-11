@@ -150,6 +150,18 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   end
 
   describe "GET #show" do
+    before do
+      %w[
+        trucking_pre
+        trucking_on
+        cargo
+        export
+        import
+      ].each do |code|
+        FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
+      end
+    end
+
     context "with charge breakdowns" do
       before do
         get :show, params: {id: result.id, organization_id: organization.id}

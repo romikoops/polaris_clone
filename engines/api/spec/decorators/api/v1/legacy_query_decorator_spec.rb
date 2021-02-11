@@ -18,6 +18,11 @@ RSpec.describe Api::V1::LegacyQueryDecorator do
   end
 
   before do
+    %w[
+      cargo
+    ].each do |code|
+      FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
+    end
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD")
     breakdown
   end

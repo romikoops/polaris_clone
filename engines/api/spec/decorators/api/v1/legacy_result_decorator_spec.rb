@@ -3,12 +3,13 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::LegacyResultDecorator do
-  let!(:result) { FactoryBot.build(:journey_result) }
+  let!(:result) { FactoryBot.build(:journey_result, query: query) }
+  let(:query) { FactoryBot.build(:journey_query, organization: organization, client: user) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.with_indifferent_access }
-  let(:decorated_query) { described_class.new(result, context: {scope: scope}) }
-  let(:legacy_format) { decorated_query.legacy_format }
+  let(:decorated_result) { described_class.new(result, context: {scope: scope}) }
+  let(:legacy_format) { decorated_result.legacy_format }
   let(:note) { FactoryBot.create(:legacy_note) }
   let(:note_service_dummy) { double("Notes::Service", fetch: [note]) }
   let(:metadatum) { FactoryBot.create(:pricings_metadatum, result_id: result.id) }
@@ -25,6 +26,15 @@ RSpec.describe Api::V1::LegacyResultDecorator do
       line_item_id: line_item.id)
     allow(Notes::Service).to receive(:new).and_return(note_service_dummy)
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD")
+    %w[
+      trucking_pre
+      trucking_on
+      cargo
+      export
+      import
+    ].each do |code|
+      FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
+    end
   end
 
   describe ".legacy_format" do

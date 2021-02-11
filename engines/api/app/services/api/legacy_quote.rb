@@ -89,7 +89,7 @@ module Api
         "edited_total" => edited_sub_total(
           items: original_line_item_set.line_items.where(route_section: route_section)
         ),
-        "name" => legacy_section_key(route_section: route_section).humanize
+        "name" => legacy_charge_category_name(route_section: route_section)
       )
     end
 
@@ -140,6 +140,13 @@ module Api
       else
         "cargo"
       end
+    end
+
+    def legacy_charge_category_name(route_section:)
+      Legacy::ChargeCategory.find_by(
+        organization: organization,
+        code: legacy_section_key(route_section: route_section)
+      ).name
     end
 
     def legacy_carriage_key(route_section:)

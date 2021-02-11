@@ -21,10 +21,31 @@ RSpec.describe Api::LegacyQuote do
   let(:line_items) do
     freight_line_items_with_cargo
   end
+  before do
+    %w[cargo import export trucking_pre trucking_on].each do |code|
+      FactoryBot.create(:legacy_charge_categories,
+        organization: organization,
+        code: code,
+        name: code.humanize)
+    end
+  end
 
   context "when it returns a complete quote" do
     it "returns a complete quote with rate data" do
       expect(quote).to match_response_schema("legacy/simple_quote")
+    end
+  end
+
+  context "with custom charge_categories" do
+    before do
+      Legacy::ChargeCategory.find_by(
+        organization: organization,
+        code: "cargo"
+      ).update(name: "Banana")
+    end
+
+    it "returns a complete quote with rate data and correct labels" do
+      expect(quote.dig("cargo", "name")).to eq("Banana")
     end
   end
 
@@ -64,7 +85,7 @@ RSpec.describe Api::LegacyQuote do
     before do
       allow(quote_service).to receive(:query).and_return(query)
     end
-    let(:query) { FactoryBot.build(:journey_query, client: nil) }
+    let(:query) { FactoryBot.build(:journey_query, client: nil, organization: organization) }
 
     it "returns a complete quote with all totals hidden" do
       expect(quote).to match_response_schema("legacy/guest_quote")
