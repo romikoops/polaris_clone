@@ -70,6 +70,7 @@ module Notifications
       main_route_sections
         .map(&:from)
         .map(&:locode)
+        .compact
         .first
     end
 
@@ -81,7 +82,8 @@ module Notifications
       main_route_sections
         .map(&:to)
         .map(&:locode)
-        .first
+        .compact
+        .last
     end
 
     def pickup_postal_code
@@ -152,9 +154,9 @@ module Notifications
     end
 
     def main_route_sections
-      @main_route_sections ||= route_sections.reject do |route_section|
+      @main_route_sections ||= route_sections.reject { |route_section|
         route_section.mode_of_transport == "carriage" && route_section.to != route_section.from
-      end
+      }
     end
   end
 end

@@ -50,7 +50,8 @@ module Wheelhouse
     def publish_event
       Rails.configuration.event_store.publish(
         Journey::OfferCreated.new(data: {
-          offer: offer.to_global_id, organization_id: Organizations.current_id}),
+          offer: offer.to_global_id, organization_id: Organizations.current_id
+        }),
         stream_name: "Organization$#{Organizations.current_id}"
       )
     end

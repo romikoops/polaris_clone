@@ -50,6 +50,14 @@ module Notifications
       it "renders the body" do
         expect(mail.body.encoded).to match("Hi")
       end
+
+      context "when Query is not billable" do
+        let(:query) { FactoryBot.build(:journey_query, organization: organization, billable: false) }
+
+        it "renders the subject line with test" do
+          expect(mail.subject).to start_with("TEST: ")
+        end
+      end
     end
   end
 end

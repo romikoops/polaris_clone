@@ -21,7 +21,6 @@ module Notifications
       @user = Users::Client.unscoped.find_by(id: @query.client_id, organization: params[:organization])
       @profile = @user&.profile || Users::ClientProfile.new
       @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
-      subject_line = Notifications::OfferSubjectLine.new(offer: @offer, scope: current_scope(user: @user)).subject_line
       mail to: params[:recipient], subject: subject_line
     end
 
@@ -29,6 +28,22 @@ module Notifications
 
     def company
       "ItsMyCargo ApS"
+    end
+
+    def subject_line
+      text = Notifications::OfferSubjectLine.new(
+        offer: @offer, scope: current_scope(user: @user)
+      ).subject_line
+
+      "#{subject_prefix}#{text}"
+    end
+
+    def subject_prefix
+      if @query.billable?
+        ""
+      else
+        "TEST: "
+      end
     end
   end
 end
