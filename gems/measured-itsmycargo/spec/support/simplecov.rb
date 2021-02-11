@@ -6,7 +6,7 @@ SimpleCov.configure do
   # Customised Rails Profile
   load_profile "test_frameworks"
 
-  if ENV["CONTINUOUS_INTEGRATION"]
+  if ENV["CI"]
     coverage_dir "coverage"
     merge_timeout 3600
 

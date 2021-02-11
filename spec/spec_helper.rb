@@ -23,7 +23,7 @@ SimpleCov.start do
 
   track_files "{app,lib}/**/*.rb"
 
-  if ENV["CONTINUOUS_INTEGRATION"]
+  if ENV["CI"]
     require "simplecov-cobertura"
 
     formatter SimpleCov::Formatter::CoberturaFormatter
@@ -54,7 +54,7 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.add_formatter(RSpec::Instafail)
-  if ENV["CONTINUOUS_INTEGRATION"]
+  if ENV["CI"]
     require "rspec_count_formatter"
     config.add_formatter(RspecCountFormatter)
     require "rspec_junit_formatter"

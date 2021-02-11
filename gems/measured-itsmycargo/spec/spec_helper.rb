@@ -6,7 +6,7 @@ require "simplecov"
 SimpleCov.start do
   enable_coverage :branch
 
-  if ENV["CONTINUOUS_INTEGRATION"]
+  if ENV["CI"]
     require "simplecov-cobertura"
 
     formatter SimpleCov::Formatter::CoberturaFormatter
@@ -27,7 +27,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  if ENV["CONTINUOUS_INTEGRATION"]
+  if ENV["CI"]
     require "rspec_junit_formatter"
     config.add_formatter(RspecJunitFormatter, File.expand_path("../junit.xml", __dir__))
   else
