@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: web
+  labels:
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: polaris
+    app.kubernetes.io/name: polaris
+  annotations:
+    kubernetes.io/ingress.class: haproxy
+spec:
+  rules:
+    - host: polaris-production.itsmycargo.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web
+              servicePort: http

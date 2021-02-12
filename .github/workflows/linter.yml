@@ -7,24 +7,9 @@ on:
     branches: [master]
 
 jobs:
-  skip:
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - id: skip_check
-        uses: fkirc/skip-duplicate-actions@master
-        with:
-          concurrent_skipping: 'same_content'
-          skip_after_successful_duplicate: 'true'
-          do_not_skip: '["pull_request", "workflow_dispatch", "schedule"]'
-
-  build:
+  lint:
     name: Lint Code Base
     runs-on: ubuntu-20.04
-
-    needs: skip
-    if: ${{ needs.skip.outputs.should_skip != 'true' }}
 
     steps:
       - uses: actions/checkout@v2
@@ -36,3 +21,4 @@ jobs:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: false
+          VALIDATE_DOCKERFILE: false

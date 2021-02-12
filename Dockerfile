@@ -1,11 +1,12 @@
 FROM ruby:2.6-slim AS base
 
 # Upgrade bundler
-RUN gem install bundler -v1.17.3
+RUN gem install bundler:1.17.3
 
 # Minimal requirements to run a Rails app
+# hadolint ignore=DL3008
 RUN apt-get update \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
   awscli \
   build-essential \
   cmake \
@@ -18,15 +19,18 @@ RUN apt-get update \
   npm \
   pv \
   tzdata \
-  wkhtmltopdf
+  wkhtmltopdf\
+  && rm -rf /var/lib/apt/lists/*
 
 # Install Postgresql 12
+# hadolint ignore=DL3008,DL4006
 RUN \
   curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | \
     tee /etc/apt/sources.list.d/pgdg.list \
   && apt-get update \
-  && apt-get install -y libpq-dev postgresql-client-12
+  && apt-get install -y --no-install-recommends libpq-dev postgresql-client-12 \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install MJML
 RUN npm install -g 'mjml@4.3.1'
@@ -34,7 +38,7 @@ RUN npm install -g 'mjml@4.3.1'
 WORKDIR /app
 
 # Collect all internal gems and engines
-FROM busybox AS dependencies
+FROM busybox:1.32 AS dependencies
 
 COPY . /app
 RUN find /app -type f ! -name "Gemfile*" ! -name "*.gemspec" ! -name ".rails-version" -delete
@@ -63,11 +67,12 @@ RUN RAILS_ENV=production bin/rails assets:precompile
 #
 FROM ruby:2.6-slim AS app
 
-RUN gem install bundler -v1.17.3
+RUN gem install bundler:1.17.3
 
 # Minimal requirements to run a Rails app
+# hadolint ignore=DL3008
 RUN apt-get update \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
     curl \
     fonts-noto \
     gnupg2 \
@@ -78,15 +83,18 @@ RUN apt-get update \
     nodejs \
     npm \
     tzdata \
-    wkhtmltopdf
+    wkhtmltopdf \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Postgresql 12
+# hadolint ignore=DL3008,DL4006
 RUN \
   curl -sL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" | \
     tee /etc/apt/sources.list.d/pgdg.list \
   && apt-get update \
-  && apt-get install -y libpq5
+  && apt-get install -y --no-install-recommends libpq5 \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install MJML
 RUN npm install -g 'mjml@4.3.1'
@@ -110,7 +118,7 @@ COPY --from=builder --chown=app:app /app /app
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
-ENV RAILS_ENV review
+ENV RAILS_ENV production
 ENV MALLOC_ARENA_MAX 2
 
 EXPOSE 3000

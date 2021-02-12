@@ -1,0 +1,10 @@
+ci:
+  blocking:
+    - Docker
+
+dependencies:
+  override: []
+
+kubernetes:
+  namespace: polaris
+  context: arn:aws:eks:eu-central-1:003688427525:cluster/armada
