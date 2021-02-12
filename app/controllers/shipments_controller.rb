@@ -38,12 +38,11 @@ class ShipmentsController < ApplicationController
   end
 
   def search_shipments
-    results = client_results.order(booking_placed_at: :desc).index_search(params[:query])
+    results = client_results.merge(organization_queries.search(params[:query]))
     per_page = params.fetch(:per_page, 4).to_f
     shipments = results.order(:updated_at).paginate(page: params[:page], per_page: per_page)
-
     response_handler(
-      results: result_table_list(results: shipments),
+      shipments: result_table_list(results: shipments),
       num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
@@ -231,5 +230,9 @@ class ShipmentsController < ApplicationController
         journey_result_sets: {status: "completed"},
         journey_queries: {client_id: current_user.id, organization_id: current_organization.id}
       )
+  end
+
+  def organization_queries
+    Api::Query.where(client_id: current_user.id, organization_id: current_organization.id)
   end
 end

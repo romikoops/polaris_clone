@@ -2,6 +2,19 @@
 
 module Api
   class Query < ::Journey::Query
+    include PgSearch::Model
+    has_one :client_profile, through: :client, source: :profile
+    pg_search_scope :search,
+      against: %i[origin destination],
+      associated_against: {
+        company: :name,
+        client: :email,
+        client_profile: %i[first_name last_name phone]
+      },
+      using: {
+        tsearch: {prefix: true}
+      }
+
     filterrific(
       default_filter_params: {sorted_by: "created_at_desc"},
       available_filters: [

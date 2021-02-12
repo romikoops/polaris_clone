@@ -52,6 +52,16 @@ RSpec.describe ShipmentsController do
     end
   end
 
+  describe "GET #search_shipments" do
+    it "returns the results for the page in question" do
+      get :search_shipments, params: {
+        organization_id: organization.id, page: 1, per_page: 1, target: "quoted", query: query.origin
+      }
+
+      expect(response_data["shipments"].pluck("id")).to eq([result.id])
+    end
+  end
+
   describe "GET #show" do
     before do
       %w[
@@ -64,9 +74,9 @@ RSpec.describe ShipmentsController do
         FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
       end
     end
-    
+
     let!(:target_exchange_rate) { FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD") }
-    
+
     it "returns requested shipment" do
       get :show, params: {id: result.id, organization_id: organization.id}
 

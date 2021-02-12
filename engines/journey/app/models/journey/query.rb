@@ -1,13 +1,7 @@
+# frozen_string_literal: true
+
 module Journey
   class Query < ApplicationRecord
-    include PgSearch::Model
-
-    pg_search_scope :search,
-      associated_against: {
-        company: :name,
-        client: %i[first_name last_name phone]
-      }
-
     has_many :cargo_units
     has_many :documents
     has_many :result_sets
@@ -17,6 +11,8 @@ module Journey
     belongs_to :creator, polymorphic: true, optional: true
     belongs_to :client, class_name: "Users::Client", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
+
+    has_one :profile, through: :client
 
     validates :source_id, presence: true
     validates :cargo_ready_date, presence: true
