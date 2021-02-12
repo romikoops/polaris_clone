@@ -5,6 +5,9 @@ module Legacy
     self.table_name = "countries"
     has_many :addresses, class_name: "Legacy::Address"
     has_many :nexuses
+
+    validates_uniqueness_of :code
+
     Geoplace = Struct.new(:name, :code)
 
     def self.geo_find_by_name(name)

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:country) { FactoryBot.create(:country_se) }
+  let(:country) { factory_country_from_code(code: "SE") }
   let(:location_1) { FactoryBot.create(:zipcode_location, :zipcode, data: "00001", country: country) }
   let(:location_2) { FactoryBot.create(:zipcode_location, :zipcode, data: "00002", country: country) }
   let(:results) {
@@ -35,7 +35,15 @@ RSpec.describe Api::Routing::Trucking::CountriesService, type: :service do
       let(:germany) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
       before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: germany)
+        FactoryBot.create(:trucking_hub_availability,
+          hub: origin_hub,
+          type_availability: factory_type_availability(
+            carriage: "pre",
+            load_type: "cargo_item",
+            query_method: :location,
+            truck_type: "default",
+            country: germany
+          ))
       end
 
       it "renders the list correct list of countries" do

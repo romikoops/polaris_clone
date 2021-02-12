@@ -51,11 +51,11 @@ module Legacy
     end
 
     describe ".new_from_raw_params" do
-      let(:country) { FactoryBot.create(:legacy_country) }
       let(:address_attributes) { FactoryBot.attributes_for(:legacy_address) }
 
       it "returns the zipcode" do
-        address_attributes["country"] = country.name
+        address_attributes["country"] = address_attributes[:country].name
+        address_attributes.delete(:country)
         address = described_class.new_from_raw_params(address_attributes)
 
         expect(address.save).to be_truthy

@@ -66,6 +66,21 @@ FactoryBot.define do
   end
 end
 
+def factory_hub_availability(load_type:, hub:, carriage:, truck_type:, query_method:, country:)
+  type_availability = factory_type_availability(
+    carriage: carriage,
+    truck_type: truck_type,
+    query_method: query_method,
+    country: country
+  )
+  hub_availability = Trucking::HubAvailability.find_by(
+    hub: hub,
+    type_availability: type_availability
+  )
+
+  hub_availability ||
+    FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: type_availability)
+end
 # == Schema Information
 #
 # Table name: trucking_hub_availabilities

@@ -8,7 +8,7 @@ FactoryBot.define do
     zip_code { "43813" }
     geocoded_address { "438 80 Landvetter, Sweden" }
     city { "Gothenburg" }
-    association :country, factory: :legacy_country
+    country { factory_country_from_code(code: "SE") }
 
     trait :shanghai do
       name { "Shanghai" }

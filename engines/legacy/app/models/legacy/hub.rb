@@ -54,6 +54,7 @@ module Legacy
       tsearch: {prefix: true}
     }
     validates :hub_code, format: {with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode"}, allow_nil: true
+
     before_validation :set_point
 
     MOT_HUB_NAME = {

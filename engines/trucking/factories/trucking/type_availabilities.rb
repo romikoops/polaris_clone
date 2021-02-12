@@ -6,7 +6,7 @@ FactoryBot.define do
     carriage { "pre" }
     truck_type { "default" }
     query_method { :not_set }
-    association :country, factory: :legacy_country
+    country { factory_country_from_code(code: "SE") }
 
     transient do
       custom_truck_type { nil }
@@ -16,18 +16,6 @@ FactoryBot.define do
     before(:create) do |availability, evaluator|
       availability.truck_type = evaluator.custom_truck_type if evaluator.custom_truck_type.present?
       availability.query_method = evaluator.custom_query_method if evaluator.custom_query_method.present?
-    end
-
-    to_create do |instance|
-      instance.attributes = Trucking::TypeAvailability.find_or_create_by(
-        load_type: instance.load_type,
-        carriage: instance.carriage,
-        truck_type: instance.truck_type,
-        query_method: instance.query_method,
-        country: instance.country
-      )
-        .attributes
-      instance.reload
     end
 
     trait :pre_carriage do
@@ -55,6 +43,25 @@ FactoryBot.define do
     factory :cargo_item_on_carriage_distance, traits: %i[on_carriage cargo_item distance]
     factory :container_on_carriage_distance, traits: %i[on_carriage container distance]
   end
+end
+
+def factory_type_availability(load_type:, carriage:, truck_type:, query_method:, country:)
+  availability = Trucking::TypeAvailability.find_by(
+    load_type: load_type,
+    carriage: carriage,
+    truck_type: truck_type,
+    query_method: query_method,
+    country: country
+  )
+
+  availability || FactoryBot.create(
+    :trucking_type_availability,
+    load_type: load_type,
+    carriage: carriage,
+    truck_type: truck_type,
+    query_method: query_method,
+    country: country
+  )
 end
 
 # == Schema Information

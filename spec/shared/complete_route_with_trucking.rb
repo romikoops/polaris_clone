@@ -113,18 +113,25 @@ RSpec.shared_context "complete_route_with_trucking" do
     end
   end
   let!(:trucking_availbilities) do
-    short_load_type = load_type == "cargo_item" ? "lcl" : "fcl"
     [
-      FactoryBot.create("#{short_load_type}_pre_carriage_availability".to_sym,
+      FactoryBot.create(:trucking_hub_availability,
         hub: origin_hub,
-        query_type: :location,
-        custom_truck_type: truck_type,
-        country: origin_hub.country),
-      FactoryBot.create("#{short_load_type}_on_carriage_availability".to_sym,
+        type_availability: factory_type_availability(
+          carriage: "pre",
+          load_type: load_type,
+          query_method: :location,
+          truck_type: truck_type,
+          country: origin_hub.country
+        )),
+      FactoryBot.create(:trucking_hub_availability,
         hub: destination_hub,
-        query_type: :location,
-        custom_truck_type: truck_type,
-        country: destination_hub.country)
+        type_availability: factory_type_availability(
+          carriage: "on",
+          load_type: load_type,
+          query_method: :location,
+          truck_type: truck_type,
+          country: destination_hub.country
+        ))
     ]
   end
 

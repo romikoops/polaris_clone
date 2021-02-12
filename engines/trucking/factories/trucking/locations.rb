@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :trucking_location, class: "Trucking::Location" do
-    association :country, factory: :legacy_country
+    country { factory_country_from_code(code: "SE") }
     trait :zipcode do
       query { "postal_code" }
       data { "15211" }

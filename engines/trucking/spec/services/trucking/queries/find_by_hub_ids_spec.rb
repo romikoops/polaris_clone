@@ -13,7 +13,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
     let(:load_type) { "cargo_item" }
     let(:carriage) { "pre" }
     let(:country_code) { "SE" }
-    let(:country) { FactoryBot.create(:legacy_country, code: country_code) }
+    let(:country) { hub.country }
     let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
     let(:address) do
       FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)

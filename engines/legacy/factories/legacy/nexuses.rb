@@ -6,14 +6,14 @@ FactoryBot.define do
     latitude { "57.694253" }
     longitude { "11.854048" }
     association :organization, factory: :organizations_organization
-    association :country, factory: :legacy_country
+    country { factory_country_from_code(code: "SE") }
 
     trait :segot do
       name { "Gothenburg" }
       locode { "SEGOT" }
       latitude { "57.694253" }
       longitude { "11.854048" }
-      association :country, factory: :country_se
+      country { factory_country_from_code(code: "SE") }
     end
 
     trait :cnsha do
@@ -21,7 +21,7 @@ FactoryBot.define do
       locode { "CNSHA" }
       latitude { "31.2231338" }
       longitude { "120.9162975" }
-      association :country, factory: :country_cn
+      country { factory_country_from_code(code: "CN") }
     end
 
     trait :deham do
@@ -29,7 +29,7 @@ FactoryBot.define do
       locode { "DEHAM" }
       latitude { "53.55" }
       longitude { "9.927" }
-      association :country, factory: :country_de
+      country { factory_country_from_code(code: "DE") }
     end
 
     trait :gbfxt do
@@ -37,7 +37,7 @@ FactoryBot.define do
       locode { "GBFXT" }
       latitude { "51.96" }
       longitude { "1.3277" }
-      association :country, factory: :country_uk
+      country { factory_country_from_code(code: "GB") }
     end
 
     factory :gothenburg_nexus, traits: [:segot]

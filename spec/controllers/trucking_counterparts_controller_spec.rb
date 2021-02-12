@@ -39,7 +39,15 @@ RSpec.describe TruckingCounterpartsController, type: :controller do
       let(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
 
       before do
-        FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location, country: country)
+        FactoryBot.create(:trucking_hub_availability,
+          hub: origin_hub,
+          type_availability: factory_type_availability(
+            carriage: "pre",
+            load_type: "cargo_item",
+            query_method: :location,
+            truck_type: "default",
+            country: country
+          ))
       end
 
       it "renders the list correct list of countries" do

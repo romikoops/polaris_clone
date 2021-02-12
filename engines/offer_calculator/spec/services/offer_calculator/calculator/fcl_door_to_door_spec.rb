@@ -79,7 +79,6 @@ RSpec.describe OfferCalculator::Calculator do
       street_number: delivery_address.street_number
     }.with_indifferent_access
   end
-  let(:quotation) { Quotations::Quotation.last }
   let(:creator) { FactoryBot.create(:users_client, organization: organization) }
   let(:service) do
     described_class.new(
