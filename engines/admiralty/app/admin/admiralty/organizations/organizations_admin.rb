@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Trestle.resource(:organizations, model: Organizations::Organization) do
   remove_action :destroy
 
@@ -57,25 +59,32 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
 
         row do
           col(sm: 4) { select :fee_detail, %w[name key key_and_name] }
+          col(sm: 3) { select :default_direction, %w[import export] }
         end
 
         %i[has_customs has_insurance fixed_currency dangerous_goods detailed_billing
           total_dimensions non_stackable_goods hide_user_pricing_requests
           customs_export_paper fixed_exchange_rates base_pricing require_full_address
           fine_fee_detail hide_sub_totals email_all_quotes hide_grand_total
-          default_direction currency_conversion show_chargeable_weight
+          currency_conversion show_chargeable_weight
           condense_local_fees_pdf freight_in_original_currency show_beta_features
           show_rate_overview fixed_exchange_rate hard_trucking_limit
           hide_converted_grand_total send_email_on_quote_download cargo_overview_only
-          no_aggregated_cargo translation_overrides offer_disclaimers closed_after_map
+          no_aggregated_cargo offer_disclaimers closed_after_map
           feature_uploaders dedicated_pricings_only
-          exclude_analytics session_length address_fields default_total_dimensions
-          append_hub_suffix expand_non_counterpart_local_charges search_buffer].each_slice(4) do |slice|
+          exclude_analytics address_fields default_total_dimensions
+          append_hub_suffix expand_non_counterpart_local_charges].each_slice(4) do |slice|
           row do
             slice.each do |key|
               col(sm: 3) { check_box key }
             end
           end
+        end
+
+        row do
+          col(sm: 3) { number_field :session_length }
+          col(sm: 3) { number_field :search_buffer }
+          col(sm: 3) { number_field :validity_period }
         end
       end
     end

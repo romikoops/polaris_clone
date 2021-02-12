@@ -41,5 +41,18 @@ RSpec.describe OrganizationManager::ScopeService do
         expect(scope.fetch(:foo)).to eq("baz")
       end
     end
+
+    context "with default scope values present on multiple levels" do
+      let(:default_content) { Organizations::DEFAULT_SCOPE }
+      let(:content) { default_content }
+
+      before do
+        FactoryBot.create(:organizations_scope, target: company, content: default_content.merge({default_direction: "export"}))
+      end
+
+      it "returns the highest value in the hierarchy" do
+        expect(scope.fetch(:default_direction)).to eq("export")
+      end
+    end
   end
 end

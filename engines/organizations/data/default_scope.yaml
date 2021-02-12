@@ -66,7 +66,7 @@ fine_fee_detail: true
 hide_sub_totals: false
 email_all_quotes: false
 hide_grand_total: false
-default_direction: false
+default_direction: null
 currency_conversion: true
 chargeable_weight_view: dynamic
 show_chargeable_weight: false
@@ -198,3 +198,12 @@ hub_suffixes:
 expand_non_counterpart_local_charges: false
 search_buffer: 0
 closing_date_buffer: 0
+privacy: ''
+display_itineraries_with_rates: false
+sorting: nil
+send_email_on_quote_email: false
+validity_period: null
+consolidated_fees: false
+primary_freight_code: 'BAS'
+cargo_price_notes: {}
+hide_chargeable_weight_values: false
