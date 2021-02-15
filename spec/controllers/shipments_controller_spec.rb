@@ -77,7 +77,7 @@ RSpec.describe ShipmentsController do
 
     let!(:target_exchange_rate) { FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD") }
 
-    it "returns requested shipment" do
+    it "returns requested result" do
       get :show, params: {id: result.id, organization_id: organization.id}
 
       aggregate_failures do
@@ -85,6 +85,14 @@ RSpec.describe ShipmentsController do
         expect(json_response.dig("data", "exchange_rates")).to include(
           "base" => "EUR", "usd" => target_exchange_rate.rate.round(2).to_s
         )
+      end
+    end
+
+    it "returns 404 when a shipment id is provided" do
+      get :show, params: {id: 1, organization_id: organization.id}
+
+      aggregate_failures do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

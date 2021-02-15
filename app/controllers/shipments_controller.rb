@@ -147,7 +147,7 @@ class ShipmentsController < ApplicationController
   end
 
   def result
-    @result ||= Journey::Result.find_by(id: params[:id])
+    @result ||= Journey::Result.find(params[:id])
   end
 
   def cargo_item_types
