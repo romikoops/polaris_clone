@@ -33,30 +33,34 @@ module ExcelDataServices
           @headers ||= extract_from_schema(section: "headers")
         end
 
-        def header_for_cell(cell:)
-          headers.find { |header| header.col == cell.col }
+        def col_from_header(header:)
+          headers.find { |header_cell| header_cell.value.downcase == header }&.col
         end
 
         def data
-          structure = basic_structure
-          cell_data.sort_by(&:row).each do |cell|
-            header = header_for_cell(cell: cell)
-            structure[header.value.downcase] << cell.value
-          end
-
-          structure
+          columns = cell_data.group_by(&:col)
+          basic_structure.keys.each_with_object(Hash.new { |h, k| h[k] = [] }) { |header, structure|
+            col = col_from_header(header: header)
+            if columns[col].blank?
+              structure[header] << parse_cell_value(header: header)
+            else
+              columns[col].sort(&:row).each do |cell|
+                structure[header] << parse_cell_value(cell: cell, header: header)
+              end
+            end
+            structure
+          }.merge("sheet_name" => [sheet_name])
         end
 
         def basic_structure
-          headers.reject(&:blank?).each_with_object({}) { |header, result|
-            header_key = header.value.downcase
-            result[header_key] = []
-          }.merge("sheet_name" => sheet_name)
+          self.class.column_types.keys.each_with_object({}) { |header, result|
+            result[header] = []
+          }
         end
 
         def extract_from_schema(section:)
           state.schema.content_positions(section: section).to_a.map { |position|
-            value = sheet.cell(position[:row], position[:col])
+            value = cell_value(position: position)
             next unless value_defined?(value: value)
 
             ExcelDataServices::DataFrames::DataProviders::Cell.new(
@@ -69,6 +73,28 @@ module ExcelDataServices
           }.compact
         end
 
+        def cell_value(position:)
+          if sheet.celltype(position[:row], position[:col]) == :date
+            sheet.cell(position[:row], position[:col])
+          else
+            sheet.excelx_value(position[:row], position[:col])
+          end
+        end
+
+        def parse_cell_value(header:, cell: nil)
+          parser = ExcelDataServices::DataFrames::DataProviders::Parser.new(
+            cell: cell,
+            header: header,
+            section: self.class.name.demodulize
+          )
+          state.errors << parser.error if parser.error.present?
+          parser.value
+        end
+
+        def parse_cell_data(header:, cell:)
+          cell.data.merge(header => parse_cell_value(header: header, cell: cell))
+        end
+
         def value_defined?(value:)
           UNDEFINED_VALUES.exclude?(value)
         end
@@ -77,20 +103,14 @@ module ExcelDataServices
           {}
         end
 
-        def rows_frame_with_query_method
-          rows_frame["identifier"] = identifier
-          rows_frame["sheet_name"] = sheet_name
-          rows_frame.inner_join(query_methods, on: {"identifier" => "identifier"})
-        end
-
-        def query_methods
-          Rover::DataFrame.new([
-            {"query_method" => "location", "identifier" => "city"},
-            {"query_method" => "location", "identifier" => "postal_code"},
-            {"query_method" => "location", "identifier" => "locode"},
-            {"query_method" => "zipcode", "identifier" => "zipcode"},
-            {"query_method" => "distance", "identifier" => "distance"}
-          ])
+        def query_method
+          {
+            "city" => "location",
+            "postal_code" => "location",
+            "locode" => "location",
+            "zipcode" => "zipcode",
+            "distance" => "distance"
+          }[identifier]
         end
 
         def identifier

@@ -4,6 +4,8 @@ require "rails_helper"
 
 module ExcelDataServices
   RSpec.shared_examples "boolean validator", type: :service do
+    let(:exception) { ExcelDataServices::Validators::ValidationErrors::TypeValidity::BooleanType }
+
     context "with valid boolean input" do
       let(:boolean_value) { false }
 
@@ -19,7 +21,7 @@ module ExcelDataServices
     context "with valid float input" do
       let(:boolean_value) { 1.0 }
 
-      it_behaves_like "passing validator"
+      it_behaves_like "failing validator"
     end
 
     context "with invalid integer input" do
@@ -31,7 +33,7 @@ module ExcelDataServices
     context "with nil inputs" do
       let(:boolean_value) { nil }
 
-      it_behaves_like "passing validator"
+      it_behaves_like "failing validator"
     end
   end
 end

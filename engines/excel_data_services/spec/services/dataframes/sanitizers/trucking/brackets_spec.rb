@@ -3,32 +3,17 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::DataFrames::Sanitizers::Trucking::Brackets do
-  include_context "with standard trucking setup"
-
-  let(:target_schema) { nil }
-  let(:result) { described_class.state(state: combinator_arguments) }
-  let(:frame) { Rover::DataFrame.new(frame_data) }
-  let(:frame_data) do
-    [
-      {"bracket_row" => 4,
-       "bracket_col" => 3,
-       "bracket" => "0.0 - 100.0 ",
-       "sheet_name" => "Sheet3"}
-    ]
-  end
-  let(:result_frame) { Rover::DataFrame.new(expected_result) }
+  let(:sanitizer) { described_class.new(value: value, attribute: attribute) }
+  let(:sanitized_value) { sanitizer.perform }
 
   describe ".sanitize" do
     context "when the value is a string" do
-      let(:expected_result) do
-        [{"bracket_row" => 4,
-          "bracket_col" => 3,
-          "bracket" => "0.0 - 100.0",
-          "sheet_name" => "Sheet3"}]
-      end
+      let(:value) { "0.0 - 100.0 " }
+      let(:attribute) { "bracket" }
+      let(:expected_result) { "0.0 - 100.0" }
 
       it "returns the sanitized data", :aggregate_failures do
-        expect(result.frame == result_frame).to be
+        expect(sanitized_value).to eq(expected_result)
       end
     end
   end

@@ -3,35 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::DataFrames::Validators::Trucking::Metadata do
-  include_context "with standard trucking setup"
-
-  let(:target_schema) { nil }
-  let(:result) { described_class.state(state: combinator_arguments) }
-  let(:column_types) { ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata.column_types }
-  let(:frame) { Rover::DataFrame.new(frame_data, types: column_types) }
-  let(:frame_data) do
-    [
-      {"city" => required_string_value,
-       "currency" => currency_value,
-       "load_meterage_ratio" => optional_rate_value,
-       "load_meterage_limit" => optional_rate_value,
-       "load_meterage_area" => optional_rate_value,
-       "load_meterage_hard_limit" => boolean_value,
-       "load_meterage_stacking" => boolean_value,
-       "cbm_ratio" => rate_value,
-       "scale" => modifier_value,
-       "rate_basis" => rate_basis_value,
-       "base" => rate_value,
-       "truck_type" => truck_type_value,
-       "load_type" => load_type_value,
-       "cargo_class" => cargo_class_value,
-       "direction" => direction_value,
-       "carrier" => optional_string_value,
-       "mode_of_transport" => mode_of_transport_value,
-       "service" => nil,
-       "sheet_name" => "Sheet3"}
-    ]
-  end
   let(:optional_rate_value) { nil }
   let(:optional_string_value) { "Gateway Cargo GmbH" }
   let(:required_string_value) { "Hamburg" }
@@ -45,20 +16,82 @@ RSpec.describe ExcelDataServices::DataFrames::Validators::Trucking::Metadata do
   let(:modifier_value) { "kg" }
   let(:rate_value) { 250 }
   let(:boolean_value) { false }
-
-  let(:errors) { result.errors }
+  let(:cell) {
+    ExcelDataServices::DataFrames::DataProviders::Cell.new(
+      value: validation_value,
+      label: header,
+      sheet_name: "Sheet3",
+      row: 1,
+      col: 1
+    )
+  }
+  let(:error) { described_class.validate(cell: cell, value: validation_value, header: header) }
 
   describe ".validate" do
-    it_behaves_like "optional_string validator"
-    it_behaves_like "mode_of_transport validator"
-    it_behaves_like "currency validator"
-    it_behaves_like "direction validator"
-    it_behaves_like "truck_type validator"
-    it_behaves_like "required_string validator"
-    it_behaves_like "numeric validator"
-    it_behaves_like "load_type validator"
-    it_behaves_like "cargo_class validator"
-    it_behaves_like "modifier validator"
-    it_behaves_like "boolean validator"
+    context "when optional_string values" do
+      let(:validation_value) { optional_string_value }
+      let(:header) { "carrier" }
+      it_behaves_like "optional_string validator"
+    end
+
+    context "when mode_of_transport values" do
+      let(:validation_value) { mode_of_transport_value }
+      let(:header) { "mode_of_transport" }
+      it_behaves_like "mode_of_transport validator"
+    end
+
+    context "when currency values" do
+      let(:validation_value) { currency_value }
+      let(:header) { "currency" }
+      it_behaves_like "currency validator"
+    end
+
+    context "when direction values" do
+      let(:validation_value) { direction_value }
+      let(:header) { "direction" }
+      it_behaves_like "direction validator"
+    end
+
+    context "when truck_type values" do
+      let(:validation_value) { truck_type_value }
+      let(:header) { "truck_type" }
+      it_behaves_like "truck_type validator"
+    end
+
+    context "when required_string values" do
+      let(:validation_value) { required_string_value }
+      let(:header) { "city" }
+      it_behaves_like "required_string validator"
+    end
+
+    context "when numeric values" do
+      let(:validation_value) { rate_value }
+      let(:header) { "cbm_ratio" }
+      it_behaves_like "numeric validator"
+    end
+
+    context "when load_type values" do
+      let(:validation_value) { load_type_value }
+      let(:header) { "load_type" }
+      it_behaves_like "load_type validator"
+    end
+
+    context "when cargo_class values" do
+      let(:validation_value) { cargo_class_value }
+      let(:header) { "cargo_class" }
+      it_behaves_like "cargo_class validator"
+    end
+
+    context "when modifier values" do
+      let(:validation_value) { modifier_value }
+      let(:header) { "modifier" }
+      it_behaves_like "modifier validator"
+    end
+
+    context "when boolean values" do
+      let(:validation_value) { boolean_value }
+      let(:header) { "load_meterage_hard_limit" }
+      it_behaves_like "boolean validator"
+    end
   end
 end

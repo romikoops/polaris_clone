@@ -3,22 +3,17 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::DataFrames::Validators::Trucking::Modifiers do
-  include_context "with standard trucking setup"
-
-  let(:target_schema) { nil }
-  let(:result) { described_class.state(state: combinator_arguments) }
-  let(:column_types) { ExcelDataServices::DataFrames::DataProviders::Trucking::Modifiers.column_types }
-  let(:frame) { Rover::DataFrame.new(frame_data, types: column_types) }
-  let(:frame_data) do
-    [
-      {"modifier_row" => 4,
-       "modifier_col" => 3,
-       "modifier" => modifier_value,
-       "sheet_name" => "Sheet3"}
-    ]
-  end
-
-  let(:errors) { result.errors }
+  let(:cell) {
+    ExcelDataServices::DataFrames::DataProviders::Cell.new(
+      value: modifier_value,
+      label: header,
+      sheet_name: "Sheet3",
+      row: 1,
+      col: 1
+    )
+  }
+  let(:header) { "modifier" }
+  let(:error) { described_class.validate(cell: cell, value: modifier_value, header: header) }
 
   describe ".validate" do
     it_behaves_like "modifier validator"

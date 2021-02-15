@@ -7,9 +7,7 @@ module ExcelDataServices
         class BracketMinimum < ExcelDataServices::DataFrames::Base
           def performing_modules
             [
-              ExcelDataServices::DataFrames::DataProviders::Trucking::BracketMinimum,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::BracketMinimum,
-              ExcelDataServices::DataFrames::Validators::Trucking::BracketMinimum
+              ExcelDataServices::DataFrames::DataProviders::Trucking::BracketMinimum
             ]
           end
         end

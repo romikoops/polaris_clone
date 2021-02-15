@@ -8,8 +8,6 @@ module ExcelDataServices
           def performing_modules
             [
               ExcelDataServices::DataFrames::DataProviders::Trucking::Zones,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::Zones,
-              ExcelDataServices::DataFrames::Validators::Trucking::Zones,
               ExcelDataServices::DataFrames::Expansions::Trucking::Zones,
               ExcelDataServices::DataFrames::Augmenters::Trucking::Zones,
               ExcelDataServices::DataFrames::Extractions::Trucking::Zones,

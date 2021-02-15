@@ -9,13 +9,13 @@ module ExcelDataServices
             {
               "load_meterage_hard_limit" => :bool,
               "load_meterage_stacking" => :bool,
-              "identifier_modifier" => :bool,
+              "identifier_modifier" => :object,
               "city" => :object,
               "currency" => :object,
               "load_meterage_ratio" => :object,
               "load_meterage_limit" => :object,
               "load_meterage_area" => :object,
-              "cbm_ratio" => :object,
+              "cbm_ratio" => :float,
               "scale" => :object,
               "rate_basis" => :object,
               "base" => :object,
@@ -29,7 +29,9 @@ module ExcelDataServices
               "group_id" => :object,
               "organization_id" => :object,
               "effective_date" => :object,
-              "expiration_date" => :object
+              "expiration_date" => :object,
+              "mode_of_transport" => :object,
+              "sheet_name" => :object
             }
           end
 

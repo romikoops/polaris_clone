@@ -23,7 +23,8 @@ module ExcelDataServices
               "container" => ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
               "minimum" => ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
               "wm" => ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
-              "percentage" => ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType
+              "percentage" => ExcelDataServices::Validators::TypeValidity::Types::OptionalNumericType,
+              "mode_of_transport" => ExcelDataServices::Validators::TypeValidity::Types::ModeOfTransportType
             }
           end
         end

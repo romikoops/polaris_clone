@@ -18,12 +18,12 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Fees do
     context "when it is a numerical range" do
       let(:expected_result) do
         {"fee" => "Fuel Surcharge Fee",
-         "mot" => "Ocean",
-         "fee_code" => "fsc",
-         "truck_type" => "Default",
-         "direction" => "Export",
-         "currency" => "eur",
-         "rate_basis" => "per_shipment",
+         "mot" => "ocean",
+         "fee_code" => "FSC",
+         "truck_type" => "default",
+         "direction" => "export",
+         "currency" => "EUR",
+         "rate_basis" => "PER_SHIPMENT",
          "ton" => nil,
          "cbm" => nil,
          "kg" => nil,
@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Fees do
 
       it "returns the frame with the fee data", :aggregate_failures do
         expect(result.frame.count).to eq(1)
-        expect(result.frame.to_a.first.inspect).to eq(expected_result.inspect)
+        expect(result.frame.to_a.first).to eq(expected_result)
       end
     end
   end

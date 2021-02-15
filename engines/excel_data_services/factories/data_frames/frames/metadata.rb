@@ -22,6 +22,9 @@ FactoryBot.define do
       mode_of_transport { "truck_carriage" }
       effective_date { Date.parse("01/09/2020") }
       expiration_date { Date.parse("31/12/2020") }
+      group_id { nil }
+      hub_id { nil }
+      organization_id { nil }
     end
 
     initialize_with do
@@ -44,7 +47,10 @@ FactoryBot.define do
         "sheet_name" => sheet_name,
         "mode_of_transport" => mode_of_transport,
         "effective_date" => effective_date,
-        "expiration_date" => expiration_date
+        "expiration_date" => expiration_date,
+        "group_id" => group_id,
+        "hub_id" => hub_id,
+        "organization_id" => organization_id
       }],
         types: ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata.column_types)
     end

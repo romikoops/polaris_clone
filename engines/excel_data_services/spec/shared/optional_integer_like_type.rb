@@ -11,9 +11,7 @@ module ExcelDataServices
     context "with valid float input as a string" do
       let(:optional_numeric_value) { "1.0" }
 
-      it "returns the validation errors", :aggregate_failures do
-        expect(errors).not_to be_empty
-      end
+      it_behaves_like "failing validator"
     end
 
     context "with valid float input" do

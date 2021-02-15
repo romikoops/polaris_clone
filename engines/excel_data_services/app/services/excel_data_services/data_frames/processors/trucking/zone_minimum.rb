@@ -7,9 +7,7 @@ module ExcelDataServices
         class ZoneMinimum < ExcelDataServices::DataFrames::Base
           def performing_modules
             [
-              ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneMinimum,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::ZoneMinimum,
-              ExcelDataServices::DataFrames::Validators::Trucking::ZoneMinimum
+              ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneMinimum
             ]
           end
         end

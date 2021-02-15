@@ -39,6 +39,9 @@ RSpec.shared_context "with trucking_metadata_sheet" do
       carrier: carrier_name,
       service: service,
       sheet_name: sheet_name,
+      group_id: default_group.id,
+      hub_id: hub.id,
+      organization_id: organization.id,
       mode_of_transport: mode_of_transport)
   end
 

@@ -8,8 +8,6 @@ module ExcelDataServices
           def performing_modules
             [
               ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::Metadata,
-              ExcelDataServices::DataFrames::Validators::Trucking::Metadata,
               ExcelDataServices::DataFrames::Augmenters::Trucking::Metadata,
               ExcelDataServices::DataFrames::Extractions::Trucking::Metadata,
               ExcelDataServices::DataFrames::Confirmations::Trucking::Metadata

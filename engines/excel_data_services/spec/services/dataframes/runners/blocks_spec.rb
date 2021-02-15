@@ -87,5 +87,19 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
         expect(truckings.map(&:validity)).to match_array([new_past_validity, sheet_validity, new_future_validity])
       end
     end
+
+    context "with errors" do
+      let!(:trucking_locations) { [] }
+      let!(:result) do
+        described_class.run(file: trucking_file, arguments: arguments)
+      end
+      let(:error) { result.dig(:errors, 0) }
+
+      it "returns the error", :aggregate_failures do
+        expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::InsertableChecks)
+        expect(error.reason).to eq("The location '20038, 20000 - 20050' cannot be found.")
+        expect(error.type).to eq(:warning)
+      end
+    end
   end
 end

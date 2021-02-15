@@ -13,6 +13,7 @@ module ExcelDataServices
               "load_meterage_limit" => "decimal",
               "load_meterage_area" => "decimal",
               "load_meterage_hard_limit" => "boolean",
+              "load_meterage_stacking" => "boolean",
               "cbm_ratio" => "decimal",
               "scale" => "downcase",
               "rate_basis" => "upcase",
@@ -24,7 +25,8 @@ module ExcelDataServices
               "carrier" => "string",
               "service" => "string",
               "effective_date" => "string",
-              "expiration_date" => "string"
+              "expiration_date" => "string",
+              "identifier_modifier" => "string"
             }
           end
 
@@ -36,12 +38,15 @@ module ExcelDataServices
               "identifier_modifier" => false,
               "mode_of_transport" => "truck_carriage",
               "effective_date" => today,
-              "expiration_date" => today + 1.year
+              "expiration_date" => today + 1.year,
+              "load_meterage_hard_limit" => false,
+              "load_meterage_stacking" => false,
+              "cbm_ratio" => 0
             }
           end
 
           def default_group
-            Groups::Group.find_by(name: "default", organization_id: state.organization_id)
+            Groups::Group.find_by(name: "default", organization_id: Organizations.current_id)
           end
 
           def today

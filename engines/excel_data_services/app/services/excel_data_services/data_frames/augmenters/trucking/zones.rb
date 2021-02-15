@@ -88,12 +88,19 @@ module ExcelDataServices
           end
 
           def locode_data_for_collection
-            locode_rows[%w[primary country_code]].to_a.map { |row|
-              {
-                "primary" => row["primary"],
-                "country_code" => row["country_code"],
-                "location_id" => ::Locations::Searchers::Locode.id(data: {locode: row["primary"]})
-              }
+            locode_rows[%w[primary country_code]].to_a.each_with_object(initial_state) { |row, result|
+                result["primary"] << row["primary"]
+                result["country_code"] << row["country_code"]
+                result["location_id"] << ::Locations::Searchers::Locode.id(data: {locode: row["primary"]})
+                result
+            }
+          end
+
+          def initial_state
+            {
+              "primary" => [],
+              "country_code" => [],
+              "location_id" => []
             }
           end
 

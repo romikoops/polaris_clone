@@ -19,7 +19,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneRow d
       let(:expected_result) do
         {"zone_row" => 6,
          "zone_col" => 1,
-         "zone" => 1.0,
+         "zone" => "1.0",
          "sheet_name" => "Sheet3"}
       end
 

@@ -7,9 +7,7 @@ module ExcelDataServices
         class Values < ExcelDataServices::DataFrames::Base
           def performing_modules
             [
-              ExcelDataServices::DataFrames::DataProviders::Trucking::Values,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::Values,
-              ExcelDataServices::DataFrames::Validators::Trucking::Values
+              ExcelDataServices::DataFrames::DataProviders::Trucking::Values
             ]
           end
         end

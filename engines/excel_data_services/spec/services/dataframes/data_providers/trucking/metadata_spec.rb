@@ -17,29 +17,39 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata 
   describe ".extract" do
     context "when it is a numerical range" do
       let(:expected_result) do
-        {"city" => "Hamburg",
-         "currency" => "EUR",
-         "load_meterage_ratio" => nil,
-         "load_meterage_limit" => nil,
-         "load_meterage_area" => nil,
-         "cbm_ratio" => 250.0,
-         "scale" => "kg",
-         "rate_basis" => "PER_SHIPMENT",
-         "base" => 1.0,
-         "truck_type" => "default",
-         "load_type" => "cargo_item",
-         "cargo_class" => "lcl",
-         "direction" => "export",
-         "carrier" => "Gateway Cargo GmbH",
-         "service" => nil,
-         "effective_date" => Date.parse("Tue, 01 Sep 2020"),
-         "expiration_date" => Date.parse("Fri, 31 Dec 2021"),
-         "sheet_name" => "Sheet3"}
+        {
+          "load_meterage_hard_limit" => false,
+          "load_meterage_stacking" => false,
+          "identifier_modifier" => false,
+          "city" => "Hamburg",
+          "currency" => "EUR",
+          "load_meterage_ratio" => nil,
+          "load_meterage_limit" => nil,
+          "load_meterage_area" => nil,
+          "cbm_ratio" => 250.0,
+          "scale" => "kg",
+          "rate_basis" => "PER_SHIPMENT",
+          "base" => 1.0,
+          "truck_type" => "default",
+          "load_type" => "cargo_item",
+          "cargo_class" => "lcl",
+          "direction" => "export",
+          "carrier" => "Gateway Cargo GmbH",
+          "service" => "standard",
+          "hub_id" => nil,
+          "group_id" => default_group.id,
+          "organization_id" => nil,
+          "effective_date" => Date.parse("Tue, 01 Sep 2020"),
+          "expiration_date" => Date.parse("Fri, 31 Dec 2021"),
+          "sheet_name" => "Sheet3"
+        }
       end
 
       it "returns the frame with the fee data", :aggregate_failures do
         expect(result.frame.count).to eq(1)
-        expect(result.frame.to_a.first.inspect).to eq(expected_result.inspect)
+        expected_result.keys.each do |key|
+          expect(result.frame[key].to_a.first).to eq(expected_result[key])
+        end
       end
     end
   end

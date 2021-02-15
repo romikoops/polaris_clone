@@ -20,7 +20,6 @@ module ExcelDataServices
 
     context "with invalid string inputs" do
       let(:optional_numeric_value) { "abc" }
-
       it_behaves_like "failing validator"
     end
 

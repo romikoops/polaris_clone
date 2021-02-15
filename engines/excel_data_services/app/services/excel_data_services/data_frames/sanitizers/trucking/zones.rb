@@ -8,8 +8,16 @@ module ExcelDataServices
           def sanitizer_lookup
             {
               "zone" => "string",
-              "primary" => "string",
-              "secondary" => "string",
+              "primary_postal_code" => "zone",
+              "primary_locode" => "string",
+              "primary_city" => "string",
+              "primary_zipcode" => "string",
+              "primary_distance" => "string",
+              "secondary_postal_code" => "zone",
+              "secondary_locode" => "string",
+              "secondary_city" => "string",
+              "secondary_zipcode" => "string",
+              "secondary_distance" => "string",
               "country_code" => "upcase"
             }
           end

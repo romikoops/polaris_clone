@@ -14,7 +14,9 @@ module ExcelDataServices
           private
 
           def data
-            extract_from_schema(section: "main_data").map(&:data)
+            extract_from_schema(section: "main_data").map do |cell|
+              parse_cell_data(header: label, cell: cell)
+            end
           end
 
           def label

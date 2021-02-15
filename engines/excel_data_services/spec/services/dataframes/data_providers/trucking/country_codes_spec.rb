@@ -17,10 +17,11 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::CountryCo
   describe ".extract" do
     context "when it is a numerical range" do
       let(:expected_result) do
-        {"country_code" => "DE",
-         "identifier" => "zipcode",
-         "sheet_name" => "Zones",
-         "query_method" => "zipcode"}
+        {
+          "country_code" => "DE",
+          "query_method" => "zipcode",
+          "identifier" => "zipcode"
+        }
       end
 
       it "returns the frame with the fee data", :aggregate_failures do

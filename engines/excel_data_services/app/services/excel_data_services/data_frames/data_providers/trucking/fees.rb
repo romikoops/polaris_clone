@@ -29,8 +29,13 @@ module ExcelDataServices
 
           private
 
+          def data
+            return {} if cell_data.empty?
+            super
+          end
+
           def cell_data
-            extract_from_schema(section: "data")
+            @cell_data ||= extract_from_schema(section: "data")
           end
 
           def label

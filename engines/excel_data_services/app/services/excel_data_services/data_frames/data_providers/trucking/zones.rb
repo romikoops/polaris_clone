@@ -19,11 +19,7 @@ module ExcelDataServices
           attr_reader :schema
 
           def data
-            rows_frame_with_query_method
-          end
-
-          def rows_frame
-            @rows_frame ||= Rover::DataFrame.new(
+            Rover::DataFrame.new(
               {
                 "primary" => primaries,
                 "secondary" => secondaries,
@@ -32,23 +28,34 @@ module ExcelDataServices
                 "zone_row" => zone_rows
               },
               types: column_types
-            )
+            ).tap do |frame|
+              frame["query_method"] = query_method
+              frame["identifier"] = identifier
+            end
           end
 
           def zones
-            extract_from_schema(section: "zones").map(&:value)
+            extract_from_schema(section: "zones").map do |cell|
+              parse_cell_value(header: "zone", cell: cell)
+            end
           end
 
           def primaries
-            extract_from_schema(section: "primary").map(&:value)
+            extract_from_schema(section: "primary").map do |cell|
+              parse_cell_value(header: "primary_#{identifier}", cell: cell)
+            end
           end
 
           def secondaries
-            extract_from_schema(section: "secondary").map(&:value)
+            extract_from_schema(section: "secondary").map do |cell|
+              parse_cell_value(header: "secondary_#{identifier}", cell: cell)
+            end
           end
 
           def country_codes
-            extract_from_schema(section: "country").map(&:value)
+            extract_from_schema(section: "country").map do |cell|
+              parse_cell_value(header: "country_code", cell: cell)
+            end
           end
 
           def zone_rows

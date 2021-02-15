@@ -21,17 +21,16 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Zones do
           "primary" => nil,
           "secondary" => "20000 - 20050",
           "country_code" => "DE",
-          "zone" => 1.0,
+          "zone" => "1.0",
           "zone_row" => 2,
           "identifier" => "zipcode",
-          "sheet_name" => "Zones",
           "query_method" => "zipcode"
         }
       end
 
       it "returns the frame with the fee data", :aggregate_failures do
         expect(result.frame.count).to eq(2)
-        expect(result.frame.to_a.first.inspect).to eq(expected_result.inspect)
+        expect(result.frame.to_a.first).to eq(expected_result)
       end
     end
   end

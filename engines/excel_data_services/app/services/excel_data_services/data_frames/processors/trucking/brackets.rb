@@ -8,8 +8,6 @@ module ExcelDataServices
           def performing_modules
             [
               ExcelDataServices::DataFrames::DataProviders::Trucking::Brackets,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::Brackets,
-              ExcelDataServices::DataFrames::Validators::Trucking::Brackets,
               ExcelDataServices::DataFrames::Expansions::Trucking::Brackets
             ]
           end

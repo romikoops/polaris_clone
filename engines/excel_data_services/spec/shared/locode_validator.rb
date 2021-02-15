@@ -26,10 +26,7 @@ module ExcelDataServices
     context "with invalid nil inputs" do
       let(:locode_value) { nil }
 
-      it "returns no validation errors", :aggregate_failures do
-        expect(errors).not_to be_empty
-        expect(errors.first[:exception_class]).to eq(exception)
-      end
+      it_behaves_like "failing validator"
     end
   end
 end

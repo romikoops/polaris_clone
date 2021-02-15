@@ -8,8 +8,6 @@ module ExcelDataServices
           def performing_modules
             [
               ExcelDataServices::DataFrames::DataProviders::Trucking::Fees,
-              ExcelDataServices::DataFrames::Sanitizers::Trucking::Fees,
-              ExcelDataServices::DataFrames::Validators::Trucking::Fees,
               ExcelDataServices::DataFrames::Augmenters::Trucking::Fees
             ]
           end
