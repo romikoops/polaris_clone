@@ -12,7 +12,7 @@ RSpec.shared_examples "Pricing .insert" do
       expect(itinerary.slice(:name, :mode_of_transport).values).to eq(["Gothenburg - Shanghai", "ocean"])
       expect(itinerary.map_data[0][:origin]).to eq itinerary.stops[0].hub.lng_lat_array
       expect(itinerary.map_data[0][:destination]).to eq itinerary.stops[1].hub.lng_lat_array
-      expect(Legacy::Stop.pluck(:itinerary_id).first).to eq(itinerary.id)
+      expect(Legacy::Stop.pluck(:itinerary_id)).to include(itinerary.id)
       pricings = ::Pricings::Pricing.all
       expect(stats).to eq(expected_stats)
       dates = pricings.pluck(:effective_date, :expiration_date)
