@@ -32,19 +32,18 @@ module ResultFormatter
     def create_rows
       sections_in_order.each do |route_section|
         current_items = current_line_item_set.line_items.where(route_section: route_section)
-        original_items = original_line_item_set.line_items.where(route_section: route_section)
         next if current_items.empty?
 
         charge_category = applicable_charge_category(route_section: route_section)
         section_row = default_values.merge(
           description: charge_category.name,
           value: value_with_currency(value(items: current_items)),
-          originalValue: value_with_currency(original_value(items: original_items)),
+          originalValue: value_with_currency(original_value(items: current_items)),
           tenderId: result.id,
           order: route_section.order,
           section: charge_category.name,
           level: 1,
-          chargeCategoryId: charge_category&.id
+          chargeCategoryId: charge_category.id
         )
 
         @rows << section_row
@@ -110,11 +109,10 @@ module ResultFormatter
           item,
           context: {scope: scope, mode_of_transport: main_freight_section.mode_of_transport}
         )
-
         @rows << default_values.merge(
           editId: item.id,
           description: decorated_line_item.description,
-          originalValue: value_with_currency(decorated_line_item.original_total),
+          originalValue: decorated_line_item.fee_context.merge(value_with_currency(original_fee_value(line_item: item))),
           value: decorated_line_item.fee_context.merge(value_with_currency(item.total)),
           order: 0,
           parentId: row[:id],
@@ -200,7 +198,8 @@ module ResultFormatter
     end
 
     def original_value(items:, currency: base_currency)
-      items.inject(Money.new(0, currency, bank)) do |sum, item|
+      original_items = original_line_item_set.line_items.where(id: items.pluck(:id))
+      original_items.inject(Money.new(0, currency, bank)) do |sum, item|
         sum + Money.new(item.total_cents, item.total_currency, bank)
       end
     end
@@ -295,11 +294,21 @@ module ResultFormatter
     end
 
     def current_line_item_set
-      @current_line_item_set ||= Journey::LineItemSet.where(result: result).order(created_at: :desc).first
+      @current_line_item_set ||= result_line_item_sets.first
     end
 
     def original_line_item_set
-      @original_line_item_set ||= Journey::LineItemSet.where(result: result).order(created_at: :desc).first
+      @original_line_item_set ||= result_line_item_sets.last
+    end
+
+    def result_line_item_sets
+      @result_line_item_sets ||= Journey::LineItemSet.where(result: result).order(created_at: :desc)
+    end
+
+    def original_fee_value(line_item:)
+      original_line_item_set.line_items.find_by(
+        fee_code: line_item.fee_code, route_section: line_item.route_section
+      ).total
     end
   end
 end
