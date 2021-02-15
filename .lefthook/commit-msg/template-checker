@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 CLASSES = %r{(docs|fix|feat|chore|style|refactor|perf|test)}i
 TICKET = %r{(IMC-[[:digit:]]+)}
@@ -7,7 +8,7 @@ COMMIT_PATTERN = %r{\A((#{TICKET}|(#{CLASSES}(\(.*\))?))(: | - )(.*))|(Merge .*)
 input_file, * = ARGV
 commit_message = File.read(input_file)
 
-if %r{(imc)-[[:digit:]]}.match?(commit_message.gsub(%r{^#.*}, "").strip)
+if %r{(imc)-[[:digit:]]}.match?(commit_message.gsub(%r{^#.*}, "").strip[0, 9])
   warn "• Use only upper case ticket numbers in commit messages."
   warn "  IMC-1234: summary"
   warn ""
