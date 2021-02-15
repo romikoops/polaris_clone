@@ -73,6 +73,7 @@ Api::Engine.routes.draw do
         get "pdf"
         get "email"
       end
+      resources :uploads, only: [:create]
     end
   end
 end

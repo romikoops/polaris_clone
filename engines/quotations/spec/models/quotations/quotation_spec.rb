@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Quotations
-  RSpec.describe Quotations::Quotation, type: :model do
+  RSpec.describe Quotations::Quotation, type: :model, skip: "Deprecated" do
     subject { FactoryBot.build :quotations_quotation }
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }

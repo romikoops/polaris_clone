@@ -11,3 +11,6 @@ open_exchange_rate:
 
 google:
   api_key: FAKEKEY
+
+uploads:
+  secret: FAKEKEY

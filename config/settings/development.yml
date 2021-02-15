@@ -6,7 +6,6 @@ carta:
   url: https://geo.itsmycargo.com/v1
 
 emails:
-  domain: itsmycargo.tech
   booking: test@itsmycargo.tech
   domain: itsmycargo.test
   support: support@itsmycargo.tech
@@ -23,3 +22,6 @@ google:
 google_sign_in:
   client_id: 924497825642-9tirmrp45vvjd82r45sjd4q8njj6laa2.apps.googleusercontent.com
   client_secret: <%= Rails.application.credentials.dig(:development, :google_sign_in, :client_secret) %>
+
+uploads:
+  secret: <%= Rails.application.credentials.dig(:development, :uploads, :secret) %>

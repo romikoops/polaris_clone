@@ -37,3 +37,6 @@ smtp:
   domain: itsmycargo.com
   username: apikey
   password: <%= Rails.application.credentials.dig(:production, :smtp, :password) %>
+
+uploads:
+  secret: <%= Rails.application.credentials.dig(:production, :uploads, :secret) %>
