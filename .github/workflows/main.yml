@@ -1,0 +1,175 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test-gems:
+    name: Test / Gems
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: gems/money_cache
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/money_cache.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - run: bundle exec rspec
+
+  test-app:
+    name: Test / App
+
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgis/postgis:12-3.0-alpine
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    env:
+      DATABASE_URL: postgis://postgres:@localhost/polaris_test
+      ELASTICSEARCH_URL: http://localhost:9200
+      RAILS_ENV: test
+      REDIS_URL: redis://localhost:6379
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - uses: ankane/setup-elasticsearch@v1
+        with:
+          elasticsearch-version: 7.4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake git libgeos-dev libpq-dev libssl-dev locales \
+            postgresql-client-12 tzdata wkhtmltopdf
+          npm install -g 'mjml@4.3.1'
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-app-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-app-
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - run: bin/rails db:test:prepare && bin/rails db:migrate
+      - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' .
+        timeout-minutes: 30
+
+  docker:
+    name: Docker
+    runs-on: ubuntu-20.04
+    steps:
+      - id: vars
+        run: |
+          echo "::set-output name=prefix::$([[ ${GITHUB_REF} = 'refs/heads/master' ]] && echo r- || echo b-)"
+          echo "::set-output name=sha_short::$(echo ${{ github.sha }} | cut -c1-7 )"
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
+          tag-edge: true
+          tag-sha: false
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          tags: |
+            003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris:${{ github.sha }}
+            003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris:${{ steps.vars.outputs.prefix }}${{ github.run_number }}
+            ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          build-args: |
+            RELEASE=${{ github.sha }}
+
+  sentry:
+    if: github.ref == 'refs/heads/master'
+    needs: [test-gems, test-app]
+
+    name: Sentry
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: getsentry/action-release@v1
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: polaris

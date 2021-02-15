@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "pathname"
 
@@ -8,6 +9,7 @@ exit 0 unless type.nil?
 
 require_relative "../jira_service"
 ticket = JiraService.fetch_ticket(issue_source: :branch)
+return unless ticket
 
 commit_msg = File.read(file_path)
 File.open(file_path, "w") do |io|

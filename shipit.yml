@@ -1,6 +1,9 @@
 ci:
-  blocking:
+  required:
     - Docker
+    - Sentry
+    - Test / App
+    - Test / Gems
 
 dependencies:
   override: []

@@ -5,5 +5,5 @@
 **/db/migrate/* @itsmycargo/data
 db/schema.rb    @itsmycargo/data
 
+.github         @itsmycargo/sre
 Dockerfile      @itsmycargo/sre
-Jenkinsfile     @itsmycargo/sre
