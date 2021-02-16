@@ -1,5 +1,28 @@
+# frozen_string_literal: true
+
 module Journey
   class CargoUnit < ApplicationRecord
+    CARGO_CLASSES = %w[
+      lcl
+      aggregated_lcl
+      fcl_10
+      fcl_20
+      fcl_20_ot
+      fcl_20_rf
+      fcl_20_frs
+      fcl_20_frw
+      fcl_40
+      fcl_40_hq
+      fcl_40_ot
+      fcl_40_rf
+      fcl_40_hq_rf
+      fcl_40_frs
+      fcl_40_frw
+      fcl_45
+      fcl_45_hq
+      fcl_45_rf
+    ].freeze
+
     has_many :commodity_infos
     has_many :line_item_cargo_units, inverse_of: :cargo_unit
     has_many :line_items, through: :line_item_cargo_units
@@ -13,7 +36,7 @@ module Journey
     validates :width, :length, :height, measured: {units: :m}
     validates :width, :length, :height, measured: {greater_than: 0}, if: :lcl?
 
-    validates :cargo_class, presence: true
+    validates_inclusion_of :cargo_class, in: CARGO_CLASSES
 
     enum colli_type: {
       barrel: "barrel",
