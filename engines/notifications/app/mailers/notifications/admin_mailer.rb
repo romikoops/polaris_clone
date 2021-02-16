@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Notifications
   class AdminMailer < ApplicationMailer
     default from: "support@itsmycargo.com"
@@ -21,6 +23,7 @@ module Notifications
       @user = Users::Client.unscoped.find_by(id: @query.client_id, organization: params[:organization])
       @profile = @user&.profile || Users::ClientProfile.new
       @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
+      attachments[@offer.file.filename.to_s] = @offer.attachment if @offer.file.attached?
       mail to: params[:recipient], subject: subject_line
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 module Notifications
@@ -39,16 +41,18 @@ module Notifications
         ).offer_created
       end
 
-      it "renders the headers" do
-        aggregate_failures do
-          expect(mail.subject).to include("FCL Quotation")
-          expect(mail.to).to eq(["to@example.org"])
-          expect(mail.from).to eq(["support@itsmycargo.com"])
-        end
+      it "renders the headers", :aggregate_failures do
+        expect(mail.subject).to include("FCL Quotation")
+        expect(mail.to).to eq(["to@example.org"])
+        expect(mail.from).to eq(["support@itsmycargo.com"])
       end
 
       it "renders the body" do
         expect(mail.body.encoded).to match("Hi")
+      end
+
+      it "renders attaches the pdf and logo" do
+        expect(mail.attachments.map { |attachment| attachment.filename }).to match_array(%w[logo.png offer.pdf])
       end
 
       context "when Query is not billable" do
