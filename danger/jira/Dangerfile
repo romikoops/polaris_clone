@@ -15,7 +15,6 @@ pr_title_issues = github.pr_title.scan(JIRA_REGEXP).flatten.map(&:upcase).uniq
 
 # Fix common issues on PR title
 pr_title = github.pr_title
-pr_title.gsub!(/(\d+)/, 'IMC-\1') if pr_title[/\d+/] && !pr_title[/IMC-\d+/i]
 pr_title.gsub!(/imc (\d+)/, 'IMC-\1') if pr_title[/imc (\d+)/]
 
 # Check title has all issues
