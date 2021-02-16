@@ -61,6 +61,7 @@ Api::Engine.routes.draw do
       resources :queries, only: [:create, :show] do
         get "result_set"
         resources :requests, only: [:create]
+        resources :cargo_units, only: [:index, :show]
       end
       resources :result_sets, only: [:show] do
         resources :results, only: [:index]
