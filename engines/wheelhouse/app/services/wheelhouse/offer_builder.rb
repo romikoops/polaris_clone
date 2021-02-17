@@ -19,7 +19,7 @@ module Wheelhouse
     end
 
     def offer
-      @offer ||= existing_offer || Journey::Offer.create(query: results.first.query, results: results)
+      @offer ||= existing_offer || Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets)
     end
 
     private
@@ -30,17 +30,25 @@ module Wheelhouse
 
     def existing_offer_id
       raw_query = "SELECT offer_id
-      FROM journey_offer_results
-      JOIN journey_offers on journey_offer_results.offer_id = journey_offers.id
-      WHERE result_id IN (:result_ids)
+      FROM journey_offer_line_item_sets
+      JOIN journey_offers on journey_offer_line_item_sets.offer_id = journey_offers.id
+      WHERE line_item_set_id IN (:line_item_set_ids)
       AND journey_offers.query_id = :query_id
-      GROUP BY journey_offer_results.id
-      HAVING COUNT(DISTINCT result_id) = :result_count"
+      GROUP BY journey_offer_line_item_sets.id
+      HAVING COUNT(DISTINCT line_item_set_id) = :result_count"
 
       sanitized_query = ActiveRecord::Base.sanitize_sql_array(
-        [raw_query, {result_ids: results.map(&:id), result_count: results.count, query_id: results.first.query.id}]
+        [raw_query, binds]
       )
       ActiveRecord::Base.connection.exec_query(sanitized_query).to_a.first&.dig("offer_id")
+    end
+
+    def binds
+      {line_item_set_ids: line_item_sets.map(&:id), result_count: results.count, query_id: results.first.query.id}
+    end
+
+    def line_item_sets
+      @line_item_sets ||= results.map { |result| result.line_item_sets.order(created_at: :desc).first }
     end
 
     def generate_pdf

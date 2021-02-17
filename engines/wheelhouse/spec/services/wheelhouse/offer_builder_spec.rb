@@ -8,11 +8,7 @@ RSpec.describe Wheelhouse::OfferBuilder do
   let(:client) { FactoryBot.create(:users_client) }
   let(:result) { FactoryBot.create(:journey_result) }
   let(:scope) { {} }
-  let(:offer_service) do
-    described_class.new(
-      results: [result]
-    )
-  end
+  let(:offer_service) { described_class.new(results: [result]) }
   let(:offer) { offer_service.perform }
 
   before do
@@ -28,7 +24,9 @@ RSpec.describe Wheelhouse::OfferBuilder do
   context "when an offer exists with those results" do
     let!(:existing_offer) do
       FactoryBot.create(:journey_offer, query: result.query).tap do |ex_offer|
-        FactoryBot.create(:journey_offer_result, offer: ex_offer, result: result)
+        FactoryBot.create(:journey_offer_line_item_set,
+          offer: ex_offer,
+          line_item_set: result.line_item_sets.first)
       end
     end
 

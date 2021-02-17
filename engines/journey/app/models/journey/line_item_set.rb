@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
 module Journey
   class LineItemSet < ApplicationRecord
     has_many :line_items, inverse_of: :line_item_set
     belongs_to :result, inverse_of: :line_item_sets
     belongs_to :shipment_request, optional: true
+    has_many :offer_line_item_sets
+    has_many :offers, through: :offer_line_item_sets
   end
 end
 

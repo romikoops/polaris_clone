@@ -7,7 +7,7 @@ RSpec.describe Pdf::Quotation::Client do
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:offer) do
-    FactoryBot.create(:journey_offer, query: query, results: [result])
+    FactoryBot.create(:journey_offer, query: query, line_item_sets: result.line_item_sets)
   end
 
   let(:client) { FactoryBot.create(:users_client, organization: organization) }

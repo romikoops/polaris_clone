@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module Journey
   class Result < ApplicationRecord
     include Sortable
 
     belongs_to :result_set
-    has_many :offer_results
-    has_many :offers, through: :offer_results
     has_many :shipment_requests
     has_many :route_sections, inverse_of: :result
     has_many :line_item_sets, inverse_of: :result

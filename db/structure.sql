@@ -1861,6 +1861,19 @@ CREATE TABLE public.journey_line_items (
 
 
 --
+-- Name: journey_offer_line_item_sets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_offer_line_item_sets (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    offer_id uuid,
+    line_item_set_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: journey_offer_results; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5733,6 +5746,14 @@ ALTER TABLE ONLY public.journey_line_items
 
 
 --
+-- Name: journey_offer_line_item_sets journey_offer_line_item_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_line_item_sets
+    ADD CONSTRAINT journey_offer_line_item_sets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: journey_offer_results journey_offer_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7524,6 +7545,20 @@ CREATE INDEX index_journey_line_items_on_route_point_id ON public.journey_line_i
 --
 
 CREATE INDEX index_journey_line_items_on_route_section_id ON public.journey_line_items USING btree (route_section_id);
+
+
+--
+-- Name: index_journey_offer_line_item_sets_on_line_item_set_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_offer_line_item_sets_on_line_item_set_id ON public.journey_offer_line_item_sets USING btree (line_item_set_id);
+
+
+--
+-- Name: index_journey_offer_line_item_sets_on_offer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_offer_line_item_sets_on_offer_id ON public.journey_offer_line_item_sets USING btree (offer_id);
 
 
 --
@@ -10366,6 +10401,14 @@ ALTER TABLE ONLY public.users_client_profiles
 
 
 --
+-- Name: journey_offer_line_item_sets fk_rails_13ac752815; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_line_item_sets
+    ADD CONSTRAINT fk_rails_13ac752815 FOREIGN KEY (line_item_set_id) REFERENCES public.journey_line_item_sets(id) ON DELETE CASCADE;
+
+
+--
 -- Name: agencies fk_rails_14ed559d97; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10707,6 +10750,14 @@ ALTER TABLE ONLY public.quotations_quotations
 
 ALTER TABLE ONLY public.pricings_pricings
     ADD CONSTRAINT fk_rails_6cebea4109 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_offer_line_item_sets fk_rails_726fd2f78d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_offer_line_item_sets
+    ADD CONSTRAINT fk_rails_726fd2f78d FOREIGN KEY (offer_id) REFERENCES public.journey_offers(id) ON DELETE CASCADE;
 
 
 --
@@ -12046,6 +12097,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210122163838'),
 ('20210125161336'),
 ('20210128140153'),
-('20210129160626');
+('20210129160626'),
+('20210216115737');
 
 

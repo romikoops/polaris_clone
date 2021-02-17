@@ -16,7 +16,7 @@ module Api
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:query) { FactoryBot.create(:journey_query) }
     let(:result) { FactoryBot.create(:journey_result, query: query) }
-    let(:offer) { FactoryBot.create(:journey_offer, query: query, results: [result]) }
+    let(:offer) { FactoryBot.create(:journey_offer, query: query, line_item_sets: result.line_item_sets) }
     let(:params) { {resultIds: [result.id], organization_id: organization.id} }
 
     describe "POST #create" do

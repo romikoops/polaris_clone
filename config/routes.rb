@@ -936,6 +936,7 @@ end
 #                 v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
 #                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
 #            v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
+#              v2_organization_query_requests POST   /v2/organizations/:organization_id/queries/:query_id/requests(.:format)                  api/v2/requests#create
 #                     v2_organization_queries POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
 #                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
 #          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
@@ -943,7 +944,10 @@ end
 #                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
 #                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
+#                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
+#                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
 #                      v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
+#                     v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #
 # Routes for Easymon::Engine:

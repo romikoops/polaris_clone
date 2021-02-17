@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module Journey
   class Offer < ApplicationRecord
-    has_many :offer_results, inverse_of: :offer
-    has_many :results, through: :offer_results
+    has_many :offer_line_item_sets, inverse_of: :offer
+    has_many :line_item_sets, through: :offer_line_item_sets
+    has_many :results, through: :line_item_sets
     belongs_to :query, inverse_of: :offers
     has_one_attached :file
 

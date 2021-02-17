@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Notifications::OfferSubjectLine do
   include_context "journey_complete_request"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:offer) { FactoryBot.create(:journey_offer, query: query, results: [result]) }
+  let(:offer) { FactoryBot.create(:journey_offer, query: query, line_item_sets: result.line_item_sets) }
   let(:scope) { Organizations::DEFAULT_SCOPE.with_indifferent_access }
   let(:subject_line_service) { described_class.new(offer: offer, scope: scope) }
   let(:subject_line) { subject_line_service.subject_line }

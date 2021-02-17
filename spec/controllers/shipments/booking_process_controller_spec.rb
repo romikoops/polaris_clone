@@ -37,7 +37,7 @@ RSpec.describe Shipments::BookingProcessController do
 
   context "when sending admin emails on quote download" do
     let(:result) { FactoryBot.create(:journey_result) }
-    let(:offer) { FactoryBot.build(:journey_offer, results: [result]) }
+    let(:offer) { FactoryBot.create(:journey_offer, line_item_sets: result.line_item_sets) }
     let(:quotes) do
       [
         {
@@ -61,7 +61,9 @@ RSpec.describe Shipments::BookingProcessController do
 
     describe ".download_quotations" do
       it "successfully calls the mailer and return the quote Document" do
-        post :download_quotations, params: {organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}}
+        post :download_quotations, params: {
+          organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}
+        }
         expect(response_data.dig("url")).to include("active_storage/blobs")
       end
     end

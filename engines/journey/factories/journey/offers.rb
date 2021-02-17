@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :journey_offer, class: "Journey::Offer" do
     association :query, factory: :journey_query
-    results { [association(:journey_result)] }
+    line_item_sets { [association(:journey_line_item_set)] }
 
     after(:build) do |offer|
       offer.file.attach(io: StringIO.new, filename: "offer.pdf")
