@@ -55,15 +55,15 @@ module Notifications
     end
 
     def dynamic_origin
-      origin_locode || pickup_postal_code || origin_city
+      pickup_postal_code || origin_locode || origin_city
     end
 
     def dynamic_destination
-      destination_locode || delivery_postal_code || destination_city
+      delivery_postal_code || destination_locode || destination_city
     end
 
     def origin_city
-      has_pre_carriage? ? pickup_address.city : origin
+      has_pre_carriage ? pickup_address.city : origin
     end
 
     def origin_locode
@@ -75,7 +75,7 @@ module Notifications
     end
 
     def destination_city
-      has_on_carriage? ? delivery_address.city : destination
+      has_on_carriage ? delivery_address.city : destination
     end
 
     def destination_locode
@@ -87,13 +87,13 @@ module Notifications
     end
 
     def pickup_postal_code
-      return unless has_pre_carriage?
+      return unless has_pre_carriage
 
       pickup_address&.zip_code.present? ? "#{pickup_address.country.code}-#{pickup_address&.zip_code}" : nil
     end
 
     def delivery_postal_code
-      return unless has_on_carriage?
+      return unless has_on_carriage
 
       delivery_address&.zip_code.present? ? "#{delivery_address.country.code}-#{delivery_address&.zip_code}" : nil
     end
@@ -112,8 +112,8 @@ module Notifications
 
     def routing
       [
-        has_pre_carriage? ? pickup_address.city : origin,
-        has_on_carriage? ? delivery_address.city : destination
+        has_pre_carriage ? pickup_address.city : origin,
+        has_on_carriage ? delivery_address.city : destination
       ].join(" - ")
     end
 
@@ -135,8 +135,8 @@ module Notifications
       ).reverse_geocode
     end
 
-    def has_pre_carriage?
-      route_sections.any? do |route_section|
+    def has_pre_carriage
+      @has_pre_carriage ||= route_sections.any? do |route_section|
         route_section.mode_of_transport == "carriage" &&
           route_section.order == 0
       end
@@ -146,8 +146,8 @@ module Notifications
       @route_sections ||= results.flat_map(&:route_sections)
     end
 
-    def has_on_carriage?
-      route_sections.any? do |route_section|
+    def has_on_carriage
+      @has_on_carriage ||= route_sections.any? do |route_section|
         route_section.mode_of_transport == "carriage" &&
           route_section.order != 0
       end
