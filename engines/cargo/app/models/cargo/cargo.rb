@@ -3,7 +3,7 @@
 module Cargo
   class Cargo < ApplicationRecord
     belongs_to :organization, class_name: "Organizations::Organization"
-    has_many :units, class_name: "Cargo::Unit"
+    has_many :units, class_name: "Cargo::Unit", dependent: :destroy
     monetize :total_goods_value_cents
 
     def total_area

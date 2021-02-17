@@ -8,8 +8,8 @@ module Quotations
     belongs_to :creator, polymorphic: true, optional: true
     belongs_to :origin_nexus, class_name: "Legacy::Nexus", optional: true
     belongs_to :destination_nexus, class_name: "Legacy::Nexus", optional: true
-    has_many :tenders, inverse_of: :quotation
-    has_one :cargo, class_name: "Cargo::Cargo"
+    has_many :tenders, inverse_of: :quotation, dependent: :destroy
+    has_one :cargo, class_name: "Cargo::Cargo", dependent: :destroy
     belongs_to :pickup_address, class_name: "Legacy::Address", optional: true
     belongs_to :delivery_address, class_name: "Legacy::Address", optional: true
     belongs_to :legacy_shipment, class_name: "Legacy::Shipment", optional: true
