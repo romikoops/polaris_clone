@@ -16,8 +16,10 @@ jobs:
 
       - uses: github/super-linter@v3
         env:
+          LINTER_RULES_PATH: /
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_DOCKERFILE: false
           FILTER_REGEX_EXCLUDE: "^(.*/spec/api/api/.*|db/data_schema.rb|db/structure.sql)$"
+          RUBY_CONFIG_FILE: .rubocop.yml
