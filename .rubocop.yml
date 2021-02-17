@@ -3,13 +3,11 @@ inherit_mode:
   merge:
     - Exclude
 
-inherit_gem:
-  rubocop-itsmycargo:
-    - config/base.yml
-    - config/rails.yml
-    - config/rspec.yml
-
-inherit_from: .rubocop_todo.yml
+inherit_from: 
+  - https://raw.githubusercontent.com/itsmycargo/rubocop-itsmycargo/master/config/rails.yml
+  - https://raw.githubusercontent.com/itsmycargo/rubocop-itsmycargo/master/config/base.yml
+  - https://raw.githubusercontent.com/itsmycargo/rubocop-itsmycargo/master/config/rspec.yml
+  - .rubocop_todo.yml
 
 AllCops:
   TargetRubyVersion: 2.6
