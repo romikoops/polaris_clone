@@ -5,6 +5,7 @@ module Users
     self.inheritance_column = nil
 
     default_scope { where(organization_id: ::Organizations.current_id) }
+    scope :global, -> { unscoped.where(deleted_at: nil) }
 
     belongs_to :organization, class_name: "Organizations::Organization"
 

@@ -75,6 +75,7 @@ organization_manager *--> companies
 organization_manager *--> groups
 organization_manager *--> legacy
 organization_manager --> organizations
+organization_manager --> users
 cargo --> organizations
 cargo *--> organization_manager
 cargo *--> legacy
