@@ -12,7 +12,7 @@ class Admin::AdminBaseController < ApplicationController
       text: text,
       doc_type: type,
       organization: current_organization,
-      user: params[:user],
+      user: options[:user],
       file: params[:file]
     )
     ## Async Uploader

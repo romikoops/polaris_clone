@@ -13,18 +13,55 @@ RSpec.describe Admin::TruckingController, type: :controller do
     append_token_header
   end
 
-  describe "POST #overwrite_zonal_trucking_by_hub" do
+  describe "POST #upload" do
     before do
-      post :upload, params: {
-        "file" => Rack::Test::UploadedFile.new(File.expand_path("../../test_sheets/spec_sheet.xlsx", __dir__)),
-        :organization_id => organization.id, :group => "all", :id => hub.id
+      allow(ExcelDataServices::UploaderJob).to receive(:perform_later)
+      allow(Legacy::File).to receive(:create!).and_return(dummy_file)
+    end
+    let(:base_params) do
+      {
+        file: Rack::Test::UploadedFile.new(File.expand_path("../../test_sheets/spec_sheet.xlsx", __dir__)),
+        organization_id: organization.id,
+        id: hub.id
       }
     end
+    let(:dummy_file) { FactoryBot.create(:legacy_file) }
 
-    it "returns error with messages when an error is raised" do
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(json_response["data"]).to be_truthy
+    context "when missing the param" do
+      it "the request is unsuccessful without the param group_id" do
+        expect { post :upload, params: base_params }.to raise_error(ActionController::ParameterMissing)
+      end
+    end
+
+    context "when the group is set to general" do
+      before { post :upload, params: base_params.merge(group_id: "all") }
+
+      it "returns error with messages when an error is raised" do
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_response["data"]).to be_truthy
+        end
+      end
+    end
+
+    context "when the group id is provided" do
+      let(:group_id) { FactoryBot.create(:groups_group, organization: organization).id }
+
+      before { post :upload, params: base_params.merge(group_id: group_id) }
+
+      it "returns error with messages when an error is raised" do
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(json_response["data"]).to be_truthy
+          expect(ExcelDataServices::UploaderJob).to have_received(:perform_later).with(
+            document_id: dummy_file.id,
+            options: {
+              user_id: user.id,
+              group_id: group_id,
+              applicable: hub
+            }
+          )
+        end
       end
     end
   end

@@ -11,9 +11,9 @@ module Response
     end
 
     def error_handler(e)
-      code = e.config[:http_code] || 500
-      Rails.logger.debug "#{e.class} (#{e.code}): #{e.message}"
+      raise e unless e.is_a?(ApplicationError)
 
+      code = e.config[:http_code] || 500
       resp = {success: false, message: e.message, code: e.code}
       json_response(resp, code)
     end

@@ -50,42 +50,17 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def upload
-    hub = Legacy::Hub.find(params[:id])
+    hub = Legacy::Hub.find(upload_hub_id)
     handle_upload(
       params: upload_params,
-      text: "group_id:#{params[:group_id] || "all"},hub_id: #{hub.id}",
+      text: "group_id:#{upload_group_id || "all"},hub_id: #{hub.id}",
       type: "trucking",
       options: {
-        group_id: upload_params[:group_id],
+        group_id: upload_group_id,
         applicable: hub,
         user: current_user
       }
     )
-  end
-
-  def overwrite_zonal_trucking_by_hub
-    if upload_params[:file]
-      document = Legacy::File.create!(
-        text: "",
-        doc_type: "truckings",
-        organization: current_organization,
-        file: upload_params[:file]
-      )
-
-      args = {
-        params: {"xlsx" => upload_params[:file]},
-        hub_id: upload_params[:id],
-        user: organization_user,
-        group: upload_params[:group] == "all" ? nil : upload_params[:group],
-        document: document
-      }
-
-      resp = Trucking::Excel::Inserter.new(args).perform
-
-      response_handler(resp)
-    else
-      response_handler(false)
-    end
   end
 
   def download
@@ -97,6 +72,14 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def upload_params
-    params.permit(:async, :file, :group, :id)
+    params.permit(:async, :file)
+  end
+
+  def upload_group_id
+    params.require(:group_id)
+  end
+
+  def upload_hub_id
+    params.require(:id)
   end
 end
