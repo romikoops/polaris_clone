@@ -74,7 +74,7 @@ module OfferCalculator
           def targets
             @targets ||=
               cargo_units
-                .select { |unit| unit.cargo_class == cargo_class }
+                .select { |unit| unit.cargo_class.include?(cargo_class) }
                 .map { |cargo_unit|
                 OfferCalculator::Service::Measurements::Cargo.new(
                   engine: cargo_engine_for_unit(cargo_unit: cargo_unit),

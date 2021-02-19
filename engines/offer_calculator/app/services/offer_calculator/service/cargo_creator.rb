@@ -79,13 +79,14 @@ module OfferCalculator
       end
 
       def aggregated_cargo
-        return if params.dig("aggregated_cargo").blank?
+        aggregated_attributes = params.dig("aggregated_cargo_attributes")
+        return if aggregated_attributes.blank?
 
         Journey::CargoUnit.new(
-          id: unit_params_id(unit_params: unit_params),
-          weight_value: params.dig("aggregated_cargo", "weight"),
+          id: unit_params_id(unit_params: aggregated_attributes),
+          weight_value: aggregated_attributes.fetch("weight"),
           width_value: 1,
-          length_value: params.dig("aggregated_cargo", "volume"),
+          length_value: aggregated_attributes.fetch("volume"),
           height_value: 1,
           quantity: 1,
           stackable: true,

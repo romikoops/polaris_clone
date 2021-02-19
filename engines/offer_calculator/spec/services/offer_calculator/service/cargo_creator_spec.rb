@@ -38,7 +38,7 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
 
     context "when fcl" do
       let(:params) do
-        {"cargo_items_attributes" => [
+        {"containers_attributes" => [
           {
             "payload_in_kg" => 120,
             "size_class" => "fcl_20",
@@ -49,11 +49,30 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
       end
       let(:results) { cargo_creator.perform }
       let(:item) { results.first }
-      let(:first_param) { params.dig("cargo_items_attributes", 0) }
+      let(:first_param) { params.dig("containers_attributes", 0) }
 
       it "creates one fcl_20 item" do
         expect(item.cargo_class).to eq("fcl_20")
         expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+      end
+    end
+
+    context "when aggregated_lcl" do
+      let(:params) do
+        {
+          "aggregated_cargo_attributes" => {
+            "weight" => 120,
+            "volume" => 1
+          }
+        }
+      end
+      let(:results) { cargo_creator.perform }
+      let(:item) { results.first }
+      let(:first_param) { params.dig("aggregated_cargo_attributes") }
+
+      it "creates one aggregated item" do
+        expect(item.cargo_class).to eq("aggregated_lcl")
+        expect(item.weight).to eq(Measured::Weight.new(first_param.dig("weight"), "kg"))
       end
     end
   end
