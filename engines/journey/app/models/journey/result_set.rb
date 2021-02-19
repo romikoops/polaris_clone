@@ -2,16 +2,14 @@ module Journey
   class ResultSet < ApplicationRecord
     belongs_to :query
     has_many :results
+    has_many :result_errors, class_name: "Journey::Error"
+
     enum status: {
       queued: "queued",
       running: "running",
       completed: "completed",
       failed: "failed"
     }
-
-    def completed?
-      status == "completed"
-    end
   end
 end
 

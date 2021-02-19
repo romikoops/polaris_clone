@@ -12,15 +12,18 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
   end
 
   collection do
-    model.where("slug NOT LIKE '%-sandbox'").order(:slug)
+    model.where("slug NOT LIKE '%-sandbox'").order("live DESC", "slug")
   end
+
+  scope :all, default: true
+  scope :live, -> { model.where(live: true) }
+  scope :non_live, -> { model.where(live: false) }
 
   # Customize the table columns shown on the index view.
   #
   table do
-    column :id
-    column :slug, sort: {default: true, default_order: :desc}
-    actions
+    column :slug, link: true
+    column :live, sort: {default: true, default_order: :desc}
   end
 
   # Customize the form fields shown on the new/edit views.

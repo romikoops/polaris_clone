@@ -107,19 +107,19 @@ jobs:
     steps:
       - id: vars
         run: |
-          echo "::set-output name=prefix::$([[ ${GITHUB_REF} = 'refs/heads/master' ]] && echo r- || echo b-)"
-          echo "::set-output name=sha_short::$(echo ${{ github.sha }} | cut -c1-7 )"
+          echo "::set-output name=build_tag::$([[ ${GITHUB_REF} = 'refs/heads/master' ]] && echo release || echo dev)-$(echo ${{ github.sha }} | cut -c1-7 )"
 
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+
       - name: Docker meta
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
+          images: ${{ secrets.ECR_REGISTRY }}/polaris
           tag-edge: true
           tag-sha: false
 
@@ -133,7 +133,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
@@ -153,8 +153,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
           tags: |
-            003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris:${{ github.sha }}
-            003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris:${{ steps.vars.outputs.prefix }}${{ github.run_number }}
+            ${{ secrets.ECR_REGISTRY }}/polaris:${{ github.sha }}
+            ${{ secrets.ECR_REGISTRY }}/polaris:${{ steps.vars.outputs.build_tag }}
             ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
