@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Api
-  RSpec.describe V1::PdfSerializer do
+  RSpec.describe V1::FileSerializer do
     let(:file) { FactoryBot.create(:legacy_file, :with_file) }
     let(:serialized_file) { described_class.new(file).serializable_hash }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Pdf
+module ResultFormatter
   class CarrierServiceInfo
     attr_reader :result, :carriage, :voyage_info
 

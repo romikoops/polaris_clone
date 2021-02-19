@@ -14,21 +14,22 @@ module Wheelhouse
 
     def perform
       generate_pdf
-      publish_event
       offer
     end
 
     def offer
-      @offer ||= existing_offer || Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets)
+      @offer ||= existing_offer || new_offer
     end
 
     private
 
-    def existing_offer
-      Journey::Offer.find_by(id: existing_offer_id)
+    def new_offer
+      Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets).tap do |created_offer|
+        publish_event(created_offer: created_offer)
+      end
     end
 
-    def existing_offer_id
+    def existing_offer
       raw_query = "SELECT offer_id
       FROM journey_offer_line_item_sets
       JOIN journey_offers on journey_offer_line_item_sets.offer_id = journey_offers.id
@@ -40,7 +41,9 @@ module Wheelhouse
       sanitized_query = ActiveRecord::Base.sanitize_sql_array(
         [raw_query, binds]
       )
-      ActiveRecord::Base.connection.exec_query(sanitized_query).to_a.first&.dig("offer_id")
+      Journey::Offer.find_by(
+        id: ActiveRecord::Base.connection.exec_query(sanitized_query).to_a.pluck("offer_id").first
+      )
     end
 
     def binds
@@ -55,10 +58,10 @@ module Wheelhouse
       Pdf::Quotation::Client.new(offer: offer).file
     end
 
-    def publish_event
+    def publish_event(created_offer:)
       Rails.configuration.event_store.publish(
         Journey::OfferCreated.new(data: {
-          offer: offer.to_global_id, organization_id: Organizations.current_id
+          offer: created_offer.to_global_id, organization_id: Organizations.current_id
         }),
         stream_name: "Organization$#{Organizations.current_id}"
       )

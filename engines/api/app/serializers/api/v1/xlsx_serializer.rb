@@ -3,8 +3,8 @@
 module Api
   module V1
     class XlsxSerializer < Api::ApplicationSerializer
-      attribute :url do |object|
-        Rails.application.routes.url_helpers.rails_blob_url(object.file, disposition: "attachment")
+      attribute :url do |object, params|
+        params.dig(:url)
       end
     end
   end

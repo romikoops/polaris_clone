@@ -109,7 +109,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
 
   describe ".pre_carriage_service" do
     it "returns the pre carriage service" do
-      expect(klass.pre_carriage_service).to eq("")
+      expect(klass.pre_carriage_service).to eq("standard")
     end
   end
 
@@ -153,13 +153,13 @@ RSpec.describe ResultFormatter::ResultDecorator do
 
     describe ".pre_carriage_service" do
       it "returns the pre carriage service" do
-        expect(klass.pre_carriage_service).to eq("operated by #{pre_carriage_carrier}(#{pre_carriage_service})")
+        expect(klass.formatted_pre_carriage_service).to eq("operated by #{pre_carriage_carrier}(#{pre_carriage_service})")
       end
     end
 
     describe ".on_carriage_service" do
       it "returns the on carriage service" do
-        expect(klass.on_carriage_service).to eq("operated by #{on_carriage_carrier}(#{on_carriage_service})")
+        expect(klass.formatted_on_carriage_service).to eq("operated by #{on_carriage_carrier}(#{on_carriage_service})")
       end
     end
 

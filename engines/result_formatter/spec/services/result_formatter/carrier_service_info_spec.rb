@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Pdf::CarrierServiceInfo, type: :service do
+RSpec.describe ResultFormatter::CarrierServiceInfo, type: :service do
   let(:result) { FactoryBot.create(:journey_result) }
   let(:decorated_result) { ResultFormatter::ResultDecorator.new(FactoryBot.create(:journey_result)) }
   let(:pre_carriage_section) do

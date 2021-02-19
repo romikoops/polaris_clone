@@ -31,7 +31,7 @@ module Api
     describe "GET #pdf" do
       let(:params) { {offer_id: offer.id, organization_id: organization.id} }
 
-      it "successfuly returns the downlaod url for the PDF" do
+      it "successfuly returns the download url for the PDF" do
         get :pdf, params: params, as: :json
         expect(response_data.dig("attributes", "url")).to be_present
       end

@@ -11,6 +11,10 @@ module Journey
     def attachment
       file&.download
     end
+
+    def xlsx
+      ExcelWriterService.new(offer: offer).quotation_sheet
+    end
   end
 end
 

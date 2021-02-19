@@ -118,14 +118,14 @@
               <p> 
                 <b> Pickup from</b>: 
                 <%=  result.full_pickup_address %>
-                <%= result.pre_carriage_service %>
+                <%= result.formatted_pre_carriage_service %>
               </p>
             <% end %>
             <% if result.on_carriage_section.present? %>
               <p> 
                 <b> Delivery to</b>: 
                 <%=  result.full_delivery_address  %>
-                <%=  result.on_carriage_service  %>
+                <%=  result.formatted_on_carriage_service  %>
               </p>
             <% end %>
           </div>

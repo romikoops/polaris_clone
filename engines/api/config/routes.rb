@@ -71,8 +71,9 @@ Api::Engine.routes.draw do
         resources :charges, only: [:index]
       end
       resources :offers, only: [:create] do
-        get "pdf"
         get "email"
+        get "pdf"
+        get "xlsx"
       end
       resources :uploads, only: [:create]
     end

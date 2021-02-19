@@ -440,14 +440,13 @@ module Api
         end
 
         context "with tender ids" do
-          let(:quotation) { Quotations::Quotation.last }
-
           it "renders origin and destination as nexus objects" do
             post :download, params: {
               organization_id: organization.id,
               quotation_id: query.id,
               format: format,
-              tenders: [result.id]
+              tenders: [result.id],
+              dl: dl
             }
 
             expect(response_data.dig("id")).not_to be_empty
@@ -456,12 +455,14 @@ module Api
       end
 
       context "when downloading as pdf" do
+        let(:dl) { 1 }
         it_should_behave_like "a downloadable quotation format", "pdf"
       end
 
-      # context "when downloading as xlsx" do  # NB: Excel Downloader needs to be updated for Journey Models
-      #   it_should_behave_like "a downloadable quotation format", "xlsx"
-      # end
+      context "when downloading as xlsx" do
+        let(:dl) { 0 }
+        it_should_behave_like "a downloadable quotation format", "xlsx"
+      end
 
       context "when format is not specified" do
         it "is unsuccessful" do

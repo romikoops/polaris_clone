@@ -36,7 +36,7 @@ module ResultFormatter
     end
 
     def currency
-      @currency ||= Users::Settings.find_by(user: client)&.currency || scope.dig(:default_currency)
+      @currency ||= Users::ClientSettings.find_by(user: client)&.currency || scope.dig(:default_currency)
     end
 
     def voyage_code
@@ -189,12 +189,28 @@ module ResultFormatter
       ).fetch.entries
     end
 
+    def formatted_pre_carriage_service
+      @formatted_pre_carriage_service ||= carriage_service_string(carriage: "pre")
+    end
+
+    def formatted_on_carriage_service
+      @formatted_on_carriage_service ||= carriage_service_string(carriage: "on")
+    end
+
     def pre_carriage_service
-      @pre_carriage_service ||= carriage_service_string(carriage: "pre")
+      @pre_carriage_service ||= pre_carriage_section&.service
     end
 
     def on_carriage_service
-      @on_carriage_service ||= carriage_service_string(carriage: "on")
+      @on_carriage_service ||= on_carriage_section&.service
+    end
+
+    def pre_carriage_carrier
+      @pre_carriage_carrier ||= pre_carriage_section&.carrier
+    end
+
+    def on_carriage_carrier
+      @on_carriage_carrier ||= on_carriage_section&.carrier
     end
 
     def full_pickup_address
@@ -206,7 +222,7 @@ module ResultFormatter
     end
 
     def carriage_service_string(carriage:)
-      operator = Pdf::CarrierServiceInfo.new(
+      operator = ResultFormatter::CarrierServiceInfo.new(
         result: self, voyage_info: scope[:voyage_info], carriage: carriage
       ).operator
       operator.present? ? "operated by #{operator}" : ""

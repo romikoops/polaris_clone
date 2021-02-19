@@ -31,11 +31,7 @@ module Api
           origin_hub: origin_hub,
           destination_hub: destination_hub,
           load_type: load_type,
-          exchange_rates: ResultFormatter::ExchangeRateService.new(
-            base_currency: base_currency,
-            currencies: line_items.pluck(:total_currency).uniq,
-            timestamp: issued_at
-          ).perform,
+          exchange_rates: exchange_rates,
           validUntil: expiration_date,
           pricing_rate_data: OfferCalculator::Service::OfferCreators::RateOverview.overview(result: self),
           remarkNotes: remarks,

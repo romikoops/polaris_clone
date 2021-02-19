@@ -41,18 +41,42 @@ module Api
       end
 
       def download
-        document = download_service.document
         case download_params[:format]
-        when Wheelhouse::QuotationDownloadService::XLSX
-          render json: XlsxSerializer.new(document)
-        when Wheelhouse::QuotationDownloadService::PDF
-          render json: PdfSerializer.new(document)
+        when "xlsx"
+          if download_params[:dl] == "1"
+            excel_direct_download
+          else
+            render json: XlsxSerializer.new(offer,
+              {url: [request.url, "?dl=1"].join})
+          end
+        when "pdf"
+          render json: FileSerializer.new(offer)
+        else
+          render json: {error: "Download format is missing or invalid"}, status: :unprocessable_entity
         end
       rescue Wheelhouse::ApplicationError => e
         render json: {error: e.message}, status: :unprocessable_entity
       end
 
       private
+
+      def excel_direct_download
+        File.open(offer_excel.path, "r") do |xlsx_data|
+          send_data(xlsx_data.read,
+            filename: "offer_#{offer.id}.xlsx",
+            content_type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            disposition: "attachment")
+        end
+        File.delete(tempfile.path)
+      end
+
+      def offer_excel
+        @offer_excel ||= Wheelhouse::ExcelWriterService.new(offer: offer).quotation_sheet
+      end
+
+      def offer
+        Wheelhouse::OfferBuilder.offer(results: results)
+      end
 
       def result_ids
         return download_params[:tenders] if download_params[:tenders].present?
@@ -114,14 +138,6 @@ module Api
         ).query
       end
 
-      def download_service
-        Wheelhouse::QuotationDownloadService.new(
-          result_ids: result_ids,
-          format: download_params[:format],
-          scope: current_scope
-        )
-      end
-
       def quotation_details
         @quotation_details ||= quotation_params.to_h.merge(creator_id: current_user.id)
       end
@@ -175,7 +191,7 @@ module Api
       end
 
       def download_params
-        params.permit(:quotation_id, :format, tenders: [], tender_ids: [])
+        params.permit(:quotation_id, :format, :dl, tenders: [], tender_ids: [])
       end
 
       def routing
@@ -249,6 +265,10 @@ module Api
         ) || return
 
         queries.filterrific_find(@filterrific)
+      end
+
+      def results
+        Journey::Result.where(id: result_ids)
       end
     end
   end
