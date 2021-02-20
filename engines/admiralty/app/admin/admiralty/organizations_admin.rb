@@ -3,12 +3,10 @@
 Trestle.resource(:organizations, model: Organizations::Organization) do
   remove_action :destroy
 
+  menu :organizations, icon: "fa fa-building", group: :organizations
+
   search do |query|
     query ? collection.where("slug ILIKE ?", "%#{query}%") : collection
-  end
-
-  menu do
-    item :organizations, icon: "fa fa-building"
   end
 
   collection do

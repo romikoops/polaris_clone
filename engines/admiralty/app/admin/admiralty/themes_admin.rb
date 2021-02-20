@@ -4,10 +4,6 @@ Trestle.resource(:themes, model: Organizations::Theme) do
       booking_process_image welcome_email_image]
   end
 
-  menu do
-    item :themes, icon: "fa fa-star"
-  end
-
   # Customize the table columns shown on the index view.
   #
   # table do

@@ -35,7 +35,8 @@ Trestle.resource(:queries, model: Journey::Query) do
 
       safe_join(content, raw("<br />"))
     end
-    column :company
+    column :origin
+    column :destination
     column :load_type, -> (query) { query.load_type.upcase }, align: :center
     column :billable, align: :center
     column :status, align: :center do |query|
@@ -50,7 +51,7 @@ Trestle.resource(:queries, model: Journey::Query) do
     column :results do |query|
       result_set = query.result_sets.order(:created_at).first
       if result_set
-        errors = result_set.result_errors.map { |error| content_tag(:small, error.property)}
+        errors = result_set.result_errors.map(&:property).sort.uniq.map { |error| content_tag(:small, error) }
         safe_join([
           content_tag(:span, "#{result_set.results.count} Results"),
           *errors
@@ -67,6 +68,8 @@ Trestle.resource(:queries, model: Journey::Query) do
   end
 
   form do |query|
+    text_field :origin, disabled: true
+    text_field :destination, disabled: true
   end
 
   controller do
