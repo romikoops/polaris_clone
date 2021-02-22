@@ -113,6 +113,19 @@ RSpec.describe Api::LegacyQuote do
     end
   end
 
+  context "when a only local charges are present" do
+    let(:line_items) do
+      [
+        origin_transfer_line_item_per_shipment,
+        freight_line_item_per_shipment
+      ].flatten
+    end
+
+    it "returns a the correct keys for the charge configuration" do
+      expect(quote.keys).to eq(%w[total edited_total name export cargo])
+    end
+  end
+
   context "when a full booking with cargo and shipment fees" do
     let(:scope) { {consolidation: {backend: {cargo: true}}} }
 

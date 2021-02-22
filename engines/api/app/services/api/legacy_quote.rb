@@ -33,9 +33,9 @@ module Api
 
     def initial_state
       {
-        total: grand_total,
-        edited_total: edited_grand_total,
-        name: "Grand Total"
+        "total" => grand_total,
+        "edited_total" => edited_grand_total,
+        "name" => "Grand Total"
       }
     end
 
@@ -154,11 +154,10 @@ module Api
     end
 
     def legacy_transfer_key(route_section:)
-      if route_sections.first.mode_of_transport == "carriage" && route_section.order >= 3 ||
-          route_sections.first.mode_of_transport == "ocean"
-        "import"
-      else
+      if route_section.to == main_freight_section.from
         "export"
+      else
+        "import"
       end
     end
 
@@ -238,6 +237,12 @@ module Api
         value: money.amount,
         currency: money.currency.iso_code
       }
+    end
+
+    def main_freight_section
+      @main_freight_section ||= route_sections.where(
+        "journey_route_sections.mode_of_transport != 'carriage' AND journey_route_sections.from_id != journey_route_sections.to_id"
+      ).first
     end
   end
 end
