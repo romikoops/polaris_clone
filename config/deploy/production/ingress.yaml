@@ -6,9 +6,8 @@ metadata:
     app.kubernetes.io/component: web
     app.kubernetes.io/instance: polaris
     app.kubernetes.io/name: polaris
-  annotations:
-    kubernetes.io/ingress.class: haproxy
 spec:
+  ingressClassName: external
   rules:
     - host: polaris-production.itsmycargo.io
       http:
