@@ -290,13 +290,13 @@ module Api
       end
 
       context "when origin and destinations are nexuses" do
-        let!(:origin_hub) { 
+        let!(:origin_hub) {
           FactoryBot.create(:legacy_hub,
             hub_code: origin_locode,
             hub_type: freight_section.mode_of_transport,
             organization: organization)
         }
-        let!(:destination_hub) { 
+        let!(:destination_hub) {
           FactoryBot.create(:legacy_hub,
             hub_code: destination_locode,
             hub_type: freight_section.mode_of_transport,

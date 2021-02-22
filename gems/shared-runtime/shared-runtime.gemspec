@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 rails_version = File.read(File.join(__dir__, "../../.rails-version"))
 
 Gem::Specification.new do |spec|

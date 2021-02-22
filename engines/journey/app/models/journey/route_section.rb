@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class RouteSection < ApplicationRecord
     belongs_to :from, class_name: "Journey::RoutePoint"

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Organizations
   class IntegrationToken < ApplicationRecord
     default_scope { where("expires_at > NOW()") }

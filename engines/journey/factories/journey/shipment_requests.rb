@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_shipment_request, class: "Journey::ShipmentRequest" do
     association :result, factory: :journey_result

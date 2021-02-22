@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddParanoiaToLegacyChargeModels < ActiveRecord::Migration[5.2]
   def change
     add_column :charge_breakdowns, :deleted_at, :datetime

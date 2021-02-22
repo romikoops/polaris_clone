@@ -36,7 +36,7 @@ module ExcelDataServices
               #{table}
             WHERE
               #{attribute_query}
-            AND 
+            AND
               validity @> :adjusted_date::date
           )
           INSERT INTO #{table} (#{model_attributes.join(", ")}, created_at, updated_at)

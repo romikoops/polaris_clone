@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class RoutePoint < ApplicationRecord
     has_many :line_items

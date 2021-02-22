@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :pricings_metadatum, class: "Pricings::Metadatum" do
     association :organization, factory: :organizations_organization

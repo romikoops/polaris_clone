@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LegacyTenantToOrganizationsPricings < ActiveRecord::Migration[5.2]
   TABLES = %w[
     pricings_details pricings_fees pricings_margins pricings_metadata pricings_pricings

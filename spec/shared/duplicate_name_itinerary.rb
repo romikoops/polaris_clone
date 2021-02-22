@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_context "false_itinerary" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:faux_origin_country) { FactoryBot.create(:country_de) }

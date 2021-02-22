@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Pdf
   class Base
     attr_reader :organization, :user, :scope, :theme, :query, :offer

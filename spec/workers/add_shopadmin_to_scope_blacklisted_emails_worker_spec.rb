@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 RSpec.describe AddShopadminToScopeBlacklistedEmailsWorker, type: :worker do
   context "when organization scope has no blacklisted emails" do

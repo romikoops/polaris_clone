@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_line_item_cargo_unit, class: "Journey::LineItemCargoUnit" do
     association :cargo_unit, factory: :journey_cargo_unit

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class AdminUserCreatedJob < ApplicationJob
     prepend RailsEventStore::AsyncHandler

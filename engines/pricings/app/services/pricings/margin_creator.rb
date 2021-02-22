@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Pricings
   class MarginCreator
     def initialize(args)

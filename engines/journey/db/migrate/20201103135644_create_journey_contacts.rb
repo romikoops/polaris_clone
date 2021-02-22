@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateJourneyContacts < ActiveRecord::Migration[5.2]
   def change
     create_table :journey_contacts, id: :uuid do |t|

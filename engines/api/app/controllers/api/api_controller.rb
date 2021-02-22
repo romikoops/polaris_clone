@@ -77,7 +77,7 @@ module Api
     def organization_domain
       @organization_domain ||= begin
         domains = [
-          URI(request.referer.to_s).host,
+          URI(request.referrer.to_s).host,
           request.host,
           Rails.env.production? ? nil : ENV.fetch("DEFAULT_TENANT", "demo.local")
         ]
@@ -95,7 +95,7 @@ module Api
     end
 
     def referer
-      URI(request.referer.to_s)
+      URI(request.referrer.to_s)
     end
 
     def target_groups(target:)

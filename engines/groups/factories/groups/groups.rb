@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :groups_group, class: "Groups::Group" do
     association :organization, factory: :organizations_organization

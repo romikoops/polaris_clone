@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddTerminalIdsToRoute < ActiveRecord::Migration[5.2]
   def change
     add_column :routing_routes, :origin_terminal_id, :uuid

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class OfferResult < ApplicationRecord
     belongs_to :offer

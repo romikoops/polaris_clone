@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddingTruckTypesToTender < ActiveRecord::Migration[5.2]
   def change
     add_column :quotations_tenders, :pickup_truck_type, :string

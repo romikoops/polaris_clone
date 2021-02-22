@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ExcelDataServices
   class ApplicationJob < ActiveJob::Base
     # Automatically retry jobs that encountered a deadlock

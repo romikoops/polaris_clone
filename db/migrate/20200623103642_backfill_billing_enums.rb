@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BackfillBillingEnums < ActiveRecord::Migration[5.2]
   def up
     %w[shipments quotations quotations_quotations].each do |table|

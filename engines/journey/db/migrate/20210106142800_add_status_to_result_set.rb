@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddStatusToResultSet < ActiveRecord::Migration[5.2]
   def up
     safety_assured do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateRoutingTerminals < ActiveRecord::Migration[5.2]
   def change
     create_table :routing_terminals, id: :uuid do |t|

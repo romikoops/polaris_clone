@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :routing_line_service, class: "Routing::LineService" do
     name { "Far East 1" }

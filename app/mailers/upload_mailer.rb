@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UploadMailer < ApplicationMailer
   default from: "notifications@itsmycargo.shop"
   layout "notification"

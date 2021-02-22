@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ExcelDataServices
   module Expanders
     module ZoneRanges

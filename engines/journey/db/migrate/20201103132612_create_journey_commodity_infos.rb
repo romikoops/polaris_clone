@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateJourneyCommodityInfos < ActiveRecord::Migration[5.2]
   def change
     create_table :journey_commodity_infos, id: :uuid do |t|

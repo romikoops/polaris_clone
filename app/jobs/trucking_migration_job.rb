@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TruckingMigrationJob < ApplicationJob
   concurrency 1, drop: false
   queue_as :default

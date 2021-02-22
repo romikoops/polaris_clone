@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class ApplicationMailer < ActionMailer::Base
     default from: "no-reply@itsmycargo.shop"

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "trestle/auth/backends/google"
 
 Trestle.configure do |config|

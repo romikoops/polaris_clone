@@ -290,7 +290,7 @@ module DocumentService
 
     def consecutive_arrays(list_of_postal_codes)
       alpha_groups = list_of_postal_codes.group_by do |postal_code|
-        {alpha: postal_code[:city_name].tr("^A-Z", ""), country: postal_code[:country_code]} 
+        {alpha: postal_code[:city_name].tr("^A-Z", ""), country: postal_code[:country_code]}
       end
       alpha_groups.flat_map do |alpha_and_country, array|
         numeric = array.all? { |postal_code| postal_code[:city_name].tr("^0-9", "").present? }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class UserMailer < ApplicationMailer
     before_action do

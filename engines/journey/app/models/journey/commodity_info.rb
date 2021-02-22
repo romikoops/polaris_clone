@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class CommodityInfo < ApplicationRecord
     VALID_IMO_CLASSES = %w[

@@ -137,7 +137,7 @@ module Trucking
           .where(group_condition)
       end
 
-       
+
 
       def truck_type_condition
         truck_type.present? ? {truck_type: truck_type} : {}

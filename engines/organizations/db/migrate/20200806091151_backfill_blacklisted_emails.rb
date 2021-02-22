@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BackfillBlacklistedEmails < ActiveRecord::Migration[5.2]
   def change
     default = Organizations::DEFAULT_SCOPE["blacklisted_emails"]

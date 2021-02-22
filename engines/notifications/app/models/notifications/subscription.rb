@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class Subscription < ApplicationRecord
     belongs_to :user, optional: true, class_name: "Users::User"

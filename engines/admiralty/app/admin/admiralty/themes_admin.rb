@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Trestle.resource(:themes, model: Organizations::Theme) do
   active_storage_fields do
     %i[background small_logo large_logo email_logo white_logo wide_logo

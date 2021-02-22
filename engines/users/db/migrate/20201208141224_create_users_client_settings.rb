@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateUsersClientSettings < ActiveRecord::Migration[5.2]
   def change
     create_table :users_client_settings, id: :uuid do |t|

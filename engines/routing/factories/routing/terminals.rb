@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :routing_terminal, class: "Routing::Terminal" do
     association :location, factory: :routing_location

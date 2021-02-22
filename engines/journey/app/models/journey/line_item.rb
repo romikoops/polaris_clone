@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class LineItem < ApplicationRecord
     has_many :line_item_cargo_units, dependent: :destroy, inverse_of: :line_item
@@ -6,7 +7,7 @@ module Journey
     belongs_to :route_section
     belongs_to :route_point
     has_one :result, through: :line_item_set
-    
+
     monetize :total_cents
     monetize :unit_price_cents
 

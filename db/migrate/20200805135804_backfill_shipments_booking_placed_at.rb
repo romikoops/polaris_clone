@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BackfillShipmentsBookingPlacedAt < ActiveRecord::Migration[5.2]
   def up
     exec_update <<~SQL

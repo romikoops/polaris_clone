@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateOrganizationsIntegrationTokens < ActiveRecord::Migration[5.2]
   def change
     create_table :organizations_integration_tokens, id: :uuid do |t|

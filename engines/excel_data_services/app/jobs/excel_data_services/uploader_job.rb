@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ExcelDataServices
   class UploaderJob < ApplicationJob
     queue_as :default

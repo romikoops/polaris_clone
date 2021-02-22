@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_route_point, class: "Journey::RoutePoint" do
     transient do

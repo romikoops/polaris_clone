@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class ImcReference
     attr_reader :date

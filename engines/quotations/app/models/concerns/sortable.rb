@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # app/models/concerns/sortable.rb
 require "active_support/concern"
 

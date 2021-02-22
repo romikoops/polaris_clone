@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddBillingEnumToModels < ActiveRecord::Migration[5.2]
   def up
     add_column :shipments, :billing, :integer, index: true

@@ -9,7 +9,7 @@ module Notifications
         length,
         width,
         height
-      ].map(&:format).join(" x ") + " " + I18n.t('notifications.request_mailer.request_created.dimensions_key')
+      ].map(&:format).join(" x ") + " " + I18n.t("notifications.request_mailer.request_created.dimensions_key")
     end
 
     def cargo_type

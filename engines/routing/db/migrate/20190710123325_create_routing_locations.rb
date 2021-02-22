@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateRoutingLocations < ActiveRecord::Migration[5.2]
   def change
     create_table :routing_locations, id: :uuid do |t|

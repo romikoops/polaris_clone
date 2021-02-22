@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Organizations
   class SamlMetadatum < ApplicationRecord
     belongs_to :organization

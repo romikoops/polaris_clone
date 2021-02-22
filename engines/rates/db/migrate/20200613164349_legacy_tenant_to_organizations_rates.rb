@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LegacyTenantToOrganizationsRates < ActiveRecord::Migration[5.2]
   TABLES = %w[
     rates_sections

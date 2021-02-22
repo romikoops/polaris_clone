@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RenameOrganizationsMembershipsToUsersMemberships < ActiveRecord::Migration[5.2]
   def change
     # Accept downtime deployment

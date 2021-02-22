@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_event_store"
 
 Rails.configuration.to_prepare do

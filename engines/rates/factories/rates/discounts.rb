@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :rates_discount, class: "Rates::Discount" do
     association :organization, factory: :organizations_organization

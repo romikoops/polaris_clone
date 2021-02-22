@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :trucking_scope, class: "Trucking::Scope" do
     load_type { "cargo_item" }

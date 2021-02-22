@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Admiralty
   class Scope < Organizations::Scope
     delegate :session_length, to: :content

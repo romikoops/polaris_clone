@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BackfillGeocodedAddresses < ActiveRecord::Migration[5.2]
   def up
     ActiveRecord::Migration.exec_update("

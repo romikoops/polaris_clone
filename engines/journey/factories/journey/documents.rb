@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_document, class: "Journey::Document" do
     association :query, factory: :journey_query

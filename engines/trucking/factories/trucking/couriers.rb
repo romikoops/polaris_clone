@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :trucking_courier, class: "Trucking::Courier" do
     name { "example courier" }

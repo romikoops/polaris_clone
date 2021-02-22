@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if ENV.fetch("ELASTICSEARCH_URL") { "" }[/es\.amazonaws\.com/]
   Searchkick.aws_credentials = {
     region: ENV.fetch("AWS_DEFAULT_REGION") { "eu-central-1" },

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class ClientPreview < ActionMailer::Preview
     def offer_email
@@ -9,7 +10,7 @@ module Notifications
     end
 
     private
-    
+
     def organization
       offer.query.organization
     end

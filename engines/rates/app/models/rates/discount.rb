@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Rates
   class Discount < ApplicationRecord
     belongs_to :organization, class_name: "Organizations::Organization"

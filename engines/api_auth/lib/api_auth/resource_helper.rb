@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApiAuth
   class ResourceHelper
     def self.resource_for_login(client:)

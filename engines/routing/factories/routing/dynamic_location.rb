@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :dynamic_location, class: "Routing::Location" do
     lat { 53.558572 }

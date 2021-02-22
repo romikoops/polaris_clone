@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateOrganizationsSamlMetadata < ActiveRecord::Migration[5.2]
   def change
     create_table :organizations_saml_metadata, id: :uuid do |t|

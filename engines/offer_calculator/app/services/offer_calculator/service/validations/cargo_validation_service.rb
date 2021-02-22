@@ -238,7 +238,7 @@ module OfferCalculator
           end
           limit = si_attribute_limit(max_dimensions: max_dimensions, attribute: attribute)
           return if limit >= measurement
-          
+
           build_error(attribute: attribute, limit: limit, id: id, cargo: cargo, measurement: measurement)
         end
 

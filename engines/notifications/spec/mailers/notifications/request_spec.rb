@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 
 module Notifications
@@ -7,7 +8,7 @@ module Notifications
       let(:query) { FactoryBot.build(:journey_query, organization: organization) }
       let(:note) { "This is a test note" }
       let(:mode_of_transport) { "ocean" }
-      let(:subject_line) { "ItsMyCargo RFQ: #{mode_of_transport.upcase} / #{query.load_type.to_s.upcase} / #{query.origin} -> #{query.destination} / #{query.client.email}"}
+      let(:subject_line) { "ItsMyCargo RFQ: #{mode_of_transport.upcase} / #{query.load_type.to_s.upcase} / #{query.origin} -> #{query.destination} / #{query.client.email}" }
       let(:mail) do
         RequestMailer.with(
           organization: organization,

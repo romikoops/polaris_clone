@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Users
   class Admin < Base
     self.inheritance_column = nil

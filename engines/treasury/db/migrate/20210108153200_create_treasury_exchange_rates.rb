@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateTreasuryExchangeRates < ActiveRecord::Migration[5.2]
   def change
     create_table :treasury_exchange_rates, id: :uuid do |t|

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "rails_helper"
 RSpec.describe DeleteUnusedHubsAndNexusesWorker, type: :worker do
   context "when hub has no hub_code" do

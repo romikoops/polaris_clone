@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Carta
   class Api
     LocationNotFound = Class.new(StandardError)

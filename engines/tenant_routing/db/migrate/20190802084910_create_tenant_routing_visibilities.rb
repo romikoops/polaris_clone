@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateTenantRoutingVisibilities < ActiveRecord::Migration[5.2]
   def change
     create_table :tenant_routing_visibilities, id: :uuid do |t|

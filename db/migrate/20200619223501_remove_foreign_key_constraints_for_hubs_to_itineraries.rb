@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RemoveForeignKeyConstraintsForHubsToItineraries < ActiveRecord::Migration[5.2]
   def up
     remove_foreign_key :itineraries, column: :origin_hub_id

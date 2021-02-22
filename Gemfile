@@ -77,6 +77,13 @@ group :development do
   gem "guard", "~> 2.16"
   gem "guard-bundler", require: false
   gem "guard-rspec", require: false
+
+  # Rubocop
+  gem "rubocop"
+  gem "rubocop-github", "0.16.0"
+  gem "rubocop-performance", "~>1.7.1"
+  gem "rubocop-rails", "~> 2.5"
+  gem "rubocop-rspec", "~> 1.41.0"
 end
 
 group :development, :test do
@@ -109,6 +116,6 @@ group :default, :engines do
   end
 end
 
+gem "measured-itsmycargo", path: "gems/measured-itsmycargo"
 gem "money_cache", path: "gems/money_cache"
 gem "shared-runtime", path: "gems/shared-runtime"
-gem "measured-itsmycargo", path: "gems/measured-itsmycargo"

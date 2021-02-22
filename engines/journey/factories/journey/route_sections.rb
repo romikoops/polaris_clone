@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_route_section, class: "Journey::RouteSection" do
     association :from, factory: :journey_route_point

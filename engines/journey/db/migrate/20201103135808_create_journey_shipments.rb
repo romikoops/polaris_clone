@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateJourneyShipments < ActiveRecord::Migration[5.2]
   def change
     create_table :journey_shipments, id: :uuid do |t|

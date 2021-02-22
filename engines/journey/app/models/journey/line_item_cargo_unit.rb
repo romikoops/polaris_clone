@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class LineItemCargoUnit < ApplicationRecord
     belongs_to :line_item, inverse_of: :line_item_cargo_units

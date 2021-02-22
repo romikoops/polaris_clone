@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Status
 require "sidekiq-status/web"
 require "sidekiq/cron/web"

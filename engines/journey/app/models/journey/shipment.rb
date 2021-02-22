@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Journey
   class Shipment < ApplicationRecord
     belongs_to :shipment_request

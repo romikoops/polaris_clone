@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class LegacyTenantToOrganizationsTrucking < ActiveRecord::Migration[5.2]
   TABLES = %w[
     trucking_couriers trucking_rates trucking_truckings users

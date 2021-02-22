@@ -53,8 +53,8 @@ RSpec.shared_context "journey_pdf_setup" do
       "country_code" => factory_country_from_code(code: "CN").code,
       "postal_code" => ""
     ])
-    FactoryBot.create(:legacy_hub, hub_type: "ocean", hub_code: origin_locode, organization: organization )
-    FactoryBot.create(:legacy_hub, hub_type: "ocean", hub_code: destination_locode, organization: organization )
+    FactoryBot.create(:legacy_hub, hub_type: "ocean", hub_code: origin_locode, organization: organization)
+    FactoryBot.create(:legacy_hub, hub_type: "ocean", hub_code: destination_locode, organization: organization)
     FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD", created_at: result.issued_at - 2.seconds)
   end
 end

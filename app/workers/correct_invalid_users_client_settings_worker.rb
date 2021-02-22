@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CorrectInvalidUsersClientSettingsWorker
   include Sidekiq::Worker
 

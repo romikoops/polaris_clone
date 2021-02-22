@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Routing
   class LineService < ApplicationRecord
     belongs_to :carrier, class_name: "Routing::Carrier"

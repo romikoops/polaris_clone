@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UsersMigrateClients < ActiveRecord::Migration[5.2]
   # Allow 3 minutes migration
   set_statement_timeout(3 * 60 * 1000)

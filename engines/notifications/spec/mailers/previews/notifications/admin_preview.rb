@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   class AdminPreview < ActionMailer::Preview
     def user_created

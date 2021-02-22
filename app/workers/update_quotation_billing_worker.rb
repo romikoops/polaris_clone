@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UpdateQuotationBillingWorker
   include Sidekiq::Worker
 

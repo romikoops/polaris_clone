@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddBillingEnumToQuotations < ActiveRecord::Migration[5.2]
   def up
     add_column :quotations_quotations, :billing, :integer, index: true

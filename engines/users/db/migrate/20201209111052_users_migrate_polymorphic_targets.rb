@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UsersMigratePolymorphicTargets < ActiveRecord::Migration[5.2]
   def change
     safety_assured do

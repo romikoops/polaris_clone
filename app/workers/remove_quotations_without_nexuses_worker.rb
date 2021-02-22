@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class RemoveQuotationsWithoutNexusesWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker

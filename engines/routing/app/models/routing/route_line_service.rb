@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Routing
   class RouteLineService < ApplicationRecord
     belongs_to :route, class_name: "Routing::Route"

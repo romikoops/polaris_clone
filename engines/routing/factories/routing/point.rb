@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :routing_point, class: "RGeo::Geos::CAPIPointImpl" do
     lat { 53.558572 }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_cargo_unit, class: "Journey::CargoUnit" do
     quantity { 2 }

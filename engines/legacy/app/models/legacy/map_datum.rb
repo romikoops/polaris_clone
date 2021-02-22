@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Legacy
   class MapDatum < ApplicationRecord
     self.table_name = "map_data"

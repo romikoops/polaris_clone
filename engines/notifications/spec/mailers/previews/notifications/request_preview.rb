@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Notifications
   # Preview all emails at http://localhost:3000/rails/mailers/notifications/user
   class RequestPreview < ActionMailer::Preview

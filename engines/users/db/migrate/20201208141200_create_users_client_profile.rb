@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateUsersClientProfile < ActiveRecord::Migration[5.2]
   def change
     create_table :users_client_profiles, id: :uuid do |t|

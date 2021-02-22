@@ -9,7 +9,7 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       theme: FactoryBot.build(:organizations_theme),
       scope: scope)
   }
-  let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content)}
+  let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content) }
   let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:organizations_domain) { FactoryBot.create(:organizations_domain, domain: "test.host", default: true) }
   let(:user_groups) {

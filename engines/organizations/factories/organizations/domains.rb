@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :organizations_domain, class: "Organizations::Domain" do
     domain { "#{organization.slug}.test" }

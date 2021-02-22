@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateJourneyRoutePoints < ActiveRecord::Migration[5.2]
   def change
     create_table :journey_route_points, id: :uuid do |t|

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :journey_error, class: "Journey::Error" do
     association :result_set, factory: :journey_result_set
