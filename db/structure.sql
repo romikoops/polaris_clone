@@ -7632,6 +7632,13 @@ CREATE INDEX index_journey_results_on_result_set_id ON public.journey_results US
 
 
 --
+-- Name: index_journey_route_points_on_geo_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_journey_route_points_on_geo_id ON public.journey_route_points USING btree (geo_id);
+
+
+--
 -- Name: index_journey_route_sections_on_from_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12101,6 +12108,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210216115737'),
 ('20210217170059'),
 ('20210217170246'),
-('20210217170422');
+('20210217170422'),
+('20210222132217');
 
 

@@ -60,13 +60,12 @@ module OfferCalculator
               [location.geocoded_address, "address", nil, geo_id_from_address(address: location)]
             end
 
-            Journey::RoutePoint.find_or_create_by(
+            Journey::RoutePoint.create_with(
               name: name,
               function: function,
               locode: locode,
-              coordinates: RGeo::Geos.factory(srid: 4326).point(location.longitude, location.latitude),
-              geo_id: geo_id
-            )
+              coordinates: RGeo::Geos.factory(srid: 4326).point(location.longitude, location.latitude)
+            ).find_or_create_by!(geo_id: geo_id)
           end
 
           def offer_data

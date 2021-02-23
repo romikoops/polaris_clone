@@ -10,5 +10,6 @@ FactoryBot.define do
     function { "ocean" }
     name { "Hamburg" }
     locode { "DEHAM" }
+    sequence(:geo_id) { |x| "GEOID-#{x}" }
   end
 end
