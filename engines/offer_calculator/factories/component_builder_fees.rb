@@ -46,7 +46,7 @@ FactoryBot.define do
           "max" => nil,
           "min" => 5,
           "name" => "Fuel Surcharge",
-          "rate" => 0.325,
+          "percentage" => 0.325,
           "currency" => "EUR",
           "rate_basis" => "PERCENTAGE"
         }

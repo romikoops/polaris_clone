@@ -57,7 +57,7 @@ module OfferCalculator
           if STANDARD_RATE_BASES.include?(rate_basis)
             [
               {
-                value: (fee.dig("value") || fee.dig("rate") || fee.dig(measure_key)).to_d,
+                value: value_from_fee.to_d,
                 modifier_key: find_modifier_by_rate_basis(rate_basis: rate_basis)
               }
             ]
@@ -66,6 +66,12 @@ module OfferCalculator
           else
             handle_non_standard_rate_basis
           end
+        end
+
+        def value_from_fee
+          return fee["percentage"] if rate_basis == "PERCENTAGE"
+
+          fee.dig("value") || fee.dig("rate") || fee.dig(measure_key)
         end
 
         def handle_non_standard_rate_basis
