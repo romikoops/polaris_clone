@@ -5,7 +5,6 @@ module Journey
 
     validates :name, presence: true
     validates :function, presence: true
-    validates :geo_id, uniqueness: true
   end
 end
 
@@ -21,8 +20,4 @@ end
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  geo_id      :string
-#
-# Indexes
-#
-#  index_journey_route_points_on_geo_id  (geo_id) UNIQUE
 #

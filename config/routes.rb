@@ -854,10 +854,20 @@ end
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
 # Routes for Trestle::Engine:
+#                                        new_client GET    /clients/new(.:format)            clients_admin/admin#new
+#                                       edit_client GET    /clients/:id/edit(.:format)       clients_admin/admin#edit
+#                                    new_membership GET    /memberships/new(.:format)        memberships_admin/admin#new
+#                                   edit_membership GET    /memberships/:id/edit(.:format)   memberships_admin/admin#edit
 #                                  new_organization GET    /organizations/new(.:format)      organizations_admin/admin#new
 #                                 edit_organization GET    /organizations/:id/edit(.:format) organizations_admin/admin#edit
+#                                         new_query GET    /queries/new(.:format)            queries_admin/admin#new
+#                                        edit_query GET    /queries/:id/edit(.:format)       queries_admin/admin#edit
+#                                  new_subscription GET    /subscriptions/new(.:format)      subscriptions_admin/admin#new
+#                                 edit_subscription GET    /subscriptions/:id/edit(.:format) subscriptions_admin/admin#edit
 #                                         new_theme GET    /themes/new(.:format)             themes_admin/admin#new
 #                                        edit_theme GET    /themes/:id/edit(.:format)        themes_admin/admin#edit
+#                                          new_user GET    /users/new(.:format)              users_admin/admin#new
+#                                         edit_user GET    /users/:id/edit(.:format)         users_admin/admin#edit
 #                                            signin GET    /signin(.:format)                 trestle/auth/sessions#create
 #                                       sidekiq_web        /sidekiq/web                      Sidekiq::Web
 #                                                   GET    /sidekiq/web(.:format)            redirect(302, login)
@@ -866,17 +876,46 @@ end
 #                                             login GET    /login(.:format)                  trestle/auth/sessions#new
 #                                                   POST   /login(.:format)                  trestle/auth/sessions#create
 #                                            logout GET    /logout(.:format)                 trestle/auth/sessions#destroy
+#                               clients_admin_index GET    /clients(.:format)                clients_admin/admin#index
+#                                                   POST   /clients(.:format)                clients_admin/admin#create
+#                                     clients_admin GET    /clients/:id(.:format)            clients_admin/admin#show
+#                                                   PATCH  /clients/:id(.:format)            clients_admin/admin#update
+#                                                   PUT    /clients/:id(.:format)            clients_admin/admin#update
+#                                                   DELETE /clients/:id(.:format)            clients_admin/admin#destroy
+#                           memberships_admin_index GET    /memberships(.:format)            memberships_admin/admin#index
+#                                                   POST   /memberships(.:format)            memberships_admin/admin#create
+#                                 memberships_admin GET    /memberships/:id(.:format)        memberships_admin/admin#show
+#                                                   PATCH  /memberships/:id(.:format)        memberships_admin/admin#update
+#                                                   PUT    /memberships/:id(.:format)        memberships_admin/admin#update
+#                                                   DELETE /memberships/:id(.:format)        memberships_admin/admin#destroy
 #                         organizations_admin_index GET    /organizations(.:format)          organizations_admin/admin#index
 #                                                   POST   /organizations(.:format)          organizations_admin/admin#create
 #                               organizations_admin GET    /organizations/:id(.:format)      organizations_admin/admin#show
 #                                                   PATCH  /organizations/:id(.:format)      organizations_admin/admin#update
 #                                                   PUT    /organizations/:id(.:format)      organizations_admin/admin#update
+#                            download_queries_admin GET    /queries/:id/download(.:format)   queries_admin/admin#download
+#                               queries_admin_index GET    /queries(.:format)                queries_admin/admin#index
+#                                     queries_admin GET    /queries/:id(.:format)            queries_admin/admin#show
+#                                                   PATCH  /queries/:id(.:format)            queries_admin/admin#update
+#                                                   PUT    /queries/:id(.:format)            queries_admin/admin#update
+#                         subscriptions_admin_index GET    /subscriptions(.:format)          subscriptions_admin/admin#index
+#                                                   POST   /subscriptions(.:format)          subscriptions_admin/admin#create
+#                               subscriptions_admin GET    /subscriptions/:id(.:format)      subscriptions_admin/admin#show
+#                                                   PATCH  /subscriptions/:id(.:format)      subscriptions_admin/admin#update
+#                                                   PUT    /subscriptions/:id(.:format)      subscriptions_admin/admin#update
+#                                                   DELETE /subscriptions/:id(.:format)      subscriptions_admin/admin#destroy
 #                                themes_admin_index GET    /themes(.:format)                 themes_admin/admin#index
 #                                                   POST   /themes(.:format)                 themes_admin/admin#create
 #                                      themes_admin GET    /themes/:id(.:format)             themes_admin/admin#show
 #                                                   PATCH  /themes/:id(.:format)             themes_admin/admin#update
 #                                                   PUT    /themes/:id(.:format)             themes_admin/admin#update
 #                                                   DELETE /themes/:id(.:format)             themes_admin/admin#destroy
+#                                 users_admin_index GET    /users(.:format)                  users_admin/admin#index
+#                                                   POST   /users(.:format)                  users_admin/admin#create
+#                                       users_admin GET    /users/:id(.:format)              users_admin/admin#show
+#                                                   PATCH  /users/:id(.:format)              users_admin/admin#update
+#                                                   PUT    /users/:id(.:format)              users_admin/admin#update
+#                                                   DELETE /users/:id(.:format)              users_admin/admin#destroy
 #                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                trestle/sidekiq/sidekiq_admin/admin#index
 # trestle_rails_event_store_rails_event_store_admin GET    /rails_event_store(.:format)      trestle/rails_event_store/rails_event_store_admin/admin#index
 #                                              root GET    /                                 trestle/dashboard#index
@@ -946,8 +985,9 @@ end
 #                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
 #                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
-#                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
 #                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
+#                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
+#                  v2_organization_offer_xlsx GET    /v2/organizations/:organization_id/offers/:offer_id/xlsx(.:format)                       api/v2/offers#xlsx
 #                      v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
 #                     v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
