@@ -36,9 +36,6 @@ mailgun:
   api_key:
   domain:
 
-sentry:
-  dsn: 'https://bc342488f6d646bf94b880fc5c5dc76a@o410390.ingest.sentry.io/5284300'
-
 smtp:
   host:
   domain:

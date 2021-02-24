@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "roo"
   spec.add_dependency "roo-xls"
   spec.add_dependency "rover-df"
-  spec.add_dependency "sentry-raven"
   spec.add_dependency "write_xlsx"
 
   spec.add_dependency "companies"

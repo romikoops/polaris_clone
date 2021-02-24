@@ -5,6 +5,7 @@ require "draper"
 require "fast_jsonapi"
 require "kaminari"
 require "money_cache"
+require "sentry-rails"
 
 module Api
   class Engine < ::Rails::Engine

@@ -8,7 +8,6 @@ require "rails"
 require "roo"
 require "roo-xls"
 require "rover-df"
-require "sentry-raven"
 require "write_xlsx"
 
 module ExcelDataServices

@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "fast_jsonapi"
   spec.add_dependency "kaminari"
   spec.add_dependency "money_cache"
+  spec.add_dependency "sentry-rails"
 
   spec.add_dependency "analytics"
   spec.add_dependency "api_auth"

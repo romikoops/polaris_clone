@@ -42,7 +42,6 @@ module OfferCalculator
           return google_directions.driving_time_in_seconds_for_trucks(driving_time) if driving_time
         end
       rescue ::Trucking::GoogleDirections::NoDrivingTime => e
-        Raven.capture_exception(e)
         raise OfferCalculator::Errors::NoDirectionsFound
       end
 

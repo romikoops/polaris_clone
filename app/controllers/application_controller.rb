@@ -3,7 +3,6 @@
 class ApplicationController < Api::ApiController
   include Response
 
-  before_action :set_raven_context, except: [:health]
   before_action :set_paper_trail_whodunnit, except: [:health]
 
   skip_before_action :doorkeeper_authorize!, only: [:health]
@@ -59,25 +58,6 @@ class ApplicationController < Api::ApiController
 
     length = [time.to_i.seconds, 10.minutes].max
     length.seconds
-  end
-
-  def set_raven_context
-    Raven.user_context(
-      email: current_user&.email,
-      id: current_user&.id,
-      ip: request.remote_ip
-    )
-    Raven.tags_context(
-      # agency: current_user&.agency_id.present?,
-      namespace: ENV["REVIEW_APP_NAME"],
-      tenant: current_organization&.slug
-    )
-    Raven.extra_context(
-      # agency: current_user&.agency&.slice(%i[id name]),
-      params: params.to_unsafe_h,
-      url: request.url,
-      scope: current_scope
-    )
   end
 
   def test_user?

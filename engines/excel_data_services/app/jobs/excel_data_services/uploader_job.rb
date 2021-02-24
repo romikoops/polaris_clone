@@ -6,10 +6,12 @@ module ExcelDataServices
     def perform(document_id:, options:)
       document = Legacy::File.find(document_id)
       organization = document.organization
+      user = Users::User.find(options[:user_id])
+
+      set_sentry_context(document, user)
 
       return if document.created_at < latest_created_at(organization: organization, doc_type: document.doc_type)
 
-      user = Users::User.find(options[:user_id])
       options = {
         organization: document.organization,
         options: options.merge({user: user})
@@ -31,6 +33,16 @@ module ExcelDataServices
     end
 
     private
+
+    def set_sentry_context(document, user)
+      scope = Sentry.get_current_scope
+
+      scope.set_tags(organization: document.organization.slug)
+      scope.set_user(id: user.id, email: user.email)
+
+      scope.set_context(:doc_type, document.doc_type)
+      scope.set_context(:file, document.text)
+    end
 
     def latest_created_at(organization:, doc_type:)
       Legacy::File

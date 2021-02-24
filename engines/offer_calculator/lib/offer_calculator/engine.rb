@@ -3,7 +3,6 @@
 require "chronic"
 require "measured"
 require "money_cache"
-require "sentry-raven"
 
 module OfferCalculator
   class Engine < ::Rails::Engine

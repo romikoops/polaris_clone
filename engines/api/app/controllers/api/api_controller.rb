@@ -11,12 +11,28 @@ module Api
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 
     skip_before_action :verify_authenticity_token
+    before_action :set_sentry_context
     before_action :doorkeeper_authorize!
     before_action :set_organization_id
     before_action :ensure_organization!
     helper_method :current_user
 
     private
+
+    def set_sentry_context
+      Sentry.set_user(
+        email: current_user&.email,
+        id: current_user&.id,
+        ip: request.remote_ip
+      )
+
+      Sentry.configure_scope do |scope|
+        scope.set_contexts(params: params.to_unsafe_h)
+      end
+
+      Sentry.set_tags(application: doorkeeper_application.name) if doorkeeper_token && doorkeeper_application
+      Sentry.set_tags(organization: current_organization.slug) if organization_id && current_organization
+    end
 
     def current_user
       @current_user ||= if doorkeeper_token
