@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-Trestle.resource(:users, model: Users::User) do
-  menu :users, icon: "fa fa-id-badge", group: :users
+Trestle.resource(:admins, model: Users::User) do
+  menu :admins, icon: "fa fa-id-badge", group: :users
 
   collection do
     Users::User.order(created_at: :desc)
@@ -47,6 +47,16 @@ Trestle.resource(:users, model: Users::User) do
       password_field :password_confirmation
 
       select :activation_state, %w[active pending]
+
+      fields_for :profile, user.profile || user.build_profile do
+        text_field :first_name
+        text_field :last_name
+      end
+
+      fields_for :settings, user.settings || user.build_settings do
+        text_field :locale
+        text_field :language
+      end
     end
 
     tab :memberships, badge: user.memberships.size do

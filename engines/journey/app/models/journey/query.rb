@@ -33,6 +33,10 @@ module Journey
     def client
       super || Users::Client.new
     end
+
+    def results
+      result_sets.order(:created_at).last.results || []
+    end
   end
 end
 

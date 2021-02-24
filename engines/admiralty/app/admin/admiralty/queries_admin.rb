@@ -1,12 +1,28 @@
 # frozen_string_literal: true
 
 Trestle.resource(:queries, model: Journey::Query) do
-  remove_action :create, :destroy
+  remove_action :new, :create, :update, :destroy
 
   menu :queries, icon: "fa fa-file-alt", group: :quotations
 
   collection do
     model.order("created_at DESC")
+  end
+
+  search do |query|
+    if query
+      collection
+        .joins(:organization)
+        .joins('INNER JOIN "users_clients" ON "users_clients"."id" = "journey_queries"."client_id"')
+        .where("\
+          origin ILIKE :query \
+          OR destination ILIKE :query \
+          OR users_clients.email ILIKE :query \
+          OR organizations_organizations.slug ILIKE :query",
+          query: "%#{query}%")
+    else
+      collection
+    end
   end
 
   scope :all, default: true
@@ -15,6 +31,14 @@ Trestle.resource(:queries, model: Journey::Query) do
 
   scope :lcl, -> { model.where(load_type: :lcl) }
   scope :fcl, -> { model.where(load_type: :fcl) }
+
+  {
+    bridge: "59ddf39e-c768-4710-98e6-f99baaa5c41f",
+    dipper: "7a90a8c0-66ce-4472-8416-659674bf711f",
+    siren: "54944c3a-f437-4be9-99ea-64fccdee7c53"
+  }.each do |name, id|
+    scope name, -> { model.where(source_id: id) }
+  end
 
   # Customize the table columns shown on the index view.
   #
@@ -33,7 +57,7 @@ Trestle.resource(:queries, model: Journey::Query) do
         content << content_tag(:small, creator.email)
       end
 
-      safe_join(content, raw("<br />"))
+      safe_join(content, tag(:br))
     end
     column :origin
     column :destination
@@ -55,7 +79,7 @@ Trestle.resource(:queries, model: Journey::Query) do
         safe_join([
           content_tag(:span, "#{result_set.results.count} Results"),
           *errors
-        ], raw("<br />"))
+        ], tag(:br))
       else
         "N/A"
       end
@@ -68,8 +92,29 @@ Trestle.resource(:queries, model: Journey::Query) do
   end
 
   form do |query|
-    text_field :origin, disabled: true
-    text_field :destination, disabled: true
+    tab :details do
+      text_field :origin, disabled: true
+      text_field :destination, disabled: true
+
+      table query.cargo_units do
+        column :quantity
+        column :cargo_class
+        column :weight
+        column :length
+        column :height
+        column :width
+        column :colli_type
+      end
+    end
+
+    tab :results do
+      table query.results, admin: :results do
+        column :id
+        column :mot, -> (result) { result.route_sections.where.not(mode_of_transport: "carriage").pluck(:mode_of_transport).uniq.join(", ") }
+        column :origin, -> (result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).first&.from }
+        column :destination, -> (result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).last&.to }
+      end
+    end
   end
 
   controller do

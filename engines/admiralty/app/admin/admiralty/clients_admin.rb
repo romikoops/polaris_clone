@@ -52,13 +52,13 @@ Trestle.resource(:clients, model: Users::Client) do
   end
 
   form do |user|
+    collection_select :organization_id, Organizations::Organization.all, :id, :slug
+
     text_field :email
 
     password_field :password
     password_field :password_confirmation
 
     select :activation_state, %w[active pending]
-
-    collection_select :organization_id, Organizations::Organization.all, :id, :slug
   end
 end

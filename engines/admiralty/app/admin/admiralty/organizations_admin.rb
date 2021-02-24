@@ -87,18 +87,13 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
           col(sm: 3) { number_field :search_buffer }
           col(sm: 3) { number_field :validity_period }
         end
+
+        row do
+          col(sm: 12) do
+            collection_select :blacklisted_emails, Users::Client.unscoped.where(organization_id: organization.id), :email, :email, {}, multiple: true
+          end
+        end
       end
     end
   end
-
-  # By default, all parameters passed to the update and create actions will be
-  # permitted. If you do not have full trust in your users, you should explicitly
-  # define the list of permitted parameters.
-  #
-  # For further information, see the Rails documentation on Strong Parameters:
-  #   http://guides.rubyonrails.org/action_controller_overview.html#strong-parameters
-  #
-  # params do |params|
-  #   params.require(:organization).permit(:name, ...)
-  # end
 end
