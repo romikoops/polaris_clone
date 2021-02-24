@@ -13,18 +13,14 @@ module Wheelhouse
     end
 
     def perform
-      generate_pdf
-      offer
-    end
-
-    def offer
-      @offer ||= existing_offer || new_offer
+      existing_offer || new_offer
     end
 
     private
 
     def new_offer
       Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets).tap do |created_offer|
+        generate_pdf(offer: created_offer)
         publish_event(created_offer: created_offer)
       end
     end
@@ -54,7 +50,7 @@ module Wheelhouse
       @line_item_sets ||= results.map { |result| result.line_item_sets.order(created_at: :desc).first }
     end
 
-    def generate_pdf
+    def generate_pdf(offer:)
       Pdf::Quotation::Client.new(offer: offer).file
     end
 
