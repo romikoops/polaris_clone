@@ -55,6 +55,9 @@ RUN \
   && find /usr/local/bundle/gems/ -name "*.c" -delete \
   && find /usr/local/bundle/gems/ -name "*.o" -delete
 
+ARG RELEASE=""
+ENV RELEASE $RELEASE
+
 COPY . ./
 
 RUN RAILS_ENV=production bin/rails assets:precompile
@@ -120,6 +123,9 @@ ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_SERVE_STATIC_FILES true
 ENV RAILS_ENV production
 ENV MALLOC_ARENA_MAX 2
+
+ARG RELEASE=""
+ENV RELEASE $RELEASE
 
 EXPOSE 3000
 
