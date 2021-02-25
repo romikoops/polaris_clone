@@ -76,6 +76,7 @@ Api::Engine.routes.draw do
         get "xlsx"
       end
       resources :uploads, only: [:create]
+      resource :theme, only: [:show]
     end
   end
 end
