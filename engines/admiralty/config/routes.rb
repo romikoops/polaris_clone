@@ -3,6 +3,7 @@
 Trestle::Engine.routes.draw do
   resources :admins, only: %i[new edit], module: "admins_admin", controller: "admin"
   resources :clients, only: %i[new edit], module: "clients_admin", controller: "admin"
+  resources :domains, only: %i[new edit], module: "domains_admin", controller: "admin"
   resources :memberships, only: %i[new edit], module: "memberships_admin", controller: "admin"
   resources :organizations, only: %i[new edit], module: "organizations_admin", controller: "admin"
   resources :queries, only: %i[new edit], module: "queries_admin", controller: "admin"

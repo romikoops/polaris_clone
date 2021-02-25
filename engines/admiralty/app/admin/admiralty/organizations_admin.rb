@@ -30,11 +30,19 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
     tab :generic do
       text_field :slug
       check_box :live
+
+      table organization.domains, admin: :domains do
+        column :domain
+        column :default
+
+        actions
+      end
+
+      concat admin_link_to("New Domain", admin: :domains, action: :new, params: { domain: {organization_id: organization.id} }, class: "btn btn-success")
     end
 
     tab :theme do
       fields_for :theme do
-        # Form helper methods now dispatch to the product.category form scope
         text_field :name
 
         row do
