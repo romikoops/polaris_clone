@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "request_store"
   spec.add_dependency "shared-runtime"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"

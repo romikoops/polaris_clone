@@ -7,11 +7,11 @@ module Organizations
 
   class << self
     def current_id=(id)
-      Thread.current[:organization_id] = id
+      RequestStore.store[:organization_id] = id
     end
 
     def current_id
-      Thread.current[:organization_id]
+      RequestStore.store[:organization_id]
     end
   end
 end

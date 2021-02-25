@@ -70,9 +70,7 @@ class OrganizationsController < ApplicationController
   end
 
   def organization
-    # Old code. not sure why params changes with environment? {H.Ezekiel}
-    # tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : (params[:tenant_id] || params[:id]))
-    @organization ||= Organizations::Organization.find_by(id: params[:id])
+    @organization ||= Organizations::Organization.find_by(id: organization_id)
   end
 
   def saml_enabled?

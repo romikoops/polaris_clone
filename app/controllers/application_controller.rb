@@ -36,11 +36,6 @@ class ApplicationController < Api::ApiController
     end
   end
 
-  def current_scope
-    @current_scope ||= ::OrganizationManager::ScopeService.new(target: current_user, organization: current_organization)
-      .fetch
-  end
-
   def quotation_tool?
     current_scope["open_quotation_tool"] || current_scope["closed_quotation_tool"]
   end

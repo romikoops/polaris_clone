@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "request_store"
+
 module Organizations
   class Engine < ::Rails::Engine
     isolate_namespace Organizations

@@ -11,10 +11,10 @@ module Api
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 
     skip_before_action :verify_authenticity_token
-    before_action :set_sentry_context
     before_action :doorkeeper_authorize!
     before_action :set_organization_id
     before_action :ensure_organization!
+    before_action :set_sentry_context
     helper_method :current_user
 
     private
