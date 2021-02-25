@@ -14,15 +14,6 @@ module Carta
     :country,
     keyword_init: true
   )
-    def postal_code
-      @postal_code ||= geocoded_data.zipcode
-    end
-
-    def geocoded_data
-      @geocoded_data ||= Legacy::Address.new(
-        latitude: latitude, longitude: longitude
-      ).reverse_geocode
-    end
 
     def city
       nexus? ? address : locality

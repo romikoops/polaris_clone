@@ -5,7 +5,7 @@ module Journey
     has_many :cargo_units, through: :line_item_cargo_units
     belongs_to :line_item_set, inverse_of: :line_items
     belongs_to :route_section
-    belongs_to :route_point
+    belongs_to :route_point, optional: true
     has_one :result, through: :line_item_set
 
     monetize :total_cents

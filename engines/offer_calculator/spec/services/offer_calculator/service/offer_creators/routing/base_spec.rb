@@ -29,13 +29,5 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Base do
         expect(route_point.locode).to eq(hub.hub_code)
       end
     end
-
-    context "when the RoutePoint does exist" do
-      let!(:existing_route_point) { FactoryBot.create(:journey_route_point, geo_id: "XXX") }
-
-      it "returns a valid RoutePoint" do
-        expect(route_point.id).to eq(existing_route_point.id)
-      end
-    end
   end
 end

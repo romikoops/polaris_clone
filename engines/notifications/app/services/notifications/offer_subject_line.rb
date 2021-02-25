@@ -154,8 +154,8 @@ module Notifications
     end
 
     def main_route_sections
-      @main_route_sections ||= route_sections.reject { |route_section|
-        route_section.mode_of_transport == "carriage" && route_section.to != route_section.from
+      @main_route_sections ||= route_sections.select { |route_section|
+        route_section.mode_of_transport != "carriage" && route_section.to.geo_id != route_section.from.geo_id
       }
     end
   end

@@ -51,7 +51,7 @@ module ResultFormatter
     end
 
     def transfer_fee?
-      route_section.from == route_section.to
+      route_section.from.geo_id == route_section.to.geo_id
     end
 
     def freight_fee?

@@ -4,12 +4,14 @@ RSpec.shared_context "routing_line_sections" do
   let(:pickup_point) do
     FactoryBot.build(:journey_route_point,
       coordinates: origin_coordinates,
-      name: origin_text)
+      name: origin_text,
+      geo_id: "PICKUP")
   end
   let(:delivery_point) do
     FactoryBot.build(:journey_route_point,
       coordinates: destination_coordinates,
-      name: destination_text)
+      name: destination_text,
+      geo_id: "DELIVERY")
   end
   let(:origin_locode) { "DEHAM" }
   let(:destination_locode) { "CNSHA" }
@@ -30,13 +32,15 @@ RSpec.shared_context "routing_line_sections" do
     FactoryBot.build(:journey_route_point,
       coordinates: origin_transfer_coordinates,
       locode: origin_locode,
-      name: origin_transfer_text)
+      name: origin_transfer_text,
+      geo_id: "ORIGIN")
   end
   let(:destination_transfer) do
     FactoryBot.build(:journey_route_point,
       coordinates: destination_transfer_coordinates,
       locode: destination_locode,
-      name: destination_transfer_text)
+      name: destination_transfer_text,
+      geo_id: "DESTINATION")
   end
 
   let(:pre_carriage_section) do

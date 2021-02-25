@@ -1972,6 +1972,12 @@ CREATE TABLE public.journey_route_points (
     updated_at timestamp without time zone NOT NULL,
     locode character varying,
     geo_id character varying,
+    postal_code character varying DEFAULT ''::character varying,
+    city character varying DEFAULT ''::character varying,
+    country character varying,
+    street character varying DEFAULT ''::character varying,
+    street_number character varying DEFAULT ''::character varying,
+    administrative_area character varying DEFAULT ''::character varying,
     CONSTRAINT journey_route_points_function_presence CHECK (((function IS NOT NULL) AND ((function)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_route_points_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text)))
 );
@@ -12101,6 +12107,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210216115737'),
 ('20210217170059'),
 ('20210217170246'),
-('20210217170422');
+('20210217170422'),
+('20210224094318');
 
 

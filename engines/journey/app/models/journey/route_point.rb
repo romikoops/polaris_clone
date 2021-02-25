@@ -12,12 +12,18 @@ end
 #
 # Table name: journey_route_points
 #
-#  id          :uuid             not null, primary key
-#  coordinates :geometry         not null, geometry, 0
-#  function    :string           not null
-#  locode      :string
-#  name        :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  geo_id      :string
+#  id                  :uuid             not null, primary key
+#  administrative_area :string           default("")
+#  city                :string           default("")
+#  coordinates         :geometry         not null, geometry, 0
+#  country             :string
+#  function            :string           not null
+#  locode              :string
+#  name                :string           not null
+#  postal_code         :string           default("")
+#  street              :string           default("")
+#  street_number       :string           default("")
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  geo_id              :string
 #

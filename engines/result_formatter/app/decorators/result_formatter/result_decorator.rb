@@ -159,13 +159,13 @@ module ResultFormatter
 
     def import?
       route_sections_in_order.any? do |section|
-        section.from == destination_route_point && section.to == destination_route_point
+        section.from.geo_id == destination_route_point.geo_id && section.to.geo_id == destination_route_point.geo_id
       end
     end
 
     def export?
       route_sections_in_order.any? do |section|
-        section.from == origin_route_point && section.to == origin_route_point
+        section.from.geo_id == origin_route_point.geo_id && section.to.geo_id == origin_route_point.geo_id
       end
     end
 
@@ -278,31 +278,31 @@ module ResultFormatter
 
     def pre_carriage_section
       @pre_carriage_section ||= route_sections_in_order.find { |section|
-        section.mode_of_transport == "carriage" && section.to == origin_route_point
+        section.mode_of_transport == "carriage" && section.to.geo_id == origin_route_point.geo_id
       }
     end
 
     def on_carriage_section
       @on_carriage_section ||= route_sections_in_order.find { |section|
-        section.mode_of_transport == "carriage" && section.from == destination_route_point
+        section.mode_of_transport == "carriage" && section.from.geo_id == destination_route_point.geo_id
       }
     end
 
     def origin_transfer_section
       @origin_transfer_section ||= route_sections_in_order.find { |section|
-        section.from == origin_route_point && section.to == origin_route_point
+        section.from.geo_id == origin_route_point.geo_id && section.to.geo_id == origin_route_point.geo_id
       }
     end
 
     def destination_transfer_section
       @destination_transfer_section ||= route_sections_in_order.find { |section|
-        section.from == destination_route_point && section.to == destination_route_point
+        section.from.geo_id == destination_route_point.geo_id && section.to.geo_id == destination_route_point.geo_id
       }
     end
 
     def main_freight_section
       @main_freight_section ||= route_sections_in_order.find { |section|
-        section.from != section.to && section.mode_of_transport != "carriage"
+        section.from.geo_id != section.to.geo_id && section.mode_of_transport != "carriage"
       }
     end
 

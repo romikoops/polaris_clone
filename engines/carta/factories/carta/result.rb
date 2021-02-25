@@ -11,7 +11,7 @@ FactoryBot.define do
     longitude { "11.854048" }
     street { "" }
     street_number { "" }
-    postal_code {}
+    postal_code { "20457" }
     locality { "Hamburg" }
     administrative_area { "" }
     country { "DE" }

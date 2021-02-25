@@ -143,9 +143,9 @@ module ResultFormatter
     end
 
     def handle_non_carriage_section_code(route_section:)
-      if route_section.from != route_section.to
+      if route_section.from.geo_id != route_section.to.geo_id
         "cargo"
-      elsif route_section.from == result.origin_route_point
+      elsif route_section.from.geo_id == result.origin_route_point.geo_id
         "export"
       else
         "import"
