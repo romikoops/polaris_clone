@@ -6,7 +6,8 @@ module Api
       skip_before_action :ensure_organization!, only: %i[index scope countries]
 
       def index
-        organizations = current_user.memberships.map(&:organization)
+        organizations = Organizations::Organization.where(id: current_user.memberships.select(:organization_id))
+        organizations = organizations.includes(:theme)
         decorated_organizations = OrganizationDecorator.decorate_collection(organizations)
         render json: OrganizationSerializer.new(decorated_organizations)
       end
