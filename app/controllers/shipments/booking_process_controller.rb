@@ -107,7 +107,15 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def result_params
-    params.require(:options).permit(
+    params.require(:options).permit(quote_param_schema)
+  end
+
+  def save_and_send_params
+    params.permit(quote_param_schema)
+  end
+
+  def quote_param_schema
+    {
       quotes:
       [
         quote: {},
@@ -115,17 +123,7 @@ class Shipments::BookingProcessController < ApplicationController
           :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
         meta: {}
       ]
-    )
-  end
-
-  def save_and_send_params
-    params.permit(quotes:
-      [
-        quote: {},
-        schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
-          :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
-        meta: {}
-      ])
+    }
   end
 
   def confirm_request_eligibility

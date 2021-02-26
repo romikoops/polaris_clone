@@ -12,12 +12,23 @@ FactoryBot.define do
     association :query, factory: :journey_query
 
     trait :fcl do
+      colli_type {}
       cargo_class { "fcl_20" }
       quantity { 2 }
       weight_value { 3000 }
       width_value { 0 }
       length_value { 0 }
       height_value { 0 }
+    end
+
+    trait :aggregate_lcl do
+      colli_type {}
+      cargo_class { "aggregate_lcl" }
+      quantity { 1 }
+      weight_value { 3000 }
+      width_value { 1.0 }
+      length_value { 1.0 }
+      height_value { 1.30 }
     end
   end
 end

@@ -6,7 +6,7 @@ module Api
 
       def cargo_item_type
         {
-          description: colli_type.humanize
+          description: colli_type.present? ? colli_type.humanize : "Aggregated LCL"
         }
       end
 
