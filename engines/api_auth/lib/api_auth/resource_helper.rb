@@ -5,12 +5,15 @@ module ApiAuth
       return [::Users::User] if client.present? && client.name[/bridge/]
       return [::Users::Client] if client.present? && client.name[/siren/]
 
-      [::Users::Client, dipper_admins]
+      [
+        dipper_admins,
+        ::Users::Client
+      ]
     end
 
     def self.dipper_admins
       ::Users::User.joins(:memberships)
-        .merge(::Users::Membership.where(organization_id: Organizations.current_id, role: :admin))
+        .merge(::Users::Membership.where(organization_id: Organizations.current_id, role: [:owner, :admin]))
     end
   end
 end
