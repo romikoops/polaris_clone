@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/name: polaris
   annotations:
     reloader.stakater.com/auto: "true"
+    krane.shopify.io/timeout-override: 600s
 spec:
   replicas: 2
   strategy:
@@ -31,6 +32,7 @@ spec:
       serviceAccountName: polaris
       securityContext:
         fsGroup: 1000
+      terminationGracePeriodSeconds: 330
       initContainers:
       - name: migrations
         image: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris:<%= current_sha %>
@@ -47,6 +49,12 @@ spec:
         - secretRef:
             name: polaris-env
             optional: false
+        resources:
+          requests:
+            cpu: 250m
+            memory: 250Mi
+          limits:
+            memory: 250Mi
         securityContext:
           readOnlyRootFilesystem: false
           runAsNonRoot: true
@@ -59,9 +67,11 @@ spec:
           - bundle
           - exec
           - sidekiq
-          - -C
+          - --config
           - config/sidekiq.yml
-          - -q
+          - --timeout
+          - "300"
+          - --queue
           - critical
           env:
             - name: RAILS_ENV
@@ -73,9 +83,35 @@ spec:
           envFrom:
             - secretRef:
                 name: polaris-env
+          ports:
+          - containerPort: 7433
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 7433
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 7433
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 7433
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 10
           resources:
             requests:
               cpu: 1000m
+              memory: 2Gi
+            limits:
               memory: 2Gi
           securityContext:
             readOnlyRootFilesystem: false
@@ -93,6 +129,12 @@ spec:
           ports:
             - containerPort: 9394
               protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 1Gi
           securityContext:
             readOnlyRootFilesystem: false
             runAsNonRoot: true

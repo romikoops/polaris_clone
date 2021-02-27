@@ -6,6 +6,12 @@ require "sidekiq/cron/web"
 # ActiveJob
 ActiveJob::TrafficControl.client = ConnectionPool.new(size: 5, timeout: 5) { Redis.new }
 
+Sidekiq.configure_server do |config|
+  config.on :startup do
+    SidekiqLiveness.start
+  end
+end
+
 # Prometheus
 if ENV["PROMETHEUS_EXPORTER"]
   require "prometheus_exporter/instrumentation"

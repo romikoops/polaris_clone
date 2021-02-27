@@ -47,6 +47,12 @@ spec:
         - secretRef:
             name: polaris-env
             optional: false
+        resources:
+          requests:
+            cpu: 250m
+            memory: 250Mi
+          limits:
+            memory: 250Mi
         securityContext:
           readOnlyRootFilesystem: false
           runAsNonRoot: true
@@ -115,6 +121,8 @@ spec:
           resources:
             requests:
               cpu: 500m
+              memory: 1Gi
+            limits:
               memory: 1Gi
           securityContext:
             readOnlyRootFilesystem: false

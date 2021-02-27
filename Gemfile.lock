@@ -1143,9 +1143,10 @@ GEM
     sidekiq-status (1.1.4)
       chronic_duration
       sidekiq (>= 3.0)
-    sidekiq_alive (2.0.2)
-      sidekiq
-      sinatra
+    sidekiq_liveness (0.5.0)
+      rack (~> 2.2)
+      sidekiq (~> 6, > 6)
+      webrick (~> 1.6)
     simplecov (0.18.5)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -1223,6 +1224,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webrick (1.7.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
@@ -1356,7 +1358,7 @@ DEPENDENCIES
   shoulda-matchers
   sidekiq-cron (~> 1.1)
   sidekiq-failures
-  sidekiq_alive
+  sidekiq_liveness (~> 0.5.0)
   simplecov
   simplecov-cobertura
   spring
