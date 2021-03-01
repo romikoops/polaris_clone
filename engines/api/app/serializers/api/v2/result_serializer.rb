@@ -30,10 +30,6 @@ module Api
         result.service
       end
 
-      attribute :modes_of_transport do |result|
-        result.route_sections.pluck(:mode_of_transport).uniq
-      end
-
       attribute :valid_until do |result|
         result.expiration_date
       end

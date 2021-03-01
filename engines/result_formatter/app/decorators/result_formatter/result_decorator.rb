@@ -376,5 +376,9 @@ module ResultFormatter
         organization: organization
       )
     end
+
+    def modes_of_transport
+      route_sections.pluck(:mode_of_transport).uniq.reject { |mot| mot == "carriage" }
+    end
   end
 end
