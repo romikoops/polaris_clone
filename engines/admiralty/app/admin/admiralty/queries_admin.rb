@@ -13,7 +13,7 @@ Trestle.resource(:queries, model: Journey::Query) do
     if query
       collection
         .joins(:organization)
-        .joins('INNER JOIN "users_clients" ON "users_clients"."id" = "journey_queries"."client_id"')
+        .joins('LEFT JOIN "users_clients" ON "users_clients"."id" = "journey_queries"."client_id"')
         .where("\
           origin ILIKE :query \
           OR destination ILIKE :query \
