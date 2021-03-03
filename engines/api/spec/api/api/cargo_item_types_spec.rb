@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Cargo Items" do
+RSpec.describe "Cargo Items", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -17,6 +17,8 @@ RSpec.describe "Cargo Items" do
   path "/v1/organizations/{organization_id}/cargo_item_types" do
     get "Fetch all available cargo types" do
       tags "Quote"
+      description "Fetches all possible cargo types enabled for the customer."
+      operationId "getCargoItemTypes"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"

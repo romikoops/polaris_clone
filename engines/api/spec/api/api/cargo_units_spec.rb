@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "CargoUnits", type: :request, swagger_doc: "v2/swagger.json" do
+RSpec.describe "CargoUnits", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
@@ -12,12 +12,14 @@ RSpec.describe "CargoUnits", type: :request, swagger_doc: "v2/swagger.json" do
   path "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units" do
     get "Fetch CargoUnits for the Query" do
       tags "CargoUnits"
+      description "Fetches cargo units for the query."
+      operationId "getCargoUnits"
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string}, description: "Organization ID"
-      parameter name: :query_id, in: :path, type: :string, schema: {type: :string}, description: "Query ID"
+      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :query_id, in: :path, type: :string, description: "Query ID"
 
       let(:organization_id) { organization.id }
       let!(:cargo_units) {
@@ -30,7 +32,7 @@ RSpec.describe "CargoUnits", type: :request, swagger_doc: "v2/swagger.json" do
                properties: {
                  data: {
                    type: :array,
-                   items: {"$ref" => "#/components/schemas/item"}
+                   items: {"$ref" => "#/components/schemas/cargo_item_type"}
                  }
                },
                required: ["data"]
@@ -43,13 +45,16 @@ RSpec.describe "CargoUnits", type: :request, swagger_doc: "v2/swagger.json" do
   path "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units/{id}" do
     get "Fetch CargoUnit for the Query" do
       tags "CargoUnits"
+      description "Fetch Cergo Units"
+      operationId "getCargoUnit"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string}, description: "Organization ID"
-      parameter name: :query_id, in: :path, type: :string, schema: {type: :string}, description: "Query ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "CargoUnit ID"
+      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :query_id, in: :path, type: :string, description: "Query ID"
+      parameter name: :id, in: :path, type: :string, description: "CargoUnit ID"
 
       let(:organization_id) { organization.id }
       let!(:cargo_unit) { FactoryBot.create(:journey_cargo_unit, query: query) }
@@ -59,7 +64,7 @@ RSpec.describe "CargoUnits", type: :request, swagger_doc: "v2/swagger.json" do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/item"}
+                 data: {"$ref" => "#/components/schemas/cargo_item_type"}
                },
                required: ["data"]
 

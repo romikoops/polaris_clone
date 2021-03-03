@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Ports", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Ports", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -14,15 +14,18 @@ RSpec.describe "Ports", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/ports" do
     get "Fetch list of ports" do
       tags "Ahoy"
+      description "Fetch list of ports"
+      operationId "getPorts"
+
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :location_type, in: :query, type: :string, schema: {type: :string},
+      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :location_type, in: :query, type: :string,
                 description: "Location Type of request origin/destination"
-      parameter name: :location_id, in: :query, type: :string, schema: {type: :string},
+      parameter name: :location_id, in: :query, type: :string,
                 description: "ID of selected location"
-      parameter name: :query, in: :query, type: :string, schema: {type: :string},
+      parameter name: :query, in: :query, type: :string,
                 description: "Text input for query"
 
       let(:organization_id) { organization.id }

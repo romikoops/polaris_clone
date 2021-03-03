@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Dashboard", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Dashboard", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -17,14 +17,17 @@ RSpec.describe "Dashboard", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/dashboard" do
     get "Fetch Dashboard Widget" do
       tags "Dashboard"
+      description "Fetch widget date for the dashboard."
+      operationId "getDashboard"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :widget, in: :query, type: :string, schema: {type: :string}
-      parameter name: :start_date, in: :query, type: :string, schema: {type: :string}
-      parameter name: :end_date, in: :query, type: :string, schema: {type: :string}
+      parameter name: :widget, in: :query, type: :string, description: "Widget to be fetch"
+      parameter name: :start_date, in: :query, type: :string, description: "Start date of dashboard data"
+      parameter name: :end_date, in: :query, type: :string, description: "End date of dashboard data"
 
       let(:widget) { "booking_count" }
 

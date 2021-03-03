@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Users", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Users", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
@@ -11,6 +11,9 @@ RSpec.describe "Users", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/me" do
     get "Fetch information of current user" do
       tags "Users"
+      description "Fetch information of current user"
+      operationId "getCurrentUser"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"

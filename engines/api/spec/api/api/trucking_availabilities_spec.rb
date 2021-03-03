@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "TruckingAvailabilities", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "TruckingAvailabilities", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -38,18 +38,21 @@ RSpec.describe "TruckingAvailabilities", type: :request, swagger_doc: "v1/swagge
   path "/v1/organizations/{organization_id}/trucking_availabilities" do
     get "Fetch Available Truckings" do
       tags "Quote"
+      description "Fetch Available Truckings"
+      operationId "getTruckingAvailabilities"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :lat, in: :query, type: :string, schema: {type: :string}
-      parameter name: :lng, in: :query, type: :string, schema: {type: :string}
-      parameter name: :load_type, in: :query, type: :string, schema: {type: :string}
-      parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
-      parameter name: :client, in: :query, type: :string, schema: {type: :string},
+      parameter name: :lat, in: :query, type: :string, description: "Latitude"
+      parameter name: :lng, in: :query, type: :string, description: "Longitude"
+      parameter name: :load_type, in: :query, type: :string, description: "Load type"
+      parameter name: :organization_id, in: :query, type: :string, description: "Organiztio nID"
+      parameter name: :client, in: :query, type: :string,
                 description: "The client id of the query"
-      parameter name: :target, in: :query, type: :string, schema: {type: :string}
+      parameter name: :target, in: :query, type: :string, description: "Target"
 
       let(:lat) { origin_hub.latitude }
       let(:lng) { origin_hub.longitude }

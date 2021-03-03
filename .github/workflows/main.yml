@@ -99,7 +99,7 @@ jobs:
 
       - run: bin/rails db:test:prepare && bin/rails db:migrate
       - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' --fail-fast .
-        timeout-minutes: 30
+        timeout-minutes: 35
 
   docker:
     name: Docker

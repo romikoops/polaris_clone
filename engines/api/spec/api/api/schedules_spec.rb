@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Schedules", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Schedules", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -30,13 +30,16 @@ RSpec.describe "Schedules", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/quotations/{quotation_id}/schedules/{id}" do
     get "Fetch available schedules" do
       tags "Quote"
+      description "Fetch available schedules"
+      operationId "getSchedule"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :quotation_id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}
+      parameter name: :quotation_id, in: :path, type: :string, description: "The quotation ID"
+      parameter name: :id, in: :path, type: :string, description: "The quotation ID"
 
       let(:quotation_id) { tender.quotation_id }
       let(:id) { tender.id }
@@ -80,12 +83,15 @@ RSpec.describe "Schedules", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/itineraries/{id}/schedules/enabled" do
     get "Fetch status of schedules" do
       tags "Quote"
+      description "Fetch status of schedules"
+      operationId "getScheduleEnabled"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}
+      parameter name: :id, in: :path, type: :string, description: "The itinerary ID"
 
       let(:id) { itinerary.id }
       let(:organization_id) { organization.id }
@@ -108,31 +114,3 @@ RSpec.describe "Schedules", type: :request, swagger_doc: "v1/swagger.json" do
     end
   end
 end
-
-#   get "/v1/organizations/{organization_id}/itineraries/:id/schedules/enabled" do
-#     let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
-#     let(:request) { {id: itinerary.id} }
-#
-#     context "when tenant runs a quote shop" do
-#       before do
-#         FactoryBot.create(:tenants_scope, target: organization, content: {closed_quotation_tool: true})
-#       end
-#
-#       example "getting schedules enabled for a tenant" do
-#         do_request(request)
-#         aggregate_failures do
-#           expect(response_data["enabled"]).to eq(false)
-#         end
-#       end
-#     end
-#
-#     context "when tenant runs a booking shop" do
-#       example "getting enableds status for tenant schedules" do
-#         do_request(request)
-#         aggregate_failures do
-#           expect(response_data["enabled"]).to eq(true)
-#         end
-#       end
-#     end
-#   end
-# end

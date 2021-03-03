@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "TruckingCountries", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "TruckingCountries", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:location) { FactoryBot.create(:zipcode_location, zipcode: "00001", country_code: "SE") }
@@ -19,14 +19,16 @@ RSpec.describe "TruckingCountries", type: :request, swagger_doc: "v1/swagger.jso
   path "/v1/organizations/{organization_id}/trucking_countries" do
     get "Fetch enabled countries for organization" do
       tags "Trucking"
+      description "Fetch enabled countries for organization"
+      operationId "getTruckingCountries"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, schema: {type: :string},
-                description: "Organization ID"
-      parameter name: :load_type, in: :query, type: :string, schema: {type: :string}, description: "Load Type"
-      parameter name: :location_type, in: :query, type: :string, schema: {type: :string}, description: "Location Type"
+      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :load_type, in: :query, type: :string, description: "Load Type"
+      parameter name: :location_type, in: :query, type: :string, description: "Location Type"
 
       let(:organization_id) { organization.id }
       let(:load_type) { "cargo_item" }

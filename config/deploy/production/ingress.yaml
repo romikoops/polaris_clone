@@ -16,3 +16,7 @@ spec:
             backend:
               serviceName: web
               servicePort: http
+          - path: /docs
+            backend:
+              serviceName: redoc
+              servicePort: http

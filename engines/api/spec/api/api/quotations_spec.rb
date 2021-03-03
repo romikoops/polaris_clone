@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Quotations", type: :request, swagger: true do
   include_context "journey_pdf_setup"
   include_context "complete_route_with_trucking"
   let(:load_type) { "container" }
@@ -30,6 +30,9 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/quotations" do
     post "Create new quotation" do
       tags "Quote"
+      description "Create new quotation"
+      operationId "createQuotation"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
@@ -42,12 +45,12 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
           quote: {
             type: :object,
             properties: {
-              selected_date: {type: :date},
+              selected_date: {type: :string},
               organization_id: {type: :string},
               user_id: {type: :string},
               origin: {type: :string},
               destination: {type: :string}
-            }
+            }, required: ["selected_date", "organization_id", "user_id", "origin", "destination"]
           },
           shipment_info: {
             type: :object,
@@ -58,9 +61,9 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
                 type: :object,
                 properties: {}
               }
-            }
+            }, required: ["cargo_item_attributes", "containers_attributes", "trucking_info"]
           }
-        }
+        }, required: ["organization_id", "quote", "shipment_info"]
       }
 
       response "200", "successful operation" do
@@ -88,13 +91,16 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/quotations/{id}" do
     get "Fetch existing quotation" do
       tags "Quote"
+      description "Fetch existing quotation"
+      operationId "getQuotation"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :id, in: :path, type: :string, description: "Quotation ID"
+      parameter name: :organization_id, in: :query, type: :string, description: "The current organization ID"
 
       response "200", "successful operation" do
         let(:organization_id) { organization.id }
@@ -108,13 +114,16 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/quotations/{id}/download" do
     post "Download quotation as PDF" do
       tags "Quote"
+      description "Download quotation as PDF"
+      operationId "downloadQuotation"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}
-      parameter name: :organization_id, in: :query, type: :string, schema: {type: :string}
+      parameter name: :id, in: :path, type: :string, description: "Quotation ID"
+      parameter name: :organization_id, in: :query, type: :string, description: "The current organization ID"
       parameter name: :format, type: :string, in: :query, description: "The desired download format (pdf/xlsx)"
       parameter name: :params, in: :body, schema: {
         type: :object,
@@ -125,7 +134,7 @@ RSpec.describe "Quotations", type: :request, swagger_doc: "v1/swagger.json" do
               type: :string
             }
           }
-        }
+        }, required: ["tenders"]
       }
 
       response "200", "successful operation" do

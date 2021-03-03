@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Groups", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Groups", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -16,6 +16,9 @@ RSpec.describe "Groups", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/groups" do
     get "Fetch all groups" do
       tags "Groups"
+      description "Fetch all groups."
+      operationId "getGroups"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"

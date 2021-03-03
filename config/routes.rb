@@ -3,8 +3,8 @@
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
   get "/healthz", to: "application#health"
-  mount Rswag::Ui::Engine, at: "/docs"
-  mount Rswag::Api::Engine, at: "/docs"
+  get "/ping/version", to: proc { [200, {}, ["#{ENV["RELEASE"]}"]] }
+  mount Rswag::Api::Engine, at: "/specs"
 
   get "/sidekiq", to: redirect("/admin/sidekiq", status: 301)
 

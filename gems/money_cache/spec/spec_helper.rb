@@ -26,11 +26,4 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-
-  if ENV["CI"]
-    require "rspec_junit_formatter"
-    config.add_formatter(RspecJunitFormatter, File.expand_path("../junit.xml", __dir__))
-  else
-    config.add_formatter("doc")
-  end
 end

@@ -2,13 +2,11 @@
 
 set -e
 
-  #statements
-echo "Fetching AWS Session Token..."
 STS_TOKEN=$(aws sts get-session-token --duration-seconds 129600)
 
-eval "$(echo ${STS_TOKEN} | jq -r '@sh "export AWS_ACCESS_KEY_ID=\(.Credentials.AccessKeyId)"')"
-eval "$(echo ${STS_TOKEN} | jq -r '@sh "export AWS_SECRET_ACCESS_KEY=\(.Credentials.SecretAccessKey)"')"
-eval "$(echo ${STS_TOKEN} | jq -r '@sh "export AWS_SESSION_TOKEN=\(.Credentials.SessionToken)"')"
+eval "$(echo "${STS_TOKEN}" | jq -r '@sh "export AWS_ACCESS_KEY_ID=\(.Credentials.AccessKeyId)"')"
+eval "$(echo "${STS_TOKEN}" | jq -r '@sh "export AWS_SECRET_ACCESS_KEY=\(.Credentials.SecretAccessKey)"')"
+eval "$(echo "${STS_TOKEN}" | jq -r '@sh "export AWS_SESSION_TOKEN=\(.Credentials.SessionToken)"')"
 
 echo "Executing docker-compose $*..."
 exec docker-compose "$@"

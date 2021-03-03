@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Equipments", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Equipments", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, organization: organization) }
@@ -20,14 +20,17 @@ RSpec.describe "Equipments", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/equipments" do
     get "Fetch all available equipment" do
       tags "Quote"
+      description "Fetch availavble equipment for the route."
+      operationId "getEquipments"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :origin_nexus_id, in: :query, type: :string, schema: {type: :string},
+      parameter name: :origin_nexus_id, in: :query, type: :string,
                 description: "the id of the origin"
-      parameter name: :destination_nexus_id, in: :query, type: :string, schema: {type: :string},
+      parameter name: :destination_nexus_id, in: :query, type: :string,
                 description: "the id of the destination"
 
       let(:organization_id) { organization.id }

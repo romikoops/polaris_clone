@@ -42,6 +42,22 @@ module Polaris
     config.middleware.use ActionDispatch::Flash
     config.middleware.use ActionDispatch::Session::CookieStore, key: "_imc_platform_session"
 
+    # Committee
+    if Rails.root.join("doc", "api", "swagger.json").exist?
+      config.middleware.use Committee::Middleware::RequestValidation,
+        schema_path: "doc/api/swagger.json",
+        coerce_date_times: true,
+        ignore_error: true,
+        parse_response_by_content_type: false,
+        error_handler: -> (ex, env) { Rails.logger.error("Committee: <-- #{ex}") }
+      config.middleware.use Committee::Middleware::ResponseValidation,
+        schema_path: "doc/api/swagger.json",
+        coerce_date_times: true,
+        ignore_error: true,
+        parse_response_by_content_type: false,
+        error_handler: -> (ex, env) { Sentry.capture_exception(ex, extra: { rack_env: env }) }
+    end
+
     config.skylight.environments << "review"
     config.skylight.probes << "active_job"
     config.skylight.probes << "active_model_serializers"

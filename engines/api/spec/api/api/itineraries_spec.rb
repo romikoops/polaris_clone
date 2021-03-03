@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Itineraries", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Itineraries", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -14,6 +14,9 @@ RSpec.describe "Itineraries", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/itineraries" do
     get "Fetch list of itineraries belonging to an organization" do
       tags "Quote"
+      description "Fetch list of itineraries belonging to an organization"
+      operationId "getItineraries"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
@@ -59,7 +62,7 @@ RSpec.describe "Itineraries", type: :request, swagger_doc: "v1/swagger.json" do
                              },
                              required: ["data"]
                            }
-                         }
+                         }, required: ["stops"]
                        }
                      },
                      required: %w[id type attributes relationships]

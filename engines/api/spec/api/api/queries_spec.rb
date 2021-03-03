@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
+RSpec.describe "Queries", type: :request, swagger: true do
   include_context "complete_route_with_trucking"
   let(:load_type) { "cargo_item" }
   let(:cargo_classes) { ["lcl"] }
@@ -46,6 +46,9 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
   path "/v2/organizations/{organization_id}/queries" do
     post "Create new query" do
       tags "Query"
+      description "Create new query"
+      operationId "createQuery"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
@@ -74,7 +77,7 @@ RSpec.describe "Queries", type: :request, swagger_doc: "v2/swagger.json" do
             type: :array,
             items: {"$ref" => "#/components/schemas/item"}
           }
-        }
+        }, required: ["originId", "destinationId", "loadType", "aggregated", "items"]
       }
 
       response "200", "successful operation" do

@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Locations", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Locations", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -18,14 +18,17 @@ RSpec.describe "Locations", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/locations/origins" do
     get "Fetch available origins" do
       tags "Quote"
+      description "Fetch available origins"
+      operationId "getLocationOrigins"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :q, in: :query, type: :string, schema: {type: :string}
-      parameter name: :id, in: :query, type: :string, schema: {type: :string}
-      parameter name: :load_type, in: :query, type: :string, schema: {type: :string}
+      parameter name: :q, in: :query, type: :string, description: "Query to search locations"
+      parameter name: :id, in: :query, type: :string, description: "ID of location to query"
+      parameter name: :load_type, in: :query, type: :string, description: "Load type for location"
 
       let(:id) { destination_hub.nexus_id }
       let(:q) { nil }
@@ -48,14 +51,17 @@ RSpec.describe "Locations", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/locations/destinations" do
     get "Fetch available destinations" do
       tags "Quote"
+      description "Fetch available destinations"
+      operationId "getLocationDestinations"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :q, in: :query, type: :string, schema: {type: :string}
-      parameter name: :id, in: :query, type: :string, schema: {type: :string}
-      parameter name: :load_type, in: :query, type: :string, schema: {type: :string}
+      parameter name: :q, in: :query, type: :string, description: "Query to search locations"
+      parameter name: :id, in: :query, type: :string, description: "ID of location to query"
+      parameter name: :load_type, in: :query, type: :string, description: "Load type for location"
 
       let(:id) { origin_hub.nexus_id }
       let(:q) { nil }

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -Eeo pipefail
+
+docker_run() {
+  docker run \
+    --rm --pull always \
+    -p 8080:80 \
+    -e SPEC_URL=http://localhost:3000/specs/swagger.json \
+    redocly/redoc "$@"
+}
+
+echo "Open your browser at http://localhost:8080/"
+docker_run "$@"

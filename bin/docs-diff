@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -Eeo pipefail
+
+docker_run() {
+  docker run \
+    --pull always \
+    --rm -t \
+    -v "$(pwd)/doc/api:/specs" \
+    openapitools/openapi-diff:latest \
+    "$@"
+}
+
+docker_run "$@" https://api.itsmycargo.com/specs/swagger.json /specs/swagger.json

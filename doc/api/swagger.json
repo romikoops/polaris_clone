@@ -1,0 +1,3149 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Polaris API",
+    "description": "ItsMyCargo Backend API",
+    "termsOfService": "https://www.itsmycargo.com/terms",
+    "contact": {
+      "name": "API Support",
+      "url": "https://support.itsmycargo.com",
+      "email": "support@itsmycargo.com"
+    },
+    "version": "2021-02"
+  },
+  "tags": [
+    {
+      "name": "Ahoy",
+      "description": "Ahoy"
+    },
+    {
+      "name": "CargoUnits",
+      "description": "CargoUnits"
+    },
+    {
+      "name": "Clients",
+      "description": "Clients"
+    },
+    {
+      "name": "Dashboard",
+      "description": "Dashboard"
+    },
+    {
+      "name": "Groups",
+      "description": "Groups"
+    },
+    {
+      "name": "Query",
+      "description": "Query"
+    },
+    {
+      "name": "Quote",
+      "description": "Quote"
+    },
+    {
+      "name": "Results",
+      "description": "Results"
+    },
+    {
+      "name": "Trucking",
+      "description": "Trucking"
+    },
+    {
+      "name": "Users",
+      "description": "Users"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "cargo_item_type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Unique identifier of the given cargo item type",
+            "type": "string"
+          },
+          "type": {
+            "description": "Generic type of the cargo item",
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "width": {
+                "description": "Width of the given cargo item type",
+                "type": "string"
+              },
+              "length": {
+                "description": "Length of the given cargo item type",
+                "type": "string"
+              },
+              "description": {
+                "description": "Descriptive information of the cargo item type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "width",
+              "length"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "client": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company_name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "house_number": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "first_name",
+          "last_name",
+          "company_name",
+          "phone",
+          "house_number",
+          "street",
+          "postal_code",
+          "country",
+          "group_id"
+        ]
+      },
+      "charge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Charge ID",
+            "type": "string"
+          },
+          "lineItemId": {
+            "description": "Line Item",
+            "type": "string"
+          },
+          "tenderId": {
+            "description": "Tender",
+            "type": "string"
+          },
+          "chargeCategoryId": {
+            "description": "Category of the charge",
+            "type": "integer"
+          },
+          "description": {
+            "description": "Description",
+            "type": "string"
+          },
+          "value": {
+            "$ref": "#/components/schemas/money"
+          },
+          "originalValue": {
+            "$ref": "#/components/schemas/money"
+          },
+          "order": {
+            "description": "Order of the charges",
+            "type": "integer"
+          },
+          "section": {
+            "description": "Section of charge",
+            "type": "string"
+          },
+          "level": {
+            "description": "Nesting level",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "lineItemId",
+          "tenderId",
+          "chargeCategoryId",
+          "description",
+          "value",
+          "originalValue",
+          "order",
+          "section",
+          "level"
+        ]
+      },
+      "country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Country ID",
+            "type": "string"
+          },
+          "type": {
+            "description": "Country Type",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Country Attributes",
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "Name of the country",
+                "type": "string"
+              },
+              "code": {
+                "description": "Country code",
+                "type": "string"
+              },
+              "flag": {
+                "description": "Flag of the country",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "code",
+              "flag"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Group ID",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of group",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes of group",
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "ID of attributes",
+                "type": "string"
+              },
+              "name": {
+                "description": "Name of the group",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "item": {
+        "type": "object",
+        "properties": {
+          "stackable": {
+            "description": "If cargo item is stackable or not",
+            "type": "boolean"
+          },
+          "valid": {
+            "description": "If cargo iem is valid",
+            "type": "boolean"
+          },
+          "dangerous": {
+            "description": "oes cargo item contain any dangerous goods",
+            "type": "boolean"
+          },
+          "cargoItemTypeId": {
+            "description": "Type of cargo itm",
+            "type": "string"
+          },
+          "quantity": {
+            "description": "Quantity",
+            "type": "integer"
+          },
+          "length": {
+            "description": "Length of the item",
+            "type": "integer"
+          },
+          "width": {
+            "description": "Width of the item",
+            "type": "integer"
+          },
+          "height": {
+            "description": "Height of the item",
+            "type": "integer"
+          },
+          "weight": {
+            "description": "Weight of the item",
+            "type": "integer"
+          },
+          "commodityCodes": {
+            "description": "Commodity codes of the contents",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "description": "ID of code",
+                  "type": "string"
+                },
+                "code": {
+                  "description": "Code",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "code"
+              ]
+            }
+          }
+        },
+        "required": [
+          "valid"
+        ]
+      },
+      "journeyError": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "string"
+          },
+          "code": {
+            "description": "Code",
+            "type": "string"
+          },
+          "service": {
+            "description": "Service",
+            "type": "string"
+          },
+          "carrier": {
+            "description": "Carrier",
+            "type": "string"
+          },
+          "mode_of_transport": {
+            "description": "MOT",
+            "type": "string"
+          },
+          "property": {
+            "description": "Property",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Limit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "money": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "Monetary amount in given currency"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 code for currency"
+          }
+        },
+        "required": [
+          "amount",
+          "currency"
+        ]
+      },
+      "nexus": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes",
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "ID",
+                "type": "number"
+              },
+              "name": {
+                "description": "Name",
+                "type": "string"
+              },
+              "latitude": {
+                "description": "Latitude",
+                "type": "number"
+              },
+              "longitude": {
+                "description": "Longitude",
+                "type": "number"
+              },
+              "modesOfTransport": {
+                "description": "MOTs",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "countryName": {
+                "description": "Country Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "latitude",
+              "longitude",
+              "modesOfTransport",
+              "countryName"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "organization": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes",
+            "type": "object",
+            "properties": {
+              "slug": {
+                "description": "Slug",
+                "type": "string"
+              }
+            },
+            "required": [
+              "slug"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      },
+      "pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "description": "Current page",
+            "type": "number"
+          },
+          "perPage": {
+            "description": "Items per page",
+            "type": "number"
+          },
+          "totalPages": {
+            "description": "Total number of pages",
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "perPage",
+          "totalPages"
+        ]
+      },
+      "paginationLinks": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "description": "First page",
+            "type": "string",
+            "nullable": true
+          },
+          "prev": {
+            "description": "Previous page",
+            "type": "string",
+            "nullable": true
+          },
+          "next": {
+            "description": "Next page",
+            "type": "string",
+            "nullable": true
+          },
+          "last": {
+            "description": "Last page",
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "quotationTender": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Data",
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "ID",
+                "type": "string"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "attributes": {
+                "description": "Attributes",
+                "type": "object",
+                "properties": {
+                  "charges": {
+                    "description": "Charges",
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/charge"
+                    }
+                  },
+                  "route": {
+                    "description": "Route",
+                    "type": "string"
+                  },
+                  "vessel": {
+                    "description": "Vessel",
+                    "type": "string"
+                  },
+                  "id": {
+                    "description": "ID",
+                    "type": "string"
+                  },
+                  "pickupTruckType": {
+                    "description": "Truck type",
+                    "type": "string"
+                  },
+                  "deliveryTruckType": {
+                    "description": "Truck type",
+                    "type": "string"
+                  },
+                  "pickupCarrier": {
+                    "description": "Carrier",
+                    "type": "string"
+                  },
+                  "deliveryCarrier": {
+                    "description": "Carrier",
+                    "type": "string"
+                  },
+                  "pickupService": {
+                    "description": "Service",
+                    "type": "string"
+                  },
+                  "deliveryService": {
+                    "description": "Service",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "route"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "attributes"
+            ]
+          }
+        }
+      },
+      "restfulResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "string"
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "Attributes",
+            "type": "object",
+            "properties": {
+              "email": {
+                "description": "Email",
+                "type": "string"
+              },
+              "organizationId": {
+                "description": "organization",
+                "type": "string"
+              },
+              "firstName": {
+                "description": "First Name",
+                "type": "string"
+              },
+              "lastName": {
+                "description": "Last Name",
+                "type": "string"
+              },
+              "phone": {
+                "description": "Phone",
+                "type": "string"
+              },
+              "companyName": {
+                "description": "Company",
+                "type": "string"
+              }
+            },
+            "required": [
+              "email",
+              "organizationId",
+              "firstName",
+              "lastName",
+              "phone",
+              "companyName"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "attributes"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "oauth": {
+        "type": "oauth2",
+        "description": "This API uses OAuth2 with the password grant flow.",
+        "flows": {
+          "password": {
+            "tokenUrl": "/oauth/tokens",
+            "refreshUrl": "/oauth/refresh",
+            "scopes": {
+              "public": "Public Access"
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{host}",
+      "variables": {
+        "host": {
+          "default": "api.itsmycargo.com"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/organizations/{organization_id}/ahoy": {
+      "get": {
+        "summary": "Fetch Settings",
+        "tags": [
+          "Ahoy"
+        ],
+        "description": "Fetch settings for Ahoy widget.",
+        "operationId": "getAhoy",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "example": {
+                  "endpoint": "test_1.test",
+                  "modes_of_transport": {
+                    "air": {
+                      "fcl": false,
+                      "lcl": true
+                    },
+                    "rail": {
+                      "fcl": false,
+                      "lcl": false
+                    },
+                    "ocean": {
+                      "fcl": true,
+                      "lcl": true
+                    },
+                    "truck": {
+                      "fcl": false,
+                      "lcl": false
+                    }
+                  },
+                  "pre_carriage": true,
+                  "on_carriage": true
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "endpoint": {
+                      "description": "Endpoint url that Ahoy will redirect to start the booking process",
+                      "type": "string"
+                    },
+                    "pre_carriage": {
+                      "description": "Determines if pre-carriage is enabled",
+                      "type": "boolean"
+                    },
+                    "on_carriage": {
+                      "description": "Determines if on-carriage is enabled",
+                      "type": "boolean"
+                    },
+                    "modes_of_transport": {
+                      "description": "Supported modes of transports",
+                      "type": "object",
+                      "properties": {
+                        "air": {
+                          "description": "Supported cargo types for Air Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "fcl",
+                            "lcl"
+                          ]
+                        },
+                        "rail": {
+                          "description": "Supported cargo types for Rail Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "fcl",
+                            "lcl"
+                          ]
+                        },
+                        "ocean": {
+                          "description": "Supported cargo types for Ocean Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "fcl",
+                            "lcl"
+                          ]
+                        },
+                        "truck": {
+                          "description": "Supported cargo types for Trucking Cargo",
+                          "type": "object",
+                          "properties": {
+                            "fcl": {
+                              "description": "Determines if FCL is supported",
+                              "type": "boolean"
+                            },
+                            "lcl": {
+                              "description": "Determines if LCL is supported",
+                              "type": "boolean"
+                            }
+                          },
+                          "required": [
+                            "fcl",
+                            "lcl"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "air",
+                        "rail",
+                        "ocean",
+                        "truck"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "endpoint",
+                    "pre_carriage",
+                    "on_carriage",
+                    "modes_of_transport"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid Customer UUID",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "message": "Couldn't find Organizations::Organization with 'id'=invalid",
+                  "status": "not_found",
+                  "code": 404
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/cargo_item_types": {
+      "get": {
+        "summary": "Fetch all available cargo types",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetches all possible cargo types enabled for the customer.",
+        "operationId": "getCargoItemTypes",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/cargo_item_type"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units": {
+      "get": {
+        "summary": "Fetch CargoUnits for the Query",
+        "tags": [
+          "CargoUnits"
+        ],
+        "description": "Fetches cargo units for the query.",
+        "operationId": "getCargoUnits",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query_id",
+            "in": "path",
+            "description": "Query ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/cargo_item_type"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units/{id}": {
+      "get": {
+        "summary": "Fetch CargoUnit for the Query",
+        "tags": [
+          "CargoUnits"
+        ],
+        "description": "Fetch Cergo Units",
+        "operationId": "getCargoUnit",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query_id",
+            "in": "path",
+            "description": "Query ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "CargoUnit ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/cargo_item_type"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/quotations/{quotation_id}/charges/{id}": {
+      "get": {
+        "summary": "Fetch tender charges",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetches available tenders.",
+        "operationId": "getCharge",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Trip ID of the tender",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotation_id",
+            "in": "path",
+            "description": "The selected quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/quotationTender"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid Charge ID"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/clients": {
+      "get": {
+        "summary": "Fetch all clients",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Fetch all customer client accounts.",
+        "operationId": "getClients",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Results per page",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/user"
+                      }
+                    },
+                    "links": {
+                      "$ref": "#/components/schemas/paginationLinks"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new client",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Creates a new client for the customer.",
+        "operationId": "createClient",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "invalid request"
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/client"
+                  }
+                },
+                "required": [
+                  "data"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/clients/{id}": {
+      "get": {
+        "summary": "Fetch specific client",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Fetch a given client.",
+        "operationId": "getClient",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/user"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          },
+          "404": {
+            "description": "Invalid Client ID"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Destroy a specific client",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Deletes an client.",
+        "operationId": "deleteClient",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Invalid Client ID"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Update client details.",
+        "operationId": "updateClient",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "$ref": "#/components/schemas/client"
+                  }
+                },
+                "required": [
+                  "client"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/clients/{id}/password_reset": {
+      "patch": {
+        "summary": "Password Reset",
+        "tags": [
+          "Clients"
+        ],
+        "description": "Resets a client password.",
+        "operationId": "passwordReset",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Client ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "password": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "password"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          },
+          "404": {
+            "description": "Invalid Client ID"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/dashboard": {
+      "get": {
+        "summary": "Fetch Dashboard Widget",
+        "tags": [
+          "Dashboard"
+        ],
+        "description": "Fetch widget date for the dashboard.",
+        "operationId": "getDashboard",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "widget",
+            "in": "query",
+            "description": "Widget to be fetch",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "description": "Start date of dashboard data",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "description": "End date of dashboard data",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/equipments": {
+      "get": {
+        "summary": "Fetch all available equipment",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch availavble equipment for the route.",
+        "operationId": "getEquipments",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "origin_nexus_id",
+            "in": "query",
+            "description": "the id of the origin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "destination_nexus_id",
+            "in": "query",
+            "description": "the id of the destination",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v2/organizations/{organization_id}/result_sets/{result_set_id}/errors": {
+      "get": {
+        "summary": "Fetch Errors for the Result Set",
+        "tags": [
+          "Users"
+        ],
+        "description": "Fetch errors for the given result set.",
+        "operationId": "getResultSetErrors",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "result_set_id",
+            "in": "path",
+            "description": "ResultSet ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/journeyError"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/groups": {
+      "get": {
+        "summary": "Fetch all groups",
+        "tags": [
+          "Groups"
+        ],
+        "description": "Fetch all groups.",
+        "operationId": "getGroups",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/group"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/itineraries": {
+      "get": {
+        "summary": "Fetch list of itineraries belonging to an organization",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch list of itineraries belonging to an organization",
+        "operationId": "getItineraries",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "modeOfTransport": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "modeOfTransport",
+                              "name"
+                            ]
+                          },
+                          "relationships": {
+                            "type": "object",
+                            "properties": {
+                              "stops": {
+                                "type": "object",
+                                "properties": {
+                                  "data": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string"
+                                        },
+                                        "type": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "type"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "data"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "stops"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes",
+                          "relationships"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/locations/origins": {
+      "get": {
+        "summary": "Fetch available origins",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch available origins",
+        "operationId": "getLocationOrigins",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Query to search locations",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of location to query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "description": "Load type for location",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/locations/destinations": {
+      "get": {
+        "summary": "Fetch available destinations",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch available destinations",
+        "operationId": "getLocationDestinations",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Query to search locations",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of location to query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "description": "Load type for location",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/nexus"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations": {
+      "get": {
+        "summary": "Fetch all organizations",
+        "tags": [
+          "Users"
+        ],
+        "description": "Fetch all organizations",
+        "operationId": "getOrganizations",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/organization"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{id}/countries": {
+      "get": {
+        "summary": "Fetch enabled countries for an organization",
+        "tags": [
+          "Users"
+        ],
+        "description": "Fetch enabled countries for an organization",
+        "operationId": "getCountries",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/country"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/ports": {
+      "get": {
+        "summary": "Fetch list of ports",
+        "tags": [
+          "Ahoy"
+        ],
+        "description": "Fetch list of ports",
+        "operationId": "getPorts",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location_type",
+            "in": "query",
+            "description": "Location Type of request origin/destination",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location_id",
+            "in": "query",
+            "description": "ID of selected location",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Text input for query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "hubType": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "hubType"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/organizations/{organization_id}/queries": {
+      "post": {
+        "summary": "Create new query",
+        "tags": [
+          "Query"
+        ],
+        "description": "Create new query",
+        "operationId": "createQuery",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "originId": {
+                    "type": "string",
+                    "description": "The Carta ID of the origin point"
+                  },
+                  "destinationId": {
+                    "type": "string",
+                    "description": "The Carta ID of the destination point"
+                  },
+                  "loadType": {
+                    "type": "string",
+                    "description": "The load type of the query"
+                  },
+                  "aggregated": {
+                    "type": "boolean",
+                    "description": "Whether the cargo is aggregated or not"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/item"
+                    }
+                  }
+                },
+                "required": [
+                  "originId",
+                  "destinationId",
+                  "loadType",
+                  "aggregated",
+                  "items"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/quotations": {
+      "post": {
+        "summary": "Create new quotation",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Create new quotation",
+        "operationId": "createQuotation",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "organization_id": {
+                    "type": "string"
+                  },
+                  "quote": {
+                    "type": "object",
+                    "properties": {
+                      "selected_date": {
+                        "type": "string"
+                      },
+                      "organization_id": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "string"
+                      },
+                      "origin": {
+                        "type": "string"
+                      },
+                      "destination": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "selected_date",
+                      "organization_id",
+                      "user_id",
+                      "origin",
+                      "destination"
+                    ]
+                  },
+                  "shipment_info": {
+                    "type": "object",
+                    "properties": {
+                      "cargo_item_attributes": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      },
+                      "containers_attributes": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      },
+                      "trucking_info": {
+                        "type": "object",
+                        "properties": {
+                        }
+                      }
+                    },
+                    "required": [
+                      "cargo_item_attributes",
+                      "containers_attributes",
+                      "trucking_info"
+                    ]
+                  }
+                },
+                "required": [
+                  "organization_id",
+                  "quote",
+                  "shipment_info"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/quotations/{id}": {
+      "get": {
+        "summary": "Fetch existing quotation",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch existing quotation",
+        "operationId": "getQuotation",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "description": "The current organization ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/quotations/{id}/download": {
+      "post": {
+        "summary": "Download quotation as PDF",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Download quotation as PDF",
+        "operationId": "downloadQuotation",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "description": "The current organization ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The desired download format (pdf/xlsx)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tenders": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "tenders"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/organizations/{organization_id}/result_sets/{result_set_id}/results": {
+      "get": {
+        "summary": "Fetch Results for the Result Set",
+        "tags": [
+          "Results"
+        ],
+        "description": "Fetch Results for the Result Set",
+        "operationId": "getResults",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "result_set_id",
+            "in": "path",
+            "description": "ResultSet ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/restfulResponse"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/quotations/{quotation_id}/schedules/{id}": {
+      "get": {
+        "summary": "Fetch available schedules",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch available schedules",
+        "operationId": "getSchedule",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quotation_id",
+            "in": "path",
+            "description": "The quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The quotation ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "attributes": {
+                            "type": "object",
+                            "properties": {
+                              "carrier": {
+                                "type": "string"
+                              },
+                              "closing": {
+                                "type": "string"
+                              },
+                              "end": {
+                                "type": "string"
+                              },
+                              "service": {
+                                "type": "string"
+                              },
+                              "start": {
+                                "type": "string"
+                              },
+                              "tenderId": {
+                                "type": "string"
+                              },
+                              "vessel": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "voyageCode": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "carrier",
+                              "closing",
+                              "end",
+                              "service",
+                              "start",
+                              "tenderId",
+                              "vessel",
+                              "voyageCode"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "attributes"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/itineraries/{id}/schedules/enabled": {
+      "get": {
+        "summary": "Fetch status of schedules",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch status of schedules",
+        "operationId": "getScheduleEnabled",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The itinerary ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "enabled"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/trucking_availabilities": {
+      "get": {
+        "summary": "Fetch Available Truckings",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch Available Truckings",
+        "operationId": "getTruckingAvailabilities",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "description": "Longitude",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "description": "Load type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "description": "Organiztio nID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client",
+            "in": "query",
+            "description": "The client id of the query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "description": "Target",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "truckTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckingAvailable": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "truckTypes",
+                    "truckingAvailable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/trucking_counterparts": {
+      "get": {
+        "summary": "Fetch counterparts fgor trucking",
+        "tags": [
+          "Quote"
+        ],
+        "description": "Fetch counterparts fgor trucking",
+        "operationId": "getTruckingCounterparts",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "The current organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "description": "Longitude",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "description": "Load type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "description": "Organization ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "client",
+            "in": "query",
+            "description": "The client id of the query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "target",
+            "in": "query",
+            "description": "Target",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "countryCodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckTypes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "truckingAvailable": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "countryCodes",
+                    "truckTypes",
+                    "truckingAvailable"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organization_id}/trucking_countries": {
+      "get": {
+        "summary": "Fetch enabled countries for organization",
+        "tags": [
+          "Trucking"
+        ],
+        "description": "Fetch enabled countries for organization",
+        "operationId": "getTruckingCountries",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "description": "Organization ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "load_type",
+            "in": "query",
+            "description": "Load Type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location_type",
+            "in": "query",
+            "description": "Location Type",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/country"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "summary": "Fetch information of current user",
+        "tags": [
+          "Users"
+        ],
+        "description": "Fetch information of current user",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "oauth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "attributes": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "string"
+                            },
+                            "organizationId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "firstName": {
+                              "type": "string"
+                            },
+                            "lastName": {
+                              "type": "string"
+                            },
+                            "phone": {
+                              "type": "string"
+                            },
+                            "companyName": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "email",
+                            "organizationId",
+                            "firstName",
+                            "lastName",
+                            "phone",
+                            "companyName"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "attributes"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Credentials"
+          }
+        }
+      }
+    }
+  }
+}

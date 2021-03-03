@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Clients", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
@@ -21,14 +21,17 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/clients" do
     get "Fetch all clients" do
       tags "Clients"
+      description "Fetch all customer client accounts."
+      operationId "getClients"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :q, in: :query, type: :string, schema: {type: :string}, description: "Search query"
-      parameter name: :page, in: :query, type: :number, schema: {type: :number}, description: "Page number"
-      parameter name: :per_page, in: :query, type: :number, schema: {type: :number}, description: "Results per page"
+      parameter name: :q, in: :query, type: :string, description: "Search query"
+      parameter name: :page, in: :query, type: :number, description: "Page number"
+      parameter name: :per_page, in: :query, type: :number, description: "Results per page"
 
       let(:q) { "" }
       let(:page) { 1 }
@@ -40,9 +43,6 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
                  data: {
                    type: :array,
                    items: {"$ref" => "#/components/schemas/user"}
-                 },
-                 meta: {
-                   pagination: {"$ref" => "#/components/schemas/pagination"}
                  },
                  links: {"$ref" => "#/components/schemas/paginationLinks"}
                },
@@ -60,15 +60,20 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
 
     post "Create a new client" do
       tags "Clients"
+      description "Creates a new client for the customer."
+      operationId "createClient"
 
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :query, in: :body, schema: {
+      parameter name: :query, in: :body, description: "Query", schema: {
         type: :object,
-        properties: {"$ref" => "#/components/schemas/client"}
+        properties: {
+          data: {"$ref" => "#/components/schemas/client"}
+        },
+        required: ["data"]
       }
 
       response "201", "successful operation" do
@@ -108,20 +113,22 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/clients/{id}" do
     get "Fetch specific client" do
       tags "Clients"
+      description "Fetch a given client."
+      operationId "getClient"
 
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+      parameter name: :id, in: :path, type: :string, description: "Client ID"
 
       let(:id) { clients.sample.id }
 
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/user"}
+                 data: {"$ref" => "#/components/schemas/user"},
                },
                required: ["data"]
 
@@ -145,13 +152,15 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/clients/{id}" do
     delete "Destroy a specific client" do
       tags "Clients"
+      description "Deletes an client."
+      operationId "deleteClient"
 
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+      parameter name: :id, in: :path, type: :string, description: "Client ID"
 
       response "204", "successful operation" do
         let(:id) { clients.sample.id }
@@ -170,13 +179,15 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
   path "/v1/organizations/{organization_id}/clients/{id}/password_reset" do
     patch "Password Reset" do
       tags "Clients"
+      description "Resets a client password."
+      operationId "passwordReset"
 
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+      parameter name: :id, in: :path, type: :string, description: "Client ID"
 
       let(:id) { clients.sample.id }
 
@@ -210,16 +221,18 @@ RSpec.describe "Clients", type: :request, swagger_doc: "v1/swagger.json" do
     end
   end
 
-  path "/v1/organizations/{organization_id}/clients/{id}/" do
+  path "/v1/organizations/{organization_id}/clients/{id}" do
     patch "Update" do
       tags "Clients"
+      description "Update client details."
+      operationId "updateClient"
 
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :id, in: :path, type: :string, schema: {type: :string}, description: "Client ID"
+      parameter name: :id, in: :path, type: :string, description: "Client ID"
 
       parameter name: :client, in: :body, schema: {
         type: :object,

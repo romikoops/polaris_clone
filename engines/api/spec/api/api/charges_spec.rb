@@ -2,7 +2,7 @@
 
 require "swagger_helper"
 
-RSpec.describe "Charges", type: :request, swagger_doc: "v1/swagger.json" do
+RSpec.describe "Charges", type: :request, swagger: true do
   include_context "journey_pdf_setup"
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
@@ -24,6 +24,9 @@ RSpec.describe "Charges", type: :request, swagger_doc: "v1/swagger.json" do
 
     get "Fetch tender charges" do
       tags "Quote"
+      description "Fetches available tenders."
+      operationId "getCharge"
+
       security [oauth: []]
       consumes "application/json"
       produces "application/json"
@@ -33,7 +36,11 @@ RSpec.describe "Charges", type: :request, swagger_doc: "v1/swagger.json" do
       parameter name: :quotation_id, in: :path, type: :string, description: "The selected quotation ID"
 
       response "200", "successful operation" do
-        schema type: {"$ref" => "#/components/schemas/quotationTender"}
+        schema type: :object,
+               properties: {
+                 data: {"$ref" => "#/components/schemas/quotationTender"}
+               },
+               required: ["data"]
 
         run_test!
       end

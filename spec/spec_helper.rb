@@ -57,8 +57,6 @@ RSpec.configure do |config|
   if ENV["CI"]
     require "rspec_count_formatter"
     config.add_formatter(RspecCountFormatter)
-    require "rspec_junit_formatter"
-    config.add_formatter(RspecJunitFormatter, File.expand_path("../junit.xml", __dir__))
   else
     config.add_formatter("Fuubar")
     config.fuubar_auto_refresh = true
