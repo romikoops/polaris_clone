@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: web
+  name: polaris
   labels:
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: polaris
     app.kubernetes.io/instance: polaris
     app.kubernetes.io/name: polaris
 spec:
@@ -17,6 +17,10 @@ spec:
               serviceName: web
               servicePort: http
           - path: /docs
+            backend:
+              serviceName: redoc
+              servicePort: http
+          - path: /redoc.standalone.js
             backend:
               serviceName: redoc
               servicePort: http

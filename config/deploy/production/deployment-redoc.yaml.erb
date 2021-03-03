@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: redoc
   labels:
     app.kubernetes.io/component: redoc
     app.kubernetes.io/instance: polaris
@@ -34,27 +34,27 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: SPEC_URL
-              value: https://api.itsmycargo.com/spec/swagger.json
+              value: https://api.itsmycargo.com/specs/swagger.json
           ports:
             - containerPort: 80
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
           startupProbe:
             httpGet:
               path: /
-              port: http
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5
