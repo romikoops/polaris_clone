@@ -115,9 +115,13 @@ jobs:
           name: swagger
           path: doc/api/swagger.json
 
+      - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' --fail-fast .
+        timeout-minutes: 35
+
   docs:
     name: API Docs
     needs: [test-app]
+    if: github.event_name == 'pull_request'
 
     runs-on: ubuntu-20.04
 
