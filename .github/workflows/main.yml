@@ -1,3 +1,4 @@
+---
 name: CI
 
 on:
@@ -98,30 +99,79 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - run: bin/rails db:test:prepare && bin/rails db:migrate
-      - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' --fail-fast .
-        timeout-minutes: 35
+
+      - name: API Specs
+        run: |
+          bundle exec rspec \
+            --pattern 'engines/api/spec/api/api/*_spec.rb' \
+            --fail-fast \
+            --format Rswag::Specs::SwaggerFormatter \
+            --order defined \
+            .
+        timeout-minutes: 15
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: swagger
+          path: doc/api/swagger.json
+
+  docs:
+    name: API Docs
+    needs: [test-app]
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: swagger
+          path: doc/api/
+
+      - id: api_changes
+        uses: itsmycargo/openapi-diff-action@main
+        with:
+          old: https://api.itsmycargo.com/specs/swagger.json
+          new: doc/api/swagger.json
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: steps.api_changes.outputs.state != 'no_changes'
+        with:
+          commit_message: 'build(docs): updated swagger schema'
+          file_pattern: doc/api/swagger.json
+
+      - uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '### API Changes'
+
+      - uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### API Changes
+
+
+            ${{ steps.api_changes.outputs.verdict }}
+
+
+            ${{ steps.api_changes.outputs.changes }}
+          edit-mode: replace
 
   docker:
     name: Docker
     runs-on: ubuntu-20.04
     steps:
-      - id: vars
-        run: |
-          echo "::set-output name=build_tag::$([[ ${GITHUB_REF} = 'refs/heads/master' ]] && echo release || echo dev)-$(echo ${{ github.sha }} | cut -c1-7 )"
+      - id: meta
+        uses: itsmycargo/docker-meta-action@v1.0.0
+        with:
+          image: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
 
       - name: Checkout Code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
-      - name: Docker meta
-        id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
-        with:
-          images: ${{ secrets.ECR_REGISTRY }}/polaris
-          tag-edge: true
-          tag-sha: false
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -152,13 +202,9 @@ jobs:
           push: true
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-          tags: |
-            ${{ secrets.ECR_REGISTRY }}/polaris:${{ github.sha }}
-            ${{ secrets.ECR_REGISTRY }}/polaris:${{ steps.vars.outputs.build_tag }}
-            ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
-          build-args: |
-            RELEASE=${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: RELEASE=${{ steps.meta.outputs.sha }}
 
   sentry:
     if: github.ref == 'refs/heads/master'
@@ -167,9 +213,9 @@ jobs:
     name: Sentry
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - uses: getsentry/action-release@v1
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-        SENTRY_PROJECT: polaris
+      - uses: actions/checkout@v2
+      - uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: polaris
