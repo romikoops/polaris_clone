@@ -8,7 +8,7 @@ module Api
         unit_price]
 
       attribute :cargo_item_type do |cargo_item|
-        cargo_item.colli_type.humanize
+        { id: cargo_item.cargo_item_type_id, description: cargo_item.colli_type.humanize }
       end
 
       attribute :contents do
