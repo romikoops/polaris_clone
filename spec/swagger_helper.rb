@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.configure do |config|
   # Auto-generate example
   config.after(:each, swagger: true) do |example|
-    if response.body.present?
+    if response && response.body.present?
        example.metadata[:response][:content] = {
          "application/json" => { example: JSON.parse(response.body, symbolize_names: true) }
        }

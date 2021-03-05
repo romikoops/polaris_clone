@@ -24,17 +24,41 @@ RSpec.describe "Users", type: :request, swagger: true do
                  data: {
                    type: :object,
                    properties: {
-                     id: {type: :string},
-                     type: {type: :string},
+                     id: {
+                       type: :string
+                     },
+                     type: {
+                       type: :string
+                     },
                      attributes: {
                        type: :object,
                        properties: {
-                         email: {type: :string},
-                         organizationId: {type: :string, nullable: true},
-                         firstName: {type: :string},
-                         lastName: {type: :string},
-                         phone: {type: :string},
-                         companyName: {type: :string}
+                         email: {
+                           type: :string,
+                           description: %(User's primary email address. This is
+                             validated address that can be used for reaching out.)
+                         },
+                         organizationId: {
+                           description: %(If current user is client, this is the
+                             organization user account is linked with.),
+                           type: :string, nullable: true
+                         },
+                         firstName: {
+                           description: "User's first name, usually given name.",
+                           type: :string
+                         },
+                         lastName: {
+                           description: "User's last name, usually family name.",
+                           type: :string
+                         },
+                         phone: {
+                           description: %(User's phone number if given. This generic
+                             information that is not validated or structured.),
+                           type: :string, nullable: true
+                         },
+                         companyName: {
+                           type: :string
+                         }
                        },
                        required: %w[email organizationId firstName lastName phone companyName]
                      }
