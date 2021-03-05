@@ -37,7 +37,7 @@ module Api
     def current_user
       @current_user ||= if doorkeeper_token
         user_id = doorkeeper_token.resource_owner_id
-        ::Users::User.find_by(id: user_id) || ::Users::Client.find_by(id: user_id)
+        ::Users::User.find_by(id: user_id) || ::Users::Client.global.find_by(id: user_id)
       end
     end
 

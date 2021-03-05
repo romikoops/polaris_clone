@@ -567,6 +567,45 @@ RSpec.configure do |config|
               }
             }
           },
+          scope: {
+            type: "object",
+            properties: {
+              id: {
+                description: "ID",
+                type: "string"
+              },
+              links: {
+                type: "object",
+                properties: {
+                  legal: {
+                    type: "string",
+                    description: "Link to any Legal notices the client wants to display",
+                    nullable: true
+                  },
+                  imprint: {
+                    type: "string",
+                    description: "Link to the 'Imprint' page of the client",
+                    nullable: true
+                  },
+                  about: {
+                    type: "string",
+                    description: "Link to the About Us page of the Clients website",
+                    nullable: true
+                  },
+                  privacy: {
+                    type: "string",
+                    description: "Link to the Client's Privacy Policy",
+                    nullable: true
+                  },
+                  terms: {
+                    type: "string",
+                    description: "Link to the Terms and Conditions the Client operates under",
+                    nullable: true
+                  }
+                }
+              }
+            }
+          },
           user: {
             type: "object",
             properties: {

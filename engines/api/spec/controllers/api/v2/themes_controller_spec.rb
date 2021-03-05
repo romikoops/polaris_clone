@@ -13,7 +13,7 @@ module Api
 
     describe "GET #show" do
 
-      it "successfuly returns the Errors for the given ResultSet" do
+      it "successfully returns the Theme for the Current Organization" do
         get :show, params: params, as: :json
         expect(response_data.dig("id")).to eq(theme.id)
         expect(response_data.dig("attributes").keys).to eq(
