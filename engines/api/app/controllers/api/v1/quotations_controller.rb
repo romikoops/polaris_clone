@@ -124,7 +124,8 @@ module Api
       def query_request
         @query_request ||= OfferCalculator::Request.new(
           query: request_query,
-          params: validation_params
+          params: validation_params,
+          persist: false
         )
       end
 
