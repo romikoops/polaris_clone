@@ -44,18 +44,28 @@ module Polaris
 
     # Committee
     if Rails.root.join("doc", "api", "swagger.json").exist?
+      error_handler = -> (ex, env) {
+        application = nil
+        if env["HTTP_AUTHORIZATION"]
+          _, token = env["HTTP_AUTHORIZATION"].split
+          application = token.application.name if (token = Doorkeeper::AccessToken.find_by(token: token))
+        end
+
+        Sentry.capture_exception(ex, extra: { rack_env: env }, tags: {application: application})
+      }
+
       config.middleware.use Committee::Middleware::RequestValidation,
         schema_path: "doc/api/swagger.json",
         coerce_date_times: true,
         ignore_error: true,
         parse_response_by_content_type: false,
-        error_handler: -> (ex, env) { Rails.logger.error("Committee: <-- #{ex}") }
+        error_handler: error_handler
       config.middleware.use Committee::Middleware::ResponseValidation,
         schema_path: "doc/api/swagger.json",
         coerce_date_times: true,
         ignore_error: true,
         parse_response_by_content_type: false,
-        error_handler: -> (ex, env) { Sentry.capture_exception(ex, extra: { rack_env: env }) }
+        error_handler: error_handler
     end
 
     config.skylight.environments << "review"
