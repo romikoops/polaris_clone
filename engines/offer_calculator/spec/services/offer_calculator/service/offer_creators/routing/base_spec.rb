@@ -7,7 +7,6 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Base do
   let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:address) { FactoryBot.create(:legacy_address, organization: organization) }
   let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
-  let(:result) { FactoryBot.build(:journey_result) }
   let(:offer) do
     OfferCalculator::Service::OfferCreators::Offer.new(
       request: request,
@@ -15,7 +14,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Base do
       offer: {cargo: []}
     )
   end
-  let(:service) { described_class.new(request: request, offer: offer, result: result, section: "cargo") }
+  let(:service) { described_class.new(request: request, offer: offer, section: "cargo") }
 
   describe "#route_point" do
     before do

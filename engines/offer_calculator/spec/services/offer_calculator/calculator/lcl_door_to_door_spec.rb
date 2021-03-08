@@ -30,21 +30,20 @@ RSpec.describe OfferCalculator::Calculator do
       },
       organization: organization)
   end
-  let(:cargo_items_attributes) do
-    [
-      {
-        "payload_in_kg" => 120,
-        "total_volume" => 0,
-        "total_weight" => 0,
-        "width" => 120,
-        "length" => 80,
-        "height" => 120,
-        "quantity" => 1,
-        "cargo_item_type_id" => pallet.id,
-        "dangerous_goods" => false,
-        "stackable" => true
-      }
-    ]
+  let(:cargo_items_attributes) { [cargo_item_attributes] }
+  let(:cargo_item_attributes) do
+    {
+      "payload_in_kg" => 120,
+      "total_volume" => 0,
+      "total_weight" => 0,
+      "width" => 120,
+      "length" => 80,
+      "height" => 120,
+      "quantity" => 1,
+      "cargo_item_type_id" => pallet.id,
+      "dangerous_goods" => false,
+      "stackable" => true
+    }
   end
   let(:params) do
     FactoryBot.build(:journey_request_params,
@@ -70,11 +69,9 @@ RSpec.describe OfferCalculator::Calculator do
   }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
   let(:result_set) { service.result_sets.order(:created_at).last }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
 
   include_context "complete_route_with_trucking"
 
@@ -83,9 +80,8 @@ RSpec.describe OfferCalculator::Calculator do
     FactoryBot.create(:companies_membership, member: user)
     organization.scope.update(content: {closed_quotation_tool: true})
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
-    allow(Carta::Api).to receive(:new).and_return(carta_double)
-    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
   end
 
   describe ".perform" do
@@ -102,18 +98,7 @@ RSpec.describe OfferCalculator::Calculator do
     context "with single trucking Availability and multiple cargo units" do
       let(:cargo_items_attributes) do
         [
-          {
-            "payload_in_kg" => 120,
-            "total_volume" => 0,
-            "total_weight" => 0,
-            "width" => 120,
-            "length" => 80,
-            "height" => 120,
-            "quantity" => 1,
-            "cargo_item_type_id" => pallet.id,
-            "dangerous_goods" => false,
-            "stackable" => true
-          }
+          cargo_item_attributes
         ] * 2
       end
 

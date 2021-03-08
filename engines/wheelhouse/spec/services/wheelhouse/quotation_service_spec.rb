@@ -121,7 +121,6 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:query) { service.result }
   let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
   let(:results) { query.result_sets.order(:created_at).last.results }
 
   before do
@@ -134,9 +133,8 @@ RSpec.describe Wheelhouse::QuotationService do
         start_date: 10.days.from_now,
         end_date: 30.days.from_now)
     end
-    allow(Carta::Api).to receive(:new).and_return(carta_double)
-    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
-    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
     FactoryBot.create(:legacy_tenant_cargo_item_type, cargo_item_type: pallet, organization: organization)
     FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)

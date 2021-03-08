@@ -12,17 +12,15 @@ RSpec.describe "Queries", type: :request, swagger: true do
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
 
   before do
     ::Organizations.current_id = organization.id
     organization.scope.update(content: {base_pricing: true})
-    allow(Carta::Api).to receive(:new).and_return(carta_double)
-    allow(carta_double).to receive(:lookup).with(id: origin.id).and_return(origin)
-    allow(carta_double).to receive(:lookup).with(id: destination.id).and_return(destination)
-    allow(carta_double).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
-    allow(carta_double).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
+    allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
+    allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
       destination_hub.nexus
     )
   end

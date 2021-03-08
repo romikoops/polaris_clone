@@ -42,16 +42,14 @@ module Wheelhouse
           organization_id: organization.id
         }
       end
-      let(:carta_double) { double("Carta::Api") }
       let(:query_request_params) { query_service.send(:query_request_params) }
 
       before do
         Organizations.current_id = organization.id
-        allow(Carta::Api).to receive(:new).and_return(carta_double)
-        allow(carta_double).to receive(:lookup).with(id: origin.id).and_return(origin)
-        allow(carta_double).to receive(:lookup).with(id: destination.id).and_return(destination)
-        allow(carta_double).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
-        allow(carta_double).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
+        allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
+        allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
+        allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
+        allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
           destination_hub.nexus
         )
       end

@@ -7,7 +7,16 @@ RSpec.shared_context "full_offer" do
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
   include_context "offer_calculator_shared_context"
   include_context "complete_route_with_trucking"
-  let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
+  let(:request_params) {
+    FactoryBot.build(:journey_request_params,
+      cargo_trait,
+      origin_hub: origin_hub,
+      destination_hub: destination_hub,
+      pickup_address: pickup_address,
+      delivery_address: delivery_address
+    )
+  }
+  let(:request) { FactoryBot.build(:offer_calculator_request, params: request_params, cargo_trait: cargo_trait, organization: organization) }
   let(:load_type) { "container" }
   let(:cargo_trait) { load_type == "container" ? :fcl : :lcl }
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }

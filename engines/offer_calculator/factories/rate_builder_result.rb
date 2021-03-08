@@ -23,7 +23,7 @@ FactoryBot.define do
           charge_category: charge_category,
           measures: result.measures.targets.first,
           raw_fee: fee_data,
-          targets: rate_basis == "PER_SHIPMENT" ? nil : result.measures.targets.first.cargo_units)
+          targets: rate_basis == "PER_SHIPMENT" ? [] : result.measures.targets.first.cargo_units)
       end
     end
   end

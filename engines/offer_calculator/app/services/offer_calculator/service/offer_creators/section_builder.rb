@@ -38,7 +38,7 @@ module OfferCalculator
 
         def line_item_from_charge(charge:)
           code = code_from_charge(charge: charge)
-          Journey::LineItem.create!(
+          Journey::LineItem.new(
             route_section: route_section,
             route_point: from_route_point,
             total: charge.value,
@@ -67,7 +67,7 @@ module OfferCalculator
         end
 
         def cargo_connection(line_item:, cargo:)
-          Journey::LineItemCargoUnit.create!(
+          Journey::LineItemCargoUnit.new(
             line_item: line_item,
             cargo_unit: cargo
           )

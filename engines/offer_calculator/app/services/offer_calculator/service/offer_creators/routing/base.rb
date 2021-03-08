@@ -5,7 +5,7 @@ module OfferCalculator
     module OfferCreators
       module Routing
         class Base
-          attr_reader :request, :result, :offer, :section
+          attr_reader :request, :offer, :section
 
           def self.get(section:)
             case section
@@ -18,9 +18,8 @@ module OfferCalculator
             end
           end
 
-          def initialize(request:, result:, offer:, section:)
+          def initialize(request:, offer:, section:)
             @request = request
-            @result = result
             @offer = offer
             @section = section
           end
@@ -34,10 +33,9 @@ module OfferCalculator
           end
 
           def route_section
-            @route_section ||= Journey::RouteSection.create(
+            @route_section ||= Journey::RouteSection.new(
               from: from_route_point,
               to: to_route_point,
-              result: result,
               mode_of_transport: mode_of_transport,
               service: tenant_vehicle.name,
               carrier: carrier_name,
@@ -85,7 +83,7 @@ module OfferCalculator
           end
 
           def geo_id_from_hub(hub:)
-            Carta::Api.new.suggest(query: hub.nexus.locode).id
+            Carta::Client.suggest(query: hub.nexus.locode).id
           end
 
           def geo_id_from_address(address:)

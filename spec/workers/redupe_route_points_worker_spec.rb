@@ -6,14 +6,12 @@ RSpec.describe RedupeRoutePointsWorker, type: :worker do
   let(:result) { FactoryBot.build(:journey_result, route_sections: [route_section]) }
   let(:route_point) { FactoryBot.create(:journey_route_point, geo_id: "xxxx") }
   let(:route_section)  { FactoryBot.build(:journey_route_section, from: route_point, to: route_point) }
-  let(:carta_double) { double("Carta::Api") }
   let(:carta_result) { FactoryBot.build(:carta_result) }
 
   describe ".perform" do
     context "with geo_ids form Carta" do
       before do
-        allow(Carta::Api).to receive(:new).and_return(carta_double)
-        allow(carta_double).to receive(:lookup).with(id: route_point.geo_id).and_return(carta_result)
+        allow(Carta::Client).to receive(:lookup).with(id: route_point.geo_id).and_return(carta_result)
         described_class.new.perform
         route_point.reload
       end

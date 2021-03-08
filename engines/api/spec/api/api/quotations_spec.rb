@@ -13,13 +13,11 @@ RSpec.describe "Quotations", type: :request, swagger: true do
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
 
   before do
     allow(controller).to receive(:doorkeeper_application).and_return(FactoryBot.create(:application))
-    allow(Carta::Api).to receive(:new).and_return(carta_double)
-    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     ::Organizations.current_id = organization.id
     organization.scope.update(content: {base_pricing: true})
   end

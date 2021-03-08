@@ -10,7 +10,7 @@ module OfferCalculator
     end
 
     def perform
-      OfferCalculator::Service::OfferCreators::ResultBuilder.results(
+      OfferCalculator::Service::OfferCreators::ResultSetBuilder.results_set(
         request: request, offers: sorted_offers
       ).tap do |offer|
         update_status(status: "completed")

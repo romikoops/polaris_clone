@@ -24,7 +24,7 @@ class RedupeRoutePointsWorker
   end
 
   def handle_carta_update(route_point:)
-    carta_result = Carta::Api.new.lookup(id: route_point.geo_id)
+    carta_result = Carta::Client.lookup(id: route_point.geo_id)
     route_point.update!(
       postal_code: carta_result.postal_code || "",
       city: carta_result.locality || "",

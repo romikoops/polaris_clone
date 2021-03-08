@@ -107,15 +107,11 @@ module Wheelhouse
     end
 
     def origin
-      @origin ||= carta.lookup(id: params[:origin_id])
+      @origin ||= Carta::Client.lookup(id: params[:origin_id])
     end
 
     def destination
-      @destination ||= carta.lookup(id: params[:destination_id])
-    end
-
-    def carta
-      @carta ||= Carta::Api.new
+      @destination ||= Carta::Client.lookup(id: params[:destination_id])
     end
 
     def aggregated_cargo_attributes

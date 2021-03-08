@@ -75,9 +75,24 @@ module Api
       end
       let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
       let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-      let(:carta_double) { double("Carta::Api") }
       let(:query) { Journey::Query.find(response_data.dig("id")) }
-
+      let(:default_cargo_items_attributes) do
+        [
+          {
+            "id" => SecureRandom.uuid,
+            "payload_in_kg" => 120,
+            "total_volume" => 0,
+            "total_weight" => 0,
+            "width" => 120,
+            "length" => 80,
+            "height" => 120,
+            "quantity" => 1,
+            "cargo_item_type_id" => pallet.id,
+            "dangerous_goods" => false,
+            "stackable" => true
+          }
+        ]
+      end
       context "with available tenders" do
         before do
           [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
@@ -91,9 +106,8 @@ module Api
           OfferCalculator::Schedule.from_trips(trips)
           FactoryBot.create(:freight_margin, default_for: "ocean", organization_id: organization.id,
                                              applicable: organization, value: 0)
-          allow(Carta::Api).to receive(:new).and_return(carta_double)
-          allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-          allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+          allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+          allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
         end
 
         it "returns tenders ordered by amount by default", :aggregate_failures do
@@ -204,23 +218,7 @@ module Api
 
         context "when cargo items are valid" do
           let(:load_type) { "cargo_item" }
-          let(:cargo_items_attributes) do
-            [
-              {
-                "id" => SecureRandom.uuid,
-                "payload_in_kg" => 120,
-                "total_volume" => 0,
-                "total_weight" => 0,
-                "width" => 120,
-                "length" => 80,
-                "height" => 120,
-                "quantity" => 1,
-                "cargo_item_type_id" => pallet.id,
-                "dangerous_goods" => false,
-                "stackable" => true
-              }
-            ]
-          end
+
 
           it "returns prices with default margins" do
             post :create, params: params, as: :json
@@ -234,23 +232,7 @@ module Api
         context "when async" do
           let(:load_type) { "cargo_item" }
           let(:async) { true }
-          let(:cargo_items_attributes) do
-            [
-              {
-                "id" => SecureRandom.uuid,
-                "payload_in_kg" => 120,
-                "total_volume" => 0,
-                "total_weight" => 0,
-                "width" => 120,
-                "length" => 80,
-                "height" => 120,
-                "quantity" => 1,
-                "cargo_item_type_id" => pallet.id,
-                "dangerous_goods" => false,
-                "stackable" => true
-              }
-            ]
-          end
+          let(:cargo_items_attributes) { default_cargo_items_attributes }
           let(:expected_keys) {
             %w[selectedDate loadType user origin destination containers cargoItems tenders completed]
           }
@@ -266,6 +248,10 @@ module Api
       end
 
       context "when no available schedules" do
+        before { FactoryBot.create(:lcl_pricing, organization: organization) }
+
+        let(:cargo_items_attributes) { default_cargo_items_attributes }
+
         it "returns no available schedules error" do
           post :create, params: params, as: :json
 

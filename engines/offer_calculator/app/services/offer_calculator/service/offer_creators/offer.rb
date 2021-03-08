@@ -4,6 +4,8 @@ module OfferCalculator
   module Service
     module OfferCreators
       class Offer < OfferCalculator::Service::OfferCreators::Base
+        OFFER_KEY_ORDER = %w[trucking_pre export cargo import trucking_on].freeze
+
         attr_reader :request, :result, :schedules
 
         delegate :load_type, to: :request
@@ -39,11 +41,11 @@ module OfferCalculator
         end
 
         def sections
-          result.values
+          OFFER_KEY_ORDER.map { |key| result[key] }.compact
         end
 
         def section_keys
-          result.keys
+          OFFER_KEY_ORDER.select { |key| result[key].present? }
         end
 
         def section(key:)

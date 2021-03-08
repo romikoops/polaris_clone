@@ -92,16 +92,14 @@ RSpec.describe OfferCalculator::Calculator do
   let(:results) { result_set.results }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:carta_double) { double("Carta::Api") }
 
   include_context "complete_route_with_trucking"
 
   before do
     FactoryBot.create(:companies_membership, member: user)
     Organizations.current_id = organization.id
-    allow(Carta::Api).to receive(:new).and_return(carta_double)
-    allow(carta_double).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-    allow(carta_double).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
   end
 
