@@ -28,6 +28,17 @@ module Legacy
     validates :width, :length, :height,
       numericality: {greater_than: 0}, if: :dimensions_required?
     validates :cargo_class, presence: true
+    # TODO: Fix specs for passing with validation
+    # validates :mode_of_transport,
+    #   inclusion: {
+    #     in: -> (max_dimensions_bundle) {
+    #       [max_dimensions_bundle.tenant_vehicle.mode_of_transport]
+    #     },
+    #     message: -> (max_dimensions_bundle, _) {
+    #       "must be #{max_dimensions_bundle.tenant_vehicle.mode_of_transport}"
+    #     }
+    #   },
+    #   if: -> (max_dimensions_bundle) { max_dimensions_bundle.tenant_vehicle.present? }
 
     has_paper_trail
 
