@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -Eeo pipefail
-
+set -x
 docker_run() {
-  docker run \
-    --pull always \
-    --rm -t \
-    -v "$(pwd)/doc/api:/specs" \
-    openapitools/openapi-diff:latest \
-    "$@"
+  docker run --rm -t -v "$(pwd):/specs:ro" -w /specs openapitools/openapi-diff:latest "$@"
 }
 
-docker_run "$@" https://api.itsmycargo.com/specs/swagger.json /specs/swagger.json
+if [ -z "$*" ];
+then
+  docker_run https://api.itsmycargo.com/specs/swagger.json /specs/doc/api/swagger.json
+else
+  docker_run "$@"
+fi

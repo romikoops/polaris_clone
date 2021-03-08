@@ -35,10 +35,14 @@ RSpec.configure do |config|
           url: "https://support.itsmycargo.com",
           email: "support@itsmycargo.com"
         },
-        version: "2021-02"
+        version: Date.today.to_s
       },
       tags: [
         { name: "Ahoy", description: "Ahoy" },
+        {
+          name: "Authentication",
+          description: %(Endpoints related to the current user and authentication.)
+        },
         { name: "CargoUnits", description: "CargoUnits" },
         { name: "Clients", description: "Clients" },
         { name: "Dashboard", description: "Dashboard" },

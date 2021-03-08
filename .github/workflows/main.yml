@@ -125,6 +125,11 @@ jobs:
 
       - run: bin/rails db:test:prepare && bin/rails db:migrate
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: swagger-base
+          path: doc/api/swagger.json
+
       - name: API Specs
         run: |
           bundle exec rspec \
@@ -137,7 +142,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: swagger
+          name: swagger-revision
           path: doc/api/swagger.json
 
       - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' --fail-fast .
@@ -154,27 +159,39 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
         with:
-          name: swagger
-          path: doc/api/
+          name: swagger-base
+          path: base/
+      - uses: actions/download-artifact@v2
+        with:
+          name: swagger-revision
+          path: revision/
 
       - id: api_changes
         uses: itsmycargo/openapi-diff-action@main
         with:
           base: https://api.itsmycargo.com/specs/swagger.json
-          revision: doc/api/swagger.json
+          revision: revision/swagger.json
+
+      - id: committed
+        uses: itsmycargo/openapi-diff-action@main
+        with:
+          base: base/swagger.json
+          revision: revision/swagger.json
 
       - uses: peter-evans/find-comment@v1
-        id: fc
+        id: comment-changes
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: '### API Changes'
+          body-includes: '<!-- api_docs:changes -->'
 
       - uses: peter-evans/create-or-update-comment@v1
+        if: steps.api_changes.outputs.state != 'no_changes'
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
+          comment-id: ${{ steps.comment-changes.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
+            <!-- api_docs:changes -->
             ### API Changes
 
 
@@ -183,6 +200,48 @@ jobs:
 
             ${{ steps.api_changes.outputs.changes }}
           edit-mode: replace
+
+      - uses: peter-evans/find-comment@v1
+        id: comment-committed
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- api_docs:committed -->'
+
+      - uses: peter-evans/create-or-update-comment@v1
+        if: steps.committed.outputs.state != 'no_changes'
+        with:
+          comment-id: ${{ steps.comment-committed.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            <!-- api_docs:committed -->
+            :bangbang: OpenAPI Specification file has been changed during test!
+
+            It seems that updated OpenAPI Specification file has not been committed to
+            this branch (`doc/api/swagger.json`). If you did changes to API Specs,
+            please remember to run
+
+                rails doc:api
+
+            locally to run API specs and update documentation.
+          edit-mode: replace
+      - uses: peter-evans/create-or-update-comment@v1
+        if: steps.committed.outputs.state == 'no_changes' && steps.comment-committed.outputs.comment-id
+        with:
+          comment-id: ${{ steps.comment-committed.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            <!-- api_docs:committed -->
+            :white_check_mark: OpenAPI Specification file has been committed.
+
+            Thank you for running `rails docs:api` before committing.
+
+          edit-mode: replace
+      - if: steps.committed.outputs.state != 'no_changes'
+        run: |
+          echo "::error file=doc/api/swagger.json::Updated OpenAPI Specification has not been committed."
+
+          exit 1
 
   docker:
     name: Docker
