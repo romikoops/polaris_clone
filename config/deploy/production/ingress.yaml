@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: external
   rules:
-    - host: polaris-production.itsmycargo.io
+    - host: polaris-production.itsmycargo.tech
       http:
         paths:
           - path: /
