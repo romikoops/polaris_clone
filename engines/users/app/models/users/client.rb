@@ -11,6 +11,7 @@ module Users
 
     has_one :profile, class_name: "Users::ClientProfile", inverse_of: :user,
                       foreign_key: :user_id, required: true
+
     accepts_nested_attributes_for :profile
 
     has_one :settings, class_name: "Users::ClientSettings", inverse_of: :user,

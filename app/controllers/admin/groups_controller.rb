@@ -46,9 +46,12 @@ class Admin::GroupsController < Admin::AdminBaseController
   def destroy
     group = current_group
     if group
-      group.memberships.destroy_all
-      Pricings::Margin.where(applicable: group).destroy_all
-      group.destroy
+      ActiveRecord::Base.transaction do
+        group.memberships.destroy_all
+        Groups::Membership.where(member: group).destroy_all
+        Pricings::Margin.where(applicable: group).destroy_all
+        group.destroy
+      end
     end
     response_handler(success: true)
   end

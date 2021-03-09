@@ -227,6 +227,17 @@ RSpec.describe Admin::CompaniesController, type: :controller do
         expect(Companies::Membership.exists?(company: company)).to be_falsy
       end
     end
+
+    context "when company is a member of a group" do
+      let(:main_group) { FactoryBot.create(:groups_group) }
+      let!(:membership) { FactoryBot.create(:groups_membership, group: main_group, member: company) }
+
+      it "destroys memberships" do
+        delete :destroy, params: params
+
+        expect(Groups::Membership.exists?(membership.id)).to eq false
+      end
+    end
   end
 
   describe "POST #edit_employees" do

@@ -173,7 +173,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    let(:edit_params) do
+    let(:params) do
       {
         "organization_id" => organization.id,
         "id" => group.id
@@ -181,10 +181,21 @@ RSpec.describe Admin::GroupsController, type: :controller do
     end
 
     it "returns http success" do
-      delete :destroy, params: edit_params
+      delete :destroy, params: params
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        expect(Groups::Group.find_by(id: edit_params["id"])).to be_falsy
+        expect(Groups::Group.find_by(id: params["id"])).to be_falsy
+      end
+    end
+
+    context "when group is a member of another" do
+      let(:main_group) { FactoryBot.create(:groups_group) }
+      let!(:membership) { FactoryBot.create(:groups_membership, group: main_group, member: group) }
+
+      it "destroys memberships" do
+        delete :destroy, params: params
+
+        expect(Groups::Membership.exists?(membership.id)).to eq false
       end
     end
   end
