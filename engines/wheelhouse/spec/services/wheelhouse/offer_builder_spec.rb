@@ -9,7 +9,7 @@ RSpec.describe Wheelhouse::OfferBuilder do
   let(:result) { FactoryBot.create(:journey_result) }
   let(:scope) { {} }
   let(:offer_service) { described_class.new(results: [result]) }
-  let(:offer) { offer_service.perform }
+  let(:offer) { offer_service.offer }
 
   before do
     allow(Pdf::Quotation::Client).to receive(:new).and_return(double(file: true))
