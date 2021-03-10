@@ -117,7 +117,7 @@ module OfferCalculator
         end
 
         def cargo_units
-          measured_request.targets
+          measured_request.validation_targets
         end
 
         def largest_ratio_rate

@@ -29,14 +29,14 @@ RSpec.describe OfferCalculator::Service::Measurements::Request do
   let(:cargo_units) { request.cargo_units }
 
   describe ".targets" do
-    let(:children) { measure.targets }
+    let(:targets) { measure.targets }
 
     context "with no consolidation" do
-      it "returns the children for the object cargo class" do
+      it "returns the targets for the object cargo class" do
         aggregate_failures do
-          expect(children.length).to eq(1)
-          expect(children.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Unit)
-          expect(children.first.cargo_units).to eq([cargo_units.first])
+          expect(targets.length).to eq(1)
+          expect(targets.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Unit)
+          expect(targets.first.cargo_units).to eq([cargo_units.first])
         end
       end
     end
@@ -44,11 +44,11 @@ RSpec.describe OfferCalculator::Service::Measurements::Request do
     context "with consolidation" do
       let(:scope) { {consolidation: {cargo: {backend: true}}} }
 
-      it "returns the children for the object cargo class" do
+      it "returns the targets for the object cargo class" do
         aggregate_failures do
-          expect(children.length).to eq(1)
-          expect(children.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Consolidated)
-          expect(children.first.cargo_units).to eq(cargo_units)
+          expect(targets.length).to eq(1)
+          expect(targets.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Consolidated)
+          expect(targets.first.cargo_units).to eq(cargo_units)
         end
       end
     end
@@ -58,11 +58,26 @@ RSpec.describe OfferCalculator::Service::Measurements::Request do
       let(:pricing) { FactoryBot.create(:fcl_20_pricing, organization: organization, wm_rate: 2000) }
       let(:scope) { {consolidation: {cargo: {backend: true}}} }
 
-      it "returns the children for the object cargo class" do
+      it "returns the targets for the object cargo class" do
         aggregate_failures do
-          expect(children.length).to eq(1)
-          expect(children.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Unit)
-          expect(children.first.cargo_units).to eq([cargo_units.first])
+          expect(targets.length).to eq(1)
+          expect(targets.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Unit)
+          expect(targets.first.cargo_units).to eq([cargo_units.first])
+        end
+      end
+    end
+  end
+
+  describe ".validation_targets" do
+    let(:targets) { measure.validation_targets }
+
+    context "with consolidation" do
+      let(:scope) { {consolidation: {cargo: {backend: true}}} }
+
+      it "returns the targets for the each cargo unit" do
+        aggregate_failures do
+          expect(targets.first.engine).to be_a(OfferCalculator::Service::Measurements::Engines::Unit)
+          expect(targets.flat_map(&:cargo_units)).to match_array(cargo_units)
         end
       end
     end

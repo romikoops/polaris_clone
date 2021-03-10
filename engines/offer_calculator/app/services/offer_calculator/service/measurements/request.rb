@@ -42,16 +42,28 @@ module OfferCalculator
           }
         end
 
+        def validation_targets
+          units_for_cargo_class.map { |cargo_unit|
+            OfferCalculator::Service::Measurements::Cargo.new(
+              engine: cargo_engine_for_unit(cargo_unit: cargo_unit),
+              object: object,
+              scope: scope
+            )
+          }
+        end
+
         def engines_for_targets
           if scope.dig("consolidation", "cargo", "backend").present? && lcl?
             [cargo_engine_for_consolidation]
           else
-            cargo_units
-              .select { |unit| unit.cargo_class.include?(cargo_class) }
-              .map do |cargo_unit|
+            units_for_cargo_class.map do |cargo_unit|
               cargo_engine_for_unit(cargo_unit: cargo_unit)
             end
           end
+        end
+
+        def units_for_cargo_class
+          cargo_units.select { |unit| unit.cargo_class.include?(cargo_class) }
         end
 
         def lcl?
