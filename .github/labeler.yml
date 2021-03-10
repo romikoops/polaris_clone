@@ -1,6 +1,6 @@
 migrations:
   - '**/db/migrate/*'
-  - 'db/schema.rb'
+  - 'db/structure.sql'
 
 translations:
   - '**/config/locales/*'
