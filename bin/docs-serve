@@ -1,13 +1,54 @@
-#!/usr/bin/env bash
-set -Eeo pipefail
+#!/usr/bin/env ruby
 
-docker_run() {
-  docker run \
-    --rm --pull always \
-    -p 8080:80 \
-    -e SPEC_URL=http://localhost:3000/specs/swagger.json \
-    redocly/redoc "$@"
-}
+require "rack"
 
-echo "Open your browser at http://localhost:8080/"
-docker_run "$@"
+class Server
+  class << self
+    def run!
+      handler = Rack::Handler.get("webrick")
+
+      Signal.trap("TERM") { handler.shutdown }
+      Signal.trap("INT") { handler.shutdown }
+
+      handler.run(self.new, Port: "8989", Host: "0.0.0.0")
+    end
+  end
+
+  def initialize
+    @content = DATA.read
+  end
+
+  def call(env)
+    case Rack::Request.new(env).path
+    when "/"
+      [200, {}, [@content]]
+    when "/swagger.json"
+      [200, {}, [File.read(File.expand_path("../doc/api/swagger.json", __dir__))]]
+    else
+      [404, {}, [""]]
+    end
+  end
+end
+
+Server.run!
+
+__END__
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ReDoc</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>body {margin: 0;padding: 0;}</style>
+  </head>
+  <body>
+    <redoc
+      spec-url='http://localhost:8989/swagger.json'
+      expand-single-schema-field="true"
+      json-sample-expand-level="3"
+      path-in-middle-panel="true"
+      required-props-first="true"
+    ></redoc>
+    <script src="https://cdn.jsdelivr.net/npm/redoc@2.0.0-rc.48/bundles/redoc.standalone.js"> </script>
+  </body>
+</html>

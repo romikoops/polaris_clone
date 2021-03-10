@@ -455,24 +455,26 @@ RSpec.configure do |config|
                 type: "string"
               },
               attributes: {
-                description: "Attributes",
+                description: "Attributes of the organisation.",
                 type: "object",
                 properties: {
+                  name: {
+                    type: "string",
+                    description: "Name of the organisation. Usually their legal business name.",
+                  },
                   slug: {
-                    description: "Slug",
-                    type: "string"
+                    type: "string",
+                    description: <<~DOC
+                      Short slug of the organisation that is unique for a single
+                      organisation. This is usually used as poart of the URL and must
+                      always match generic domain requirements.
+                    DOC
                   }
                 },
-                required: [
-                  "slug"
-                ]
+                required: %w[name slug]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
-            ]
+            required: %w[id type attributes]
           },
           pagination: {
             type: "object",

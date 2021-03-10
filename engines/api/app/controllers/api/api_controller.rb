@@ -47,8 +47,9 @@ module Api
       @organization_id ||= begin
         org_id = params[:organization_id] if params[:organization_id]
 
-        org_id ||= begin
-          Organizations::Domain.where(domain: organization_domain).pluck(:organization_id).first
+        org_id ||= Organizations::Domain.where(domain: organization_domain).pluck(:organization_id).first
+        org_id ||= if Organizations::Organization.exists?(slug: organization_slug)
+          Organizations::Organization.find_by(slug: organization_slug).id
         end
 
         org_id
@@ -101,6 +102,13 @@ module Api
         domains.push(parse_saco_idp)
         domains.compact.flatten.find { |domain| Organizations::Domain.exists?(domain: domain) }
       end
+    end
+
+    def organization_slug
+      ActionDispatch::Http::URL.extract_subdomain(
+        URI(request.referrer.to_s).host.to_s,
+        1
+      )
     end
 
     def parse_saco_idp

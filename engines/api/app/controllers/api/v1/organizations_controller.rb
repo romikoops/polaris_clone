@@ -4,6 +4,11 @@ module Api
   module V1
     class OrganizationsController < ApiController
       skip_before_action :ensure_organization!, only: %i[index scope countries]
+      skip_before_action :doorkeeper_authorize!, only: %i[show]
+
+      def show
+        render json: OrganizationSerializer.new(current_organization)
+      end
 
       def index
         organizations = Organizations::Organization.where(id: current_user.memberships.select(:organization_id))

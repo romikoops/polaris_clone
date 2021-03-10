@@ -7,6 +7,7 @@ Api::Engine.routes.draw do
     resource :me, controller: :users, only: :show
     resource :uploads, only: :create
 
+    resource :organization, only: :show
     resources :organizations, only: :index do
       member do
         get "scope"
