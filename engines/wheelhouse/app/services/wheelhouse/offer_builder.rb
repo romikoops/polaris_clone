@@ -2,7 +2,7 @@
 
 module Wheelhouse
   class OfferBuilder
-    attr_reader :results
+    attr_reader :results, :returnable_offer
 
     def self.offer(results:)
       new(results: results).offer
@@ -13,10 +13,10 @@ module Wheelhouse
     end
 
     def offer
-      returnable_offer.tap do |old_or_new_offer|
-        generate_pdf(offer: old_or_new_offer) if generate_pdf? 
-        publish_event(created_offer: old_or_new_offer) if publish_event?
-      end
+      @returnable_offer = old_offer || new_offer
+      generate_pdf if generate_pdf?
+      publish_event if offer_created?
+      returnable_offer
     end
 
     private
@@ -48,15 +48,9 @@ module Wheelhouse
     end
 
     def new_offer
-      Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets)
-    end
-
-    def returnable_offer
-      @returnable_offer ||= (old_offer || new_offer)
-    end
-
-    def publish_event?
-      old_offer.nil?
+      @new_offer ||= Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets).tap do
+        @offer_created = true
+      end
     end
 
     def line_item_sets
@@ -67,14 +61,18 @@ module Wheelhouse
       !returnable_offer.file.attached?
     end
 
-    def generate_pdf(offer:)
-      Pdf::Quotation::Client.new(offer: offer).file
+    def offer_created?
+      @offer_created.present?
     end
 
-    def publish_event(created_offer:)
+    def generate_pdf
+      Pdf::Quotation::Client.new(offer: returnable_offer).file
+    end
+
+    def publish_event
       Rails.configuration.event_store.publish(
         Journey::OfferCreated.new(data: {
-          offer: created_offer.to_global_id, organization_id: Organizations.current_id
+          offer: new_offer.to_global_id, organization_id: Organizations.current_id
         }),
         stream_name: "Organization$#{Organizations.current_id}"
       )

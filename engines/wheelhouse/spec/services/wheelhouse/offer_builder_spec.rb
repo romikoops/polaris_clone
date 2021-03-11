@@ -10,14 +10,20 @@ RSpec.describe Wheelhouse::OfferBuilder do
   let(:scope) { {} }
   let(:offer_service) { described_class.new(results: [result]) }
   let(:offer) { offer_service.offer }
+  let(:mailer_job) { double(deliver_later: true) }
+  let(:pdf_spy) { spy("Pdf::Quotation::Client", file: true) }
+  let(:event_spy) { spy("EventStore", publish: true) }
 
   before do
-    allow(Pdf::Quotation::Client).to receive(:new).and_return(double(file: true))
+    allow(Pdf::Quotation::Client).to receive(:new).and_return(pdf_spy)
+    allow(offer_service).to receive(:publish_event).and_return(event_spy)
   end
 
   context "when it returns a complete offer" do
-    it "returns a complete offer with rate data" do
+    it "returns a complete offer with rate data", :aggregate_failures do
       expect(offer).to be_a(Journey::Offer)
+      expect(pdf_spy).to have_received(:file)
+      expect(offer_service).to have_received(:publish_event)
     end
   end
 
@@ -30,8 +36,9 @@ RSpec.describe Wheelhouse::OfferBuilder do
       end
     end
 
-    it "returns the existing offer" do
+    it "returns the existing offer", :aggregate_failures do
       expect(offer).to eq(existing_offer)
+      expect(offer_service).not_to have_received(:publish_event)
     end
   end
 end
