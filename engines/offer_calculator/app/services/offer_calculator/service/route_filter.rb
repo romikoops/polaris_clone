@@ -5,7 +5,14 @@ module OfferCalculator
     class RouteFilter < Base
       DEFAULT_MOT = "general"
 
-      def perform(routes)
+      attr_reader :request, :date_range
+
+      def initialize(request:, date_range:)
+        @date_range = date_range
+        super(request: request)
+      end
+
+      def perform(routes:)
         return routes unless should_apply_filter?(routes)
 
         filtered_routes = routes.select { |route|
@@ -26,7 +33,7 @@ module OfferCalculator
       def valid_for_route?(route:)
         pricings = route_pricings(route: route)
         errors = route_errors(pricings: pricings)
-        persist_errors(errors: errors, pricings: pricings)
+        persist_errors(errors: errors, route: route)
         errors.empty?
       end
 
@@ -45,11 +52,11 @@ module OfferCalculator
           itinerary_id: route.itinerary_id,
           tenant_vehicle_id: route.tenant_vehicle_id,
           cargo_class: request.cargo_classes
-        ).current
+        ).for_dates(date_range.first, date_range.last)
       end
 
-      def persist_errors(errors:, pricings:)
-        service = pricings.first.tenant_vehicle
+      def persist_errors(errors:, route:)
+        service = Legacy::TenantVehicle.find(route.tenant_vehicle_id)
         errors.each do |error|
           Journey::Error.create(
             result_set: request.result_set,

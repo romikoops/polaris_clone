@@ -66,8 +66,8 @@ module OfferCalculator
 
     def routes
       @routes ||= OfferCalculator::Service::RouteFilter.new(
-        request: request
-      ).perform(unfiltered_routes)
+        request: request, date_range: date_range
+      ).perform(routes: unfiltered_routes)
     end
 
     def valid_rates
