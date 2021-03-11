@@ -88,7 +88,6 @@ RSpec.describe "Queries", type: :request, swagger: true do
             items: [
               {
                 stackable: true,
-                valid: true,
                 dangerous: false,
                 cargoItemTypeId: pallet.id,
                 quantity: 1,

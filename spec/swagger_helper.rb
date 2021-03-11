@@ -277,10 +277,6 @@ RSpec.configure do |config|
                 description: "If cargo item is stackable or not",
                 type: "boolean"
               },
-              valid: {
-                description: "If cargo iem is valid",
-                type: "boolean"
-              },
               dangerous: {
                 description: "oes cargo item contain any dangerous goods",
                 type: "boolean"
@@ -321,7 +317,7 @@ RSpec.configure do |config|
                   required: ["id", "code"]
                 }
               }
-            }, required: ["valid"]
+            }
           },
           journeyError: {
             type: "object",
