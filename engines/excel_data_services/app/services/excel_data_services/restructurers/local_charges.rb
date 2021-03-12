@@ -212,7 +212,7 @@ module ExcelDataServices
             counterpart_hub_name = params[:counterpart_hub]
           end
           params[:hub_name] = hub_name
-          params[:counterpart_hub_name] = counterpart_hub_name
+          params[:counterpart_hub] = counterpart_hub_name
         end
       end
     end

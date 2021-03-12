@@ -11,8 +11,8 @@ module ExcelDataServices
         @counterpart_hub ||= data[:counterpart_hub]
       end
 
-      def counterpart_hub_locode
-        @counterpart_hub_locode ||= data[:counterpart_locode]
+      def counterpart_locode
+        @counterpart_locode ||= data[:counterpart_locode]
       end
 
       def fees

@@ -9,7 +9,11 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     [
       FactoryBot.create(:legacy_hub,
         organization: organization, name: "Bremerhaven", hub_type: "ocean", address: german_address),
-      FactoryBot.create(:legacy_hub, organization: organization, name: "Antwerp", hub_type: "ocean",
+      FactoryBot.create(:legacy_hub, organization: organization,
+                                     name: "Antwerp", hub_type: "ocean",
+                                     nexus: FactoryBot.create(:legacy_nexus, organization: organization,
+                                                                             name: "Antwerp",
+                                                                             locode: "BEANR"),
                                      address: FactoryBot.create(:legacy_address,
                                        country: FactoryBot.create(:legacy_country, code: "BE", name: "Belgium"))),
       FactoryBot.create(:legacy_hub,
@@ -52,63 +56,85 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
     end
     let(:input_data) { FactoryBot.build(:excel_data_restructured_correct_local_charges) }
     let(:expected_stats) do
-      {'legacy/local_charges': {number_created: 4, number_updated: 0, number_deleted: 1}, errors: []}
+      {'legacy/local_charges': {number_created: 8, number_updated: 0, number_deleted: 5}, errors: []}
     end
     let(:expected_partial_db_data) do
       [
-        [DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
-          DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
-          "ocean",
-          "lcl",
-          "export",
-          {"DOC" => {
+        {
+          effective_date: DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
+          expiration_date: DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
+          mode_of_transport: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          fees: { "DOC" => {
             "key" => "DOC", "max" => nil, "min" => nil,
             "name" => "Documentation", "value" => 20, "currency" => "EUR",
             "rate_basis" => "PER_BILL"
-          }}],
-        [DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
-          DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
-          "ocean",
-          "lcl",
-          "export",
-          {"DOC" => {
+          } },
+          counterpart_hub_name: nil
+        },
+        {
+          effective_date: DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
+          expiration_date: DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
+          mode_of_transport: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          fees: { "DOC" => {
             "key" => "DOC", "max" => nil, "min" => nil,
-            "name" => "Documentation", "range" => [{"max" => 100, "min" => 0,
-                                                    "value" => 20, "currency" => "EUR"}], "currency" => "EUR",
+            "name" => "Documentation", "range" => [{ "max" => 100, "min" => 0,
+                                                     "value" => 20, "currency" => "EUR" }], "currency" => "EUR",
             "rate_basis" => "PER_BILL"
-          }}],
-        [DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
-          DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
-          "ocean",
-          "lcl",
-          "export",
-          {"DOC" => {
-            "key" => "DOC", "max" => nil, "min" => nil,
-            "name" => "Documentation", "value" => 20, "currency" => "EUR",
-            "rate_basis" => "PER_BILL"
-          }}],
-        [DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
-          DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
-          "ocean",
-          "lcl",
-          "export",
-          {"DOC" => {
+          } },
+          counterpart_hub_name: nil
+        },
+        {
+          effective_date: DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
+          expiration_date: DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
+          mode_of_transport: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          fees: { "DOC" => {
             "key" => "DOC", "max" => nil, "min" => nil,
             "name" => "Documentation", "value" => 20, "currency" => "EUR",
             "rate_basis" => "PER_BILL"
-          }}]
+          } },
+          counterpart_hub_name: "Antwerp"
+        },
+        {
+          effective_date: DateTime.parse("Thu, 24 Jan 2019 00:00:00"),
+          expiration_date: DateTime.parse("Fri, 24 Jan 2020 23:59:59"),
+          mode_of_transport: "ocean",
+          load_type: "lcl",
+          direction: "export",
+          fees: { "DOC" => {
+            "key" => "DOC", "max" => nil, "min" => nil,
+            "name" => "Documentation", "value" => 20, "currency" => "EUR",
+            "rate_basis" => "PER_BILL"
+          } },
+          counterpart_hub_name: "Antwerp"
+        }
       ]
+    end
+    let(:result_partial_db_data) do
+      ::Legacy::LocalCharge.includes(:counterpart_hub).map do |local_charge|
+        local_charge.slice(
+          :effective_date,
+          :expiration_date,
+          :mode_of_transport,
+          :load_type,
+          :direction,
+          :fees
+        ).merge(counterpart_hub_name: local_charge.counterpart_hub&.name)
+      end
     end
 
     it "inserts correctly and returns correct stats" do
       stats = described_class.insert(options)
 
-      expect(
-        ::Legacy::LocalCharge.all.map { |lc|
-          lc.slice(:effective_date, :expiration_date, :mode_of_transport, :load_type, :direction, :fees).values
-        }
-      ).to match_array(expected_partial_db_data)
-      expect(stats).to eq(expected_stats)
+      aggregate_failures do
+        expect(result_partial_db_data).to match_array(expected_partial_db_data)
+        expect(stats).to eq(expected_stats)
+      end
     end
   end
 end

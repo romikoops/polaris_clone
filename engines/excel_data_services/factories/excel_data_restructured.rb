@@ -1095,8 +1095,7 @@ FactoryBot.define do
              name: "Documentation",
              rate_basis: "PER_BILL",
              value: 20}},
-          hub_name: "Bremerhaven",
-          counterpart_hub_name: nil},
+          hub_name: "Bremerhaven"},
           {hub: "Antwerp",
            country: "Belgium",
            effective_date: Date.parse("Thu, 24 Jan 2019"),
@@ -1120,8 +1119,7 @@ FactoryBot.define do
              rate_basis: "PER_BILL",
              range: [{currency: "EUR", max: 100, min: 0,
                       value: 20}]}},
-           hub_name: "Antwerp",
-           counterpart_hub_name: nil},
+           hub_name: "Antwerp"},
           {hub: "Le Havre",
            country: "France",
            effective_date: Date.parse("Thu, 24 Jan 2019"),
@@ -1144,8 +1142,53 @@ FactoryBot.define do
               name: "Documentation",
               rate_basis: "PER_BILL",
               value: 20}},
-           hub_name: "Le Havre",
-           counterpart_hub_name: "Antwerp"}]
+           hub_name: "Le Havre"},
+          {hub: "Le Havre",
+           country: "France",
+           effective_date: Date.parse("Thu, 24 Jan 2019"),
+           expiration_date: Date.parse("Fri, 24 Jan 2020"),
+           counterpart_locode: "BEANR",
+           counterpart_hub: nil,
+           counterpart_country: nil,
+           service_level: "standard",
+           carrier: "all",
+           mot: "ocean",
+           row_nr: "4",
+           load_type: "lcl",
+           direction: "export",
+           dangerous: nil,
+           fees: {"DOC" =>
+             {currency: "EUR",
+              key: "DOC",
+              min: nil,
+              max: nil,
+              name: "Documentation",
+              rate_basis: "PER_BILL",
+              value: 20}},
+           hub_name: "Le Havre"},
+          {hub: "Le Havre",
+           country: "France",
+           effective_date: Date.parse("Thu, 24 Jan 2019"),
+           expiration_date: Date.parse("Fri, 24 Jan 2020"),
+           counterpart_locode: nil,
+           counterpart_hub: "Antwerp",
+           counterpart_country: "Belgium",
+           service_level: "standard",
+           carrier: "all",
+           mot: "ocean",
+           row_nr: "4",
+           load_type: "lcl",
+           direction: "export",
+           dangerous: nil,
+           fees: {"DOC" =>
+             {currency: "EUR",
+              key: "DOC",
+              min: nil,
+              max: nil,
+              name: "Documentation",
+              rate_basis: "PER_BILL",
+              value: 20}},
+           hub_name: "Le Havre"}]
       end
     end
 
@@ -1176,8 +1219,7 @@ FactoryBot.define do
             }
           },
           row_nr: "2",
-          hub_name: "Bremerhaven",
-          counterpart_hub_name: nil},
+          hub_name: "Bremerhaven"},
           {hub: "Bremerhaven",
            country: "Germany",
            effective_date: Date.parse("Thu, 24 Jan 2019"),
@@ -1212,8 +1254,7 @@ FactoryBot.define do
              }
            },
            row_nr: "3, 2",
-           hub_name: "Bremerhaven",
-           counterpart_hub_name: "Gothenburg"},
+           hub_name: "Bremerhaven"},
           {hub: "Le Havre",
            country: "France",
            effective_date: Date.parse("Thu, 24 Jan 2019"),
@@ -1239,8 +1280,7 @@ FactoryBot.define do
              }
            },
            row_nr: "4",
-           hub_name: "Le Havre",
-           counterpart_hub_name: "Antwerp"}]
+           hub_name: "Le Havre"}]
       end
     end
 

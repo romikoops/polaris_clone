@@ -42,13 +42,14 @@ module ExcelDataServices
           )
 
           params[:hub_id] = origin_hub_with_info[:hub].id
-          next params[:counterpart_hub_id] = nil unless row.counterpart_hub
+
+          next params[:counterpart_hub_id] = nil unless row.counterpart_hub || row.counterpart_locode
 
           counterpart_hub_with_info = find_hub_by_name_or_locode_with_info(
             name: row.counterpart_hub,
             country: row.counterpart_country,
             mot: row.mot,
-            locode: row.counterpart_hub_locode
+            locode: row.counterpart_locode
           )
           params[:counterpart_hub_id] = counterpart_hub_with_info[:hub].id
         end

@@ -23,12 +23,12 @@ module ExcelDataServices
 
           return unless origin_hub
 
-          if row.counterpart_hub || row.counterpart_hub_locode
+          if row.counterpart_hub || row.counterpart_locode
             counterpart_hub_with_info = find_hub_by_name_or_locode_with_info(
               name: row.counterpart_hub,
               country: row.counterpart_country,
               mot: row.mot,
-              locode: row.counterpart_hub_locode
+              locode: row.counterpart_locode
             )
             check_hub_existence(counterpart_hub_with_info, row)
           end

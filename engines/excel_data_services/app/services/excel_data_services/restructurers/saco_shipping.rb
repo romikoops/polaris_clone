@@ -38,7 +38,7 @@ module ExcelDataServices
         hub_locode
         counterpart_country
         counterpart_hub
-        counterpart_hub_locode
+        counterpart_locode
       ].freeze
       LOAD_TYPE_LOOKUP = {
         nil => %w[fcl_20 fcl_40 fcl_40_hq],
@@ -389,7 +389,7 @@ module ExcelDataServices
           row_data[:hub_locode] = row_data.delete(:origin_locode)
           row_data[:country] = row_data.delete(:country_origin)
           row_data[:counterpart_hub] = row_data.delete(:destination)
-          row_data[:counterpart_hub_locode] = row_data.delete(:destination_locode)
+          row_data[:counterpart_locode] = row_data.delete(:destination_locode)
           row_data[:counterpart_country] = row_data.delete(:country_destination)
         end
       end
