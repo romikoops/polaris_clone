@@ -99,9 +99,11 @@ RSpec.describe ShipmentsController do
 
   describe "Patch #update_user" do
     context "with shipment" do
+      let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+      let(:query) { FactoryBot.create(:journey_query, client_id: nil) }
+
       before do
-        patch :update_user, params: {organization_id: organization.id, id: result.id}
-        result.reload
+        patch :update_user, params: {organization_id: organization.id, id: query.id}
       end
 
       it "returns http success" do
@@ -109,14 +111,14 @@ RSpec.describe ShipmentsController do
       end
 
       it "updates the shipment user" do
-        expect(query.client_id).to eq(user.id)
+        expect(query.reload.client_id).to eq(user.id)
       end
     end
 
     context "when shipment is deleted" do
       before do
-        result.destroy
-        patch :update_user, params: {organization_id: organization.id, id: result.id}
+        query.destroy
+        patch :update_user, params: {organization_id: organization.id, id: query.id}
       end
 
       it "returns http not found" do
