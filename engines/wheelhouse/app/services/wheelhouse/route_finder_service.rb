@@ -37,9 +37,6 @@ module Wheelhouse
       end
     end
 
-    def itineraries
-      Legacy::Itinerary.where(organization_id: organization.id)
-    end
 
     def hubs_from_nexus(target:)
       Legacy::Hub.where(organization_id: organization.id, nexus_id: target[:nexus_id])

@@ -84,14 +84,6 @@ module Wheelhouse
       )
     end
 
-    def modes_of_transport
-      @modes_of_transport ||= routes.where(id: pricings.select(:itinerary_id))
-        .select(:mode_of_transport)
-        .distinct
-      @modes_of_transport += ["truck_carriage"] if includes_trucking?
-      @modes_of_transport
-    end
-
     def tenant_vehicle_ids
       @tenant_vehicle_ids ||= pricings.select(:tenant_vehicle_id)
     end

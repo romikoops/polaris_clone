@@ -42,6 +42,12 @@ module Api
     let(:origin_trucking_location) {
       FactoryBot.create(:trucking_location, location: origin_location, country_code: "DE")
     }
+    let(:origin_params) do
+      {organization_id: organization.id, origin_latitude: shanghai.latitude, origin_longitude: shanghai.longitude}
+    end
+    let(:destination_params) do
+      {organization_id: organization.id, destination_latitude: gothenburg.latitude, destination_longitude: gothenburg.longitude}
+    end
 
     describe "GET #fcl" do
       it "Renders a json of equipments" do
@@ -51,15 +57,13 @@ module Api
       end
 
       it "Renders a json of equipments related with origin" do
-        get :index, params: {organization_id: organization.id, origin_nexus_id: shanghai.nexus_id}
+        get :index, params: origin_params.merge(origin_nexus_id: shanghai.nexus_id)
 
         expect(response_data).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
       end
 
       it "Renders a json of equipments related with origin lat/lngs" do
-        get :index, params: {
-          organization_id: organization.id, origin_latitude: shanghai.latitude, origin_longitude: shanghai.longitude
-        }
+        get :index, params: origin_params
 
         expect(response_data).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
       end
@@ -71,7 +75,7 @@ module Api
       end
 
       it "Renders a json of equipments related with destination" do
-        get :index, params: {organization_id: organization.id, destination_nexus_id: gothenburg.nexus_id}
+        get :index, params: destination_params.merge(destination_nexus_id: gothenburg.nexus_id)
 
         expect(response_data).to match_array(%w[fcl_20 fcl_40])
       end

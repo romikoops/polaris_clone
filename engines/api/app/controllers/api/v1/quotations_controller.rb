@@ -17,8 +17,8 @@ module Api
       end
 
       def create
-        if validation.errors.present?
-          return render json: ValidationErrorSerializer.new(validation.errors), status: :expectation_failed
+        if validation_errors.present?
+          return render json: ValidationErrorSerializer.new(validation_errors), status: :expectation_failed
         end
 
         render json: QuerySerializer.new(
@@ -84,13 +84,18 @@ module Api
         query.result_sets.order(created_at: :desc).first.results.ids
       end
 
-      def validation
-        validator = Wheelhouse::ValidationService.new(
+      def validator
+        @validator ||= Wheelhouse::ValidationService.new(
           request: query_request,
           final: true
         )
-        validator.validate
-        validator
+      end
+
+      def validation_errors
+        @validation_errors ||= begin
+          validator.validate
+          validator.errors
+        end
       end
 
       def index_params

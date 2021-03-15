@@ -18,13 +18,11 @@ module Api
       private
 
       def location(target:)
-        if fcl_params["#{target}_latitude"].present? && fcl_params["#{target}_longitude"].present?
-          {latitude: fcl_params["#{target}_latitude"], longitude: fcl_params["#{target}_longitude"]}
-        elsif fcl_params["#{target}_nexus_id"]
-          {nexus_id: fcl_params["#{target}_nexus_id"]}
-        elsif fcl_params[target]
-          {nexus_id: fcl_params[target]}
-        end
+        {
+          nexus_id: fcl_params["#{target}_nexus_id"],
+          latitude: fcl_params["#{target}_latitude"],
+          longitude: fcl_params["#{target}_longitude"]
+        }
       end
 
       def fcl_params

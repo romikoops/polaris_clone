@@ -88,7 +88,7 @@ module Wheelhouse
     end
 
     def nexus_ids(location:, target:)
-      return [] if location.nil?
+      return [] unless location_is_valid?(location: location)
       return [location[:nexus_id]] if location[:nexus_id].present?
 
       ::Trucking::Queries::Hubs.new(
@@ -120,6 +120,13 @@ module Wheelhouse
         organization: organization,
         target: user
       ).fetch
+    end
+
+    def location_is_valid?(location:)
+      return false if location.nil?
+
+      location[:latitude].present? && location[:longitude].present? ||
+        location[:nexus_id].present?
     end
   end
 end
