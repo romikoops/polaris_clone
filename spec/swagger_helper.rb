@@ -71,11 +71,15 @@ RSpec.configure do |config|
                 properties: {
                   width: {
                     description: "Width of the given cargo item type",
-                    type: "string"
+                    type: "string",
+                    nullable: true,
+                    deprecated: true
                   },
                   length: {
                     description: "Length of the given cargo item type",
-                    type: "string"
+                    type: "string",
+                    nullable: true,
+                    deprecated: true
                   },
                   description: {
                     description: "Descriptive information of the cargo item type",
