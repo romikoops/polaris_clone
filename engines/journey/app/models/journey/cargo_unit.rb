@@ -39,6 +39,7 @@ module Journey
     validates_inclusion_of :cargo_class, in: CARGO_CLASSES
 
     enum colli_type: {
+      container: "container", # When cargo class is fcl
       barrel: "barrel",
       bottle: "bottle",
       carton: "carton",

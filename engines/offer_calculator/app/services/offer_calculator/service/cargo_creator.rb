@@ -45,6 +45,7 @@ module OfferCalculator
           cargo_class: cargo_class_from_params(unit_params: unit_params)
         ).tap do |new_cargo|
           return new_cargo unless persist?
+
           new_cargo.commodity_infos << commodity_info_for_cargo(unit: new_cargo, unit_params: unit_params)
           new_cargo.save
         end
@@ -55,6 +56,8 @@ module OfferCalculator
       end
 
       def colli_type(unit_params:)
+        return unit_params["colli_type"] if unit_params["colli_type"].present?
+
         legacy_type = Legacy::CargoItemType.find_by(id: unit_params["cargo_item_type_id"])
         return :pallet if legacy_type.blank?
 

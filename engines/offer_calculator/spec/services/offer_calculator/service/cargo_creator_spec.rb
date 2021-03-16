@@ -9,72 +9,144 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
   let(:query) { FactoryBot.create(:journey_query, cargo_units: []) }
 
   describe "perform" do
-    context "when lcl and dangerous_goods is a boolean" do
-      let(:params) do
-        {"cargo_items_attributes" => [
-          {
-            "payload_in_kg" => 120,
-            "total_volume" => 0,
-            "total_weight" => 0,
-            "width" => 120,
-            "length" => 80,
-            "height" => 120,
-            "quantity" => 1,
-            "cargo_item_type_id" => pallet.id,
-            "dangerous_goods" => false,
-            "stackable" => true
-          }
-        ]}
-      end
-      let(:results) { cargo_creator.perform }
-      let(:item) { results.first }
-      let(:first_param) { params.dig("cargo_items_attributes", 0) }
+    context "legacy" do
+      context "when lcl" do
+        let(:params) do
+          {"cargo_items_attributes" => [
+            {
+              "payload_in_kg" => 120,
+              "total_volume" => 0,
+              "total_weight" => 0,
+              "width" => 120,
+              "length" => 80,
+              "height" => 120,
+              "quantity" => 1,
+              "cargo_item_type_id" => pallet.id,
+              "dangerous_goods" => false,
+              "stackable" => true
+            }
+          ]}
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("cargo_items_attributes", 0) }
 
-      it "creates one lcl item", :aggregate_failures do
-        expect(item.width).to eq(Measured::Length.new(first_param.dig("width"), "cm"))
-        expect(item.length).to eq(Measured::Length.new(first_param.dig("length"), "cm"))
-        expect(item.height).to eq(Measured::Length.new(first_param.dig("height"), "cm"))
-        expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+        it "creates one lcl item" do
+          expect(item.width).to eq(Measured::Length.new(first_param.dig("width"), "cm"))
+          expect(item.length).to eq(Measured::Length.new(first_param.dig("length"), "cm"))
+          expect(item.height).to eq(Measured::Length.new(first_param.dig("height"), "cm"))
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+        end
+      end
+
+      context "when fcl" do
+        let(:params) do
+          {"containers_attributes" => [
+            {
+              "payload_in_kg" => 120,
+              "size_class" => "fcl_20",
+              "dangerous_goods" => false,
+              "stackable" => true
+            }
+          ]}
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("containers_attributes", 0) }
+
+        it "creates one fcl_20 item" do
+          expect(item.cargo_class).to eq("fcl_20")
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+        end
+      end
+
+      context "when aggregated_lcl" do
+        let(:params) do
+          {
+            "aggregated_cargo_attributes" => {
+              "weight" => 120,
+              "volume" => 1
+            }
+          }
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("aggregated_cargo_attributes") }
+
+        it "creates one aggregated item" do
+          expect(item.cargo_class).to eq("aggregated_lcl")
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("weight"), "kg"))
+        end
       end
     end
 
-    context "when fcl and dangerous_goods is a boolean" do
-      let(:params) do
-        {"containers_attributes" => [
+    context 'greenland' do
+      context "when lcl" do
+        let(:params) do
+          {"cargo_items_attributes" => [
+            {
+              "payload_in_kg" => 120,
+              "width" => 120,
+              "length" => 80,
+              "height" => 120,
+              "quantity" => 1,
+              "colli_type" => 'pallet',
+              "cargo_class" => 'lcl',
+              "dangerous_goods" => false,
+              "stackable" => true
+            }
+          ]}
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("cargo_items_attributes", 0) }
+
+        it "creates one lcl item" do
+          expect(item.width).to eq(Measured::Length.new(first_param.dig("width"), "cm"))
+          expect(item.length).to eq(Measured::Length.new(first_param.dig("length"), "cm"))
+          expect(item.height).to eq(Measured::Length.new(first_param.dig("height"), "cm"))
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+        end
+      end
+
+      context "when fcl" do
+        let(:params) do
+          {"containers_attributes" => [
+            {
+              "payload_in_kg" => 120,
+              "size_class" => "fcl_20",
+              "dangerous_goods" => false,
+              "stackable" => true
+            }
+          ]}
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("containers_attributes", 0) }
+
+        it "creates one fcl_20 item" do
+          expect(item.cargo_class).to eq("fcl_20")
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
+        end
+      end
+
+      context "when aggregated_lcl" do
+        let(:params) do
           {
-            "payload_in_kg" => 120,
-            "size_class" => "fcl_20",
-            "dangerous_goods" => false,
-            "stackable" => true
+            "aggregated_cargo_attributes" => {
+              "weight" => 120,
+              "volume" => 1
+            }
           }
-        ]}
-      end
-      let(:results) { cargo_creator.perform }
-      let(:item) { results.first }
-      let(:first_param) { params.dig("containers_attributes", 0) }
+        end
+        let(:results) { cargo_creator.perform }
+        let(:item) { results.first }
+        let(:first_param) { params.dig("aggregated_cargo_attributes") }
 
-      it "creates one fcl_20 item", :aggregate_failures do
-        expect(item.cargo_class).to eq("fcl_20")
-        expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
-      end
-    end
-
-    context "when aggregated_lcl and dangerous_goods is a boolean" do
-      let(:params) do
-        {
-          "aggregated_cargo_attributes" => {
-            "weight" => 120,
-            "volume" => 1
-          }
-        }
-      end
-      let(:results) { cargo_creator.perform }
-      let(:item) { results.first }
-      let(:first_param) { params.dig("aggregated_cargo_attributes") }
-
-      it "creates one aggregated item", :aggregate_failures do
-        expect(item.cargo_class).to eq("aggregated_lcl")
-        expect(item.weight).to eq(Measured::Weight.new(first_param.dig("weight"), "kg"))
+        it "creates one aggregated item" do
+          expect(item.cargo_class).to eq("aggregated_lcl")
+          expect(item.weight).to eq(Measured::Weight.new(first_param.dig("weight"), "kg"))
+        end
       end
     end
 
@@ -89,7 +161,7 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
             "length" => 100,
             "height" => 100,
             "quantity" => 2,
-            "cargo_item_type_id" => pallet.id,
+            "colli_type" => "pallet",
             "commodities" => [{
               "imo_class" => "0",
               "description" => "Unknown IMO Class"

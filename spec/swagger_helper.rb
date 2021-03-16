@@ -277,13 +277,33 @@ RSpec.configure do |config|
           item: {
             type: "object",
             properties: {
+              cargo_class: {
+                description: "Container classification code",
+                type: "string",
+                enum: [
+                  "lcl",
+                  "aggregated_lcl",
+                  "fcl_10",
+                  "fcl_20",
+                  "fcl_20_ot",
+                  "fcl_20_rf",
+                  "fcl_20_frs",
+                  "fcl_20_frw",
+                  "fcl_40",
+                  "fcl_40_hq",
+                  "fcl_40_ot",
+                  "fcl_40_rf",
+                  "fcl_40_hq_rf",
+                  "fcl_40_frs",
+                  "fcl_40_frw",
+                  "fcl_45",
+                  "fcl_45_hq",
+                  "fcl_45_rf"
+                ]
+              },
               stackable: {
                 description: "If cargo item is stackable or not",
                 type: "boolean"
-              },
-              cargoItemTypeId: {
-                description: "Type of cargo item",
-                type: "string"
               },
               quantity: {
                 description: "Quantity",
@@ -364,7 +384,18 @@ RSpec.configure do |config|
                   required: ["id", "code"]
                 }
               }
-            }
+            },
+            required: [
+              "stackable",
+              "dangerous",
+              "colliType",
+              "quantity",
+              "length",
+              "width",
+              "height",
+              "weight",
+              "commodityCodes"
+            ],
           },
           journeyError: {
             type: "object",

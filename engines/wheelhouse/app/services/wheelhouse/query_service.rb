@@ -46,37 +46,20 @@ module Wheelhouse
 
     def cargo_items_attributes
       attributes_payload(
-        items: params[:items].select { |item| item[:cargo_item_type_id].present? },
-        cargo_class_mapper: proc { "lcl" }
+        items: params[:items].select { |item| item[:colli_type].present? }
       )
     end
 
     def container_attributes
       attributes_payload(
-        items: params[:items].select { |item| item[:equipment_id].present? },
-        cargo_class_mapper: proc { |attributes| container_id_lookup[attributes[:equipment_id]] }
+        items: params[:items].select { |item| item[:cargo_class].match?('fcl') }
       )
     end
 
-    def container_id_lookup
-      {
-        "ee9b339d-6aee-466a-b8d4-b1c08a4731d4" => "fcl_20",
-        "999b255d-9f2d-4399-93a4-deab4e9b8705" => "fcl_40",
-        "7931fbf4-a45c-4c0a-af1d-e7bc3dcfefc2" => "fcl_40_hq"
-      }
-    end
-
-    def attributes_payload(items:, cargo_class_mapper:)
+    def attributes_payload(items:)
       items.map do |item|
-        item.tap do |attributes|
-          attributes[:cargo_class] = cargo_class_mapper.call(attributes)
-          attributes[:payload_in_kg] = attributes.delete(:weight)
-          break item if params.dig(:scale) != "m"
-
-          %i[width length height].each do |dim|
-            attributes[dim] = attributes[dim] * 100.0
-          end
-        end
+        item[:payload_in_kg] = item.delete(:weight)
+        item
       end
     end
 

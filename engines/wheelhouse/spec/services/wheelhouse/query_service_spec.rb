@@ -59,8 +59,8 @@ module Wheelhouse
           [
             {
               stackable: true,
-              valid: true,
-              cargo_item_type_id: pallet.id,
+              cargo_class: 'lcl',
+              colli_type: 'pallet',
               quantity: 1,
               length: 120,
               width: 100,
@@ -83,8 +83,7 @@ module Wheelhouse
         let(:items) do
           [
             {
-              valid: true,
-              equipment_id: "ee9b339d-6aee-466a-b8d4-b1c08a4731d4",
+              cargo_class: "fcl_20",
               quantity: 1,
               weight: 1200,
               commodity_codes: []

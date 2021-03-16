@@ -9,7 +9,8 @@ module Api
 
       def create
         new_query = wheelhouse_query_service.perform
-        render json: Api::V2::RestfulSerializer.new(new_query)
+        decorated = Api::V2::QueryDecorator.decorate(new_query)
+        render json: Api::V2::QuerySerializer.new(decorated), status: :created
       rescue Wheelhouse::ApplicationError => e
         render json: {error: e.message}, status: :unprocessable_entity
       end
@@ -46,7 +47,7 @@ module Api
           creator: mock_user,
           client: mock_user,
           source: mock_doorkeeper_application,
-          params: query_params.to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym }
+          params: query_service_params
         )
       end
 
@@ -54,28 +55,29 @@ module Api
         Doorkeeper::Application.find_by(name: "siren")
       end
 
+      def query_service_params
+        query_params
+        .to_h
+        .deep_transform_keys { |key| key.to_s.underscore.to_sym }
+      end
+
       def query_params
         params.permit(
-          :id,
           :originId,
           :destinationId,
           :loadType,
           :aggregated,
           items: [
-            :default,
-            :equipmentId,
-            :cargoItemTypeId,
-            :id,
+            :cargoClass,
+            :stackable,
+            :dangerous,
+            :colliType,
             :quantity,
-            :valid,
-            :weight,
             :width,
             :height,
-            :TotalVolume,
-            :TotalWeight,
-            :Volume,
-            :Weight,
             :length,
+            :volume,
+            :weight,
             commodities: [:description, :hs_code, :imo_class]
           ]
         )

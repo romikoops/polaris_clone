@@ -59,8 +59,9 @@ module Api
         let(:items) do
           [
             {
+              cargoClass: 'lcl',
               stackable: true,
-              cargoItemTypeId: pallet.id,
+              colliType: 'pallet',
               quantity: 1,
               length: 120,
               width: 100,
@@ -75,6 +76,7 @@ module Api
 
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           post :create, params: params, as: :json
+
           expect(response_data.dig("id")).to be_present
         end
       end
@@ -83,8 +85,7 @@ module Api
         let(:items) do
           [
             {
-              valid: true,
-              equipmentId: "ee9b339d-6aee-466a-b8d4-b1c08a4731d4",
+              cargoClass: "fcl_20",
               quantity: 1,
               weight: 1200,
               commodityCodes: []

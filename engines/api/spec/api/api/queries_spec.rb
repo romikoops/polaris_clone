@@ -78,7 +78,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
         }, required: ["originId", "destinationId", "loadType", "aggregated", "items"]
       }
 
-      response "200", "successful operation" do
+      response "201", "successful operation" do
         let(:query) do
           {
             originId: origin.id,
@@ -88,7 +88,9 @@ RSpec.describe "Queries", type: :request, swagger: true do
             items: [
               {
                 stackable: true,
-                cargoItemTypeId: pallet.id,
+                dangerous: false,
+                cargoClass:'fcl_20',
+                colliType: 'container',
                 quantity: 1,
                 length: 120,
                 width: 100,

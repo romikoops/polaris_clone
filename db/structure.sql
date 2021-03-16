@@ -94,7 +94,8 @@ CREATE TYPE public.journey_colli_type AS ENUM (
     'pallet',
     'roll',
     'skid',
-    'stack'
+    'stack',
+    'container'
 );
 
 
@@ -12110,6 +12111,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210217170246'),
 ('20210217170422'),
 ('20210224094318'),
-('20210312114929');
+('20210312114929'),
+('20210315112012');
 
 
