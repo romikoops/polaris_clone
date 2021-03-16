@@ -122,7 +122,7 @@ module Wheelhouse
         total_weight: item[:weight],
         total_volume: item[:volume],
         stackable: true,
-        dangerous: false,
+        dangerous: {},
         commodities: item[:commodities]
       }
     end

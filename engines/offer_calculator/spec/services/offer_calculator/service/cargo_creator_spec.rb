@@ -3,11 +3,13 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::CargoCreator do
-  let(:cargo_creator) { described_class.new(query: query, params: params, persist: false) }
+  let(:persist) { false }
+  let(:cargo_creator) { described_class.new(query: query, params: params, persist: persist) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:query) { FactoryBot.create(:journey_query, cargo_units: []) }
+
   describe "perform" do
-    context "when lcl" do
+    context "when lcl and dangerous_goods is a boolean" do
       let(:params) do
         {"cargo_items_attributes" => [
           {
@@ -28,7 +30,7 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
       let(:item) { results.first }
       let(:first_param) { params.dig("cargo_items_attributes", 0) }
 
-      it "creates one lcl item" do
+      it "creates one lcl item", :aggregate_failures do
         expect(item.width).to eq(Measured::Length.new(first_param.dig("width"), "cm"))
         expect(item.length).to eq(Measured::Length.new(first_param.dig("length"), "cm"))
         expect(item.height).to eq(Measured::Length.new(first_param.dig("height"), "cm"))
@@ -36,7 +38,7 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
       end
     end
 
-    context "when fcl" do
+    context "when fcl and dangerous_goods is a boolean" do
       let(:params) do
         {"containers_attributes" => [
           {
@@ -51,13 +53,13 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
       let(:item) { results.first }
       let(:first_param) { params.dig("containers_attributes", 0) }
 
-      it "creates one fcl_20 item" do
+      it "creates one fcl_20 item", :aggregate_failures do
         expect(item.cargo_class).to eq("fcl_20")
         expect(item.weight).to eq(Measured::Weight.new(first_param.dig("payload_in_kg"), "kg"))
       end
     end
 
-    context "when aggregated_lcl" do
+    context "when aggregated_lcl and dangerous_goods is a boolean" do
       let(:params) do
         {
           "aggregated_cargo_attributes" => {
@@ -70,9 +72,41 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
       let(:item) { results.first }
       let(:first_param) { params.dig("aggregated_cargo_attributes") }
 
-      it "creates one aggregated item" do
+      it "creates one aggregated item", :aggregate_failures do
         expect(item.cargo_class).to eq("aggregated_lcl")
         expect(item.weight).to eq(Measured::Weight.new(first_param.dig("weight"), "kg"))
+      end
+    end
+
+    context "when dangerous goods is expressed as CommodityInfo" do
+      let(:params) do
+        {"cargo_items_attributes" => [
+          {
+            "payload_in_kg" => 121,
+            "total_volume" => 0,
+            "total_weight" => 0,
+            "width" => 130,
+            "length" => 100,
+            "height" => 100,
+            "quantity" => 2,
+            "cargo_item_type_id" => pallet.id,
+            "commodities" => [{
+              "imo_class" => "0",
+              "description" => "Unknown IMO Class"
+            }],
+            "stackable" => true
+          }
+        ]}
+      end
+      let(:results) { cargo_creator.perform }
+      let(:item) { results.first }
+      let(:commodity_info) { item.commodity_infos.first }
+      let(:first_param) { params.dig("cargo_items_attributes", 0) }
+      let(:persist) { true }
+
+      it "creates the CommodityInfo for the IMO Class", :aggregate_failures do
+        expect(commodity_info.imo_class).to eq("0")
+        expect(commodity_info.description).to eq("Unknown IMO Class")
       end
     end
   end

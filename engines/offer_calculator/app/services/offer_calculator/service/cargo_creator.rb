@@ -99,14 +99,28 @@ module OfferCalculator
       end
 
       def commodity_info_for_cargo(unit_params:, unit:)
+        return legacy_dangerous_goods(unit_params: unit_params , unit: unit) if unit_params.has_key?("dangerous_goods")
+        return [] if unit_params["commodities"].blank?
+
+        unit_params["commodities"].map do |commodity_param|
+          Journey::CommodityInfo.new(
+            cargo_unit: unit,
+            imo_class: commodity_param.dig("imo_class") || "",
+            hs_code: commodity_param.dig("hs_code") || "",
+            description: commodity_param.dig("description")
+          )
+        end
+      end
+
+      def legacy_dangerous_goods(unit_params: , unit:)
         return [] if unit_params["dangerous_goods"].blank?
 
-        Journey::CommodityInfo.new(
+        [Journey::CommodityInfo.new(
           cargo_unit: unit,
           imo_class: "0",
           hs_code: "",
           description: "Unknown Dangerous Goods"
-        )
+        )]
       end
 
       def unit_params_id(unit_params:)

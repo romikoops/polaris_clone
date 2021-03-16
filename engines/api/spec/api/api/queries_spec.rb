@@ -88,14 +88,13 @@ RSpec.describe "Queries", type: :request, swagger: true do
             items: [
               {
                 stackable: true,
-                dangerous: false,
                 cargoItemTypeId: pallet.id,
                 quantity: 1,
                 length: 120,
                 width: 100,
                 height: 120,
                 weight: 1200,
-                commodityCodes: []
+                commodities: [{ imo_class: "0", description: "Unknown IMO Class"}]
               }
             ]
           }

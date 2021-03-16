@@ -60,7 +60,6 @@ module Wheelhouse
             {
               stackable: true,
               valid: true,
-              dangerous: false,
               cargo_item_type_id: pallet.id,
               quantity: 1,
               length: 120,
@@ -85,7 +84,6 @@ module Wheelhouse
           [
             {
               valid: true,
-              dangerous: false,
               equipment_id: "ee9b339d-6aee-466a-b8d4-b1c08a4731d4",
               quantity: 1,
               weight: 1200,

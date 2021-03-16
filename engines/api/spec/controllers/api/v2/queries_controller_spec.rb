@@ -60,8 +60,6 @@ module Api
           [
             {
               stackable: true,
-              valid: true,
-              dangerous: false,
               cargoItemTypeId: pallet.id,
               quantity: 1,
               length: 120,
@@ -86,7 +84,6 @@ module Api
           [
             {
               valid: true,
-              dangerous: false,
               equipmentId: "ee9b339d-6aee-466a-b8d4-b1c08a4731d4",
               quantity: 1,
               weight: 1200,

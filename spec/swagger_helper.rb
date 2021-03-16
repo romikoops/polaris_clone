@@ -277,12 +277,8 @@ RSpec.configure do |config|
                 description: "If cargo item is stackable or not",
                 type: "boolean"
               },
-              dangerous: {
-                description: "oes cargo item contain any dangerous goods",
-                type: "boolean"
-              },
               cargoItemTypeId: {
-                description: "Type of cargo itm",
+                description: "Type of cargo item",
                 type: "string"
               },
               quantity: {
@@ -305,14 +301,61 @@ RSpec.configure do |config|
                 description: "Weight of the item",
                 type: "integer"
               },
-              commodityCodes: {
+              commodities: {
                 description: "Commodity codes of the contents",
                 type: "array",
                 items: {
                   type: "object",
                   properties: {
-                    id: { description: "ID of code", type: "string" },
-                    code: { description: "Code", type: "string" }
+                    imo_class: {
+                      type: "string",
+                      oneOf: %w[
+                        0
+                        1.1
+                        1.2
+                        1.3
+                        1.4
+                        1.5
+                        1.6
+                        2.1
+                        2.2
+                        2.3
+                        3
+                        4.1
+                        4.2
+                        4.3
+                        5.1
+                        5.2
+                        6.1
+                        6.2
+                        7.1
+                        7.2
+                        7.3
+                        7.4
+                        8
+                        9
+                      ],
+                      description: <<~DOC
+                        Defines the standard IMO class for the dangerous goods that this cargo item might contain. IMO Class is defined as Class and possible sub-class, where class defines top-level category of type of dangerous goods, and sub-class defines more detailed separation of different dangerous goods.
+
+                        To see list of possible classes and sub-classes, please see for example https://www.searates.com/reference/imo/
+
+                        If dangerous goods category is unknown, please use `0.0` as IMO class, which is used internally for unknown dangerous goods class but known that it is dangerous goods.
+                        If cargo item contains no dangerous goods, set this field as `null`.
+                      DOC
+                    },
+                    description: {
+                      type: "string",
+                      description: "The description of the IMO Class/ HSCode chosen"
+                    },
+                    hs_code: {
+                      type: "string",
+                      description: <<~DOC
+                        The Harmonized Commodity Description and Coding System, also known as the Harmonized System of tariff nomenclature is an internationally standardized system of names and numbers to classify traded products.
+                        This code is is used to identify the type of cargo being shipped as it can affect the pricing and routes available
+                      DOC
+
+                    }
                   },
                   required: ["id", "code"]
                 }

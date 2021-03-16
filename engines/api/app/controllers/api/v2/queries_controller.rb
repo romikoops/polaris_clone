@@ -76,7 +76,7 @@ module Api
             :Volume,
             :Weight,
             :length,
-            commodities: [:id, :code]
+            commodities: [:description, :hs_code, :imo_class]
           ]
         )
       end
