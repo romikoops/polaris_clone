@@ -15,5 +15,6 @@ FactoryBot.define do
     optional { false }
     sequence(:order) { |n| n }
     wm_rate { 1000 }
+    exchange_rate { 1.2 }
   end
 end

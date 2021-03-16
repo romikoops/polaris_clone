@@ -6,9 +6,6 @@ module OfferCalculator
       class LineItemBuilder
         attr_reader :line_item_set, :offer, :route_sections, :request
 
-        delegate :result, to: :line_item_set
-        delegate :cargo_units, to: :query
-
         def self.line_items(offer:, request:, route_sections:)
           new(offer: offer, request: request, route_sections: route_sections).line_items
         end
@@ -29,8 +26,16 @@ module OfferCalculator
 
         private
 
-        def query
-          @query ||= result.result_set.query
+        def result_set
+          @result_set ||= request.result_set
+        end
+
+        def currency
+          result_set.currency
+        end
+
+        def cargo_units
+          result_set.query.cargo_units
         end
 
         def line_item_from_charge(charge:, order:)
@@ -48,10 +53,17 @@ module OfferCalculator
             description: charge.name,
             included: charge.code.include?("included"),
             optional: charge.code.include?("unknown"),
-            cargo_units: charge.targets
+            cargo_units: charge.targets,
+            exchange_rate: exchange_rate(from: currency, to: charge.value.currency.iso_code)
           ).tap do |new_line_item|
             charge.line_item = new_line_item
           end
+        end
+
+        def exchange_rate(from:, to:)
+          return 1 if from == to
+
+          Money.default_bank.get_rate(from, to)
         end
       end
     end

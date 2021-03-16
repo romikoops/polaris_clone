@@ -1854,6 +1854,7 @@ CREATE TABLE public.journey_line_items (
     wm_rate numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    exchange_rate numeric,
     CONSTRAINT journey_line_items_fee_code_presence CHECK (((fee_code IS NOT NULL) AND ((fee_code)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_line_items_units_numericality CHECK ((units > 0)),
     CONSTRAINT journey_line_items_wm_rate_numericality CHECK ((wm_rate > (0)::numeric))
@@ -12108,6 +12109,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210217170059'),
 ('20210217170246'),
 ('20210217170422'),
-('20210224094318');
+('20210224094318'),
+('20210312114929');
 
 

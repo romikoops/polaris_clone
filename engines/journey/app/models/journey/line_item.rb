@@ -16,6 +16,7 @@ module Journey
     validates :units, numericality: {greater_than: 0}
     validates :unit_price_cents, numericality: true
     validates :total_cents, numericality: true
+    validates :exchange_rate, numericality: {greater_than: 0}
   end
 end
 
@@ -25,6 +26,7 @@ end
 #
 #  id                  :uuid             not null, primary key
 #  description         :string           default(""), not null
+#  exchange_rate       :decimal(, )
 #  fee_code            :string           not null
 #  included            :boolean          default(FALSE)
 #  note                :string           default(""), not null
