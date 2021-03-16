@@ -35,6 +35,9 @@ spec:
           env:
             - name: SPEC_URL
               value: https://api.itsmycargo.com/specs/swagger.json
+            - name: REDOC_OPTIONS
+              value: expand-single-schema-field="true" json-sample-expand-level="3" path-in-middle-panel="true"
+                required-props-first="true"
           ports:
             - containerPort: 80
           livenessProbe:
