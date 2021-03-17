@@ -34,7 +34,10 @@ RSpec.describe "Dashboard", type: :request, swagger: true do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {type: :number}
+                 data: {
+                   type: :number,
+                   nullable: true
+                  }
                },
                required: ["data"]
 
