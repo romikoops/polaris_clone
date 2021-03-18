@@ -4,62 +4,37 @@ require "rails_helper"
 
 module ResultFormatter
   RSpec.describe ExchangeRateService, type: :service do
-    let(:tender) { FactoryBot.create(:quotations_tender, amount: tender_amount) }
-    let(:tender_amount) { Money.new(100, "EUR") }
-    let(:line_item_amount) { Money.new(50, "AED") }
-    let(:line_item_iso_code) { line_item_amount.currency.iso_code.downcase }
     let(:euro_us_rate) { 1.34 }
-
-    before do
-      Treasury::ExchangeRate.create(from: tender_amount.currency.iso_code,
-                                  to: line_item_amount.currency.iso_code,
-                                  rate: euro_us_rate)
-      FactoryBot.create_list(:quotations_line_item, 5, tender: tender, amount: line_item_amount)
+    let(:base_currency) { "USD" }
+    let(:line_item_currency) { "EUR" }
+    let(:line_items) do
+      [
+        FactoryBot.create(:journey_line_item, exchange_rate: euro_us_rate, total_currency: line_item_currency)
+      ]
     end
 
     describe ".perform" do
       let(:klass) do
         described_class.new(
-          base_currency: tender.amount.currency.iso_code,
-          currencies: tender.line_items.pluck(:amount_currency),
-          timestamp: tender.created_at
+          base_currency: base_currency,
+          line_items: line_items
         )
       end
 
       context "when line items and the tender have differing currencies" do
+        let(:expected_result) { {"base" => base_currency, line_item_currency.downcase => euro_us_rate } }
+
         it "returns a hash containing the currency rates of line items" do
-          result = {"base" => tender.amount.currency.iso_code, line_item_iso_code => euro_us_rate}
-          expect(klass.perform).to eq(result)
+          expect(klass.perform).to eq(expected_result)
         end
       end
 
       context "when line items and tender have the same currencies" do
-        let(:tender_amount) { Money.new(100, "USD") }
-        let(:line_item_amount) { Money.new(50, "USD") }
+        let(:base_currency) { "EUR" }
+        let(:expected_result) { {} }
 
         it "returns an empty hash" do
-          result = {}
-          expect(klass.perform).to eq(result)
-        end
-      end
-
-      context "when there are multiple rates (with varying dates)" do
-        let(:rates) do
-          [{rate: 2.14, created_at: tender.created_at + 2.days},
-            {rate: 3.04, created_at: tender.created_at - 10.days}]
-        end
-
-        before do
-          rates.each do |rate|
-            Treasury::ExchangeRate.create(from: tender_amount.currency.iso_code,
-                                        to: "USD", rate: rate[:rate],
-                                        created_at: rate[:created_at])
-          end
-        end
-
-        it "uses the rate valid at the time of creation of tender" do
-          result = {"base" => tender.amount.currency.iso_code, line_item_iso_code => euro_us_rate}
-          expect(klass.perform).to eq(result)
+          expect(klass.perform).to eq(expected_result)
         end
       end
     end

@@ -191,7 +191,7 @@ module Api
 
     def line_items_total(items:)
       items.inject(Money.new(0, currency)) { |sum, item|
-        sum + item.total
+        sum + Money.new(item.total * item.exchange_rate, currency)
       }
     end
 

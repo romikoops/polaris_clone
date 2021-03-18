@@ -67,8 +67,7 @@ module Api
       attribute :exchange_rates do |result|
         ::ResultFormatter::ExchangeRateService.new(
           base_currency: result.total.currency.iso_code,
-          currencies: result.line_items.pluck(:total_currency).uniq,
-          timestamp: result.created_at
+          line_items: result.line_items
         ).perform
       end
     end

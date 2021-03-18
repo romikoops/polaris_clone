@@ -192,15 +192,15 @@ module ResultFormatter
     end
 
     def value(items:, currency: base_currency)
-      items.inject(Money.new(0, currency, bank)) do |sum, item|
-        sum + Money.new(item.total_cents, item.total_currency, bank)
+      items.inject(Money.new(0, currency)) do |sum, item|
+        sum + Money.new(item.total_cents * item.exchange_rate, currency)
       end
     end
 
     def original_value(items:, currency: base_currency)
       original_items = original_line_item_set.line_items.where(id: items.pluck(:id))
-      original_items.inject(Money.new(0, currency, bank)) do |sum, item|
-        sum + Money.new(item.total_cents, item.total_currency, bank)
+      original_items.inject(Money.new(0, currency)) do |sum, item|
+        sum + Money.new(item.total_cents * item.exchange_rate, currency)
       end
     end
 
@@ -277,17 +277,6 @@ module ResultFormatter
     end
 
     delegate :organization, :client, :cargo_units, to: :query
-
-    def bank
-      @bank ||= begin
-        store = MoneyCache::Converter.new(
-          klass: Treasury::ExchangeRate,
-          date: result.created_at,
-          config: {bank_app_id: Settings.open_exchange_rate&.app_id || ""}
-        )
-        Money::Bank::VariableExchange.new(store)
-      end
-    end
 
     def base_currency
       @base_currency ||= Users::Settings.find_by(user: client)&.currency || scope.dig(:default_currency)

@@ -78,8 +78,7 @@ class ShipmentsController < ApplicationController
     response = Rails.cache.fetch("#{result.cache_key}/view_shipment", expires_in: 12.hours) {
       exchange_rates = ResultFormatter::ExchangeRateService.new(
         base_currency: decorated_result.currency,
-        currencies: decorated_result.line_items.pluck(:total_currency).uniq,
-        timestamp: result.created_at
+        line_items: decorated_result.line_items
       ).perform
 
       {

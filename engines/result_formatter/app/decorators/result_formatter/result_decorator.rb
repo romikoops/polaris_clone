@@ -20,7 +20,7 @@ module ResultFormatter
     end
 
     def total
-      @total ||= line_items.inject(Money.new(0, currency)) { |sum, item| sum + item.total }
+      @total ||= line_items.inject(Money.new(0, currency)) { |sum, item| sum + (item.total * item.exchange_rate) }
     end
 
     def transshipment
@@ -243,14 +243,15 @@ module ResultFormatter
     def exchange_rates
       @exchange_rates ||= ResultFormatter::ExchangeRateService.new(
         base_currency: currency,
-        currencies: line_items.pluck(:total_currency).uniq,
-        timestamp: object.created_at
+        line_items: line_items
       ).perform
     end
 
     def itinerary
       @itinerary ||= freight_pricing.itinerary || Legacy::Itinerary.new(
-        origin_hub: legacy_origin_hub, destination_hub: legacy_destination_hub
+        origin_hub: legacy_origin_hub,
+        destination_hub: legacy_destination_hub,
+        organization: organization
       )
     end
 

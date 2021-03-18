@@ -75,7 +75,7 @@ RSpec.describe ShipmentsController do
       end
     end
 
-    let!(:target_exchange_rate) { FactoryBot.create(:treasury_exchange_rate, from: "EUR", to: "USD") }
+    let(:target_exchange_rate) { result.line_item_sets.first.line_items.first.exchange_rate }
 
     it "returns requested result" do
       get :show, params: {id: result.id, organization_id: organization.id}
@@ -83,7 +83,7 @@ RSpec.describe ShipmentsController do
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response.dig("data", "exchange_rates")).to include(
-          "base" => "EUR", "usd" => target_exchange_rate.rate.round(2).to_s
+          "base" => "EUR", "usd" => target_exchange_rate.round(2).to_s
         )
       end
     end

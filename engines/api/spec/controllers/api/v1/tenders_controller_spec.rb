@@ -7,7 +7,6 @@ module Api
     routes { Engine.routes }
 
     before do
-      Treasury::ExchangeRate.create(from: "EUR", to: "USD", rate: 1.3, created_at: 30.seconds.ago)
       request.headers["Authorization"] = token_header
     end
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -24,6 +23,7 @@ module Api
         total: Money.new(9000, "EUR"),
         unit_price: Money.new(3000, "EUR"),
         optional: optional,
+        exchange_rate: 1,
         included: included)
     end
     let(:new_line_item_set) { Journey::LineItemSet.where(result: result).where.not(id: line_item_set).first }
@@ -34,7 +34,7 @@ module Api
     describe "PATCH #update" do
       let(:params) { {organization_id: organization.id, line_item_id: line_item.id, id: result.id, value: 50} }
 
-      it "renders the charges successfully" do
+      it "renders the charges successfully", :aggregate_failures do
         patch :update, params: params
 
         expect(response_data.dig("id")).to eq(result.id)
