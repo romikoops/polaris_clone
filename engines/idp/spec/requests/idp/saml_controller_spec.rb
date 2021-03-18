@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe IDP::SamlController, type: :request do
   # routes { IDP::Engine.routes }
-
+  let(:event_store) { Rails.configuration.event_store }
   let!(:saml_metadatum) { FactoryBot.create(:organizations_saml_metadatum, organization: organization) }
   let(:organization) {
     FactoryBot.create(:organizations_organization,
@@ -19,6 +19,9 @@ RSpec.describe IDP::SamlController, type: :request do
     OrganizationManager::GroupsService.new(target: user, organization: organization).fetch
   }
   let(:one_login) { double("OneLogin::RubySaml::Response", is_valid?: true) }
+
+  let(:error_from_event) { event_store.read.stream("Organization$#{organization.id}").of_type([IDP::SamlUnsuccessfulLogin]).first.data[:error_messages] }
+  let(:success_event) { event_store.read.stream("Organization$#{organization.id}").of_type([IDP::SamlSuccessfulLogin]).first }
 
   before do
     FactoryBot.create(:application, name: "dipper")
@@ -72,6 +75,12 @@ RSpec.describe IDP::SamlController, type: :request do
 
         expect(Users::ClientProfile.find_by(user_id: created_user.id).external_id).to eq attributes["customerID"][0]
       end
+
+      it "publishes event" do
+        post "/saml/#{organization.id}/consume", params: {SAMLResponse: saml_response}
+
+        expect(success_event).to be_present
+      end
     end
 
     context "with successful login and group param present" do
@@ -96,6 +105,10 @@ RSpec.describe IDP::SamlController, type: :request do
         aggregate_failures do
           expect(user_groups).to match_array([group, default_group])
         end
+      end
+
+      it "publishes event" do
+        expect(success_event).to be_present
       end
     end
 
@@ -129,6 +142,10 @@ RSpec.describe IDP::SamlController, type: :request do
 
       it "attaches the user to the target group" do
         expect(user_groups).to match_array([group, group_2, default_group])
+      end
+
+      it "publishes event" do
+        expect(success_event).to be_present
       end
     end
 
@@ -182,6 +199,10 @@ RSpec.describe IDP::SamlController, type: :request do
         it "attaches the user to the target company" do
           expect(company_membership).to be_present
         end
+
+        it "publishes event" do
+          expect(success_event).to be_present
+        end
       end
 
       context "when company is not present" do
@@ -206,41 +227,75 @@ RSpec.describe IDP::SamlController, type: :request do
         it "attaches the user to the target company" do
           expect(company_membership).to be_present
         end
+
+        it "publishes event" do
+          expect(success_event).to be_present
+        end
       end
     end
 
-    context "when profile fails to create" do
-      let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
-      let(:attributes) { {"firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "groups" => [group.name]} }
+    context "with unsuccessful login" do
+      context "when saml metadata isn't found" do
+        let!(:saml_metadatum) { nil }
 
-      before do
-        allow(Users::Client).to receive(:find_or_initialize_by).and_raise(ActiveRecord::RecordInvalid)
+        it "redirects to error url with error param" do
+          post "/saml/#{organization.id}/consume", params: {SAMLResponse: saml_response}
+          uri = URI(response.location)
+
+          expect(response.location).to start_with("https://test.host/login/saml/error")
+          expect(Rack::Utils.parse_nested_query(uri.query)).to eq({"errors"=>["SAML settings not found"]})
+        end
       end
 
-      it "does not create a user without profile" do
-        post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+      context "with invalid saml response" do
+        let!(:one_login) { double("OneLogin::RubySaml::Response", is_valid?: false, errors: ['invalid response']) }
 
-        expect(response.location).to eq("https://test.host/login/saml/error")
+        it "redirects to error url with error param" do
+          post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+
+          uri = URI(response.location)
+
+          expect(response.location).to start_with("https://test.host/login/saml/error")
+          expect(Rack::Utils.parse_nested_query(uri.query)).to eq({"errors"=>["invalid response"]})
+        end
+
+        it "publishes event" do
+          post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+
+          expect(error_from_event).to eq ["invalid response"]
+        end
       end
-    end
-  end
 
-  context "with unsuccessful login" do
-    describe "POST #consume (failed login)" do
-      it "redirects to error url when the response is not valid" do
-        post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+      context "when organization is not found" do
+        it "redirects to error url with error param" do
+          post "/saml/#{'123'}/consume", params: {SAMLResponse: saml_response}
 
-        expect(response.location).to eq("https://test.host/login/saml/error")
+          expect(response.body).to eq("Organization not found")
+        end
       end
-    end
-  end
 
-  context "when organization is not found" do
-    describe "POST #consume (no organization)" do
-      it "redirects to error url when the response is not valid" do
-        post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+      context "when email is blank" do
+        let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
+        let(:attributes) { {"firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "groups" => [group.name]} }
 
-        expect(response.location).to eq("https://test.host/login/saml/error")
+        before do
+          allow(one_login).to receive(:name_id).and_return(nil)
+        end
+
+        it "does not create a user" do
+          post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+
+          uri = URI(response.location)
+
+          expect(response.location).to start_with("https://test.host/login/saml/error")
+          expect(Rack::Utils.parse_nested_query(uri.query)).to eq({"errors"=>["Email can't be blank", "Email is invalid"]})
+        end
+
+        it "publishes event" do
+          post "/saml/#{organization.id}/consume", params: {id: organization.id, SAMLResponse: saml_response}
+
+          expect(error_from_event).to eq ["Email can't be blank", "Email is invalid"]
+        end
       end
     end
   end

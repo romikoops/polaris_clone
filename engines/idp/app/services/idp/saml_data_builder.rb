@@ -2,24 +2,62 @@
 
 module IDP
   class SamlDataBuilder
-    attr_reader :saml_response, :organization_id
+
+    attr_reader :saml_response, :organization_id, :data, :errors, :user
 
     def initialize(saml_response:, organization_id:)
       @saml_response = saml_response
       @organization_id = organization_id
+      @invalid_record = nil
+      @errors = []
+      @data = nil
     end
 
     def perform
+      @user = set_user
       attach_to_groups
       attach_to_company
       token = create_token
 
-      token.merge(userId: user.id, organizationId: organization_id)
+      @data = token.merge(userId: user.id, organizationId: organization_id)
+      self
+    rescue ActiveRecord::RecordInvalid => invalid
+      @errors = invalid.record.errors.full_messages
+      self
     end
 
     private
 
-    def user
+    def attach_to_groups
+      group_names = saml_response.groups
+      return if group_names.blank?
+
+      groups = Groups::Group.where(name: group_names, organization: organization)
+      return if groups.empty?
+
+      Groups::Membership.where(member: user).where.not(group: groups)&.destroy_all
+      groups.each do |group|
+        membership = Groups::Membership.find_or_create_by!(member: user, group: group)
+      end
+    end
+
+
+    def attach_to_company
+      company_attributes = saml_response.company_attributes
+
+      id = company_attributes[:external_id]
+      name = company_attributes[:name]
+      return if id.blank?
+
+      company = Companies::Company.find_or_initialize_by(external_id: id, organization: organization)
+      company.name = name
+      company.address = address
+      company.save!
+
+      Companies::Membership.find_or_create_by!(member: user, company: company)
+    end
+
+    def set_user
       @user ||= Users::Client.find_or_initialize_by(
         organization: organization,
         email: saml_response.email || saml_response.name_id
@@ -43,38 +81,13 @@ module IDP
       saml_user.settings.update(currency: default_currency)
     end
 
-    def attach_to_groups
-      group_names = saml_response.groups
-      return if group_names.blank?
-
-      groups = Groups::Group.where(name: group_names, organization: organization)
-      return if groups.empty?
-
-      Groups::Membership.where(member: user).where.not(group: groups)&.destroy_all
-      groups.each { |group| Groups::Membership.find_or_create_by!(member: user, group: group) }
-    end
-
-    def attach_to_company
-      company_attributes = saml_response.company_attributes
-
-      id = company_attributes[:external_id]
-      name = company_attributes[:name]
-      return if id.blank?
-
-      company = Companies::Company.find_or_initialize_by(external_id: id, organization: organization)
-      company.name = name
-      company.address = address
-      company.save!
-
-      Companies::Membership.find_or_create_by!(member: user, company: company)
-    end
-
     def create_token
       token = Doorkeeper::AccessToken.create!(resource_owner_id: user.id,
                                               refresh_token: refresh_token,
                                               application: Doorkeeper::Application.find_by(name: "dipper"),
                                               expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
                                               scopes: "public")
+
       Doorkeeper::OAuth::TokenResponse.new(token).body
     end
 

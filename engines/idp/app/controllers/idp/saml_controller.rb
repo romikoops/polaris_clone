@@ -13,18 +13,33 @@ module IDP
     end
 
     def consume
-      return error_redirect unless saml_response.present? && saml_response.is_valid?
-
-      ActiveRecord::Base.transaction do
-        @response_params = SamlDataBuilder.new(saml_response: decorated_saml,
-                                               organization_id: organization_id)
-          .perform
+      if organization.blank?
+        render plain: "Organization not found"
+        return
       end
 
-      redirect_to generate_url(url_string: "https://#{organization_domain}/login/saml/success",
-                               params: @response_params)
-    rescue ActiveRecord::RecordInvalid
-      error_redirect
+      if saml_settings.blank?
+        register_errors_and_redirect(errors: ["SAML settings not found"])
+        return
+      end
+
+      unless saml_response.is_valid?
+       register_errors_and_redirect(errors: saml_response.errors)
+       return
+      end
+
+      @response_params = SamlDataBuilder.new(saml_response: decorated_saml, organization_id: organization_id).perform
+
+      if @response_params.errors.any?
+        register_errors_and_redirect(errors: @response_params.errors)
+        return
+      end
+
+      redirect_to generate_url(
+        url_string: "https://#{organization_domain}/login/saml/success",
+        params: @response_params.data)
+
+      publish_successful_login_event
     end
 
     private
@@ -50,6 +65,10 @@ module IDP
       end
     end
 
+    def organization
+      Organizations::Organization.find_by(id: organization_id)
+    end
+
     def organization_id
       params[:id]
     end
@@ -59,7 +78,7 @@ module IDP
     end
 
     def organization_domain
-      Organizations::Domain.find_by!(default: true, organization_id: organization_id).domain
+      Organizations::Domain.find_by(default: true, organization_id: organization_id).domain
     end
 
     def generate_url(url_string:, params: {})
@@ -67,8 +86,6 @@ module IDP
     end
 
     def saml_response
-      return if saml_settings.blank?
-
       @saml_response ||= OneLogin::RubySaml::Response.new(saml_params, settings: saml_settings)
     end
 
@@ -82,6 +99,38 @@ module IDP
 
     def set_current_organization_id
       Organizations.current_id = organization_id
+    end
+
+    def register_errors_and_redirect(errors:)
+      publish_error_event(errors)
+
+      redirect_to generate_url(
+        url_string: "https://#{organization_domain}/login/saml/error",
+        params: { errors: errors }
+      )
+    end
+
+    def publish_error_event(errors)
+      Rails.configuration.event_store.publish(
+        IDP::SamlUnsuccessfulLogin.new(
+          data: {
+            params: params,
+            error_messages: errors
+          }
+        ),
+        stream_name: "Organization$#{organization_id}"
+      )
+    end
+
+    def publish_successful_login_event
+      Rails.configuration.event_store.publish(
+        IDP::SamlSuccessfulLogin.new(
+          data: {
+            params: params
+          }
+        ),
+        stream_name: "Organization$#{organization_id}"
+      )
     end
   end
 end
