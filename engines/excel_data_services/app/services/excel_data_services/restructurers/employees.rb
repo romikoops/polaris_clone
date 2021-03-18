@@ -5,8 +5,8 @@ module ExcelDataServices
     class Employees < ExcelDataServices::Restructurers::Base
       def perform
         restructured_data = data[:rows_data].map { |row|
-          row[:address_id] = Legacy::Address.geocoded_address(row[:address]) if row[:address]
-          row[:company] = Companies::Company.find_by(
+          row[:address_id] = ::Legacy::Address.geocoded_address(row[:address]).id if row[:address]
+          row[:company] = ::Companies::Company.find_by(
             name: row[:company_name],
             organization: @organization
           )
