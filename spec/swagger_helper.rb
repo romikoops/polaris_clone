@@ -55,6 +55,24 @@ RSpec.configure do |config|
       ],
       components: {
         schemas: {
+          errors: {
+            type: 'object',
+            properties: {
+              errors: {
+                type: 'object',
+                properties: {
+                  message: {
+                    description: "error message",
+                    type: "string"
+                  }
+                },
+                additionalProperties: {
+                  type: 'array',
+                  items: { type: 'string' }
+                }
+              }
+            }
+          },
           cargo_item_type: {
             type: "object",
             properties: {
@@ -647,11 +665,21 @@ RSpec.configure do |config|
               }
             }
           },
+          offer: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the Offer",
+                type: "string"
+              }
+            },
+            required: ["id"]
+          },
           scope: {
             type: "object",
             properties: {
               id: {
-                description: "ID",
+                description: "Unique identifier of the offer",
                 type: "string"
               },
               links: {

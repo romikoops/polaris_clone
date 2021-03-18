@@ -8,7 +8,13 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: [:create]
 
       def create
-        render json: Api::V2::RestfulSerializer.new(new_offer)
+        if new_offer_params[:resultIds].blank?
+          render(json: {error: "No results provided" }, status: :unprocessable_entity)
+        elsif results.blank?
+          render(json: {error: "No results found" }, status: :not_found)
+        else
+          render json: Api::V2::OfferSerializer.new(new_offer), status: :created
+        end
       end
 
       def pdf
@@ -29,7 +35,11 @@ module Api
       end
 
       def new_offer
-        Wheelhouse::OfferBuilder.offer(results: Journey::Result.where(id: new_offer_params[:resultIds]))
+        Wheelhouse::OfferBuilder.offer(results: results)
+      end
+
+      def results
+        @results ||= Journey::Result.where(id: new_offer_params[:resultIds])
       end
 
       def new_offer_params

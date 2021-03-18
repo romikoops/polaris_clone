@@ -26,6 +26,22 @@ module Api
         post :create, params: params, as: :json
         expect(response_data.dig("id")).to eq(offer.id)
       end
+
+      context "when results are not provided" do
+        it "renders 422" do
+          post :create, params: {resultIds: [], organization_id: organization.id}, as: :json
+
+          expect(response.status).to eq 422
+        end
+      end
+
+      context "when results are not found" do
+        it "renders 404" do
+          post :create, params: {resultIds: ['1231132'], organization_id: organization.id}, as: :json
+
+          expect(response.status).to eq 404
+        end
+      end
     end
 
     describe "GET #pdf" do
