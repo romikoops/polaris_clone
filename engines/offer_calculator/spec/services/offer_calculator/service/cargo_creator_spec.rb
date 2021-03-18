@@ -114,7 +114,7 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
           {"containers_attributes" => [
             {
               "payload_in_kg" => 120,
-              "size_class" => "fcl_20",
+              "cargo_class" => "fcl_20",
               "dangerous_goods" => false,
               "stackable" => true
             }
@@ -135,7 +135,11 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
           {
             "aggregated_cargo_attributes" => {
               "weight" => 120,
-              "volume" => 1
+              "volume" => 1,
+              "commodities" => [{
+                "imo_class" => "0",
+                "description" => "Unknown IMO Class"
+              }],
             }
           }
         end

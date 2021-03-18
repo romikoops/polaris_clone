@@ -25,7 +25,6 @@ module Wheelhouse
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:items) { [] }
       let(:load_type) { "container" }
-      let(:aggregated) { false }
       let(:origin) {
         FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
       }
@@ -34,7 +33,6 @@ module Wheelhouse
       }
       let(:siren_params) do
         {
-          aggregated: aggregated,
           items: items,
           load_type: load_type,
           origin_id: origin.id,
@@ -42,6 +40,7 @@ module Wheelhouse
           organization_id: organization.id
         }
       end
+      let(:items) { [item] }
       let(:query_request_params) { query_service.send(:query_request_params) }
 
       before do
@@ -55,9 +54,8 @@ module Wheelhouse
       end
 
       context "when lcl" do
-        let(:items) do
-          [
-            {
+        let(:item) {
+          {
               stackable: true,
               cargo_class: 'lcl',
               colli_type: 'pallet',
@@ -66,10 +64,9 @@ module Wheelhouse
               width: 100,
               height: 120,
               weight: 1200,
-              commodity_codes: []
+              commodities: []
             }
-          ]
-        end
+          }
         let(:load_type) { "cargo_item" }
 
         it "correctly processes the params", :aggregate_failures do
@@ -79,17 +76,41 @@ module Wheelhouse
         end
       end
 
+      context "when Aggregated Cargo Item" do
+        let(:item) {
+          {
+            stackable: true,
+            cargo_class: 'aggregated_lcl',
+            colli_type: nil,
+            quantity: 1,
+            length: nil,
+            width: nil,
+            height: nil,
+            weight: 1200,
+            volume: 1.1,
+            commodities: []
+          }
+        }
+
+        let(:expected_values) { {weight: item[:weight], volume: item[:volume], commodities: item[:commodities], stackable: true} }
+        let(:load_type) { "cargo_item" }
+
+        it "correctly processes the params", :aggregate_failures do
+          expect(query_request_params.dig(:aggregated_cargo_attributes)).to match(expected_values)
+          expect(query_request_params.dig(:origin, :nexus_id)).to eq(origin_hub.nexus_id)
+          expect(query_request_params.dig(:destination, :nexus_id)).to eq(destination_hub.nexus_id)
+        end
+      end
+
       context "when fcl_20" do
-        let(:items) do
-          [
-            {
+        let(:item) {
+          {
               cargo_class: "fcl_20",
               quantity: 1,
               weight: 1200,
-              commodity_codes: []
+              commodities: []
             }
-          ]
-        end
+          }
         let(:load_type) { "container" }
 
         it "correctly handles fcl param and sets the cargo class" do

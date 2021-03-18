@@ -53,7 +53,7 @@ module OfferCalculator
         end
 
         def engines_for_targets
-          if scope.dig("consolidation", "cargo", "backend").present? && lcl?
+          if scope.dig("consolidation", "cargo", "backend").present? && cargo_item?
             [cargo_engine_for_consolidation]
           else
             units_for_cargo_class.map do |cargo_unit|
@@ -66,7 +66,7 @@ module OfferCalculator
           cargo_units.select { |unit| unit.cargo_class.include?(cargo_class) }
         end
 
-        def lcl?
+        def cargo_item?
           load_type == "cargo_item"
         end
 

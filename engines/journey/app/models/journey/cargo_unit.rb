@@ -29,14 +29,18 @@ module Journey
     belongs_to :query
 
     measured_weight :weight
+    measured_volume :volume
     measured_length :width, :length, :height
 
     validates :quantity, presence: true, numericality: {greater_than: 0}
     validates :weight, measured: {units: :kg, greater_than: 0}
     validates :width, :length, :height, measured: {units: :m}
-    validates :width, :length, :height, measured: {greater_than: 0}, if: :lcl?
+    validates :width, :length, :height, measured: {greater_than: 0}, if: :dimensions_required?
+    validates :volume, measured: {greater_than: 0}, if: :cargo_item?
 
     validates_inclusion_of :cargo_class, in: CARGO_CLASSES
+
+    before_validation :set_volume, if: :dimensions_required?
 
     enum colli_type: {
       container: "container", # When cargo class is fcl
@@ -55,12 +59,8 @@ module Journey
       low_temp_reefer: "low_temp_reefer"
     }
 
-    def lcl?
+    def cargo_item?
       cargo_class.downcase.match?(/lcl/)
-    end
-
-    def volume
-      Measured::Volume.new(width_value * length_value * height_value, "m3")
     end
 
     def total_volume
@@ -69,6 +69,14 @@ module Journey
 
     def total_weight
       weight.scale(quantity)
+    end
+
+    def dimensions_required?
+      cargo_class == 'lcl'
+    end
+
+    def set_volume
+      self.volume_value ||= width_value * length_value * height_value
     end
   end
 end
@@ -81,15 +89,17 @@ end
 #  cargo_class  :string           not null
 #  colli_type   :enum
 #  height_unit  :string           default("m"), not null
-#  height_value :decimal(20, 5)   default(0.0), not null
+#  height_value :decimal(20, 5)
 #  length_unit  :string           default("m"), not null
-#  length_value :decimal(20, 5)   default(0.0), not null
+#  length_value :decimal(20, 5)
 #  quantity     :integer          default(1), not null
 #  stackable    :boolean          not null
+#  volume_unit  :string           default("m3")
+#  volume_value :decimal(, )
 #  weight_unit  :string           default("kg"), not null
 #  weight_value :decimal(20, 5)   default(0.0), not null
 #  width_unit   :string           default("m"), not null
-#  width_value  :decimal(20, 5)   default(0.0), not null
+#  width_value  :decimal(20, 5)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  query_id     :uuid

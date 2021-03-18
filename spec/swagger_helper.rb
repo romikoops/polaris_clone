@@ -215,6 +215,61 @@ RSpec.configure do |config|
               "level"
             ]
           },
+          commodityInfo: {
+            type: "object",
+            properties: {
+              imo_class: {
+                type: "string",
+                enum: %w[
+                  0
+                  1.1
+                  1.2
+                  1.3
+                  1.4
+                  1.5
+                  1.6
+                  2.1
+                  2.2
+                  2.3
+                  3
+                  4.1
+                  4.2
+                  4.3
+                  5.1
+                  5.2
+                  6.1
+                  6.2
+                  7.1
+                  7.2
+                  7.3
+                  7.4
+                  8
+                  9
+                ],
+                description: <<~DOC
+                  Defines the standard IMO class for the dangerous goods that this cargo item might contain. IMO Class is defined as Class and possible sub-class, where class defines top-level category of type of dangerous goods, and sub-class defines more detailed separation of different dangerous goods.
+
+                  To see list of possible classes and sub-classes, please see for example https://www.searates.com/reference/imo/
+
+                  If dangerous goods category is unknown, please use `0.0` as IMO class, which is used internally for unknown dangerous goods class but known that it is dangerous goods.
+                  If cargo item contains no dangerous goods, set this field as `null`.
+                DOC
+              },
+              description: {
+                type: "string",
+                description: "The description of the IMO Class/ HSCode chosen"
+              },
+              hs_code: {
+                type: "string",
+                description: <<~DOC
+                  The Harmonized Commodity Description and Coding System, also known as the Harmonized System of tariff nomenclature is an internationally standardized system of names and numbers to classify traded products.
+                  This code is is used to identify the type of cargo being shipped as it can affect the pricing and routes available
+                DOC
+
+              }
+            },
+            required: ["id", "code"]
+          },
           country: {
             type: "object",
             properties: {
@@ -296,7 +351,7 @@ RSpec.configure do |config|
             type: "object",
             properties: {
               cargo_class: {
-                description: "Container classification code",
+                description: "Cargo classification code",
                 type: "string",
                 enum: [
                   "lcl",
@@ -328,91 +383,235 @@ RSpec.configure do |config|
                 type: "integer"
               },
               length: {
-                description: "Length of the item",
-                type: "integer"
+                description: "Length of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
               },
               width: {
-                description: "Width of the item",
-                type: "integer"
+                description: "Width of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
               },
               height: {
-                description: "Height of the item",
-                type: "integer"
+                description: "Height of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
               },
               weight: {
-                description: "Weight of the item",
-                type: "integer"
+                description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
+                type: "number",
+                not: 0.0
+              },
+              volume: {
+                description: "Volume of the item expressed as a decimal on the cubic meter (m3) scale",
+                type: "number",
+                not: 0.0
               },
               commodities: {
                 description: "Commodity codes of the contents",
                 type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    imo_class: {
-                      type: "string",
-                      oneOf: %w[
-                        0
-                        1.1
-                        1.2
-                        1.3
-                        1.4
-                        1.5
-                        1.6
-                        2.1
-                        2.2
-                        2.3
-                        3
-                        4.1
-                        4.2
-                        4.3
-                        5.1
-                        5.2
-                        6.1
-                        6.2
-                        7.1
-                        7.2
-                        7.3
-                        7.4
-                        8
-                        9
-                      ],
-                      description: <<~DOC
-                        Defines the standard IMO class for the dangerous goods that this cargo item might contain. IMO Class is defined as Class and possible sub-class, where class defines top-level category of type of dangerous goods, and sub-class defines more detailed separation of different dangerous goods.
-
-                        To see list of possible classes and sub-classes, please see for example https://www.searates.com/reference/imo/
-
-                        If dangerous goods category is unknown, please use `0.0` as IMO class, which is used internally for unknown dangerous goods class but known that it is dangerous goods.
-                        If cargo item contains no dangerous goods, set this field as `null`.
-                      DOC
-                    },
-                    description: {
-                      type: "string",
-                      description: "The description of the IMO Class/ HSCode chosen"
-                    },
-                    hs_code: {
-                      type: "string",
-                      description: <<~DOC
-                        The Harmonized Commodity Description and Coding System, also known as the Harmonized System of tariff nomenclature is an internationally standardized system of names and numbers to classify traded products.
-                        This code is is used to identify the type of cargo being shipped as it can affect the pricing and routes available
-                      DOC
-
-                    }
-                  },
-                  required: ["id", "code"]
-                }
+                items: { "$ref": "#/components/schemas/commodityInfo" }
               }
             },
             required: [
               "stackable",
-              "dangerous",
               "colliType",
               "quantity",
               "length",
               "width",
               "height",
               "weight",
-              "commodityCodes"
+              "commodities"
+            ],
+          },
+          item_lcl: {
+            type: "object",
+            properties: {
+              cargo_class: {
+                description: "Cargo classification code",
+                type: "string",
+                enum: [
+                  "lcl"
+                ]
+              },
+              stackable: {
+                description: "If cargo item is stackable or not",
+                type: "boolean"
+              },
+              quantity: {
+                description: "Quantity",
+                type: "integer"
+              },
+              length: {
+                description: "Length of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
+              },
+              width: {
+                description: "Width of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
+              },
+              height: {
+                description: "Height of the item expressed as a decimal on the centimeter (cm) scale",
+                type: "number",
+                not: 0.0
+              },
+              weight: {
+                description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
+                type: "number",
+                not: 0.0
+              },
+              volume: {
+                description: "Volume is derived from Width, Length and Height values so this property is null",
+                type: "number",
+                nullable: true
+              },
+              commodities: {
+                description: "Commodity codes of the contents",
+                type: "array",
+                items: { "$ref": "#/components/schemas/commodityInfo" }
+              }
+            },
+            required: [
+              "stackable",
+              "colliType",
+              "quantity",
+              "length",
+              "width",
+              "height",
+              "weight",
+              "commodities"
+            ],
+          },
+          item_aggregated_lcl: {
+            type: "object",
+            properties: {
+              cargo_class: {
+                description: "Cargo classification code",
+                type: "string",
+                enum: [
+                  "aggregated_lcl"
+                ]
+              },
+              stackable: {
+                description: "Aggregated Cargo Item's are always stackable so this property is not required",
+                type: "boolean",
+                nullable: true
+              },
+              quantity: {
+                description: "Quantity",
+                type: "integer"
+              },
+              length: {
+                description: "Aggregated Cargo Item's have no defined length so this property is null",
+                type: "number",
+                nullable: true
+              },
+              width: {
+                description: "Aggregated Cargo Item's have no defined width so this property is null",
+                type: "number",
+                nullable: true
+              },
+              height: {
+                description: "Aggregated Cargo Item's have no defined height so this property is null",
+                type: "number",
+                nullable: true
+              },
+              weight: {
+                description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
+                type: "number",
+                not: 0.0
+              },
+              volume: {
+                description: "Volume of the item expressed as a decimal on the cubic meter (m3) scale",
+                type: "number",
+                not: 0.0
+              },
+              commodities: {
+                description: "Commodity codes of the contents",
+                type: "array",
+                items: { "$ref": "#/components/schemas/commodityInfo" }
+              }
+            },
+            required: [
+              "colliType",
+              "quantity",
+              "volume",
+              "weight",
+              "commodities",
+              "cargo_class"
+            ],
+          },
+          item_fcl: {
+            type: "object",
+            properties: {
+              cargo_class: {
+                description: "Container classification code",
+                type: "string",
+                enum: [
+                  "fcl_10",
+                  "fcl_20",
+                  "fcl_20_ot",
+                  "fcl_20_rf",
+                  "fcl_20_frs",
+                  "fcl_20_frw",
+                  "fcl_40",
+                  "fcl_40_hq",
+                  "fcl_40_ot",
+                  "fcl_40_rf",
+                  "fcl_40_hq_rf",
+                  "fcl_40_frs",
+                  "fcl_40_frw",
+                  "fcl_45",
+                  "fcl_45_hq",
+                  "fcl_45_rf"
+                ]
+              },
+              stackable: {
+                description: "If cargo item is stackable or not: N/A for FCL",
+                type: "boolean"
+              },
+              quantity: {
+                description: "Quantity",
+                type: "integer"
+              },
+              length: {
+                description: "Containers have no defined length so this property is null",
+                type: "integer",
+                nullable: true
+              },
+              width: {
+                description: "Containers have no defined width so this property is null",
+                type: "integer",
+                nullable: true
+              },
+              height: {
+                description: "Containers have no defined height so this property is null",
+                type: "integer",
+                nullable: true
+              },
+              weight: {
+                description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
+                type: "integer"
+              },
+              volume: {
+                description: "Containers have no defined dimensions so this property is null",
+                type: "integer"
+              },
+              commodities: {
+                description: "Commodity codes of the contents",
+                type: "array",
+                items: { "$ref": "#/components/schemas/commodityInfo" }
+              }
+            },
+            required: [
+              "stackable",
+              "colliType",
+              "quantity",
+              "weight",
+              "commodities",
+              "cargo_class"
             ],
           },
           journeyError: {

@@ -9,7 +9,7 @@ module OfferCalculator
         attr_accessor :stackability
 
         delegate :cargo_unit, :quantity, :volumetric_weight, :total_weight, :height, :width, :length,
-          :total_area, :total_volume, :id, :consolidated?, :stackable?, :stowage_factor, :lcl?, :weight,
+          :total_area, :total_volume, :id, :consolidated?, :stackable?, :stowage_factor, :cargo_item?, :weight,
           :height, :volume, :valid?, :load_meterage_weight, :cargo_class, :load_type, :cbm_ratio,
           :load_meterage_ratio, :load_meterage_limit, :section, :load_meterage_type, :type, :km,
           :load_meterage_hard_limit, :load_meterage_stacking, :stacked_area, :targets,
@@ -49,7 +49,7 @@ module OfferCalculator
 
         def chargeable_weight
           @chargeable_weight ||=
-            if lcl?
+            if cargo_item?
               lcl_chargeable_weight.max
             else
               total_weight

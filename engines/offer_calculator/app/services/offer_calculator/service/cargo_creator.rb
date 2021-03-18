@@ -44,6 +44,7 @@ module OfferCalculator
           colli_type: colli_type(unit_params: unit_params),
           cargo_class: cargo_class_from_params(unit_params: unit_params)
         ).tap do |new_cargo|
+          new_cargo.set_volume if new_cargo.dimensions_required?
           return new_cargo unless persist?
 
           new_cargo.commodity_infos << commodity_info_for_cargo(unit: new_cargo, unit_params: unit_params)
@@ -88,12 +89,10 @@ module OfferCalculator
         Journey::CargoUnit.new(
           id: unit_params_id(unit_params: aggregated_attributes),
           weight_value: aggregated_attributes.fetch("weight"),
-          width_value: 1,
-          length_value: aggregated_attributes.fetch("volume"),
-          height_value: 1,
           quantity: 1,
           stackable: true,
           query: query,
+          volume_value: aggregated_attributes.fetch("volume"),
           cargo_class: "aggregated_lcl"
         ).tap do |new_cargo|
           return new_cargo unless persist?

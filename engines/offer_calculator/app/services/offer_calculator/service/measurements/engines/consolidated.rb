@@ -30,6 +30,10 @@ module OfferCalculator
             1
           end
 
+          def cargo_item?
+            cargo_units.all?(&:cargo_item?)
+          end
+
           def volumetric_weight
             targets.sum(Measured::Weight.new(0, "kg"), &:volumetric_weight)
           end

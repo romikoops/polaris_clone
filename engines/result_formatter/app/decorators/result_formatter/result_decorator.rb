@@ -233,7 +233,7 @@ module ResultFormatter
     end
 
     def fcl_units
-      @fcl_units ||= cargo_units.reject(&:lcl?)
+      @fcl_units ||= cargo_units.reject(&:cargo_item?)
     end
 
     def aggr_units

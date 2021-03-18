@@ -96,7 +96,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
       context "with failure (AggregatedCargo)" do
         let(:cargo_units) do
           [FactoryBot.build(:journey_cargo_unit,
-            cargo_class: "aggregated_lcl",
+            :aggregate_lcl,
             weight_value: 25000)]
         end
 

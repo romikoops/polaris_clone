@@ -5,7 +5,7 @@ module Api
       delegate_all
 
       def legacy_format
-        lcl? ? cargo_item_format : container_format
+        cargo_item? ? cargo_item_format : container_format
       end
 
       def cargo_item_format

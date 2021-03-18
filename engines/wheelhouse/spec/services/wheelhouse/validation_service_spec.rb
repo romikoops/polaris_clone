@@ -150,6 +150,7 @@ module Wheelhouse
                 width_value: 1.20,
                 length_value: 0.80,
                 height_value: 120.0,
+                volume_value: 115.2,
                 quantity: 1)
             ]
           end

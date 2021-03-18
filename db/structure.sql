@@ -1704,12 +1704,14 @@ CREATE TABLE public.journey_cargo_units (
     length_unit character varying DEFAULT 'm'::character varying NOT NULL,
     height_unit character varying DEFAULT 'm'::character varying NOT NULL,
     weight_value numeric(20,5) DEFAULT 0.0 NOT NULL,
-    width_value numeric(20,5) DEFAULT 0.0 NOT NULL,
-    length_value numeric(20,5) DEFAULT 0.0 NOT NULL,
-    height_value numeric(20,5) DEFAULT 0.0 NOT NULL,
+    width_value numeric(20,5),
+    length_value numeric(20,5),
+    height_value numeric(20,5),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     colli_type public.journey_colli_type,
+    volume_unit character varying DEFAULT 'm3'::character varying,
+    volume_value numeric,
     CONSTRAINT journey_cargo_units_cargo_class_presence CHECK (((cargo_class IS NOT NULL) AND ((cargo_class)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_cargo_units_height_unit_presence CHECK (((height_unit IS NOT NULL) AND ((height_unit)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_cargo_units_height_value_numericality CHECK ((height_value >= (0)::numeric)),
@@ -12112,6 +12114,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210217170422'),
 ('20210224094318'),
 ('20210312114929'),
-('20210315112012');
+('20210315112012'),
+('20210317075546'),
+('20210317084132');
 
 

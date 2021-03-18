@@ -98,14 +98,13 @@ module Wheelhouse
     end
 
     def aggregated_cargo_attributes
-      return [] if params[:aggregated].blank?
+      return if params[:items].none? {|item| item[:cargo_class] == "aggregated_lcl" }
 
       item = params[:items].first
       {
-        total_weight: item[:weight],
-        total_volume: item[:volume],
+        weight: item[:weight],
+        volume: item[:volume],
         stackable: true,
-        dangerous: {},
         commodities: item[:commodities]
       }
     end

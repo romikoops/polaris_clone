@@ -73,12 +73,18 @@ RSpec.describe "Queries", type: :request, swagger: true do
           },
           items: {
             type: :array,
-            items: {"$ref" => "#/components/schemas/item"}
+            items: {
+              oneOf: [
+                {"$ref" => "#/components/schemas/item_lcl"},
+                {"$ref" => "#/components/schemas/item_aggregated_lcl"},
+                {"$ref" => "#/components/schemas/item_fcl"}
+              ]
+            }
           }
         }, required: ["originId", "destinationId", "loadType", "aggregated", "items"]
       }
 
-      response "201", "successful operation" do
+      response "201", "successful operation (FCL)" do
         let(:query) do
           {
             originId: origin.id,
@@ -88,13 +94,67 @@ RSpec.describe "Queries", type: :request, swagger: true do
             items: [
               {
                 stackable: true,
-                dangerous: false,
                 cargoClass:'fcl_20',
                 colliType: 'container',
+                quantity: 1,
+                length: nil,
+                width: nil,
+                height: nil,
+                weight: 1200,
+                volume: nil,
+                commodities: [{ imo_class: "0", description: "Unknown IMO Class"}]
+              }
+            ]
+          }
+        end
+
+        run_test!
+      end
+
+      response "201", "successful operation (Aggregated Cargo Items)" do
+        let(:query) do
+          {
+            originId: origin.id,
+            destinationId: destination.id,
+            loadType: load_type,
+            aggregated: false,
+            items: [
+              {
+                stackable: true,
+                cargoClass:'aggregated_lcl',
+                colliType: 'pallet',
+                quantity: 1,
+                length: nil,
+                width: nil,
+                height: nil,
+                volume: 1.44,
+                weight: 1200,
+                commodities: [{ imo_class: "0", description: "Unknown IMO Class"}]
+              }
+            ]
+          }
+        end
+
+        run_test!
+      end
+
+      response "201", "successful operation (Cargo Item)" do
+        let(:query) do
+          {
+            originId: origin.id,
+            destinationId: destination.id,
+            loadType: load_type,
+            aggregated: false,
+            items: [
+              {
+                stackable: true,
+                cargoClass:'lcl',
+                colliType: 'pallet',
                 quantity: 1,
                 length: 120,
                 width: 100,
                 height: 120,
+                volume: nil,
                 weight: 1200,
                 commodities: [{ imo_class: "0", description: "Unknown IMO Class"}]
               }

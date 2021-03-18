@@ -210,12 +210,10 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
           [
             {
               cargo_class: "aggregated_lcl",
-              height_value: 1,
-              length_value: 1,
+              volume_value: 1,
               quantity: 1,
               stackable: true,
-              weight_value: 1000,
-              width_value: 1
+              weight_value: 1000
             }
           ]
         end
