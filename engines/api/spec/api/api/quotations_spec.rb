@@ -46,8 +46,8 @@ RSpec.describe "Quotations", type: :request, swagger: true do
               selected_date: {type: :string},
               organization_id: {type: :string},
               user_id: {type: :string},
-              origin: {type: :string},
-              destination: {type: :string}
+              origin: { "$ref" => "#/components/schemas/locationV1" },
+              destination: { "$ref" => "#/components/schemas/locationV1" }
             }, required: ["selected_date", "organization_id", "user_id", "origin", "destination"]
           },
           shipment_info: {

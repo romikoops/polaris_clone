@@ -452,6 +452,23 @@ RSpec.configure do |config|
               }
             }, required: ["id"]
           },
+          locationV1: {
+            type: "object",
+            properties: {
+              nexus_id: {
+                type: "integer",
+                description: "The unique identifier of the Location Nexus"
+              },
+              latitude: {
+                type: "string",
+                description: "The latitude of the Location"
+              },
+              longitude: {
+                type: "string",
+                description: "The longitude of the Location"
+              }
+            }, required: ["latitude", "longitude"]
+          },
           money: {
             type: "object",
             properties: {
