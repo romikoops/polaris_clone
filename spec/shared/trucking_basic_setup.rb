@@ -15,7 +15,7 @@ RSpec.shared_context "with standard trucking setup" do
   let(:group_id) { nil }
   let(:arguments) do
     {
-      applicable: hub,
+      hub_id: hub.id,
       group_id: group_id,
       organization_id: organization.id
     }

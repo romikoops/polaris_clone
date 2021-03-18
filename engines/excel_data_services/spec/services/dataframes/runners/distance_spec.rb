@@ -22,7 +22,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Trucking do
 
   describe ".perform" do
     it "returns successfully", :aggregate_failures do
-      expect(stats_or_errors.dig("truckings", "created")).to eq(103)
+      expect(stats_or_errors.dig("truckings", "created")).to eq(101)
       expect(truckings.map { |tr| tr.rates.dig(modifiers.first.to_s).count }.uniq).to eq([bracket_counts.first])
       expect(truckings.map(&:modifier).uniq).to eq(modifiers)
     end

@@ -29,7 +29,7 @@ module ExcelDataServices
             file: file,
             errors: [],
             frame: nil,
-            hub_id: arguments["applicable"].id,
+            hub_id: arguments["hub_id"],
             group_id: arguments["group_id"],
             organization_id: arguments["organization_id"]
           )

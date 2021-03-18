@@ -28,7 +28,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
   let(:trucking_file) { ExcelDataServices::Schemas::Files::Trucking.new(file: xlsx) }
   let(:arguments) do
     {
-      applicable: hub,
+      hub_id: hub.id,
       group_id: group_id,
       organization_id: organization.id
     }

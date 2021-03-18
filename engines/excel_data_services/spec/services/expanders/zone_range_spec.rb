@@ -19,8 +19,8 @@ RSpec.describe ExcelDataServices::Expanders::ZoneRange do
       let(:row) { {zone: 1.0, primary: nil, secondary: "10 - 20", country_code: "ZA"}.stringify_keys }
 
       it "returns the frame with the one row per code in range", :aggregate_failures do
-        expect(expanded_table.count).to eq(11)
-        expect(expanded_table["primary"].to_a).to eq("10".upto("20").to_a)
+        expect(expanded_table.count).to eq(10)
+        expect(expanded_table["primary"].to_a).to eq("10".upto("19").to_a)
       end
     end
 

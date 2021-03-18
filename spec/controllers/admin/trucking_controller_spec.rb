@@ -58,7 +58,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
             options: {
               user_id: user.id,
               group_id: group_id,
-              applicable: hub
+              hub_id: hub.id
             }
           )
         end

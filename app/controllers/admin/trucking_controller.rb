@@ -57,8 +57,7 @@ class Admin::TruckingController < Admin::AdminBaseController
       type: "trucking",
       options: {
         group_id: upload_group_id,
-        applicable: hub,
-        user: current_user
+        hub_id: hub.id
       }
     )
   end

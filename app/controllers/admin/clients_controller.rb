@@ -46,10 +46,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}_clients",
-      type: "clients",
-      options: {
-        user: organization_user
-      }
+      type: "clients"
     )
   end
 

@@ -36,10 +36,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}:schedule_generator",
-      type: "schedules_generator",
-      options: {
-        user: organization_user
-      }
+      type: "schedules_generator"
     )
   end
 
@@ -47,10 +44,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
     handle_upload(
       params: upload_params,
       text: "#{current_organization.slug}:schedules",
-      type: "schedules",
-      options: {
-        user: organization_user
-      }
+      type: "schedules"
     )
   end
 

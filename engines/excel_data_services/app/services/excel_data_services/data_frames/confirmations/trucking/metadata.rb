@@ -6,7 +6,10 @@ module ExcelDataServices
       module Trucking
         class Metadata < ExcelDataServices::DataFrames::Base
           def performing_modules
-            [ExcelDataServices::Validators::Extractions::TenantVehicle]
+            [
+              ExcelDataServices::Validators::Extractions::TenantVehicle,
+              ExcelDataServices::Validators::Extractions::Hub
+            ]
           end
         end
       end

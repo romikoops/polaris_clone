@@ -49,9 +49,9 @@ module ExcelDataServices
         end
 
         def numeric_range
-          range_start.upto(range_end).map do |postal_string|
+          (range_start...range_end).map do |numeric|
             {
-              "primary" => postal_string,
+              "primary" => numeric,
               "country_code" => country_code,
               "secondary" => secondary_range
             }

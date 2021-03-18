@@ -104,7 +104,6 @@ class Admin::HubsController < Admin::AdminBaseController
       text: "#{current_organization.slug} hubs upload #{Time.zone.today.strftime("%d/%m/%Y")}",
       type: "hubs",
       options: {
-        user: organization_user,
         group_id: upload_params[:group_id]
       }
     )

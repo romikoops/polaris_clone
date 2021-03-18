@@ -12,15 +12,14 @@ class Admin::AdminBaseController < ApplicationController
       text: text,
       doc_type: type,
       organization: current_organization,
-      user: options[:user],
+      user: current_user,
       file: params[:file]
     )
     ## Async Uploader
-    ExcelDataServices::UploaderJob.perform_later(document_id: document.id, options: {
-      user_id: options[:user]&.id,
-      group_id: options[:group_id],
-      applicable: options[:applicable]
-    })
+    ExcelDataServices::UploaderJob.perform_later(
+      document_id: document.id,
+      options: { user_id: current_user&.id }.merge(options)
+    )
     response_handler({has_errors: false, async: true})
   end
 

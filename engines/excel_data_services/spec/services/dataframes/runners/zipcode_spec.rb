@@ -25,7 +25,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Trucking do
       before { tenant_vehicle }
 
       it "returns successfully", :aggregate_failures do
-        expect(stats_or_errors.dig("truckings", "created")).to eq(53)
+        expect(stats_or_errors.dig("truckings", "created")).to eq(51)
         expect(truckings.map { |tr| tr.rates.dig(modifiers.first.to_s).count }.uniq).to eq([bracket_counts.first])
         expect(truckings.map(&:modifier).uniq).to eq(modifiers)
       end

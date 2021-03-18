@@ -70,8 +70,7 @@ class Admin::LocalChargesController < Admin::AdminBaseController
       text: "group_id:#{upload_params[:group_id] || "all"}",
       type: "local_charges",
       options: {
-        group_id: upload_params[:group_id],
-        user: organization_user
+        group_id: upload_params[:group_id]
       }
     )
   end

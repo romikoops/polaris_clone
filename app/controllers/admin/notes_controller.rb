@@ -7,8 +7,7 @@ class Admin::NotesController < Admin::AdminBaseController
       text: "#{current_organization.slug}:notes",
       type: "notes",
       options: {
-        group_id: upload_params[:group_id],
-        user: organization_user
+        group_id: upload_params[:group_id]
       }
     )
   end

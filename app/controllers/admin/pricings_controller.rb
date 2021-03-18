@@ -98,7 +98,6 @@ class Admin::PricingsController < Admin::AdminBaseController
       text: "group_id:#{params[:group_id] || "all"}",
       type: "pricings",
       options: {
-        user: organization_user,
         group_id: upload_params[:group_id]
       }
     )

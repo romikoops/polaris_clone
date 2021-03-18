@@ -18,6 +18,18 @@ module ExcelDataServices
         def perform
           import_result
           stats
+        rescue ActiveRecord::StatementInvalid
+          ExcelDataServices::DataFrames::Importers::Stats.new(
+            type: type,
+            created: 0,
+            failed: data.length,
+            errors: [
+              {
+                sheet_name: type,
+                reason: "We were not able to insert your #{type.humanize} correctly."
+              }
+            ]
+          )
         end
 
         private
