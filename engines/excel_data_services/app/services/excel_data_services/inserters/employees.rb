@@ -15,7 +15,7 @@ module ExcelDataServices
 
       def update_or_create_employee(params)
         user = Users::Client.find_by(email: params[:email], organization: @organization)
-        user ||= Users::Client.create!(
+        user ||= Users::Client.new(
           password: params[:password],
           organization_id: @organization.id,
           email: params[:email],
@@ -26,9 +26,10 @@ module ExcelDataServices
           },
           settings_attributes: {}
         )
+        add_stats(user, params[:row_nr], true)
+        return unless user.save
 
         ::Companies::Membership.first_or_create(company: params[:company], member: user)
-        add_stats(user, params[:row_nr], true)
       end
     end
   end

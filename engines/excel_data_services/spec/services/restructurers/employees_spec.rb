@@ -10,7 +10,7 @@ RSpec.describe ExcelDataServices::Restructurers::Companies do
        rows_data: [{
          first_name: "Test",
          last_name: "Agent",
-         email: "TEST@company.com",
+         email: "TEST@company.com  ", # with &nbsp;
          phone: "1234567879",
          company_name: company.name,
          vat_number: "987654321",

@@ -19,8 +19,8 @@ module ExcelDataServices
           name: params[:name],
           email: params[:email]
         )
-
         add_stats(company, params[:row_nr])
+
         company.update(
           vat_number: params[:vat_number],
           phone: params[:phone],

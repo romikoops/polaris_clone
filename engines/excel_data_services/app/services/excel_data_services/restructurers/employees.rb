@@ -10,7 +10,7 @@ module ExcelDataServices
             name: row[:company_name],
             organization: @organization
           )
-          row[:email] = row[:email].downcase.strip
+          row[:email] = row[:email].gsub(/[[:space:]]/, ' ').downcase.strip
           password = row[:password].is_a?(Numeric) ? row[:password].to_i.to_s : row[:password]
           row[:password] = password.strip
 
