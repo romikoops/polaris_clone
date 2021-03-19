@@ -30,7 +30,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :organization, :data, :klass_identifier, :options, :stats, :scope, :group_id
+      attr_reader :data, :klass_identifier, :options, :stats, :scope, :group_id
 
       def metadata(row:)
         document = options[:document]

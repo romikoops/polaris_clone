@@ -5,21 +5,49 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::Inserters::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:german_address) { FactoryBot.create(:hamburg_address) }
+  let(:belgium) { FactoryBot.create(:legacy_country, code: "BE", name: "Belgium") }
+  let(:france) { FactoryBot.create(:legacy_country, code: "FR", name: "France") }
   let!(:hubs) do
     [
-      FactoryBot.create(:legacy_hub,
-        organization: organization, name: "Bremerhaven", hub_type: "ocean", address: german_address),
-      FactoryBot.create(:legacy_hub, organization: organization,
-                                     name: "Antwerp", hub_type: "ocean",
-                                     nexus: FactoryBot.create(:legacy_nexus, organization: organization,
-                                                                             name: "Antwerp",
-                                                                             locode: "BEANR"),
-                                     address: FactoryBot.create(:legacy_address,
-                                       country: FactoryBot.create(:legacy_country, code: "BE", name: "Belgium"))),
-      FactoryBot.create(:legacy_hub,
-        organization: organization, name: "Le Havre", hub_type: "ocean",
+      FactoryBot.create(
+        :legacy_hub,
+        organization: organization,
+        name: "Bremerhaven",
+        nexus: FactoryBot.create(
+          :legacy_nexus,
+          organization: organization,
+          name: "Bremerhaven",
+          locode: "DEBRV",
+          country: german_address.country
+        ),
+        hub_type: "ocean",
+        address: german_address
+      ),
+      FactoryBot.create(
+        :legacy_hub,
+        organization: organization,
+        name: "Antwerp",
+        hub_code: "BEANR",
+        hub_type: "ocean",
+        nexus: FactoryBot.create(:legacy_nexus,
+          organization: organization,
+          name: "Antwerp",
+          locode: "BEANR",
+          country: belgium),
         address: FactoryBot.create(:legacy_address,
-          country: FactoryBot.create(:legacy_country, code: "FR", name: "France")))
+          country: belgium)
+      ),
+      FactoryBot.create(:legacy_hub,
+        organization: organization,
+        name: "Le Havre",
+        nexus: FactoryBot.create(:legacy_nexus,
+          organization: organization,
+          name: "Le Havre",
+          locode: "FRLEH",
+          country: france),
+        hub_type: "ocean",
+        address: FactoryBot.create(:legacy_address,
+          country: france))
     ]
   end
   let(:options) { {organization: organization, data: input_data, options: {}} }

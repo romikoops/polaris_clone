@@ -9,7 +9,13 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::LocalCharges do
     FactoryBot.create(:legacy_hub,
       name: "Bremerhaven",
       organization: organization,
-      nexus: FactoryBot.create(:legacy_nexus, locode: "DEBRV", country: german_address.country),
+      nexus: FactoryBot.create(
+        :legacy_nexus,
+        organization: organization,
+        name: "Bremerhaven",
+        locode: "DEBRV",
+        country: german_address.country
+      ),
       address: german_address)
   end
   let!(:hubs) { [bremen] }

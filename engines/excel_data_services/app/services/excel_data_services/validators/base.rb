@@ -64,7 +64,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :organization, :sheet_name, :data, :klass_identifier, :options
+      attr_reader :sheet_name, :data, :klass_identifier, :options
 
       def add_to_errors(type:, row_nr:, sheet_name:, reason:, exception_class:)
         @errors_and_warnings << {type: type,

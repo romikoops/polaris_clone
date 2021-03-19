@@ -749,7 +749,7 @@ FactoryBot.define do
            origin_locode: "SEGOT",
            country_origin: "Sweden",
            destination: "",
-           destination_locode: "CNSHG",
+           destination_locode: "CNSHA",
            country_destination: "China",
            mot: "ocean",
            carrier: nil,

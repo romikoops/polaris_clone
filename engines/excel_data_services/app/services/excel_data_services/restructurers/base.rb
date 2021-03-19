@@ -45,7 +45,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :organization, :data
+      attr_reader :data
 
       def scope
         @scope ||= ::OrganizationManager::ScopeService.new(organization: organization).fetch

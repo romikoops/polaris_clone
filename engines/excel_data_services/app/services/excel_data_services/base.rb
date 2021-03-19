@@ -9,41 +9,29 @@ module ExcelDataServices
        "truck" => "Depot"}.freeze
 
     def find_hub_by_name_or_locode_with_info(name:, country:, mot:, locode:)
-      if locode.is_a?(String)
-        nexus = find_nexus_by_locode_or_name(locode: locode, name: name, country: country)
-        hub = find_hub_by_name_and_mot(name: name, country: country, mot: mot, nexus: nexus)
-        found_by_info = locode
-      end
+      locode = locode.delete(" ").upcase if locode.present?
+      nexus = find_nexus_by_locode_or_name(name: name, country: country, locode: locode)
+      hub = find_hub_by_name_and_mot(name: name, country: country, mot: mot, nexus: nexus, locode: locode) if nexus.present?
 
-      if !hub && name
-        hub = find_hub_by_name_and_mot(name: name, country: country, mot: mot)
-        found_by_info = [name, country].compact.join(", ")
-      end
-
-      {hub: hub, found_by_info: found_by_info}
+      {hub: hub, found_by_info: [name, country, locode].compact.join(", ")}
     end
 
     private
 
-    def find_hub_by_name_and_mot(name:, country:, mot:, nexus: nil)
-      hubs = ::Legacy::Hub.where(organization: organization, hub_type: mot)
-      hubs = hubs.where(nexus: nexus) if nexus.present?
-      hubs = hubs.where(name: name) if name.present?
+    attr_reader :organization
 
-      if country.present?
-        hubs.joins(:country).find_by(countries: {name: country})
-      else
-        hubs.first
-      end
+    def find_nexus_by_locode_or_name(name:, country:, locode:)
+      nexuses = ::Legacy::Nexus.where(organization: organization)
+      nexus = nexuses.joins(:country).find_by(name: name, countries: {name: country}) if name.present? && country.present?
+
+      nexus || nexuses.find_by(locode: locode)
     end
 
-    def find_nexus_by_locode_or_name(locode:, name:, country:)
-      safe_locode = locode.delete(" ").upcase
-      nexuses = ::Legacy::Nexus.where(organization: organization)
+    def find_hub_by_name_and_mot(name:, country:, mot:, nexus:, locode:)
+      hubs = ::Legacy::Hub.where(organization: organization, hub_type: mot, nexus: nexus)
+      hub = hubs.joins(:country).find_by(name: name, countries: {name: country}) if name.present? && country.present?
 
-      nexuses = nexuses.joins(:country).where(countries: {name: country}) if country.present?
-      nexus = nexuses.find_by(name: name, locode: safe_locode)
-      nexus || nexuses.find_by(locode: safe_locode)
+      hub || hubs.find_by(hub_code: locode)
     end
   end
 end
