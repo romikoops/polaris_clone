@@ -33,6 +33,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
   let(:results) {
     described_class.new(request: request).perform(routes, hubs)
   }
+  let(:duration) { OfferCalculator::Schedule::DURATION }
+  let(:desired_end_date) { request.cargo_ready_date + duration.days }
 
   before do
     ::Organizations.current_id = organization.id
@@ -45,8 +47,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
-          expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
+          expect(results.first.etd).to eq(request.cargo_ready_date)
+          expect(results.first.eta).to eq(desired_end_date)
         end
       end
     end
@@ -54,16 +56,15 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
     context "with transit_time" do
       before do
         FactoryBot.create(:legacy_transit_time,
-          itinerary: itinerary, tenant_vehicle_id: tenant_vehicle.id, duration: 35)
+          itinerary: itinerary, tenant_vehicle_id: tenant_vehicle.id, duration: duration)
       end
-
-      let(:desired_end_date) { 35.days.from_now.beginning_of_day }
+      let(:duration) { 35 }
 
       it "returns the generated Schedule for available routes" do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
+          expect(results.first.etd).to eq(request.cargo_ready_date)
           expect(results.first.eta).to eq(desired_end_date)
         end
       end
@@ -83,7 +84,11 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
     end
 
     context "with search_buffer & closing_date_buffer" do
-      let(:scope_content) { {search_buffer: 15, closing_date_buffer: 5} }
+      before do
+        allow(request).to receive(:cargo_ready_date).and_return(desired_start_date)
+      end
+
+      let(:scope_content) { {search_buffer: 5, closing_date_buffer: 5} }
       let(:desired_start_date) { 15.days.from_now.beginning_of_day }
 
       it "returns the generated Schedule for available routes" do
@@ -96,12 +101,26 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
 
     context "with closing_date_buffer before today" do
       let(:scope_content) { {search_buffer: 0, closing_date_buffer: 5} }
-      let(:desired_start_date) { Time.zone.now.beginning_of_day }
+      let(:desired_start_date) { Time.zone.today.beginning_of_day }
+
+      it "returns the generated Schedule for available routes" do
+        aggregate_failures do
+          expect(results.first.closing_date).to eq(desired_start_date)
+          expect(results.first.etd).to eq(request.cargo_ready_date)
+        end
+      end
+    end
+
+    context "with cargo_ready_date in the future" do
+      let(:desired_start_date) { Time.zone.now.beginning_of_day + 2.months }
+
+      before { allow(request).to receive(:cargo_ready_date).and_return(desired_start_date) }
 
       it "returns the generated Schedule for available routes" do
         aggregate_failures do
           expect(results.first.closing_date).to eq(desired_start_date)
           expect(results.first.etd).to eq(desired_start_date)
+          expect(results.first.eta).to eq(desired_start_date + 25.days)
         end
       end
     end
@@ -121,8 +140,8 @@ RSpec.describe OfferCalculator::Service::QuoteRouteBuilder do
         aggregate_failures do
           expect(results.length).to eq(1)
           expect(results.first.trip.tenant_vehicle_id).to eq(tenant_vehicle.id)
-          expect(results.first.etd).to eq(Time.zone.today.beginning_of_day)
-          expect(results.first.eta).to eq(OfferCalculator::Schedule.quote_trip_end_date)
+          expect(results.first.etd).to eq(request.cargo_ready_date)
+          expect(results.first.eta).to eq(desired_end_date)
         end
       end
     end

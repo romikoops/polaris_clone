@@ -35,18 +35,21 @@ module OfferCalculator
         if transit_time
           start_date + [transit_time.duration, 1].max.days
         else
-          OfferCalculator::Schedule.quote_trip_end_date
+          start_date + OfferCalculator::Schedule::DURATION.days
         end
       end
 
       def start_date
-        @start_date ||= buffer.to_i.days.from_now.beginning_of_day
+        @start_date ||= [
+          buffer.to_i.days.from_now.beginning_of_day,
+          request.cargo_ready_date.beginning_of_day
+        ].max
       end
 
       def closing_date
         @closing_date ||= [
           Time.zone.today.beginning_of_day,
-          (buffer - closing_date_buffer).days.from_now.beginning_of_day
+          (start_date - closing_date_buffer.days)
         ].max
       end
 

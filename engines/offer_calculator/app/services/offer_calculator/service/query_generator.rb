@@ -51,7 +51,7 @@ module OfferCalculator
 
       def delivery_date
         @delivery_date ||= params[:selected_collection_day] ||
-          OfferCalculator::Schedule.quote_trip_end_date
+          cargo_ready_date + OfferCalculator::Schedule::DURATION.days
       end
 
       def origin_string
