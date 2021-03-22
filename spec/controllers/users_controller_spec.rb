@@ -43,6 +43,7 @@ RSpec.describe UsersController do
   describe "POST #create" do
     let(:test_email) { "test@itsmycargo.com" }
     let(:created_user) { Users::Client.find_by(email: test_email, organization: organization) }
+    let(:return_token) { Doorkeeper::AccessToken.find_by(token: json.dig(:data, :access_token)) }
 
     before { FactoryBot.create(:companies_company, organization: organization, name: "default") }
 
@@ -59,7 +60,11 @@ RSpec.describe UsersController do
         }
       }
       post :create, params: params
-      expect(response).to have_http_status(:success)
+
+      aggregate_failures do
+        expect(created_user.profile.first_name).to eq("Test")
+        expect(return_token.application.name).to eq("dipper")
+      end
     end
 
     context "when creating with no profile attributes" do
@@ -176,6 +181,8 @@ RSpec.describe UsersController do
   end
 
   describe "POST #update" do
+    let(:return_token) { Doorkeeper::AccessToken.find_by(token: json.dig(:data, :headers, :access_token)) }
+
     it "returns http success, updates the user and send the email" do
       params = {
         organization_id: user.organization_id,
@@ -183,7 +190,7 @@ RSpec.describe UsersController do
         update: {
           company_name: "Person Freight",
           company_number: "Person Freight",
-          email: "wkbeamish+123@gmail.com",
+          email: "test+123@itsmycargo.com",
           first_name: "Test",
           guest: false,
           last_name: "Person",
@@ -192,7 +199,12 @@ RSpec.describe UsersController do
         }
       }
       post :update, params: params
-      expect(response).to have_http_status(:success)
+
+      aggregate_failures do
+        expect(user.profile.reload.first_name).to eq("Test")
+        expect(return_token.application.name).to eq("dipper")
+        expect(response).to have_http_status(:success)
+      end
     end
 
     context "when updating with no profile attributes" do

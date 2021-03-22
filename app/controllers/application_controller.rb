@@ -61,6 +61,7 @@ class ApplicationController < Api::ApiController
 
   def generate_token_for(user:, scope:)
     Doorkeeper::AccessToken.create(resource_owner_id: user.id,
+                                   application: Doorkeeper::Application.find_by(name: 'dipper'),
                                    refresh_token: generate_refresh_token,
                                    expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
                                    scopes: scope)
