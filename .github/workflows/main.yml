@@ -157,6 +157,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
       - uses: actions/download-artifact@v2
         with:
           name: swagger-base
@@ -169,7 +171,7 @@ jobs:
       - id: api_changes
         uses: itsmycargo/openapi-diff-action@main
         with:
-          base: https://api.itsmycargo.com/specs/swagger.json
+          base: doc/api/swagger.json
           revision: revision/swagger.json
 
       - id: committed
