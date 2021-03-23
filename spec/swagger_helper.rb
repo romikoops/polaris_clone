@@ -438,6 +438,26 @@ RSpec.configure do |config|
                 description: "If cargo item is stackable or not",
                 type: "boolean"
               },
+              colliType: {
+                description: "Colli Type: The type of container the items are packed in. One of a preset list",
+                type: "string",
+                enum: [
+                  "container",
+                  "barrel",
+                  "bottle",
+                  "carton",
+                  "case",
+                  "crate",
+                  "drum",
+                  "package",
+                  "pallet",
+                  "roll",
+                  "skid",
+                  "stack",
+                  "room_temp_reefer",
+                  "low_temp_reefer"
+                ]
+              },
               quantity: {
                 description: "Quantity",
                 type: "integer"
