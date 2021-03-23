@@ -8,6 +8,8 @@ module Legacy
     validates :name, :code, presence: true
     validates_uniqueness_of :name, scope: %i[code organization_id cargo_unit_id]
 
+    before_validation :downcase_code
+
     def self.from_code(code:, organization_id: nil, name: nil, cargo_unit_id: nil)
       name ||= code
       code = code.to_s.downcase
@@ -27,6 +29,12 @@ module Legacy
 
       klass = "Legacy::#{code.camelize}".safe_constantize
       klass.find_by(id: cargo_unit_id)
+    end
+
+    private
+
+    def downcase_code
+      code.downcase!
     end
   end
 end
