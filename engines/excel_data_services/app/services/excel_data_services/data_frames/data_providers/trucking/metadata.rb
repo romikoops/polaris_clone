@@ -41,15 +41,45 @@ module ExcelDataServices
 
           def headers
             extract_from_schema(section: "metadata_headers") |
-              extract_from_schema(section: "optional_metadata_headers")
+              extract_from_schema(section: "optional_metadata_headers") |
+              state_headers
           end
 
           def cell_data
-            extract_from_schema(section: "metadata_data")
+            extract_from_schema(section: "metadata_data") | state_cells
           end
 
           def label
             "metadata"
+          end
+
+          def state_cells
+            %i[hub_id group_id organization_id].map.with_index do |key, i|
+              ExcelDataServices::DataFrames::DataProviders::Cell.new(
+                value: state.send(key),
+                row: 1,
+                col: last_sheet_col + i,
+                label: label,
+                sheet_name: sheet_name
+              )
+            end
+          end
+
+          def state_headers
+            %w[hub_id group_id organization_id].map.with_index do |key, i|
+              ExcelDataServices::DataFrames::DataProviders::Cell.new(
+                value: key,
+                row: 1,
+                col: last_sheet_col + i,
+                label: label,
+                sheet_name: sheet_name
+              )
+            end
+          end
+
+          def last_sheet_col
+            @last_sheet_col ||=
+              extract_from_schema(section: "optional_metadata_headers").max_by(&:col).col + 1
           end
         end
       end

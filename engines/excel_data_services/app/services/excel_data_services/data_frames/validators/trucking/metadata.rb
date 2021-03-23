@@ -27,7 +27,10 @@ module ExcelDataServices
               "service" => ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
               "mode_of_transport" => ExcelDataServices::Validators::TypeValidity::Types::ModeOfTransportType,
               "effective_date" => ExcelDataServices::Validators::TypeValidity::Types::DateType,
-              "expiration_date" => ExcelDataServices::Validators::TypeValidity::Types::DateType
+              "expiration_date" => ExcelDataServices::Validators::TypeValidity::Types::DateType,
+              "group_id" => ExcelDataServices::Validators::TypeValidity::Types::UuidType,
+              "organization_id" => ExcelDataServices::Validators::TypeValidity::Types::UuidType,
+              "hub_id" => ExcelDataServices::Validators::TypeValidity::Types::IntegerType,
             }
           end
         end

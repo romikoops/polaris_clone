@@ -23,12 +23,13 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
   let(:country) { FactoryBot.create(:country_de) }
   let(:carrier_name) { "Gateway Cargo GmbH" }
   let(:truckings) { ::Trucking::Trucking.all }
+  let(:hub_id) { hub.id }
   let(:trucking_hub_availabilities) { ::Trucking::HubAvailability.all }
   let(:trucking_type_availabilities) { ::Trucking::TypeAvailability.all }
   let(:trucking_file) { ExcelDataServices::Schemas::Files::Trucking.new(file: xlsx) }
   let(:arguments) do
     {
-      hub_id: hub.id,
+      hub_id: hub_id,
       group_id: group_id,
       organization_id: organization.id
     }
@@ -89,16 +90,30 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
     end
 
     context "with errors" do
-      let!(:trucking_locations) { [] }
       let!(:result) do
         described_class.run(file: trucking_file, arguments: arguments)
       end
-      let(:error) { result.dig(:errors, 0) }
 
-      it "returns the error", :aggregate_failures do
-        expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::InsertableChecks)
-        expect(error.reason).to eq("The location '20038, 20000 - 20050' cannot be found.")
-        expect(error.type).to eq(:warning)
+      context "when locations dont exist" do
+        let!(:trucking_locations) { [] }
+        let(:error) { result.dig(:errors, 0) }
+
+        it "returns the error", :aggregate_failures do
+          expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::InsertableChecks)
+          expect(error.reason).to eq("The location '20038, 20000 - 20050' cannot be found.")
+          expect(error.type).to eq(:warning)
+        end
+      end
+
+      context "when the hub id provided is invalid" do
+        let(:hub_id) { "ALL" }
+        let(:error) { result.dig(:errors, 0) }
+
+        it "returns the error", :aggregate_failures do
+          expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::TypeValidity::IntegerType)
+          expect(error.reason).to eq("The value: ALL of the key: hub_id is not a valid IntegerType.")
+          expect(error.type).to eq(:type_error)
+        end
       end
     end
   end

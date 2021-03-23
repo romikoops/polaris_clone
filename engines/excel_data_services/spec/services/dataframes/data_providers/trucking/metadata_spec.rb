@@ -36,9 +36,9 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata 
           "direction" => "export",
           "carrier" => "Gateway Cargo GmbH",
           "service" => "standard",
-          "hub_id" => nil,
+          "hub_id" => hub.id,
           "group_id" => default_group.id,
-          "organization_id" => nil,
+          "organization_id" => organization.id,
           "effective_date" => Date.parse("Tue, 01 Sep 2020"),
           "expiration_date" => Date.parse("Fri, 31 Dec 2021"),
           "sheet_name" => "Sheet3"

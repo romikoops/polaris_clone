@@ -26,7 +26,10 @@ module ExcelDataServices
               "service" => "string",
               "effective_date" => "string",
               "expiration_date" => "string",
-              "identifier_modifier" => "string"
+              "identifier_modifier" => "string",
+              "group_id" => "string",
+              "organization_id" => "string",
+              "hub_id" => "integer"
             }
           end
 
