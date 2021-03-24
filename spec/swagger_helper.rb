@@ -1006,6 +1006,43 @@ RSpec.configure do |config|
               "attributes"
             ]
           },
+          profile: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the profile. Format of UUID.",
+                type: "string"
+              },
+              attributes: {
+                description: "Attributes",
+                type: "object",
+                properties: {
+                  email: {
+                    description: "Email of the client",
+                    type: "string"
+                  },
+                  firstName: {
+                    description: "First name of the user. This can be missing in case the user either does not have a first (given) name, or does not want it to be used.",
+                    type: "string"
+                  },
+                  lastName: {
+                    description: "User's last or family name. In cases user only has one name, last name is used for identifying that.",
+                    type: "string"
+                  }
+                },
+                required: [
+                  "email",
+                  "firstName",
+                  "lastName"
+                ]
+              }
+            },
+            required: [
+              "id",
+              "type",
+              "attributes"
+            ]
+          }
         },
         securitySchemes: {
           oauth: {

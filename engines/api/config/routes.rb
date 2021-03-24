@@ -79,6 +79,7 @@ Api::Engine.routes.draw do
       resources :uploads, only: [:create]
       resource :theme, only: [:show]
       resource :scope, only: [:show]
+      resource :profile, only: [:show, :update]
     end
   end
 end
