@@ -8,37 +8,11 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def show
-    hub = Hub.find_by(id: params[:id])
-    filters = {
-      cargo_class: params[:cargo_class],
-      truck_type: params[:truck_type],
-      destination: params[:destination],
-      carriage: params[:direction],
-      courier_name: params[:courier]
-    }
-    results = Trucking::Trucking.find_by_hub_id(
-      hub_id: params[:id],
-      options: {
-        paginate: true,
-        page: params[:page] || 1,
-        filters: filters,
-        per_page: params[:page_size],
-        group_id: params[:group] == "all" ? default_group.id : params[:group]
-      }
-    )
-
-    groups = Groups::Group.where(organization_id: current_organization)
-    trucking_providers = Legacy::TenantVehicle
-      .where(id: Trucking::Trucking
-                  .where(hub_id: params[:id], organization: current_organization)
-                  .select(:tenant_vehicle_id).distinct)
-      .pluck(:name)
-
     response_handler(
       hub: hub,
-      truckingPricings: results.map(&:as_index_result),
-      page: params[:page],
-      pages: results.total_pages,
+      truckingPricings: paginated_truckings.map(&:as_index_result),
+      page: show_params[:page],
+      pages: paginated_truckings.total_pages,
       groups: groups,
       providers: trucking_providers.select(&:presence)
     )
@@ -70,6 +44,21 @@ class Admin::TruckingController < Admin::AdminBaseController
     response_handler(url: url, key: "trucking")
   end
 
+  private
+
+  def show_params
+    params.permit(:id,
+      :cargo_class,
+      :truck_type,
+      :destination,
+      :direction,
+      :courier,
+      :group,
+      :page,
+      :per_page,
+      :paginate)
+  end
+
   def upload_params
     params.permit(:async, :file)
   end
@@ -80,5 +69,42 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def upload_hub_id
     params.require(:id)
+  end
+
+  def groups
+    @groups ||= Groups::Group.where(organization_id: current_organization)
+  end
+
+  def trucking_providers
+    Legacy::TenantVehicle
+      .where(organization: current_organization, mode_of_transport: "truck_carriage")
+      .joins(:carrier)
+      .pluck("carriers.name")
+  end
+
+  def hub
+    Legacy::Hub.find_by(id: params[:id])
+  end
+
+  def filters
+    {
+      cargo_class: show_params[:cargo_class],
+      truck_type: show_params[:truck_type],
+      destination: show_params[:destination],
+      carriage: show_params[:direction],
+      courier_name: show_params[:courier]
+    }
+  end
+
+  def truckings_by_hub
+    ::Trucking::Queries::FindByHubIds.new({
+      hub_ids: [show_params[:id]],
+      filters: filters,
+      group_id: show_params[:group].present? ? show_params[:group] : default_group.id
+    }).perform
+  end
+
+  def paginated_truckings
+    truckings_by_hub.paginate(page: show_params[:page] || 1, per_page: show_params[:per_page] || 20)
   end
 end

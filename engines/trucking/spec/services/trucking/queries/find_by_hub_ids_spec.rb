@@ -50,7 +50,7 @@ RSpec.describe Trucking::Queries::FindByHubIds do
           FactoryBot.create(:trucking_trucking, hub: hub, location: trucking_location,
                                                 tenant_vehicle: tenant_vehicle, organization: organization)
         }
-        let(:filters) { {courier_name: tenant_vehicle.name} }
+        let(:filters) { {courier_name: tenant_vehicle.carrier.name} }
 
         before { FactoryBot.create(:trucking_trucking, hub: hub) }
 

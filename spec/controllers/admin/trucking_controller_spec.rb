@@ -69,14 +69,15 @@ RSpec.describe Admin::TruckingController, type: :controller do
   describe "GET #show" do
     let(:courier_name) { "Test Courier" }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
-    let(:courier) { FactoryBot.create(:legacy_tenant_vehicle, name: courier_name, organization: organization) }
+    let(:carrier) { FactoryBot.create(:legacy_carrier, name: courier_name) }
+    let(:courier) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, organization: organization, mode_of_transport: "truck_carriage") }
 
     before do
       FactoryBot.create(:trucking_trucking, hub: hub, tenant_vehicle: courier, organization: organization, group: group)
     end
 
     it "returns the truckings for the requested hub" do
-      get :show, params: {id: hub.id, organization_id: organization.id, group: group.id}
+      get :show, params: {id: hub.id, organization_id: organization.id, group: group.id, courier: courier_name}
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response.dig("data", "groups")).not_to be_empty

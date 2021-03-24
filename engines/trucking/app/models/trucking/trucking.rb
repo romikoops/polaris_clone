@@ -38,22 +38,6 @@ module Trucking
 
     acts_as_paranoid
 
-    def self.delete_existing_truckings(hub)
-      where(hub_id: hub.id).destroy_all
-    end
-
-    def self.find_by_hub_id(hub_id:, options: {})
-      for_hubs(hub_ids: [hub_id], options: options)
-    end
-
-    def self.for_hubs(hub_ids:, options: {})
-      args = options.merge(hub_ids: hub_ids)
-      result = ::Trucking::Queries::FindByHubIds.new(args.merge(klass: self)).perform
-      result = result.paginate(page: options[:page], per_page: options[:per_page] || 20) if options[:paginate]
-
-      result
-    end
-
     # Instance Methods
     delegate :nexus_id, to: :hub
 
