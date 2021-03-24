@@ -350,7 +350,7 @@ RSpec.configure do |config|
           item: {
             type: "object",
             properties: {
-              cargo_class: {
+              cargoClass: {
                 description: "Cargo classification code",
                 type: "string",
                 enum: [
@@ -427,7 +427,7 @@ RSpec.configure do |config|
           item_lcl: {
             type: "object",
             properties: {
-              cargo_class: {
+              cargoClass: {
                 description: "Cargo classification code",
                 type: "string",
                 enum: [
@@ -501,13 +501,14 @@ RSpec.configure do |config|
               "width",
               "height",
               "weight",
-              "commodities"
+              "commodities",
+              "cargoClass"
             ],
           },
           item_aggregated_lcl: {
             type: "object",
             properties: {
-              cargo_class: {
+              cargoClass: {
                 description: "Cargo classification code",
                 type: "string",
                 enum: [
@@ -560,13 +561,13 @@ RSpec.configure do |config|
               "volume",
               "weight",
               "commodities",
-              "cargo_class"
+              "cargoClass"
             ],
           },
           item_fcl: {
             type: "object",
             properties: {
-              cargo_class: {
+              cargoClass: {
                 description: "Container classification code",
                 type: "string",
                 enum: [
@@ -631,7 +632,7 @@ RSpec.configure do |config|
               "quantity",
               "weight",
               "commodities",
-              "cargo_class"
+              "cargoClass"
             ],
           },
           journeyError: {
