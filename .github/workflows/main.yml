@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: github/super-linter@v3.15.2
+      - uses: github/super-linter@v3.15.3
         env:
           DEFAULT_BRANCH: master
           FILTER_REGEX_EXCLUDE: "^(.*/spec/api/api/.*|db/data_schema.rb|db/structure.sql)$"

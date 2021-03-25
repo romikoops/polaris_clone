@@ -81,11 +81,8 @@ group :development do
   gem "guard-rspec", require: false
 
   # Rubocop
-  gem "rubocop"
-  gem "rubocop-github", "0.16.0"
-  gem "rubocop-performance", "~>1.7.1"
-  gem "rubocop-rails", "~> 2.5"
-  gem "rubocop-rspec", "~> 1.41.0"
+  gem "rubocop-github", "0.16.1"
+  gem "rubocop-rspec", "~> 2.2.0"
 end
 
 group :development, :test do

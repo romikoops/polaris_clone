@@ -4,26 +4,61 @@ inherit_gem:
     - config/default_edge.yml
     - config/rails_edge.yml
 
-inherit_mode:
-  merge:
-    - Include
-
 require:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.6
-  DisabledByDefault: true
-  DisplayCopNames: true
-  DisplayStyleGuide: true
-  ExtraDetails: true
-  CacheRootDirectory: ./tmp
   Exclude:
     - '**/bin/**/*'
     - 'tmp/**/*'
+  NewCops: enable
 
 Naming/FileName:
   Exclude:
     - 'config/initializers/*'
+
+# More Sensible layouts
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/EndAlignment:
+  AutoCorrect: true
+  EnforcedStyleAlignWith: variable
+
+Layout/FirstArgumentIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+  IndentationWidth: ~
+
+Layout/FirstArrayElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+  IndentationWidth: ~
+
+Layout/FirstHashElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+  IndentationWidth: ~
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+  IndentationWidth: ~
+
+Layout/MultilineOperationIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+  IndentationWidth: ~
+
+Layout/ParameterAlignment:
+  Enabled: true
+  EnforcedStyle: with_fixed_indentation
+  IndentationWidth: ~
+
+Style/Documentation:
+  Enabled: false
