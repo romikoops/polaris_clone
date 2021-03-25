@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Treasury
   class ExchangeRate < ApplicationRecord
     def self.current
@@ -8,8 +9,7 @@ module Treasury
 
     def self.for_date(date:)
       select("DISTINCT ON (\"from\" , \"to\") *")
-        .where("created_at > ?", date.utc.beginning_of_day - 1.day)
-        .where("created_at < ?", date.utc.end_of_day)
+        .where("created_at < ?", date.utc)
         .order(:from, :to, created_at: :desc)
     end
   end

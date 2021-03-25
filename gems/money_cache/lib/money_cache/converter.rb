@@ -47,6 +47,7 @@ module MoneyCache
     def bank
       Money::Bank::OpenExchangeRatesBank.new(store).tap do |bank|
         bank.app_id = config.dig(:bank_app_id)
+        bank.source = "EUR"
       end
     end
 

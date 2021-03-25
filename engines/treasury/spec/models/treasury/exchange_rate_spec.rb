@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 module Treasury
@@ -35,7 +36,7 @@ module Treasury
         let(:date) { 1.month.ago }
         let!(:desired_currencies) do
           currencies.map do |currency|
-            FactoryBot.create(:treasury_exchange_rate, from: base, to: currency, created_at: 1.month.ago + 1.minute)
+            FactoryBot.create(:treasury_exchange_rate, from: base, to: currency, created_at: 1.month.ago - 1.minute)
           end
         end
 

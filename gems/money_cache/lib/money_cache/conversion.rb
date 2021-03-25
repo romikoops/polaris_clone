@@ -44,15 +44,11 @@ module MoneyCache
     end
 
     def from_base_rate
-      @from_base_rate ||= base_rate(target: from)
+      @from_base_rate ||= store.get_rate(from, base) || get_inverse_rate(from_currency: base, to_currency: from)
     end
 
     def to_base_rate
-      @to_base_rate ||= base_rate(target: to)
-    end
-
-    def base_rate(target:)
-      store.get_rate(base, target) || get_inverse_rate(from_currency: base, to_currency: target)
+      @to_base_rate ||= store.get_rate(base, to) || get_inverse_rate(from_currency: to, to_currency: base)
     end
   end
 end

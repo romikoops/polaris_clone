@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe MoneyCache::Converter do
   let(:money_cache) { described_class.new(config: config, klass: klass) }
-  let(:config) { {bank_app_id: "TEST_ID"} }
+  let(:config) { { bank_app_id: "TEST_ID" } }
   let(:import_double) { double(failed_instances: []) }
   let(:klass) { double(import: import_double, current: rates) }
   let(:currency_rates) do
@@ -16,6 +16,10 @@ RSpec.describe MoneyCache::Converter do
       AED: 4.277129
     }
   end
+  let(:base) { "EUR" }
+  let(:from) { base }
+  let(:to) { "GBP" }
+  let(:exchange_rate) { money_cache.get_rate(from, to) }
   let(:rates) do
     currency_rates.map do |currency, rate|
       double("Treasury::ExchangeRate", from: "EUR", to: currency, rate: rate)
@@ -24,13 +28,15 @@ RSpec.describe MoneyCache::Converter do
 
   context "with rates in store" do
     it "uses the rates existing in the store (database) to convert currencies" do
-      rate = money_cache.get_rate("EUR", "GBP")
-      expect(rate.to_f).to eq(currency_rates[:GBP])
+      expect(exchange_rate).to eq(currency_rates[:GBP])
     end
   end
 
   context "when exact rates for currencies sent are absent" do
     let(:eur_cny_rate) { 1.075166 }
+    let(:from) { "CNY" }
+    let(:to) { base }
+    let(:expected_rate) { (1.0 / eur_cny_rate).round(6) }
 
     before do
       allow(money_cache.store).to receive(:get_rate).and_call_original
@@ -38,27 +44,25 @@ RSpec.describe MoneyCache::Converter do
     end
 
     it "uses the inverse rate for conversion" do
-      rate = money_cache.get_rate("CNY", "EUR")
-      expected_rate = (1.0 / eur_cny_rate).round(6)
-      expect(rate).to eq(expected_rate)
+      expect(exchange_rate).to eq(expected_rate)
     end
   end
 
   context "when one of the currencies is missing in store" do
-    let(:from_usd_rate) { 1.075166 }
-    let(:to_usd_rate) { 4.075166 }
+    let(:from_eur_rate) { 1.075166 }
+    let(:to_eur_rate) { 4.075166 }
+    let(:from) { "GBP" }
+    let(:to) { "CNY" }
+    let(:expected_rate) { (from_eur_rate.to_d / to_eur_rate.to_d).round(6) }
 
     before do
       allow(money_cache.store).to receive(:get_rate).and_call_original
-      allow(money_cache.store).to receive(:get_rate).with("USD", "GBP").and_return(from_usd_rate)
-      allow(money_cache.store).to receive(:get_rate).with("USD", "CNY").and_return(to_usd_rate)
+      allow(money_cache.store).to receive(:get_rate).with(from, base).and_return(to_eur_rate)
+      allow(money_cache.store).to receive(:get_rate).with(base, to).and_return(from_eur_rate)
     end
 
     it "performs conversion using base currency for ABC conversion" do
-      rate = money_cache.get_rate("GBP", "CNY")
-      expected_rate = (BigDecimal(to_usd_rate.to_s) / from_usd_rate).to_f
-      rounded = expected_rate.round(6)
-      expect(rate.to_f).to eq(rounded)
+      expect(exchange_rate).to eq(expected_rate)
     end
   end
 end
