@@ -17,6 +17,7 @@ RUN apt-get update \
   libgeos-dev \
   nodejs \
   npm \
+  shared-mime-info \
   pv \
   tzdata \
   wkhtmltopdf\
@@ -85,6 +86,7 @@ RUN apt-get update \
     libgeos-dev \
     nodejs \
     npm \
+    shared-mime-info \
     tzdata \
     wkhtmltopdf \
     && rm -rf /var/lib/apt/lists/*
