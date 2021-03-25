@@ -220,32 +220,7 @@ RSpec.configure do |config|
             properties: {
               imo_class: {
                 type: "string",
-                enum: %w[
-                  0
-                  1.1
-                  1.2
-                  1.3
-                  1.4
-                  1.5
-                  1.6
-                  2.1
-                  2.2
-                  2.3
-                  3
-                  4.1
-                  4.2
-                  4.3
-                  5.1
-                  5.2
-                  6.1
-                  6.2
-                  7.1
-                  7.2
-                  7.3
-                  7.4
-                  8
-                  9
-                ],
+                enum: Journey::CommodityInfo::VALID_IMO_CLASSES,
                 description: <<~DOC
                   Defines the standard IMO class for the dangerous goods that this cargo item might contain. IMO Class is defined as Class and possible sub-class, where class defines top-level category of type of dangerous goods, and sub-class defines more detailed separation of different dangerous goods.
 

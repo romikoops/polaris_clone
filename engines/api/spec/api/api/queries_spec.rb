@@ -32,22 +32,6 @@ RSpec.describe "Queries", type: :request, swagger: true do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:journey_query,
-      origin: "aaaaa",
-      destination: "aaaaa",
-      organization: organization,
-      cargo_ready_date: 3.days.from_now,
-      created_at: 2.hours.ago,
-      client: user,
-      result_sets: [FactoryBot.build(:journey_result_set)])
-    FactoryBot.create(:journey_query,
-      origin: "bbbbb",
-      destination: "bbbbb",
-      organization: organization,
-      cargo_ready_date: 2.days.from_now,
-      created_at: 5.hours.ago,
-      client: user,
-      result_sets: [FactoryBot.build(:journey_result_set)])
     organization.scope.update(content: { base_pricing: true })
     allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
     allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
@@ -100,27 +84,32 @@ RSpec.describe "Queries", type: :request, swagger: true do
         }, required: %w[originId destinationId loadType aggregated items]
       }
 
+      let(:query) do
+        {
+          originId: origin.id,
+          destinationId: destination.id,
+          loadType: load_type,
+          aggregated: false,
+          items: [item]
+        }
+      end
+
       response "201", "successful operation (FCL)" do
-        let(:query) do
+        let(:cargo_classes) { ["fcl_20"] }
+        let(:load_type) { "container" }
+        let(:item) do
           {
-            originId: origin.id,
-            destinationId: destination.id,
-            loadType: load_type,
-            aggregated: false,
-            items: [
-              {
-                stackable: true,
-                cargoClass: "fcl_20",
-                colliType: "container",
-                quantity: 1,
-                length: nil,
-                width: nil,
-                height: nil,
-                weight: 1200,
-                volume: nil,
-                commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
-              }
-            ]
+            stackable: true,
+            cargoClass: "fcl_20",
+            colliType: "container",
+            quantity: 1,
+            length: nil,
+            width: nil,
+            height: nil,
+            weight: 1200,
+            volume: nil,
+            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
+
           }
         end
 
@@ -128,26 +117,19 @@ RSpec.describe "Queries", type: :request, swagger: true do
       end
 
       response "201", "successful operation (Aggregated Cargo Items)" do
-        let(:query) do
+        let(:item) do
           {
-            originId: origin.id,
-            destinationId: destination.id,
-            loadType: load_type,
-            aggregated: false,
-            items: [
-              {
-                stackable: true,
-                cargoClass: "aggregated_lcl",
-                colliType: "pallet",
-                quantity: 1,
-                length: nil,
-                width: nil,
-                height: nil,
-                volume: 1.44,
-                weight: 1200,
-                commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
-              }
-            ]
+            stackable: true,
+            cargoClass: "aggregated_lcl",
+            colliType: "pallet",
+            quantity: 1,
+            length: nil,
+            width: nil,
+            height: nil,
+            volume: 1.44,
+            weight: 1200,
+            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
+
           }
         end
 
@@ -155,26 +137,18 @@ RSpec.describe "Queries", type: :request, swagger: true do
       end
 
       response "201", "successful operation (Cargo Item)" do
-        let(:query) do
+        let(:item) do
           {
-            originId: origin.id,
-            destinationId: destination.id,
-            loadType: load_type,
-            aggregated: false,
-            items: [
-              {
-                stackable: true,
-                cargoClass: "lcl",
-                colliType: "pallet",
-                quantity: 1,
-                length: 120,
-                width: 100,
-                height: 120,
-                volume: nil,
-                weight: 1200,
-                commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
-              }
-            ]
+            stackable: true,
+            cargoClass: "lcl",
+            colliType: "pallet",
+            quantity: 1,
+            length: 120,
+            width: 100,
+            height: 120,
+            volume: nil,
+            weight: 1200,
+            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
           }
         end
 

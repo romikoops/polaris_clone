@@ -1,25 +1,32 @@
 # frozen_string_literal: true
+
 module Journey
   class CommodityInfo < ApplicationRecord
     VALID_IMO_CLASSES = %w[
       0
+      1
       1.1
       1.2
       1.3
       1.4
       1.5
       1.6
+      2
       2.1
       2.2
       2.3
       3
+      4
       4.1
       4.2
       4.3
+      5
       5.1
       5.2
+      6
       6.1
       6.2
+      7
       7.1
       7.2
       7.3
@@ -29,7 +36,7 @@ module Journey
     ].freeze
     belongs_to :cargo_unit
 
-    validates :imo_class, inclusion: {in: VALID_IMO_CLASSES, message: "%{value} is not a valid IMO Class"}
+    validates :imo_class, inclusion: { in: VALID_IMO_CLASSES, message: "%<value>s is not a valid IMO Class" }
     validates :description, presence: true
   end
 end
