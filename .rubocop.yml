@@ -4,6 +4,9 @@ inherit_gem:
     - config/default_edge.yml
     - config/rails_edge.yml
 
+inherit_from:
+  - rubocop_legacy.yml
+
 require:
   - rubocop-performance
   - rubocop-rails

@@ -5,14 +5,25 @@ require_dependency "api/api_controller"
 module Api
   module V2
     class QueriesController < ApiController
-      skip_before_action :doorkeeper_authorize!, only: [:create, :result_set, :show]
+      skip_before_action :doorkeeper_authorize!, only: %i[create result_set show]
+
+      def index
+        render json: Api::V2::QuerySerializer.new(
+          Api::V2::QueryDecorator.decorate_collection(
+            filtered_queries.paginate(
+              page: index_params[:page],
+              per_page: index_params[:per_page]
+            )
+          )
+        )
+      end
 
       def create
         new_query = wheelhouse_query_service.perform
         decorated = Api::V2::QueryDecorator.decorate(new_query)
         render json: Api::V2::QuerySerializer.new(decorated), status: :created
       rescue Wheelhouse::ApplicationError => e
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def show
@@ -27,15 +38,30 @@ module Api
 
       private
 
-      def query
-        @query ||= Journey::Query.find(params[:id] || params[:query_id])
+      def filterrific_params
+        return {} if index_params[:sort_by].blank?
+
+        { sorted_by: [index_params[:sort_by], index_params[:direction]].compact.join("_") }
       end
 
-      def mock_user
-        Users::Client.where(
-          email: ["agent@itsmycargo.com"],
-          organization: current_organization
-        ).first
+      def filtered_queries
+        queries = Api::Query.joins(:result_sets).where(
+          client: current_user,
+          billable: true,
+          organization_id: current_organization.id,
+          journey_result_sets: { status: "completed" }
+        )
+
+        @filterrific = initialize_filterrific(
+          queries,
+          filterrific_params
+        ) || return
+
+        queries.filterrific_find(@filterrific)
+      end
+
+      def query
+        @query ||= Journey::Query.find(params[:id] || params[:query_id])
       end
 
       def current_result_set
@@ -44,8 +70,8 @@ module Api
 
       def wheelhouse_query_service
         Wheelhouse::QueryService.new(
-          creator: mock_user,
-          client: mock_user,
+          creator: current_user,
+          client: current_user,
           source: mock_doorkeeper_application,
           params: query_service_params
         )
@@ -57,8 +83,8 @@ module Api
 
       def query_service_params
         query_params
-        .to_h
-        .deep_transform_keys { |key| key.to_s.underscore.to_sym }
+          .to_h
+          .deep_transform_keys { |key| key.to_s.underscore.to_sym }
       end
 
       def query_params
@@ -78,7 +104,7 @@ module Api
             :length,
             :volume,
             :weight,
-            commodities: [:description, :hs_code, :imo_class]
+            { commodities: %i[description hs_code imo_class] }
           ]
         )
       end
@@ -89,6 +115,10 @@ module Api
           :query_id,
           :note
         )
+      end
+
+      def index_params
+        params.permit(:sort_by, :direction)
       end
     end
   end

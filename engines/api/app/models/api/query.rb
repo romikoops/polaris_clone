@@ -12,11 +12,11 @@ module Api
         client_profile: %i[first_name last_name phone]
       },
       using: {
-        tsearch: {prefix: true}
+        tsearch: { prefix: true }
       }
 
     filterrific(
-      default_filter_params: {sorted_by: "created_at_desc"},
+      default_filter_params: { sorted_by: "created_at_desc" },
       available_filters: [
         :sorted_by
       ]
@@ -26,17 +26,17 @@ module Api
       direction = /desc$/.match?(sort_option) ? "desc" : "asc"
       case sort_option.to_s
 
-      when /^load_type_/
+      when /^load_type/
         order(sanitize_sql_for_order("load_type #{direction}"))
-      when /^last_name_/
+      when /^last_name/
         joins(client: :profile).order(sanitize_sql_for_order("last_name #{direction}"))
-      when /^origin_/
+      when /^origin/
         order(sanitize_sql_for_order("origin #{direction}"))
-      when /^destination_/
+      when /^destination/
         order(sanitize_sql_for_order("destination #{direction}"))
-      when /^selected_date_/
+      when /^selected_date|^cargo_ready_date/
         order(sanitize_sql_for_order("cargo_ready_date #{direction}"))
-      when /^created_at_/
+      when /^created_at/
         order(sanitize_sql_for_order("created_at #{direction}"))
       else
         raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")

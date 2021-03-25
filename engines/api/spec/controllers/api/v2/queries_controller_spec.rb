@@ -9,16 +9,12 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      {USD: 1.26, SEK: 8.26}.each do |currency, rate|
-        FactoryBot.create(:treasury_exchange_rate, from: currency, to: "EUR", rate: rate)
-      end
       FactoryBot.create(:companies_membership, member: user)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:source) { FactoryBot.create(:application, name: "siren") }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: source) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: FactoryBot.create(:application, name: "siren")) }
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe "POST #create" do
@@ -29,12 +25,12 @@ module Api
       let(:items) { [] }
       let(:load_type) { "container" }
       let(:aggregated) { false }
-      let(:origin) {
+      let(:origin) do
         FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
-      }
-      let(:destination) {
+      end
+      let(:destination) do
         FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode)
-      }
+      end
       let(:params) do
         {
           aggregated: aggregated,
@@ -47,6 +43,9 @@ module Api
       end
 
       before do
+        { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
+          FactoryBot.create(:treasury_exchange_rate, from: currency, to: "EUR", rate: rate)
+        end
         allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
         allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
         allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
@@ -59,9 +58,9 @@ module Api
         let(:items) do
           [
             {
-              cargoClass: 'lcl',
+              cargoClass: "lcl",
               stackable: true,
-              colliType: 'pallet',
+              colliType: "pallet",
               quantity: 1,
               length: 120,
               width: 100,
@@ -77,7 +76,7 @@ module Api
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           post :create, params: params, as: :json
 
-          expect(response_data.dig("id")).to be_present
+          expect(response_data["id"]).to be_present
         end
       end
 
@@ -96,18 +95,18 @@ module Api
 
         it "successfuly triggers the job and returns the query" do
           post :create, params: params, as: :json
-          expect(response_data.dig("id")).to be_present
+          expect(response_data["id"]).to be_present
         end
       end
 
       context "when LOCODE doesnt match Legacy::Nexus" do
-        let(:destination) {
+        let(:destination) do
           FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: "ZACPT")
-        }
+        end
 
         it "successfuly triggers the job and returns the query" do
           post :create, params: params, as: :json
-          expect(response_data.dig("id")).to be_present
+          expect(response_data["id"]).to be_present
         end
       end
     end
@@ -115,22 +114,103 @@ module Api
     describe "GET #show" do
       include_context "journey_pdf_setup"
 
-      let(:params) { {id: query.id, organization_id: organization.id} }
+      let(:params) { { id: query.id, organization_id: organization.id } }
+
       context "when lcl" do
         it "successfuly returns the query object", :aggregate_failures do
           get :show, params: params, as: :json
-          expect(response_data.dig("id")).to be_present
+          expect(response_data["id"]).to be_present
         end
       end
     end
 
     describe "GET #result_set" do
       include_context "journey_pdf_setup"
-      let(:params) { {query_id: query.id, organization_id: organization.id} }
+      let(:params) { { query_id: query.id, organization_id: organization.id } }
 
       it "successfuly returns the latest ResultSet", :aggregate_failures do
         get :result_set, params: params, as: :json
-        expect(response_data.dig("id")).to be_present
+        expect(response_data["id"]).to be_present
+      end
+    end
+
+    describe "GET #index" do
+      let!(:query_a) do
+        FactoryBot.create(:journey_query,
+          origin: "aaaaa",
+          destination: "aaaaa",
+          organization: organization,
+          cargo_ready_date: 3.days.from_now,
+          created_at: 2.hours.ago,
+          client: user,
+          result_sets: [FactoryBot.build(:journey_result_set)])
+      end
+      let!(:query_b) do
+        FactoryBot.create(:journey_query,
+          origin: "bbbbb",
+          destination: "bbbbb",
+          organization: organization,
+          cargo_ready_date: 2.days.from_now,
+          created_at: 5.hours.ago,
+          client: user,
+          result_sets: [FactoryBot.build(:journey_result_set)])
+      end
+
+      let(:params) { { organization_id: organization.id } }
+
+      context "when no sorting applied" do
+        it "returns the queries", :aggregate_failures do
+          get :index, params: params, as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
+        end
+      end
+
+      context "when sorting by created_at" do
+        it "returns the Queries sorted by created_at desc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "created_at", direction: "desc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
+        end
+
+        it "returns the Queries sorted by created_at asc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "created_at", direction: "asc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
+        end
+      end
+
+      context "when sorting by origin" do
+        it "returns the Queries sorted by origin desc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "origin", direction: "desc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
+        end
+
+        it "returns the Queries sorted by origin asc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "origin", direction: "asc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
+        end
+      end
+
+      context "when sorting by destination" do
+        it "returns the Queries sorted by destination desc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "destination", direction: "desc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
+        end
+
+        it "returns the Queries sorted by destination asc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "destination", direction: "asc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
+        end
+      end
+
+      context "when sorting by cargo_ready_date" do
+        it "returns the Queries sorted by cargo_ready_date desc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "cargo_ready_date", direction: "desc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
+        end
+
+        it "returns the Queries sorted by cargo_ready_date asc", :aggregate_failures do
+          get :index, params: params.merge(sort_by: "cargo_ready_date", direction: "asc"), as: :json
+          expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
+        end
       end
     end
   end

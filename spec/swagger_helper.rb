@@ -6,16 +6,16 @@ RSpec.configure do |config|
   # Auto-generate example
   config.after(:each, swagger: true) do |example|
     if response && response.body.present?
-       example.metadata[:response][:content] = {
-         "application/json" => { example: JSON.parse(response.body, symbolize_names: true) }
-       }
-     end
+      example.metadata[:response][:content] = {
+        "application/json" => { example: JSON.parse(response.body, symbolize_names: true) }
+      }
+    end
   end
 
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder
-  config.swagger_root = Rails.root.join("doc", "api").to_s
+  config.swagger_root = Rails.root.join("doc/api").to_s
 
   # Define one or more Swagger documents and provide global metadata for each one
   # When you run the 'rswag:specs:swaggerize' rake task, the complete Swagger will
@@ -35,7 +35,7 @@ RSpec.configure do |config|
           url: "https://support.itsmycargo.com",
           email: "support@itsmycargo.com"
         },
-        version: Date.today.to_s
+        version: Time.zone.today.to_s
       },
       tags: [
         { name: "Ahoy", description: "Ahoy" },
@@ -51,15 +51,15 @@ RSpec.configure do |config|
         { name: "Quote", description: "Quote" },
         { name: "Results", description: "Results" },
         { name: "Trucking", description: "Trucking" },
-        { name: "Users", description: "Users" },
+        { name: "Users", description: "Users" }
       ],
       components: {
         schemas: {
           errors: {
-            type: 'object',
+            type: "object",
             properties: {
               errors: {
-                type: 'object',
+                type: "object",
                 properties: {
                   message: {
                     description: "error message",
@@ -67,8 +67,8 @@ RSpec.configure do |config|
                   }
                 },
                 additionalProperties: {
-                  type: 'array',
-                  items: { type: 'string' }
+                  type: "array",
+                  items: { type: "string" }
                 }
               }
             }
@@ -104,13 +104,13 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: ["width", "length"]
+                required: %w[width length]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           },
           client: {
@@ -147,17 +147,17 @@ RSpec.configure do |config|
                 type: "string"
               }
             },
-            required: [
-              "email",
-              "first_name",
-              "last_name",
-              "company_name",
-              "phone",
-              "house_number",
-              "street",
-              "postal_code",
-              "country",
-              "group_id"
+            required: %w[
+              email
+              first_name
+              last_name
+              company_name
+              phone
+              house_number
+              street
+              postal_code
+              country
+              group_id
             ]
           },
           charge: {
@@ -202,17 +202,17 @@ RSpec.configure do |config|
                 type: "integer"
               }
             },
-            required: [
-              "id",
-              "lineItemId",
-              "tenderId",
-              "chargeCategoryId",
-              "description",
-              "value",
-              "originalValue",
-              "order",
-              "section",
-              "level"
+            required: %w[
+              id
+              lineItemId
+              tenderId
+              chargeCategoryId
+              description
+              value
+              originalValue
+              order
+              section
+              level
             ]
           },
           commodityInfo: {
@@ -268,7 +268,7 @@ RSpec.configure do |config|
 
               }
             },
-            required: ["id", "code"]
+            required: %w[id code]
           },
           country: {
             type: "object",
@@ -298,17 +298,17 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: [
-                  "name",
-                  "code",
-                  "flag"
+                required: %w[
+                  name
+                  code
+                  flag
                 ]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           },
           group: {
@@ -335,16 +335,16 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: [
-                  "id",
-                  "name"
+                required: %w[
+                  id
+                  name
                 ]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           },
           item: {
@@ -353,25 +353,25 @@ RSpec.configure do |config|
               cargoClass: {
                 description: "Cargo classification code",
                 type: "string",
-                enum: [
-                  "lcl",
-                  "aggregated_lcl",
-                  "fcl_10",
-                  "fcl_20",
-                  "fcl_20_ot",
-                  "fcl_20_rf",
-                  "fcl_20_frs",
-                  "fcl_20_frw",
-                  "fcl_40",
-                  "fcl_40_hq",
-                  "fcl_40_ot",
-                  "fcl_40_rf",
-                  "fcl_40_hq_rf",
-                  "fcl_40_frs",
-                  "fcl_40_frw",
-                  "fcl_45",
-                  "fcl_45_hq",
-                  "fcl_45_rf"
+                enum: %w[
+                  lcl
+                  aggregated_lcl
+                  fcl_10
+                  fcl_20
+                  fcl_20_ot
+                  fcl_20_rf
+                  fcl_20_frs
+                  fcl_20_frw
+                  fcl_40
+                  fcl_40_hq
+                  fcl_40_ot
+                  fcl_40_rf
+                  fcl_40_hq_rf
+                  fcl_40_frs
+                  fcl_40_frw
+                  fcl_45
+                  fcl_45_hq
+                  fcl_45_rf
                 ]
               },
               stackable: {
@@ -384,28 +384,23 @@ RSpec.configure do |config|
               },
               length: {
                 description: "Length of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               width: {
                 description: "Width of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               height: {
                 description: "Height of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               weight: {
                 description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               volume: {
                 description: "Volume of the item expressed as a decimal on the cubic meter (m3) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               commodities: {
                 description: "Commodity codes of the contents",
@@ -413,16 +408,16 @@ RSpec.configure do |config|
                 items: { "$ref": "#/components/schemas/commodityInfo" }
               }
             },
-            required: [
-              "stackable",
-              "colliType",
-              "quantity",
-              "length",
-              "width",
-              "height",
-              "weight",
-              "commodities"
-            ],
+            required: %w[
+              stackable
+              colliType
+              quantity
+              length
+              width
+              height
+              weight
+              commodities
+            ]
           },
           item_lcl: {
             type: "object",
@@ -441,21 +436,21 @@ RSpec.configure do |config|
               colliType: {
                 description: "Colli Type: The type of container the items are packed in. One of a preset list",
                 type: "string",
-                enum: [
-                  "container",
-                  "barrel",
-                  "bottle",
-                  "carton",
-                  "case",
-                  "crate",
-                  "drum",
-                  "package",
-                  "pallet",
-                  "roll",
-                  "skid",
-                  "stack",
-                  "room_temp_reefer",
-                  "low_temp_reefer"
+                enum: %w[
+                  container
+                  barrel
+                  bottle
+                  carton
+                  case
+                  crate
+                  drum
+                  package
+                  pallet
+                  roll
+                  skid
+                  stack
+                  room_temp_reefer
+                  low_temp_reefer
                 ]
               },
               quantity: {
@@ -464,23 +459,19 @@ RSpec.configure do |config|
               },
               length: {
                 description: "Length of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               width: {
                 description: "Width of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               height: {
                 description: "Height of the item expressed as a decimal on the centimeter (cm) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               weight: {
                 description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               volume: {
                 description: "Volume is derived from Width, Length and Height values so this property is null",
@@ -493,17 +484,17 @@ RSpec.configure do |config|
                 items: { "$ref": "#/components/schemas/commodityInfo" }
               }
             },
-            required: [
-              "stackable",
-              "colliType",
-              "quantity",
-              "length",
-              "width",
-              "height",
-              "weight",
-              "commodities",
-              "cargoClass"
-            ],
+            required: %w[
+              stackable
+              colliType
+              quantity
+              length
+              width
+              height
+              weight
+              commodities
+              cargoClass
+            ]
           },
           item_aggregated_lcl: {
             type: "object",
@@ -541,13 +532,11 @@ RSpec.configure do |config|
               },
               weight: {
                 description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               volume: {
                 description: "Volume of the item expressed as a decimal on the cubic meter (m3) scale",
-                type: "number",
-                not: 0.0
+                type: "number"
               },
               commodities: {
                 description: "Commodity codes of the contents",
@@ -555,14 +544,14 @@ RSpec.configure do |config|
                 items: { "$ref": "#/components/schemas/commodityInfo" }
               }
             },
-            required: [
-              "colliType",
-              "quantity",
-              "volume",
-              "weight",
-              "commodities",
-              "cargoClass"
-            ],
+            required: %w[
+              colliType
+              quantity
+              volume
+              weight
+              commodities
+              cargoClass
+            ]
           },
           item_fcl: {
             type: "object",
@@ -570,23 +559,23 @@ RSpec.configure do |config|
               cargoClass: {
                 description: "Container classification code",
                 type: "string",
-                enum: [
-                  "fcl_10",
-                  "fcl_20",
-                  "fcl_20_ot",
-                  "fcl_20_rf",
-                  "fcl_20_frs",
-                  "fcl_20_frw",
-                  "fcl_40",
-                  "fcl_40_hq",
-                  "fcl_40_ot",
-                  "fcl_40_rf",
-                  "fcl_40_hq_rf",
-                  "fcl_40_frs",
-                  "fcl_40_frw",
-                  "fcl_45",
-                  "fcl_45_hq",
-                  "fcl_45_rf"
+                enum: %w[
+                  fcl_10
+                  fcl_20
+                  fcl_20_ot
+                  fcl_20_rf
+                  fcl_20_frs
+                  fcl_20_frw
+                  fcl_40
+                  fcl_40_hq
+                  fcl_40_ot
+                  fcl_40_rf
+                  fcl_40_hq_rf
+                  fcl_40_frs
+                  fcl_40_frw
+                  fcl_45
+                  fcl_45_hq
+                  fcl_45_rf
                 ]
               },
               stackable: {
@@ -626,14 +615,14 @@ RSpec.configure do |config|
                 items: { "$ref": "#/components/schemas/commodityInfo" }
               }
             },
-            required: [
-              "stackable",
-              "colliType",
-              "quantity",
-              "weight",
-              "commodities",
-              "cargoClass"
-            ],
+            required: %w[
+              stackable
+              colliType
+              quantity
+              weight
+              commodities
+              cargoClass
+            ]
           },
           journeyError: {
             type: "object",
@@ -687,7 +676,7 @@ RSpec.configure do |config|
                 type: "string",
                 description: "The longitude of the Location"
               }
-            }, required: ["latitude", "longitude"]
+            }, required: %w[latitude longitude]
           },
           money: {
             type: "object",
@@ -708,9 +697,9 @@ RSpec.configure do |config|
                 description: "ISO 4217 code for currency"
               }
             },
-            required: [
-              "amount",
-              "currency"
+            required: %w[
+              amount
+              currency
             ]
           },
           nexus: {
@@ -756,20 +745,20 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: [
-                  "id",
-                  "name",
-                  "latitude",
-                  "longitude",
-                  "modesOfTransport",
-                  "countryName"
+                required: %w[
+                  id
+                  name
+                  latitude
+                  longitude
+                  modesOfTransport
+                  countryName
                 ]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           },
           organization: {
@@ -789,7 +778,7 @@ RSpec.configure do |config|
                 properties: {
                   name: {
                     type: "string",
-                    description: "Name of the organisation. Usually their legal business name.",
+                    description: "Name of the organisation. Usually their legal business name."
                   },
                   slug: {
                     type: "string",
@@ -821,10 +810,10 @@ RSpec.configure do |config|
                 type: "number"
               }
             },
-            required: [
-              "page",
-              "perPage",
-              "totalPages"
+            required: %w[
+              page
+              perPage
+              totalPages
             ]
           },
           paginationLinks: {
@@ -884,12 +873,11 @@ RSpec.configure do |config|
                       pickupCarrier: { description: "Carrier", type: "string" },
                       deliveryCarrier: { description: "Carrier", type: "string" },
                       pickupService: { description: "Service", type: "string" },
-                      deliveryService: { description: "Service", type: "string"
-                      },
-                    }, required: ["id", "route"]
+                      deliveryService: { description: "Service", type: "string" }
+                    }, required: %w[id route]
                   }
                 },
-                required: ["id", "type", "attributes"]
+                required: %w[id type attributes]
               }
             }
           },
@@ -991,20 +979,20 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: [
-                  "email",
-                  "organizationId",
-                  "firstName",
-                  "lastName",
-                  "phone",
-                  "companyName"
+                required: %w[
+                  email
+                  organizationId
+                  firstName
+                  lastName
+                  phone
+                  companyName
                 ]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           },
           profile: {
@@ -1031,17 +1019,17 @@ RSpec.configure do |config|
                     type: "string"
                   }
                 },
-                required: [
-                  "email",
-                  "firstName",
-                  "lastName"
+                required: %w[
+                  email
+                  firstName
+                  lastName
                 ]
               }
             },
-            required: [
-              "id",
-              "type",
-              "attributes"
+            required: %w[
+              id
+              type
+              attributes
             ]
           }
         },
@@ -1072,7 +1060,7 @@ RSpec.configure do |config|
         }
       ]
 
-    },
+    }
   }
 
   # Specify the format of the output Swagger file when running 'rswag:specs:swaggerize'.

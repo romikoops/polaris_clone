@@ -1,0 +1,5 @@
+---
+
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+  - 'engines/api/spec/controllers/api/v2/queries_controller_spec.rb'

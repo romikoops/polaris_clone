@@ -5,39 +5,37 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class QuotationsController < ApiController
-      SORTING_ATTRIBUTES = ["selected_date", "load_type", "last_name", "origin", "destination"]
+      SORTING_ATTRIBUTES = %w[selected_date load_type last_name origin destination].freeze
 
       def index
         paginated = paginate(filtered_queries)
 
         decorated_queries = Api::V1::QueryDecorator.decorate_collection(paginated,
-          {context: {links: pagination_links(paginated)}})
+          { context: { links: pagination_links(paginated) } })
 
-        render json: QueryListSerializer.new(decorated_queries, params: {scope: current_scope}).serialized_json
+        render json: QueryListSerializer.new(decorated_queries, params: { scope: current_scope }).serialized_json
       end
 
       def create
-        if validation_errors.present?
-          return render json: ValidationErrorSerializer.new(validation_errors), status: :expectation_failed
-        end
+        return render json: ValidationErrorSerializer.new(validation_errors), status: :expectation_failed if validation_errors.present?
 
         render json: QuerySerializer.new(
           Api::V1::QueryDecorator.new(
             quotation_service.result,
-            context: {scope: current_scope, load_type: load_type}
+            context: { scope: current_scope, load_type: load_type }
           ),
-          params: {scope: current_scope}
+          params: { scope: current_scope }
         )
       rescue Wheelhouse::ApplicationError => e
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def show
         check_for_errors
         decorated_query = QueryDecorator.decorate(query)
-        render json: QuerySerializer.new(decorated_query, params: {scope: current_scope})
+        render json: QuerySerializer.new(decorated_query, params: { scope: current_scope })
       rescue OfferCalculator::Errors::Failure => e
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       def download
@@ -47,15 +45,15 @@ module Api
             excel_direct_download
           else
             render json: XlsxSerializer.new(offer,
-              {url: [request.url, "?dl=1"].join})
+              { url: [request.url, "?dl=1"].join })
           end
         when "pdf"
           render json: FileSerializer.new(offer)
         else
-          render json: {error: "Download format is missing or invalid"}, status: :unprocessable_entity
+          render json: { error: "Download format is missing or invalid" }, status: :unprocessable_entity
         end
       rescue Wheelhouse::ApplicationError => e
-        render json: {error: e.message}, status: :unprocessable_entity
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       private
@@ -154,16 +152,16 @@ module Api
           :user_id,
           :load_type,
           :delay,
-          origin: [*address_params, hub_ids: []],
-          destination: [*address_params, hub_ids: []]
+          origin: [*address_params, { hub_ids: [] }],
+          destination: [*address_params, { hub_ids: [] }]
         )
       end
 
       def dimension_params
         shipment_params.fetch(:cargo_items_attributes).map do |cargo_item_params|
-          {width: cargo_item_params[:width] || cargo_item_params[:dimension_x],
-           length: cargo_item_params[:length] || cargo_item_params[:dimension_y],
-           height: cargo_item_params[:height] || cargo_item_params[:dimension_z]}
+          { width: cargo_item_params[:width] || cargo_item_params[:dimension_x],
+            length: cargo_item_params[:length] || cargo_item_params[:dimension_y],
+            height: cargo_item_params[:height] || cargo_item_params[:dimension_z] }
         end
       end
 
@@ -174,10 +172,10 @@ module Api
       def modified_shipment_params
         return shipment_params if shipment_params["cargo_items_attributes"].nil?
 
-        {cargo_items_attributes: modified_cargo_item_params,
-         container_attributes: shipment_params[:container_attributes],
-         trucking_info: shipment_params[:trucking_info],
-         scale: "m"}.to_h
+        { cargo_items_attributes: modified_cargo_item_params,
+          container_attributes: shipment_params[:container_attributes],
+          trucking_info: shipment_params[:trucking_info],
+          scale: "m" }.to_h
       end
 
       def shipment_params
@@ -212,7 +210,7 @@ module Api
       end
 
       def sanitize_direction(direction)
-        direction.to_s.upcase == "DESC" ? "DESC" : "ASC"
+        direction.to_s.casecmp("DESC").zero? ? "DESC" : "ASC"
       end
 
       def user
@@ -243,27 +241,20 @@ module Api
       end
 
       def filterrific_params
-        filters = {}
-        if index_params[:sort_by].present?
-          filters[:sorted_by] = [index_params[:sort_by], index_params[:direction]].join("_")
-        end
+        return {} if index_params[:sort_by].blank?
 
-        filters
+        { sorted_by: [index_params[:sort_by], index_params[:direction]].compact.join("_") }
       end
 
       def filtered_queries
         queries = Api::Query.joins(:result_sets).where(
           billable: true,
           organization_id: current_organization.id,
-          journey_result_sets: {status: "completed"}
+          journey_result_sets: { status: "completed" }
         )
 
-        if index_params[:start_date].present?
-          queries = queries.where("cargo_ready_date >= ?", index_params[:start_date])
-        end
-        if index_params[:end_date].present?
-          queries = queries.where("cargo_ready_date <= ?", index_params[:end_date])
-        end
+        queries = queries.where("cargo_ready_date >= ?", index_params[:start_date]) if index_params[:start_date].present?
+        queries = queries.where("cargo_ready_date <= ?", index_params[:end_date]) if index_params[:end_date].present?
 
         @filterrific = initialize_filterrific(
           queries,
