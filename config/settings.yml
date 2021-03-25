@@ -2,6 +2,10 @@ aws:
   bucket:
   ingest_bucket:
 
+carta:
+  token:
+  url:
+
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>
 

@@ -1,3 +1,7 @@
+carta:
+  token: FAKECARTATOKEN
+  url: fakecartaurl
+
 emails:
   booking: itsmycargodev@gmail.com
   domain: itsmycargo.test
