@@ -20,12 +20,12 @@ class BackfillJourneyModelsWorker
 
     total quotations.count
 
-    last_index_inserted = (retrieve :current_index)&.to_i || 0
-    at last_index_inserted
+    quotations.find_each.with_index do |quotation, index|
+      next if Journey::Query.exists?(created_at: quotation.created_at, organization_id: quotation.organization_id)
 
-    quotations.order(:id).offset(last_index_inserted).find_each.with_index do |quotation, index|
       quotation_id = quotation.id
       first_tender = quotation.tenders.first
+
       ActiveRecord::Base.transaction do
         query_id = insert_query(quotation_id)
         insert_cargo_units(quotation_id, query_id)
@@ -116,9 +116,7 @@ class BackfillJourneyModelsWorker
         insert_commodity_info(quotation_id)
         update_exchange_rate(quotation_id: quotation_id, result_set_id: result_set_id)
 
-        current_index = last_index_inserted + (index + 1)
-        at current_index, "quotation #{current_index} done"
-        store current_index: current_index
+        at index, "quotation #{index} done"
         store current_quotation: quotation_id
       end
     rescue CountValidationError => e
