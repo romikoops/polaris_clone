@@ -23,17 +23,17 @@ module OfferCalculator
           return if cargo_errors.empty?
 
           volume_error = cargo_errors.find { |error| error.attribute == :volume }
-
           expand_attr_errors(units: [cargo_unit], attributes: VOLUME_DIMENSIONS, error: volume_error) if volume_error
         end
 
         def expand_attr_errors(units:, attributes:, error:)
           combinations = units.to_a.product(attributes)
+
           combinations.each do |cargo_unit, attribute|
             next if errors.any? { |match_error| match_error.matches?(cargo: cargo_unit, attr: attribute) }
 
             errors << OfferCalculator::Service::Validations::Error.new(
-              id: cargo_unit.id || SecureRandom.uuid,
+              id: cargo_unit.id,
               message: error.message,
               attribute: attribute,
               limit: error.limit,
@@ -124,6 +124,8 @@ module OfferCalculator
         end
 
         def validation_attributes
+          return [:payload_in_kg] if request.cargo_units.all? { |unit| unit.cargo_class == "aggregated_lcl" }
+
           STANDARD_ATTRIBUTES
         end
       end

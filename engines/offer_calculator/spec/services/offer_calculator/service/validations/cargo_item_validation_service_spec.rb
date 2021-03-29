@@ -11,12 +11,13 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     Organizations::Organization.current_id = organization.id
     allow(request).to receive(:cargo_units).and_return(cargo_units)
   end
+
   let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:itinerary) {
+  let(:itinerary) do
     FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization, mode_of_transport: "ocean")
-  }
+  end
   let(:result) do
     described_class.errors(
       request: request,
@@ -59,6 +60,18 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       it "returns an empty array" do
+        expect(result).to be_empty
+      end
+    end
+
+    context "when the object is complete and valid aggregated lcl" do
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          :aggregate_lcl,
+          weight_value: 120)]
+      end
+
+      it "passes validation" do
         expect(result).to be_empty
       end
     end
@@ -230,13 +243,13 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           width_value: 1,
           length_value: 1,
           height_value: 1,
           weight_value: 120),
-          FactoryBot.build(:journey_cargo_unit,
+          FactoryBot.create(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
@@ -304,36 +317,41 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
           organization: organization,
           mode_of_transport: "ocean",
           tenant_vehicle: tenant_vehicle,
+          chargeable_weight: 1_000_000,
           volume: 15)
       end
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
+        [FactoryBot.create(:journey_cargo_unit,
           quantity: 1,
           width_value: 5,
           length_value: 2,
           height_value: 1,
           weight_value: 1.2),
-          FactoryBot.build(:journey_cargo_unit,
+          FactoryBot.create(:journey_cargo_unit,
             quantity: 1,
             width_value: 5,
             length_value: 2,
             height_value: 1,
             weight_value: 1.2)]
       end
-      let(:expected_help_text) do
-        [
-          "Aggregate Volume exceeds the limit of 15 m3",
-          "Aggregate Chargeable Weight exceeds the limit of 10000 kg"
-        ]
+      let(:expected_result) do
+        cargo_units.flat_map do |unit|
+          %i[width length height].map do |dimension|
+            OfferCalculator::Service::Validations::Error.new(
+              id: unit.id,
+              message: "Aggregate Volume exceeds the limit of 15 m3",
+              attribute: dimension,
+              limit: "15 m3",
+              section: "cargo_item",
+              code: 4019
+            )
+          end
+        end
       end
 
       it "returns an array of errors for each input when aggregate fails validation" do
-        aggregate_failures do
-          expect(result.length).to eq(14)
-          expect(result.map(&:message).uniq).to match_array(expected_help_text)
-          expect(result.map(&:code).uniq).to match_array([4006, 4019])
-        end
+        expect(result).to match_array(expected_result)
       end
     end
 
@@ -348,9 +366,9 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
         FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
       end
 
-      let(:air_itinerary) {
+      let(:air_itinerary) do
         FactoryBot.create(:default_itinerary, organization: organization, mode_of_transport: "air")
-      }
+      end
       let(:itinerary_ids) { [itinerary, air_itinerary].map(&:id) }
       let(:modes_of_transport) { %w[ocean air] }
 

@@ -87,9 +87,11 @@ module OfferCalculator
 
         def modes_of_transport
           @modes_of_transport ||= begin
-            return pricing_modes_of_transport unless trucking_involved?
-
-            pricing_modes_of_transport + ["truck_carriage"]
+            if trucking_involved?
+              pricing_modes_of_transport + ["truck_carriage"]
+            else
+              pricing_modes_of_transport
+            end
           end
         end
 
@@ -170,7 +172,7 @@ module OfferCalculator
             )
           end
 
-          validate_volume(attributes: attributes, lcl_max_dimensions: lcl_max_dimensions, cargo_unit: cargo_unit)
+          validate_volume(lcl_max_dimensions: lcl_max_dimensions, cargo_unit: cargo_unit)
 
           if attributes == STANDARD_ATTRIBUTES && load_type == :cargo_item
             validate_attribute(
@@ -185,8 +187,8 @@ module OfferCalculator
           final_validation(cargo_unit: cargo_unit) if final.present?
         end
 
-        def validate_volume(attributes:, lcl_max_dimensions:, cargo_unit:)
-          return unless complete_volume_attributes?(attributes) && load_type == :cargo_item
+        def validate_volume(lcl_max_dimensions:, cargo_unit:)
+          return if cargo_unit.volume.blank?
 
           validate_attribute(
             max_dimensions: lcl_max_dimensions,
@@ -195,10 +197,6 @@ module OfferCalculator
             measurement: cargo_unit.total_volume,
             cargo: cargo_unit
           )
-        end
-
-        def complete_volume_attributes?(attributes)
-          (VOLUME_DIMENSIONS - attributes).empty?
         end
 
         def load_type
@@ -244,7 +242,7 @@ module OfferCalculator
 
         def build_error(attribute:, limit:, id:, cargo:, measurement:)
           message = "#{HUMANIZED_DIMENSION_LOOKUP[attribute]} exceeds the limit of #{limit}"
-          message = "Aggregate " + message if id == "aggregate"
+          message = "Aggregate #{message}" if id == "aggregate"
           code = ERROR_CODE_DIMENSION_LOOKUP[attribute]
           code = AGGREGATE_ERROR_CODE_DIMENSION_LOOKUP[attribute] if id == "aggregate"
 

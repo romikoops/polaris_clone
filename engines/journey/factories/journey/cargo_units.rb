@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :journey_cargo_unit, class: "Journey::CargoUnit" do
     quantity { 2 }
@@ -16,17 +17,20 @@ FactoryBot.define do
       cargo_class { "fcl_20" }
       quantity { 2 }
       weight_value { 3000 }
-      width_value { }
-      length_value { }
-      height_value { }
+      width_value { nil }
+      length_value { nil }
+      height_value { nil }
     end
 
     trait :aggregate_lcl do
-      colli_type { }
+      colli_type { nil }
       cargo_class { "aggregated_lcl" }
       quantity { 1 }
       weight_value { 3000 }
       volume_value { 1.30 }
+      width_value { nil }
+      length_value { nil }
+      height_value { nil }
     end
 
     after(:build) do |cargo_unit|

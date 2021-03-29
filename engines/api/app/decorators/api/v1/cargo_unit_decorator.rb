@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Api
   module V1
     class CargoUnitDecorator < ApplicationDecorator
@@ -26,14 +27,11 @@ module Api
         Journey::CommodityInfo.where(cargo_unit: object).where.not(hs_code: "").pluck(:hs_code)
       end
 
-      def weight_class
-      end
+      def weight_class; end
 
-      def tare_weight
-      end
+      def tare_weight; end
 
-      def gross_weight
-      end
+      def gross_weight; end
 
       def customs_text
         ""
@@ -50,23 +48,23 @@ module Api
       end
 
       def width
-        width_value * 100.0
+        width_value && width_value * 100.0
       end
 
       def height
-        height_value * 100.0
+        height_value && height_value * 100.0
       end
 
       def length
-        length_value * 100.0
+        length_value && length_value * 100.0
       end
 
       def wm_ratio
-        context.dig(:wm_ratio) || 0
+        context[:wm_ratio] || 0
       end
 
       def cargo_item_type_id
-        Legacy::CargoItemType.joins(:tenant_cargo_item_types).where(tenant_cargo_item_types: {organization_id: query.organization_id})
+        Legacy::CargoItemType.joins(:tenant_cargo_item_types).where(tenant_cargo_item_types: { organization_id: query.organization_id })
           .where("category ILIKE ?", "%#{colli_type}%").first&.id
       end
     end
