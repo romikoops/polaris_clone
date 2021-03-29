@@ -26,8 +26,9 @@ class BackfillJourneyModelsWorker
       quotation_id = quotation.id
       first_tender = quotation.tenders.first
 
+      fall_back_origin, fall_back_destination = first_tender.name.split('-', 2).map(&:strip!)
       ActiveRecord::Base.transaction do
-        query_id = insert_query(quotation_id)
+        query_id = insert_query(quotation_id, fall_back_origin, fall_back_destination)
         insert_cargo_units(quotation_id, query_id)
         result_set_id = insert_result_sets(query_id, quotation_id)
         offer_id = insert_offer(query_id, quotation_id)
@@ -155,7 +156,7 @@ class BackfillJourneyModelsWorker
     )
   end
 
-  def insert_query(quotation_id)
+  def insert_query(quotation_id, fall_back_origin, fall_back_destination)
     query = ActiveRecord::Base.connection.execute(
       <<~SQL
         INSERT INTO journey_queries (
@@ -178,10 +179,10 @@ class BackfillJourneyModelsWorker
           updated_at)
           SELECT
             DISTINCT ON(quotations_quotations.id) gen_random_uuid(),
-            COALESCE(pickup_addresses.geocoded_address, origin_nexuses.name),
-            ST_SetSRID(ST_MakePoint(COALESCE(pickup_addresses.longitude, origin_nexuses.longitude), COALESCE(pickup_addresses.latitude, origin_nexuses.latitude)), 4326),
-            COALESCE(delivery_addresses.geocoded_address, destination_nexuses.name),
-            ST_SetSRID(ST_MakePoint(COALESCE(delivery_addresses.longitude, destination_nexuses.longitude), COALESCE(delivery_addresses.latitude, destination_nexuses.latitude)), 4326),
+            COALESCE(pickup_addresses.geocoded_address, origin_nexuses.name, '#{fall_back_origin}'),
+            ST_SetSRID(ST_MakePoint(COALESCE(pickup_addresses.longitude, origin_nexuses.longitude, 0), COALESCE(pickup_addresses.latitude, origin_nexuses.latitude, 0)), 4326),
+            COALESCE(delivery_addresses.geocoded_address, destination_nexuses.name, '#{fall_back_destination}'),
+            ST_SetSRID(ST_MakePoint(COALESCE(delivery_addresses.longitude, destination_nexuses.longitude, 0), COALESCE(delivery_addresses.latitude, destination_nexuses.latitude, 0)), 4326),
             LEAST(shipments.planned_pickup_date, shipments.planned_origin_drop_off_date, quotations_quotations.selected_date, quotations_quotations.created_at),
             COALESCE(shipments.planned_delivery_date, shipments.planned_destination_collection_date, COALESCE(quotations_quotations.selected_date, quotations_quotations.created_at)+ INTERVAL '25 DAY'),
             quotations_quotations.user_id,
