@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "bundler/inline"
 
@@ -13,21 +14,8 @@ require "git"
 require "jira-ruby"
 
 class JiraService
-  def self.update_tickets(issue_source:)
-    new(issue_source: issue_source).update_tickets
-  end
-
-  def self.fetch_ticket(issue_source:)
-    new(issue_source: issue_source).fetch_ticket
-  end
-
-  def initialize(issue_source:)
-    @issue_source = issue_source
-  end
-
-  def update_tickets
-    move_stale
-    move_active
+  def self.fetch_ticket
+    new.fetch_ticket
   end
 
   def fetch_ticket
@@ -36,42 +24,11 @@ class JiraService
     {
       key: issue.key,
       summary: issue.summary,
-      assignee: issue.assignee.displayName
+      assignee: issue.assignee&.displayName
     }
   end
 
   private
-
-  attr_reader :issue_source
-
-  def move_stale
-    # Find all In Progress tickets for current user
-    jql = "assignee = \"#{jira_client.options[:username]}\""
-    jql += " AND issuetype NOT IN (\"Epic\")"
-    jql += " AND status IN (\"In Progress\")"
-    jql += " AND key != \"#{issue_key}\"" if issue_key
-
-    jira_client.Issue.jql(jql, expand: "transitions.fields").each do |issue|
-      if issue.status.name == "In Progress" &&
-          (transition = issue.transitions.find { |t| t.name == "Ready for Development" })
-        issue_transition = issue.transitions.build
-        issue_transition.save!("transition" => {"id" => transition.id.to_i})
-        puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"
-      end
-    end
-  end
-
-  def move_active
-    return unless issue_key
-    return unless issue.assignee.nil? || issue.assignee.emailAddress == jira_client.options[:username]
-
-    if issue.status.name == "Ready for Development" &&
-        (transition = issue.transitions.find { |t| t.name == "In Development" })
-      issue_transition = issue.transitions.build
-      issue_transition.save!("transition" => {"id" => transition.id.to_i})
-      puts "Issue #{issue.key}: #{issue.status.name} -> #{jira_client.Issue.find(issue.key).status.name}"
-    end
-  end
 
   def issue
     return unless issue_key
@@ -81,14 +38,7 @@ class JiraService
 
   def issue_key
     @issue_key ||= begin
-      data = case issue_source
-      when :commit
-        git.log(1).first.message
-      when :branch
-        git.current_branch
-      end
-
-      m = data.match(/(IMC[_-]\d+)/i)
+      m = git.current_branch.match(/([A-Z]{2,}[_-]\d+)/i)
       m[1].upcase.tr("_", "-") if m
     end
   end
@@ -98,19 +48,25 @@ class JiraService
   end
 
   def jira_client
-    @jira_client ||= JIRA::Client.new(
-      username: ENV.fetch("JIRA_USER") { git.config["user.email"] },
-      password: ENV.fetch("JIRA_TOKEN") {
-        fail(
-          "Create API Token at https://id.atlassian.com/manage-profile/security/api-tokens" \
-          "" \
-          "Store token to environment as JIRA_TOKEN environment variable."
+    @jira_client ||= begin
+      jira_token = ENV.fetch("JIRA_TOKEN") do
+        raise(
+          <<~DOC
+            Create API Token at https://id.atlassian.com/manage-profile/security/api-tokens
+
+            Store token to environment as JIRA_TOKEN environment variable.
+          DOC
         )
-      },
-      site: ENV.fetch("JIRA_URL") { "https://itsmycargo.atlassian.net" },
-      context_path: "",
-      auth_type: :basic,
-      http_debug: false
-    )
+      end
+
+      JIRA::Client.new(
+        username: ENV.fetch("JIRA_USER") { git.config["user.email"] },
+        password: jira_token,
+        site: ENV.fetch("JIRA_URL", "https://itsmycargo.atlassian.net"),
+        context_path: "",
+        auth_type: :basic,
+        http_debug: false
+      )
+    end
   end
 end

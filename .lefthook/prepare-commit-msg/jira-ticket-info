@@ -8,7 +8,7 @@ file_path, type, * = ARGV
 exit 0 unless type.nil?
 
 require_relative "../jira_service"
-ticket = JiraService.fetch_ticket(issue_source: :branch)
+ticket = JiraService.fetch_ticket
 return unless ticket
 
 commit_msg = File.read(file_path)

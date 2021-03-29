@@ -49,7 +49,7 @@ set up your own Amazon AWS Access Keys properly.
 
 After this, simply run rake task:
 
-    $ bin/rake db:reload
+    bin/rake db:reload
 
 ## Docker Based Development
 
@@ -83,7 +83,7 @@ considered good git commit message, please see
 [Linus' instructions][2].
 Each commit message should adhere to the following pattern:
 
-    IMC-123: explain the commit in one line (use the imperative)
+    POL-123: explain the commit in one line (use the imperative)
 
     Body of commit message is a few lines of text, explaining things
           in more detail, possibly giving some background about the issue
@@ -95,10 +95,10 @@ link commits and PRs to tickets, each commit must have a JIRA ticket key. In the
 case that there is no JIRA ticket, you should either create one, or use one of
 following prefixes:
 
-  * `hotfix:` - Hotfixing broken master
-  * `wip:` - The commit is a work in progress
-  * `chore:` - The commit is a quick chore or task and does not directly relate
-    to any ticket (such as README cleanups etc)
+* `hotfix:` - Hotfixing broken master
+* `wip:` - The commit is a work in progress
+* `chore:` - The commit is a quick chore or task and does not directly relate
+  to any ticket (such as README cleanups etc)
 
 All prefixes are case insensitive.
 

@@ -1,0 +1,63 @@
+---
+name: Pull Request
+on: [pull_request]
+
+jobs:
+  jira:
+    name: "JIRA"
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: alvisetrevisan/jira-details-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-token: ${{ secrets.JIRA_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_CLOUD_INSTANCE_BASE_URL }}
+          skip-branches: '^(master)$'
+
+  assignee:
+    name: "Auto-Assign"
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: itsmycargo/action-pr-assignee@master
+
+  jira-assignee:
+    name: "JIRA Assignee"
+    runs-on: ubuntu-20.04
+    needs: [assignee]
+    steps:
+      - uses: atlassian/gajira-login@master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_CLOUD_INSTANCE_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      - id: jira_keys
+        uses: atlassian/gajira-find-issue-key@master
+        with:
+          string: ${{ github.event.pull_request.title }}
+      - uses: itsmycargo/jira-auto-assign@master
+        if: steps.jira_keys.outputs.issue != ''
+        with:
+          issue-key: ${{ steps.jira_keys.outputs.issue }}
+          jira-token: ${{ secrets.JIRA_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-domain: ${{ secrets.JIRA_DOMAIN }}
+
+  labeler:
+    name: "Labeler"
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/labeler@v3
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+  # SKIP Danger as setting up sensible rules is time-consuming, will pick up later
+  # Rules for: ensure API docs specs are touched when touching API controllers
+  #
+  # danger:
+  #   name: Danger JS
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: danger/danger-js@9.1.6
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

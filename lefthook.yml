@@ -12,10 +12,6 @@ commit-msg:
   scripts:
     template-checker:
       tags: default
-pre-push:
-  scripts:
-    verify:
-      tags: default
 post-checkout:
   scripts:
     ensure-branch-name:

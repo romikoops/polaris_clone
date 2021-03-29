@@ -25,14 +25,6 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_DOCKERFILE: false
 
-  triage:
-    name: "Triage"
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/labeler@v3
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-
   test-gems:
     name: Test / Gems
     runs-on: ubuntu-20.04
