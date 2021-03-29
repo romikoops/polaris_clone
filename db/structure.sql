@@ -1733,7 +1733,7 @@ CREATE TABLE public.journey_commodity_infos (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     cargo_unit_id uuid,
     hs_code character varying,
-    imo_class character varying DEFAULT ''::character varying NOT NULL,
+    imo_class character varying,
     description character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -12117,6 +12117,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210315112012'),
 ('20210317075546'),
 ('20210317084132'),
-('20210319101738');
+('20210319101738'),
+('20210326102626');
 
 

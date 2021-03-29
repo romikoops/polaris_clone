@@ -36,7 +36,7 @@ module Journey
     ].freeze
     belongs_to :cargo_unit
 
-    validates :imo_class, inclusion: { in: VALID_IMO_CLASSES, message: "%<value>s is not a valid IMO Class" }
+    validates :imo_class, inclusion: { in: VALID_IMO_CLASSES, message: "%<value>s is not a valid IMO Class", allow_nil: true }
     validates :description, presence: true
   end
 end
@@ -48,7 +48,7 @@ end
 #  id            :uuid             not null, primary key
 #  description   :string           default(""), not null
 #  hs_code       :string
-#  imo_class     :string           default(""), not null
+#  imo_class     :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  cargo_unit_id :uuid

@@ -487,8 +487,9 @@ RSpec.configure do |config|
                 nullable: true
               },
               quantity: {
-                description: "Quantity",
-                type: "integer"
+                description: "Aggregated Cargo Item's have no defined quantity so this property is null",
+                type: "integer",
+                nullable: true
               },
               length: {
                 description: "Aggregated Cargo Item's have no defined length so this property is null",
@@ -520,8 +521,6 @@ RSpec.configure do |config|
               }
             },
             required: %w[
-              colliType
-              quantity
               volume
               weight
               commodities

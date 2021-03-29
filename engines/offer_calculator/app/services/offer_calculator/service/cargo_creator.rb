@@ -3,7 +3,7 @@
 module OfferCalculator
   module Service
     class CargoCreator
-      attr_reader :params, :query, :persist
+      attr_reader :params, :query
 
       def initialize(query:, params:, persist: true)
         @query = query
@@ -17,7 +17,9 @@ module OfferCalculator
         raise OfferCalculator::Errors::InvalidCargoUnit
       end
 
-      alias_method :persist?, :persist
+      def persist?
+        @persist
+      end
 
       private
 
@@ -26,7 +28,7 @@ module OfferCalculator
       end
 
       def cargo_units_params
-        params.dig("cargo_items_attributes").presence || params.dig("containers_attributes") || []
+        params["cargo_items_attributes"].presence || params["containers_attributes"] || []
       end
 
       def journey_cargo(unit_params:)
@@ -34,26 +36,23 @@ module OfferCalculator
 
         Journey::CargoUnit.new(
           id: unit_params_id(unit_params: unit_params),
-          weight_value: unit_params.dig("payload_in_kg") || 0,
+          weight_value: unit_params["payload_in_kg"] || 0,
           width_value: dimension_from_params(unit_params: unit_params, dimension: "width"),
           length_value: dimension_from_params(unit_params: unit_params, dimension: "length"),
           height_value: dimension_from_params(unit_params: unit_params, dimension: "height"),
-          quantity: unit_params.dig("quantity") || 1,
-          stackable: unit_params.dig("stackable").present?,
+          quantity: unit_params["quantity"] || 1,
+          stackable: unit_params["stackable"].present?,
           query: query,
           colli_type: colli_type(unit_params: unit_params),
           cargo_class: cargo_class_from_params(unit_params: unit_params)
         ).tap do |new_cargo|
           new_cargo.set_volume if new_cargo.dimensions_required?
-          return new_cargo unless persist?
-
-          new_cargo.commodity_infos << commodity_info_for_cargo(unit: new_cargo, unit_params: unit_params)
-          new_cargo.save
+          attach_and_persist(unit: new_cargo, unit_params: unit_params)
         end
       end
 
       def cargo_class_from_params(unit_params:)
-        unit_params.dig("size_class") || unit_params.dig("cargo_class") || "lcl"
+        unit_params["size_class"] || unit_params["cargo_class"] || "lcl"
       end
 
       def colli_type(unit_params:)
@@ -77,13 +76,13 @@ module OfferCalculator
       end
 
       def dimension_from_params(unit_params:, dimension:)
-        return 0 if unit_params.dig(dimension).blank?
+        return 0 if unit_params[dimension].blank?
 
-        unit_params.dig(dimension).to_d / 100.0
+        unit_params[dimension].to_d / 100.0
       end
 
       def aggregated_cargo
-        aggregated_attributes = params.dig("aggregated_cargo_attributes")
+        aggregated_attributes = params["aggregated_cargo_attributes"]
         return if aggregated_attributes.blank?
 
         Journey::CargoUnit.new(
@@ -95,26 +94,32 @@ module OfferCalculator
           volume_value: aggregated_attributes.fetch("volume"),
           cargo_class: "aggregated_lcl"
         ).tap do |new_cargo|
-          return new_cargo unless persist?
-          new_cargo.save
+          attach_and_persist(unit: new_cargo, unit_params: aggregated_attributes)
         end
       end
 
+      def attach_and_persist(unit:, unit_params:)
+        return unit unless persist?
+
+        unit.commodity_infos << commodity_info_for_cargo(unit: unit, unit_params: unit_params)
+        unit.save!
+      end
+
       def commodity_info_for_cargo(unit_params:, unit:)
-        return legacy_dangerous_goods(unit_params: unit_params , unit: unit) if unit_params.has_key?("dangerous_goods")
+        return legacy_dangerous_goods(unit_params: unit_params, unit: unit) if unit_params.key?("dangerous_goods")
         return [] if unit_params["commodities"].blank?
 
         unit_params["commodities"].map do |commodity_param|
           Journey::CommodityInfo.new(
             cargo_unit: unit,
-            imo_class: commodity_param.dig("imo_class") || "",
-            hs_code: commodity_param.dig("hs_code") || "",
-            description: commodity_param.dig("description")
+            imo_class: commodity_param["imo_class"],
+            hs_code: commodity_param["hs_code"],
+            description: commodity_param["description"]
           )
         end
       end
 
-      def legacy_dangerous_goods(unit_params: , unit:)
+      def legacy_dangerous_goods(unit_params:, unit:)
         return [] if unit_params["dangerous_goods"].blank?
 
         [Journey::CommodityInfo.new(

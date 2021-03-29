@@ -3,3 +3,4 @@
 RSpec/MultipleMemoizedHelpers:
   Exclude:
   - 'engines/api/spec/controllers/api/v2/queries_controller_spec.rb'
+  - 'engines/offer_calculator/spec/services/offer_calculator/service/cargo_creator_spec.rb'
