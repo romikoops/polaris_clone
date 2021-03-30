@@ -18,7 +18,7 @@ module ResultFormatter
     def gross_weight_per_item
       return if scope["cargo_overview_only"]
 
-      locals = {weight: unit_weight_humanize}
+      locals = { weight: unit_weight_humanize }
       h.render template: "pdf/partials/quotation/cargo/gross_weight_per_item", locals: locals
     end
 
@@ -48,7 +48,7 @@ module ResultFormatter
 
     def render_chargeable_weight_row
       row, value = determine_chargeable_weight_row
-      h.render template: "pdf/partials/quotation/cargo/chargeable_weight_rows/#{row}", locals: {value: value}
+      h.render template: "pdf/partials/quotation/cargo/chargeable_weight_rows/#{row}", locals: { value: value }
     end
 
     def total_chargeable_weight
@@ -64,7 +64,7 @@ module ResultFormatter
     end
 
     def result
-      @result ||= context.dig(:result)
+      @result ||= context[:result]
     end
 
     def cargo_item_type_description
@@ -72,8 +72,8 @@ module ResultFormatter
     end
 
     def dimensions_format
-      h.content_tag :p do
-        [length, width, height].map(&:format).join(" x ")
+      h.tag.p do
+        [length, width, height].compact.map(&:format).join(" x ")
       end
     end
 
@@ -82,7 +82,7 @@ module ResultFormatter
     end
 
     def wm_ratio
-      context.dig(:wm_ratio) || 0
+      context[:wm_ratio] || 0
     end
   end
 end

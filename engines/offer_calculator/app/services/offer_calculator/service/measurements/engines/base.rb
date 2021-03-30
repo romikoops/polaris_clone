@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module OfferCalculator
   module Service
     module Measurements
@@ -34,10 +35,14 @@ module OfferCalculator
           end
 
           def height_limit_violated
+            return false unless dimensions_required?
+
             load_meterage_type == "height_limit" && check_load_meter_limit(amount: height.value)
           end
 
           def area_limit_violated
+            return false unless dimensions_required?
+
             load_meterage_type == "area_limit" && check_load_meter_limit(amount: area_for_load_meters)
           end
 

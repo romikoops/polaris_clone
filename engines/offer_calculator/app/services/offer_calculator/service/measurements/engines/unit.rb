@@ -6,13 +6,14 @@ module OfferCalculator
       module Engines
         class Unit < OfferCalculator::Service::Measurements::Engines::Base
           delegate :quantity, :total_weight, :height, :width, :length, :total_volume, :id,
-            :consolidated?, :stackable?, :cargo_item?, :volume, :weight, :valid?, to: :cargo_unit
+            :consolidated?, :stackable?, :cargo_item?, :volume, :weight, :valid?, :dimensions_required?, to: :cargo_unit
 
           def initialize(cargo_unit:, scope:, object:)
             @cargo_unit = cargo_unit
             @scope = scope
             @object = object
             @stackability = stackable?
+            super()
           end
 
           attr_reader :cargo_unit, :scope, :object
