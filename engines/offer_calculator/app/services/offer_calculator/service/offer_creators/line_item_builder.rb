@@ -54,7 +54,7 @@ module OfferCalculator
             included: charge.code.include?("included"),
             optional: charge.code.include?("unknown"),
             cargo_units: charge.targets,
-            exchange_rate: exchange_rate(from: currency, to: charge.value.currency.iso_code)
+            exchange_rate: exchange_rate(from: charge.value.currency.iso_code, to: currency)
           ).tap do |new_line_item|
             charge.line_item = new_line_item
           end
