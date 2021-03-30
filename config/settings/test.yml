@@ -2,6 +2,9 @@ carta:
   token: FAKECARTATOKEN
   url: fakecartaurl
 
+elasticsearch:
+  url: http://localhost:9200/
+
 emails:
   booking: itsmycargodev@gmail.com
   domain: itsmycargo.test

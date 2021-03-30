@@ -17,7 +17,7 @@ module ExcelDataServices
           )
 
           def iterations
-            @iterations ||= file.rate_schemas.map { |schema|
+            @iterations ||= file.rate_schemas.map do |schema|
               RatesSheetIteration.new(
                 brackets_state: brackets_schema_state(schema: schema),
                 bracket_minimums_state: bracket_minimums_schema_state(schema: schema),
@@ -27,19 +27,19 @@ module ExcelDataServices
                 zone_rows_state: zone_rows_schema_state(schema: schema),
                 metadata_state: metadata_schema_state(schema: schema)
               )
-            }
+            end
           end
 
           private
 
           def combined_state_frames(iteration:)
             iteration.values_state.frame
-              .inner_join(iteration.modifiers_state.frame, on: {"value_col" => "modifier_col"})
-              .inner_join(iteration.zone_rows_state.frame, on: {"value_row" => "zone_row"})
-              .inner_join(iteration.brackets_state.frame, on: {"value_col" => "bracket_col"})
-              .left_join(iteration.zone_minimums_state.frame, on: {"value_row" => "zone_minimum_col"})
-              .inner_join(iteration.bracket_minimums_state.frame, on: {"value_col" => "bracket_minimum_col"})
-              .inner_join(iteration.metadata_state.frame, on: {"sheet_name" => "sheet_name"})
+              .inner_join(iteration.modifiers_state.frame, on: { "value_col" => "modifier_col" })
+              .inner_join(iteration.zone_rows_state.frame, on: { "value_row" => "zone_row" })
+              .inner_join(iteration.brackets_state.frame, on: { "value_col" => "bracket_col" })
+              .left_join(iteration.zone_minimums_state.frame, on: { "value_row" => "zone_minimum_row" })
+              .inner_join(iteration.bracket_minimums_state.frame, on: { "value_col" => "bracket_minimum_col" })
+              .inner_join(iteration.metadata_state.frame, on: { "sheet_name" => "sheet_name" })
           end
 
           def combined_state_errors(iteration:)

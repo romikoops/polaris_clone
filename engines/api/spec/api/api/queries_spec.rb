@@ -32,6 +32,22 @@ RSpec.describe "Queries", type: :request, swagger: true do
 
   before do
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:journey_query,
+      origin: "aaaaa",
+      destination: "aaaaa",
+      organization: organization,
+      cargo_ready_date: 3.days.from_now,
+      created_at: 2.hours.ago,
+      client: user,
+      result_sets: [FactoryBot.build(:journey_result_set)])
+    FactoryBot.create(:journey_query,
+      origin: "bbbbb",
+      destination: "bbbbb",
+      organization: organization,
+      cargo_ready_date: 2.days.from_now,
+      created_at: 5.hours.ago,
+      client: user,
+      result_sets: [FactoryBot.build(:journey_result_set)])
     organization.scope.update(content: { base_pricing: true })
     allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
     allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)

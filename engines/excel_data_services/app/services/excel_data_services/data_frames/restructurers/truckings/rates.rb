@@ -18,7 +18,7 @@ module ExcelDataServices
             results = build_modifier_sections_from_sub_frame(
               sub_frame: sub_frames_by_sheet_and_zone(sheet_name: sheet_name, zone: zone)
             )
-            {"rates" => results, "sheet_name" => sheet_name, "zone" => zone}
+            { "rates" => results, "sheet_name" => sheet_name, "zone" => zone }
           end
 
           def build_modifier_sections_from_sub_frame(sub_frame:)
@@ -30,7 +30,7 @@ module ExcelDataServices
           def build_modifier_section_from_row(sub_frame:, modifier:)
             modifier_rows = modifier_results(sub_frame: sub_frame, modifier: modifier)
 
-            {modifier.to_s => modifier_rows.map { |row| build_rate_hash(row: row) }.uniq}
+            { modifier.to_s => modifier_rows.map { |row| build_rate_hash(row: row) }.uniq }
           end
 
           def build_rate_hash(row:)
@@ -54,13 +54,13 @@ module ExcelDataServices
           end
 
           def min_value_attributes(row:)
-            {min_value: row.values_at("zone_minimum", "bracket_minimum").compact.max}
+            { min_value: row.values_at("zone_minimum", "bracket_minimum").compact.max }
           end
 
           def bracket(row:)
             {
-              "min_#{row["modifier"]}" => row["min"],
-              "max_#{row["modifier"]}" => row["max"]
+              "min_#{row['modifier']}" => row["min"],
+              "max_#{row['modifier']}" => row["max"]
             }
           end
         end

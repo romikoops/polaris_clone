@@ -4,9 +4,9 @@ require "rails_helper"
 
 module ExcelDataServices
   RSpec.shared_examples "optional_integer_like type", type: :service do
-    let(:exception) {
+    let(:exception) do
       ExcelDataServices::Validators::ValidationErrors::TypeValidity::OptionalIntegerLikeType
-    }
+    end
 
     context "with valid float input as a string" do
       let(:optional_numeric_value) { "1.0" }

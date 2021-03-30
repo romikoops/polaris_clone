@@ -6,13 +6,13 @@ module ExcelDataServices
   RSpec.shared_examples "modifier validator", type: :service do
     let(:exception) { ExcelDataServices::Validators::ValidationErrors::TypeValidity::ModifierType }
 
-    context "with valid string input" do
+    context "with valid string input (simple)" do
       let(:modifier_value) { "kg" }
 
       it_behaves_like "passing validator"
     end
 
-    context "with valid string input" do
+    context "with valid string input (combination)" do
       let(:modifier_value) { "cbm_kg" }
 
       it_behaves_like "passing validator"
