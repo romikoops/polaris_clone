@@ -64,7 +64,7 @@ module ExcelDataServices
         validation_errors = []
         restructured_data =
           all_sheets_raw_data.each_with_object({}) { |per_sheet_raw_data, hsh|
-            hsh[per_sheet_raw_data[:sheet_name]] = restructure_data(per_sheet_raw_data)
+            hsh[per_sheet_raw_data[:sheet_name]] = restructure_data(per_sheet_raw_data) if per_sheet_raw_data[:rows_data].present?
           }
 
         restructured_data.each do |sheet_name, data_by_insertion_types|
