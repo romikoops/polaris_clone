@@ -26,7 +26,11 @@ class BackfillJourneyModelsWorker
       quotation_id = quotation.id
       first_tender = quotation.tenders.first
 
-      fall_back_origin, fall_back_destination = first_tender.name.split('-', 2).map(&:strip!)
+      fall_back_origin, fall_back_destination = if first_tender.present?
+        first_tender.name.to_s.split("-", 2).map(&:strip!)
+      else
+        ["", ""]
+      end
       ActiveRecord::Base.transaction do
         query_id = insert_query(quotation_id, fall_back_origin, fall_back_destination)
         insert_cargo_units(quotation_id, query_id)
