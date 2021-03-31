@@ -20,7 +20,10 @@ module ResultFormatter
     end
 
     def total
-      @total ||= line_items.inject(Money.new(0, currency)) { |sum, item| sum + (item.total * item.exchange_rate) }
+      @total ||= line_items.inject(Money.new(0, currency)) do |sum, item|
+        cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
+        sum + Money.new(cents, currency)
+      end
     end
 
     def transshipment
@@ -36,7 +39,7 @@ module ResultFormatter
     end
 
     def currency
-      @currency ||= Users::ClientSettings.find_by(user: client)&.currency || scope.dig(:default_currency)
+      @currency ||= Users::ClientSettings.find_by(user: client)&.currency || scope[:default_currency]
     end
 
     def voyage_code
@@ -47,14 +50,6 @@ module ResultFormatter
       Journey::ImcReference.new(date: created_at).reference
     end
 
-    def has_pre_carriage?
-      route_sections_in_order.first.mode_of_transport == "carriage"
-    end
-
-    def has_on_carriage?
-      route_sections_in_order.last.mode_of_transport == "carriage"
-    end
-
     delegate :mode_of_transport, to: :main_freight_section
 
     def grand_total_section
@@ -63,7 +58,7 @@ module ResultFormatter
 
       h.render(
         template: "pdf/partials/general/grand_total",
-        locals: {total: total.format(rounded_infinite_precision: true, symbol: currency + " ")}
+        locals: { total: total.format(rounded_infinite_precision: true, symbol: "#{currency} ") }
       )
     end
 
@@ -72,15 +67,15 @@ module ResultFormatter
     end
 
     def chargeable_weight_string(section:)
-      return "" if ["import", "export"].include?(section)
+      return "" if %w[import export].include?(section)
 
       target_section = case section
-      when "cargo"
-        main_freight_section
-      when "trucking_pre"
-        pre_carriage_section
-      else
-        on_carriage_section
+                       when "cargo"
+                         main_freight_section
+                       when "trucking_pre"
+                         pre_carriage_section
+                       else
+                         on_carriage_section
       end
 
       cargo_chargeable_weight_string(section: target_section)
@@ -126,15 +121,15 @@ module ResultFormatter
     end
 
     def query
-      @query ||= ResultFormatter::QueryDecorator.decorate(object.query, context: {scope: scope})
+      @query ||= ResultFormatter::QueryDecorator.decorate(object.query, context: { scope: scope })
     end
 
     def origin_hub
-      @origin_hub ||= Legacy::HubDecorator.decorate(legacy_origin_hub, context: {scope: scope})
+      @origin_hub ||= Legacy::HubDecorator.decorate(legacy_origin_hub, context: { scope: scope })
     end
 
     def destination_hub
-      @destination_hub ||= Legacy::HubDecorator.decorate(legacy_destination_hub, context: {scope: scope})
+      @destination_hub ||= Legacy::HubDecorator.decorate(legacy_destination_hub, context: { scope: scope })
     end
 
     def origin
@@ -154,7 +149,7 @@ module ResultFormatter
     end
 
     def decorator_context
-      {scope: scope, result: self}
+      { scope: scope, result: self }
     end
 
     def import?
@@ -265,11 +260,11 @@ module ResultFormatter
 
     def metadata_pricing_id
       @metadata_pricing_id ||= begin
-        return if metadatum.blank?
-
-        metadatum.breakdowns.where(order: 0).find do |breakdown|
-          breakdown.rate_origin["type"] == "Pricings::Pricing"
-        end&.rate_origin&.dig("id")
+        if metadatum.present?
+          metadatum.breakdowns.where(order: 0).find do |breakdown|
+            breakdown.rate_origin["type"] == "Pricings::Pricing"
+          end&.rate_origin&.dig("id")
+        end
       end
     end
 
@@ -278,33 +273,33 @@ module ResultFormatter
     end
 
     def pre_carriage_section
-      @pre_carriage_section ||= route_sections_in_order.find { |section|
+      @pre_carriage_section ||= route_sections_in_order.find do |section|
         section.mode_of_transport == "carriage" && section.to.geo_id == origin_route_point.geo_id
-      }
+      end
     end
 
     def on_carriage_section
-      @on_carriage_section ||= route_sections_in_order.find { |section|
+      @on_carriage_section ||= route_sections_in_order.find do |section|
         section.mode_of_transport == "carriage" && section.from.geo_id == destination_route_point.geo_id
-      }
+      end
     end
 
     def origin_transfer_section
-      @origin_transfer_section ||= route_sections_in_order.find { |section|
+      @origin_transfer_section ||= route_sections_in_order.find do |section|
         section.from.geo_id == origin_route_point.geo_id && section.to.geo_id == origin_route_point.geo_id
-      }
+      end
     end
 
     def destination_transfer_section
-      @destination_transfer_section ||= route_sections_in_order.find { |section|
+      @destination_transfer_section ||= route_sections_in_order.find do |section|
         section.from.geo_id == destination_route_point.geo_id && section.to.geo_id == destination_route_point.geo_id
-      }
+      end
     end
 
     def main_freight_section
-      @main_freight_section ||= route_sections_in_order.find { |section|
+      @main_freight_section ||= route_sections_in_order.find do |section|
         section.from.geo_id != section.to.geo_id && section.mode_of_transport != "carriage"
-      }
+      end
     end
 
     def current_line_item_set
@@ -315,22 +310,22 @@ module ResultFormatter
 
     def origin_route_point
       @origin_route_point ||= route_sections_in_order
-        .reject { |route_section|
+        .reject do |route_section|
           route_section.mode_of_transport == "carriage" ||
             route_section.order < main_freight_section.order
-        }
+        end
         .map(&:from)
-        .find { |route_point| route_point.locode }
+        .find(&:locode)
     end
 
     def destination_route_point
       @destination_route_point ||= route_sections_in_order
-        .reject { |route_section|
+        .reject do |route_section|
           route_section.mode_of_transport == "carriage" ||
             route_section.order < main_freight_section.order
-        }
+        end
         .map(&:to)
-        .find { |route_point| route_point.locode }
+        .find(&:locode)
     end
 
     def total_chargeable_weight(section:)
@@ -355,7 +350,7 @@ module ResultFormatter
     end
 
     def scope
-      context.dig(:scope) || {}
+      context[:scope] || {}
     end
 
     def load_type

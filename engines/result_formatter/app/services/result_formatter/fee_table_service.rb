@@ -27,6 +27,7 @@ module ResultFormatter
     private
 
     attr_reader :result, :rows, :scope, :charge_breakdown
+
     delegate :main_freight_section, to: :result
 
     def create_rows
@@ -47,9 +48,7 @@ module ResultFormatter
         )
 
         @rows << section_row
-        if scope.dig(:quote_card, :sections, charge_category.code)
-          create_cargo_section_rows(row: section_row, items: current_items)
-        end
+        create_cargo_section_rows(row: section_row, items: current_items) if scope.dig(:quote_card, :sections, charge_category.code)
       end
     end
 
@@ -79,9 +78,7 @@ module ResultFormatter
 
     def create_cargo_currency_section_rows(row:, items:, level:)
       sorted_currency_items = sorted_items_for_currency_sections(items: items)
-      if sorted_currency_items.keys.length == 1 && sorted_currency_items.first.first == base_currency
-        return create_fee_rows(row: row, items: items, level: level)
-      end
+      return create_fee_rows(row: row, items: items, level: level) if sorted_currency_items.keys.length == 1 && sorted_currency_items.first.first == base_currency
 
       sorted_currency_items.each do |currency, items_by_currency|
         fee_value = value(items: items_by_currency, currency: currency)
@@ -107,7 +104,7 @@ module ResultFormatter
       sorted_items_for_section(items: items).each do |item|
         decorated_line_item = ::ResultFormatter::LineItemDecorator.new(
           item,
-          context: {scope: scope, mode_of_transport: main_freight_section.mode_of_transport}
+          context: { scope: scope, mode_of_transport: main_freight_section.mode_of_transport }
         )
         @rows << default_values.merge(
           editId: item.id,
@@ -139,7 +136,7 @@ module ResultFormatter
     end
 
     def code_from_carriage_section(route_section:)
-      route_section.order == 0 ? "trucking_pre" : "trucking_on"
+      route_section.order.zero? ? "trucking_pre" : "trucking_on"
     end
 
     def handle_non_carriage_section_code(route_section:)
@@ -175,7 +172,7 @@ module ResultFormatter
     end
 
     def sections_in_order
-      scope.dig(:quote_card, :order).map { |key|
+      scope.dig(:quote_card, :order).map do |key|
         {
           "trucking_pre" => result.pre_carriage_section,
           "export" => result.origin_transfer_section,
@@ -183,7 +180,7 @@ module ResultFormatter
           "import" => result.destination_transfer_section,
           "trucking_on" => result.on_carriage_section
         }[key]
-      }.compact
+      end.compact
     end
 
     def section_order(section:)
@@ -193,14 +190,21 @@ module ResultFormatter
 
     def value(items:, currency: base_currency)
       items.inject(Money.new(0, currency)) do |sum, item|
-        sum + Money.new(item.total_cents * item.exchange_rate, currency)
+        cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
+        sum + Money.new(cents * item.exchange_rate, currency)
       end
     end
 
     def original_value(items:, currency: base_currency)
-      original_items = original_line_item_set.line_items.where(id: items.pluck(:id))
-      original_items.inject(Money.new(0, currency)) do |sum, item|
-        sum + Money.new(item.total_cents * item.exchange_rate, currency)
+      original_items(items: items).inject(Money.new(0, currency)) do |sum, item|
+        cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
+        sum + Money.new(cents, currency)
+      end
+    end
+
+    def original_items(items:)
+      original_line_item_set.line_items.select do |line_item|
+        items.find { |item| item.fee_code == line_item.fee_code && item.route_section_id == line_item.route_section_id }
       end
     end
 
@@ -221,9 +225,7 @@ module ResultFormatter
     end
 
     def sorted_items_for_currency_sections(items:)
-      if primary_code.blank? || items.first.route_section != main_freight_section
-        return group_by_item_currency(items: items)
-      end
+      return group_by_item_currency(items: items) if primary_code.blank? || items.first.route_section != main_freight_section
 
       primary_item = primary_item(items: items)
       return group_by_item_currency(items: items) if primary_item.nil?
@@ -265,7 +267,7 @@ module ResultFormatter
     end
 
     def consolidated_cargo?
-      cargo_units.exists?(cargo_class: ["lcl", "aggregated_lcl"]) && scope.dig(:consolidation, :cargo, :backend)
+      cargo_units.exists?(cargo_class: %w[lcl aggregated_lcl]) && scope.dig(:consolidation, :cargo, :backend)
     end
 
     def org_charge_categories
@@ -279,7 +281,7 @@ module ResultFormatter
     delegate :organization, :client, :cargo_units, to: :query
 
     def base_currency
-      @base_currency ||= Users::Settings.find_by(user: client)&.currency || scope.dig(:default_currency)
+      @base_currency ||= Users::Settings.find_by(user: client)&.currency || scope[:default_currency]
     end
 
     def current_line_item_set

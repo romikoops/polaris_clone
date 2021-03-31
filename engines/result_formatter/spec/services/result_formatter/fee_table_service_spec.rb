@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+RSpec.shared_examples "FeeTableService results" do
+  it "returns rows for each level of charge table", :aggregate_failures do
+    expect(results.pluck(:description)).to eq(expected_descriptions)
+    expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
+  end
+end
 
 module ResultFormatter
   RSpec.describe FeeTableService, type: :service do
     include_context "journey_pdf_setup"
     let!(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:custom_scope) { {primary_freight_code: "Fee 1", fee_detail: "name", default_currency: "USD"} }
+    let(:custom_scope) { { primary_freight_code: "Fee 1", fee_detail: "name", default_currency: "USD" } }
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:type) { :table }
     let(:cargo_unit_params) do
@@ -23,8 +29,9 @@ module ResultFormatter
       ]
     end
     let(:cargo_class) { "fcl_20" }
-    let(:decorated_result) { ResultFormatter::ResultDecorator.new(result, context: {scope: scope}) }
+    let(:decorated_result) { ResultFormatter::ResultDecorator.new(result, context: { scope: scope }) }
     let(:klass) { described_class.new(result: decorated_result, scope: scope, type: type) }
+    let(:results) { klass.perform }
 
     describe ".perform" do
       let(:expected_descriptions) do
@@ -51,14 +58,7 @@ module ResultFormatter
       end
 
       context "with container load type" do
-        it "returns rows for each level of charge table" do
-          results = klass.perform
-          aggregate_failures do
-            expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(Journey::LineItem.all.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with cargo_item load type" do
@@ -82,14 +82,7 @@ module ResultFormatter
             on_carriage_line_items_with_cargo.first.description]
         end
 
-        it "returns rows for each level of charge table" do
-          results = klass.perform
-          aggregate_failures do
-            expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with varied currencies" do
@@ -127,14 +120,7 @@ module ResultFormatter
           line_item_set.line_items << solas_line_item
         end
 
-        it "returns rows for each level of charge table" do
-          results = klass.perform
-          aggregate_failures do
-            expect(results.length).to eq(19)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with custom names" do
@@ -162,17 +148,10 @@ module ResultFormatter
             on_carriage_line_items_with_cargo.first.description]
         end
 
-        it "returns rows for each level of charge table" do
-          results = klass.perform
-          aggregate_failures do
-            expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
-      context "with cargo_item load type" do
+      context "with sorted fees" do
         let(:second_line_item) do
           FactoryBot.build(:journey_line_item,
             line_item_set: line_item_set,
@@ -194,7 +173,7 @@ module ResultFormatter
       end
 
       context "with cargo consolidation" do
-        let(:custom_scope) { {consolidation: {cargo: {backend: true}}, fee_detail: "name", default_currency: "USD"} }
+        let(:custom_scope) { { consolidation: { cargo: { backend: true } }, fee_detail: "name", default_currency: "USD" } }
         let(:cargo_class) { "lcl" }
         let(:results) { klass.perform }
         let(:expected_descriptions) do
@@ -211,24 +190,18 @@ module ResultFormatter
             on_carriage_line_items_with_cargo.first.description]
         end
 
-        it "returns rows for each level of charge table" do
-          aggregate_failures do
-            expect(results.length).to eq(11)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with multiple currencies" do
-        let(:second_line_item) {
+        let(:second_line_item) do
           FactoryBot.build(:journey_line_item,
             line_item_set: line_item_set,
             route_section: origin_transfer_section,
             fee_code: "BAF",
             description: "Bunker Adjustment Fee",
             total: Money.new(1000, "SEK"))
-        }
+        end
 
         let(:cargo_class) { "lcl" }
         let(:results) { klass.perform }
@@ -261,13 +234,7 @@ module ResultFormatter
           line_item_set.line_items << second_line_item
         end
 
-        it "returns rows for each level of charge table" do
-          aggregate_failures do
-            expect(results.length).to eq(19)
-            expect(results.pluck(:description)).to match_array(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with custom order" do
@@ -316,13 +283,7 @@ module ResultFormatter
           ]
         end
 
-        it "returns rows for each level of charge table" do
-          aggregate_failures do
-            expect(results.length).to eq(16)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-            expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
-          end
-        end
+        include_examples "FeeTableService results"
       end
 
       context "with collapsed sections" do
@@ -368,16 +329,13 @@ module ResultFormatter
         end
 
         it "returns rows for each level of charge table" do
-          aggregate_failures do
-            expect(results.length).to eq(12)
-            expect(results.pluck(:description)).to eq(expected_descriptions)
-          end
+          expect(results.pluck(:description)).to eq(expected_descriptions)
         end
       end
     end
 
     describe ".value_with_currency" do
-      let(:amount) { 10000 }
+      let(:amount) { 10_000 }
       let(:currency) { "USD" }
       let(:money) { Money.new(amount, currency) }
       let(:format) { klass.send(:value_with_currency, money) }
@@ -402,6 +360,50 @@ module ResultFormatter
 
         it "returns the raw value" do
           expect(format[:amount]).to eq("1.23")
+        end
+      end
+    end
+
+    describe ".original_value" do
+      let(:edited_money) { Money.new(5555, "USD") }
+      let(:format) { klass.send(:value_with_currency, money) }
+      let(:line_items) { freight_line_items_with_cargo }
+      let(:edited_line_item_set) { line_item_set.dup.tap(&:save!) }
+
+      let(:edited_line_items) do
+        freight_line_items_with_cargo.map do |line_item|
+          line_item.dup.tap do |edited_line_item|
+            edited_line_item.update(line_item_set: edited_line_item_set, total: edited_money)
+          end
+        end
+      end
+
+      it "returns the subtotal of the items provided from the original LineItemSet" do
+        expect(klass.send(:original_value, items: edited_line_items, currency: "USD")).to eq(freight_line_items_with_cargo.sum(&:total))
+      end
+    end
+
+    describe ".value" do
+      let(:line_items) { freight_line_items_with_cargo }
+
+      context "when the currency is the same" do
+        let(:currency) { "USD" }
+
+        it "returns the subtotal of the items provided from the original LineItemSet" do
+          expect(klass.send(:original_value, items: line_items, currency: currency)).to eq(freight_line_items_with_cargo.sum(&:total))
+        end
+      end
+
+      context "when the currency is the different" do
+        let(:currency) { "EUR" }
+        let(:expected_amount) do
+          freight_line_items_with_cargo.inject(Money.new(0, currency)) do |sum, item|
+            sum + Money.new(item.total_cents * item.exchange_rate, currency)
+          end
+        end
+
+        it "returns the subtotal of the items provided from the original LineItemSet" do
+          expect(klass.send(:original_value, items: line_items, currency: currency)).to eq(expected_amount)
         end
       end
     end

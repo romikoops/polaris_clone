@@ -5,15 +5,15 @@ require "rails_helper"
 RSpec.describe ResultFormatter::ResultDecorator do
   include_context "journey_pdf_setup"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) {
+  let(:user) do
     FactoryBot.create(:users_client, organization: organization)
-  }
+  end
   let(:chargeable_weight_view) { "volume" }
-  let(:scope_content) {
-    {"show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view}
-  }
+  let(:scope_content) do
+    { "show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view }
+  end
   let(:scope) { OrganizationManager::ScopeService.new(target: user, organization: organization).fetch }
-  let(:klass) { described_class.decorate(result, context: {scope: scope}) }
+  let(:klass) { described_class.decorate(result, context: { scope: scope }) }
   let(:desired_line_items) { result.line_item_sets.first.line_items }
 
   before do
@@ -35,7 +35,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
 
     context "with pickup carrier info settings" do
-      let(:scope_content) { {"voyage_info" => {"pre_carriage_carrier" => true}} }
+      let(:scope_content) { { "voyage_info" => { "pre_carriage_carrier" => true } } }
 
       it "returns the carrier info in the correct format" do
         expect(operator_string).to eq("operated by #{pre_carriage_carrier}")
@@ -43,7 +43,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
 
     context "with pickup service info settings" do
-      let(:scope_content) { {"voyage_info" => {"pre_carriage_service" => true}} }
+      let(:scope_content) { { "voyage_info" => { "pre_carriage_service" => true } } }
 
       it "returns the carrier info in the correct format" do
         expect(operator_string).to eq("operated by #{pre_carriage_service}")
@@ -51,7 +51,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
 
     context "with pickup carrier and service info settings" do
-      let(:scope_content) { {"voyage_info" => {"pre_carriage_service" => true, "pre_carriage_carrier" => true}} }
+      let(:scope_content) { { "voyage_info" => { "pre_carriage_service" => true, "pre_carriage_carrier" => true } } }
 
       it "returns the carrier info in the correct format" do
         expect(operator_string).to eq("operated by #{pre_carriage_carrier}(#{pre_carriage_service})")
@@ -61,7 +61,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
 
   describe ".currency" do
     it "returns the tender currency" do
-      expect(klass.currency).to eq(scope.dig(:default_currency))
+      expect(klass.currency).to eq(scope[:default_currency])
     end
   end
 
@@ -79,31 +79,31 @@ RSpec.describe ResultFormatter::ResultDecorator do
 
   describe ".export?" do
     it "returns true if export fees are present" do
-      expect(klass.export?).to be_truthy
+      expect(klass).to be_export
     end
   end
 
   describe ".import?" do
     it "returns true if import fees are present" do
-      expect(klass.import?).to be_truthy
+      expect(klass).to be_import
     end
   end
 
   describe ".addons?" do
     it "returns true if addons fees are present" do
-      expect(klass.addons?).to be_falsy
+      expect(klass).not_to be_addons
     end
   end
 
   describe ".insurance?" do
     it "returns true if insurance fees are present" do
-      expect(klass.insurance?).to be_falsy
+      expect(klass).not_to be_insurance
     end
   end
 
   describe ".customs?" do
     it "returns true if customs fees are present" do
-      expect(klass.customs?).to be_falsy
+      expect(klass).not_to be_customs
     end
   end
 
@@ -172,18 +172,6 @@ RSpec.describe ResultFormatter::ResultDecorator do
     describe ".full_delivery_address" do
       it "returns the on delivery_address" do
         expect(klass.full_delivery_address).to eq("China")
-      end
-    end
-
-    describe ".has_pre_carriage?" do
-      it "returns false when no carriage section exists" do
-        expect(klass.has_pre_carriage?).to be_truthy
-      end
-    end
-
-    describe ".has_on_carriage?" do
-      it "returns false when no carriage section exists" do
-        expect(klass.has_on_carriage?).to be_truthy
       end
     end
   end
