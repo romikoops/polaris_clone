@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::ClientsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:resp) { JSON.parse(response.body) }
   let(:user) { FactoryBot.create(:users_user) }
 
   before do
@@ -16,31 +17,31 @@ RSpec.describe Admin::ClientsController do
   describe "GET #index" do
     let(:company) { FactoryBot.create(:companies_company, name: "ItsMyCargo", organization_id: organization.id) }
     let(:users) { FactoryBot.create_list(:users_client, 3, organization: organization) }
+    let!(:client) { FactoryBot.create(:users_client, organization: organization, profile_attributes: { first_name: "Bob" }) }
 
     before do
       ::Organizations.current_id = organization.id
-      users.each do |user|
-        FactoryBot.create(:companies_membership, company: company, member: user)
+      users.each do |other_user|
+        FactoryBot.create(:companies_membership, company: company, member: other_user)
       end
     end
 
     it "returns an http status of success" do
-      get :index, params: {organization_id: organization.id}
+      get :index, params: { organization_id: organization.id }
       expect(response).to have_http_status(:success)
     end
 
     context "with query search" do
       it "returns the correct matching results with search" do
-        get :index, params: {organization_id: organization.id, query: users.first.profile.name}
-        resp = JSON.parse(response.body)
-        expect(resp["data"]["clientData"].first["email"]).to eq(users.first.email)
+        get :index, params: { organization_id: organization.id, query: client.profile.name }
+
+        expect(resp.dig("data", "clientData", 0, "email")).to eq(client.email)
       end
     end
 
     context "when searching via company names" do
       it "returns users matching the given company_name " do
-        get :index, params: {organization_id: organization.id, company_name: company.name}
-        resp = JSON.parse(response.body)
+        get :index, params: { organization_id: organization.id, company_name: company.name }
 
         expect(resp["data"]["clientData"].pluck("email")).to include(users.first.email)
       end
@@ -51,15 +52,13 @@ RSpec.describe Admin::ClientsController do
         context "#{search_key} search & ordering" do
           it "yields the correct matching results for search", skip: "flaky" do
             sample_user = users.sample
-            get :index, params: {search_key => sample_user[search_key.to_sym], :organization_id => organization.id}
-            resp = JSON.parse(response.body)
+            get :index, params: { search_key => sample_user[search_key.to_sym], :organization_id => organization.id }
             expect(resp["data"]["clientData"].first[search_key.camelize(:lower)]).to eq(sample_user[search_key.to_sym])
           end
 
           it "sorts the result according to the param provided", skip: "flaky" do
             expected_response = users.pluck(search_key.to_sym).sort.reverse
-            get :index, params: {"#{search_key}_desc" => "true", :organization_id => organization.id}
-            resp = JSON.parse(response.body)
+            get :index, params: { "#{search_key}_desc" => "true", :organization_id => organization.id }
             expect(resp["data"]["clientData"].pluck(search_key.camelize(:lower))).to eq(expected_response)
           end
         end
@@ -69,88 +68,49 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe "GET #show" do
-    let(:user) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:client) { FactoryBot.create(:users_client, organization: organization) }
 
     it "returns an http status of success" do
-      post :show, params: {organization_id: organization, id: user}
+      post :show, params: { organization_id: organization, id: client }
       expect(response).to have_http_status(:success)
     end
   end
 
   describe "post #create" do
     let(:email) { "email123@demo.com" }
-    let(:user_attributes) {
-      FactoryBot.attributes_for(:users_client, email: email).deep_transform_keys { |k| k.to_s.camelize(:lower) }
-    }
+    let(:user_attributes) do
+      FactoryBot.attributes_for(:users_client, email: email)
+        .deep_transform_keys { |k| k.to_s.camelize(:lower) }
+        .merge(password: "12345678", password_confirmation: "12345678")
+    end
     let(:profile_params) { FactoryBot.attributes_for(:users_profile) }
     let(:profile_attributes) { profile_params.deep_transform_keys { |k| k.to_s.camelize(:lower) } }
     let(:attributes) { user_attributes.merge(profile_attributes) }
     let(:created_profile) { Users::ClientProfile.find_by(user_id: response_data.dig("data", "id")) }
     let(:created_settings) { Users::ClientSettings.find_by(user_id: response_data.dig("data", "id")) }
-    let(:profile_response) {
+    let(:profile_response) do
       created_profile.attributes.slice("first_name", "last_name", "phone", "company_name").symbolize_keys
-    }
+    end
 
     it "creates the user, profile and settings correctly", :aggregate_failures do
-      post :create, params: {organization_id: organization, new_client: attributes.to_json}
+      post :create, params: { organization_id: organization, client: attributes }
       expect(response).to have_http_status(:success)
       expect(response_data.dig("data", "attributes", "email")).to eq(email)
       expect(profile_response).to eq(profile_params.except(:user))
       expect(created_settings.currency).to eq(Organizations::DEFAULT_SCOPE["default_currency"])
     end
 
-    context "when creating client with email belonging to a soft deleted user" do
-      let(:user) do
-        FactoryBot.create(:users_client, email: "email123@demo.com", organization: organization)
-      end
-      let(:user_2) do
-        FactoryBot.create(:users_client,
-          email: "email123@demo.com",
-          organization: organization)
-      end
-
-      before do
-        user.destroy
-        user_2.destroy
-      end
-
-      it "restores the user and restores corresponding relationships", skip: "flaky" do
-        post :create, params: {organization_id: organization, new_client: attributes.to_json}
-
-        restored_user = Users::Client.find_by(email: "email123@demo.com", organization: organization)
-        aggregate_failures do
-          expect(user_2.deleted?).to eq(true)
-        end
-      end
-    end
-
-    context "when user is restored and the associations are permanently deleted" do
-      let(:email) { "email1234@demo.com" }
-      let(:user) do
-        FactoryBot.create(:users_client,
-          email: "email1234@demo.com",
-          organization: organization)
-      end
-
-      before do
-        user.destroy
-      end
-
-      it "creates new associations with defaults", skip: "flaky" do
-        post :create, params: {organization_id: organization, new_client: attributes.to_json}
-
-        restored_user = Users::Client.find_by(email: email, organization: organization)
-        aggregate_failures do
-          expect(Users::Settings.where(user_id: restored_user.id)).to exist
-          expect(Users::Profile.where(user_id: restored_user.id)).to exist
-        end
+    context "when params are incomplete" do
+      it "responds with an ActionController::ParameterMissing error when params are missing" do
+        expect do
+          post :create, params: { organization_id: organization, client: attributes.except(:password) }
+        end.to raise_error(ActionController::ParameterMissing)
       end
     end
   end
 
   describe "POST #agents" do
-    let(:perform_request) { post :agents, params: {organization_id: organization, file: file} }
-    let(:uploader) { double(perform: nil) }
+    let(:perform_request) { post :agents, params: { organization_id: organization, file: file } }
     let(:file) { fixture_file_upload("spec/fixtures/files/dummy.xlsx") }
 
     it_behaves_like "uploading request async"
@@ -167,22 +127,22 @@ RSpec.describe Admin::ClientsController do
     end
 
     it "returns an http status of success" do
-      delete :destroy, params: {organization_id: organization, id: user.id}
+      delete :destroy, params: { organization_id: organization, id: user.id }
       expect(response).to have_http_status(:success)
     end
 
     it "deletes the users group membership" do
-      delete :destroy, params: {organization_id: organization, id: user.id}
+      delete :destroy, params: { organization_id: organization, id: user.id }
       expect(Groups::Membership.exists?(member: user)).to be false
     end
 
     it "deletes the users company memberships" do
-      delete :destroy, params: {organization_id: organization, id: user.id}
-      expect(Companies::Membership.where(member: user)).to_not exist
+      delete :destroy, params: { organization_id: organization, id: user.id }
+      expect(Companies::Membership.where(member: user)).not_to exist
     end
 
     it "deletes the user" do
-      delete :destroy, params: {organization_id: organization, id: user.id}
+      delete :destroy, params: { organization_id: organization, id: user.id }
       expect(Users::Client.find_by(id: user.id)).to be(nil)
     end
   end

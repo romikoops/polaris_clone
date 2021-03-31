@@ -15,7 +15,7 @@ module Api
         client.save!
         attach_associations
         Rails.configuration.event_store.publish(
-          Users::UserCreated.new(data: {user: client.to_global_id, organization_id: client.organization_id}),
+          Users::UserCreated.new(data: { user: client.to_global_id, organization_id: client.organization_id }),
           stream_name: "Organization$#{client.organization_id}"
         )
         client
@@ -28,8 +28,8 @@ module Api
 
     def client
       @client ||= new_or_restored_client.tap do |new_user|
-        new_user.profile = Users::ClientProfile.new(profile_attributes)
-        new_user.settings = Users::ClientSettings.new(settings_attributes)
+        new_user.profile = Users::ClientProfile.new(profile_attributes) if new_user.profile.id.blank?
+        new_user.settings = Users::ClientSettings.new(settings_attributes) if new_user.settings.id.blank?
       end
     end
 
@@ -79,10 +79,8 @@ module Api
     end
 
     def restorable_client
-      @restorable_client ||= begin
-        email = client_attributes.dig("email")
-        Users::Client.only_deleted.find_by(email: email)&.restore
-      end
+      @restorable_client ||=
+        Users::Client.only_deleted.find_by(email: client_attributes[:email])&.restore
     end
 
     def new_or_restored_client

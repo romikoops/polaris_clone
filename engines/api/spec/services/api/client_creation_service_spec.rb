@@ -5,34 +5,34 @@ require "rails_helper"
 RSpec.describe Api::ClientCreationService do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:test_email) { "test@imc.test" }
-  let(:client_attributes) {
+  let(:client_attributes) do
     {
       email: test_email,
       password: "123456789",
       organization_id: organization.id
     }
-  }
-  let(:profile_attributes) {
+  end
+  let(:profile_attributes) do
     {
       company_name: company_name,
       first_name: "Test",
       last_name: "Person",
       phone: "01628710344"
     }
-  }
-  let(:settings_attributes) {
+  end
+  let(:settings_attributes) do
     {
       currency: "EUR"
     }
-  }
+  end
   let(:country) { FactoryBot.create(:country_de) }
   let(:address_attributes) do
-    {street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: country.name}
+    { street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: country.name }
   end
   let(:company_name) { "Person Freight" }
   let(:group) { FactoryBot.create(:groups_group, organization: organization) }
   let(:group_id) { group.id }
-  let(:service) {
+  let(:service) do
     described_class.new(
       client_attributes: client_attributes,
       profile_attributes: profile_attributes,
@@ -40,7 +40,7 @@ RSpec.describe Api::ClientCreationService do
       address_attributes: address_attributes,
       group_id: group_id
     )
-  }
+  end
   let!(:company) { FactoryBot.create(:companies_company, organization: organization, name: company_name) }
   let(:client) { service.perform }
   let(:client_address) { Legacy::UserAddress.find_by(user: client) }
@@ -80,6 +80,24 @@ RSpec.describe Api::ClientCreationService do
 
     it "attaches the user to the correct company", :aggregate_failures do
       expect(Companies::Membership.find_by(member: client, company: company)).to be_valid
+    end
+
+    context "when creating client with email belonging to a soft deleted user" do
+      let!(:existing_client) do
+        FactoryBot.create(:users_client, email: test_email, organization: organization)
+      end
+
+      before do
+        existing_client.destroy
+      end
+
+      it "restores the user" do
+        aggregate_failures do
+          expect(client).to eq(existing_client)
+          expect(client.profile).to be_present
+          expect(client.settings).to be_present
+        end
+      end
     end
   end
 end
