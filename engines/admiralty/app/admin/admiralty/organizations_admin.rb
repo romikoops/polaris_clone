@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Trestle.resource(:organizations, model: Organizations::Organization) do
+Trestle.resource(:organizations, model: Admiralty::Organization) do
   remove_action :destroy
 
   menu :organizations, icon: "fa fa-building", group: :organizations
@@ -21,7 +21,7 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
   #
   table do
     column :slug, link: true
-    column :live, sort: {default: true, default_order: :desc}
+    column :live, sort: { default: true, default_order: :desc }
   end
 
   # Customize the form fields shown on the new/edit views.
@@ -38,7 +38,7 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
         actions
       end
 
-      concat admin_link_to("New Domain", admin: :domains, action: :new, params: { domain: {organization_id: organization.id} }, class: "btn btn-success")
+      concat admin_link_to("New Domain", admin: :domains, action: :new, params: { domain: { organization_id: organization.id } }, class: "btn btn-success")
     end
 
     tab :theme do
@@ -102,6 +102,16 @@ Trestle.resource(:organizations, model: Organizations::Organization) do
           end
         end
       end
+    end
+
+    tab :charge_categories do
+      fields_for :charge_categories do
+        row do
+          col(sm: 6) { text_field :code }
+          col(sm: 6) { text_field :name }
+        end
+      end
+      concat admin_link_to("New Charge Category", admin: :charge_categories, action: :new, params: { charge_category: { organization_id: organization.id } }, class: "btn btn-success")
     end
   end
 end
