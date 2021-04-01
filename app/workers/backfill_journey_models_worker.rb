@@ -29,7 +29,7 @@ class BackfillJourneyModelsWorker
       fall_back_origin, fall_back_destination = if first_tender.present?
         first_tender.name.to_s.split("-", 2).map {|string| ActiveRecord::Base.connection.quote(string.strip) }
       else
-        ["", ""]
+        ["''", "''"]
       end
       ActiveRecord::Base.transaction do
         query_id = insert_query(quotation_id, fall_back_origin, fall_back_destination)
