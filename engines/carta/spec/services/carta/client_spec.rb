@@ -8,6 +8,15 @@ module Carta
     let(:conn)   { Faraday.new { |b| b.adapter(:test, stubs) } }
     let(:result) { Carta::Result.new({ "id": "itsmycargo:locode:ABC123" }) }
     let(:lookup_resp) { '{"data": {"id": "itsmycargo:locode:ABC123"} }' }
+    let(:server_error_response) do
+      [
+        503,
+        { 'Content-Type': "application/json" },
+        "<html><body><h1>503 Service Unavailable</h1>
+        No server is available to handle this request.
+        </body></html>"
+      ]
+    end
 
     before do
       allow(described_class).to receive(:connection).and_return(conn)
@@ -36,11 +45,7 @@ module Carta
       context "when carta responds with 503" do
         before do
           stubs.get("/lookup?id=#{geo_id}") do
-            [
-              503,
-              { 'Content-Type': "application/json" },
-              "{}"
-            ]
+            server_error_response
           end
         end
 
@@ -77,11 +82,7 @@ module Carta
       context "when carta responds with 503" do
         before do
           stubs.get("/suggest?query=#{locode}") do
-            [
-              503,
-              { 'Content-Type': "application/json" },
-              "{}"
-            ]
+            server_error_response
           end
         end
 

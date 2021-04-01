@@ -7,6 +7,7 @@ RSpec/MultipleMemoizedHelpers:
   - 'engines/api/spec/services/api/client_creation_service_spec.rb'
   - 'engines/api/spec/decorators/api/v1/legacy_cargo_unit_decorator_spec.rb'
   - 'engines/api/spec/decorators/api/v1/cargo_unit_decorator_spec.rb'
+  - 'engines/carta/spec/services/carta/client_spec.rb'
   - 'engines/excel_data_services/spec/**'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/cargo_creator_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/measurements/**/*.rb'
