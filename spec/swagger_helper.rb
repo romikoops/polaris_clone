@@ -1020,6 +1020,11 @@ RSpec.configure do |config|
                 }
               }
             }
+          },
+          bearerAuth: {
+            type: :http,
+            description: "Some endpoints authorize via integration token",
+            scheme: "bearer"
           }
         }
       },

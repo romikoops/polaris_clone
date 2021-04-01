@@ -1,5 +1,6 @@
 aws:
   bucket: assets.itsmycargo.com
+  ingest_bucket: <%= ENV['AWS_INGEST_BUCKET'] %>
 
 carta:
   token: <%= Rails.application.credentials.dig(:production, :carta, :token) %>

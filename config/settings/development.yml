@@ -1,5 +1,6 @@
 aws:
   bucket: assets.itsmycargo.com
+  ingest_bucket: <%= ENV.fetch('AWS_INGEST_BUCKET', 'itsmycargo-ingest') %>
 
 carta:
   token: <%= Rails.application.credentials.dig(:development, :carta, :token) %>

@@ -1,14 +1,13 @@
 # frozen_string_literal: true
+
 module Organizations
   class IntegrationToken < ApplicationRecord
-    default_scope { where("expires_at > NOW()") }
+    scope :active, -> { where("expires_at > NOW() OR expires_at IS NULL") }
 
     belongs_to :organization
 
     validates_presence_of :token, :scope
     validates_format_of :scope, with: /\A([a-z]+\.)*[a-z]+\z/
-
-    scope :with_expired, -> { unscope(:where) }
   end
 end
 
