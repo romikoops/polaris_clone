@@ -17,5 +17,13 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultBuilder do
     it "returns the correct number of results for the number of offers" do
       expect(result).to be_persisted
     end
+
+    context "when an error occurs" do
+      before { allow(OfferCalculator::Service::OfferCreators::LineItemBuilder).to receive(:line_items).and_raise(ActiveRecord::RecordInvalid) }
+
+      it "raises an OfferCalculator::Errors::OfferBuilder error" do
+        expect { result }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+      end
+    end
   end
 end
