@@ -31,8 +31,16 @@ class BackfillJourneyModelsWorker
       else
         ["''", "''"]
       end
+      load_type_bool = if first_tender.present?
+        first_tender.load_type == "cargo_item"
+      elsif quotation.cargo.present?
+        quotation.cargo.lcl?
+      elsif quotation.legacy_shipment.present?
+        quotation.legacy_shipment.load_type == "cargo_item"
+      end
+      load_type = load_type_bool ? "lcl" : "fcl"
       ActiveRecord::Base.transaction do
-        query_id = insert_query(quotation_id, fall_back_origin, fall_back_destination)
+        query_id = insert_query(quotation_id, fall_back_origin, fall_back_destination, load_type)
         insert_cargo_units(quotation_id, query_id)
         result_set_id = insert_result_sets(query_id, quotation_id)
         offer_id = insert_offer(query_id, quotation_id)
@@ -160,7 +168,7 @@ class BackfillJourneyModelsWorker
     )
   end
 
-  def insert_query(quotation_id, fall_back_origin, fall_back_destination)
+  def insert_query(quotation_id, fall_back_origin, fall_back_destination, load_type)
     query = ActiveRecord::Base.connection.execute(
       <<~SQL
         INSERT INTO journey_queries (
@@ -178,6 +186,7 @@ class BackfillJourneyModelsWorker
           insurance,
           customs,
           billable,
+          load_type,
           source_id,
           created_at,
           updated_at)
@@ -214,6 +223,7 @@ class BackfillJourneyModelsWorker
           CASE WHEN (quotations_quotations.billing = 2)
           THEN CAST(false AS boolean)
           ELSE CAST(true AS boolean) END,
+          '#{load_type}'::journey_load_type,
           CASE WHEN (quotations_quotations.user_id != quotations_quotations.creator_id)
           THEN (select id from oauth_applications where name = 'bridge' limit 1) -- Bridge Doorkeepr Application Id
           ELSE (select id from oauth_applications where name = 'dipper' limit 1) -- Dipper Doorkeepr Application Id
