@@ -15,7 +15,12 @@ module Api
     before_action :set_organization_id
     before_action :ensure_organization!
     before_action :set_sentry_context
-    helper_method :current_user
+    helper_method :current_user, :current_organization
+
+    def current_organization
+      @current_organization ||= Organizations::Organization.current ||
+        Organizations::Organization.find_by(id: organization_id)
+    end
 
     private
 
@@ -44,15 +49,12 @@ module Api
     def organization_id
       return @organization_id if defined?(@organization_id)
 
-      @organization_id ||= begin
-        org_id = params[:organization_id] if params[:organization_id]
-
-        org_id ||= Organizations::Domain.where(domain: organization_domain).pluck(:organization_id).first
-        org_id ||= if Organizations::Organization.exists?(slug: organization_slug)
-          Organizations::Organization.find_by(slug: organization_slug).id
+      @organization_id = params.fetch(:organization_id) do
+        if organization_domain.present?
+          organization_domain.organization_id
+        elsif organization_slug.present?
+          Organizations::Organization.where(slug: organization_slug).ids.first
         end
-
-        org_id
       end
     end
 
@@ -62,10 +64,6 @@ module Api
 
     def organization_user
       current_user&.becomes(::Users::Client)
-    end
-
-    def current_organization
-      @current_organization ||= ::Organizations::Organization.find(organization_id)
     end
 
     def user_organization
@@ -92,34 +90,17 @@ module Api
     end
 
     def organization_domain
-      @organization_domain ||= begin
-        domains = [
-          URI(request.referrer.to_s).host,
-          request.host,
-          Rails.env.production? ? nil : ENV.fetch("DEFAULT_TENANT", "demo.local")
-        ]
+      @organization_domain ||= Organizations::Domain.find_by(domain: referrer_host) ||
+        Organizations::Domain.find_by("? ILIKE domain", referrer_host) ||
+        (Organizations::Domain.find_by(domain: "demo.local") if Rails.env.development?)
+    end
 
-        domains.push(parse_saco_idp)
-        domains.compact.flatten.find { |domain| Organizations::Domain.exists?(domain: domain) }
-      end
+    def referrer_host
+      @referrer_host ||= URI(request.referrer.to_s).host
     end
 
     def organization_slug
-      ActionDispatch::Http::URL.extract_subdomain(
-        URI(request.referrer.to_s).host.to_s,
-        1
-      )
-    end
-
-    def parse_saco_idp
-      forwarded_host = request.headers["X-Forwarded-Host"]
-      return if forwarded_host.nil?
-
-      forwarded_host.split(",").map(&:strip).reject { |host| host == API_HOST }
-    end
-
-    def referer
-      URI(request.referrer.to_s)
+      @organization_slug ||= ActionDispatch::Http::URL.extract_subdomain(referrer_host, 1) if referrer_host.present?
     end
 
     def target_groups(target:)
@@ -133,8 +114,8 @@ module Api
     def organization_results
       @organization_results ||= Journey::Result.joins(result_set: :query)
         .where(
-          journey_result_sets: {status: "completed"},
-          journey_queries: {billable: true, organization_id: current_organization.id}
+          journey_result_sets: { status: "completed" },
+          journey_queries: { billable: true, organization_id: current_organization.id }
         )
     end
   end

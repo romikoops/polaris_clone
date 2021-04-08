@@ -29,13 +29,6 @@ class ApplicationController < Api::ApiController
 
   private
 
-  def current_organization
-    @current_organization ||= begin
-      Organizations::Organization.current ||
-        Organizations::Organization.find_by(id: organization_id)
-    end
-  end
-
   def quotation_tool?
     current_scope["open_quotation_tool"] || current_scope["closed_quotation_tool"]
   end
@@ -61,7 +54,7 @@ class ApplicationController < Api::ApiController
 
   def generate_token_for(user:, scope:)
     Doorkeeper::AccessToken.create(resource_owner_id: user.id,
-                                   application: Doorkeeper::Application.find_by(name: 'dipper'),
+                                   application: Doorkeeper::Application.find_by(name: "dipper"),
                                    refresh_token: generate_refresh_token,
                                    expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
                                    scopes: scope)
@@ -76,7 +69,7 @@ class ApplicationController < Api::ApiController
 
   def role_for(user:)
     if user.organization_id.nil? &&
-        ::Users::Membership.where(organization_id: current_organization.id, user_id: user.id).exists?
+        ::Users::Membership.exists?(organization_id: current_organization.id, user_id: user.id)
       "admin"
     else
       "shipper"
@@ -86,7 +79,7 @@ class ApplicationController < Api::ApiController
   def decorate_results(results:)
     Api::V1::LegacyResultDecorator.decorate_collection(
       results,
-      context: {scope: current_scope}
+      context: { scope: current_scope }
     )
   end
 

@@ -28,7 +28,7 @@ RSpec.describe "Organization", type: :request, swagger: true do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/organization"}
+                 data: { "$ref" => "#/components/schemas/organization" }
                },
                required: ["data"]
 
@@ -41,18 +41,8 @@ RSpec.describe "Organization", type: :request, swagger: true do
       response "404", "Not Found" do
         let(:Referer) { "https://deadbeef.nullisland.io" }
 
-        schema type: :object,
-               properties: {
-                 success: { type: :boolean },
-                 message: { type: :string },
-                 status: { type: :string },
-                 code: { type: :number }
-               },
-               required: %w[success message status code]
-
         run_test! do
-          json_response = JSON.parse(response.body)
-          expect(json_response["status"]).to eq "not_found"
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
