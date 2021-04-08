@@ -4,7 +4,10 @@ Api::Engine.routes.draw do
   mount ApiAuth::Engine, at: "/"
 
   namespace :v1 do
-    resource :me, controller: :users, only: :show
+    resource :me, controller: :users, only: :show do
+      resource :settings, only: :show
+    end
+
     resource :uploads, only: :create
 
     resource :organization, only: :show

@@ -876,6 +876,60 @@ RSpec.configure do |config|
             },
             required: ["id"]
           },
+          settings: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the settings object",
+                type: "string"
+              },
+              attributes: {
+                description: "Attributes",
+                type: "object",
+                properties: {
+                  language: {
+                    type: "string",
+                    pattern: "[a-z]{2}-[A-Z]{2}",
+                    description: <<~DOC
+                      User's preferred language. Preferred language is given as language
+                      and country combination, allowing different dialects and languages
+                      for each region.
+
+                      Language code is combined with language and country, separated by
+                      dash. First part of the code, language is the lower-case
+                      two-letter codes as defined by ISO-639-1. Second part is the
+                      upper-case two-letter codes as defined by ISO-3166-1.
+
+                      For example:
+
+                      * `en-US` - English as spoken in United States of America
+                      * `en-GB` - English as spoken in United Kingdom and the Northern Ireland
+                      * `sv-FI` - Swedish as spoken in Finland
+                    DOC
+                  },
+                  locale: {
+                    type: "string",
+                    pattern: "[a-z]{2}-[A-Z]{2}",
+                    description: <<~DOC
+                      User's preferred locale. Preferred locale defines how numbers and
+                      currencies, time et al. are displayed in the shop.
+
+                      Locale code is combined with language and country, separated by
+                      dash. First part of the code, language is the lower-case
+                      two-letter codes as defined by ISO-639-1. Second part is the
+                      upper-case two-letter codes as defined by ISO-3166-1.
+
+                      For example:
+
+                      * `en-US` - English as spoken in United States of America
+                      * `en-GB` - English as spoken in United Kingdom and the Northern Ireland
+                      * `sv-FI` - Swedish as spoken in Finland
+                    DOC
+                  }
+                }
+              }
+            }
+          },
           scope: {
             type: "object",
             properties: {
