@@ -21,9 +21,10 @@ module Journey
     validates :destination_coordinates, presence: true
     validates :origin, presence: true
     validates :origin_coordinates, presence: true
+    validates :load_type, presence: true
 
-    validates :delivery_date, date: {after: :cargo_ready_date}
-    validates :cargo_ready_date, date: {after: proc { Time.zone.now }}
+    validates :delivery_date, date: { after: :cargo_ready_date }
+    validates :cargo_ready_date, date: { after: proc { Time.zone.now } }
 
     enum load_type: {
       lcl: "lcl",
@@ -35,6 +36,8 @@ module Journey
     end
 
     def results
+      return Journey::Result.none if result_sets.empty?
+
       result_sets.order(:created_at).last.results || []
     end
   end
