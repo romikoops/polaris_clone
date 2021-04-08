@@ -221,6 +221,7 @@ RSpec.configure do |config|
               imo_class: {
                 type: "string",
                 enum: Journey::CommodityInfo::VALID_IMO_CLASSES,
+                nullable: true,
                 description: <<~DOC
                   Defines the standard IMO class for the dangerous goods that this cargo item might contain. IMO Class is defined as Class and possible sub-class, where class defines top-level category of type of dangerous goods, and sub-class defines more detailed separation of different dangerous goods.
 
@@ -236,6 +237,7 @@ RSpec.configure do |config|
               },
               hs_code: {
                 type: "string",
+                nullable: true,
                 description: <<~DOC
                   The Harmonized Commodity Description and Coding System, also known as the Harmonized System of tariff nomenclature is an internationally standardized system of names and numbers to classify traded products.
                   This code is is used to identify the type of cargo being shipped as it can affect the pricing and routes available
