@@ -17,6 +17,7 @@ module ExcelDataServices
           def build_trucking_from_row(row:)
             row["load_meterage"] = load_meterage(row: row)
             row["identifier_modifier"] = row.delete("query_method")
+            row["modifier"] = row.delete("scale")
             row["validity"] = row_validity(row: row)
             row
           end
@@ -35,7 +36,6 @@ module ExcelDataServices
             %w[
               cbm_ratio
               group_id
-              modifier
               hub_id
               organization_id
               scale
