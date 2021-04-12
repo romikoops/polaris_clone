@@ -25,6 +25,7 @@ module Api
     private
 
     attr_reader :result
+
     delegate :client, :creator, :organization, to: :query
 
     def admin?
@@ -56,7 +57,7 @@ module Api
     end
 
     def currency
-      @currency ||= Users::Settings.find_by(user: client)&.currency || scope.dig(:default_currency)
+      @currency ||= result.result_set.currency
     end
 
     def legacy_section_format(route_section:)
@@ -150,7 +151,7 @@ module Api
     end
 
     def legacy_carriage_key(route_section:)
-      "trucking_#{route_section.order == 0 ? "pre" : "on"}"
+      "trucking_#{route_section.order.zero? ? 'pre' : 'on'}"
     end
 
     def legacy_transfer_key(route_section:)
@@ -190,9 +191,10 @@ module Api
     end
 
     def line_items_total(items:)
-      items.inject(Money.new(0, currency)) { |sum, item|
-        sum + Money.new(item.total * item.exchange_rate, currency)
-      }
+      items.inject(Money.new(0, currency)) do |sum, item|
+        cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
+        sum + Money.new(cents, currency)
+      end
     end
 
     def should_hide_sub_totals?
@@ -240,9 +242,9 @@ module Api
     end
 
     def main_freight_section
-      @main_freight_section ||= route_sections.find { |route_section|
+      @main_freight_section ||= route_sections.find do |route_section|
         route_section.mode_of_transport != "carriage" && route_section.to.geo_id != route_section.from.geo_id
-      }
+      end
     end
   end
 end
