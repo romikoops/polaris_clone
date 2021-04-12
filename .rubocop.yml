@@ -63,5 +63,8 @@ Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
   IndentationWidth: ~
 
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
+
 Style/Documentation:
   Enabled: false
