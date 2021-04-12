@@ -11,6 +11,7 @@ end
 module ResultFormatter
   RSpec.describe FeeTableService, type: :service do
     include_context "journey_pdf_setup"
+    let(:currency) { "USD" }
     let!(:organization) { FactoryBot.create(:organizations_organization) }
     let(:custom_scope) { { primary_freight_code: "Fee 1", fee_detail: "name", default_currency: "USD" } }
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
@@ -390,7 +391,7 @@ module ResultFormatter
         let(:currency) { "USD" }
 
         it "returns the subtotal of the items provided from the original LineItemSet" do
-          expect(klass.send(:original_value, items: line_items, currency: currency)).to eq(freight_line_items_with_cargo.sum(&:total))
+          expect(klass.send(:value, items: line_items, currency: currency)).to eq(freight_line_items_with_cargo.sum(&:total))
         end
       end
 
@@ -402,8 +403,12 @@ module ResultFormatter
           end
         end
 
+        before do
+          freight_line_items_with_cargo.each { |line_item| line_item.update(exchange_rate: 1.5) }
+        end
+
         it "returns the subtotal of the items provided from the original LineItemSet" do
-          expect(klass.send(:original_value, items: line_items, currency: currency)).to eq(expected_amount)
+          expect(klass.send(:value, items: line_items, currency: currency)).to eq(expected_amount)
         end
       end
     end

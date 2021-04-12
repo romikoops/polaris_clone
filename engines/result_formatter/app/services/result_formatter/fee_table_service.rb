@@ -191,15 +191,12 @@ module ResultFormatter
     def value(items:, currency: base_currency)
       items.inject(Money.new(0, currency)) do |sum, item|
         cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
-        sum + Money.new(cents * item.exchange_rate, currency)
+        sum + Money.new(cents, currency)
       end
     end
 
     def original_value(items:, currency: base_currency)
-      original_items(items: items).inject(Money.new(0, currency)) do |sum, item|
-        cents = item.total_currency == currency ? item.total_cents : item.total_cents * item.exchange_rate
-        sum + Money.new(cents, currency)
-      end
+      value(items: original_items(items: items), currency: currency)
     end
 
     def original_items(items:)
@@ -281,7 +278,7 @@ module ResultFormatter
     delegate :organization, :client, :cargo_units, to: :query
 
     def base_currency
-      @base_currency ||= Users::Settings.find_by(user: client)&.currency || scope[:default_currency]
+      @base_currency ||= result.result_set.currency
     end
 
     def current_line_item_set
