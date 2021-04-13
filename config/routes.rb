@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fd5f625a890@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fc86a30b490@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -858,6 +858,8 @@ end
 #                                        edit_admin GET    /admins/:id/edit(.:format)                 admins_admin/admin#edit
 #                                        new_client GET    /clients/new(.:format)                     clients_admin/admin#new
 #                                       edit_client GET    /clients/:id/edit(.:format)                clients_admin/admin#edit
+#                               new_charge_category GET    /charge_categories/new(.:format)           charge_categories_admin/admin#new
+#                              edit_charge_category GET    /charge_categories/:id/edit(.:format)      charge_categories_admin/admin#edit
 #                                        new_domain GET    /domains/new(.:format)                     domains_admin/admin#new
 #                                       edit_domain GET    /domains/:id/edit(.:format)                domains_admin/admin#edit
 #                         new_max_dimensions_bundle GET    /max_dimensions_bundles/new(.:format)      max_dimensions_bundles_admin/admin#new
@@ -886,6 +888,12 @@ end
 #                                                   PATCH  /admins/:id(.:format)                      admins_admin/admin#update
 #                                                   PUT    /admins/:id(.:format)                      admins_admin/admin#update
 #                                                   DELETE /admins/:id(.:format)                      admins_admin/admin#destroy
+#                     charge_categories_admin_index GET    /charge_categories(.:format)               charge_categories_admin/admin#index
+#                                                   POST   /charge_categories(.:format)               charge_categories_admin/admin#create
+#                           charge_categories_admin GET    /charge_categories/:id(.:format)           charge_categories_admin/admin#show
+#                                                   PATCH  /charge_categories/:id(.:format)           charge_categories_admin/admin#update
+#                                                   PUT    /charge_categories/:id(.:format)           charge_categories_admin/admin#update
+#                                                   DELETE /charge_categories/:id(.:format)           charge_categories_admin/admin#destroy
 #                               clients_admin_index GET    /clients(.:format)                         clients_admin/admin#index
 #                                                   POST   /clients(.:format)                         clients_admin/admin#create
 #                                     clients_admin GET    /clients/:id(.:format)                     clients_admin/admin#show
@@ -946,6 +954,7 @@ end
 #
 # Routes for Api::Engine:
 #                                    api_auth        /                                                                                        ApiAuth::Engine
+#                              v1_me_settings GET    /v1/me/settings(.:format)                                                                api/v1/settings#show
 #                                       v1_me GET    /v1/me(.:format)                                                                         api/v1/users#show
 #                                  v1_uploads POST   /v1/uploads(.:format)                                                                    api/v1/uploads#create
 #                             v1_organization GET    /v1/organization(.:format)                                                               api/v1/organizations#show
@@ -993,7 +1002,8 @@ end
 #              v2_organization_query_requests POST   /v2/organizations/:organization_id/queries/:query_id/requests(.:format)                  api/v2/requests#create
 #           v2_organization_query_cargo_units GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units(.:format)               api/v2/cargo_units#index
 #            v2_organization_query_cargo_unit GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units/:id(.:format)           api/v2/cargo_units#show
-#                     v2_organization_queries POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
+#                     v2_organization_queries GET    /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#index
+#                                             POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
 #                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
 #          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
 #           v2_organization_result_set_errors GET    /v2/organizations/:organization_id/result_sets/:result_set_id/errors(.:format)           api/v2/errors#index
@@ -1007,6 +1017,9 @@ end
 #                     v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
 #                       v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show
 #                       v2_organization_scope GET    /v2/organizations/:organization_id/scope(.:format)                                       api/v2/scopes#show
+#                     v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show
+#                                             PATCH  /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
+#                                             PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #
 # Routes for Easymon::Engine:

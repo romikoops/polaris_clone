@@ -56,7 +56,7 @@ end
 #  destination             :string           not null
 #  destination_coordinates :geometry         not null, geometry, 4326
 #  insurance               :boolean          default(FALSE)
-#  load_type               :enum
+#  load_type               :enum             not null
 #  origin                  :string           not null
 #  origin_coordinates      :geometry         not null, geometry, 4326
 #  created_at              :datetime         not null
