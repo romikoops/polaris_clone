@@ -5,11 +5,13 @@ module Treasury
     def self.current
       select("DISTINCT ON (\"from\" , \"to\") *")
         .order(:from, :to, created_at: :desc)
+        .where("created_at > ?", Time.zone.now.utc - 36.hours)
     end
 
     def self.for_date(date:)
       select("DISTINCT ON (\"from\" , \"to\") *")
         .where("created_at < ?", date.utc)
+        .where("created_at > ?", date.utc - 36.hours)
         .order(:from, :to, created_at: :desc)
     end
   end
