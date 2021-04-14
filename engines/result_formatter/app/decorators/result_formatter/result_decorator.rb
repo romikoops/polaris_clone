@@ -237,7 +237,6 @@ module ResultFormatter
 
     def exchange_rates
       @exchange_rates ||= ResultFormatter::ExchangeRateService.new(
-        base_currency: currency,
         line_items: line_items
       ).perform
     end

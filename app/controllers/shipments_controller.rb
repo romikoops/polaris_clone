@@ -2,7 +2,7 @@
 
 class ShipmentsController < ApplicationController
   def index
-    response = Rails.cache.fetch("#{client_results.cache_key}/shipment_index", expires_in: 12.hours) {
+    response = Rails.cache.fetch("#{client_results.cache_key}/shipment_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
       quoted = client_results.order(updated_at: :desc)
         .paginate(page: params[:quoted_page], per_page: per_page)
@@ -17,7 +17,7 @@ class ShipmentsController < ApplicationController
         },
         num_shipment_pages: num_pages
       }
-    }
+    end
 
     response_handler(response)
   end
@@ -34,8 +34,7 @@ class ShipmentsController < ApplicationController
     )
   end
 
-  def new
-  end
+  def new; end
 
   def search_shipments
     results = client_results.merge(organization_queries.search(params[:query]))
@@ -75,9 +74,8 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    response = Rails.cache.fetch("#{result.cache_key}/view_shipment", expires_in: 12.hours) {
+    response = Rails.cache.fetch("#{result.cache_key}/view_shipment", expires_in: 12.hours) do
       exchange_rates = ResultFormatter::ExchangeRateService.new(
-        base_currency: decorated_result.currency,
         line_items: decorated_result.line_items
       ).perform
 
@@ -94,7 +92,7 @@ class ShipmentsController < ApplicationController
         pricingBreakdowns: pricing_breakdowns(result: result),
         exchange_rates: exchange_rates
       }.as_json
-    }
+    end
 
     response_handler(response)
   end
@@ -107,7 +105,7 @@ class ShipmentsController < ApplicationController
         route_points = Journey::RoutePoint.where(locode: nexus.locode)
 
         @filtered_user_results = @filtered_user_results
-          .joins(:route_sections).where(journey_route_sections: {from_id: route_points.ids}).distinct
+          .joins(:route_sections).where(journey_route_sections: { from_id: route_points.ids }).distinct
       end
 
       if params[:destination_nexus]
@@ -115,7 +113,7 @@ class ShipmentsController < ApplicationController
         route_points = Journey::RoutePoint.where(locode: nexus.locode)
 
         @filtered_user_results = @filtered_user_results
-          .joins(:route_sections).where(journey_route_sections: {to_id: route_points.ids}).distinct
+          .joins(:route_sections).where(journey_route_sections: { to_id: route_points.ids }).distinct
       end
 
       if params[:hub_type] && params[:hub_type] != ""
@@ -124,7 +122,7 @@ class ShipmentsController < ApplicationController
         @filtered_user_results = @filtered_user_results
           .joins(:route_sections)
           .where(
-            journey_route_sections: {mode_of_transport: hub_type_array}
+            journey_route_sections: { mode_of_transport: hub_type_array }
           ).distinct
       end
 
@@ -140,7 +138,7 @@ class ShipmentsController < ApplicationController
     results.map do |result|
       Api::V1::ResultDecorator.decorate(
         result,
-        context: {scope: current_scope}
+        context: { scope: current_scope }
       ).legacy_json
     end
   end
@@ -160,8 +158,8 @@ class ShipmentsController < ApplicationController
 
   def addresses
     @addresses ||= {
-      origin: {name: query.origin},
-      destination: {name: query.destination}
+      origin: { name: query.origin },
+      destination: { name: query.destination }
     }
   end
 
@@ -171,24 +169,24 @@ class ShipmentsController < ApplicationController
 
   def cargo_items
     @cargo_items ||=
-      cargo_units.where(cargo_class: "lcl").map { |cargo_item|
+      cargo_units.where(cargo_class: "lcl").map do |cargo_item|
         Api::V1::LegacyCargoUnitDecorator.decorate(cargo_item).legacy_format
-      }
+      end
   end
 
   def containers
-    @containers ||= cargo_units.where.not(cargo_class: "lcl").map { |container|
+    @containers ||= cargo_units.where.not(cargo_class: "lcl").map do |container|
       Api::V1::LegacyCargoUnitDecorator.decorate(container).legacy_format
-    }
+    end
   end
 
   def aggregated_cargo
     @aggregated_cargo ||= begin
       agg_units = cargo_units.where(cargo_class: "aggregated_lcl")
-      return nil if agg_units.empty?
-
-      agg_units.map do |agg|
-        Api::V1::LegacyCargoUnitDecorator.decorate(agg).legacy_format
+      if agg_units.present?
+        agg_units.map do |agg|
+          Api::V1::LegacyCargoUnitDecorator.decorate(agg).legacy_format
+        end
       end
     end
   end
@@ -216,7 +214,7 @@ class ShipmentsController < ApplicationController
   end
 
   def decorated_result
-    Api::V1::ResultDecorator.new(result, context: {scope: current_scope})
+    Api::V1::ResultDecorator.new(result, context: { scope: current_scope })
   end
 
   def result_table_list(results:)
@@ -226,8 +224,8 @@ class ShipmentsController < ApplicationController
   def client_results
     @client_results ||= Journey::Result.joins(result_set: :query)
       .where(
-        journey_result_sets: {status: "completed"},
-        journey_queries: {client_id: current_user.id, organization_id: current_organization.id}
+        journey_result_sets: { status: "completed" },
+        journey_queries: { client_id: current_user.id, organization_id: current_organization.id }
       )
   end
 

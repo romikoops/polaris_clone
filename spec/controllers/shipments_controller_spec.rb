@@ -8,24 +8,6 @@ RSpec.describe ShipmentsController do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { query.client }
   let(:json_response) { JSON.parse(response.body) }
-  let(:origin_hub) {
-    FactoryBot.create(:legacy_hub,
-      hub_code: freight_section.from.locode,
-      hub_type: freight_section.mode_of_transport,
-      organization: organization)
-  }
-  let(:destination_hub) {
-    FactoryBot.create(:legacy_hub,
-      hub_code: freight_section.to.locode,
-      hub_type: freight_section.mode_of_transport,
-      organization: organization)
-  }
-  let!(:origin_nexus) {
-    origin_hub.nexus
-  }
-  let!(:destination_nexus) {
-    destination_hub.nexus
-  }
   let(:route_sections) { [freight_section] }
   let(:line_items) { freight_line_items_with_cargo }
 
@@ -33,11 +15,19 @@ RSpec.describe ShipmentsController do
     Organizations.current_id = organization.id
     breakdown
     append_token_header
+    FactoryBot.create(:legacy_hub,
+      hub_code: freight_section.from.locode,
+      hub_type: freight_section.mode_of_transport,
+      organization: organization)
+    FactoryBot.create(:legacy_hub,
+      hub_code: freight_section.to.locode,
+      hub_type: freight_section.mode_of_transport,
+      organization: organization)
   end
 
   describe "GET #index" do
     it "returns an http status of success" do
-      get :index, params: {organization_id: organization.id}
+      get :index, params: { organization_id: organization.id }
 
       expect(response_data["quoted"].map { |res| res["id"] }).to match([result.id])
     end
@@ -45,7 +35,7 @@ RSpec.describe ShipmentsController do
 
   describe "GET #delta_page_handler" do
     it "returns the results for the page in question", :aggregate_failures do
-      get :delta_page_handler, params: {organization_id: organization.id, page: 1, per_page: 1, target: "quoted"}
+      get :delta_page_handler, params: { organization_id: organization.id, page: 1, per_page: 1, target: "quoted" }
 
       expect(response_data["shipments"].count).to eq(1)
       expect(response_data["page"]).to eq("1")
@@ -78,18 +68,15 @@ RSpec.describe ShipmentsController do
     let(:target_exchange_rate) { result.line_item_sets.first.line_items.first.exchange_rate }
 
     it "returns requested result" do
-      get :show, params: {id: result.id, organization_id: organization.id}
+      get :show, params: { id: result.id, organization_id: organization.id }
 
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(json_response.dig("data", "exchange_rates")).to include(
-          "base" => "EUR", "usd" => target_exchange_rate.round(2).to_s
-        )
-      end
+      expect(json_response.dig("data", "exchange_rates")).to include(
+        "base" => "EUR", "usd" => (1 / target_exchange_rate).round(2).to_s
+      )
     end
 
     it "returns 404 when a shipment id is provided" do
-      get :show, params: {id: 1, organization_id: organization.id}
+      get :show, params: { id: 1, organization_id: organization.id }
 
       aggregate_failures do
         expect(response).to have_http_status(:not_found)
@@ -103,7 +90,7 @@ RSpec.describe ShipmentsController do
       let(:query) { FactoryBot.create(:journey_query, client_id: nil) }
 
       before do
-        patch :update_user, params: {organization_id: organization.id, id: query.id}
+        patch :update_user, params: { organization_id: organization.id, id: query.id }
       end
 
       it "returns http success" do
@@ -118,7 +105,7 @@ RSpec.describe ShipmentsController do
     context "when shipment is deleted" do
       before do
         query.destroy
-        patch :update_user, params: {organization_id: organization.id, id: query.id}
+        patch :update_user, params: { organization_id: organization.id, id: query.id }
       end
 
       it "returns http not found" do

@@ -3,7 +3,7 @@
 module Api
   module V1
     class ResultSerializer < Api::ApplicationSerializer
-      attributes [:remarks, :carrier, :mode_of_transport, :id]
+      attributes %i[remarks carrier mode_of_transport id]
       attribute :origin do |result|
         result.query.origin
       end
@@ -12,9 +12,7 @@ module Api
         result.query.destination
       end
 
-      attribute :service_level do |result|
-        result.service
-      end
+      attribute :service_level, &:service
 
       attribute :total do |result|
         {
@@ -35,38 +33,27 @@ module Api
         result.cargo_units.empty?
       end
 
-      attribute :valid_until do |result|
-        result.expiration_date
-      end
+      attribute :valid_until, &:expiration_date
 
-      attribute :pickup_truck_type do |result|
+      attribute :pickup_truck_type do |_result|
         ""
       end
 
-      attribute :delivery_truck_type do |result|
+      attribute :delivery_truck_type do |_result|
         ""
       end
 
-      attribute :pickup_carrier do |result|
-        result.pre_carriage_carrier
-      end
+      attribute :pickup_carrier, &:pre_carriage_carrier
 
-      attribute :delivery_carrier do |result|
-        result.on_carriage_carrier
-      end
+      attribute :delivery_carrier, &:on_carriage_carrier
 
-      attribute :pickup_service do |result|
-        result.pre_carriage_service
-      end
+      attribute :pickup_service, &:pre_carriage_service
 
-      attribute :delivery_service do |result|
-        result.on_carriage_service
-      end
+      attribute :delivery_service, &:on_carriage_service
 
-      attribute :transit_time, if: proc { |_, params| !quotation_tool?(scope: params.dig(:scope)) }
+      attribute :transit_time, if: proc { |_, params| !quotation_tool?(scope: params[:scope]) }
       attribute :exchange_rates do |result|
         ::ResultFormatter::ExchangeRateService.new(
-          base_currency: result.total.currency.iso_code,
           line_items: result.line_items
         ).perform
       end
