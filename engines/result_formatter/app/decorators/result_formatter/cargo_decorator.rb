@@ -8,11 +8,7 @@ module ResultFormatter
     delegate :mode_of_transport, :shipment, to: :result
 
     def chargeable_weight
-      @chargeable_weight ||=
-        [
-          (object.volume.value * wm_ratio),
-          object.weight.value
-        ].max
+      @chargeable_weight ||= Measured::Weight.new(object.volume.value * wm_ratio, "t").convert_to("kg")
     end
 
     def gross_weight_per_item
@@ -48,15 +44,16 @@ module ResultFormatter
 
     def render_chargeable_weight_row
       row, value = determine_chargeable_weight_row
+
       h.render template: "pdf/partials/quotation/cargo/chargeable_weight_rows/#{row}", locals: { value: value }
     end
 
     def total_chargeable_weight
-      chargeable_weight * quantity
+      chargeable_weight.scale(quantity).value.to_f
     end
 
     def total_chargeable_volume
-      (chargeable_weight / 1000.0 * quantity).round(3)
+      chargeable_weight.convert_to("t").scale(quantity).value.to_f.round(3)
     end
 
     def payload_in_tons
