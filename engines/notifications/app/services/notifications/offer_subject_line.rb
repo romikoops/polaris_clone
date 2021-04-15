@@ -3,6 +3,7 @@
 module Notifications
   class OfferSubjectLine
     attr_reader :offer, :scope
+
     CHARACTER_COUNT = 90
 
     include ActionView::Helpers::TextHelper
@@ -21,7 +22,7 @@ module Notifications
       grapheme_clusters = liquid_string.each_grapheme_cluster
       return liquid_string if grapheme_clusters.count < CHARACTER_COUNT
 
-      grapheme_clusters.take(CHARACTER_COUNT).join + "..."
+      "#{grapheme_clusters.take(CHARACTER_COUNT).join}..."
     end
 
     def context
@@ -38,7 +39,7 @@ module Notifications
         total_volume: total_volume,
         client_name: profile&.full_name,
         load_type: load_type,
-        references: truncate("Refs: #{imc_references.join(", ")}", length: 23, separator: " "),
+        references: truncate("Refs: #{imc_references.join(', ')}", length: 23, separator: " "),
         routing: routing,
         noun: "Quotation"
       }.deep_stringify_keys
@@ -47,7 +48,7 @@ module Notifications
     private
 
     def liquid
-      Liquid::Template.parse(scope.dig(:email_subject_template))
+      Liquid::Template.parse(scope[:email_subject_template])
     end
 
     def imc_references
@@ -63,7 +64,7 @@ module Notifications
     end
 
     def origin_city
-      has_pre_carriage ? pickup_address.city : origin
+      pre_carriage? ? pickup_address.city : origin
     end
 
     def origin_locode
@@ -75,7 +76,7 @@ module Notifications
     end
 
     def destination_city
-      has_on_carriage ? delivery_address.city : destination
+      on_carriage? ? delivery_address.city : destination
     end
 
     def destination_locode
@@ -87,38 +88,38 @@ module Notifications
     end
 
     def pickup_postal_code
-      return unless has_pre_carriage
+      return unless pre_carriage?
 
       pickup_address&.zip_code.present? ? "#{pickup_address.country.code}-#{pickup_address&.zip_code}" : nil
     end
 
     def delivery_postal_code
-      return unless has_on_carriage
+      return unless on_carriage?
 
       delivery_address&.zip_code.present? ? "#{delivery_address.country.code}-#{delivery_address&.zip_code}" : nil
     end
 
     def total_weight
-      @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) { |memo, unit|
+      @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) do |memo, unit|
         memo + unit.total_weight
-      }.value
+      end.value
     end
 
     def total_volume
-      @total_volume ||= cargo_units.inject(Measured::Volume.new(0, "m3")) { |memo, unit|
-        memo + unit.total_volume
-      }.value
+      @total_volume ||= cargo_units.inject(Measured::Volume.new(0, "m3")) do |memo, unit|
+        unit.total_volume.present? ? memo + unit.total_volume : memo
+      end.value
     end
 
     def routing
       [
-        has_pre_carriage ? pickup_address.city : origin,
-        has_on_carriage ? delivery_address.city : destination
+        pre_carriage? ? pickup_address.city : origin,
+        on_carriage? ? delivery_address.city : destination
       ].join(" - ")
     end
 
     def load_type
-      cargo_units.exists?(cargo_class: ["aggregated_lcl", "lcl"]) ? "LCL" : "FCL"
+      cargo_units.exists?(cargo_class: %w[aggregated_lcl lcl]) ? "LCL" : "FCL"
     end
 
     def pickup_address
@@ -135,10 +136,10 @@ module Notifications
       ).reverse_geocode
     end
 
-    def has_pre_carriage
-      @has_pre_carriage ||= route_sections.any? do |route_section|
+    def pre_carriage?
+      @pre_carriage ||= route_sections.any? do |route_section|
         route_section.mode_of_transport == "carriage" &&
-          route_section.order == 0
+          route_section.order.zero?
       end
     end
 
@@ -146,17 +147,17 @@ module Notifications
       @route_sections ||= results.flat_map(&:route_sections)
     end
 
-    def has_on_carriage
-      @has_on_carriage ||= route_sections.any? do |route_section|
+    def on_carriage?
+      @on_carriage ||= route_sections.any? do |route_section|
         route_section.mode_of_transport == "carriage" &&
           route_section.order != 0
       end
     end
 
     def main_route_sections
-      @main_route_sections ||= route_sections.select { |route_section|
+      @main_route_sections ||= route_sections.select do |route_section|
         route_section.mode_of_transport != "carriage" && route_section.to.geo_id != route_section.from.geo_id
-      }
+      end
     end
   end
 end

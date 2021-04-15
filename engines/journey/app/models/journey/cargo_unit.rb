@@ -32,11 +32,11 @@ module Journey
     measured_volume :volume
     measured_length :width, :length, :height
 
-    validates :quantity, presence: true, numericality: {greater_than: 0}
-    validates :weight, measured: {units: :kg, greater_than: 0}
-    validates :width, :length, :height, measured: {units: :m}
-    validates :width, :length, :height, measured: {greater_than: 0}, if: :dimensions_required?
-    validates :volume, measured: {greater_than: 0}, if: :cargo_item?
+    validates :quantity, presence: true, numericality: { greater_than: 0 }
+    validates :weight, measured: { units: :kg, greater_than: 0 }
+    validates :width, :length, :height, measured: { units: :m }
+    validates :width, :length, :height, measured: { greater_than: 0 }, if: :dimensions_required?
+    validates :volume, measured: { greater_than: 0 }, if: :cargo_item?
 
     validates_inclusion_of :cargo_class, in: CARGO_CLASSES
 
@@ -60,10 +60,12 @@ module Journey
     }
 
     def cargo_item?
-      cargo_class.downcase.match?(/lcl/)
+      cargo_class.downcase.include?("lcl")
     end
 
     def total_volume
+      return if volume.nil?
+
       volume.scale(quantity)
     end
 
@@ -72,7 +74,7 @@ module Journey
     end
 
     def dimensions_required?
-      cargo_class == 'lcl'
+      cargo_class == "lcl"
     end
 
     def set_volume
