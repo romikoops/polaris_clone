@@ -29,7 +29,7 @@ RSpec.describe "Profiles", type: :request, swagger: true do
       response 200, "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/profile"},
+                 data: { "$ref" => "#/components/schemas/profile" }
                },
                required: ["data"]
 
@@ -57,7 +57,7 @@ RSpec.describe "Profiles", type: :request, swagger: true do
       parameter name: :profile, in: :body, schema: {
         type: :object,
         properties: {
-          profile: {"$ref" => "#/components/schemas/profile"}
+          profile: { "$ref" => "#/components/schemas/profile" }
         },
         required: %w[profile]
       }
@@ -66,23 +66,24 @@ RSpec.describe "Profiles", type: :request, swagger: true do
 
       response 200, "successful operation" do
         let(:profile) do
-          {profile: {
+          { profile: {
             email: "john@example.com",
             first_name: "John",
             last_name: "Doe"
-          }}
+          } }
         end
 
         run_test!
       end
 
       response 422, "Unprocessable Entity" do
+        let(:other_client) { FactoryBot.create(:users_client, organization: organization) }
         let(:profile) do
-          {profile: {
-            email: nil,
+          { profile: {
+            email: other_client.email,
             first_name: "John",
             last_name: "Doe"
-          }}
+          } }
         end
 
         run_test!

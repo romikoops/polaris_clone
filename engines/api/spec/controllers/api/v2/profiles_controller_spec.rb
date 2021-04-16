@@ -12,7 +12,7 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com") }
+    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com", organization: organization) }
     let(:profile) { client.profile }
 
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public") }
@@ -25,7 +25,7 @@ module Api
 
     describe "Get #show" do
       let(:request_object) { get :show, params: { organization_id: organization.id }, as: :json }
-      let(:expected_data) { {"email" => client.email, "firstName" => profile.first_name, "lastName" => profile.last_name }}
+      let(:expected_data) { { "email" => client.email, "firstName" => profile.first_name, "lastName" => profile.last_name } }
 
       context "when successful" do
         it "resturns 200" do
@@ -44,19 +44,19 @@ module Api
 
     describe "PATCH #update" do
       context "when request is successful" do
-        let(:expected_data) {
-          {"email"=>"updated@itsmycargo.com", "firstName"=>"new first name", "lastName"=>"new last name"}
-        }
+        let(:expected_data) do
+          { "email" => "updated@itsmycargo.com", "firstName" => "new first name", "lastName" => "new last name" }
+        end
 
-        let(:request_object) {
-          patch :update, params: {organization_id: organization.id,
-                                  profile: {
-                                    email: expected_data["email"],
-                                    first_name: expected_data["firstName"],
-                                    last_name: expected_data["lastName"]
-                                  }
-                                }, as: :json
-        }
+        let(:request_object) do
+          patch :update, params: { organization_id: organization.id,
+                                   profile: {
+                                     email: expected_data["email"],
+                                     first_name: expected_data["firstName"],
+                                     last_name: expected_data["lastName"],
+                                     password: "NEWPASSWORD"
+                                   } }, as: :json
+        end
 
         it "returns an http status of success" do
           perform_request
@@ -68,17 +68,24 @@ module Api
 
           expect(response_data["attributes"]).to eq(expected_data)
         end
+
+        it "updates the user email and password successfully" do
+          perform_request
+
+          expect(Users::Client.global.authenticate(expected_data["email"].dup, "NEWPASSWORD")).to eq(client)
+        end
       end
 
       context "when update email request is invalid" do
-        let(:request_object) {
-          patch :update, params: {organization_id: organization.id,
-                                  profile: {
-                                    email: nil,
-                                    first_name: "Bassam",
-                                    last_name: "Aziz"
-                                  }}, as: :json
-        }
+        let(:other_client) { FactoryBot.create(:users_client, organization: organization) }
+        let(:request_object) do
+          patch :update, params: { organization_id: organization.id,
+                                   profile: {
+                                     email: other_client.email,
+                                     first_name: "Bassam",
+                                     last_name: "Aziz"
+                                   } }, as: :json
+        end
 
         it "returns with a 422 response" do
           perform_request
@@ -87,7 +94,7 @@ module Api
 
         it "returns list of errors" do
           json = JSON.parse(perform_request.body)
-          expect(json["error"]).to match_array(["Email can't be blank", "Email is invalid"])
+          expect(json["error"]).to match_array(["Email has already been taken"])
         end
       end
     end
