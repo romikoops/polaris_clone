@@ -18,8 +18,8 @@ module Users
                        foreign_key: :user_id, required: true
     accepts_nested_attributes_for :settings
 
-    validates :email, presence: true, uniqueness: {scope: :organization_id},
-                      format: {with: URI::MailTo::EMAIL_REGEXP}
+    validates :email, presence: true, uniqueness: { scope: :organization_id },
+                      format: { with: URI::MailTo::EMAIL_REGEXP }
 
     acts_as_paranoid
 

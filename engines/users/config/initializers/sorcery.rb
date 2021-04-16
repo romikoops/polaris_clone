@@ -235,7 +235,7 @@ Rails.application.config.sorcery.configure do |config|
     # Downcase the username before trying to authenticate, default is false
     # Default: `false`
     #
-    # user.downcase_username_before_authenticating =
+    user.downcase_username_before_authenticating = true
 
     # Change default email attribute.
     # Default: `:email`
@@ -410,7 +410,7 @@ Rails.application.config.sorcery.configure do |config|
     #
     # user.magic_login_token_expires_at_attribute_name =
 
-    # When was magic login email sent — used for hammering protection.
+    # When was magic login email sent - used for hammering protection.
     # Default: `:magic_login_email_sent_at`
     #
     # user.magic_login_email_sent_at_attribute_name =

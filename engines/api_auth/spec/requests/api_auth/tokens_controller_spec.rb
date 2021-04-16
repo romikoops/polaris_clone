@@ -7,10 +7,10 @@ RSpec.describe ApiAuth::TokensController, type: :request do
   let(:email) { "agent@itsmycargo.com" }
   let(:password) { "IMC123456789" }
   let(:params) do
-    {"email": user.email,
-     "password": password,
-     "organization_id": organization.id,
-     "grant_type": "password"}
+    { "email": user.email,
+      "password": password,
+      "organization_id": organization.id,
+      "grant_type": "password" }
   end
 
   before do
@@ -18,10 +18,18 @@ RSpec.describe ApiAuth::TokensController, type: :request do
       .to_return(status: 200)
   end
 
+  shared_examples "Successful login" do
+    it "generates new token", :aggregate_failures do
+      post "/oauth/token", params: params
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "unauthorized" do
     let(:user) { FactoryBot.create(:users_client) }
 
-    it "should return unauthorized" do
+    it "returns unauthorized" do
       post "/oauth/token", params: params
 
       expect(response).to have_http_status(:unauthorized)
@@ -32,17 +40,22 @@ RSpec.describe ApiAuth::TokensController, type: :request do
     let(:new_token) { Doorkeeper::AccessToken.find_by(resource_owner_id: user.id, scopes: "public") }
 
     context "when organization user" do
-      let!(:user) {
+      let(:user) do
         FactoryBot.create(:users_client,
           organization_id: organization.id, email: email, password: password)
-      }
-
-      it "generates new token" do
-        post "/oauth/token", params: params
-
-        expect(JSON.parse(response.body)["access_token"]).to eq new_token.token
-        expect(new_token).to be_valid
       end
+
+      it_behaves_like "Successful login"
+    end
+
+    context "when the email is not lowercased" do
+      let(:email) { "AGENT@itsmycargo.com" }
+      let(:user) do
+        FactoryBot.create(:users_client,
+          organization_id: organization.id, email: email, password: password)
+      end
+
+      it_behaves_like "Successful login"
     end
 
     context "when admin user" do
@@ -56,12 +69,7 @@ RSpec.describe ApiAuth::TokensController, type: :request do
         allow(::Organizations::Organization).to receive(:current_id).and_return(organization.id)
       end
 
-      it "generates new token" do
-        post "/oauth/token", params: params
-
-        expect(JSON.parse(response.body)["access_token"]).to eq new_token.token
-        expect(new_token).to be_valid
-      end
+      it_behaves_like "Successful login"
     end
   end
 end

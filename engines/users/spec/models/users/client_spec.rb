@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Users::Client, type: :model do
@@ -6,6 +7,15 @@ RSpec.describe Users::Client, type: :model do
 
   it "builds a valid user" do
     expect(user).to be_valid
+  end
+
+  context "when the email isn't downcased" do
+    let(:email) { "NoTcAsEdProPerLy@itsmycargo.test" }
+    let(:user) { FactoryBot.build(:users_client, email: email).tap(&:valid?) }
+
+    it "safely downcases the email prior to validation" do
+      expect(user.email).to eq(email.downcase)
+    end
   end
 end
 
