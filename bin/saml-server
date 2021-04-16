@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+
+require "bundler/inline"
+
+gemfile do
+  source "https://rubygems.org"
+
+  gem "saml_idp"
+  gem "sinatra"
+  gem "webrick"
+  gem "pry"
+end
+
+require "saml_idp"
+require "sinatra"
+
+SamlIdp.configure do |config|
+  base = "http://localhost:4567"
+
+  config.base_saml_location = "#{base}/saml"
+  config.attribute_service_location = "#{base}/saml/attributes"
+  config.single_service_post_location = "#{base}/saml/auth"
+
+  config.name_id.formats = {
+    email_address: -> (principal) { principal.email },
+    transient: -> (principal) { principal.id },
+    persistent: -> (principal) { principal.id },
+  }
+  config.service_provider.finder = ->(issuer_or_entity_id) do
+    {
+      fingerprint: "9E:65:2E:03:06:8D:80:F2:86:C7:6C:77:A1:D9:14:97:0A:4D:F4:4D",
+      metadata_url: "http://idp.lvh.me:4567/saml/metadata",
+    }
+  end
+end
+
+get "/saml/metadata" do
+  SamlIdp.metadata.signed
+end
+
+get "/saml/auth" do
+  saml_request = SamlIdp::Request.from_deflated_request(params[:SAMLRequest])
+  return 403 unless saml_request.valid?
+
+  user = (Class.new do
+    def id
+      "2f653cfd-beb9-4120-b92f-da345edb09ab"
+    end
+
+    def email
+      "shipper@itsmycargo.com"
+    end
+  end).new
+
+  saml_response = SamlIdp::SamlResponse.new(
+    SecureRandom.uuid,
+    SecureRandom.uuid,
+    SamlIdp.config.base_saml_location,
+    user,
+    saml_request.issuer ,
+    saml_request.request_id,
+    saml_request.acs_url,
+    OpenSSL::Digest::SHA256,
+    Saml::XML::Namespaces::AuthnContext::ClassRef::PASSWORD,
+    60*60,
+    nil,
+    3600,
+    false
+  ).build
+
+  return <<~EOT
+    <!DOCTYPE html>
+    <html>
+      <body onload="document.forms[0].submit();" style="visibility:hidden;">
+        <form method="post" action="#{saml_request.acs_url}">
+          <input type="hidden" name="SAMLResponse" value="#{saml_response}">
+        </form>
+      </body>
+    </html>
+  EOT
+end

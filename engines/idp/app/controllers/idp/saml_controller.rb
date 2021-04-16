@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module IDP
   class SamlController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:consume]
@@ -9,6 +10,7 @@ module IDP
     end
 
     def init
+      session[:redirect_url] = request.referrer
       redirect_to(OneLogin::RubySaml::Authrequest.new.create(saml_settings))
     end
 
@@ -24,8 +26,8 @@ module IDP
       end
 
       unless saml_response.is_valid?
-       register_errors_and_redirect(errors: saml_response.errors)
-       return
+        register_errors_and_redirect(errors: saml_response.errors)
+        return
       end
 
       @response_params = SamlDataBuilder.new(saml_response: decorated_saml, organization_id: organization_id).perform
@@ -35,29 +37,30 @@ module IDP
         return
       end
 
-      redirect_to generate_url(
-        url_string: "https://#{organization_domain}/login/saml/success",
-        params: @response_params.data)
-
       publish_successful_login_event
+
+      redirect_to generate_url(
+        url_string: "#{organization_url}/login/saml/success",
+        params: @response_params.data
+      )
     end
 
     private
 
     def error_redirect
-      redirect_to "https://#{organization_domain}/login/saml/error"
+      redirect_to "#{organization_url}/login/saml/error"
+    end
+
+    def saml_metadata
+      @saml_metadata ||= Organizations::SamlMetadatum.find_by(organization_id: organization_id)
     end
 
     def saml_settings
-      @saml_settings ||= begin
-        organization_saml_metadata = Organizations::SamlMetadatum.find_by(organization_id: organization_id)
-        return if organization_saml_metadata.blank?
+      @saml_settings ||= if saml_metadata.present?
+        settings = OneLogin::RubySaml::IdpMetadataParser.new.parse(saml_metadata.content)
 
-        idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-        settings = idp_metadata_parser.parse(organization_saml_metadata.content)
-
-        settings.assertion_consumer_service_url = "https://#{saml_domain}/saml/#{organization_id}/consume"
-        settings.sp_entity_id = "https://#{saml_domain}/saml/#{organization_id}/metadata"
+        settings.assertion_consumer_service_url = consume_saml_url
+        settings.sp_entity_id = metadata_saml_url
         settings.name_identifier_format = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
         settings.authn_context = "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
 
@@ -73,8 +76,8 @@ module IDP
       params[:id]
     end
 
-    def saml_domain
-      "idp.itsmycargo.shop"
+    def organization_url
+      session[:redirect_url] || "https://#{organization_domain}"
     end
 
     def organization_domain
@@ -105,7 +108,7 @@ module IDP
       publish_error_event(errors)
 
       redirect_to generate_url(
-        url_string: "https://#{organization_domain}/login/saml/error",
+        url_string: "#{organization_url}/login/saml/error",
         params: { errors: errors }
       )
     end
