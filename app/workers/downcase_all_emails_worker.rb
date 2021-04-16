@@ -5,7 +5,7 @@ class DowncaseAllEmailsWorker
 
   def perform
     Users::Client.global.where("email != LOWER(email)").find_each do |client|
-      existing_client = Users::Client.unscope.find_by(email: client.email.downcase, organization: client.organization)
+      existing_client = Users::Client.unscoped.find_by(email: client.email.downcase, organization: client.organization)
       if existing_client.present?
         # rubocop:disable Rails/SkipsModelValidations
         Journey::Query.where(client: client).update_all(client_id: existing_client)
