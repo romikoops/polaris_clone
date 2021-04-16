@@ -43,15 +43,15 @@ module ExcelDataServices
         rows_data = parse_dates(rows_data: rows_data)
         rows_data = cut_based_on_date_overlaps(rows_data, ROW_IDENTIFIERS - %i[effective_date expiration_date])
         rows_chunked_by_identifier = rows_data.group_by { |row| row.slice(*ROW_IDENTIFIERS) }.values
-        rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map { |rows|
+        rows_chunked_by_identifier_and_sorted_ranges = rows_chunked_by_identifier.map do |rows|
           rows_chunked_by_ranges = rows.group_by { |row| range_identifier(row) }.values
           sort_chunks_by_range_min(rows_chunked_by_ranges)
-        }
+        end
 
         charges_data = build_charges_data(rows_chunked_by_identifier_and_sorted_ranges)
         add_hub_names(charges_data)
 
-        {"LocalCharges" => charges_data}
+        { "LocalCharges" => charges_data }
       end
 
       private
@@ -86,7 +86,7 @@ module ExcelDataServices
       end
 
       def expand_non_counterparts_to_counterparts(rows_data)
-        grouped = rows_data.group_by { |row_data|
+        grouped = rows_data.group_by do |row_data|
           row_data.values_at(
             *(ROW_IDENTIFIERS - %i[
               effective_date
@@ -96,7 +96,7 @@ module ExcelDataServices
               counterpart_locode
             ])
           )
-        }
+        end
 
         grouped.values.flat_map do |per_group_rows_data|
           per_group_rows_data + expanded_for_counterparts(per_group_rows_data: per_group_rows_data)
@@ -104,25 +104,27 @@ module ExcelDataServices
       end
 
       def expanded_for_counterparts(per_group_rows_data:)
-        without_counterpart, with_counterpart = per_group_rows_data.partition { |row_data|
+        without_counterpart, with_counterpart = per_group_rows_data.partition do |row_data|
           row_data.values_at(:counterpart_hub, :counterpart_locode).all?(&:blank?)
-        }
+        end
+
         counterpart_identifiers = with_counterpart.pluck(
           :counterpart_hub, :counterpart_country, :counterpart_locode
         ).uniq
+
         counterpart_identifiers.flat_map do |counterpart_hub, counterpart_country, counterpart_locode|
           without_counterpart.map do |row_data_without_counterpart|
             row_data_without_counterpart.dup.tap do |row_data|
-              row_data[:counterpart_hub] = counterpart_hub
-              row_data[:counterpart_country] = counterpart_country
-              row_data[:counterpart_locode] = counterpart_locode
+              row_data[:counterpart_hub] = counterpart_hub if row_data.key?(:counterpart_hub)
+              row_data[:counterpart_country] = counterpart_country if row_data.key?(:counterpart_country)
+              row_data[:counterpart_locode] = counterpart_locode if row_data.key?(:counterpart_locode)
             end
           end
         end
       end
 
       def range_identifier(row)
-        {rate_basis: row[:rate_basis].upcase, fee_code: row[:fee_code].upcase}
+        { rate_basis: row[:rate_basis].upcase, fee_code: row[:fee_code].upcase }
       end
 
       def sort_chunks_by_range_min(chunked_data)
@@ -135,10 +137,10 @@ module ExcelDataServices
           data_with_fees = data_without_fees.merge(fees: {})
 
           data_per_identifier.each do |data_per_ranges|
-            ranges_obj = {range: reduce_ranges_into_one_obj(data_per_ranges)}
+            ranges_obj = { range: reduce_ranges_into_one_obj(data_per_ranges) }
             charge_data = data_per_ranges.first
             fee_code = charge_data[:fee_code]
-            fees_obj = {fee_code => standard_charge_params(charge_data)}
+            fees_obj = { fee_code => standard_charge_params(charge_data) }
 
             if ranges_obj[:range]
               fees_obj[fee_code].merge!(ranges_obj)
@@ -159,16 +161,16 @@ module ExcelDataServices
       end
 
       def reduce_ranges_into_one_obj(data_per_ranges)
-        ranges_obj = data_per_ranges.map { |single_data|
+        ranges_obj = data_per_ranges.map do |single_data|
           next unless includes_range?(single_data)
 
           rate_basis = ::Pricings::RateBasis.get_internal_key(single_data[:rate_basis].upcase)
 
-          {currency: single_data[:currency],
-           min: single_data[:range_min],
-           max: single_data[:range_max],
-           **specific_charge_params(rate_basis, single_data)}
-        }
+          { currency: single_data[:currency],
+            min: single_data[:range_min],
+            max: single_data[:range_max],
+            **specific_charge_params(rate_basis, single_data) }
+        end
 
         ranges_obj.compact.empty? ? nil : ranges_obj
       end
@@ -178,24 +180,22 @@ module ExcelDataServices
       end
 
       def standard_charge_params(charge_data)
-        {currency: charge_data[:currency],
-         key: charge_data[:fee_code],
-         min: charge_data[:minimum],
-         max: charge_data[:maximum],
-         name: charge_data[:fee],
-         rate_basis: charge_data[:rate_basis].upcase}
+        { currency: charge_data[:currency],
+          key: charge_data[:fee_code],
+          min: charge_data[:minimum],
+          max: charge_data[:maximum],
+          name: charge_data[:fee],
+          rate_basis: charge_data[:rate_basis].upcase }
       end
 
       def specific_charge_params(rate_basis, single_data)
-        return {value: single_data[:kg], base: single_data[:base]} if rate_basis == "PER_X_KG_FLAT"
-        return {value: single_data[:ton], base: single_data[:base]} if rate_basis == "PER_SHIPMENT_TON"
+        return { value: single_data[:kg], base: single_data[:base] } if rate_basis == "PER_X_KG_FLAT"
+        return { value: single_data[:ton], base: single_data[:base] } if rate_basis == "PER_SHIPMENT_TON"
 
         keys = rate_basis.downcase.split("_")[1..-1].map(&:to_sym)
         value_obj = {}
         keys.each { |key| value_obj[key] = single_data[key] if single_data[key] }
-        if value_obj.size == 1 && !keys.include?(:range) && rate_basis != "PER_TON"
-          value_obj[:value] = value_obj.delete(value_obj.keys.first)
-        end
+        value_obj[:value] = value_obj.delete(value_obj.keys.first) if value_obj.size == 1 && !keys.include?(:range) && rate_basis != "PER_TON"
 
         value_obj
       end
@@ -208,9 +208,7 @@ module ExcelDataServices
       def add_hub_names(charges_data)
         charges_data.each do |params|
           hub_name = params[:hub]
-          if params[:counterpart_hub] && !params[:counterpart_hub].casecmp?("all")
-            counterpart_hub_name = params[:counterpart_hub]
-          end
+          counterpart_hub_name = params[:counterpart_hub] if params[:counterpart_hub] && !params[:counterpart_hub].casecmp?("all")
           params[:hub_name] = hub_name
           params[:counterpart_hub] = counterpart_hub_name
         end
