@@ -40,7 +40,7 @@ module IDP
       publish_successful_login_event
 
       redirect_to generate_url(
-        url_string: "#{organization_url}/login/saml/success",
+        url_string: URI.join(organization_url, "login/saml/success"),
         params: @response_params.data
       )
     end
@@ -48,7 +48,7 @@ module IDP
     private
 
     def error_redirect
-      redirect_to "#{organization_url}/login/saml/error"
+      redirect_to URI.join(organization_url, "login/saml/error")
     end
 
     def saml_metadata
@@ -77,7 +77,7 @@ module IDP
     end
 
     def organization_url
-      session[:redirect_url] || "https://#{organization_domain}"
+      session[:redirect_url] || "https://#{organization_domain}/"
     end
 
     def organization_domain
@@ -108,7 +108,7 @@ module IDP
       publish_error_event(errors)
 
       redirect_to generate_url(
-        url_string: "#{organization_url}/login/saml/error",
+        url_string: URI.join(organization_url, "login/saml/error"),
         params: { errors: errors }
       )
     end
