@@ -67,7 +67,7 @@ module ResultFormatter
     end
 
     def chargeable_weight_string(section:)
-      return "" if %w[import export].include?(section)
+      return "" if %w[import export].include?(section) || section.nil?
 
       target_section = case section
                        when "cargo"
@@ -77,12 +77,12 @@ module ResultFormatter
                        else
                          on_carriage_section
       end
-
       cargo_chargeable_weight_string(section: target_section)
     end
 
     def cargo_chargeable_weight_string(section:)
       row, value = determine_chargeable_weight_row(section: section)
+
       [
         "<small class='chargeable_weight'>",
         " (Chargeable #{row.capitalize}: ",
@@ -94,8 +94,8 @@ module ResultFormatter
 
     def determine_chargeable_weight_row(section:)
       Pdf::ChargeableWeightRow.new(
-        weight: total_chargeable_weight(section: section).value,
-        volume: total_chargeable_volume(section: section).value,
+        weight: total_chargeable_weight(section: section).value.to_f,
+        volume: total_chargeable_volume(section: section).value.to_f,
         view_type: scope["chargeable_weight_view"]
       ).perform
     end
@@ -329,7 +329,7 @@ module ResultFormatter
 
     def total_chargeable_weight(section:)
       cargo_items_for_section(section: section)
-        .inject(Measured::Weight.new(0, "kg")) { |sum, unit| sum + unit.total_weight }
+        .inject(Measured::Weight.new(0, "kg")) { |sum, unit| sum + unit.chargeable_weight }
     end
 
     def total_chargeable_volume(section:)

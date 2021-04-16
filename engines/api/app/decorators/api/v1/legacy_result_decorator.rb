@@ -50,12 +50,10 @@ module Api
 
       def metadata_pricing_id
         @metadata_pricing_id ||= begin
-          target_breakdown = metadatum.breakdowns.where(order: 0).find { |breakdown|
+          target_breakdown = metadatum.breakdowns.where(order: 0).find do |breakdown|
             breakdown.rate_origin["type"] == "Pricings::Pricing"
-          }
-          return if target_breakdown.nil?
-
-          target_breakdown.rate_origin.dig("id")
+          end
+          target_breakdown.present? ? target_breakdown.rate_origin["id"] : nil
         end
       end
 
@@ -65,28 +63,22 @@ module Api
 
       def legacy_carrier
         @legacy_carrier ||= begin
-          return if carrier == organization.slug
-
-          Legacy::Carrier.find_by(name: carrier)
+          Legacy::Carrier.find_by(name: carrier) if carrier != organization.slug
         end
       end
 
       def base_currency
-        return scope.dig(:default_currency) if query.client_id.nil?
+        return scope[:default_currency] if query.client_id.nil?
 
         client.settings.currency
       end
 
       def chargeable_weights
         weights = {
-          ocean_chargeable_weight: chargeable_weight(section: main_freight_section)
+          ocean_chargeable_weight: total_chargeable_weight(section: main_freight_section).value.to_f
         }
-        if pre_carriage_section.present?
-          weights[:pre_carriage_chargeable_weight] = chargeable_weight(section: pre_carriage_section)
-        end
-        if on_carriage_section.present?
-          weights[:on_carriage_chargeable_weight] = chargeable_weight(section: on_carriage_section)
-        end
+        weights[:pre_carriage_chargeable_weight] = total_chargeable_weight(section: pre_carriage_section).value.to_f if pre_carriage_section.present?
+        weights[:on_carriage_chargeable_weight] = total_chargeable_weight(section: on_carriage_section).value.to_f if on_carriage_section.present?
         weights
       end
     end

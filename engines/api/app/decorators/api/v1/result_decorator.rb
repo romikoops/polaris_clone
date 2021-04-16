@@ -113,18 +113,11 @@ module Api
       end
 
       def scope
-        context.dig(:scope) || {}
+        context[:scope] || {}
       end
 
       def selected_offer
         Api::LegacyQuote.quote(result: object, scope: context[:scope], admin: context[:admin]).as_json
-      end
-
-      def chargeable_weight(section:)
-        wm_ratio = section.line_items.first.wm_rate
-        cargo_units.sum(0) do |cargo, sum|
-          Api::V1::CargoUnitDecorator.new(cargo, context: {wm_ratio: wm_ratio}).chargeable_weight
-        end
       end
     end
   end

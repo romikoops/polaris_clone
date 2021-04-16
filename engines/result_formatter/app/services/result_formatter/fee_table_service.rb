@@ -42,11 +42,10 @@ module ResultFormatter
           originalValue: value_with_currency(original_value(items: current_items)),
           tenderId: result.id,
           order: route_section.order,
-          section: charge_category.name,
+          section: charge_category.code,
           level: 1,
           chargeCategoryId: charge_category.id
         )
-
         @rows << section_row
         create_cargo_section_rows(row: section_row, items: current_items) if scope.dig(:quote_card, :sections, charge_category.code)
       end
@@ -57,7 +56,7 @@ module ResultFormatter
 
       items.group_by { |item| item.cargo_units.ids }.each do |cargo_unit_ids, items_by_cargo|
         fee_value = value(items: items_by_cargo)
-        original_fee_value = original_value(items: items_by_cargo) # Not sure how to handle this properly
+        original_fee_value = original_value(items: items_by_cargo)
         cargo_row = default_values.merge(
           editId: cargo_unit_ids.join,
           description: cargo_description(cargo_units: items_by_cargo.first.cargo_units),

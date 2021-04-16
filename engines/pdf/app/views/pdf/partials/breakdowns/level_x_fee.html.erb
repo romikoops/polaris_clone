@@ -5,10 +5,10 @@
         <% if
           scope['show_chargeable_weight'] &&
           fee[:level] == 1 &&
-          fee[:code].present? &&
-          !['import', 'export'].include?(fee[:code])
+          fee[:section].present? &&
+          !['import', 'export'].include?(fee[:section])
         %>
-          <%== result.chargeable_weight_string(section: fee[:code]) %>
+          <%== result.chargeable_weight_string(section: fee[:section]) %>
         <% end %>
     </p>
   </td>
