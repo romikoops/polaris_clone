@@ -14,28 +14,32 @@ RSpec.describe "Uploads", type: :request, swagger: true do
       operationId "createUpload"
 
       security [bearerAuth: []]
-      consumes "multipart/form-data"
+      consumes "application/json"
       produces "application/json"
 
-      parameter name: :file, in: :formData, schema: {
+      parameter name: :upload, in: :body, schema: {
         type: :object,
         properties: {
-          file: {
+          jsonData: {
             type: :string,
-            format: :binary,
             description:
-              "Provide the file to upload as form-data with form field `file`. Example cURL request:\n" \
+              "Provide the data to upload as `application/json`. " \
+              "Serialize the payload as a value for the key `jsonData` (case invariant). " \
+              "Example cURL request:\n" \
               "```\n" \
               "curl --location --request POST 'https://api.itsmycargo.com/v1/uploads' \\\n" \
               "   --header 'Authorization: Bearer aa0c9a1d-7b50-4c14-ba8e-21a329877ddd' \\\n" \
-              "   --form 'file=@\"/path/to/file.json\"'\n" \
+              "   --header 'Content-Type: application/json' \\\n" \
+              "   --data-raw '\{\n" \
+              "   \"jsonData\": \"\{\\\"foo\\\":123\}\"\n" \
+              "   \}'\n" \
               "```"
           }
         }
       }, required: true
 
       response "201", "Successful operation" do
-        let(:file) { fixture_file_upload("spec/fixtures/files/dummy.json", "application/json") }
+        let(:upload) { { jsonData: File.read("spec/fixtures/files/dummy.json") } }
 
         before do
           allow(Aws::S3::Client).to receive(:new).and_return(Aws::S3::Client.new(stub_responses: true))
@@ -47,13 +51,13 @@ RSpec.describe "Uploads", type: :request, swagger: true do
 
       response "401", "Unauthorized request" do
         let(:Authorization) { "Basic deadbeef" }
-        let(:file) { nil }
+        let(:upload) { nil }
 
         run_test!
       end
 
       response "400", "Bad request" do
-        let(:file) { nil }
+        let(:upload) { nil }
 
         run_test!
       end
