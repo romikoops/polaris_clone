@@ -2,6 +2,13 @@
 
 require "rails_helper"
 
+RSpec.shared_examples "ChargeCalculator Single Component" do
+  it "calculates the fee correctly", :aggregate_failures do
+    expect(results.length).to eq(1)
+    expect(results.first.value).to eq(expected_value)
+  end
+end
+
 RSpec.describe OfferCalculator::Service::ChargeCalculator do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
@@ -13,7 +20,6 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       quantity: 2,
       weight_value: 1200)
   end
-
   let(:pricing) { FactoryBot.create(:lcl_pricing, organization: organization) }
   let(:manipulated_result) do
     FactoryBot.build(:manipulator_result,
@@ -22,23 +28,19 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       flat_margins: flat_margins)
   end
   let(:flat_margins) { {} }
-  let(:engine) do
-    OfferCalculator::Service::Measurements::Engines::Unit.new(
-      cargo_unit: cargo_unit,
-      scope: {},
-      object: manipulated_result
-    )
-  end
   let(:measures) do
     OfferCalculator::Service::Measurements::Cargo.new(
-      engine: engine,
+      engine: OfferCalculator::Service::Measurements::Engines::Unit.new(
+        cargo_unit: cargo_unit,
+        scope: {},
+        object: manipulated_result
+      ),
       scope: {},
       object: manipulated_result
     )
   end
   let(:min_value) { Money.new(0, "USD") }
   let(:max_value) { Money.new(1e12, "USD") }
-  let(:fee_data) { fee.fee_data }
   let(:rate_builder_fee) do
     FactoryBot.build(:rate_builder_fee,
       min_value: min_value,
@@ -47,34 +49,34 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
       targets: measures.cargo_units,
       measures: measures,
       charge_category: fee.charge_category,
-      raw_fee: fee_data)
+      raw_fee: fee.fee_data)
   end
   let(:fees) { [rate_builder_fee] }
   let(:results) { described_class.charges(request: request, fees: fees) }
+  let(:percentage_fee) do
+    FactoryBot.build(:rate_builder_fee,
+      min_value: min_value,
+      rate_basis: "PERCENTAGE",
+      targets: nil,
+      measures: measures,
+      charge_category: FactoryBot.create(:puf_charge),
+      raw_fee: { rate: 0.1, rate_basis: "PERCENTAGE" })
+  end
 
   context "when calculating per_wm fee" do
     let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
+    let(:expected_value) { measures.wm.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_wm fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.wm.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_wm fee with flat margin" do
     let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
-    let(:flat_margins) { {fee.charge_category.code => 50} }
-    let(:expected_value) { measures.wm.value * Money.new(fee.rate * 100, fee.currency_name) }
+    let(:flat_margins) { { fee.charge_category.code => 50 } }
+    let(:expected_value) { measures.wm.value * Money.new(fee.rate * 100, fee.currency_name) + flat_margin_value }
     let(:flat_margin_value) { Money.new(5000, "USD") }
 
-    it "calculates the per_wm fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(expected_value + flat_margin_value)
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_container fee" do
@@ -85,91 +87,66 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
         quantity: 2,
         weight_value: 12_000)
     end
+    let(:expected_value) { measures.unit.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_container fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.unit.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_hbl fee" do
     let(:fee) { FactoryBot.create(:fee_per_hbl, pricing: pricing) }
+    let(:expected_value) { measures.shipment.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_hbl fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.shipment.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_shipment fee" do
     let(:fee) { FactoryBot.create(:fee_per_shipment, pricing: pricing) }
+    let(:expected_value) { measures.shipment.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_shipment fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.shipment.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_item fee" do
     let(:fee) { FactoryBot.create(:fee_per_item, pricing: pricing) }
+    let(:expected_value) { measures.unit.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_item fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.unit.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_cbm fee" do
     let(:fee) { FactoryBot.create(:fee_per_cbm, pricing: pricing) }
+    let(:expected_value) { measures.cbm.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_cbm fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.cbm.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_kg fee" do
     let(:fee) { FactoryBot.create(:fee_per_kg, pricing: pricing) }
+    let(:expected_value) { measures.kg.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_kg fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.kg.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_x_kg_flat fee" do
     let(:fee) { FactoryBot.create(:fee_per_x_kg_flat, pricing: pricing) }
     let(:rate_value) { (measures.kg.value / fee.base).ceil * fee.base }
+    let(:expected_value) { Money.new(rate_value * fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_x_kg_flat fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(rate_value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating per_ton fee" do
     let(:fee) { FactoryBot.create(:fee_per_ton, pricing: pricing) }
+    let(:expected_value) { measures.ton.value * Money.new(fee.rate * 100, fee.currency_name) }
 
-    it "calculates the per_ton fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(Money.new(measures.ton.value * fee.rate * 100, fee.currency_name))
-      end
-    end
+    include_examples "ChargeCalculator Single Component"
+  end
+
+  context "when calculating per_ton with base fee" do
+    let(:fee) { FactoryBot.create(:fee_per_ton, base: 0.1, pricing: pricing) }
+    let(:expected_value) { Money.new((measures.ton.value / fee.base).ceil * fee.rate * fee.base * 100, fee.currency_name) }
+
+    include_examples "ChargeCalculator Single Component"
   end
 
   context "when calculating percentage fee" do
@@ -177,13 +154,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     let(:expected_rate_value) { measures.wm.value * fee.rate * 0.1 }
 
     before do
-      fees << FactoryBot.build(:rate_builder_fee,
-        min_value: min_value,
-        rate_basis: "PERCENTAGE",
-        targets: nil,
-        measures: measures,
-        charge_category: FactoryBot.create(:puf_charge),
-        raw_fee: {rate: 0.1, rate_basis: "PERCENTAGE"})
+      fees << percentage_fee
     end
 
     it "calculates the per_ton fee correctly" do
@@ -199,13 +170,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     let(:min_value) { Money.new(12_000_000, "USD") }
 
     before do
-      fees << FactoryBot.build(:rate_builder_fee,
-        min_value: min_value,
-        rate_basis: "PERCENTAGE",
-        targets: nil,
-        measures: measures,
-        charge_category: FactoryBot.create(:puf_charge),
-        raw_fee: {rate: 0.1, rate_basis: "PERCENTAGE"})
+      fees << percentage_fee
     end
 
     it "calculates the per_ton fee correctly" do
@@ -221,10 +186,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     let(:min_value) { Money.new(12_000_000, "USD") }
 
     it "calculates the per_ton fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(min_value)
-      end
+      expect(results.first.value).to eq(min_value)
     end
   end
 
@@ -233,10 +195,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
     let(:max_value) { Money.new(100, "USD") }
 
     it "calculates the per_ton fee correctly" do
-      aggregate_failures do
-        expect(results.length).to eq(1)
-        expect(results.first.value).to eq(max_value)
-      end
+      expect(results.first.value).to eq(max_value)
     end
   end
 

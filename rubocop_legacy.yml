@@ -15,6 +15,8 @@ RSpec/MultipleMemoizedHelpers:
   - 'engines/excel_data_services/spec/**'
   - 'engines/notifications/spec/services/notifications/offer_subject_line_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/cargo_creator_spec.rb'
+  - 'engines/offer_calculator/spec/services/offer_calculator/service/charge_calculator_spec.rb'
+  - 'engines/offer_calculator/spec/services/offer_calculator/service/manipulators/local_charges_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/measurements/**/*.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/route_filter_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/validations/cargo_item_validation_service_spec.rb'

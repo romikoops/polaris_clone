@@ -12,6 +12,7 @@ module OfferCalculator
         super(request: request)
       end
 
+      # rubocop:disable Style/RescueStandardError
       def perform
         grouped_fees.flat_map do |grouped_fees|
           calculate_charges(grouped_fees: grouped_fees)
@@ -19,6 +20,7 @@ module OfferCalculator
       rescue
         raise OfferCalculator::Errors::CalculationError
       end
+      # rubocop:enable Style/RescueStandardError
 
       private
 
@@ -94,9 +96,9 @@ module OfferCalculator
       end
 
       def handle_fee(component:, fee:)
-        return handle_x_fees(component: component, fee: fee) if fee.rate_basis.match?(/_X_/)
+        return handle_x_fees(component: component, fee: fee) if fee.rate_basis.include?("_X_")
 
-        component.value * fee.measures.send(component.modifier).value
+        component.value * (fee.measures.send(component.modifier).value / component.base).ceil * component.base
       end
 
       def handle_x_fees(component:, fee:)

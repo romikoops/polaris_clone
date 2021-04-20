@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:itinerary_1) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-  let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-  let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
+  let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
+  let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
+  let(:other_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "second", organization: organization) }
   let(:load_type) { "cargo_item" }
   let(:request) do
     FactoryBot.create(:offer_calculator_request,
@@ -18,7 +18,7 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
   end
   let(:trips) do
     [
-      FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1)
+      FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     ]
   end
   let(:group) do
@@ -27,9 +27,9 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
   end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:results) {
+  let(:results) do
     described_class.results(association: Legacy::LocalCharge.all, request: request, schedules: schedules)
-  }
+  end
 
   before do
     ::Organizations.current_id = organization.id
@@ -41,11 +41,11 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
 
   describe ".perform" do
     context "when only one local_charge available w/o margins" do
-      let!(:local_charge) {
+      let!(:local_charge) do
         FactoryBot.create(:legacy_local_charge,
-          direction: "import", hub: itinerary_1.origin_hub, organization: organization,
-          tenant_vehicle: tenant_vehicle_1)
-      }
+          direction: "import", hub: itinerary.origin_hub, organization: organization,
+          tenant_vehicle: tenant_vehicle)
+      end
 
       it "returns the one local_charge" do
         results
@@ -57,56 +57,54 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
     end
 
     context "when only two local_charges w/o margins" do
-      let!(:local_charge_1) {
+      let!(:local_charge) do
         FactoryBot.create(:legacy_local_charge,
-          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1)
-      }
-      let!(:local_charge_2) {
+          hub: itinerary.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle)
+      end
+      let!(:other_local_charge) do
         FactoryBot.create(:legacy_local_charge,
-          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_2)
-      }
+          hub: itinerary.origin_hub, organization: organization, tenant_vehicle: other_tenant_vehicle)
+      end
       let(:trips) do
         [
-          FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_1),
-          FactoryBot.create(:legacy_trip, itinerary: itinerary_1, tenant_vehicle: tenant_vehicle_2)
+          FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: tenant_vehicle),
+          FactoryBot.create(:legacy_trip, itinerary: itinerary, tenant_vehicle: other_tenant_vehicle)
         ]
       end
 
-      it "returns the one local_charge" do
+      it "returns both local charges" do
         aggregate_failures do
           expect(results.first).to be_a(Pricings::ManipulatorResult)
           expect(results.count).to eq(2)
-          expect(results.map(&:id)).to eq([local_charge_1, local_charge_2].map(&:id))
+          expect(results.map(&:id)).to match_array([local_charge, other_local_charge].map(&:id))
         end
       end
     end
 
     context "when only two pricings w/ one margin (groups)" do
-      let!(:local_charge) {
+      let!(:local_charge) do
         FactoryBot.create(:legacy_local_charge,
-          hub: itinerary_1.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
-      }
-      let!(:margin) {
+          hub: itinerary.origin_hub, organization: organization, tenant_vehicle: tenant_vehicle, group_id: group.id)
+      end
+      let!(:margin) do
         FactoryBot.create(:export_margin,
-          tenant_vehicle: tenant_vehicle_1, organization: organization, applicable: user, value: 100)
-      }
+          tenant_vehicle: tenant_vehicle, organization: organization, applicable: user, value: 100)
+      end
 
-      it "returns the one local_charge" do
-        aggregate_failures do
-          expect(results.first).to be_a(Pricings::ManipulatorResult)
-          expect(results.count).to eq(1)
-          expect(results.first.id).to eq(local_charge.id)
-          expect(results.first.breakdowns.count).to eq(2)
-          expect(results.first.breakdowns.second.source).to eq(margin)
-        end
+      it "returns the one local_charge", :aggregate_failures do
+        expect(results.first).to be_a(Pricings::ManipulatorResult)
+        expect(results.count).to eq(1)
+        expect(results.first.id).to eq(local_charge.id)
+        expect(results.first.breakdowns.count).to eq(2)
+        expect(results.first.breakdowns.second.source).to eq(margin)
       end
     end
 
     context "with invalid direction" do
       before do
         FactoryBot.create(:legacy_local_charge,
-          direction: "blue", hub: itinerary_1.origin_hub, organization: organization,
-          tenant_vehicle: tenant_vehicle_1, group_id: group.id)
+          direction: "blue", hub: itinerary.origin_hub, organization: organization,
+          tenant_vehicle: tenant_vehicle, group_id: group.id)
       end
 
       it "raises InvalidDirection error" do
