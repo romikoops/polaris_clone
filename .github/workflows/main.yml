@@ -38,7 +38,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/money_cache.gemspec') }}
@@ -104,7 +104,7 @@ jobs:
             locales postgresql-client-12 tzdata wkhtmltopdf
           npm install -g 'mjml@4.3.1'
 
-      - uses: actions/cache@v2.1.4
+      - uses: actions/cache@v2.1.5
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-app-${{ hashFiles('**/Gemfile.lock') }}
@@ -265,7 +265,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
