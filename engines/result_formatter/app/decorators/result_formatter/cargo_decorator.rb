@@ -36,7 +36,7 @@ module ResultFormatter
 
     def determine_chargeable_weight_row
       Pdf::ChargeableWeightRow.new(
-        weight: total_chargeable_weight,
+        weight: total_chargeable_weight.value.to_f,
         volume: total_chargeable_volume,
         view_type: scope["chargeable_weight_view"]
       ).perform
@@ -49,7 +49,7 @@ module ResultFormatter
     end
 
     def total_chargeable_weight
-      chargeable_weight.scale(quantity).value.to_f
+      chargeable_weight.scale(quantity)
     end
 
     def total_chargeable_volume

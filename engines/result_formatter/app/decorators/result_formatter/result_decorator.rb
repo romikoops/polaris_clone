@@ -329,7 +329,7 @@ module ResultFormatter
 
     def total_chargeable_weight(section:)
       cargo_items_for_section(section: section)
-        .inject(Measured::Weight.new(0, "kg")) { |sum, unit| sum + unit.chargeable_weight }
+        .inject(Measured::Weight.new(0, "kg")) { |sum, unit| sum + unit.total_chargeable_weight }
     end
 
     def total_chargeable_volume(section:)

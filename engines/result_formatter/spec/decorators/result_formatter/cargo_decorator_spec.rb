@@ -7,8 +7,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
   let(:result) { FactoryBot.create(:journey_result) }
   let(:decorated_result) { ResultFormatter::ResultDecorator.new(FactoryBot.create(:journey_result)) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
-
-  let(:cargo_unit) { FactoryBot.create(:journey_cargo_unit, weight_value: 500, quantity: 1) }
+  let(:cargo_unit) { FactoryBot.create(:journey_cargo_unit, weight_value: 500, quantity: 2) }
   let(:chargeable_weight_view) { "volume" }
   let(:scope_content) { { "show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view } }
   let(:scope) { OrganizationManager::ScopeService.new(target: user, organization: organization).fetch }
@@ -29,7 +28,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
       let(:chargeable_weight_view) { "volume" }
 
       it "renders the correct chargeable weight" do
-        expect(klass.render_chargeable_weight_row).to include cargo_unit.volume.value.to_s
+        expect(klass.render_chargeable_weight_row).to include cargo_unit.total_volume.value.to_s
       end
     end
 
@@ -37,7 +36,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
       let(:chargeable_weight_view) { "weight" }
 
       it "renders the correct chargeable weight" do
-        expect(klass.render_chargeable_weight_row).to include "1344.0 kg"
+        expect(klass.render_chargeable_weight_row).to include "2688.0 kg"
       end
     end
 
@@ -49,7 +48,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
       end
 
       it "renders the correct chargeable weight" do
-        expect(klass.render_chargeable_weight_row).to include "500.0 kg"
+        expect(klass.render_chargeable_weight_row).to include "1000.0 kg"
       end
     end
 
@@ -61,7 +60,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
       end
 
       it "renders the correct chargeable weight" do
-        expect(klass.render_chargeable_weight_row).to include "0.5  t|m"
+        expect(klass.render_chargeable_weight_row).to include "1.0  t|m"
       end
     end
   end
