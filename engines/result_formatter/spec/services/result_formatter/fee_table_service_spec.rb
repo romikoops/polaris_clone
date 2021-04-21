@@ -13,7 +13,7 @@ module ResultFormatter
     include_context "journey_pdf_setup"
     let(:currency) { "USD" }
     let!(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:custom_scope) { { primary_freight_code: "Fee 1", fee_detail: "name", default_currency: "USD" } }
+    let(:custom_scope) { { primary_freight_code: "BAF", fee_detail: "name", default_currency: "USD" } }
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:type) { :table }
     let(:cargo_unit_params) do
@@ -157,12 +157,13 @@ module ResultFormatter
           FactoryBot.build(:journey_line_item,
             line_item_set: line_item_set,
             route_section: freight_section,
-            fee_code: "BAF")
+            cargo_units: line_item.cargo_units,
+            fee_code: "baf")
         end
         let(:results) { klass.perform }
         let(:line_item) { freight_line_items_with_cargo.first }
-        let(:main_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == line_item.id }) }
-        let(:second_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == second_line_item.id }) }
+        let(:main_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == second_line_item.id }) }
+        let(:second_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == line_item.id }) }
 
         before do
           line_item_set.line_items << second_line_item
