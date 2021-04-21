@@ -50,7 +50,7 @@ closed_registration: false
 continuous_rounding: false
 incoterm_info_level: text
 non_stackable_goods: true
-open_quotation_tool: false
+open_quotation_tool: true
 hide_user_pricing_requests: true
 customs_export_paper: false
 fixed_exchange_rates: true

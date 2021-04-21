@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class Shipments::BookingProcessController < ApplicationController
-  skip_before_action :doorkeeper_authorize!, only: [:create_shipment, :get_offers]
+  skip_before_action :doorkeeper_authorize!, only: %i[create_shipment get_offers]
   before_action :confirm_request_eligibility, only: [:get_offers]
-  before_action :attach_user_to_shipment, only: [:get_offers, :choose_offer]
 
   include Wheelhouse::ErrorHandler
 
@@ -22,12 +21,12 @@ class Shipments::BookingProcessController < ApplicationController
     ).perform
     resp = Api::V1::LegacyQueryDecorator.new(
       offer_query,
-      context: {scope: current_scope}
+      context: { scope: current_scope }
     ).legacy_json
     resp = resp.to_json if params[:async].blank?
     response_handler(resp)
-  rescue OfferCalculator::Errors::Failure => error
-    handle_error(error: error)
+  rescue OfferCalculator::Errors::Failure => e
+    handle_error(error: e)
   rescue ArgumentError
     raise ApplicationError::InternalError
   end
@@ -53,12 +52,12 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def refresh_quotes
-    resp = shipment.charge_breakdowns.map { |charge_breakdown|
+    resp = shipment.charge_breakdowns.map do |charge_breakdown|
       {
         trip_id: charge_breakdown.trip_id,
         quote: charge_breakdown.to_nested_hash(Pdf::HiddenValueService.new(user: organization_user).hide_total_args)
       }
-    }
+    end
 
     response_handler(resp)
   end
@@ -120,7 +119,7 @@ class Shipments::BookingProcessController < ApplicationController
       [
         quote: {},
         schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
-          :carrier_name, :trip_id, origin_hub: {}, destination_hub: {}],
+          :carrier_name, :trip_id, { origin_hub: {}, destination_hub: {} }],
         meta: {}
       ]
     }
@@ -129,10 +128,6 @@ class Shipments::BookingProcessController < ApplicationController
   def confirm_request_eligibility
     guest_ineligible = current_scope.values_at(:closed_shop, :closed_after_map, :closed_quotation_tool).any?(&:present?)
     raise ApplicationError::NotLoggedIn if guest_ineligible && current_user.blank?
-  end
-
-  def attach_user_to_shipment
-    shipment.update(user: organization_user)
   end
 
   def offer_calculator_params
