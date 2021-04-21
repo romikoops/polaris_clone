@@ -7,73 +7,73 @@ FactoryBot.define do
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     cbm_ratio { 460 }
     modifier { "kg" }
-    load_meterage { {"ratio" => 1850.0, "height_limit" => 130}.freeze }
+    load_meterage { { "ratio" => 1850.0, "height_limit" => 130 }.freeze }
     validity { Range.new(Time.zone.yesterday, 3.months.from_now) }
     rates do
       {
         kg: [
           {
-            rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "200.0",
             min_kg: "0.1",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "300.0",
             min_kg: "200.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "400.0",
             min_kg: "300.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "500.0",
             min_kg: "400.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 109.090909090909, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 109.090909090909, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "600.0",
             min_kg: "500.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 110.769230769231, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 110.769230769231, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "700.0",
             min_kg: "600.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "800.0",
             min_kg: "700.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "900.0",
             min_kg: "800.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "1000.0",
             min_kg: "900.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 85.0, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 85.0, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "2500.0",
             min_kg: "1000.0",
             min_value: 400.0
           },
           {
-            rate: {base: 100.0, value: 58.0, currency: "SEK", rate_basis: "PER_X_KG"},
+            rate: { base: 100.0, value: 58.0, currency: "SEK", rate_basis: "PER_X_KG" },
             max_kg: "5000.0",
             min_kg: "2500.0",
             min_value: 533.0
@@ -107,7 +107,11 @@ FactoryBot.define do
       end
     end
 
-    trait :fcl_20 do
+    trait :updated_load_meterage do
+      load_meterage { { "ratio" => 1850.0, "stackable_type" => "height", "stackable_limit" => 130 }.freeze }
+    end
+
+    trait :fcl20 do
       load_type { "container" }
       cargo_class { "fcl_20" }
       truck_type { "chassis" }
@@ -234,10 +238,10 @@ FactoryBot.define do
             "currency" => "CNY",
             "rate_basis" => "PER_UNIT_RANGE",
             "range" => [
-              {"min" => 0, "max" => 5, "rate" => 100},
-              {"min" => 6, "max" => 10, "rate" => 80},
-              {"min" => 11, "max" => 15, "rate" => 60},
-              {"min" => 16, "max" => 20, "rate" => 60}
+              { "min" => 0, "max" => 5, "rate" => 100 },
+              { "min" => 6, "max" => 10, "rate" => 80 },
+              { "min" => 11, "max" => 15, "rate" => 60 },
+              { "min" => 16, "max" => 20, "rate" => 60 }
             ]
           },
           "OFEE" => {
@@ -247,10 +251,10 @@ FactoryBot.define do
             "min" => 15,
             "rate_basis" => "PER_KG_RANGE",
             "range" => [
-              {"min" => 0, "max" => 1000, "rate" => 100},
-              {"min" => 1000, "max" => 5000, "rate" => 80},
-              {"min" => 5000, "max" => 1000, "rate" => 60},
-              {"min" => 10_000, "max" => 20_000, "rate" => 60}
+              { "min" => 0, "max" => 1000, "rate" => 100 },
+              { "min" => 1000, "max" => 5000, "rate" => 80 },
+              { "min" => 5000, "max" => 1000, "rate" => 60 },
+              { "min" => 10_000, "max" => 20_000, "rate" => 60 }
             ]
           },
           "PFEE" => {
@@ -275,19 +279,19 @@ FactoryBot.define do
         {
           cbm: [
             {
-              rate: {value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "5",
               min_cbm: "0",
               min_value: 400.0
             },
             {
-              rate: {value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "5",
               min_cbm: "10",
               min_value: 400.0
             },
             {
-              rate: {value: 135.0, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 135.0, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "10",
               min_cbm: "30",
               min_value: 400.0
@@ -303,39 +307,39 @@ FactoryBot.define do
         {
           cbm: [
             {
-              rate: {value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 137.5, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "5",
               min_cbm: "0.1",
               min_value: 400.0
             },
             {
-              rate: {value: 237.5, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 227.5, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "5",
               min_cbm: "10",
-              min_value: 400.0
+              min_value: 420.0
             },
             {
-              rate: {value: 135.0, currency: "SEK", rate_basis: "PER_SHIPMENT"},
+              rate: { value: 135.0, currency: "SEK", rate_basis: "PER_SHIPMENT" },
               max_cbm: "10",
-              min_cbm: "30",
-              min_value: 400.0
+              min_cbm: "35",
+              min_value: 450.0
             }
           ],
           kg: [
             {
-              rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG"},
+              rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
               max_kg: "500.0",
               min_kg: "100.0",
-              min_value: 400.0
+              min_value: 500.0
             },
             {
-              rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG"},
+              rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
               max_kg: "1000.0",
               min_kg: "500.0",
               min_value: 400.0
             },
             {
-              rate: {base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG"},
+              rate: { base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_X_KG" },
               max_kg: "2500.0",
               min_kg: "1000.0",
               min_value: 400.0
@@ -351,13 +355,13 @@ FactoryBot.define do
         {
           wm: [
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_WM"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_WM" },
               min_wm: "0",
               max_wm: "5",
               min_value: 400.0
             },
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_WM"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_WM" },
               min_wm: "5.000001",
               max_wm: "15",
               min_value: 200.0
@@ -373,7 +377,7 @@ FactoryBot.define do
         {
           wm: [
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_WM"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_WM" },
               min_wm: "0",
               max_wm: "15",
               min_value: 1_000_000
@@ -389,7 +393,7 @@ FactoryBot.define do
         {
           unit: [
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_UNIT"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_UNIT" },
               min_unit: "0",
               max_unit: "10",
               min_value: 400.0
@@ -405,7 +409,7 @@ FactoryBot.define do
         {
           unit: [
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_UNIT"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_UNIT" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -413,7 +417,7 @@ FactoryBot.define do
           ],
           km: [
             {
-              rate: {value: 1, currency: "SEK", rate_basis: "PER_KM"},
+              rate: { value: 1, currency: "SEK", rate_basis: "PER_KM" },
               max_km: "0",
               min_km: "1000",
               min_value: 400.0
@@ -429,7 +433,7 @@ FactoryBot.define do
         {
           kg: [
             {
-              rate: {value: 1, currency: "SEK", rate_basis: "PER_KG"},
+              rate: { value: 1, currency: "SEK", rate_basis: "PER_KG" },
               max_unit: "0",
               min_unit: "10000",
               min_value: 400.0
@@ -437,7 +441,7 @@ FactoryBot.define do
           ],
           kg_sub: [
             {
-              rate: {value: 10, currency: "SEK", rate_basis: "PER_KG"},
+              rate: { value: 10, currency: "SEK", rate_basis: "PER_KG" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -445,7 +449,7 @@ FactoryBot.define do
           ],
           kg_base: [
             {
-              rate: {value: 10, currency: "SEK", rate_basis: "PER_KG"},
+              rate: { value: 10, currency: "SEK", rate_basis: "PER_KG" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -453,7 +457,7 @@ FactoryBot.define do
           ],
           cbm: [
             {
-              rate: {value: 1, currency: "SEK", rate_basis: "PER_CBM"},
+              rate: { value: 1, currency: "SEK", rate_basis: "PER_CBM" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -461,7 +465,7 @@ FactoryBot.define do
           ],
           cbm_sub: [
             {
-              rate: {value: 10, currency: "SEK", rate_basis: "PER_CBM"},
+              rate: { value: 10, currency: "SEK", rate_basis: "PER_CBM" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -469,7 +473,7 @@ FactoryBot.define do
           ],
           cbm_base: [
             {
-              rate: {value: 10, currency: "SEK", rate_basis: "PER_CBM"},
+              rate: { value: 10, currency: "SEK", rate_basis: "PER_CBM" },
               max_unit: "0",
               min_unit: "10",
               min_value: 400.0
@@ -486,13 +490,13 @@ FactoryBot.define do
         {
           unit_in_kg: [
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_UNIT_KG"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_UNIT_KG" },
               max_unit_in_kg: "1000",
               min_unit_in_kg: "0",
               min_value: 400.0
             },
             {
-              rate: {value: 100, currency: "SEK", rate_basis: "PER_UNIT_KG"},
+              rate: { value: 100, currency: "SEK", rate_basis: "PER_UNIT_KG" },
               max_unit_in_kg: "2000",
               min_unit_in_kg: "1001",
               min_value: 400.0
@@ -500,19 +504,19 @@ FactoryBot.define do
           ],
           kg: [
             {
-              rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_UNIT_KG"},
+              rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_UNIT_KG" },
               max_kg: "500.0",
               min_kg: "100.0",
               min_value: 400.0
             },
             {
-              rate: {base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_UNIT_KG"},
+              rate: { base: 100.0, value: 237.5, currency: "SEK", rate_basis: "PER_UNIT_KG" },
               max_kg: "1000.0",
               min_kg: "500.0",
               min_value: 400.0
             },
             {
-              rate: {base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_UNIT_KG"},
+              rate: { base: 100.0, value: 135.0, currency: "SEK", rate_basis: "PER_UNIT_KG" },
               max_kg: "2500.0",
               min_kg: "1000.0",
               min_value: 400.0
@@ -532,8 +536,8 @@ FactoryBot.define do
       end
     end
 
-    factory :fcl_20_trucking, traits: [:fcl_20]
-    factory :fcl_20_unit_trucking, traits: %i[fcl_20 unit_rates]
+    factory :fcl_20_trucking, traits: [:fcl20]
+    factory :fcl_20_unit_trucking, traits: %i[fcl20 unit_rates]
     factory :trucking_with_fees, traits: [:with_fees]
     factory :trucking_with_return, traits: [:return_distance]
 

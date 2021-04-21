@@ -78,16 +78,17 @@ module OfferCalculator
           end
 
           def targets
-            @targets ||=
-              cargo_units
-                .select { |unit| unit.cargo_class.include?(cargo_class) }
-                .map do |cargo_unit|
-                OfferCalculator::Service::Measurements::Cargo.new(
-                  engine: cargo_engine_for_unit(cargo_unit: cargo_unit),
-                  object: object,
-                  scope: scope
-                )
-              end
+            @targets ||= applicable_units.map do |cargo_unit|
+              OfferCalculator::Service::Measurements::Cargo.new(
+                engine: cargo_engine_for_unit(cargo_unit: cargo_unit),
+                object: object,
+                scope: scope
+              )
+            end
+          end
+
+          def applicable_units
+            @applicable_units ||= cargo_units.select { |unit| unit.cargo_class.include?(cargo_class) }
           end
 
           def cargo_engine_for_unit(cargo_unit:)

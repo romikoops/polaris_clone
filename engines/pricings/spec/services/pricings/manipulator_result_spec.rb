@@ -25,7 +25,7 @@ RSpec.describe Pricings::ManipulatorResult do
 
     describe ".fees" do
       it "returns the fees in json form" do
-        expect(instance.fees).to eq(original.as_json.dig("data"))
+        expect(instance.fees).to eq(original.as_json["data"])
       end
     end
 
@@ -75,7 +75,16 @@ RSpec.describe Pricings::ManipulatorResult do
   context "with trucking rates" do
     let(:hub) { FactoryBot.create(:legacy_hub, hub_type: "air") }
     let(:trucking_location) { FactoryBot.create(:trucking_location, :distance, data: 55) }
-    let(:load_meterage) { {ratio: 100, height_limit: 1.5, hard_limit: true, stacking: true} }
+    let(:load_meterage) do
+      {
+        ratio: 100,
+        stackable_type: "height",
+        non_stackable_type: "ldm",
+        stackable_limit: 1.5,
+        hard_limit: true,
+        non_stackable_limit: 1
+      }
+    end
     let(:original) do
       FactoryBot.create(:trucking_trucking,
         organization: organization,
@@ -91,8 +100,12 @@ RSpec.describe Pricings::ManipulatorResult do
     end
 
     describe ".load_meterage_limit" do
-      it "returns the correct limit" do
-        expect(instance.load_meterage_limit).to eq(original.load_meterage["height_limit"])
+      it "returns the correct stackable limit" do
+        expect(instance.load_meterage_limit(type: "stackable")).to eq(original.load_meterage["stackable_limit"])
+      end
+
+      it "returns the correct non_stackable limit" do
+        expect(instance.load_meterage_limit(type: "non_stackable")).to eq(original.load_meterage["non_stackable_limit"])
       end
     end
 
@@ -109,8 +122,12 @@ RSpec.describe Pricings::ManipulatorResult do
     end
 
     describe ".load_meterage_type" do
-      it "returns the correct type" do
-        expect(instance.load_meterage_type).to eq("height_limit")
+      it "returns the correct stackable type" do
+        expect(instance.load_meterage_type(type: "stackable")).to eq(original.load_meterage["stackable_type"])
+      end
+
+      it "returns the correct non_stackable type" do
+        expect(instance.load_meterage_type(type: "non_stackable")).to eq(original.load_meterage["non_stackable_type"])
       end
     end
 

@@ -257,6 +257,7 @@ PATH
   remote: engines/offer_calculator
   specs:
     offer_calculator (1)
+      cargo_packer
       chronic
       legacy
       measured
@@ -486,6 +487,13 @@ PATH
       result_formatter
       shared-runtime
       write_xlsx
+
+PATH
+  remote: gems/cargo_packer
+  specs:
+    cargo_packer (1)
+      activesupport (~> 5.2.2)
+      rake (~> 13.0)
 
 PATH
   remote: gems/measured-itsmycargo
@@ -1264,6 +1272,7 @@ DEPENDENCIES
   binding_of_caller
   byebug
   cargo!
+  cargo_packer!
   carta!
   chronic
   cms_data!

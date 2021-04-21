@@ -183,7 +183,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
       end
 
       let(:scope) { { 'consolidation': { 'trucking': { 'comparative': true } } } }
-      let(:load_meterage) { { ratio: 1000, lm_limit: 0.5 } }
+      let(:load_meterage) { { ratio: 1000, ldm_limit: 0.5 } }
       let(:cbm_ratio) { 200 }
 
       it "returns the correct weight" do
@@ -213,7 +213,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
       end
 
       let(:scope) { { 'consolidation': { 'trucking': { 'calculation': true } } } }
-      let(:load_meterage) { { ratio: 1000, lm_limit: 0.5 } }
+      let(:load_meterage) { { ratio: 1000, ldm_limit: 0.5 } }
       let(:cbm_ratio) { 250 }
 
       it "returns the correct weight" do

@@ -3,6 +3,7 @@
 module Pricings
   class ManipulatorResult
     attr_reader :result, :breakdowns, :original, :flat_margins
+
     delegate :id, :organization, :tenant_vehicle_id, to: :original
 
     def initialize(original:, result:, breakdowns: [], flat_margins: {})
@@ -27,7 +28,7 @@ module Pricings
     end
 
     def cbm_ratio
-      result.dig("cbm_ratio") || result.dig("wm_rate") || Pricings::Pricing::WM_RATIO_LOOKUP[mot.to_sym]
+      result["cbm_ratio"] || result["wm_rate"] || Pricings::Pricing::WM_RATIO_LOOKUP[mot.to_sym]
     end
 
     def load_meterage_ratio
@@ -35,7 +36,7 @@ module Pricings
     end
 
     def fees
-      result.dig("data") || result.dig("fees")
+      result["data"] || result["fees"]
     end
 
     def type
@@ -71,8 +72,8 @@ module Pricings
       end
     end
 
-    def load_meterage_limit
-      result.dig("load_meterage", load_meterage_type)
+    def load_meterage_limit(type:)
+      result.dig("load_meterage", [type, "limit"].join("_")) || result.dig("load_meterage", load_meterage_type(type: type))
     end
 
     def load_meterage_hard_limit
@@ -83,24 +84,24 @@ module Pricings
       result.dig("load_meterage", "stacking")
     end
 
-    def load_meterage_type
-      return if result.dig("load_meterage").blank?
-
-      result.dig("load_meterage").except("ratio", "stacking").entries.find { |entry| entry.second.present? }&.first
+    def load_meterage_type(type:)
+      result.dig("load_meterage", [type, "type"].join("_")) ||
+        (result["load_meterage"] || {}).slice("height_limit", "area_limit", "ldm_limit").entries.find { |entry| entry.second.present? }&.first ||
+        "none"
     end
 
     def distance
-      location = Trucking::Location.find_by(id: result.dig("location_id"))
+      location = Trucking::Location.find_by(id: result["location_id"])
       km = location&.query == "distance" ? location.data : 0
       Measured::Length.new(km, "km")
     end
 
     def effective_date
-      result.dig("effective_date")
+      result["effective_date"]
     end
 
     def expiration_date
-      result.dig("expiration_date")
+      result["expiration_date"]
     end
 
     def truck_type
@@ -121,7 +122,7 @@ module Pricings
       original.hub_id
     end
 
-    alias_method :km, :distance
+    alias km distance
 
     private
 

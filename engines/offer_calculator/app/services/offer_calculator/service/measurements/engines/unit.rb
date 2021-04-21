@@ -22,6 +22,8 @@ module OfferCalculator
             [cargo_unit]
           end
 
+          alias applicable_units cargo_units
+
           def volumetric_weight
             Measured::Weight.new(cbm_ratio || 0, "kg").scale(total_volume.value)
           end

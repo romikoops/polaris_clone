@@ -115,6 +115,7 @@ group :default, :engines do
   end
 end
 
+gem "cargo_packer", path: "gems/cargo_packer"
 gem "measured-itsmycargo", path: "gems/measured-itsmycargo"
 gem "money_cache", path: "gems/money_cache"
 gem "shared-runtime", path: "gems/shared-runtime"

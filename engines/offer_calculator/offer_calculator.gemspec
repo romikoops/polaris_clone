@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "cargo_packer"
   spec.add_dependency "shared-runtime"
   spec.add_dependency "money_cache"
 
