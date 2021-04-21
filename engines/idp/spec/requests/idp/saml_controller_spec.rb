@@ -18,7 +18,7 @@ RSpec.describe IDP::SamlController, type: :request do
     OrganizationManager::GroupsService.new(target: user, organization: organization).fetch
   end
   let(:one_login) { instance_double("OneLogin::RubySaml::Response", is_valid?: true) }
-
+  let(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
   let(:success_event) { event_store.read.stream("Organization$#{organization.id}").of_type([IDP::SamlSuccessfulLogin]).first }
 
   before do
@@ -62,6 +62,20 @@ RSpec.describe IDP::SamlController, type: :request do
       allow(one_login).to receive(:attributes).and_return(saml_attributes)
     end
 
+    shared_examples_for "SAML consume success" do
+      it "returns an http status of success", :aggregate_failures do
+        expect(response.status).to eq(302)
+        expect(response_params.keys).to match_array(expected_keys)
+        expect(response_params["organizationId"]).to eq(organization.id.to_s)
+
+        expect(created_user).to be_present
+      end
+
+      it "publishes event" do
+        expect(success_event).to be_present
+      end
+    end
+
     context "with successful login" do
       it "returns an http status of success" do
         post "/saml/#{organization.id}/consume", params: { SAMLResponse: saml_response }
@@ -82,36 +96,20 @@ RSpec.describe IDP::SamlController, type: :request do
     end
 
     context "with successful login and group param present" do
-      let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
       let(:attributes) { { "firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "groups" => [group.name] } }
 
       before do
         post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
       end
 
-      it "returns an http status of success" do
-        aggregate_failures do
-          expect(response.status).to eq(302)
-          expect(response_params.keys).to match_array(expected_keys)
-          expect(response_params["organizationId"]).to eq(organization.id.to_s)
-
-          expect(created_user).to be_present
-        end
-      end
+      it_behaves_like "SAML consume success"
 
       it "attaches the user to the target group" do
-        aggregate_failures do
-          expect(user_groups).to match_array([group, default_group])
-        end
-      end
-
-      it "publishes event" do
-        expect(success_event).to be_present
+        expect(user_groups).to match_array([group, default_group])
       end
     end
 
     context "with successful login and group param and existing present" do
-      let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
       let!(:second_group) { FactoryBot.create(:groups_group, name: "Test Group 2", organization: organization) }
       let!(:third_group) { FactoryBot.create(:groups_group, name: "Test Group 3", organization: organization) }
       let(:attributes) do
@@ -128,22 +126,10 @@ RSpec.describe IDP::SamlController, type: :request do
         post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
       end
 
-      it "returns an http status of success" do
-        aggregate_failures do
-          expect(response.status).to eq(302)
-          expect(response_params.keys).to match_array(expected_keys)
-          expect(response_params["organizationId"]).to eq(organization.id.to_s)
-
-          expect(created_user).to be_present
-        end
-      end
+      it_behaves_like "SAML consume success"
 
       it "attaches the user to the target group" do
         expect(user_groups).to match_array([group, second_group, default_group])
-      end
-
-      it "publishes event" do
-        expect(success_event).to be_present
       end
     end
 
@@ -154,7 +140,7 @@ RSpec.describe IDP::SamlController, type: :request do
         Companies::Membership.find_by(member: created_user, company: company)
       end
       let(:company) do
-        Companies::Company.find_by(external_id: external_id, organization: organization)
+        Companies::Company.find_by(name: saml_attributes[:companyName], organization: organization)
       end
       let(:address_params) do
         { "address_1" => ["add_1"], "address_2" => ["add_2"], "address_3" => ["add_3"],
@@ -182,6 +168,7 @@ RSpec.describe IDP::SamlController, type: :request do
         before do
           FactoryBot.create(:companies_company,
             external_id: external_id,
+            name: saml_attributes[:companyName],
             organization: organization)
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
         end
@@ -241,7 +228,7 @@ RSpec.describe IDP::SamlController, type: :request do
       end
 
       context "when saml metadata isn't found" do
-        let!(:saml_metadatum) { nil }
+        let(:saml_metadatum) { nil }
 
         it "redirects to error url with error param" do
           post "/saml/#{organization.id}/consume", params: { SAMLResponse: saml_response }
@@ -254,15 +241,13 @@ RSpec.describe IDP::SamlController, type: :request do
       end
 
       context "with invalid saml response" do
-        let!(:one_login) { instance_double("OneLogin::RubySaml::Response", is_valid?: false, errors: ["invalid response"]) }
+        let(:one_login) { instance_double("OneLogin::RubySaml::Response", is_valid?: false, errors: ["invalid response"]) }
 
-        it "redirects to error url with error param" do
+        it "redirects to error url with error param", :aggregate_failures do
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
 
-          uri = URI(response.location)
-
           expect(response.location).to start_with("https://test.host/login/saml/error")
-          expect(Rack::Utils.parse_nested_query(uri.query)).to eq({ "errors" => ["invalid response"] })
+          expect(Rack::Utils.parse_nested_query(URI(response.location).query)).to eq({ "errors" => ["invalid response"] })
         end
 
         it "publishes event" do
@@ -281,22 +266,15 @@ RSpec.describe IDP::SamlController, type: :request do
       end
 
       context "when email is blank" do
-        let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
-        let(:attributes) { { "firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "groups" => [group.name] } }
-
         before do
           allow(one_login).to receive(:name_id).and_return(nil)
         end
 
-        it "does not create a user" do
+        it "does not create a user", :aggregate_failures do
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
 
-          uri = URI(response.location)
-
-          aggregate_failures do
-            expect(response.location).to start_with("https://test.host/login/saml/error")
-            expect(Rack::Utils.parse_nested_query(uri.query)).to eq({ "errors" => ["Email can't be blank", "Email is invalid"] })
-          end
+          expect(response.location).to start_with("https://test.host/login/saml/error")
+          expect(Rack::Utils.parse_nested_query(URI(response.location).query)).to eq({ "errors" => ["Email can't be blank", "Email is invalid"] })
         end
 
         it "publishes event" do

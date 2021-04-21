@@ -2,8 +2,9 @@
 
 module IDP
   class SamlDataBuilder
-
     attr_reader :saml_response, :organization_id, :data, :errors, :user
+
+    delegate :company_attributes, :address_attributes, to: :saml_response
 
     def initialize(saml_response:, organization_id:)
       @saml_response = saml_response
@@ -21,8 +22,8 @@ module IDP
 
       @data = token.merge(userId: user.id, organizationId: organization_id)
       self
-    rescue ActiveRecord::RecordInvalid => invalid
-      @errors = invalid.record.errors.full_messages
+    rescue ActiveRecord::RecordInvalid => e
+      @errors = e.record.errors.full_messages
       self
     end
 
@@ -37,28 +38,18 @@ module IDP
 
       Groups::Membership.where(member: user).where.not(group: groups)&.destroy_all
       groups.each do |group|
-        membership = Groups::Membership.find_or_create_by!(member: user, group: group)
+        Groups::Membership.find_or_create_by!(member: user, group: group)
       end
     end
 
-
     def attach_to_company
-      company_attributes = saml_response.company_attributes
-
-      id = company_attributes[:external_id]
-      name = company_attributes[:name]
-      return if id.blank?
-
-      company = Companies::Company.find_or_initialize_by(external_id: id, organization: organization)
-      company.name = name
-      company.address = address
-      company.save!
+      return if company.nil?
 
       Companies::Membership.find_or_create_by!(member: user, company: company)
     end
 
     def set_user
-      @user ||= Users::Client.find_or_initialize_by(
+      Users::Client.find_or_initialize_by(
         organization: organization,
         email: saml_response.email || saml_response.name_id
       ).tap do |saml_user|
@@ -113,6 +104,14 @@ module IDP
 
     def organization
       @organization ||= Organizations::Organization.find(organization_id)
+    end
+
+    def company
+      Companies::Company.create_with(name: company_attributes[:name])
+        .find_or_create_by(external_id: company_attributes[:external_id], organization: organization).tap do |comp|
+        comp.address = address
+        comp.save!
+      end
     end
   end
 end

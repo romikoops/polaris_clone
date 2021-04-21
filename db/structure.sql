@@ -7250,13 +7250,6 @@ CREATE INDEX index_companies_companies_on_organization_id ON public.companies_co
 
 
 --
--- Name: index_companies_companies_on_organization_id_and_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_companies_on_organization_id_and_name ON public.companies_companies USING btree (organization_id, name);
-
-
---
 -- Name: index_companies_companies_on_tenants_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12189,6 +12182,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210317084132'),
 ('20210319101738'),
 ('20210326102626'),
-('20210412145911');
+('20210412145911'),
+('20210420120815');
 
 

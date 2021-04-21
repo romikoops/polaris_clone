@@ -66,5 +66,8 @@ Layout/ParameterAlignment:
 RSpec/MultipleMemoizedHelpers:
   Max: 10
 
+RSpec/NestedGroups:
+  Max: 4
+
 Style/Documentation:
   Enabled: false

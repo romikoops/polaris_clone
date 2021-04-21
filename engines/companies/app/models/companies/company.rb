@@ -10,14 +10,13 @@ module Companies
     has_one :country, through: :address, class_name: "Legacy::Country"
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
 
-    validates :name, uniqueness: {scope: :organization_id}
-    validates :external_id, uniqueness: {scope: [:name, :organization_id]}, allow_nil: true
+    validates :external_id, uniqueness: { scope: %i[name organization_id] }, allow_nil: true
 
     pg_search_scope :name_search, against: %i[name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     pg_search_scope :vat_search, against: %i[vat_number], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     pg_search_scope :address_search,
       against: %i[name],
@@ -25,7 +24,7 @@ module Companies
         address: %i[geocoded_address]
       },
       using: {
-        tsearch: {prefix: true}
+        tsearch: { prefix: true }
       }
     pg_search_scope :country_search,
       against: %i[name],
@@ -33,7 +32,7 @@ module Companies
         country: %i[name code]
       },
       using: {
-        tsearch: {prefix: true}
+        tsearch: { prefix: true }
       }
 
     scope :ordered_by, ->(col, desc = false) { reorder(col => desc.to_s == "true" ? :desc : :asc) }
@@ -59,10 +58,9 @@ end
 #
 # Indexes
 #
-#  index_companies_companies_on_address_id                (address_id)
-#  index_companies_companies_on_organization_id           (organization_id)
-#  index_companies_companies_on_organization_id_and_name  (organization_id,name) UNIQUE
-#  index_companies_companies_on_tenants_company_id        (tenants_company_id)
+#  index_companies_companies_on_address_id          (address_id)
+#  index_companies_companies_on_organization_id     (organization_id)
+#  index_companies_companies_on_tenants_company_id  (tenants_company_id)
 #
 # Foreign Keys
 #
