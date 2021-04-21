@@ -182,7 +182,7 @@ module ExcelDataServices
 
       def group_by_static_headers(data_with_dynamic_headers)
         groups_hsh = data_with_dynamic_headers.group_by { |el|
-          el.values_at(*HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES)
+          el.values_at(*HEADER_COLLECTION::PRICING_DYNAMIC_FEE_COLS_NO_RANGES.keys)
         }
 
         groups_hsh.values
