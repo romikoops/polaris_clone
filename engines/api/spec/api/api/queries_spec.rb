@@ -190,10 +190,20 @@ RSpec.describe "Queries", type: :request, swagger: true do
                 in: :query,
                 type: :string,
                 description: "The defining whether the sorting is ascending or descending"
+      parameter name: :page,
+                in: :query,
+                type: :string,
+                description: "The page of result requested"
+      parameter name: :per_page,
+                in: :query,
+                type: :string,
+                description: "The number of results requested per page"
 
       response "200", "successful operation" do
         let(:sort_by) { "created_at" }
         let(:direction) { "desc" }
+        let(:page) { "1" }
+        let(:per_page) { "10" }
 
         run_test!
       end

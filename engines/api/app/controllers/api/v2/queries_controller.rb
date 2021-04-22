@@ -117,7 +117,7 @@ module Api
       end
 
       def index_params
-        params.permit(:sort_by, :direction)
+        params.permit(:sort_by, :direction, :page, :per_page)
       end
     end
   end

@@ -6,6 +6,7 @@ RSpec/EmptyExampleGroup:
 
 RSpec/MultipleMemoizedHelpers:
   Exclude:
+  - 'engines/api/spec/api/api/*_spec.rb'
   - 'engines/api/spec/controllers/api/v2/queries_controller_spec.rb'
   - 'engines/api/spec/services/api/client_creation_service_spec.rb'
   - 'engines/api/spec/decorators/api/v1/legacy_cargo_unit_decorator_spec.rb'

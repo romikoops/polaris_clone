@@ -213,6 +213,18 @@ module Api
           expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
         end
       end
+
+      context "when paginating" do
+        it "returns the Queries sorted by cargo_ready_date desc", :aggregate_failures do
+          get :index, params: params.merge(page: 1, per_page: 1), as: :json
+          expect(response_data.pluck("id")).to eq([query_a.id])
+        end
+
+        it "returns the Queries sorted by cargo_ready_date asc", :aggregate_failures do
+          get :index, params: params.merge(page: 2, per_page: 1), as: :json
+          expect(response_data.pluck("id")).to eq([query_b.id])
+        end
+      end
     end
   end
 end
