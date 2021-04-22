@@ -47,7 +47,6 @@ module Api
       def filtered_queries
         queries = Api::Query.joins(:result_sets).where(
           client: current_user,
-          billable: true,
           organization_id: current_organization.id,
           journey_result_sets: { status: "completed" }
         )

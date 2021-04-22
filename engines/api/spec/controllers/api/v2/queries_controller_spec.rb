@@ -153,6 +153,7 @@ module Api
           cargo_ready_date: 2.days.from_now,
           created_at: 5.hours.ago,
           client: user,
+          billable: false,
           result_sets: [FactoryBot.build(:journey_result_set)])
       end
 
