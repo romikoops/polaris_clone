@@ -19,13 +19,14 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Metadata 
       let(:expected_result) do
         {
           "load_meterage_hard_limit" => false,
-          "load_meterage_stacking" => false,
+          "load_meterage_ratio" => 1500,
+          "load_meterage_stackable_type" => "area",
+          "load_meterage_non_stackable_type" => "ldm",
+          "load_meterage_stackable_limit" => 8.0,
+          "load_meterage_non_stackable_limit" => 5.0,
           "identifier_modifier" => false,
           "city" => "Hamburg",
           "currency" => "EUR",
-          "load_meterage_ratio" => nil,
-          "load_meterage_limit" => nil,
-          "load_meterage_area" => nil,
           "cbm_ratio" => 250.0,
           "scale" => "kg",
           "rate_basis" => "PER_SHIPMENT",

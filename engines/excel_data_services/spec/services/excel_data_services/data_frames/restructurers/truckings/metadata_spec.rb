@@ -9,13 +9,14 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Metadata
   let(:sheet_names) { ["Rates"] }
   let(:input_rows) do
     modifiers.map do |modifier|
-      { "load_meterage_hard_limit" => 0,
-        "load_meterage_stacking" => 0,
+      { "load_meterage_hard_limit" => false,
         "identifier_modifier" => 0,
         "currency" => "EUR",
-        "load_meterage_ratio" => nil,
-        "load_meterage_limit" => nil,
-        "load_meterage_area" => nil,
+        "load_meterage_ratio" => 1500,
+        "load_meterage_stackable_type" => "area",
+        "load_meterage_non_stackable_type" => "ldm",
+        "load_meterage_stackable_limit" => 3.5,
+        "load_meterage_non_stackable_limit" => 2.5,
         "cbm_ratio" => 333.0,
         "scale" => "cbm_kg",
         "rate_basis" => "PER_CBM_KG",
@@ -51,7 +52,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Metadata
        "tenant_vehicle_id" => 1,
        "truck_type" => "default",
        "sheet_name" => "Rates",
-       "load_meterage" => { "load_meterage_ratio" => nil, "load_meterage_limit" => nil, "load_meterage_area" => nil },
+       "load_meterage" => { "ratio" => 1500, "stackable_type" => "area", "non_stackable_type" => "ldm", "hard_limit" => false, "stackable_limit" => 3.5, "non_stackable_limit" => 2.5 },
        "identifier_modifier" => Float::NAN,
        "modifier" => "cbm_kg",
        "validity" => "[#{Time.zone.today}, #{Time.zone.today + 1.year})" }]
@@ -68,7 +69,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Metadata
       )
     end
 
-    it "returns a single metadata row for a complex weight scale (CBM_KG) sheet", :aggregate_failures do
+    it "returns a single metadata row for a complex weight scale (CBM_KG) sheet" do
       expect(result.to_a.first.inspect).to match(expected_result.first.inspect)
     end
   end

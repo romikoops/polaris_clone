@@ -6,8 +6,11 @@ FactoryBot.define do
       city { "Hamburg" }
       currency { "EUR" }
       load_meterage_ratio { 1500 }
-      load_meterage_limit { 2.4 }
-      load_meterage_area { 2.5 }
+      load_meterage_stackable_type { "area" }
+      load_meterage_non_stackable_type { "ldm" }
+      load_meterage_stackable_limit { 5 }
+      load_meterage_non_stackable_limit { 2.5 }
+      load_meterage_hard_limit { false }
       cbm_ratio { 250 }
       scale { "kg" }
       rate_basis { "PER_KG" }
@@ -32,8 +35,11 @@ FactoryBot.define do
         "city" => city,
         "currency" => currency,
         "load_meterage_ratio" => load_meterage_ratio,
-        "load_meterage_limit" => load_meterage_limit,
-        "load_meterage_area" => load_meterage_area,
+        "load_meterage_non_stackable_type" => load_meterage_non_stackable_type,
+        "load_meterage_stackable_type" => load_meterage_stackable_type,
+        "load_meterage_stackable_limit" => load_meterage_stackable_limit,
+        "load_meterage_non_stackable_limit" => load_meterage_non_stackable_limit,
+        "load_meterage_hard_limit" => load_meterage_hard_limit,
         "cbm_ratio" => cbm_ratio,
         "scale" => scale,
         "rate_basis" => rate_basis,

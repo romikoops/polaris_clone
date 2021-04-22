@@ -7,12 +7,11 @@ RSpec.describe ExcelDataServices::Schemas::Targets::Relative do
   let(:source) { FactoryBot.build(:schemas_sheets_trucking_rates, file: xlsx, sheet_name: "Sheet3") }
   let(:section) { "metadata_data" }
   let(:axis) { "cols" }
+  let(:row_target) { "1" }
   let(:columns) { described_class.new(source: source, section: section, axis: axis).perform }
 
   describe ".valid?" do
-    let(:expected_result) do
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map { |num| [num] }
-    end
+    let(:expected_result) { 1.upto(xlsx.row(1).compact.count).map { |num| [num] } }
 
     it "returns successfully" do
       expect(columns).to eq(expected_result)

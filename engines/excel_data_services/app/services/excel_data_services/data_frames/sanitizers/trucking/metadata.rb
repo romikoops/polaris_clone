@@ -10,10 +10,11 @@ module ExcelDataServices
               "city" => "string",
               "currency" => "upcase",
               "load_meterage_ratio" => "decimal",
-              "load_meterage_limit" => "decimal",
-              "load_meterage_area" => "decimal",
+              "load_meterage_stackable_limit" => "decimal",
+              "load_meterage_non_stackable_limit" => "decimal",
+              "load_meterage_stackable_type" => "downcase",
+              "load_meterage_non_stackable_type" => "downcase",
               "load_meterage_hard_limit" => "boolean",
-              "load_meterage_stacking" => "boolean",
               "cbm_ratio" => "decimal",
               "scale" => "downcase",
               "rate_basis" => "upcase",
@@ -43,7 +44,6 @@ module ExcelDataServices
               "effective_date" => today,
               "expiration_date" => today + 1.year,
               "load_meterage_hard_limit" => false,
-              "load_meterage_stacking" => false,
               "cbm_ratio" => 0
             }
           end

@@ -7,8 +7,11 @@ RSpec.shared_context "with trucking_metadata_sheet" do
   let(:city) { "Hamburg" }
   let(:currency) { "EUR" }
   let(:load_meterage_ratio) { 1500 }
-  let(:load_meterage_limit) { 2.4 }
-  let(:load_meterage_area) { 2.5 }
+  let(:load_meterage_stackable_type) { "area" }
+  let(:load_meterage_non_stackable_type) { "ldm" }
+  let(:load_meterage_stackable_limit) { 5 }
+  let(:load_meterage_non_stackable_limit) { 2.5 }
+  let(:load_meterage_hard_limit) { false }
   let(:cbm_ratio) { 250 }
   let(:scale) { "kg" }
   let(:rate_basis) { "PER_KG" }
@@ -26,8 +29,11 @@ RSpec.shared_context "with trucking_metadata_sheet" do
       city: city,
       currency: currency,
       load_meterage_ratio: load_meterage_ratio,
-      load_meterage_limit: load_meterage_limit,
-      load_meterage_area: load_meterage_area,
+      load_meterage_stackable_type: load_meterage_stackable_type,
+      load_meterage_non_stackable_type: load_meterage_non_stackable_type,
+      load_meterage_stackable_limit: load_meterage_stackable_limit,
+      load_meterage_non_stackable_limit: load_meterage_non_stackable_limit,
+      load_meterage_hard_limit: load_meterage_hard_limit,
       cbm_ratio: cbm_ratio,
       scale: scale,
       rate_basis: rate_basis,

@@ -8,13 +8,14 @@ module ExcelDataServices
           def self.column_types
             {
               "load_meterage_hard_limit" => :bool,
-              "load_meterage_stacking" => :bool,
+              "load_meterage_stackable_type" => :object,
+              "load_meterage_non_stackable_type" => :object,
               "identifier_modifier" => :object,
               "city" => :object,
               "currency" => :object,
               "load_meterage_ratio" => :object,
-              "load_meterage_limit" => :object,
-              "load_meterage_area" => :object,
+              "load_meterage_stackable_limit" => :object,
+              "load_meterage_non_stackable_limit" => :object,
               "cbm_ratio" => :float,
               "scale" => :object,
               "rate_basis" => :object,
