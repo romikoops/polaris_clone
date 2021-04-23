@@ -23,6 +23,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Zones do
           "country_code" => "DE",
           "zone" => "1.0",
           "zone_row" => 2,
+          "sheet_name" => "Zones",
           "identifier" => "zipcode",
           "query_method" => "zipcode"
         }

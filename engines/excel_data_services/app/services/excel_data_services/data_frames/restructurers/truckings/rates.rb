@@ -5,20 +5,26 @@ module ExcelDataServices
     module Restructurers
       module Truckings
         class Rates < ExcelDataServices::DataFrames::Restructurers::Base
+          GROUPING_KEYS = %w[cargo_class carriage truck_type zone].freeze
           def restructured_data
             groupings.map do |grouping|
               build_rate_from_row(
-                sheet_name: grouping["sheet_name"],
+                cargo_class: grouping["cargo_class"],
+                carriage: grouping["carriage"],
+                truck_type: grouping["truck_type"],
                 zone: grouping["zone"]
               )
             end
           end
 
-          def build_rate_from_row(sheet_name:, zone:)
+          def build_rate_from_row(cargo_class:, carriage:, truck_type:, zone:)
             results = build_modifier_sections_from_sub_frame(
-              sub_frame: sub_frames_by_sheet_and_zone(sheet_name: sheet_name, zone: zone)
+              sub_frame: sub_frames(
+                cargo_class: cargo_class, carriage: carriage, truck_type: truck_type, zone: zone
+              )
             )
-            { "rates" => results, "sheet_name" => sheet_name, "zone" => zone }
+
+            { "rates" => results, "cargo_class" => cargo_class, "carriage" => carriage, "truck_type" => truck_type, "zone" => zone }
           end
 
           def build_modifier_sections_from_sub_frame(sub_frame:)
@@ -41,8 +47,8 @@ module ExcelDataServices
             }.merge(min_max).merge(min_value_attributes(row: data))
           end
 
-          def sub_frames_by_sheet_and_zone(sheet_name:, zone:)
-            frame[(frame["sheet_name"] == sheet_name) & (frame["zone"] == zone)]
+          def sub_frames(cargo_class:, carriage:, truck_type:, zone:)
+            frame[(frame["cargo_class"] == cargo_class) & (frame["carriage"] == carriage) & (frame["truck_type"] == truck_type) & (frame["zone"] == zone)]
           end
 
           def modifier_results(sub_frame:, modifier:)
@@ -50,7 +56,7 @@ module ExcelDataServices
           end
 
           def groupings
-            @groupings ||= frame[%w[sheet_name zone]].to_a.uniq
+            @groupings ||= frame[GROUPING_KEYS].to_a.uniq
           end
 
           def min_value_attributes(row:)

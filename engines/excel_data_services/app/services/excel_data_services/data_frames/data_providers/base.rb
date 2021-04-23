@@ -16,7 +16,9 @@ module ExcelDataServices
         end
 
         def frame
-          @frame ||= Rover::DataFrame.new(data, types: self.class.column_types)
+          @frame ||= Rover::DataFrame.new(data, types: self.class.column_types).tap do |frame|
+            frame["sheet_name"] = sheet_name
+          end
         end
 
         private
@@ -39,27 +41,27 @@ module ExcelDataServices
 
         def data
           columns = cell_data.group_by(&:col)
-          basic_structure.keys.each_with_object(Hash.new { |h, k| h[k] = [] }) { |header, structure|
+          basic_structure.keys.each_with_object(Hash.new { |h, k| h[k] = [] }) do |header, structure|
             col = col_from_header(header: header)
             if columns[col].blank?
               structure[header] << parse_cell_value(header: header)
             else
-              columns[col].sort(&:row).each do |cell|
+              columns[col].sort_by(&:row).each do |cell|
                 structure[header] << parse_cell_value(cell: cell, header: header)
               end
             end
             structure
-          }.merge("sheet_name" => [sheet_name])
+          end
         end
 
         def basic_structure
-          self.class.column_types.keys.each_with_object({}) { |header, result|
+          self.class.column_types.keys.each_with_object({}) do |header, result|
             result[header] = []
-          }
+          end
         end
 
         def extract_from_schema(section:)
-          state.schema.content_positions(section: section).to_a.map { |position|
+          state.schema.content_positions(section: section).to_a.map do |position|
             value = cell_value(position: position)
             next unless value_defined?(value: value)
 
@@ -70,7 +72,7 @@ module ExcelDataServices
               label: label,
               sheet_name: sheet_name
             )
-          }.compact
+          end.compact
         end
 
         def cell_value(position:)

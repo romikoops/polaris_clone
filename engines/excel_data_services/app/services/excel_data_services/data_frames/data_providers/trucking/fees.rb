@@ -23,7 +23,9 @@ module ExcelDataServices
               "container" => :object,
               "minimum" => :object,
               "wm" => :object,
-              "percentage" => :object
+              "percentage" => :object,
+              "range_min" => :object,
+              "range_max" => :object
             }
           end
 
@@ -31,6 +33,7 @@ module ExcelDataServices
 
           def data
             return {} if cell_data.empty?
+
             super
           end
 

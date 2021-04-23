@@ -30,7 +30,10 @@ module ExcelDataServices
               "identifier_modifier" => "string",
               "group_id" => "string",
               "organization_id" => "string",
-              "hub_id" => "integer"
+              "hub_id" => "integer",
+              "load_meterage_height" => "decimal",
+              "load_meterage_area" => "decimal",
+              "load_meterage_limit" => "decimal"
             }
           end
 

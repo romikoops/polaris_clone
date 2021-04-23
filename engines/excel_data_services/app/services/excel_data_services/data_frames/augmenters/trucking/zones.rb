@@ -25,14 +25,14 @@ module ExcelDataServices
             combined = postal_code_locations
               .concat(distance_locations)
               .concat(locode_locations)
-              .inner_join(countries, on: {"country_code" => "code"})
-            combined[["data", "query", "country_id"]].to_a
+              .inner_join(countries, on: { "country_code" => "code" })
+            combined[%w[data query country_id]].to_a
           end
 
           def postal_code_locations
             Rover::DataFrame.new(
               postal_code_location_data,
-              types: {"query" => :object, "data" => :object, "country_id" => :object}
+              types: { "query" => :object, "data" => :object, "country_id" => :object }
             )
           end
 
@@ -42,7 +42,7 @@ module ExcelDataServices
               locations["data"] = locations.delete("primary")
               locations["query"] = "postal_code"
 
-              memo.concat(locations[["data", "query", "country_code"]])
+              memo.concat(locations[%w[data query country_code]])
             end
           end
 
@@ -57,7 +57,7 @@ module ExcelDataServices
               if validated_country_codes.include?(country_code)
                 country_rows = country_rows.inner_join(
                   validated_country_postal_codes,
-                  on: {"primary" => "postal_code", "country_code" => "country_code"}
+                  on: { "primary" => "postal_code", "country_code" => "country_code" }
                 )
               end
               memo.concat(country_rows)
@@ -69,7 +69,7 @@ module ExcelDataServices
             locations["data"] = locations.delete("primary")
             locations["query"] = "distance"
 
-            locations[["data", "query", "country_code"]]
+            locations[%w[data query country_code]]
           end
 
           def locode_locations
@@ -77,23 +77,23 @@ module ExcelDataServices
             locations["data"] = locations.delete("primary")
             locations["query"] = "location"
 
-            locations[["data", "query", "country_code"]]
+            locations[%w[data query country_code]]
           end
 
           def locode_collection
             @locode_collection ||= Rover::DataFrame.new(
               locode_data_for_collection,
-              types: {"primary" => :object, "country_code" => :object, "location_id" => :object}
+              types: { "primary" => :object, "country_code" => :object, "location_id" => :object }
             )
           end
 
           def locode_data_for_collection
-            locode_rows[%w[primary country_code]].to_a.each_with_object(initial_state) { |row, result|
-                result["primary"] << row["primary"]
-                result["country_code"] << row["country_code"]
-                result["location_id"] << ::Locations::Searchers::Locode.id(data: {locode: row["primary"]})
-                result
-            }
+            locode_rows[%w[primary country_code]].to_a.each_with_object(initial_state) do |row, result|
+              result["primary"] << row["primary"]
+              result["country_code"] << row["country_code"]
+              result["location_id"] << ::Locations::Searchers::Locode.id(data: { locode: row["primary"] })
+              result
+            end
           end
 
           def initial_state

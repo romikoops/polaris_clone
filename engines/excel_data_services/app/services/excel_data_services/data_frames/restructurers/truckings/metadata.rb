@@ -13,33 +13,42 @@ module ExcelDataServices
             load_meterage_stackable_limit
             load_meterage_non_stackable_limit
           ].freeze
+          GROUPING_KEYS = %w[cargo_class carriage truck_type].freeze
 
           def restructured_data
-            groupings.flat_map do |sheet_name|
-              rows = frame[frame["sheet_name"] == sheet_name][default_keys].to_a.uniq
-              rows.map do |row|
-                build_trucking_from_row(row: row, sheet_name: sheet_name)
-              end
+            groupings.flat_map do |grouping|
+              selected_rows(cargo_class: grouping["cargo_class"], carriage: grouping["carriage"], truck_type: grouping["truck_type"])
+                .map { |row| build_trucking_from_row(row: row) }.uniq
             end
           end
 
-          def build_trucking_from_row(row:, sheet_name:)
-            row["load_meterage"] = load_meterage(sheet_name: sheet_name)
+          def build_trucking_from_row(row:)
+            row["load_meterage"] = load_meterage(sheet_name: row["sheet_name"])
             row["identifier_modifier"] = row.delete("query_method")
             row["modifier"] = row.delete("scale")
             row["validity"] = row_validity(row: row)
+            row.delete("sheet_name")
             row
           end
 
           def load_meterage(sheet_name:)
-            frame[frame["sheet_name"] == sheet_name].to_a.first
-              .slice(*LOAD_METERAGE_KEYS)
+            row = frame[frame["sheet_name"] == sheet_name].to_a.first
+            row.slice(*LOAD_METERAGE_KEYS)
               .transform_keys { |key| key.delete_prefix("load_meterage_") }
-              .tap { |datum| datum["hard_limit"] = datum["hard_limit"].positive? }
+              .tap do |datum|
+                legacy_limit_type = %w[area height].find { |type| row["load_meterage_#{type}"].present? }
+                datum["hard_limit"] = datum["hard_limit"].positive?
+                datum["stackable_type"] ||= legacy_limit_type
+                datum["stackable_limit"] ||= row["load_meterage_#{legacy_limit_type}"]
+              end
           end
 
           def groupings
-            @groupings ||= frame["sheet_name"].uniq.to_a
+            @groupings ||= frame[GROUPING_KEYS].to_a.uniq
+          end
+
+          def selected_rows(cargo_class:, carriage:, truck_type:)
+            frame[(frame["cargo_class"] == cargo_class) & (frame["carriage"] == carriage) & (frame["truck_type"] == truck_type)][default_keys].to_a.uniq
           end
 
           def default_keys

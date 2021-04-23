@@ -35,6 +35,9 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Rates do
         "load_meterage_area" => nil,
         "cbm_ratio" => 200.0,
         "scale" => "kg",
+        "cargo_class" => "lcl",
+        "carriage" => sheet_names.first == sheet_name ? "pre" : "on",
+        "truck_type" => "default",
         "rate_basis" => "PER_SHIPMENT",
         "base" => 1.0 }
     end
@@ -62,7 +65,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Rates do
 
     context "when it is a single sheet" do
       it "returns the frame with the rate data", :aggregate_failures do
-        expect(result.keys).to eq(%w[rates sheet_name zone])
+        expect(result.keys).to eq(%w[rates cargo_class carriage truck_type zone])
         expect(restructured_rates.keys).to eq(["kg"])
         expect(restructured_rates.dig("kg", 0).stringify_keys).to match(expected_result)
       end
@@ -71,9 +74,8 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Rates do
     context "when there are multiple sheets" do
       let(:sheet_names) { %w[Import Export] }
 
-      it "returns the frame with the rate data", :aggregate_failures do
+      it "returns the frame with the rate data" do
         expect(result.count).to eq(2)
-        expect(result["sheet_name"].uniq).to match_array(sheet_names)
       end
     end
   end

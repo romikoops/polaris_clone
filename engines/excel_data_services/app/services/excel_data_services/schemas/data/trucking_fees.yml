@@ -1,20 +1,36 @@
 headers:
   rows: '1:1'
-  cols: 'A:Q'
+  cols: 'A:S'
   required: true
-  content: 
+  content:
+    - "FEE"
+    - "MOT"
     - "FEE_CODE"
     - "TRUCK_TYPE"
     - "DIRECTION"
+    - "CURRENCY"
+    - "RATE_BASIS"
+    - "TON"
+    - "CBM"
+    - "KG"
+    - "ITEM"
+    - "SHIPMENT"
+    - "BILL"
+    - "CONTAINER"
+    - "MINIMUM"
+    - "WM"
+    - "RANGE_MIN"
+    - "RANGE_MAX"
+    - "PERCENTAGE"
 fee_row:
   rows: '2:?'
   cols: 'A:A'
   required: false
 fee_data:
   rows: '2:fee_row.last_row'
-  cols: 'B:Q'
+  cols: 'B:S'
   required: false
 data:
   rows: '2:fee_row.last_row'
-  cols: 'A:Q'
+  cols: 'A:S'
   required: false

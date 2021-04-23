@@ -23,7 +23,9 @@ module ExcelDataServices
               "container" => "decimal",
               "minimum" => "decimal",
               "wm" => "decimal",
-              "percentage" => "decimal"
+              "percentage" => "decimal",
+              "range_min" => "decimal",
+              "range_max" => "decimal"
             }
           end
         end

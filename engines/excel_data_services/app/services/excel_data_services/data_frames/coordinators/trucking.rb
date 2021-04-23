@@ -11,13 +11,13 @@ module ExcelDataServices
         def complete_truckings
           @complete_truckings ||= rates_locations_and_metadata
             .inner_join(default_fees_frame, on: "hub_id")
-            .left_join(fees.frame, on: {"truck_type" => "truck_type", "carriage" => "carriage"})
+            .left_join(fees.frame, on: { "truck_type" => "truck_type", "carriage" => "carriage" })
         end
 
         def rates_locations_and_metadata
           @rates_locations_and_metadata ||= metadata.frame
-            .inner_join(rates.frame, on: {"sheet_name" => "sheet_name"})
-            .inner_join(locations.frame, on: {"zone" => "zone"})
+            .inner_join(rates.frame, on: { "cargo_class" => "cargo_class", "carriage" => "carriage", "truck_type" => "truck_type" })
+            .inner_join(locations.frame, on: { "zone" => "zone" })
         end
 
         def combinator_errors
@@ -64,7 +64,7 @@ module ExcelDataServices
         end
 
         def default_fees_frame
-          Rover::DataFrame.new([{"fees" => {}, "hub_id" => state.hub_id}])
+          Rover::DataFrame.new([{ "fees" => {}, "hub_id" => state.hub_id }])
         end
       end
     end

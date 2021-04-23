@@ -34,12 +34,13 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Fees do
           "minimum" => nil,
           "wm" => nil,
           "percentage" => nil,
+          "range_max" => nil,
+          "range_min" => nil,
           "sheet_name" => "Fees" }
       end
 
-      it "returns the frame with the fee data", :aggregate_failures do
-        expect(result.frame.count).to eq(1)
-        expect(result.frame.to_a.first).to eq(expected_result)
+      it "returns the frame with the fee data" do
+        expect(result.frame.to_a).to eq([expected_result])
       end
     end
   end
