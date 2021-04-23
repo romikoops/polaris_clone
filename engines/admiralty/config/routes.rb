@@ -6,6 +6,7 @@ Trestle::Engine.routes.draw do
   resources :charge_categories, only: %i[new edit], module: "charge_categories_admin", controller: "admin"
   resources :domains, only: %i[new edit], module: "domains_admin", controller: "admin"
   resources :max_dimensions_bundles, only: %i[new edit], module: "max_dimensions_bundles_admin", controller: "admin"
+  resources :margins, only: %i[new edit], module: "margins_admin", controller: "admin"
   resources :memberships, only: %i[new edit], module: "memberships_admin", controller: "admin"
   resources :organizations, only: %i[new edit], module: "organizations_admin", controller: "admin"
   resources :queries, only: %i[new edit], module: "queries_admin", controller: "admin"

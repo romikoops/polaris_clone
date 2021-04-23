@@ -113,5 +113,17 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
       end
       concat admin_link_to("New Charge Category", admin: :charge_categories, action: :new, params: { charge_category: { organization_id: organization.id } }, class: "btn btn-success")
     end
+
+    tab :margins do
+      fields_for :margins do
+        row do
+          col(sm: 3) { select :margin_type,  Pricings::Margin.margin_types.keys }
+          col(sm: 3) { select :default_for,  ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil] }
+          col(sm: 3) { select :operator, ["+", "%"] }
+          col(sm: 3) { number_field :value, label: "Value", help: "The margin value to be applied to the rates" }
+        end
+      end
+      concat admin_link_to("New Margin", admin: :margins, action: :new, params: { margin: { organization_id: organization.id } }, class: "btn btn-success")
+    end
   end
 end

@@ -5,13 +5,34 @@ module Admiralty
     has_many :charge_categories, -> { where code: %w[trucking_pre export cargo import trucking_on] }, class_name: "Legacy::ChargeCategory"
     accepts_nested_attributes_for :charge_categories
 
-    after_initialize :initialize_charge_categories
+    has_many :margins, -> { where "organization_id = applicable_id" }, class_name: "Pricings::Margin"
+    accepts_nested_attributes_for :margins
+
+    after_initialize :initialize_charge_categories, :initialize_margins
 
     def initialize_charge_categories
       return unless charge_categories.empty?
 
       %w[trucking_pre export cargo import trucking_on].each do |section|
         charge_categories << Legacy::ChargeCategory.new(code: section, name: section.humanize)
+      end
+    end
+
+    def initialize_margins
+      margins << ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil].product(
+        %i[freight_margin export_margin import_margin trucking_pre_margin trucking_on_margin]
+      ).map do |default, margin_type|
+        ::Pricings::Margin.create_with(
+          value: 0,
+          operator: "%",
+          effective_date: created_at || Time.zone.now,
+          expiration_date: 100.years.from_now
+        ).find_or_initialize_by(
+          organization: self,
+          default_for: default,
+          applicable: self,
+          margin_type: margin_type
+        )
       end
     end
   end
