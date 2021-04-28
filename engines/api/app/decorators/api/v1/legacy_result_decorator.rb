@@ -75,10 +75,10 @@ module Api
 
       def chargeable_weights
         weights = {
-          ocean_chargeable_weight: total_chargeable_weight(section: main_freight_section).value.to_f
+          ocean_chargeable_weight: total_chargeable_weight(section: main_freight_section).value.round(3).to_f
         }
-        weights[:pre_carriage_chargeable_weight] = total_chargeable_weight(section: pre_carriage_section).value.to_f if pre_carriage_section.present?
-        weights[:on_carriage_chargeable_weight] = total_chargeable_weight(section: on_carriage_section).value.to_f if on_carriage_section.present?
+        weights[:pre_carriage_chargeable_weight] = total_chargeable_weight(section: pre_carriage_section).value.round(3).to_f if pre_carriage_section.present?
+        weights[:on_carriage_chargeable_weight] = total_chargeable_weight(section: on_carriage_section).value.round(3).to_f if on_carriage_section.present?
         weights
       end
     end

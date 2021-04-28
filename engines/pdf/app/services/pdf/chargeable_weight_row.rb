@@ -13,16 +13,16 @@ module Pdf
     def perform
       case view_type
       when "weight"
-        ["weight", weight]
+        ["weight", weight.round(3)]
       when "volume"
-        ["volume", volume]
+        ["volume", volume.round(3)]
       when "both"
-        ["both", volume]
+        ["both", volume.round(3)]
       when "dynamic"
         if show_volume
-          ["volume", volume]
+          ["volume", volume.round(3)]
         else
-          ["weight", weight]
+          ["weight", weight.round(3)]
         end
       end
     end
