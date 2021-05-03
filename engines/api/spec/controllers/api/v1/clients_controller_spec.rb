@@ -34,7 +34,7 @@ module Api
 
       context "when no sorting params passed" do
         let(:request_object) do
-          get :index, params: {organization_id: organization.id}, as: :json
+          get :index, params: { organization_id: organization.id }, as: :json
         end
 
         it "renders the list of users successfully" do
@@ -48,7 +48,7 @@ module Api
 
       context "when sorting params passed" do
         let(:request_object) do
-          get :index, params: {organization_id: organization.id, sort_by: "phone", direction: "asc"}, as: :json
+          get :index, params: { organization_id: organization.id, sort_by: "phone", direction: "asc" }, as: :json
         end
 
         it "renders the list of users successfully" do
@@ -59,17 +59,27 @@ module Api
           end
         end
       end
+
+      context "when search params passed" do
+        let!(:client) { FactoryBot.create(:users_client, organization: organization, profile: FactoryBot.build(:users_client_profile, first_name: "Bob")) }
+        let(:request_object) do
+          get :index, params: { organization_id: organization.id, query: client.profile.first_name[0..1] }, as: :json
+        end
+
+        it "renders the list of users successfully", :aggregate_failures do
+          perform_request
+          expect(response).to be_successful
+          expect(response_data).not_to be_empty
+        end
+      end
     end
 
     describe "Get #show" do
       let(:org_user) { FactoryBot.create(:users_client, organization: organization) }
-      let(:request_object) { get :show, params: {organization_id: organization.id, id: org_user.id}, as: :json }
+      let(:request_object) { get :show, params: { organization_id: organization.id, id: org_user.id }, as: :json }
 
-      it "returns the requested client correctly" do
+      it "returns the requested client correctly", :aggregate_failures do
         perform_request
-        expect(response).to be_successful
-
-        expect(response_data).not_to be_empty
         %w[companyName email phone firstName lastName].each do |key|
           expect(response_data["attributes"]).to have_key(key)
         end
@@ -81,14 +91,14 @@ module Api
       let(:profile) { user.profile }
 
       context "when request is successful" do
-        let(:request_object) {
-          patch :update, params: {organization_id: organization.id,
-                                  id: user.id,
-                                  email: "bassam@itsmycargo.com",
-                                  first_name: "Bassam", last_name: "Aziz",
-                                  company_name: "ItsMyCargo",
-                                  phone: "123123"}, as: :json
-        }
+        let(:request_object) do
+          patch :update, params: { organization_id: organization.id,
+                                   id: user.id,
+                                   email: "bassam@itsmycargo.com",
+                                   first_name: "Bassam", last_name: "Aziz",
+                                   company_name: "ItsMyCargo",
+                                   phone: "123123" }, as: :json
+        end
 
         it "returns an http status of success" do
           perform_request
@@ -107,14 +117,14 @@ module Api
       end
 
       context "when update email request is invalid" do
-        let(:request_object) {
-          patch :update, params: {organization_id: organization,
-                                  id: user.id,
-                                  email: nil,
-                                  first_name: "Bassam", last_name: "Aziz",
-                                  company_name: "ItsMyCargo",
-                                  phone: "123123"}, as: :json
-        }
+        let(:request_object) do
+          patch :update, params: { organization_id: organization,
+                                   id: user.id,
+                                   email: nil,
+                                   first_name: "Bassam", last_name: "Aziz",
+                                   company_name: "ItsMyCargo",
+                                   phone: "123123" }, as: :json
+        end
 
         it "returns with a 422 response" do
           perform_request
@@ -129,14 +139,14 @@ module Api
     end
 
     describe "POST #create" do
-      let(:user_info) {
+      let(:user_info) do
         FactoryBot.attributes_for(:users_client, organization_id: organization.id)
           .merge(group_id: organization_group.id)
-      }
+      end
       let(:profile_info) { FactoryBot.attributes_for(:users_profile) }
       let(:country) { FactoryBot.create(:legacy_country) }
       let(:address_info) do
-        {street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: country.name}
+        { street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: country.name }
       end
       let(:request_object) do
         post :create, params: {
@@ -146,9 +156,9 @@ module Api
           **address_info
         }, as: :json
       end
-      let(:user_groups) {
+      let(:user_groups) do
         OrganizationManager::GroupsService.new(target: client, organization: organization).fetch
-      }
+      end
       let(:client) { Users::Client.find_by(email: user_info[:email]) }
 
       context "when request is successful" do
@@ -189,7 +199,7 @@ module Api
       context "when request is unsuccessful (bad or missing data)" do
         let(:request_object) do
           post :create, params: {
-            organization_id: organization.id, client: {**user_info, **profile_info, **address_info, email: nil}
+            organization_id: organization.id, client: { **user_info, **profile_info, **address_info, email: nil }
           }, as: :json
         end
 
@@ -210,12 +220,12 @@ module Api
       let!(:profile) { Users::ClientProfile.find_by(user_id: client.id) }
       let(:organization_user) { Users::Client.with_deleted.find_by(id: client.id) }
       let(:company) { FactoryBot.create(:companies_company, organization: organization) }
-      let(:request_object) {
+      let(:request_object) do
         delete :destroy,
-          params: {organization_id: organization.id,
-                   id: client.id},
+          params: { organization_id: organization.id,
+                    id: client.id },
           as: :json
-      }
+      end
 
       before do
         FactoryBot.create(:groups_membership, group: organization_group, member: client)
@@ -230,7 +240,7 @@ module Api
 
         it "deletes the profile successfully" do
           perform_request
-          expect(profile.present?).to be_truthy
+          expect(profile).to be_present
         end
 
         it "deletes the users group membership" do
@@ -240,19 +250,19 @@ module Api
 
         it "deletes the user's company membership" do
           perform_request
-          expect(Companies::Membership.where(member: client)).to_not exist
+          expect(Companies::Membership.where(member: client)).not_to exist
         end
 
         it "deletes the authentication user successfully" do
           perform_request
           client.reload
-          expect(client.deleted?).to be_truthy
+          expect(client).to be_deleted
         end
 
         it "deletes the organization user successfully" do
           perform_request
           user.reload
-          expect(organization_user.deleted?).to be_truthy
+          expect(organization_user).to be_deleted
         end
       end
 

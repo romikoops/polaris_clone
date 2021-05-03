@@ -91,7 +91,8 @@ module Admin
 
     def handle_search(params)
       query = profiles
-      query = query.search(params[:query]) if params[:query]
+      query = query.search(params[:first_name]) if params[:first_name]
+      query = query.search(params[:last_name]) if params[:last_name]
       query = query.search(params[:email]) if params[:email]
       query = clients.where(id: query.select(:user_id)).joins(:profile)
 

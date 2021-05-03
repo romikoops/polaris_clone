@@ -17,7 +17,7 @@ RSpec.describe Admin::ClientsController do
   describe "GET #index" do
     let(:company) { FactoryBot.create(:companies_company, name: "ItsMyCargo", organization_id: organization.id) }
     let(:users) { FactoryBot.create_list(:users_client, 3, organization: organization) }
-    let!(:client) { FactoryBot.create(:users_client, organization: organization, profile_attributes: { first_name: "Bob" }) }
+    let!(:client) { FactoryBot.create(:users_client, organization: organization, profile_attributes: { first_name: "Bob", last_name: "Smith" }) }
 
     before do
       ::Organizations.current_id = organization.id
@@ -31,9 +31,17 @@ RSpec.describe Admin::ClientsController do
       expect(response).to have_http_status(:success)
     end
 
-    context "with query search" do
+    context "with first name search" do
       it "returns the correct matching results with search" do
-        get :index, params: { organization_id: organization.id, query: client.profile.name }
+        get :index, params: { organization_id: organization.id, first_name: client.profile.first_name }
+
+        expect(resp.dig("data", "clientData", 0, "email")).to eq(client.email)
+      end
+    end
+
+    context "with last name search" do
+      it "returns the correct matching results with search" do
+        get :index, params: { organization_id: organization.id, last_name: client.profile.last_name }
 
         expect(resp.dig("data", "clientData", 0, "email")).to eq(client.email)
       end

@@ -13,7 +13,7 @@ module Api
 
       def update
         unless client.update(email: client_params[:email], profile_attributes: profile_params.merge(id: client.profile_id))
-          render(json: {error: client.errors.full_messages}, status: :unprocessable_entity)
+          render(json: { error: client.errors.full_messages }, status: :unprocessable_entity)
           return
         end
         render json: UserSerializer.new(UserDecorator.decorate(client))
@@ -25,13 +25,13 @@ module Api
           render json: UserSerializer.new(decorated_user), status: :created
         end
       rescue ActiveRecord::RecordInvalid => e
-        render(json: {error: e.message}, status: :bad_request)
+        render(json: { error: e.message }, status: :bad_request)
       end
 
       def password_reset
         random_password = SecureRandom.alphanumeric(16)
         client.update(password: random_password)
-        render json: {data: {password: random_password}}
+        render json: { data: { password: random_password } }
       end
 
       def destroy
@@ -54,7 +54,7 @@ module Api
       end
 
       def group_memberships
-        @memberships ||= Groups::Membership.where(member: client.id)
+        @group_memberships ||= Groups::Membership.where(member: client.id)
       end
 
       def company_memberships
@@ -101,15 +101,15 @@ module Api
         clients = initialize_filterrific(
           clients,
           sort_by: index_params[:sort_by],
-          direction: index_params[:direction].to_s.upcase == "DESC" ? "DESC" : "ASC"
+          direction: index_params[:direction].to_s.casecmp("DESC").zero? ? "DESC" : "ASC"
         ) || return
 
         paginated = paginate(clients.model_class)
-        UserDecorator.decorate_collection(paginated, {context: {links: pagination_links(paginated)}})
+        UserDecorator.decorate_collection(paginated, { context: { links: pagination_links(paginated) } })
       end
 
       def filtered_profiles
-        Users::Profile.where(user_id: client_ids).search(query)
+        Users::ClientProfile.where(user_id: client_ids).search(query)
       end
 
       def client_ids
@@ -125,7 +125,7 @@ module Api
             organization_id: current_organization.id
           },
           profile_attributes: profile_params,
-          settings_attributes: {currency: current_scope[:default_currency]},
+          settings_attributes: { currency: current_scope[:default_currency] },
           group_id: params[:group_id]
         ).perform
       end
