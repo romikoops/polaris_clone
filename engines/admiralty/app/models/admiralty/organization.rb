@@ -8,7 +8,10 @@ module Admiralty
     has_many :margins, -> { where "organization_id = applicable_id" }, class_name: "Pricings::Margin"
     accepts_nested_attributes_for :margins
 
-    after_initialize :initialize_charge_categories, :initialize_margins
+    has_many :tenant_cargo_item_types, class_name: "Legacy::TenantCargoItemType"
+    accepts_nested_attributes_for :tenant_cargo_item_types
+
+    after_initialize :initialize_charge_categories, :initialize_margins, :initialize_colli_types
 
     def initialize_charge_categories
       return unless charge_categories.empty?
@@ -34,6 +37,14 @@ module Admiralty
           margin_type: margin_type
         )
       end
+    end
+
+    def initialize_colli_types
+      return unless tenant_cargo_item_types.empty?
+
+      tenant_cargo_item_types << Legacy::TenantCargoItemType.new(
+        cargo_item_type: Legacy::CargoItemType.find_by(category: "Pallet", width: nil, length: nil)
+      )
     end
   end
 end

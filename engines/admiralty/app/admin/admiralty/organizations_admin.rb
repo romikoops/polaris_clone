@@ -38,7 +38,7 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
         actions
       end
 
-      concat admin_link_to("New Domain", admin: :domains, action: :new, params: { domain: { organization_id: organization.id } }, class: "btn btn-success")
+      concat admin_link_to("New Domain", admin: :domains, action: :new, params: { domain: { organization_id: organization.id } }, class: "btn btn-success") if organization.id
     end
 
     tab :theme do
@@ -111,7 +111,8 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           col(sm: 6) { text_field :name }
         end
       end
-      concat admin_link_to("New Charge Category", admin: :charge_categories, action: :new, params: { charge_category: { organization_id: organization.id } }, class: "btn btn-success")
+
+      concat admin_link_to("New Charge Category", admin: :charge_categories, action: :new, params: { charge_category: { organization_id: organization.id } }, class: "btn btn-success") if organization.id
     end
 
     tab :margins do
@@ -123,7 +124,18 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           col(sm: 3) { number_field :value, label: "Value", help: "The margin value to be applied to the rates" }
         end
       end
-      concat admin_link_to("New Margin", admin: :margins, action: :new, params: { margin: { organization_id: organization.id } }, class: "btn btn-success")
+
+      concat admin_link_to("New Margin", admin: :margins, action: :new, params: { margin: { organization_id: organization.id } }, class: "btn btn-success") if organization.id
+    end
+
+    tab :tenant_cargo_item_types do
+      fields_for :tenant_cargo_item_types do
+        row do
+          col(sm: 6) { collection_select :cargo_item_type_id, Legacy::CargoItemType.all, :id, :description }
+        end
+      end
+
+      concat admin_link_to("New Cargo Item Types", admin: :tenant_cargo_item_types, action: :new, params: { tenant_cargo_item_type: { organization_id: organization.id } }, class: "btn btn-success") if organization.id
     end
   end
 end

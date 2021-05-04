@@ -12,6 +12,7 @@ Trestle::Engine.routes.draw do
   resources :queries, only: %i[new edit], module: "queries_admin", controller: "admin"
   resources :subscriptions, only: %i[new edit], module: "subscriptions_admin", controller: "admin"
   resources :themes, only: %i[new edit], module: "themes_admin", controller: "admin"
+  resources :tenant_cargo_item_types, only: %i[new edit], module: "tenant_cargo_item_types_admin", controller: "admin"
 
   controller "trestle/auth/sessions" do
     get "signin" => :create
