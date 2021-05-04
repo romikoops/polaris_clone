@@ -94,8 +94,8 @@ RSpec.describe Api::ClientCreationService do
       it "restores the user" do
         aggregate_failures do
           expect(client).to eq(existing_client)
-          expect(client.profile).to be_present
-          expect(client.settings).to be_present
+          expect(client.profile.id).to be_present
+          expect(client.settings.id).to be_present
         end
       end
     end

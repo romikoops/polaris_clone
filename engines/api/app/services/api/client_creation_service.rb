@@ -28,8 +28,8 @@ module Api
 
     def client
       @client ||= new_or_restored_client.tap do |new_user|
-        new_user.profile = Users::ClientProfile.new(profile_attributes) if new_user.profile.id.blank?
-        new_user.settings = Users::ClientSettings.new(settings_attributes) if new_user.settings.id.blank?
+        new_user.profile = Users::ClientProfile.create_with(profile_attributes).find_or_initialize_by(user: new_user)
+        new_user.settings = Users::ClientSettings.create_with(settings_attributes).find_or_initialize_by(user: new_user)
       end
     end
 
@@ -84,7 +84,7 @@ module Api
     end
 
     def new_or_restored_client
-      (restorable_client || Users::Client.new(client_attributes))
+      (restorable_client || Users::Client.create(client_attributes.merge(settings_attributes: settings_attributes, profile_attributes: profile_attributes)))
     end
   end
 end
