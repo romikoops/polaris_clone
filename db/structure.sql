@@ -150,6 +150,20 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
 -- Name: journey_colli_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -4607,7 +4621,8 @@ CREATE TABLE public.trucking_locations (
     deleted_at timestamp without time zone,
     data character varying,
     query integer,
-    country_id bigint
+    country_id bigint,
+    upsert_id uuid
 );
 
 
@@ -12186,6 +12201,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210326102626'),
 ('20210412145911'),
 ('20210420120815'),
+('20210422110800'),
+('20210422110801'),
 ('20210427175457'),
 ('20210504094632');
 

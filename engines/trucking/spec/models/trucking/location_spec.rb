@@ -7,7 +7,7 @@ module Trucking
     let(:location) { FactoryBot.create(:trucking_location) }
 
     it "is valid with valid attributes" do
-      expect(FactoryBot.build(:trucking_location)).to be_valid
+      expect(FactoryBot.build(:trucking_location, :zipcode)).to be_valid
     end
   end
 end

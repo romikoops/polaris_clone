@@ -10,7 +10,7 @@ RSpec.describe Trucking::Queries::Base do
       bounds: FactoryBot.build(:legacy_bounds, lat: hub.latitude, lng: hub.longitude, delta: 0.4),
       country_code: "de")
   end
-  let(:trucking_location) { FactoryBot.create(:trucking_location, location: location, country_code: "DE") }
+  let(:trucking_location) { FactoryBot.create(:trucking_location, query: :location, location: location, country_code: "DE") }
   let(:address) { FactoryBot.create(:hamburg_address) }
   let(:stub_url) do
     [
@@ -42,7 +42,7 @@ RSpec.describe Trucking::Queries::Base do
     end
 
     it "with proper args returns an array of hub ids with distance" do
-      expect(result).to eq([{hub_id: hub.id, distance: 0}])
+      expect(result).to eq([{ hub_id: hub.id, distance: 0 }])
     end
   end
 end

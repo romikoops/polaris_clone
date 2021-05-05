@@ -8,9 +8,9 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
-  let(:air_itinerary) {
+  let(:air_itinerary) do
     FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
-  }
+  end
   let(:origin_hub) { itinerary.hubs.find_by(name: "Hamburg") }
   let(:destination_hub) { itinerary.destination_hub }
   let(:origin_airport) { air_itinerary.hubs.find_by(name: "Hamburg") }
@@ -21,7 +21,7 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:direction) { "export" }
   let(:base_shipping_info) do
     {
-      trucking_info: {pre_carriage: {truck_type: ""}, on_carriage: {truck_type: ""}}
+      trucking_info: { pre_carriage: { truck_type: "" }, on_carriage: { truck_type: "" } }
     }
   end
   let(:cargo_item_attributes) do
@@ -52,16 +52,16 @@ RSpec.describe Wheelhouse::QuotationService do
     ]
   end
   let(:input) do
-    {organization_id: organization.id,
-     user_id: user.id,
-     creator_id: user.id,
-     direction: direction,
-     load_type: load_type,
-     selected_date: Time.zone.today}
+    { organization_id: organization.id,
+      user_id: user.id,
+      creator_id: user.id,
+      direction: direction,
+      load_type: load_type,
+      selected_date: Time.zone.today }
   end
   let(:port_to_port_input) do
-    input[:origin] = {nexus_id: origin_hub.nexus_id}
-    input[:destination] = {nexus_id: destination_hub.nexus_id}
+    input[:origin] = { nexus_id: origin_hub.nexus_id }
+    input[:destination] = { nexus_id: destination_hub.nexus_id }
     input
   end
   let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
@@ -99,25 +99,25 @@ RSpec.describe Wheelhouse::QuotationService do
                                                delta: 0.4),
       country_code: "cn")
   end
-  let(:origin_trucking_location) {
-    FactoryBot.create(:trucking_location, location: origin_location,
+  let(:origin_trucking_location) do
+    FactoryBot.create(:trucking_location, query: :location, location: origin_location,
                                           country_code: "DE")
-  }
-  let(:destination_trucking_location) {
-    FactoryBot.create(:trucking_location, location: destination_location,
+  end
+  let(:destination_trucking_location) do
+    FactoryBot.create(:trucking_location, query: :location, location: destination_location,
                                           country_code: "CN")
-  }
+  end
   let(:quotation_details) { port_to_port_input }
   let(:shipping_info) { base_shipping_info }
   let(:source) { FactoryBot.create(:application) }
-  let(:service) {
+  let(:service) do
     described_class.new(
       organization: organization,
       quotation_details: quotation_details.with_indifferent_access,
       shipping_info: shipping_info,
       source: source
     )
-  }
+  end
   let(:query) { service.result }
   let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
@@ -185,15 +185,17 @@ RSpec.describe Wheelhouse::QuotationService do
     context "when door to door (defaults & container)" do
       include_context "complete_route_with_trucking"
       before do
+        # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time)
           .and_return(10)
+        # rubocop:enable RSpec/AnyInstance
       end
 
       let(:load_type) { "container" }
       let(:cargo_classes) { ["fcl_20"] }
       let(:shipping_info) do
         {
-          trucking_info: {pre_carriage: {truck_type: "chassis"}, on_carriage: {truck_type: "chassis"}}
+          trucking_info: { pre_carriage: { truck_type: "chassis" }, on_carriage: { truck_type: "chassis" } }
         }
       end
       let(:quotation_details) { door_to_door_input }
@@ -206,7 +208,7 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context "when port to port (defaults & quote & container)" do
-      let(:scope_content) { {closed_quotation_tool: true} }
+      let(:scope_content) { { closed_quotation_tool: true } }
 
       let(:load_type) { "container" }
 
@@ -253,14 +255,7 @@ RSpec.describe Wheelhouse::QuotationService do
       it "rescues errors from the offer calculator service and spews the right messages" do
         offer_calculator_error_map.each do |key, message|
           allow(offer_calculator_double).to receive(:perform).and_raise(key.to_s.constantize)
-          expect {
-            described_class.new(
-              organization: organization,
-              quotation_details: port_to_port_input.with_indifferent_access,
-              shipping_info: shipping_info,
-              source: source
-            ).result
-          }.to raise_error(Wheelhouse::ApplicationError, message)
+          expect { service.result }.to raise_error(Wheelhouse::ApplicationError, message)
         end
       end
     end

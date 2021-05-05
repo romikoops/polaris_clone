@@ -15,7 +15,7 @@ module Api
                                           location: origin_trucking_location)
       FactoryBot.create(:fcl_pre_carriage_availability, hub: shanghai, query_type: :location)
       Geocoder::Lookup::Test.add_stub([shanghai.latitude, shanghai.longitude], [
-        "address_components" => [{"types" => ["premise"]}],
+        "address_components" => [{ "types" => ["premise"] }],
         "address" => "Shanghai, China",
         "city" => "Shanghai",
         "country" => "China",
@@ -39,19 +39,19 @@ module Api
         bounds: FactoryBot.build(:legacy_bounds, lat: shanghai.latitude, lng: shanghai.longitude, delta: 0.4),
         country_code: "de")
     end
-    let(:origin_trucking_location) {
-      FactoryBot.create(:trucking_location, location: origin_location, country_code: "DE")
-    }
+    let(:origin_trucking_location) do
+      FactoryBot.create(:trucking_location, query: :location, location: origin_location, country_code: "DE")
+    end
     let(:origin_params) do
-      {organization_id: organization.id, origin_latitude: shanghai.latitude, origin_longitude: shanghai.longitude}
+      { organization_id: organization.id, origin_latitude: shanghai.latitude, origin_longitude: shanghai.longitude }
     end
     let(:destination_params) do
-      {organization_id: organization.id, destination_latitude: gothenburg.latitude, destination_longitude: gothenburg.longitude}
+      { organization_id: organization.id, destination_latitude: gothenburg.latitude, destination_longitude: gothenburg.longitude }
     end
 
     describe "GET #fcl" do
       it "Renders a json of equipments" do
-        get :index, params: {organization_id: organization.id}
+        get :index, params: { organization_id: organization.id }
 
         expect(response_data).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
       end
@@ -69,7 +69,7 @@ module Api
       end
 
       it "Renders a json of equipments related with origin (legacy format)" do
-        get :index, params: {organization_id: organization.id, origin: shanghai.nexus_id}
+        get :index, params: { organization_id: organization.id, origin: shanghai.nexus_id }
 
         expect(response_data).to match_array(%w[fcl_20 fcl_40 fcl_40_hq])
       end

@@ -1,20 +1,34 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/digest/uuid"
 module Trucking
   class Location < ApplicationRecord
-    validates :data,
+    UUID_V5_NAMESPACE = "404827a9-bc4d-4c97-b813-d925588215d6"
+
+    validates :upsert_id,
       uniqueness: {
-        scope: %i[query location_id],
         message: "is a duplicate (all attributes match an existing record in the DB)"
       }
+    validates :data, presence: true
+    validates :query, presence: true
 
-    belongs_to :country, optional: true, class_name: "Legacy::Country"
+    belongs_to :country, class_name: "Legacy::Country"
     belongs_to :location, optional: true, class_name: "Locations::Location"
     has_many :truckings, class_name: "Trucking::Trucking"
     has_many :hubs, through: :truckings
-    enum query: {postal_code: 0, location: 1, distance: 2}
+    enum query: { postal_code: 0, location: 1, distance: 2 }
 
     acts_as_paranoid
+
+    before_validation :generate_upsert_id
+
+    private
+
+    def generate_upsert_id
+      # rubocop:disable GitHub/InsecureHashAlgorithm
+      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
+      # rubocop:enable GitHub/InsecureHashAlgorithm
+    end
   end
 end
 
@@ -35,6 +49,7 @@ end
 #  country_id   :bigint
 #  location_id  :uuid
 #  sandbox_id   :uuid
+#  upsert_id    :uuid
 #
 # Indexes
 #

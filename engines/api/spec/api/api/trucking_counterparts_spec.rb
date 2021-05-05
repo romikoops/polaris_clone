@@ -14,7 +14,7 @@ RSpec.describe "TruckingCounterparts", type: :request, swagger: true do
       country_code: "se")
   end
   let(:origin_trucking_location) {
-    FactoryBot.create(:trucking_location, location: origin_location, country_code: "SE")
+    FactoryBot.create(:trucking_location, query: :location, location: origin_location, country_code: "SE")
   }
 
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }

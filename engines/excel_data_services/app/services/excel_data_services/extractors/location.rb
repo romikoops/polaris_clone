@@ -12,9 +12,9 @@ module ExcelDataServices
       end
 
       def join_arguments
-        return {"zone" => "zone"} if identifier == "city"
+        return { "zone" => "zone" } if identifier == "city"
 
-        {"primary" => "data"}
+        { "primary" => "data" }
       end
 
       def identifier
@@ -33,14 +33,15 @@ module ExcelDataServices
 
       def city_locations
         @city_locations ||= Rover::DataFrame.new(
-          frame[frame["identifier"] == "city"].to_a.map { |row|
-            trucking_location_data_from_row(row: row)
-          }
+          frame[frame["identifier"] == "city"].to_a.map do |row|
+            trucking_location = trucking_location_data_from_row(row: row)
+            trucking_location.slice(:data).merge("location_id" => trucking_location.id, "zone" => row["zone"])
+          end
         )
       end
 
       def filtered_locations
-        @filtered_locations ||= Trucking::Location.joins(:country).where(countries: {code: country_codes})
+        @filtered_locations ||= Trucking::Location.joins(:country).where(countries: { code: country_codes })
       end
 
       def country_codes

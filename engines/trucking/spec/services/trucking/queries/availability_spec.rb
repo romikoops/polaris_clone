@@ -21,13 +21,13 @@ RSpec.describe Trucking::Queries::Availability do
     let(:address) do
       FactoryBot.create(:legacy_address, country: hub.address.country, zip_code: zipcode, latitude: latitude, longitude: longitude)
     end
-    let(:args) {
+    let(:args) do
       {
         klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
         carriage: carriage, country_code: country_code,
         address: address, groups: groups, cargo_classes: cargo_classes
       }
-    }
+    end
     let(:cargo_classes) { nil }
     let(:trucking_results) { described_class.new(args).perform }
     let(:query_type) { :zipcode }
@@ -39,7 +39,7 @@ RSpec.describe Trucking::Queries::Availability do
     end
 
     context "with missing arguments (organization_id)" do
-      let(:args) { {load_type: load_type, zipcode: zipcode, carriage: carriage, country_code: country_code} }
+      let(:args) { { load_type: load_type, zipcode: zipcode, carriage: carriage, country_code: country_code } }
 
       it "raises an ArgumentError if no organization_id is provided" do
         expect { trucking_results }.to raise_error(ArgumentError)
@@ -47,10 +47,10 @@ RSpec.describe Trucking::Queries::Availability do
     end
 
     context "with missing arguments (carriage)" do
-      let(:args) {
-        {klass: ::Trucking::Trucking, organization_id: organization.id, zipcode: zipcode,
-         load_type: load_type, country_code: country_code}
-      }
+      let(:args) do
+        { klass: ::Trucking::Trucking, organization_id: organization.id, zipcode: zipcode,
+          load_type: load_type, country_code: country_code }
+      end
 
       it "raises an ArgumentError if no carriage is provided" do
         expect { trucking_results }.to raise_error(ArgumentError)
@@ -58,7 +58,7 @@ RSpec.describe Trucking::Queries::Availability do
     end
 
     context "with missing arguments (wrong keys)" do
-      let(:args) { {klass: ::Trucking::Trucking, organization_id: organization.id} }
+      let(:args) { { klass: ::Trucking::Trucking, organization_id: organization.id } }
 
       it "raises an ArgumentError if incorrect keys are provided" do
         expect { trucking_results }.to raise_error(ArgumentError)
@@ -75,13 +75,14 @@ RSpec.describe Trucking::Queries::Availability do
       let(:query_type) { :zipcode }
 
       context "with address object filter" do
-        let(:args) {
+        let(:args) do
           {
             klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
             carriage: carriage, country_code: country_code,
             address: address, groups: groups
           }
-        }
+        end
+
         it "finds the correct trucking_rate with address object filter" do
           expect(trucking_results).to match([trucking_trucking_zipcode])
         end
@@ -89,6 +90,7 @@ RSpec.describe Trucking::Queries::Availability do
 
       context "with cargo_class filter" do
         let(:cargo_classes) { ["lcl"] }
+
         it "finds the correct trucking_rate with cargo_class filter" do
           expect(trucking_results).to match([trucking_trucking_zipcode])
         end
@@ -96,6 +98,7 @@ RSpec.describe Trucking::Queries::Availability do
 
       context "when nothing is found" do
         let(:cargo_classes) { ["some_string"] }
+
         it "return empty collection if cargo_class filter does not match any item in db" do
           expect(trucking_results).to match([])
         end
@@ -110,17 +113,17 @@ RSpec.describe Trucking::Queries::Availability do
           hub: hub,
           location: FactoryBot.create(:trucking_location, :zipcode, country: country, data: "1802"))
       end
-      let(:nl_address) {
+      let(:nl_address) do
         FactoryBot.create(:legacy_address,
           zip_code: "1802 PT",
           country: country)
-      }
-      let(:args) {
+      end
+      let(:args) do
         {
           klass: ::Trucking::Trucking, organization_id: organization.id, load_type: load_type,
           carriage: carriage, address: nl_address, groups: groups
         }
-      }
+      end
 
       it "finds the correct trucking_rate with address" do
         expect(trucking_results).to match([nl_trucking_trucking_zipcode])
@@ -155,6 +158,7 @@ RSpec.describe Trucking::Queries::Availability do
       end
       let(:other_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
       let(:distance_location) { FactoryBot.create(:trucking_location, :distance, country: country, data: 89) }
+
       before do
         FactoryBot.create(:trucking_hub_availability,
           hub: other_hub,
@@ -205,6 +209,7 @@ RSpec.describe Trucking::Queries::Availability do
 
       context "with cargo_class filter" do
         let(:cargo_classes) { ["lcl"] }
+
         it "finds the correct trucking_rate with cargo_class filter" do
           expect(trucking_results).to match([trucking_trucking_geometry])
         end
@@ -212,6 +217,7 @@ RSpec.describe Trucking::Queries::Availability do
 
       context "when cargo_class filter does not match any item in db" do
         let(:cargo_classes) { ["some_string"] }
+
         it "return empty collection if cargo_class filter does not match any item in db" do
           expect(trucking_results).to match([])
         end

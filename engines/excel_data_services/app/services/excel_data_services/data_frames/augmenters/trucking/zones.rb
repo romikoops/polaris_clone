@@ -14,10 +14,8 @@ module ExcelDataServices
           end
 
           def import_locations
-            ::Trucking::Location.import(all_locations, {
-              on_duplicate_key_ignore: {
-                constraint_name: :trucking_locations_upsert
-              }
+            ::Trucking::Location.import(all_locations.select(&:valid?), {
+              on_duplicate_key_ignore: true
             })
           end
 
@@ -26,7 +24,9 @@ module ExcelDataServices
               .concat(distance_locations)
               .concat(locode_locations)
               .inner_join(countries, on: { "country_code" => "code" })
-            combined[%w[data query country_id]].to_a
+            combined[%w[data query country_id]].to_a.map do |row|
+              ::Trucking::Location.new(data: row["data"], query: row["query"], country_id: row["country_id"])
+            end
           end
 
           def postal_code_locations

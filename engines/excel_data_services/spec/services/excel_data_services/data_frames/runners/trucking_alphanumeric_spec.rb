@@ -33,7 +33,6 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Trucking do
 
     it "creates the necessary TypeAvailabilities", :aggregate_failures do
       expect(stats_or_errors.dig("type_availabilities", "created")).to eq(1)
-      expect(trucking_type_availabilities.count).to eq(1)
       expect(trucking_type_availability.load_type).to eq("cargo_item")
       expect(trucking_type_availability.carriage).to eq("pre")
       expect(trucking_type_availability.country).to eq(country)

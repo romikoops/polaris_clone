@@ -26,27 +26,27 @@ FactoryBot.define do
 
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "AB10",
-           "secondary" => nil,
-           "identifier" => "postal_code",
-           "country_code" => "GB",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => "AB19",
-           "secondary" => nil,
-           "identifier" => "postal_code",
-           "country_code" => "GB",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => nil,
-           "identifier" => "postal_code",
-           "secondary" => "SW1-SW11",
-           "country_code" => "GB",
-           "query_method" => "location"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "AB10",
+            "secondary" => nil,
+            "identifier" => "postal_code",
+            "country_code" => "GB",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => "AB19",
+            "secondary" => nil,
+            "identifier" => "postal_code",
+            "country_code" => "GB",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => nil,
+            "identifier" => "postal_code",
+            "secondary" => "SW1-SW11",
+            "country_code" => "GB",
+            "query_method" => "location" }
         ]
       end
     end
@@ -54,27 +54,27 @@ FactoryBot.define do
     trait :zipcode do
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "20457",
-           "secondary" => nil,
-           "country_code" => "ZA",
-           "identifier" => "zipcode",
-           "query_method" => "zipcode"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => nil,
-           "secondary" => "30000 - 30025",
-           "country_code" => "ZA",
-           "identifier" => "zipcode",
-           "query_method" => "zipcode"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => nil,
-           "secondary" => "10000 - 10025",
-           "country_code" => "ZA",
-           "identifier" => "zipcode",
-           "query_method" => "zipcode"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "20457",
+            "secondary" => nil,
+            "country_code" => "ZA",
+            "identifier" => "zipcode",
+            "query_method" => "zipcode" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => nil,
+            "secondary" => "30000 - 30025",
+            "country_code" => "ZA",
+            "identifier" => "zipcode",
+            "query_method" => "zipcode" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => nil,
+            "secondary" => "10000 - 10025",
+            "country_code" => "ZA",
+            "identifier" => "zipcode",
+            "query_method" => "zipcode" }
         ]
       end
     end
@@ -82,27 +82,27 @@ FactoryBot.define do
     trait :distance do
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "10",
-           "secondary" => nil,
-           "country_code" => "ZA",
-           "identifier" => "distance",
-           "query_method" => "distance"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => nil,
-           "secondary" => "20 - 50",
-           "country_code" => "ZA",
-           "identifier" => "distance",
-           "query_method" => "distance"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => nil,
-           "secondary" => "60-130",
-           "country_code" => "ZA",
-           "identifier" => "distance",
-           "query_method" => "distance"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "10",
+            "secondary" => nil,
+            "country_code" => "ZA",
+            "identifier" => "distance",
+            "query_method" => "distance" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => nil,
+            "secondary" => "20 - 50",
+            "country_code" => "ZA",
+            "identifier" => "distance",
+            "query_method" => "distance" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => nil,
+            "secondary" => "60-130",
+            "country_code" => "ZA",
+            "identifier" => "distance",
+            "query_method" => "distance" }
         ]
       end
     end
@@ -110,24 +110,24 @@ FactoryBot.define do
     trait :postal_code do
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "20457",
-           "secondary" => nil,
-           "country_code" => "DE",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => nil,
-           "secondary" => "30000 - 30555",
-           "country_code" => "DE",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => nil,
-           "secondary" => "10000 - 10200",
-           "country_code" => "DE",
-           "query_method" => "location"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "20457",
+            "secondary" => nil,
+            "country_code" => "DE",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => nil,
+            "secondary" => "30000 - 30555",
+            "country_code" => "DE",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => nil,
+            "secondary" => "10000 - 10200",
+            "country_code" => "DE",
+            "query_method" => "location" }
         ]
       end
     end
@@ -135,11 +135,11 @@ FactoryBot.define do
     trait :city do
       after(:build) do
         [
-          {city: "Cape Town", province: "Western Cape"},
-          {city: "Durban", province: "KwaZulu Natal"},
-          {city: "Johannesburg", province: "Gauteng"}
+          { city: "Cape Town", province: "Western Cape" },
+          { city: "Durban", province: "KwaZulu Natal" },
+          { city: "Johannesburg", province: "Gauteng" }
         ].each do |data|
-          FactoryBot.create(:locations_name,
+          locations_name = FactoryBot.create(:locations_name,
             name: [data[:city], data[:province]].join(", "),
             city: data[:city],
             country: "Republic of South Africa",
@@ -147,33 +147,38 @@ FactoryBot.define do
             location: FactoryBot.create(:locations_location,
               name: [data[:city], data[:province]].join(", "),
               country_code: "ZA"))
+          FactoryBot.create(:trucking_location,
+            query: :location,
+            data: locations_name.name,
+            country: factory_country_from_code(code: "ZA"),
+            location: locations_name.location)
         end
         Locations::Name.reindex
       end
 
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "Cape Town",
-           "secondary" => "Western Cape",
-           "country_code" => "ZA",
-           "identifier" => "city",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => "Durban",
-           "secondary" => "KwaZulu Natal",
-           "country_code" => "ZA",
-           "identifier" => "city",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => "Johannesburg",
-           "secondary" => "Gauteng",
-           "country_code" => "ZA",
-           "identifier" => "city",
-           "query_method" => "location"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "Cape Town",
+            "secondary" => "Western Cape",
+            "country_code" => "ZA",
+            "identifier" => "city",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => "Durban",
+            "secondary" => "KwaZulu Natal",
+            "country_code" => "ZA",
+            "identifier" => "city",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => "Johannesburg",
+            "secondary" => "Gauteng",
+            "country_code" => "ZA",
+            "identifier" => "city",
+            "query_method" => "location" }
         ]
       end
     end
@@ -190,27 +195,27 @@ FactoryBot.define do
 
       zones do
         [
-          {"sheet_name" => sheet_name,
-           "zone" => 1.0,
-           "primary" => "DEHAM",
-           "secondary" => nil,
-           "country_code" => "DE",
-           "identifier" => "locode",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 2.0,
-           "primary" => "DEBRV",
-           "secondary" => nil,
-           "country_code" => "DE",
-           "identifier" => "locode",
-           "query_method" => "location"},
-          {"sheet_name" => sheet_name,
-           "zone" => 3.0,
-           "primary" => "DEFRA",
-           "secondary" => nil,
-           "country_code" => "DE",
-           "identifier" => "locode",
-           "query_method" => "location"}
+          { "sheet_name" => sheet_name,
+            "zone" => 1.0,
+            "primary" => "DEHAM",
+            "secondary" => nil,
+            "country_code" => "DE",
+            "identifier" => "locode",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 2.0,
+            "primary" => "DEBRV",
+            "secondary" => nil,
+            "country_code" => "DE",
+            "identifier" => "locode",
+            "query_method" => "location" },
+          { "sheet_name" => sheet_name,
+            "zone" => 3.0,
+            "primary" => "DEFRA",
+            "secondary" => nil,
+            "country_code" => "DE",
+            "identifier" => "locode",
+            "query_method" => "location" }
         ]
       end
     end
