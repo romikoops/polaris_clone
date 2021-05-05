@@ -6843,14 +6843,6 @@ ALTER TABLE ONLY public.trucking_locations
 
 
 --
--- Name: trucking_locations trucking_locations_upsert; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.trucking_locations
-    ADD CONSTRAINT trucking_locations_upsert UNIQUE (data, query, country_id, deleted_at);
-
-
---
 -- Name: trucking_rates trucking_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9815,20 +9807,6 @@ CREATE INDEX index_trucking_hub_availabilities_on_type_availability_id ON public
 
 
 --
--- Name: index_trucking_locations_on_city_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_locations_on_city_name ON public.trucking_locations USING btree (city_name);
-
-
---
--- Name: index_trucking_locations_on_country_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_locations_on_country_code ON public.trucking_locations USING btree (country_code);
-
-
---
 -- Name: index_trucking_locations_on_country_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9847,13 +9825,6 @@ CREATE INDEX index_trucking_locations_on_data ON public.trucking_locations USING
 --
 
 CREATE INDEX index_trucking_locations_on_deleted_at ON public.trucking_locations USING btree (deleted_at);
-
-
---
--- Name: index_trucking_locations_on_distance; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_trucking_locations_on_distance ON public.trucking_locations USING btree (distance);
 
 
 --
@@ -9878,10 +9849,10 @@ CREATE INDEX index_trucking_locations_on_sandbox_id ON public.trucking_locations
 
 
 --
--- Name: index_trucking_locations_on_zipcode; Type: INDEX; Schema: public; Owner: -
+-- Name: index_trucking_locations_upsert; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_trucking_locations_on_zipcode ON public.trucking_locations USING btree (zipcode);
+CREATE UNIQUE INDEX index_trucking_locations_upsert ON public.trucking_locations USING btree (upsert_id) WHERE (deleted_at IS NULL);
 
 
 --
@@ -12203,6 +12174,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210420120815'),
 ('20210422110800'),
 ('20210422110801'),
+('20210426104420'),
+('20210426104428'),
 ('20210427175457'),
 ('20210504094632');
 
