@@ -22,21 +22,17 @@ RSpec.describe UsersController do
 
   describe "GET #home" do
     it "returns an http status of success" do
-      get :home, params: {organization_id: user.organization_id, user_id: user.id}
+      get :home, params: { organization_id: user.organization_id, user_id: user.id }
 
       expect(response).to have_http_status(:success)
     end
   end
 
   describe "GET #show" do
-    it "returns an http status of success" do
-      get :show, params: {organization_id: user.organization_id, user_id: user.id}
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        body = JSON.parse(response.body)
-        expect(body.dig("data", "id")).to eq(user.id)
-        expect(body.dig("data", "inactivityLimit")).to eq(86_400)
-      end
+    it "returns an http status of success", :aggregate_failures do
+      get :show, params: { organization_id: user.organization_id, user_id: user.id }
+      expect(json.dig(:data, :id)).to eq(user.id)
+      expect(json.dig(:data, :inactivityLimit)).to eq(86_400)
     end
   end
 
@@ -44,57 +40,52 @@ RSpec.describe UsersController do
     let(:test_email) { "test@itsmycargo.com" }
     let(:created_user) { Users::Client.find_by(email: test_email, organization: organization) }
     let(:return_token) { Doorkeeper::AccessToken.find_by(token: json.dig(:data, :access_token)) }
+    let(:params) do
+      {
+        user: user_param
+      }
+    end
+    let(:user_param) do
+      {
+        email: test_email,
+        password: "123456789",
+        organization_id: user.organization_id,
+        company_name: "Person Freight",
+        first_name: "Test",
+        last_name: "Person",
+        phone: "01628710344"
+      }
+    end
 
     before { FactoryBot.create(:companies_company, organization: organization, name: "default") }
 
-    it "creates a new user" do
-      params = {
-        user: {
-          email: test_email,
-          password: "123456789",
-          organization_id: user.organization_id,
-          company_name: "Person Freight",
-          first_name: "Test",
-          last_name: "Person",
-          phone: "01628710344"
-        }
-      }
+    it "creates a new user", :aggregate_failures do
       post :create, params: params
-
-      aggregate_failures do
-        expect(created_user.profile.first_name).to eq("Test")
-        expect(return_token.application.name).to eq("dipper")
-      end
+      expect(created_user.profile.first_name).to eq("Test")
+      expect(return_token.application.name).to eq("dipper")
     end
 
     context "when creating with no profile attributes" do
-      let(:params) do
+      let(:user_param) do
         {
-          user: {
-            email: test_email,
-            password: "123456789",
-            organization_id: user.organization_id
-          }
+          email: test_email,
+          password: "123456789",
+          organization_id: user.organization_id
         }
       end
 
       it "returns http status and updates the user" do
         post :create, params: params
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(Users::ClientProfile.exists?(user: created_user)).to be_truthy
-        end
+        expect(Users::ClientProfile).to exist(user: created_user)
       end
     end
 
     context "when creating with wrong params" do
-      let(:params) do
+      let(:user_param) do
         {
-          user: {
-            email: nil,
-            password: "123456789",
-            organization_id: user.organization_id
-          }
+          email: nil,
+          password: "123456789",
+          organization_id: user.organization_id
         }
       end
 
@@ -107,20 +98,26 @@ RSpec.describe UsersController do
 
   describe "POST #passwordless_authentication" do
     before do
-      organization.scope.update(content: {"signup_form_fields" => {"password" => false}})
+      organization.scope.update(content: { "signup_form_fields" => { "password" => false } })
+    end
+
+    let(:params) do
+      {
+        user: user_param
+      }
     end
 
     context "when user does not exist" do
       let(:test_email) { "test_new@itsmycargo.com" }
+      let(:user_param) do
+        {
+          email: test_email,
+          organization_id: user.organization_id,
+          phone: "01628710344"
+        }
+      end
 
       it "creates a new user without password" do
-        params = {
-          user: {
-            email: test_email,
-            organization_id: user.organization_id,
-            phone: "01628710344"
-          }
-        }
         post :passwordless_authentication, params: params
 
         aggregate_failures do
@@ -131,14 +128,15 @@ RSpec.describe UsersController do
     end
 
     context "when user already exists" do
-      it "reuturns a new token for the existing user" do
-        params = {
-          user: {
-            email: user.email,
-            organization_id: user.organization_id,
-            phone: "01628710344"
-          }
+      let(:user_param) do
+        {
+          email: user.email,
+          organization_id: user.organization_id,
+          phone: "01628710344"
         }
+      end
+
+      it "returns a new token for the existing user" do
         post :passwordless_authentication, params: params
 
         expect(json[:data][:access_token]).to be_present
@@ -147,17 +145,18 @@ RSpec.describe UsersController do
 
     context "when password is required" do
       before do
-        organization.scope.update(content: {"signup_form_fields" => {"password" => true}})
+        organization.scope.update(content: { "signup_form_fields" => { "password" => true } })
       end
 
-      it "reuturns 401 - unauthorized" do
-        params = {
-          user: {
-            email: user.email,
-            organization_id: user.organization_id,
-            phone: "01628710344"
-          }
+      let(:user_param) do
+        {
+          email: user.email,
+          organization_id: user.organization_id,
+          phone: "01628710344"
         }
+      end
+
+      it "returns 401 - unauthorized" do
         post :passwordless_authentication, params: params
 
         expect(response).to have_http_status(:unauthorized)
@@ -165,14 +164,15 @@ RSpec.describe UsersController do
     end
 
     context "when no email provided" do
-      it "reuturns 422 - unprocessable_entity" do
-        params = {
-          user: {
-            email: nil,
-            organization_id: user.organization_id,
-            phone: "01628710344"
-          }
+      let(:user_param) do
+        {
+          email: nil,
+          organization_id: user.organization_id,
+          phone: "01628710344"
         }
+      end
+
+      it "returns 422 - unprocessable_entity" do
         post :passwordless_authentication, params: params
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -182,9 +182,8 @@ RSpec.describe UsersController do
 
   describe "POST #update" do
     let(:return_token) { Doorkeeper::AccessToken.find_by(token: json.dig(:data, :headers, :access_token)) }
-
-    it "returns http success, updates the user and send the email" do
-      params = {
+    let(:params) do
+      {
         organization_id: user.organization_id,
         user_id: user.id,
         update: {
@@ -198,13 +197,13 @@ RSpec.describe UsersController do
           organization_id: user.organization_id
         }
       }
-      post :update, params: params
+    end
 
-      aggregate_failures do
-        expect(user.profile.reload.first_name).to eq("Test")
-        expect(return_token.application.name).to eq("dipper")
-        expect(response).to have_http_status(:success)
-      end
+    it "returns http success, updates the user and send the email", :aggregate_failures do
+      post :update, params: params
+      expect(user.profile.reload.first_name).to eq("Test")
+      expect(return_token.application.name).to eq("dipper")
+      expect(response).to have_http_status(:success)
     end
 
     context "when updating with no profile attributes" do
@@ -230,14 +229,14 @@ RSpec.describe UsersController do
       user.setup_activation
       user.save
 
-      get :activate, params: {organization_id: organization.id, id: user.activation_token}
+      get :activate, params: { organization_id: organization.id, id: user.activation_token }
 
       expect(response).to have_http_status(:success)
     end
 
     context "when user not found by the reset token" do
       it "returns not found" do
-        get :activate, params: {organization_id: organization.id, id: "123"}
+        get :activate, params: { organization_id: organization.id, id: "123" }
 
         expect(response).to have_http_status(:unauthorized)
       end
@@ -246,12 +245,12 @@ RSpec.describe UsersController do
 
   describe "POST currencies" do
     it "returns http success" do
-      post :set_currency, params: {organization_id: organization.id, user_id: user.id, currency: "EUR"}
+      post :set_currency, params: { organization_id: organization.id, user_id: user.id, currency: "EUR" }
       expect(response).to have_http_status(:success)
     end
 
     it "changes the user default currency" do
-      post :set_currency, params: {organization_id: organization.id, user_id: user.id, currency: "BRL"}
+      post :set_currency, params: { organization_id: organization.id, user_id: user.id, currency: "BRL" }
       currency = Users::ClientSettings.find_by(user_id: user.id).currency
       expect(currency).to eq("BRL")
     end

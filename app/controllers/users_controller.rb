@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :doorkeeper_authorize!, only: [:create, :activate, :passwordless_authentication]
+  skip_before_action :doorkeeper_authorize!, only: %i[create activate passwordless_authentication]
 
   DASH_LIMIT = 3
 
   def home
-    response = Rails.cache.fetch("#{client_results.cache_key}/dashboard_index", expires_in: 12.hours) {
-      @contacts = Legacy::Contact.where(user: current_user).limit(6).map { |contact|
+    response = Rails.cache.fetch("#{client_results.cache_key}/dashboard_index", expires_in: 12.hours) do
+      @contacts = Legacy::Contact.where(user: current_user).limit(6).map do |contact|
         contact.as_json(
-          include: {address: {include: {country: {only: :name}},
-                              except: %i[created_at updated_at country_id]}},
+          include: { address: { include: { country: { only: :name } },
+                                except: %i[created_at updated_at country_id] } },
           except: %i[created_at updated_at address_id]
         )
-      }
+      end
       user_locs = Legacy::UserAddress.where(user: current_user)
-      addresses = user_locs.map { |ul|
-        {user: ul, address: ul.address.to_custom_hash}
-      }
+      addresses = user_locs.map do |ul|
+        { user: ul, address: ul.address.to_custom_hash }
+      end
 
       {
         shipments: shipments_hash,
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
         num_contact_pages: (Legacy::Contact.where(user: current_user).count.to_f / 6).to_f.ceil,
         addresses: addresses
       }
-    }
+    end
     response_handler(response)
   end
 
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     user = current_user
     @addresses = Legacy::UserAddress.where(user: user).map(&:address)
 
-    {addresses: @addresses}
+    { addresses: @addresses }
   end
 
   def update
@@ -49,9 +49,7 @@ class UsersController < ApplicationController
     if params[:update][:address]
       address = Address.create_from_raw_params!(address_params)
       address.geocode_from_address_fields!
-      unless address.nil?
-        Legacy::UserAddress.create(user: user, address: address)
-      end
+      Legacy::UserAddress.create(user: user, address: address) unless address.nil?
     end
 
     user_response = complete_user_response(user: user)
@@ -65,7 +63,7 @@ class UsersController < ApplicationController
     user = Api::ClientCreationService.new(
       client_attributes: new_user_params,
       profile_attributes: profile_params,
-      settings_attributes: {currency: current_scope[:default_currency]}
+      settings_attributes: { currency: current_scope[:default_currency] }
     ).perform
     response = generate_token_for(user: user, scope: "public")
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
@@ -79,9 +77,7 @@ class UsersController < ApplicationController
   end
 
   def passwordless_authentication
-    if current_scope.dig(:signup_form_fields, :password)
-      not_authenticated && return
-    end
+    not_authenticated && return if current_scope.dig(:signup_form_fields, :password)
     raise ActiveRecord::RecordInvalid if passwordless_new_user_params[:email].blank?
 
     user = Users::Client.find_by(passwordless_new_user_params)
@@ -132,7 +128,7 @@ class UsersController < ApplicationController
   private
 
   def not_authenticated
-    render json: {success: false}, status: :unauthorized
+    render json: { success: false }, status: :unauthorized
   end
 
   def new_user_params
@@ -152,9 +148,7 @@ class UsersController < ApplicationController
       :organization_id, :email, :password, :cookies
     ).to_h
 
-    unless return_params[:confirm_password].nil?
-      return_params[:password_confirmation] = return_params.delete(:confirm_password)
-    end
+    return_params[:password_confirmation] = return_params.delete(:confirm_password) unless return_params[:confirm_password].nil?
 
     unless return_params[:cookies].nil?
       return_params.delete(:cookies)
@@ -188,17 +182,17 @@ class UsersController < ApplicationController
   end
 
   def complete_user_response(user:)
-    role = {name: role_for(user: user)}
+    role = { name: role_for(user: user) }
     currency = user.settings&.currency
-    user_metadata = {role: role, inactivityLimit: inactivity_limit, currency: currency}
+    user_metadata = { role: role, inactivityLimit: inactivity_limit, currency: currency }
     merge_profile(user: user).merge(user_metadata)
   end
 
   def client_results
-    @client_results ||= Journey::Result.joins(result_set: :query)
+    @client_results ||= Journey::Result.joins(result_set: :query).joins(:route_sections)
       .where(
-        journey_result_sets: {status: "completed"},
-        journey_queries: {client_id: current_user.id, organization_id: current_organization.id}
+        journey_result_sets: { status: "completed" },
+        journey_queries: { client_id: current_user.id, organization_id: current_organization.id }
       )
   end
 end
