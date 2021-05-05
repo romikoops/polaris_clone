@@ -54,7 +54,9 @@ module ResultFormatter
     def create_cargo_section_rows(row:, items:)
       return create_cargo_currency_section_rows(row: row, items: items, level: 3) if consolidated_cargo?
 
-      items.group_by { |item| item.cargo_units.ids }.each do |cargo_unit_ids, items_by_cargo|
+      items.group_by { |item| item.cargo_units.ids }
+        .sort_by { |cargo_unit_ids, _items_by_cargo| -cargo_unit_ids.length }
+        .each do |cargo_unit_ids, items_by_cargo|
         fee_value = value(items: items_by_cargo)
         original_fee_value = original_value(items: items_by_cargo)
         cargo_row = default_values.merge(
