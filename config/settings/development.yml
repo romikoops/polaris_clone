@@ -26,3 +26,5 @@ google_sign_in:
 
 uploads:
   secret: <%= Rails.application.credentials.dig(:development, :uploads, :secret) %>
+
+airflow: https://airflow-dev.itsmycargo.tech

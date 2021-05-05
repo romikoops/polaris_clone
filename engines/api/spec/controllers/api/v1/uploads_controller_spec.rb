@@ -10,27 +10,21 @@ module Api
     let(:token) { FactoryBot.create(:organizations_integration_token, organization: organization) }
 
     before do
+      Organizations.current_id = organization.id
       request.headers["Authorization"] = "Bearer #{token.token}"
     end
 
-    describe "POST #upload" do
-      let(:client) { Aws::S3::Client.new(stub_responses: true) }
-      let(:expected_request) do
-        {
-          bucket: Settings.aws.ingest_bucket,
-          content_type: upload_content_type,
-          key: "#{organization.id}/#{upload_filename}",
-          body: upload_body
-        }
-      end
-      let(:upload_content_type) { uploaded_file.content_type }
-      let(:upload_filename) { uploaded_file.original_filename }
-      let(:upload_body) { uploaded_file.tempfile }
-
+    describe "POST #create" do
       before do
-        allow(Aws::S3::Client).to receive(:new).and_return(client)
-        allow(Settings.aws).to receive(:ingest_bucket).and_return("itsmycargo-ingest")
         allow(ActionDispatch::Http::UploadedFile).to receive(:new).and_return(uploaded_file)
+      end
+
+      context "when token exists and is valid and the upload pipeline is successful" do
+        it "renders 201" do
+          post :create, params: { file: uploaded_file }
+
+          expect(response.status).to eq(201)
+        end
       end
 
       describe "Authentication" do
@@ -39,20 +33,6 @@ module Api
             post :create, params: { file: uploaded_file }
 
             expect(response.status).to eq(401)
-          end
-
-          it "doesn't upload" do
-            post :create, params: { file: uploaded_file }
-
-            expect(client.api_requests.count).to eq(0)
-          end
-        end
-
-        context "when token exists and valid" do
-          it "renders 201" do
-            post :create, params: { file: uploaded_file }
-
-            expect(response.status).to eq(201)
           end
         end
 
@@ -81,53 +61,40 @@ module Api
         end
       end
 
-      describe "upload" do
+      describe "Trigger upload pipeline" do
+        before do
+          allow(Api::UploadPipelines::Base).to receive(:new).and_return(upload_pipeline)
+          allow(upload_pipeline).to receive(:perform)
+          allow(described_class::FileWrapper).to receive(:new).and_return(file_wrapper)
+          allow(upload_pipeline).to receive(:message)
+        end
+
+        let(:upload_pipeline) { instance_double("Upload Pipeline") }
+
         context "when request content type is multipart/form-data" do
-          it "builds the correct upload request" do
+          let(:file_wrapper) { FactoryBot.build(:api_file_wrapper, content_type: "multipart/form-data") }
+
+          it "builds the correct file wrapper" do
             post :create, params: { file: uploaded_file }
 
-            expect(client.api_requests.first[:params]).to eq(expected_request)
+            expect(Api::UploadPipelines::Base).to have_received(:new).with(
+              organization_id: token.organization_id,
+              file_wrapper: file_wrapper
+            )
           end
         end
 
         context "when request content type is application/json" do
           let(:json_data) { File.read("spec/fixtures/files/dummy.json") }
-          let(:upload_content_type) { "application/json" }
-          let(:upload_filename) { "unknown at request time (gets generated)" }
-          let(:upload_body) { json_data }
+          let(:file_wrapper) { FactoryBot.build(:api_file_wrapper) }
 
-          it "builds the correct upload request" do
+          it "builds the correct file wrapper" do
             post :create, params: { json_data: json_data }, as: :json
 
-            expect(client.api_requests.first[:params].except(:key)).to eq(expected_request.except(:key))
-          end
-        end
-
-        context "when upload fails" do
-          before do
-            client.stub_responses(
-              :put_object, ->(_) { "NoSuchBucket" }
+            expect(Api::UploadPipelines::Base).to have_received(:new).with(
+              organization_id: token.organization_id,
+              file_wrapper: file_wrapper
             )
-          end
-
-          it "renders error" do
-            post :create, params: { file: uploaded_file }
-
-            expect(response.status).to eq(422)
-          end
-        end
-
-        context "when etag is not present" do
-          before do
-            client.stub_responses(
-              :put_object, ->(_) { { etag: nil } }
-            )
-          end
-
-          it "renders error" do
-            post :create, params: { file: uploaded_file }
-
-            expect(response.status).to eq(422)
           end
         end
       end

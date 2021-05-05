@@ -18,6 +18,7 @@ end
 #  id              :uuid             not null, primary key
 #  description     :string
 #  expires_at      :datetime
+#  pipeline        :string           default("default")
 #  scope           :string
 #  token           :uuid
 #  created_at      :datetime         not null

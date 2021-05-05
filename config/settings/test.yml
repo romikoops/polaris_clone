@@ -1,3 +1,6 @@
+aws:
+  ingest_bucket: "itsmycargo-ingest"
+
 carta:
   token: FAKECARTATOKEN
   url: fakecartaurl
@@ -21,3 +24,5 @@ google:
 
 uploads:
   secret: FAKEKEY
+
+airflow: https://example.com

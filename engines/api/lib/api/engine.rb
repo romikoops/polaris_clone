@@ -3,6 +3,7 @@
 require "active_model_serializers"
 require "draper"
 require "fast_jsonapi"
+require "google/iam/credentials/v1"
 require "kaminari"
 require "money_cache"
 require "sentry-rails"
@@ -40,8 +41,6 @@ module Api
       end
     end
 
-    if defined?(FactoryBotRails)
-      config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)]
-    end
+    config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)] if defined?(FactoryBotRails)
   end
 end

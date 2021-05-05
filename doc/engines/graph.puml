@@ -155,13 +155,13 @@ api --> analytics
 api --> api_auth
 api --> cargo
 api --> carta
+api --> cms_data
 api --> journey
-api --> organizations
 api --> organization_manager
+api --> organizations
 api --> pricings
 api --> profiles
 api --> result_formatter
-api --> cms_data
 api --> treasury
 api --> trucking
 api --> users

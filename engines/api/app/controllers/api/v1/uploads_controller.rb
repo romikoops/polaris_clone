@@ -7,10 +7,13 @@ module Api
     class UploadsController < ApiController
       skip_before_action :doorkeeper_authorize!, :ensure_organization!
       before_action :authenticate_request!
-      before_action :file_params, only: [:create]
+
+      FileWrapper = Struct.new(:content_type, :filename, :file_or_string, keyword_init: true)
 
       def create
-        s3_upload && (render json: { message: "File uploaded" }, status: :created)
+        upload_pipeline.perform
+
+        render json: { message: upload_pipeline.message }, status: :created
       rescue Aws::S3::Errors::ServiceError => e
         render json: { message: "Error uploading object: #{e.message}" }, status: :unprocessable_entity
       end
@@ -35,40 +38,36 @@ module Api
         )
       end
 
-      def file_params
-        @file_params ||= case request.content_type
-                         when "application/json"
-                           {
-                             content_type: "application/json",
-                             filename: "#{SecureRandom.uuid}.json",
-                             file_or_string: case_invariant_params.require(:json_data)
-                           }
-                         when "multipart/form-data"
-                           uploaded_file = case_invariant_params.require(:file)
+      def upload_pipeline
+        @upload_pipeline ||= Api::UploadPipelines::Base
+          .get(pipeline: integration_token.pipeline)
+          .new(organization_id: integration_token.organization_id, file_wrapper: file_wrapper)
+      end
 
-                           {
-                             content_type: uploaded_file.content_type,
-                             filename: uploaded_file.original_filename,
-                             file_or_string: uploaded_file.tempfile
-                           }
-                         else
-                           render json: { message: "Unsupported Content-Type" }, status: :unsupported_media_type and return
-                         end
+      def file_wrapper
+        @file_wrapper ||=
+          case request.content_type
+          when "application/json"
+            FileWrapper.new(
+              content_type: "application/json",
+              filename: "#{SecureRandom.uuid}.json",
+              file_or_string: case_invariant_params.require(:json_data)
+            )
+          when "multipart/form-data"
+            uploaded_file = case_invariant_params.require(:file)
+
+            FileWrapper.new(
+              content_type: uploaded_file.content_type,
+              filename: uploaded_file.original_filename,
+              file_or_string: uploaded_file.tempfile
+            )
+          else
+            render json: { message: "Unsupported Content-Type" }, status: :unsupported_media_type and return
+          end
       end
 
       def case_invariant_params
         params.transform_keys(&:underscore)
-      end
-
-      def s3_upload
-        response = Aws::S3::Client.new.put_object(
-          bucket: Settings.aws.ingest_bucket,
-          content_type: file_params[:content_type],
-          key: "#{integration_token.organization_id}/#{file_params[:filename]}",
-          body: file_params[:file_or_string]
-        )
-
-        response.etag.present? || (raise Aws::S3::Errors::ServiceError.new("etag is missing", nil))
       end
     end
   end

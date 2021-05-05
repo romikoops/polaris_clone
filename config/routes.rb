@@ -3,12 +3,12 @@
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
   get "/healthz", to: "application#health"
-  get "/ping/version", to: proc { [200, {}, ["#{ENV["RELEASE"]}"]] }
+  get "/ping/version", to: proc { [200, {}, [(ENV["RELEASE"]).to_s]] }
   mount Rswag::Api::Engine, at: "/specs"
 
   get "/sidekiq", to: redirect("/admin/sidekiq", status: 301)
 
-  resource :user, only: [:show, :create] do
+  resource :user, only: %i[show create] do
     collection do
       post :passwordless_authentication
     end
@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f8774d44538@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f883a01cbf0@/Users/henry/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -864,6 +864,8 @@ end
 #                                       edit_domain GET    /domains/:id/edit(.:format)                domains_admin/admin#edit
 #                         new_max_dimensions_bundle GET    /max_dimensions_bundles/new(.:format)      max_dimensions_bundles_admin/admin#new
 #                        edit_max_dimensions_bundle GET    /max_dimensions_bundles/:id/edit(.:format) max_dimensions_bundles_admin/admin#edit
+#                                        new_margin GET    /margins/new(.:format)                     margins_admin/admin#new
+#                                       edit_margin GET    /margins/:id/edit(.:format)                margins_admin/admin#edit
 #                                    new_membership GET    /memberships/new(.:format)                 memberships_admin/admin#new
 #                                   edit_membership GET    /memberships/:id/edit(.:format)            memberships_admin/admin#edit
 #                                  new_organization GET    /organizations/new(.:format)               organizations_admin/admin#new
@@ -906,6 +908,12 @@ end
 #                                                   PATCH  /domains/:id(.:format)                     domains_admin/admin#update
 #                                                   PUT    /domains/:id(.:format)                     domains_admin/admin#update
 #                                                   DELETE /domains/:id(.:format)                     domains_admin/admin#destroy
+#                               margins_admin_index GET    /margins(.:format)                         margins_admin/admin#index
+#                                                   POST   /margins(.:format)                         margins_admin/admin#create
+#                                     margins_admin GET    /margins/:id(.:format)                     margins_admin/admin#show
+#                                                   PATCH  /margins/:id(.:format)                     margins_admin/admin#update
+#                                                   PUT    /margins/:id(.:format)                     margins_admin/admin#update
+#                                                   DELETE /margins/:id(.:format)                     margins_admin/admin#destroy
 #                max_dimensions_bundles_admin_index GET    /max_dimensions_bundles(.:format)          max_dimensions_bundles_admin/admin#index
 #                                                   POST   /max_dimensions_bundles(.:format)          max_dimensions_bundles_admin/admin#create
 #                      max_dimensions_bundles_admin GET    /max_dimensions_bundles/:id(.:format)      max_dimensions_bundles_admin/admin#show

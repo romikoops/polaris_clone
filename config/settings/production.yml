@@ -41,3 +41,5 @@ smtp:
 
 uploads:
   secret: <%= Rails.application.credentials.dig(:production, :uploads, :secret) %>
+
+airflow: https://airflow.itsmycargo.tech

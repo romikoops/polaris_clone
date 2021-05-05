@@ -2890,7 +2890,8 @@ CREATE TABLE public.organizations_integration_tokens (
     description character varying,
     expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    pipeline character varying DEFAULT 'default'::character varying
 );
 
 
@@ -12183,6 +12184,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210319101738'),
 ('20210326102626'),
 ('20210412145911'),
-('20210420120815');
+('20210420120815'),
+('20210427175457');
 
 
