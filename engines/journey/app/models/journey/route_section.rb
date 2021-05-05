@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Journey
   class RouteSection < ApplicationRecord
     belongs_to :from, class_name: "Journey::RoutePoint"
@@ -10,7 +11,8 @@ module Journey
       air: "air",
       rail: "rail",
       truck: "truck",
-      carriage: "carriage"
+      carriage: "carriage",
+      relay: "relay"
     }
 
     validates :service, presence: true

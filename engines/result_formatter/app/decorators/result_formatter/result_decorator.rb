@@ -273,32 +273,30 @@ module ResultFormatter
 
     def pre_carriage_section
       @pre_carriage_section ||= route_sections_in_order.find do |section|
-        section.mode_of_transport == "carriage" && section.to.geo_id == origin_route_point.geo_id
+        section.mode_of_transport == "carriage" && section.order < main_freight_section.order
       end
     end
 
     def on_carriage_section
       @on_carriage_section ||= route_sections_in_order.find do |section|
-        section.mode_of_transport == "carriage" && section.from.geo_id == destination_route_point.geo_id
+        section.mode_of_transport == "carriage" && section.order > main_freight_section.order
       end
     end
 
     def origin_transfer_section
       @origin_transfer_section ||= route_sections_in_order.find do |section|
-        section.from.geo_id == origin_route_point.geo_id && section.to.geo_id == origin_route_point.geo_id
+        section.mode_of_transport == "relay" && section.order < main_freight_section.order
       end
     end
 
     def destination_transfer_section
       @destination_transfer_section ||= route_sections_in_order.find do |section|
-        section.from.geo_id == destination_route_point.geo_id && section.to.geo_id == destination_route_point.geo_id
+        section.mode_of_transport == "relay" && section.order > main_freight_section.order
       end
     end
 
     def main_freight_section
-      @main_freight_section ||= route_sections_in_order.find do |section|
-        section.from.geo_id != section.to.geo_id && section.mode_of_transport != "carriage"
-      end
+      @main_freight_section ||= route_sections.where.not(mode_of_transport: %w[carriage relay]).first
     end
 
     def current_line_item_set
@@ -308,23 +306,11 @@ module ResultFormatter
     delegate :line_items, to: :current_line_item_set
 
     def origin_route_point
-      @origin_route_point ||= route_sections_in_order
-        .reject do |route_section|
-          route_section.mode_of_transport == "carriage" ||
-            route_section.order < main_freight_section.order
-        end
-        .map(&:from)
-        .find(&:locode)
+      @origin_route_point ||= main_freight_section.from
     end
 
     def destination_route_point
-      @destination_route_point ||= route_sections_in_order
-        .reject do |route_section|
-          route_section.mode_of_transport == "carriage" ||
-            route_section.order < main_freight_section.order
-        end
-        .map(&:to)
-        .find(&:locode)
+      @destination_route_point ||= main_freight_section.to
     end
 
     def total_chargeable_weight(section:)

@@ -134,9 +134,10 @@ module Api
     end
 
     def legacy_section_key(route_section:)
-      if route_section.mode_of_transport == "carriage"
+      case route_section.mode_of_transport
+      when "carriage"
         legacy_carriage_key(route_section: route_section)
-      elsif route_section.from.geo_id == route_section.to.geo_id
+      when "relay"
         legacy_transfer_key(route_section: route_section)
       else
         "cargo"
@@ -155,7 +156,7 @@ module Api
     end
 
     def legacy_transfer_key(route_section:)
-      if route_section.to.geo_id == main_freight_section.from.geo_id
+      if route_section.order < main_freight_section.order
         "export"
       else
         "import"
@@ -242,9 +243,7 @@ module Api
     end
 
     def main_freight_section
-      @main_freight_section ||= route_sections.find do |route_section|
-        route_section.mode_of_transport != "carriage" && route_section.to.geo_id != route_section.from.geo_id
-      end
+      @main_freight_section ||= route_sections.where.not(mode_of_transport: %w[carriage relay]).first
     end
   end
 end

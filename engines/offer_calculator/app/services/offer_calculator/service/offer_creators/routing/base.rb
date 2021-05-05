@@ -12,7 +12,7 @@ module OfferCalculator
             when /trucking/
               OfferCalculator::Service::OfferCreators::Routing::Carriage
             when /port/
-              OfferCalculator::Service::OfferCreators::Routing::Transfer
+              OfferCalculator::Service::OfferCreators::Routing::Relay
             else
               OfferCalculator::Service::OfferCreators::Routing::Freight
             end
@@ -52,10 +52,10 @@ module OfferCalculator
 
           def route_point(location:)
             name, function, locode, geo_id = case location.class.to_s
-            when "Legacy::Hub"
-              [location.name, "port", location.nexus.locode, geo_id_from_hub(hub: location)]
-            when "Legacy::Address"
-              [location.geocoded_address, "address", nil, geo_id_from_address(address: location)]
+                                             when "Legacy::Hub"
+                                               [location.name, "port", location.nexus.locode, geo_id_from_hub(hub: location)]
+                                             when "Legacy::Address"
+                                               [location.geocoded_address, "address", nil, geo_id_from_address(address: location)]
             end
 
             Journey::RoutePoint.create(
@@ -63,7 +63,8 @@ module OfferCalculator
               function: function,
               locode: locode,
               coordinates: RGeo::Geos.factory(srid: 4326).point(location.longitude, location.latitude),
-              geo_id: geo_id)
+              geo_id: geo_id
+            )
           end
 
           def offer_data

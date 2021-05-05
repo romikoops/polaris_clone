@@ -18,7 +18,7 @@ module Api
 
       def section
         return carriage_section if mode_of_transport == "carriage"
-        return transfer_section if route_section.from.geo_id == route_section.to.geo_id
+        return transfer_section if mode_of_transport == "relay"
 
         freight_charge_category.name
       end
@@ -26,7 +26,7 @@ module Api
       private
 
       def carriage_section
-        return pre_carriage_charge_category.name if order == 0
+        return pre_carriage_charge_category.name if order.zero?
 
         on_carriage_charge_category.name
       end

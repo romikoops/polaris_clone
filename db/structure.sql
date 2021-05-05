@@ -210,7 +210,8 @@ CREATE TYPE public.journey_mode_of_transport AS ENUM (
     'air',
     'rail',
     'truck',
-    'carriage'
+    'carriage',
+    'relay'
 );
 
 
@@ -12185,6 +12186,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210326102626'),
 ('20210412145911'),
 ('20210420120815'),
-('20210427175457');
+('20210427175457'),
+('20210504094632');
 
 

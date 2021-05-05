@@ -26,7 +26,7 @@ module ResultFormatter
     end
 
     def mode_of_transport
-      context.dig(:mode_of_transport)
+      context[:mode_of_transport]
     end
 
     def scope
@@ -51,7 +51,7 @@ module ResultFormatter
     end
 
     def transfer_fee?
-      route_section.from.geo_id == route_section.to.geo_id
+      route_section.mode_of_transport == "relay"
     end
 
     def freight_fee?

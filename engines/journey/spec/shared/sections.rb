@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_context "routing_line_sections" do
+RSpec.shared_context "with routing_line_sections" do
   let(:pickup_point) do
     FactoryBot.build(:journey_route_point,
       coordinates: origin_coordinates,
@@ -18,15 +18,15 @@ RSpec.shared_context "routing_line_sections" do
   let(:origin_transfer_latitude) { 57.694253 }
   let(:origin_transfer_longitude) { 11.854048 }
   let(:origin_transfer_text) { "Hamburg" }
-  let(:origin_transfer_coordinates) {
+  let(:origin_transfer_coordinates) do
     RGeo::Geos.factory(srid: 4326).point(origin_transfer_longitude, origin_transfer_latitude)
-  }
+  end
   let(:destination_transfer_latitude) { 31.232014 }
   let(:destination_transfer_longitude) { 121.4867159 }
   let(:destination_transfer_text) { "Shanghai" }
-  let(:destination_transfer_coordinates) {
+  let(:destination_transfer_coordinates) do
     RGeo::Geos.factory(srid: 4326).point(destination_transfer_longitude, destination_transfer_latitude)
-  }
+  end
   let(:freight_mot) { "ocean" }
   let(:origin_transfer) do
     FactoryBot.build(:journey_route_point,
@@ -57,7 +57,7 @@ RSpec.shared_context "routing_line_sections" do
       from: origin_transfer,
       to: origin_transfer,
       order: 1,
-      mode_of_transport: freight_mot,
+      mode_of_transport: "relay",
       service: freight_carriage_service,
       carrier: freight_carriage_carrier)
   end
@@ -75,7 +75,7 @@ RSpec.shared_context "routing_line_sections" do
       from: destination_transfer,
       to: destination_transfer,
       order: 3,
-      mode_of_transport: freight_mot,
+      mode_of_transport: "relay",
       service: freight_carriage_service,
       carrier: freight_carriage_carrier)
   end

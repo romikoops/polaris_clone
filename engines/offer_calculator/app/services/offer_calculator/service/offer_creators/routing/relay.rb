@@ -4,7 +4,7 @@ module OfferCalculator
   module Service
     module OfferCreators
       module Routing
-        class Transfer < OfferCalculator::Service::OfferCreators::Routing::Base
+        class Relay < OfferCalculator::Service::OfferCreators::Routing::Base
           private
 
           def local_charge
@@ -20,7 +20,7 @@ module OfferCalculator
           end
 
           def mode_of_transport
-            local_charge.mode_of_transport
+            "relay"
           end
         end
       end
