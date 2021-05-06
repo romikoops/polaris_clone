@@ -16,10 +16,11 @@ module ExcelDataServices
           GROUPING_KEYS = %w[cargo_class carriage truck_type].freeze
 
           def restructured_data
-            groupings.flat_map do |grouping|
+            all_sheet_data = groupings.flat_map do |grouping|
               selected_rows(cargo_class: grouping["cargo_class"], carriage: grouping["carriage"], truck_type: grouping["truck_type"])
                 .map { |row| build_trucking_from_row(row: row) }.uniq
             end
+            all_sheet_data.uniq { |row| row.slice(*GROUPING_KEYS) }
           end
 
           def build_trucking_from_row(row:)

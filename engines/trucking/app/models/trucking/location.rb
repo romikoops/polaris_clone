@@ -22,8 +22,6 @@ module Trucking
 
     before_validation :generate_upsert_id
 
-    private
-
     def generate_upsert_id
       # rubocop:disable GitHub/InsecureHashAlgorithm
       self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)

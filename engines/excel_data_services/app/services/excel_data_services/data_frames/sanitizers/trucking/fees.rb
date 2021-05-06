@@ -28,6 +28,12 @@ module ExcelDataServices
               "range_max" => "decimal"
             }
           end
+
+          def default_values
+            {
+              "percentage" => nil
+            }
+          end
         end
       end
     end

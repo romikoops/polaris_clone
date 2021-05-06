@@ -15,28 +15,15 @@ module ExcelDataServices
         end
 
         def zone_schema
-          @zone_schema ||= file.sheets.each do |sheet_name|
-            schema = ExcelDataServices::Schemas::Sheet::TruckingZones.new(file: file, sheet_name: sheet_name)
-            return schema if schema.valid?
-          end
+          @zone_schema ||= single_sheet(sheet_class: ExcelDataServices::Schemas::Sheet::TruckingZones)
         end
 
         def fee_schema
-          @fee_schema ||= file.sheets.each do |sheet_name|
-            schema = ExcelDataServices::Schemas::Sheet::TruckingFees.new(file: file, sheet_name: sheet_name)
-            return schema if schema.valid?
-          end
+          @fee_schema ||= single_sheet(sheet_class: ExcelDataServices::Schemas::Sheet::TruckingFees)
         end
 
         def rate_schemas
-          @rate_schemas ||= begin
-            file.sheets.each_with_object([]) do |sheet_name, schemas|
-              schema = ExcelDataServices::Schemas::Sheet::TruckingRates.new(
-                file: file, sheet_name: sheet_name
-              )
-              schemas << schema if schema.valid?
-            end
-          end
+          @rate_schemas ||= multiple_sheets(sheet_class: ExcelDataServices::Schemas::Sheet::TruckingRates)
         end
       end
     end

@@ -5,6 +5,8 @@ module ExcelDataServices
     module Augmenters
       module Trucking
         class Zones < ExcelDataServices::DataFrames::Augmenters::Base
+          BATCH_SIZE = 2000
+
           def perform
             super
             import_locations
@@ -14,9 +16,23 @@ module ExcelDataServices
           end
 
           def import_locations
-            ::Trucking::Location.import(all_locations.select(&:valid?), {
+            ::Trucking::Location.import(insertable_locations, {
               on_duplicate_key_ignore: true
             })
+          end
+
+          def insertable_locations
+            existing_ids = []
+            upsert_ids_with_locations.keys.each_slice(BATCH_SIZE) do |id_batch|
+              existing_batch = ::Trucking::Location.where(upsert_id: id_batch).pluck(:upsert_id)
+              existing_ids.append(*existing_batch)
+            end
+
+            upsert_ids_with_locations.except(*existing_ids).values
+          end
+
+          def upsert_ids_with_locations
+            @upsert_ids_with_locations ||= all_locations.index_by(&:generate_upsert_id)
           end
 
           def all_locations

@@ -11,5 +11,13 @@ RSpec.describe ExcelDataServices::Schemas::Files::Trucking do
     it "returns successfully" do
       expect(described_class.new(file: xlsx).valid?).to eq(true)
     end
+
+    context "when the file is not valid" do
+      let(:xlsx) { Roo::ExcelxMoney.new(file_fixture("dummy.xlsx").to_s) }
+
+      it "returns unsuccessfully" do
+        expect(described_class.new(file: xlsx).valid?).to eq(false)
+      end
+    end
   end
 end

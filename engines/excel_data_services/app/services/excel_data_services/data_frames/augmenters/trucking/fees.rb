@@ -27,7 +27,7 @@ module ExcelDataServices
           end
 
           def new_fee_codes
-            fee_codes = frame["fee_code"].to_a.uniq
+            fee_codes = frame["fee_code"].to_a.uniq.compact
             lowercase_with_original = fee_codes.map(&:downcase).zip(fee_codes).to_h
             existing_codes = Legacy::ChargeCategory.where(organization_id: state.organization_id, code: lowercase_with_original.keys).pluck(:code)
             lowercase_with_original.except(*existing_codes).values

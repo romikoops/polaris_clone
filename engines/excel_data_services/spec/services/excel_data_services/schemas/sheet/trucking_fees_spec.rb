@@ -11,5 +11,9 @@ RSpec.describe ExcelDataServices::Schemas::Sheet::TruckingFees do
     it "returns successfully" do
       expect(described_class.new(file: xlsx.sheet("Fees"), sheet_name: "Fees").valid?).to eq(true)
     end
+
+    it "returns unsuccessfully" do
+      expect(described_class.new(file: xlsx.sheet("Zones"), sheet_name: "Zones").valid?).to eq(false)
+    end
   end
 end
