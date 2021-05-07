@@ -4,6 +4,8 @@ Hallo,
 
 References: <%= @query.references.join(" ") %>
 Erstellungsdatum:: <% @query.created_at.strftime('%Y%d%m') %>
+Kunde: <%= @profile.full_name %>
+Email: <%= @user.email %>
 
 Beschreibung  Betrag
 
@@ -16,7 +18,7 @@ Wenn Sie eine Frage bzgl. Ihrer Quotierung haben, antworten Sie einfach auf dies
 Mit freundlichen Grüßen,
 
 Ihr <%= @theme.name %> Team
-  
+
 © 2020 ItsMyCargo ApS. All rights reserved.
 
 ItsMyCargo ApS

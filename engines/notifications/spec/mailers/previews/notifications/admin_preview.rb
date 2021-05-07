@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Notifications
   class AdminPreview < ActionMailer::Preview
     def user_created
@@ -10,7 +11,7 @@ module Notifications
     end
 
     def offer_created
-      query = FactoryBot.build(:journey_query, organization: organization)
+      query = FactoryBot.build(:journey_query, client: user, organization: organization)
       offer = FactoryBot.build(:journey_offer, query: query)
 
       AdminMailer.with(

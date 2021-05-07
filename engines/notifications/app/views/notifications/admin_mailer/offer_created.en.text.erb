@@ -1,9 +1,11 @@
 Hi,
 
 A new offer has been generated through your online shop!
-                        
+
 Ref: <%= @results.map(&:imc_reference).join(" ") %>
 Created at: <% @query.created_at.strftime('%Y%d%m') %>
+Client: <%= @profile.full_name %>
+Email: <%= @user.email %>
 
 Description Amount
 

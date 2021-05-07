@@ -5,6 +5,7 @@ module Notifications
     default from: "support@itsmycargo.com"
 
     before_action do
+      Organizations.current_id = current_organization.id
       attachments.inline["logo.png"] = Pathname.new(
         File.expand_path("../../assets/images/notifications/logo-blue.png", __dir__)
       ).read
@@ -20,8 +21,8 @@ module Notifications
     def offer_created
       @offer = params[:offer]
       @query = @offer.query
-      @user = Users::Client.unscoped.find_by(id: @query.client_id, organization: params[:organization])
-      @profile = @user&.profile || Users::ClientProfile.new
+      @user = @query.client || Users::Client.new
+      @profile = @user.profile
       @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
       attachments[@offer.file.filename.to_s] = @offer.attachment if @offer.file.attached?
       mail to: params[:recipient], subject: subject_line
