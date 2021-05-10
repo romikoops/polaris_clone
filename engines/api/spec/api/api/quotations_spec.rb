@@ -44,7 +44,7 @@ RSpec.describe "Quotations", type: :request, swagger: true do
             properties: {
               selected_date: { type: :string },
               organization_id: { type: :string },
-              user_id: { type: :string },
+              user_id: { type: :string, nullable: true },
               origin: {
                 type: :object,
                 oneOf: [
