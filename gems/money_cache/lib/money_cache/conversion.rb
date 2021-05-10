@@ -16,18 +16,18 @@ module MoneyCache
     end
 
     def perform
-      (get_stored_rate || get_inverse_rate || get_calculated_rate).round(6)
+      (stored_rate || inverse_rate || calculated_rate).round(6)
     end
 
     private
 
     attr_reader :store, :from, :to, :base
 
-    def get_stored_rate
+    def stored_rate
       store.get_rate(from, to)
     end
 
-    def get_inverse_rate(from_currency: from, to_currency: to)
+    def inverse_rate(from_currency: from, to_currency: to)
       inverse_rate = store.get_rate(to_currency, from_currency)
       return unless inverse_rate
 
@@ -35,20 +35,20 @@ module MoneyCache
       store.add_rate(from_currency, to_currency, rate)
     end
 
-    def get_calculated_rate
+    def calculated_rate
       return unless to_base_rate && from_base_rate
 
-      rate = to_base_rate.to_d / from_base_rate
+      rate = from_base_rate / to_base_rate.to_d
       store.add_rate(from, to, rate)
       rate
     end
 
     def from_base_rate
-      @from_base_rate ||= store.get_rate(from, base) || get_inverse_rate(from_currency: base, to_currency: from)
+      @from_base_rate ||= store.get_rate(from, base) || inverse_rate(from_currency: from, to_currency: base)
     end
 
     def to_base_rate
-      @to_base_rate ||= store.get_rate(base, to) || get_inverse_rate(from_currency: to, to_currency: base)
+      @to_base_rate ||= store.get_rate(base, to) || inverse_rate(from_currency: base, to_currency: to)
     end
   end
 end
