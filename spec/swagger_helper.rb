@@ -1007,7 +1007,8 @@ RSpec.configure do |config|
                   },
                   phone: {
                     description: "Phone",
-                    type: "string"
+                    type: "string",
+                    nullable: true
                   },
                   companyName: {
                     description: "Company",
