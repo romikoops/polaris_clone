@@ -7,7 +7,6 @@ RSpec.describe "Queries", type: :request, swagger: true do
   let(:load_type) { "cargo_item" }
   let(:params) do
     {
-      aggregated: aggregated,
       items: items,
       loadType: loadType,
       originId: originId,
@@ -83,10 +82,6 @@ RSpec.describe "Queries", type: :request, swagger: true do
             type: :string,
             description: "The load type of the query"
           },
-          aggregated: {
-            type: :boolean,
-            description: "Whether the cargo is aggregated or not"
-          },
           items: {
             type: :array,
             items: {
@@ -97,7 +92,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
               ]
             }
           }
-        }, required: %w[originId destinationId loadType aggregated items]
+        }, required: %w[originId destinationId loadType items]
       }
 
       let(:query) do
@@ -105,7 +100,6 @@ RSpec.describe "Queries", type: :request, swagger: true do
           originId: origin.id,
           destinationId: destination.id,
           loadType: load_type,
-          aggregated: false,
           items: [item]
         }
       end
