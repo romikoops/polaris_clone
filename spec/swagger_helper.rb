@@ -637,13 +637,18 @@ RSpec.configure do |config|
               }
             }, required: ["id"]
           },
-          locationV1: {
+          locationV1Nexus: {
             type: "object",
             properties: {
               nexus_id: {
                 type: "integer",
                 description: "The unique identifier of the Location Nexus"
-              },
+              }
+            }, required: %w[nexus_id]
+          },
+          locationV1Trucking: {
+            type: "object",
+            properties: {
               latitude: {
                 type: "string",
                 description: "The latitude of the Location"
