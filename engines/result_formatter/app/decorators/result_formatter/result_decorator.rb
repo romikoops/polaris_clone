@@ -39,7 +39,7 @@ module ResultFormatter
     end
 
     def currency
-      @currency ||= Users::ClientSettings.find_by(user: client)&.currency || scope[:default_currency]
+      @currency ||= result_set.currency
     end
 
     def voyage_code

@@ -175,4 +175,46 @@ RSpec.describe ResultFormatter::ResultDecorator do
       end
     end
   end
+
+  describe ".grand_total_section" do
+    context "when hide_grand_total is true" do
+      let(:scope_content) do
+        {
+          "hide_grand_total" => true
+        }
+      end
+
+      it "returns an empty string" do
+        expect(klass.grand_total_section).to eq("")
+      end
+    end
+
+    context "when hide_converted_grand_total is true" do
+      let(:scope_content) do
+        {
+          "hide_converted_grand_total" => true
+        }
+      end
+
+      before do
+        allow(klass).to receive(:currencies).and_return(%w[EUR SEK])
+      end
+
+      it "returns an empty string" do
+        expect(klass.grand_total_section).to eq("")
+      end
+    end
+
+    context "when deafult currency has changed" do
+      let(:scope_content) do
+        {
+          "default_currency" => "SEK"
+        }
+      end
+
+      it "returns an empty string" do
+        expect(klass.grand_total_section).to include("EUR")
+      end
+    end
+  end
 end
