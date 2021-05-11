@@ -5,7 +5,7 @@ module OfferCalculator
     module RateBuilders
       class Fee
         LCL_TRUCKING_CODES = %w[stackable non_stackable].freeze
-        FCL_WM_RATE = 0.0001
+        FCL_CHARGEABLE_DENSITY = 0.0001
         attr_reader :charge_category, :code, :name, :min_value, :targets, :rate_basis,
           :max_value, :measures
         attr_accessor :components
@@ -41,12 +41,12 @@ module OfferCalculator
         end
 
         def flat_margin
-          margin_value = (object.flat_margins.dig(code) || 0) * 100
+          margin_value = (object.flat_margins[code] || 0) * 100
           Money.new(margin_value, max_value.currency)
         end
 
-        def wm_rate
-          return FCL_WM_RATE if /fcl/.match?(cargo_class)
+        def chargeable_density
+          return FCL_CHARGEABLE_DENSITY if /fcl/.match?(cargo_class)
 
           @measures.chargeable_weight_in_tons.value / @measures.volume.value
         end

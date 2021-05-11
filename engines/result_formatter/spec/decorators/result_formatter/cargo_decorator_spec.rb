@@ -11,7 +11,7 @@ RSpec.describe ResultFormatter::CargoDecorator do
   let(:chargeable_weight_view) { "volume" }
   let(:scope_content) { { "show_chargeable_weight" => true, "chargeable_weight_view" => chargeable_weight_view } }
   let(:scope) { OrganizationManager::ScopeService.new(target: user, organization: organization).fetch }
-  let(:klass) { described_class.decorate(cargo_unit, context: { scope: scope, result: decorated_result, wm_ratio: 1.0 }) }
+  let(:klass) { described_class.decorate(cargo_unit, context: { scope: scope, result: decorated_result, chargeable_density: 1.0 }) }
 
   before do
     Draper::ViewContext.controller = Pdf::ApplicationController.new

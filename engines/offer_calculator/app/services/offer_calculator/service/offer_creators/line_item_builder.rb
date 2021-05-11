@@ -48,7 +48,7 @@ module OfferCalculator
             units: charge.quantity,
             line_item_set: line_item_set,
             fee_code: charge.code.sub(/\A(included_|unknown_)/, ""),
-            wm_rate: charge.wm_rate,
+            chargeable_density: charge.chargeable_density,
             order: order,
             description: charge.name,
             included: charge.code.include?("included"),

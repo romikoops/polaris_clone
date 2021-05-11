@@ -324,9 +324,10 @@ module ResultFormatter
     end
 
     def cargo_items_for_section(section:)
+      line_item = section.line_items.first
       ResultFormatter::CargoDecorator.decorate_collection(
         lcl_units | aggr_units,
-        context: decorator_context.merge(wm_ratio: section.line_items.first.wm_rate)
+        context: decorator_context.merge(chargeable_density: line_item.chargeable_density || line_item.wm_rate)
       )
     end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Journey
   class LineItem < ApplicationRecord
     has_many :line_item_cargo_units, dependent: :destroy, inverse_of: :line_item
@@ -11,12 +12,12 @@ module Journey
     monetize :total_cents
     monetize :unit_price_cents
 
-    validates :wm_rate, presence: true
+    validates :chargeable_density, numericality: { greater_than: 0 }, presence: true
     validates :fee_code, presence: true
-    validates :units, numericality: {greater_than: 0}
+    validates :units, numericality: { greater_than: 0 }
     validates :unit_price_cents, numericality: true
     validates :total_cents, numericality: true
-    validates :exchange_rate, numericality: {greater_than: 0}
+    validates :exchange_rate, numericality: { greater_than: 0 }
   end
 end
 
@@ -25,6 +26,7 @@ end
 # Table name: journey_line_items
 #
 #  id                  :uuid             not null, primary key
+#  chargeable_density  :decimal(, )
 #  description         :string           default(""), not null
 #  exchange_rate       :decimal(, )
 #  fee_code            :string           not null
@@ -37,7 +39,7 @@ end
 #  unit_price_cents    :integer
 #  unit_price_currency :string
 #  units               :integer          not null
-#  wm_rate             :decimal(, )      not null
+#  wm_rate             :decimal(, )
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  line_item_set_id    :uuid

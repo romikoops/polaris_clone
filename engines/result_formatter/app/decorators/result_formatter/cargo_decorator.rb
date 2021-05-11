@@ -8,7 +8,7 @@ module ResultFormatter
     delegate :mode_of_transport, :shipment, to: :result
 
     def chargeable_weight
-      @chargeable_weight ||= Measured::Weight.new(object.volume.value * wm_ratio, "t").convert_to("kg")
+      @chargeable_weight ||= Measured::Weight.new(object.volume.value * chargeable_density, "t").convert_to("kg")
     end
 
     def gross_weight_per_item
@@ -78,8 +78,8 @@ module ResultFormatter
       @size_class ||= cargo_class
     end
 
-    def wm_ratio
-      context[:wm_ratio] || 0
+    def chargeable_density
+      context[:chargeable_density] || 0
     end
   end
 end

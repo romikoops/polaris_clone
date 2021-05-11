@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :journey_line_item, class: "Journey::LineItem" do
     association :line_item_set, factory: :journey_line_item_set
@@ -14,7 +15,7 @@ FactoryBot.define do
     included { false }
     optional { false }
     sequence(:order) { |n| n }
-    wm_rate { 1000 }
+    chargeable_density { 1000 }
     exchange_rate { 1.2 }
   end
 end
