@@ -6,7 +6,7 @@ Trestle.resource(:tenant_cargo_item_types, model: Legacy::TenantCargoItemType) d
   search do |query|
     filtered_collection = collection
       .joins(:organization)
-      .joins(:cargo_item_types)
+      .joins(:cargo_item_type)
     if query
       filtered_collection.where("category ILIKE :query OR description ILIKE :query OR organizations_organizations.slug ILIKE :query", query: "%#{query}%")
     else
@@ -17,7 +17,7 @@ Trestle.resource(:tenant_cargo_item_types, model: Legacy::TenantCargoItemType) d
   sort_column(:organization) do |collection, order|
     collection
       .joins(:organization)
-      .joins(:cargo_item_types)
+      .joins(:cargo_item_type)
       .reorder("organizations_organizations.slug #{order}")
   end
 
@@ -30,7 +30,9 @@ Trestle.resource(:tenant_cargo_item_types, model: Legacy::TenantCargoItemType) d
   end
 
   form do
-    select :organization, Organizations::Organization.all, :id, :slug
-    select :cargo_item_type, Legacy::CargoItemType.where(width: nil, height: nil), :id, :description
+    row do
+      col(sm: 6) { collection_select :organization_id, Organizations::Organization.all, :id, :slug }
+      col(sm: 6) { collection_select :cargo_item_type_id, Legacy::CargoItemType.where(width: nil, length: nil), :id, :description }
+    end
   end
 end
