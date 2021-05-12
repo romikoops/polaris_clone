@@ -18,7 +18,7 @@ module ResultFormatter
       ).reverse_geocode
     end
 
-    def has_pre_carriage?
+    def pre_carriage?
       Journey::RouteSection.exists?(
         result: results,
         mode_of_transport: :carriage,
@@ -34,7 +34,7 @@ module ResultFormatter
       cargo_ready_date
     end
 
-    def has_on_carriage?
+    def on_carriage?
       Journey::RouteSection.where.not(order: 0).exists?(result: results, mode_of_transport: :carriage)
     end
 
@@ -59,7 +59,7 @@ module ResultFormatter
     end
 
     delegate :external_id, :full_name, to: :user_profile
-    alias_method :client_name, :full_name
+    alias client_name full_name
 
     def company
       Companies::Company.joins(:memberships)
@@ -71,29 +71,29 @@ module ResultFormatter
     end
 
     def note_remarks
-      @note_remarks ||= results.reduce(Legacy::Note.none) { |notes, result|
+      @note_remarks ||= results.reduce(Legacy::Note.none) do |notes, result|
         notes.or(Notes::Service.new(itinerary: result.itinerary,
                                     tenant_vehicle: result.legacy_service,
                                     remarks: true).fetch)
-      }.uniq.pluck(:body)
+      end.uniq.pluck(:body)
     end
 
     def results
-      @results ||= result_sets.order(created_at: :desc).first.results.map { |result|
+      @results ||= result_sets.order(created_at: :desc).first.results.map do |result|
         ResultFormatter::ResultDecorator.new(result, context: context)
-      }
+      end
     end
 
     def total_weight
-      @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) { |memo, unit|
+      @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) do |memo, unit|
         memo + unit.total_weight
-      }
+      end
     end
 
     def total_volume
-      @total_volume ||= cargo_units.inject(Measured::Volume.new(0, "m3")) { |memo, unit|
+      @total_volume ||= cargo_units.inject(Measured::Volume.new(0, "m3")) do |memo, unit|
         memo + unit.total_volume
-      }
+      end
     end
 
     def modes_of_transport

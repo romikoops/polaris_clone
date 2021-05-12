@@ -6,6 +6,7 @@ module Api
       delegate_all
 
       decorates_association :client, with: UserDecorator
+      decorates_association :creator, with: UserDecorator
       decorates_association :origin_route_point, with: RoutePointDecorator
       decorates_association :destination_route_point, with: RoutePointDecorator
       decorates_association :results, with: ResultDecorator
@@ -16,8 +17,8 @@ module Api
           "status": "quoted",
           "load_type": load_type,
           "planned_pickup_date": selected_date,
-          "has_pre_carriage": has_pre_carriage?,
-          "has_on_carriage": has_on_carriage?,
+          "has_pre_carriage": pre_carriage?,
+          "has_on_carriage": on_carriage?,
           "destination_nexus": destination_nexus.as_json,
           "origin_nexus": origin_nexus.as_json,
           "pickup_address": pickup_address&.as_json,
@@ -48,7 +49,7 @@ module Api
       end
 
       def containers
-        cargo_units.where.not(cargo_class: ["lcl", "aggregated_lcl"]).map do |cargo_unit|
+        cargo_units.where.not(cargo_class: %w[lcl aggregated_lcl]).map do |cargo_unit|
           Api::V1::CargoUnitDecorator.new(cargo_unit, context: context)
         end
       end
@@ -67,7 +68,7 @@ module Api
         @results ||= Journey::Result.where(result_set: current_result_set)
       end
 
-      def has_pre_carriage?
+      def pre_carriage?
         Journey::RouteSection.exists?(
           result: results,
           mode_of_transport: :carriage,
@@ -75,13 +76,13 @@ module Api
         )
       end
 
-      def has_on_carriage?
+      def on_carriage?
         Journey::RouteSection.where(result: results, mode_of_transport: :carriage)
           .where.not(order: 0).present?
       end
 
       def pickup_address
-        return unless has_pre_carriage?
+        return unless pre_carriage?
 
         Legacy::Address.new(
           id: SecureRandom.uuid,
@@ -91,7 +92,7 @@ module Api
       end
 
       def delivery_address
-        return unless has_on_carriage?
+        return unless on_carriage?
 
         Legacy::Address.new(
           id: SecureRandom.uuid,
@@ -141,7 +142,7 @@ module Api
       end
 
       def scope
-        context.dig(:scope) || {}
+        context[:scope] || {}
       end
     end
   end

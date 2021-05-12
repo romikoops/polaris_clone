@@ -95,6 +95,33 @@ RSpec.describe "Quotations", type: :request, swagger: true do
         run_test!
       end
     end
+
+    get "Fetch quotations" do
+      tags "Quote"
+      description "Fetch all Quotations"
+      operationId "fetchQuotations"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :start_date,
+                in: :query,
+                type: :string,
+                description: "The beginning of the date range for filtering Queries by their CargoReadyDate"
+      parameter name: :end_date,
+                in: :query,
+                type: :string,
+                description: "The end of the date range for filtering Queries by their CargoReadyDate"
+
+      response "200", "successful operation" do
+        let(:start_date) { Time.zone.now - 1.month }
+        let(:end_date) { Time.zone.now }
+
+        run_test!
+      end
+    end
   end
 
   path "/v1/organizations/{organization_id}/quotations/{id}" do

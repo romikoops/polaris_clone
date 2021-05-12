@@ -2,8 +2,8 @@
   <% primary_color = theme.primary_color %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + organization["slug"] + ".png" %>
-  <% precarriage_color = query.has_pre_carriage? ? primary_color : neutral_color %>
-  <% oncarriage_color = query.has_on_carriage? ? primary_color : neutral_color %>
+  <% precarriage_color = query.pre_carriage? ? primary_color : neutral_color %>
+  <% oncarriage_color = query.on_carriage? ? primary_color : neutral_color %>
   <% weight_units = scope['values']['weight'] %>
 
   <div class="title">
@@ -115,15 +115,15 @@
         <% if result.pickup_address || result.delivery_address %>
           <div class="delivery-info">
             <% if result.pre_carriage_section.present? %>
-              <p> 
-                <b> Pickup from</b>: 
+              <p>
+                <b> Pickup from</b>:
                 <%=  result.full_pickup_address %>
                 <%= result.formatted_pre_carriage_service %>
               </p>
             <% end %>
             <% if result.on_carriage_section.present? %>
-              <p> 
-                <b> Delivery to</b>: 
+              <p>
+                <b> Delivery to</b>:
                 <%=  result.full_delivery_address  %>
                 <%=  result.formatted_on_carriage_service  %>
               </p>

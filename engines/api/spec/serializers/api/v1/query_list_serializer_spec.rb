@@ -19,13 +19,17 @@ module Api
       expect(target[:user]).to be_a(Api::V1::UserSerializer)
     end
 
+    it "returns the correct creator for the object passed" do
+      expect(target[:creator]).to be_a(Api::V1::UserSerializer)
+    end
+
     context "with pre_carriage" do
       before do
         allow(decorated_query).to receive(:pickup_address).and_return(address)
       end
 
       it "returns the pickup address" do
-        expect(target.dig(:origin)).to be_a(Api::V1::AddressSerializer)
+        expect(target[:origin]).to be_a(Api::V1::AddressSerializer)
       end
     end
 
@@ -36,7 +40,7 @@ module Api
       end
 
       it "returns the pickup address" do
-        expect(target.dig(:origin)).to be_a(Api::V1::NexusSerializer)
+        expect(target[:origin]).to be_a(Api::V1::NexusSerializer)
       end
     end
 
@@ -46,7 +50,7 @@ module Api
       end
 
       it "returns the pickup address" do
-        expect(target.dig(:destination)).to be_a(Api::V1::AddressSerializer)
+        expect(target[:destination]).to be_a(Api::V1::AddressSerializer)
       end
     end
 
@@ -57,7 +61,7 @@ module Api
       end
 
       it "returns the pickup address" do
-        expect(target.dig(:destination)).to be_a(Api::V1::NexusSerializer)
+        expect(target[:destination]).to be_a(Api::V1::NexusSerializer)
       end
     end
   end

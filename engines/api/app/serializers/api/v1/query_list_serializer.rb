@@ -5,12 +5,14 @@ module Api
     class QueryListSerializer < Api::ApplicationSerializer
       attributes :load_type
 
-      attributes :selected_date do |query|
-        query.cargo_ready_date
-      end
+      attributes :selected_date, &:cargo_ready_date
 
       attribute :user do |query|
         UserSerializer.new(query.client)
+      end
+
+      attribute :creator do |query|
+        UserSerializer.new(query.creator)
       end
 
       attribute :origin do |query|
