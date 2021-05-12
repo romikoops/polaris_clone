@@ -1,25 +1,30 @@
 # frozen_string_literal: true
+
 class ExchangeRateUpdateWorker
   include Sidekiq::Worker
 
-  def perform(*args)
+  BASE_CURRENCIES = %w[EUR USD].freeze
+
+  def perform
     last_updated_at = Time.zone.now
-    new_rates = bank.update_rates.map { |key, rate|
-      {
-        from: bank.source,
-        to: key,
-        rate: rate,
-        created_at: last_updated_at,
-        updated_at: last_updated_at
-      }
-    }
+    new_rates = BASE_CURRENCIES.flat_map do |base|
+      bank_for_base_currency(base: base).update_rates.map do |key, rate|
+        {
+          from: base,
+          to: key,
+          rate: rate,
+          created_at: last_updated_at,
+          updated_at: last_updated_at
+        }
+      end
+    end
     Treasury::ExchangeRate.import(new_rates)
   end
 
-  def bank
-    @bank ||= Money::Bank::OpenExchangeRatesBank.new.tap do |bank|
+  def bank_for_base_currency(base:)
+    Money::Bank::OpenExchangeRatesBank.new.tap do |bank|
       bank.app_id = Settings.open_exchange_rate.app_id
-      bank.source = "EUR"
+      bank.source = base
     end
   end
 end

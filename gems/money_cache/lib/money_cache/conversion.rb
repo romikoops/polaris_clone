@@ -16,7 +16,7 @@ module MoneyCache
     end
 
     def perform
-      (stored_rate || inverse_rate || calculated_rate).round(6)
+      (stored_rate || rate_through_inverse || calculated_rate).round(6)
     end
 
     private
@@ -27,28 +27,25 @@ module MoneyCache
       store.get_rate(from, to)
     end
 
-    def inverse_rate(from_currency: from, to_currency: to)
+    def rate_through_inverse(from_currency: from, to_currency: to)
       inverse_rate = store.get_rate(to_currency, from_currency)
       return unless inverse_rate
 
-      rate = 1.0 / inverse_rate
-      store.add_rate(from_currency, to_currency, rate)
+      1.0 / inverse_rate
     end
 
     def calculated_rate
       return unless to_base_rate && from_base_rate
 
-      rate = from_base_rate / to_base_rate.to_d
-      store.add_rate(from, to, rate)
-      rate
+      to_base_rate.to_d / from_base_rate
     end
 
     def from_base_rate
-      @from_base_rate ||= store.get_rate(from, base) || inverse_rate(from_currency: from, to_currency: base)
+      @from_base_rate ||= store.get_rate(from, base) || rate_through_inverse(from_currency: from, to_currency: base)
     end
 
     def to_base_rate
-      @to_base_rate ||= store.get_rate(base, to) || inverse_rate(from_currency: base, to_currency: to)
+      @to_base_rate ||= store.get_rate(base, to) || rate_through_inverse(from_currency: base, to_currency: to)
     end
   end
 end

@@ -38,7 +38,7 @@ RSpec.describe MoneyCache::Converter do
     let(:to_eur_rate) { 4.075166 }
     let(:from) { "GBP" }
     let(:to) { "CNY" }
-    let(:expected_rate) { (from_eur_rate.to_d / to_eur_rate.to_d).round(6) }
+    let(:expected_rate) { (to_eur_rate.to_d / from_eur_rate.to_d).round(6) }
     let(:rates) do
       [
         instance_double("Treasury::ExchangeRate", from: from, to: base, rate: from_eur_rate),
