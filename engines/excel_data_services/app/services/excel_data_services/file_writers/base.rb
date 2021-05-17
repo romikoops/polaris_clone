@@ -43,7 +43,8 @@ module ExcelDataServices
         load_type: :load_type,
         rate_basis: :rate_basis,
         currency: :currency_name,
-        wm_ratio: :wm_ratio
+        wm_ratio: :wm_ratio,
+        vm_ratio: :vm_ratio
       }.freeze
 
       PRICING_ONE_FEE_COL_AND_RANGES_LOOKUP = PRICING_COMMON_LOOKUP.merge(

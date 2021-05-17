@@ -42,6 +42,10 @@ module ExcelDataServices
       def wm_ratio
         @wm_ratio ||= data[:wm_ratio]&.to_i || Pricings::Pricing::WM_RATIO_LOOKUP[mode_of_transport]
       end
+
+      def vm_ratio
+        @vm_ratio ||= data[:vm_ratio] ? (data[:vm_ratio].to_d / 1000.0) : 1.0
+      end
     end
   end
 end

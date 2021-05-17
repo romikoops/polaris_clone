@@ -23,6 +23,7 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
         service_level
         load_type
         rate_basis
+        wm_rate
         currency
         bas
         lss

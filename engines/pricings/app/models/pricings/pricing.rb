@@ -53,7 +53,7 @@ module Pricings
       new_options = options.reverse_merge(
         methods: %i[data carrier service_level],
         only: %i[
-          effective_date expiration_date wm_rate itinerary_id load_type cargo_class
+          effective_date expiration_date wm_rate vm_rate itinerary_id load_type cargo_class
           organization_id id tenant_vehicle_id internal group_id transshipment
         ]
       )
@@ -64,7 +64,7 @@ module Pricings
       new_options = options.reverse_merge(
         methods: %i[data load_type cargo_class carrier service_level itinerary_name mode_of_transport],
         only: %i[
-          effective_date expiration_date wm_rate itinerary_id
+          effective_date expiration_date wm_rate vm_rate itinerary_id
           organization_id id tenant_vehicle_id internal group_id
         ]
       )
@@ -109,6 +109,7 @@ end
 #  load_type         :string
 #  transshipment     :string
 #  validity          :daterange
+#  vm_rate           :decimal(, )
 #  wm_rate           :decimal(, )
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

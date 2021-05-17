@@ -22,6 +22,7 @@ module ExcelDataServices
           :created_at,
           :updated_at,
           :wm_rate,
+          :vm_rate,
           :organization_id,
           :user_id,
           :itinerary_id,
@@ -58,7 +59,8 @@ module ExcelDataServices
           transit_time: transit_time,
           group_name: group_name,
           transshipment: transshipment,
-          wm_ratio: pricing.wm_rate
+          wm_ratio: pricing.wm_rate,
+          vm_ratio: pricing.vm_rate
         )
       end
 

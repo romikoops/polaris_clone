@@ -40,4 +40,19 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
       expect(result["Pricing"]).to match_array(output_data["Pricing"])
     end
   end
+
+  describe ".restructure with VM Rate" do
+    let(:input_data) do
+      FactoryBot.build(:excel_data_parsed_correct_pricings_one_fee_col_and_ranges_with_vm_rate).first
+    end
+    let(:output_data) do
+      { "Pricing" =>
+     FactoryBot.build(:excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_vm_rate) }
+    end
+    let(:result) { described_class.restructure(options) }
+
+    it "restructures the data correctly" do
+      expect(result["Pricing"]).to match_array(output_data["Pricing"])
+    end
+  end
 end

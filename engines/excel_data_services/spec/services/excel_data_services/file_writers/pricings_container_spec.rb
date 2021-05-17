@@ -55,6 +55,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       transit_time.duration,
       nil,
       pricing.wm_rate,
+      pricing.vm_rate,
       "EUR",
       250
     ]

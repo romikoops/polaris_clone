@@ -11,7 +11,7 @@ module OfferCalculator
           attr_reader :object
 
           delegate :cargo_class, :load_type, :cbm_ratio, :load_meterage_ratio,
-            :section, :type, :km, :load_meterage_hard_limit, :load_meterage_stacking, to: :object
+            :section, :type, :km, :load_meterage_hard_limit, :load_meterage_stacking, :vm_ratio, to: :object
 
           def determine_singular_load_meterage_weight
             return volumetric_weight if load_meterage_ratio.blank?

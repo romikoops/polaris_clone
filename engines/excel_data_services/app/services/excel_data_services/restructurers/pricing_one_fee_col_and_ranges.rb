@@ -14,7 +14,7 @@ module ExcelDataServices
         sheet_name = data[:sheet_name]
         restructurer_name = data[:restructurer_name]
         restructured_data = replace_nil_equivalents_with_nil(data[:rows_data])
-        restructured_data = downcase_values(rows_data: restructured_data, keys: [:load_type, :mot])
+        restructured_data = downcase_values(rows_data: restructured_data, keys: %i[load_type mot])
         restructured_data = upcase_values(rows_data: restructured_data, keys: %i[rate_basis fee_code])
         restructured_data = parse_dates(rows_data: restructured_data)
         restructured_data.reject! { |row_data| row_data[:fee].blank? }
@@ -22,22 +22,20 @@ module ExcelDataServices
           row_data.reverse_merge!(sheet_name: sheet_name,
                                   restructurer_name: restructurer_name)
           row_data[:internal] ||= false
-          if row_data[:remarks]
-            row_data[:notes] = extract_notes(row_data)
-          end
+          row_data[:notes] = extract_notes(row_data) if row_data[:remarks]
         end
 
         restructured_data = trim_based_on_effective_date(restructured_data)
 
         grouped_data = group_by_params(restructured_data, ROWS_BY_CONNECTED_RANGES_GROUPING_KEYS)
 
-        restructured_data = grouped_data.map { |group|
+        restructured_data = grouped_data.map do |group|
           result_row_data = group.first
-          ranges_values = group.map { |row_data|
+          ranges_values = group.map do |row_data|
             next unless range_values?(row_data)
 
             extract_range_values(row_data)
-          }
+          end
           ranges_values = ranges_values.compact
 
           if ranges_values.present?
@@ -47,18 +45,18 @@ module ExcelDataServices
           result_row_data.except!(:range_min, :range_max) # already inside range hash
 
           result_row_data
-        }
+        end
 
         restructured_data = add_hub_names(restructured_data)
         restructured_data = sanitize_service_level_and_carrier(restructured_data)
         restructured_data = cut_based_on_date_overlaps(
           restructured_data,
-          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date wm_ratio]
+          ROWS_BY_PRICING_PARAMS_GROUPING_KEYS - %i[effective_date expiration_date wm_ratio vm_ratio]
         )
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
         restructured_data = group_by_params(restructured_data, ROWS_BY_PRICING_PARAMS_GROUPING_KEYS)
 
-        {"Pricing" => restructured_data}
+        { "Pricing" => restructured_data }
       end
 
       private
@@ -84,7 +82,7 @@ module ExcelDataServices
       end
 
       def extract_range_values(row_data)
-        {"max" => row_data[:range_max], "min" => row_data[:range_min], "rate" => row_data[:fee]}
+        { "max" => row_data[:range_max], "min" => row_data[:range_min], "rate" => row_data[:fee] }
       end
     end
   end

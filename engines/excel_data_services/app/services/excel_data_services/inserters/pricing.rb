@@ -25,7 +25,7 @@ module ExcelDataServices
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
 
-          stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary, row[:row_nr])
+          stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary)
           itinerary.stops << stops - itinerary.stops
 
           add_stats(itinerary, row[:row_nr])
@@ -62,7 +62,7 @@ module ExcelDataServices
         end
       end
 
-      def find_or_initialize_stops(hubs, itinerary, row_nr)
+      def find_or_initialize_stops(hubs, itinerary)
         hubs.map.with_index do |hub, i|
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
           stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i)
@@ -93,20 +93,22 @@ module ExcelDataServices
       def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary, notes)
         load_type = row.load_type == "lcl" ? "cargo_item" : "container"
         pricing_params =
-          {organization: organization,
-           internal: row.internal,
-           transshipment: row.transshipment,
-           cargo_class: row.load_type,
-           load_type: load_type,
-           tenant_vehicle: tenant_vehicle,
-           group_id: find_group_id(row: row),
-           wm_rate: row.wm_ratio,
-           effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
-           expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0)}
+          { organization: organization,
+            internal: row.internal,
+            transshipment: row.transshipment,
+            cargo_class: row.load_type,
+            load_type: load_type,
+            tenant_vehicle: tenant_vehicle,
+            group_id: find_group_id(row: row),
+            wm_rate: row.wm_ratio,
+            vm_rate: row.vm_ratio,
+            effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
+            expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
         new_pricing = itinerary.rates.new(pricing_params)
         old_pricings = itinerary.rates.where(pricing_params.except(:effective_date,
           :wm_rate,
+          :vm_rate,
           :expiration_date,
           :internal))
 
@@ -173,10 +175,10 @@ module ExcelDataServices
           fee_code = row.fee_code
 
           pricing_detail_params =
-            {organization_id: organization.id,
-             currency_name: row.currency&.upcase,
-             currency_id: nil,
-             hw_threshold: row.hw_threshold}
+            { organization_id: organization.id,
+              currency_name: row.currency&.upcase,
+              currency_id: nil,
+              hw_threshold: row.hw_threshold }
 
           charge_category = Legacy::ChargeCategory.from_code(
             organization_id: organization.id,

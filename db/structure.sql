@@ -3189,7 +3189,8 @@ CREATE TABLE public.pricings_pricings (
     validity daterange,
     transshipment character varying,
     organization_id uuid,
-    user_id uuid
+    user_id uuid,
+    vm_rate numeric
 );
 
 
@@ -12179,6 +12180,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210426104428'),
 ('20210427175457'),
 ('20210504094632'),
-('20210504143455');
+('20210504143455'),
+('20210512092712');
 
 

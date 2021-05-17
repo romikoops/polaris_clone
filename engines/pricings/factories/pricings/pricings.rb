@@ -17,7 +17,7 @@ FactoryBot.define do
     cargo_class { "lcl" }
     load_type { "cargo_item" }
     group_id { default_group.id }
-
+    vm_rate { 1 }
     association :organization, factory: :organizations_organization
     association :itinerary, :default, factory: :legacy_itinerary
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
@@ -25,9 +25,9 @@ FactoryBot.define do
     after :create do |pricing, evaluator|
       next unless evaluator.fee_attrs
 
-      fee_options = {pricing: pricing,
-                     organization_id: pricing.organization_id,
-                     rate_basis: FactoryBot.create(evaluator.fee_attrs[:rate_basis])}
+      fee_options = { pricing: pricing,
+                      organization_id: pricing.organization_id,
+                      rate_basis: FactoryBot.create(evaluator.fee_attrs[:rate_basis]) }
       fee_options.merge!(evaluator.fee_attrs.except(:rate_basis))
       create_list :pricings_fee, 1, **fee_options
     end

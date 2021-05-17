@@ -731,9 +731,39 @@ FactoryBot.define do
            transshipment: "ZACPT",
            remarks: "test",
            row_nr: 2,
-           wm_rate: 800,
+           wm_ratio: 800,
            internal: false,
            notes: [{header: "Gothenburg - Shanghai", body: "test"}],
+           origin_name: "Gothenburg",
+           destination_name: "Shanghai"}]]
+      end
+    end
+
+    trait :correct_pricings_one_fee_col_and_ranges_with_vm_rate do
+      data do
+        [[{sheet_name: "Sheet1",
+           restructurer_name: "pricing_one_fee_col_and_ranges",
+           effective_date: Date.parse("Thu, 15 Mar 2018"),
+           expiration_date: Date.parse("Sun, 15 Nov 2019"),
+           origin: "Gothenburg",
+           country_origin: "Sweden",
+           destination: "Shanghai",
+           country_destination: "China",
+           mot: "ocean",
+           carrier: nil,
+           service_level: "standard",
+           load_type: "lcl",
+           rate_basis: "PER_WM",
+           fee_code: "BAS",
+           fee_name: "Bas",
+           currency: "USD",
+           fee_min: 17,
+           fee: 17,
+           transit_time: 24,
+           transshipment: nil,
+           row_nr: 2,
+           vm_ratio: 800,
+           internal: false,
            origin_name: "Gothenburg",
            destination_name: "Shanghai"}]]
       end
@@ -3548,6 +3578,8 @@ FactoryBot.define do
       traits: %i[correct_pricings_one_fee_col_and_ranges]
     factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_remarks,
       traits: %i[correct_pricings_one_fee_col_and_ranges_with_remarks]
+    factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges_with_vm_rate,
+      traits: %i[correct_pricings_one_fee_col_and_ranges_with_vm_rate]
     factory :excel_data_restructured_faulty_pricings_one_fee_col_and_ranges,
       traits: %i[faulty_pricings_one_fee_col_and_ranges]
     factory :excel_data_restructured_correct_pricings_dynamic_fee_cols_no_ranges,

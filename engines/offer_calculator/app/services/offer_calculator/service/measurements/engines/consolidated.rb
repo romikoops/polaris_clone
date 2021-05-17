@@ -40,6 +40,10 @@ module OfferCalculator
             targets.sum(Measured::Weight.new(0, "kg"), &:volumetric_weight)
           end
 
+          def volume_adjusted_weight
+            targets.sum(Measured::Weight.new(0, "kg"), &:volume_adjusted_weight)
+          end
+
           def dynamic_volumetric_weight
             targets.sum(Measured::Weight.new(0, "kg"), &:dynamic_volumetric_weight)
           end

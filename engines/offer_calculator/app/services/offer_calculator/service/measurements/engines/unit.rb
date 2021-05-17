@@ -28,6 +28,10 @@ module OfferCalculator
             Measured::Weight.new(cbm_ratio || 0, "kg").scale(total_volume.value)
           end
 
+          def volume_adjusted_weight
+            Measured::Weight.new(vm_ratio, "kg").scale(total_weight.value)
+          end
+
           def dynamic_volumetric_weight
             [
               volumetric_weight,

@@ -64,6 +64,7 @@ module ExcelDataServices
           transit_time: :optional,
           remarks: :optional,
           wm_ratio: :optional,
+          vm_ratio: :optional,
           currency: :required
         }.freeze
 
@@ -87,6 +88,7 @@ module ExcelDataServices
           transit_time: :optional,
           remarks: :optional,
           wm_ratio: :optional,
+          vm_ratio: :optional,
           fee_code: :required,
           fee_name: :required,
           currency: :required,

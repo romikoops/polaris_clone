@@ -31,6 +31,10 @@ module Pricings
       result["cbm_ratio"] || result["wm_rate"] || Pricings::Pricing::WM_RATIO_LOOKUP[mot.to_sym]
     end
 
+    def vm_ratio
+      result["vm_rate"] || 1
+    end
+
     def load_meterage_ratio
       result.dig("load_meterage", "ratio") || 0
     end

@@ -8,7 +8,7 @@ module OfferCalculator
           :scope, :children
         attr_accessor :stackability
 
-        delegate :cargo_unit, :quantity, :volumetric_weight, :total_weight, :height, :width, :length,
+        delegate :cargo_unit, :quantity, :volumetric_weight, :volume_adjusted_weight, :total_weight, :height, :width, :length,
           :total_area, :total_volume, :id, :consolidated?, :stackable?, :stowage_factor, :cargo_item?, :weight,
           :height, :volume, :valid?, :load_meterage_weight, :cargo_class, :load_type, :cbm_ratio,
           :load_meterage_ratio, :load_meterage_limit, :section, :load_meterage_type, :type, :km,
@@ -42,7 +42,7 @@ module OfferCalculator
 
         def weight_measure
           @weight_measure ||= Measured::WeightMeasure.new(
-            [total_weight, volumetric_weight].max.convert_to("t").value,
+            [volume_adjusted_weight, volumetric_weight].max.convert_to("t").value,
             "t/m3"
           )
         end
@@ -60,7 +60,7 @@ module OfferCalculator
           return [total_weight] if type == "Legacy::LocalCharge"
 
           [
-            total_weight,
+            volume_adjusted_weight,
             load_meterage_weight,
             volumetric_weight
           ]
