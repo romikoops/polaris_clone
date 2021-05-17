@@ -8,7 +8,7 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      {USD: 1.26, SEK: 8.26}.each do |currency, rate|
+      { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
         FactoryBot.create(:treasury_exchange_rate, from: currency, to: "EUR", rate: rate)
       end
       FactoryBot.create(:companies_membership, member: user)
@@ -17,12 +17,12 @@ module Api
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
     let(:source) { FactoryBot.create(:application, name: "bridge") }
-    let(:access_token) {
+    let(:access_token) do
       FactoryBot.create(:access_token,
         resource_owner_id: user.id,
         scopes: "public",
         application: source)
-    }
+    end
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe "POST #create" do
@@ -31,19 +31,11 @@ module Api
       let(:origin_hub) { itinerary.origin_hub }
       let(:destination_hub) { itinerary.destination_hub }
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-      let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
+      let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
-      let(:trip_1) {
-        FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container",
-                                               tenant_vehicle: tenant_vehicle)
-      }
-      let(:trip_2) {
-        FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container",
-                                               tenant_vehicle: tenant_vehicle_2)
-      }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) do
-        [tenant_vehicle, tenant_vehicle_2].flat_map do |tv|
+        [tenant_vehicle, tenant_vehicle2].flat_map do |tv|
           [
             FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "container", tenant_vehicle: tv),
             FactoryBot.create(:trip_with_layovers, itinerary: itinerary, load_type: "cargo_item", tenant_vehicle: tv)
@@ -62,11 +54,11 @@ module Api
             organization_id: organization.id,
             user_id: user.id,
             load_type: load_type,
-            origin: {nexus_id: origin_hub.nexus_id},
-            destination: {nexus_id: destination_hub.nexus_id}
+            origin: { nexus_id: origin_hub.nexus_id },
+            destination: { nexus_id: destination_hub.nexus_id }
           },
           shipment_info: {
-            trucking_info: {pre_carriage: :pre},
+            trucking_info: { pre_carriage: :pre },
             cargo_items_attributes: cargo_items_attributes,
             containers_attributes: containers_attributes
           },
@@ -75,7 +67,7 @@ module Api
       end
       let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
       let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-      let(:query) { Journey::Query.find(response_data.dig("id")) }
+      let(:query) { Journey::Query.find(response_data["id"]) }
       let(:default_cargo_items_attributes) do
         [
           {
@@ -93,14 +85,15 @@ module Api
           }
         ]
       end
+
       context "with available tenders" do
         before do
-          [tenant_vehicle, tenant_vehicle_2].each do |t_vehicle|
+          [tenant_vehicle, tenant_vehicle2].each do |t_vehicle|
             FactoryBot.create(:lcl_pricing, itinerary: itinerary, tenant_vehicle: t_vehicle, organization: organization)
           end
           FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle,
                                              organization: organization, amount: 170)
-          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle_2,
+          FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, tenant_vehicle: tenant_vehicle2,
                                              organization: organization, amount: 190)
 
           OfferCalculator::Schedule.from_trips(trips)
@@ -113,9 +106,7 @@ module Api
         it "returns tenders ordered by amount by default", :aggregate_failures do
           post :create, params: params, as: :json
 
-          amounts = response_data.dig("attributes", "tenders", "data").map { |i|
-            i.dig("attributes", "total", "amount")
-          }
+          amounts = response_data.dig("attributes", "tenders", "data").map { |i| i.dig("attributes", "total", "amount") }
           expect(query.source_id).to eq(source.id)
           expect(amounts).to eq(["170.0", "190.0"])
           expect(response_data.dig("attributes", "loadType")).to eq("container")
@@ -138,7 +129,7 @@ module Api
         context "when no client is provided" do
           before do
             params[:quote][:user_id] = nil
-            organization.scope.update(content: {default_currency: "usd"})
+            organization.scope.update(content: { default_currency: "usd" })
           end
 
           it "returns prices with default margins" do
@@ -219,7 +210,6 @@ module Api
         context "when cargo items are valid" do
           let(:load_type) { "cargo_item" }
 
-
           it "returns prices with default margins" do
             post :create, params: params, as: :json
             aggregate_failures do
@@ -233,9 +223,9 @@ module Api
           let(:load_type) { "cargo_item" }
           let(:async) { true }
           let(:cargo_items_attributes) { default_cargo_items_attributes }
-          let(:expected_keys) {
-            %w[selectedDate loadType user origin destination containers cargoItems tenders completed]
-          }
+          let(:expected_keys) do
+            %w[selectedDate loadType user creator origin destination containers cargoItems tenders completed]
+          end
 
           it "returns prices with default margins" do
             post :create, params: params
@@ -264,10 +254,11 @@ module Api
       include_context "journey_pdf_setup"
       context "when async error has occurred " do
         let(:error_result_set) { FactoryBot.create(:journey_result_set, query: query, result_count: 0) }
+
         before { FactoryBot.create(:journey_error, result_set: error_result_set, code: 3002) }
 
         it "renders the errors" do
-          get :show, params: {organization_id: organization.id, id: query.id}
+          get :show, params: { organization_id: organization.id, id: query.id }
 
           aggregate_failures do
             expect(response_error).to eq "OfferCalculator::Errors::LoadMeterageExceeded"
@@ -276,47 +267,36 @@ module Api
       end
 
       context "when origin and destinations are nexuses" do
-        let!(:origin_hub) {
+        let!(:origin_hub) do
           FactoryBot.create(:legacy_hub,
             hub_code: origin_locode,
             hub_type: freight_section.mode_of_transport,
             organization: organization)
-        }
-        let!(:destination_hub) {
+        end
+        let!(:destination_hub) do
           FactoryBot.create(:legacy_hub,
             hub_code: destination_locode,
             hub_type: freight_section.mode_of_transport,
             organization: organization)
-        }
+        end
         let!(:origin_nexus) { origin_hub.nexus }
         let!(:destination_nexus) { destination_hub.nexus }
         let(:route_sections) { [freight_section] }
-        it "renders origin and destination as nexus objects" do
-          get :show, params: {organization_id: organization.id, id: query.id}
 
-          aggregate_failures do
-            expect(
-              response_data.dig("attributes", "origin", "data", "id")
-            ).to eq origin_nexus.id.to_s
-            expect(
-              response_data.dig("attributes", "destination", "data", "id")
-            ).to eq destination_nexus.id.to_s
-          end
+        it "renders origin and destination as nexus objects", :aggregate_failures do
+          get :show, params: { organization_id: organization.id, id: query.id }
+
+          expect(response_data.dig("attributes", "origin", "data", "id")).to eq origin_nexus.id.to_s
+          expect(response_data.dig("attributes", "destination", "data", "id")).to eq destination_nexus.id.to_s
         end
       end
 
       context "when origin and destination are addresses" do
-        it "renders origin and destination as address objects" do
-          get :show, params: {organization_id: organization.id, id: query.id}
+        it "renders origin and destination as address objects", :aggregate_failures do
+          get :show, params: { organization_id: organization.id, id: query.id }
 
-          aggregate_failures do
-            expect(
-              response_data.dig("attributes", "origin", "data", "attributes", "geocodedAddress")
-            ).to eq origin_text
-            expect(
-              response_data.dig("attributes", "destination", "data", "attributes", "geocodedAddress")
-            ).to eq destination_text
-          end
+          expect(response_data.dig("attributes", "origin", "data", "attributes", "geocodedAddress")).to eq origin_text
+          expect(response_data.dig("attributes", "destination", "data", "attributes", "geocodedAddress")).to eq destination_text
         end
       end
 
@@ -324,7 +304,7 @@ module Api
         let(:cargo_trait) { :lcl }
 
         it "returns the cargo items" do
-          get :show, params: {organization_id: organization.id, id: query.id}
+          get :show, params: { organization_id: organization.id, id: query.id }
           expect(response_data.dig("attributes", "cargoItems", "data", 0, "id")).to eq(query.cargo_units.first.id)
         end
       end
@@ -336,7 +316,7 @@ module Api
       end
 
       context "when quotations exist" do
-        let!(:queries) do
+        before do
           FactoryBot.create_list(:journey_query, 3, organization: organization).tap do |queries|
             queries.each do |query|
               FactoryBot.create(:journey_result_set, query: query)
@@ -345,7 +325,7 @@ module Api
         end
 
         it "renders a list of quotations" do
-          get :index, params: {organization_id: organization.id}
+          get :index, params: { organization_id: organization.id }
 
           expected_response = Journey::Query.order("created_at DESC").pluck(:id)
 
@@ -353,7 +333,7 @@ module Api
         end
 
         it "paginates results" do
-          get :index, params: {organization_id: organization.id, per_page: 2}
+          get :index, params: { organization_id: organization.id, per_page: 2 }
 
           expected_response = Journey::Query.order("created_at DESC").pluck(:id)[0..1]
 
@@ -363,7 +343,7 @@ module Api
 
       context "when quotations do not exist" do
         it "renders an empty list" do
-          get :index, params: {organization_id: organization.id}
+          get :index, params: { organization_id: organization.id }
 
           aggregate_failures do
             expect(response_data).to eq []
@@ -372,30 +352,27 @@ module Api
       end
 
       context "with sorting params" do
-        let(:older_query) {
+        let(:older_query) do
           FactoryBot.create(:journey_query,
             organization: organization,
             cargo_ready_date: DateTime.now + 1.day,
             client: user)
-        }
+        end
 
-        let(:newer_query) {
+        let(:newer_query) do
           FactoryBot.create(:journey_query,
             organization: organization,
             cargo_ready_date: DateTime.now + 2.days,
             client: user)
-        }
+        end
 
-        let!(:older_result_set) {
+        before do
           FactoryBot.create(:journey_result_set, query: older_query)
-        }
-
-        let!(:newer_result_set) {
           FactoryBot.create(:journey_result_set, query: newer_query)
-        }
+        end
 
         it "sorts by selected date desc" do
-          get :index, params: {organization_id: organization.id, sort_by: "selected_date", direction: "desc"}
+          get :index, params: { organization_id: organization.id, sort_by: "selected_date", direction: "desc" }
 
           aggregate_failures do
             expect(response_data.first["id"]).to eq newer_query.id
@@ -404,7 +381,7 @@ module Api
         end
 
         it "filters by cargo_ready_date desc" do
-          get :index, params: {organization_id: organization.id, start_date: 1.minute.ago, end_date: 36.hours.from_now}
+          get :index, params: { organization_id: organization.id, start_date: 1.minute.ago, end_date: 36.hours.from_now }
 
           aggregate_failures do
             expect(response_data.pluck("id")).to eq [older_query.id]
@@ -419,42 +396,48 @@ module Api
       shared_examples_for "a downloadable quotation format" do |format|
         context "without tender ids" do
           it "returns the url of the generated document for the quotation tenders" do
-            post :download, params: {organization_id: organization.id, quotation_id: query.id, format: format}
+            post :download, params: { organization_id: organization.id, quotation_id: query.id, format: format }
 
-            expect(response_data.dig("id")).not_to be_empty
+            expect(response_data["id"]).not_to be_empty
           end
         end
 
         context "with tender ids" do
-          it "renders origin and destination as nexus objects" do
-            post :download, params: {
+          let(:params) do
+            {
               organization_id: organization.id,
               quotation_id: query.id,
               format: format,
               tenders: [result.id],
               dl: dl
             }
+          end
 
-            expect(response_data.dig("id")).not_to be_empty
+          it "renders origin and destination as nexus objects" do
+            post :download, params: params
+
+            expect(response_data["id"]).not_to be_empty
           end
         end
       end
 
       context "when downloading as pdf" do
         let(:dl) { 1 }
-        it_should_behave_like "a downloadable quotation format", "pdf"
+
+        it_behaves_like "a downloadable quotation format", "pdf"
       end
 
       context "when downloading as xlsx" do
         let(:dl) { 0 }
-        it_should_behave_like "a downloadable quotation format", "xlsx"
+
+        it_behaves_like "a downloadable quotation format", "xlsx"
       end
 
       context "when format is not specified" do
-        it "is unsuccessful" do
-          post :download, params: {organization_id: organization.id, quotation_id: query.id, tenders: []}
+        it "is unsuccessful", :aggregate_failures do
+          post :download, params: { organization_id: organization.id, quotation_id: query.id, tenders: [] }
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body).dig("error")).to eq("Download format is missing or invalid")
+          expect(JSON.parse(response.body)["error"]).to eq("Download format is missing or invalid")
         end
       end
     end

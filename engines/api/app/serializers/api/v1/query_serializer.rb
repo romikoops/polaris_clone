@@ -13,6 +13,10 @@ module Api
         query.client && UserSerializer.new(UserDecorator.new(query.client))
       end
 
+      attribute :creator do |query|
+        UserSerializer.new(query.creator)
+      end
+
       attribute :origin do |query|
         origin = if query.pre_carriage?
           query.pickup_address && AddressSerializer.new(query.pickup_address)
