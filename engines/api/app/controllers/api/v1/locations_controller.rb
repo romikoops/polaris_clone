@@ -54,6 +54,7 @@ module Api
           target: target,
           load_type: location_params[:load_type],
           query: location_params[:q],
+          user: client,
           coordinates: coordinates
         )
       end
@@ -63,7 +64,11 @@ module Api
       end
 
       def location_params
-        params.permit(:q, :id, :lat, :lng, :load_type)
+        params.permit(:q, :id, :lat, :lng, :load_type, :client_id)
+      end
+
+      def client
+        Users::Client.find_by(id: location_params[:client_id])
       end
     end
   end
