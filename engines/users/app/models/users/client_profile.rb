@@ -4,7 +4,7 @@ module Users
   class ClientProfile < ApplicationRecord
     include PgSearch::Model
 
-    belongs_to :user, class_name: "Users::Client", foreign_key: :user_id
+    belongs_to :user, class_name: "Users::Client"
 
     validates :first_name, presence: true, allow_blank: true
     validates :last_name, presence: true, allow_blank: true
@@ -14,20 +14,24 @@ module Users
                                user: %i[email]
                              },
                              using: {
-                               tsearch: {prefix: true}
+                               tsearch: { prefix: true }
                              }
+    pg_search_scope :email_search, associated_against: { user: %i[email] },
+                                   using: {
+                                     tsearch: { prefix: true }
+                                   }
 
     pg_search_scope :first_name_search, against: %i[first_name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     pg_search_scope :last_name_search, against: %i[last_name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
 
     def full_name
       [first_name, last_name].compact.join(" ")
     end
-    alias_method :name, :full_name
+    alias name full_name
     delegate :email, to: :user
   end
 end

@@ -91,9 +91,9 @@ module Admin
 
     def handle_search(params)
       query = profiles
-      query = query.search(params[:first_name]) if params[:first_name]
-      query = query.search(params[:last_name]) if params[:last_name]
-      query = query.search(params[:email]) if params[:email]
+      query = query.first_name_search(params[:first_name]) if params[:first_name]
+      query = query.last_name_search(params[:last_name]) if params[:last_name]
+      query = query.email_search(params[:email]) if params[:email]
       query = clients.where(id: query.select(:user_id)).joins(:profile)
 
       return query if params[:company_name].blank?
@@ -139,7 +139,7 @@ module Admin
         first_name_desc: "users_client_profiles.first_name",
         last_name_desc: "users_client_profiles.last_name",
         company_name_desc: "companies_companies.name",
-        email_desc: "users_client.email"
+        email_desc: "users_clients.email"
       }
       if order_clauses.keys.any? { |key| params[key].present? }
         order_clauses.each do |order_key, order_clause|

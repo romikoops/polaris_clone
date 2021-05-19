@@ -16,7 +16,7 @@ RSpec.describe Admin::ClientsController do
 
   describe "GET #index" do
     let(:company) { FactoryBot.create(:companies_company, name: "ItsMyCargo", organization_id: organization.id) }
-    let(:users) { FactoryBot.create_list(:users_client, 3, organization: organization) }
+    let(:users) { FactoryBot.create_list(:users_client, 3, organization: organization) + [client] }
     let!(:client) { FactoryBot.create(:users_client, organization: organization, profile_attributes: { first_name: "Bob", last_name: "Smith" }) }
 
     before do
@@ -58,14 +58,16 @@ RSpec.describe Admin::ClientsController do
     shared_examples_for "A searchable & orderable collection" do |search_keys|
       search_keys.each do |search_key|
         context "#{search_key} search & ordering" do
-          it "yields the correct matching results for search", skip: "flaky" do
-            sample_user = users.sample
-            get :index, params: { search_key => sample_user[search_key.to_sym], :organization_id => organization.id }
-            expect(resp["data"]["clientData"].first[search_key.camelize(:lower)]).to eq(sample_user[search_key.to_sym])
+          let(:search_target) { search_key == "email" ? client : client.profile }
+          let(:sortables) { search_key == "email" ? users : users.map(&:profile) }
+
+          it "yields the correct matching results for search" do
+            get :index, params: { search_key => search_target[search_key.to_sym], :organization_id => organization.id }
+            expect(resp["data"]["clientData"].first[search_key.camelize(:lower)]).to eq(search_target[search_key.to_sym])
           end
 
-          it "sorts the result according to the param provided", skip: "flaky" do
-            expected_response = users.pluck(search_key.to_sym).sort.reverse
+          it "sorts the result according to the param provided" do
+            expected_response = sortables.pluck(search_key.to_sym).sort.reverse
             get :index, params: { "#{search_key}_desc" => "true", :organization_id => organization.id }
             expect(resp["data"]["clientData"].pluck(search_key.camelize(:lower))).to eq(expected_response)
           end
