@@ -12,6 +12,17 @@ module Api
         result.query.destination
       end
 
+      attribute :origin_hub, &:origin
+
+      attribute :destination_hub, &:destination
+
+      attribute :pickup_address do |result|
+        result.pickup_address&.geocoded_address
+      end
+      attribute :delivery_address do |result|
+        result.delivery_address&.geocoded_address
+      end
+
       attribute :service_level, &:service
 
       attribute :total do |result|
