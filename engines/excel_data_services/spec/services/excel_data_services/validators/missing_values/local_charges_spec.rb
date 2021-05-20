@@ -7,6 +7,8 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
   let(:validator) { described_class.new(organization: organization, sheet_name: "Sheet1", data: data) }
   let(:data) { FactoryBot.build(:excel_data_restructured_faulty_local_charges) }
 
+  before { FactoryBot.create(:pricings_rate_basis, internal_code: "PER_SINGLE_TON") }
+
   describe ".perform" do
     it "detects unknown rate basis and missing values rate basis" do
       validator.perform
@@ -42,11 +44,6 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
             type: :error },
           { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::MissingValueForRateBasis,
             reason: "Missing value for PER_WM_RANGE.",
-            row_nr: "2",
-            sheet_name: "Sheet1",
-            type: :error },
-          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::MissingValueForRateBasis,
-            reason: "Missing value for PER_SHIPMENT_CONTAINER.",
             row_nr: "2",
             sheet_name: "Sheet1",
             type: :error },

@@ -35,9 +35,10 @@ module ExcelDataServices
         end
 
         def check_rate_basis(row_nr, fee_hsh)
-          rate_basis = ::Pricings::RateBasis.get_internal_key(fee_hsh[:rate_basis]&.upcase)
+          row_rate_basis = fee_hsh[:rate_basis]&.upcase
+          rate_basis = ::Pricings::RateBasis.get_internal_key(row_rate_basis)
 
-          unless VALID_RATE_BASES.include?(rate_basis)
+          unless VALID_RATE_BASES.include?(rate_basis) || Pricings::RateBasis.exists?(internal_code: row_rate_basis)
             add_to_errors(
               type: :error,
               row_nr: row_nr,

@@ -25,6 +25,7 @@ module ExcelDataServices
         PER_UNIT_RANGE
         PER_UNIT_RANGE_FLAT
         PER_X_KG_FLAT
+        PER_X_KG
         PER_UNIT_TON_CBM_RANGE
         PER_SHIPMENT_TON
       ].freeze

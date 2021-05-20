@@ -1348,7 +1348,7 @@ FactoryBot.define do
                'min': nil,
                'name': "ISPS",
                'value': nil,
-               'rate_basis': "PER_SHIPMENT_CONTAINER"
+               'rate_basis': "PER_X_KG"
              },
              BLA: {
                'key': "BLA",
@@ -1357,7 +1357,7 @@ FactoryBot.define do
                'ton': 40,
                'name': "Quay dues",
                'currency': "EUR",
-               'rate_basis': "PER_TON"
+               'rate_basis': "PER_SINGLE_TON"
              },
              SOL: {
                'key': nil,
