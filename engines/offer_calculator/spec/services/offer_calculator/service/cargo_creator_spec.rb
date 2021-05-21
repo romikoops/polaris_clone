@@ -144,5 +144,28 @@ RSpec.describe OfferCalculator::Service::CargoCreator do
         expect(commodity_info.description).to eq("Unknown IMO Class")
       end
     end
+
+    context "when invalid input" do
+      let(:cargo_items_attributes) do
+        [
+          {
+            "payload_in_kg" => 20,
+            "width" => 20,
+            "length" => 80,
+            "height" => 20,
+            "quantity" => 2,
+            "colli_type" => "slpallet",
+            "cargo_class" => "lcl",
+            "stackable" => true,
+            "commodities" => []
+          }
+        ]
+      end
+      let(:first_param) { cargo_items_attributes.first }
+
+      it "raises and error when then arguments aare invalid" do
+        expect { results }.to raise_error(OfferCalculator::Errors::InvalidCargoUnit)
+      end
+    end
   end
 end

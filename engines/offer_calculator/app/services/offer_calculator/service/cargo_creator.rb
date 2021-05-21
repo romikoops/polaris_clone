@@ -13,7 +13,7 @@ module OfferCalculator
 
       def perform
         (cargo_units + [aggregated_cargo]).compact
-      rescue ActiveRecord::RecordInvalid
+      rescue ActiveRecord::RecordInvalid, ArgumentError
         raise OfferCalculator::Errors::InvalidCargoUnit
       end
 
