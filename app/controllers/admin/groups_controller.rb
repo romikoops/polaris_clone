@@ -3,9 +3,9 @@
 class Admin::GroupsController < Admin::AdminBaseController
   def index
     paginated_groups = handle_search(params).paginate(pagination_options)
-    response_groups = paginated_groups.map { |group|
+    response_groups = paginated_groups.map do |group|
       for_index_json(group).deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    }
+    end
     response_handler(
       pagination_options.merge(
         groupData: response_groups,
@@ -69,7 +69,7 @@ class Admin::GroupsController < Admin::AdminBaseController
   end
 
   def current_group
-    ::Groups::Group.find_by(id: params[:id])
+    ::Groups::Group.find(params[:id])
   end
 
   def create_member_from_type(group:, type:, member:)
@@ -113,13 +113,13 @@ class Admin::GroupsController < Admin::AdminBaseController
       case search_params[:target_type]
       when "company"
         query = query.joins(:memberships)
-          .where(groups_memberships: {member_type: "Companies::Company", member_id: search_params[:target_id]})
+          .where(groups_memberships: { member_type: "Companies::Company", member_id: search_params[:target_id] })
       when "group"
         query = query.joins(:memberships)
-          .where(groups_memberships: {member_type: "Groups::Group", member_id: search_params[:target_id]})
+          .where(groups_memberships: { member_type: "Groups::Group", member_id: search_params[:target_id] })
       when "user"
         query = query.joins(:memberships)
-          .where(groups_memberships: {member_type: "Users::Client", member_id: search_params[:target_id]})
+          .where(groups_memberships: { member_type: "Users::Client", member_id: search_params[:target_id] })
       end
     end
     query = query.order(name: search_params[:name_desc] == "true" ? :desc : :asc) if search_params[:name_desc]

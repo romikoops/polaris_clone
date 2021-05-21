@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) {
+  let!(:user) do
     FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
-  }
+  end
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization, name: "Test").tap do |grp|
@@ -23,15 +23,10 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let!(:groups) { FactoryBot.create_list(:groups_group, 5, organization: organization) + [default_group] }
 
     context "without sorting" do
-      it "returns http success" do
-        get :index, params: {organization_id: organization.id}
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          json = JSON.parse(response.body)
-
-          expect(json.dig("data", "numPages")).to eq 1
-          expect(json.dig("data", "groupData").map { |c| c["id"] }.sort).to eq groups.map(&:id).sort
-        end
+      it "returns http success", :aggregate_failures do
+        get :index, params: { organization_id: organization.id }
+        expect(response_data["numPages"]).to eq 1
+        expect(response_data["groupData"].map { |c| c["id"] }.sort).to eq groups.map(&:id).sort
       end
     end
 
@@ -44,59 +39,48 @@ RSpec.describe Admin::GroupsController, type: :controller do
 
       let(:other_group) { FactoryBot.create(:groups_group, organization: organization) }
 
-      it "returns http success" do
-        get :index, params: {organization_id: organization.id, member_count_desc: "true"}
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          json = JSON.parse(response.body)
-          expect(json.dig("data", "groupData", 0, "id")).to eq group.id
-          expect(json.dig("data", "groupData", 1, "id")).to eq other_group.id
-        end
+      it "returns http success", :aggregate_failures do
+        get :index, params: { organization_id: organization.id, member_count_desc: "true" }
+
+        expect(response_data.dig("groupData", 0, "id")).to eq group.id
+        expect(response_data.dig("groupData", 1, "id")).to eq other_group.id
       end
     end
 
     context "when search target is a user" do
-      let(:user_2) { FactoryBot.create(:users_client, organization: organization) }
+      let(:user2) { FactoryBot.create(:users_client, organization: organization) }
       let(:user_group) { FactoryBot.create(:groups_group, organization: organization, name: "Test Group 2") }
 
       before do
-        FactoryBot.create(:groups_membership, member: user_2, group: user_group)
+        FactoryBot.create(:groups_membership, member: user2, group: user_group)
       end
 
       it "returns the users groups" do
-        get :index, params: {organization_id: organization.id,
-                             target_type: "user",
-                             target_id: user_2.id}
-        aggregate_failures do
-          json_response = JSON.parse(response.body)
-          expect(response).to have_http_status(:success)
-          expect(json_response.dig("data", "groupData").first.dig("id")).to eq(user_group.id)
-        end
+        get :index, params: { organization_id: organization.id,
+                              target_type: "user",
+                              target_id: user2.id }
+
+        expect(response_data.dig("groupData", 0, "id")).to eq(user_group.id)
       end
     end
   end
 
   describe "POST #create" do
     let(:create_params) do
-      {"addedMembers" =>
-        {"clients" =>
+      { "addedMembers" =>
+        { "clients" =>
           [user.as_json],
-         "groups" => [],
-         "companies" => []},
-       "name" => "Test",
-       "organization_id" => organization.id,
-       "group" => {"name" => "Test"}}
+          "groups" => [],
+          "companies" => [] },
+        "name" => "Test",
+        "organization_id" => organization.id,
+        "group" => { "name" => "Test" } }
     end
 
-    it "returns http success" do
+    it "returns http success", :aggregate_failures do
       post :create, params: create_params
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-        expect(json["success"]).to eq true
-        expect(json.dig("data", "name")).to eq "Test"
-        expect(::Groups::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq [user.id]
-      end
+      expect(response_data["name"]).to eq "Test"
+      expect(::Groups::Group.find(response_data["id"]).members.map { |c| c["id"] }).to eq [user.id]
     end
   end
 
@@ -107,14 +91,14 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
 
     let(:edit_params) do
-      {"addedMembers" =>
-        {"clients" =>
+      { "addedMembers" =>
+        { "clients" =>
           [user_a.as_json],
-         "groups" => [],
-         "companies" => [company_a.as_json]},
-       "name" => "Test",
-       "organization_id" => organization.id,
-       "id" => group.id}
+          "groups" => [],
+          "companies" => [company_a.as_json] },
+        "name" => "Test",
+        "organization_id" => organization.id,
+        "id" => group.id }
     end
     let(:expected) { [user_a.id, company_a.id] }
 
@@ -123,14 +107,10 @@ RSpec.describe Admin::GroupsController, type: :controller do
       FactoryBot.create(:groups_membership, group: group, member: company_b)
     end
 
-    it "returns http success" do
+    it "returns http success", :aggregate_failures do
       post :edit_members, params: edit_params
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-        expect(json.dig("data", "name")).to eq "Test"
-        expect(::Groups::Group.find(json.dig("data", "id")).members.map { |c| c["id"] }).to eq(expected)
-      end
+      expect(response_data["name"]).to eq "Test"
+      expect(::Groups::Group.find(response_data["id"]).members.map { |c| c["id"] }).to eq(expected)
     end
   end
 
@@ -145,16 +125,13 @@ RSpec.describe Admin::GroupsController, type: :controller do
 
     it "updates the group name" do
       post :update, params: edit_params
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-        expect(json.dig("data", "name")).to eq "Test2"
-      end
+
+      expect(response_data["name"]).to eq "Test2"
     end
   end
 
   describe "GET #show" do
-    let(:edit_params) do
+    let(:params) do
       {
         "organization_id" => organization.id,
         "id" => group.id
@@ -162,13 +139,13 @@ RSpec.describe Admin::GroupsController, type: :controller do
     end
 
     it "returns http success" do
-      get :show, params: edit_params
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        json = JSON.parse(response.body)
-        expect(json["success"]).to eq true
-        expect(json.dig("data", "name")).to eq "Test"
-      end
+      get :show, params: params
+      expect(response_data["name"]).to eq "Test"
+    end
+
+    it "returns 404 when the group is not found" do
+      get :show, params: { organization_id: organization.id, id: "aabb" }
+      expect(response.status).to eq(404)
     end
   end
 
@@ -180,12 +157,11 @@ RSpec.describe Admin::GroupsController, type: :controller do
       }
     end
 
-    it "returns http success" do
+    it "returns http success", :aggregate_failures do
       delete :destroy, params: params
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(Groups::Group.find_by(id: params["id"])).to be_falsy
-      end
+
+      expect(response).to have_http_status(:success)
+      expect(Groups::Group.find_by(id: params["id"])).to be_falsy
     end
 
     context "when group is a member of another" do
