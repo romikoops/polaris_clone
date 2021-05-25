@@ -21,9 +21,8 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
   let(:first_sheet) { xlsx.sheet(xlsx.sheets.first) }
 
   context "when valid" do
+    let!(:local_charge) { FactoryBot.create(:legacy_local_charge, hub: hub, organization: organization, group_id: group.id) }
     let(:local_charge_data_without_ranges) do
-      local_charge = ::Legacy::LocalCharge.first
-
       { "GROUP_ID" => local_charge.group_id,
         "GROUP_NAME" => Groups::Group.find_by(id: local_charge.group_id)&.name,
         "EFFECTIVE_DATE" => local_charge.effective_date.strftime("%F"),
@@ -35,7 +34,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
         "COUNTERPART_HUB" => nil,
         "COUNTERPART_COUNTRY" => nil,
         "SERVICE_LEVEL" => "standard",
-        "CARRIER" => Legacy::Carrier.first.name,
+        "CARRIER" => local_charge.tenant_vehicle.carrier.name,
         "FEE_CODE" => "SOLAS",
         "FEE" => "SOLAS",
         "MOT" => "ocean",
@@ -60,16 +59,12 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
     end
 
     context "without ranges" do
-      before do
-        FactoryBot.create(:legacy_local_charge, hub: hub, organization: organization)
-      end
+      let(:group) { default_group }
 
       describe ".perform" do
-        it "writes all local charges to the sheet" do
-          aggregate_failures "testing sheet values" do
-            expect(first_sheet.row(1)).to eq(local_charge_data_without_ranges.keys)
-            expect(first_sheet.row(2)).to eq(local_charge_data_without_ranges.values)
-          end
+        it "writes all local charges to the sheet", :aggregate_failures do
+          expect(first_sheet.row(1)).to eq(local_charge_data_without_ranges.keys)
+          expect(first_sheet.row(2)).to eq(local_charge_data_without_ranges.values)
         end
       end
     end
@@ -77,32 +72,22 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
     context "with attached group" do
       let(:group) { FactoryBot.create(:groups_group, organization: organization, name: "TEST") }
 
-      before do
-        FactoryBot.create(:legacy_local_charge, hub: hub, organization: organization, group_id: group.id)
-      end
-
       describe ".perform" do
-        it "writes all local charges to the sheet" do
-          aggregate_failures "testing sheet values" do
-            expect(first_sheet.row(1)).to eq(local_charge_data_without_ranges.keys)
-            expect(first_sheet.row(2)).to eq(local_charge_data_without_ranges.values)
-          end
+        it "writes all local charges to the sheet", :aggregate_failures do
+          expect(first_sheet.row(1)).to eq(local_charge_data_without_ranges.keys)
+          expect(first_sheet.row(2)).to eq(local_charge_data_without_ranges.values)
         end
       end
     end
 
     context "with ranges" do
-      before do
-        FactoryBot.create(:legacy_local_charge, :range, hub: hub, organization: organization)
-      end
+      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, :range, hub: hub, organization: organization) }
 
       let(:local_charge_data_with_ranges) do
-        local_charge_with_ranges = ::Legacy::LocalCharge.first
-
         { "GROUP_ID" => default_group.id,
           "GROUP_NAME" => default_group.name,
-          "EFFECTIVE_DATE" => local_charge_with_ranges.effective_date.strftime("%F"),
-          "EXPIRATION_DATE" => local_charge_with_ranges.expiration_date.strftime("%F"),
+          "EFFECTIVE_DATE" => local_charge.effective_date.strftime("%F"),
+          "EXPIRATION_DATE" => local_charge.expiration_date.strftime("%F"),
           "LOCODE" => hub.nexus.locode,
           "HUB" => hub.name,
           "COUNTRY" => hub.country.name,
@@ -110,7 +95,7 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
           "COUNTERPART_HUB" => nil,
           "COUNTERPART_COUNTRY" => nil,
           "SERVICE_LEVEL" => "standard",
-          "CARRIER" => Legacy::Carrier.first.name,
+          "CARRIER" => local_charge.tenant_vehicle.carrier.name,
           "FEE_CODE" => "QDF",
           "FEE" => "Wharfage / Quay Dues",
           "MOT" => "ocean",
@@ -135,11 +120,55 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
       end
 
       describe ".perform" do
-        it "writes all local charges to the sheet" do
-          aggregate_failures "testing sheet values" do
-            expect(first_sheet.row(1)).to eq(local_charge_data_with_ranges.keys)
-            expect(first_sheet.row(2)).to eq(local_charge_data_with_ranges.values)
-          end
+        it "writes all local charges to the sheet", :aggregate_failures do
+          expect(first_sheet.row(1)).to eq(local_charge_data_with_ranges.keys)
+          expect(first_sheet.row(2)).to eq(local_charge_data_with_ranges.values)
+        end
+      end
+    end
+
+    context "with base" do
+      let!(:local_charge) { FactoryBot.create(:legacy_local_charge, :fees_with_base, hub: hub, organization: organization) }
+      let(:local_charge_data_with_base) do
+        { "GROUP_ID" => default_group.id,
+          "GROUP_NAME" => default_group.name,
+          "EFFECTIVE_DATE" => local_charge.effective_date.strftime("%F"),
+          "EXPIRATION_DATE" => local_charge.expiration_date.strftime("%F"),
+          "LOCODE" => hub.nexus.locode,
+          "HUB" => hub.name,
+          "COUNTRY" => hub.country.name,
+          "COUNTERPART_LOCODE" => nil,
+          "COUNTERPART_HUB" => nil,
+          "COUNTERPART_COUNTRY" => nil,
+          "SERVICE_LEVEL" => "standard",
+          "CARRIER" => local_charge.tenant_vehicle.carrier.name,
+          "FEE_CODE" => "THC",
+          "FEE" => local_charge.fees.dig("THC", "name"),
+          "MOT" => "ocean",
+          "LOAD_TYPE" => "lcl",
+          "DIRECTION" => "export",
+          "CURRENCY" => "EUR",
+          "RATE_BASIS" => "PER_X_KG",
+          "MINIMUM" => local_charge.fees.dig("THC", "min"),
+          "MAXIMUM" => nil,
+          "BASE" => local_charge.fees.dig("THC", "base"),
+          "TON" => nil,
+          "CBM" => nil,
+          "KG" => local_charge.fees.dig("THC", "value"),
+          "ITEM" => nil,
+          "SHIPMENT" => nil,
+          "BILL" => nil,
+          "CONTAINER" => nil,
+          "WM" => nil,
+          "RANGE_MIN" => nil,
+          "RANGE_MAX" => nil,
+          "DANGEROUS" => nil }
+      end
+
+      describe ".perform" do
+        it "writes all local charges to the sheet", :aggregate_failures do
+          expect(first_sheet.row(1)).to eq(local_charge_data_with_base.keys)
+          expect(first_sheet.row(2)).to eq(local_charge_data_with_base.values)
         end
       end
     end

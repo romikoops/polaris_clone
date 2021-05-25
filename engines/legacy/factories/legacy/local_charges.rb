@@ -35,16 +35,16 @@ FactoryBot.define do
       fees do
         {
           "QDF" =>
-            {"key" => "QDF",
-             "max" => nil,
-             "min" => 57,
-             "name" => "Wharfage / Quay Dues",
-             "range" => [
-               {"max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR"},
-               {"cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR"}
-             ],
-             "currency" => "EUR",
-             "rate_basis" => "PER_UNIT_TON_CBM_RANGE"}
+            { "key" => "QDF",
+              "max" => nil,
+              "min" => 57,
+              "name" => "Wharfage / Quay Dues",
+              "range" => [
+                { "max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR" },
+                { "cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR" }
+              ],
+              "currency" => "EUR",
+              "rate_basis" => "PER_UNIT_TON_CBM_RANGE" }
         }
       end
     end
@@ -62,16 +62,32 @@ FactoryBot.define do
             "rate_basis" => "PER_SHIPMENT"
           },
           "QDF" =>
-            {"key" => "QDF",
-             "max" => nil,
-             "min" => 57,
-             "name" => "Wharfage / Quay Dues",
-             "range" => [
-               {"max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR"},
-               {"cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR"}
-             ],
-             "currency" => "EUR",
-             "rate_basis" => "PER_UNIT_TON_CBM_RANGE"}
+            { "key" => "QDF",
+              "max" => nil,
+              "min" => 57,
+              "name" => "Wharfage / Quay Dues",
+              "range" => [
+                { "max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR" },
+                { "cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR" }
+              ],
+              "currency" => "EUR",
+              "rate_basis" => "PER_UNIT_TON_CBM_RANGE" }
+        }
+      end
+    end
+    trait :fees_with_base do
+      fees do
+        {
+          "THC" => {
+            "key" => "THC",
+            "max" => nil,
+            "min" => 17.5,
+            "name" => "Terminal Handling",
+            "value" => 17.5,
+            "base" => 100,
+            "currency" => "EUR",
+            "rate_basis" => "PER_X_KG"
+          }
         }
       end
     end
