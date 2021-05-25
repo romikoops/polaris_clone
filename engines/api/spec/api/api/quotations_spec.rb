@@ -38,12 +38,10 @@ RSpec.describe "Quotations", type: :request, swagger: true do
       parameter name: :quote, in: :body, schema: {
         type: :object,
         properties: {
-          organization_id: { type: :string },
           quote: {
             type: :object,
             properties: {
               selected_date: { type: :string },
-              organization_id: { type: :string },
               user_id: { type: :string, nullable: true },
               origin: {
                 type: :object,
@@ -59,7 +57,7 @@ RSpec.describe "Quotations", type: :request, swagger: true do
                   { "$ref" => "#/components/schemas/locationV1Trucking" }
                 ]
               }
-            }, required: %w[selected_date organization_id user_id origin destination]
+            }, required: %w[selected_date origin destination]
           },
           shipment_info: {
             type: :object,
