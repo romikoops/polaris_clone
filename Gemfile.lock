@@ -30,13 +30,13 @@ PATH
   specs:
     analytics (1)
       companies
+      journey
       legacy
       organization_manager
       organizations
       pricings
-      quotations
       shared-runtime
-      shipments
+      users
 
 PATH
   remote: engines/api_auth

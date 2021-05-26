@@ -9,34 +9,34 @@ module Analytics
       @end_date = end_date
     end
 
-    def quotations
-      Quotations::Quotation.where(organization: organization)
+    def queries
+      Journey::Query.where(organization: organization)
         .where(created_at: start_date..end_date)
-        .where(user: clients)
+        .where(client: clients)
     end
 
     def shipment_requests
-      Shipments::ShipmentRequest
-        .where(organization: organization)
+      Journey::ShipmentRequest
+        .joins(result: :query)
+        .merge(queries)
         .where(created_at: start_date..end_date)
-        .where(user: clients)
     end
 
-    def tenders
-      Quotations::Tender.where(quotation: quotations)
+    def results
+      Journey::Result.where(result_set: result_sets)
     end
 
-    def itineraries
-      Legacy::Itinerary.where(organization_id: organization.id)
+    def result_sets
+      Journey::ResultSet.where(query: queries, status: "completed")
     end
 
     def requests
-      quotation_tool? ? quotations : shipment_requests
+      quotation_tool? ? queries : shipment_requests
     end
 
     def requests_with_profiles
       if quotation_tool?
-        quotations.joins(profile_join(reference: "quotations_quotations"))
+        queries.joins(profile_join(reference: "journey_queries"))
       else
         shipment_requests.joins(profile_join(reference: "shipments_shipment_requests"))
       end
@@ -44,22 +44,27 @@ module Analytics
 
     def requests_with_companies
       if quotation_tool?
-        quotations.joins(companies_join(reference: "quotations_quotations"))
+        queries.joins(companies_join(reference: "journey_queries"))
       else
         shipment_requests.joins(companies_join(reference: "shipments_shipment_requests"))
       end
     end
 
-    def tender_or_request
-      quotation_tool? ? tenders : shipment_requests
-    end
-
-    def tender_or_request_with_itinerary
-      quotation_tool? ? tenders.joins(:itinerary) : shipment_requests.joins(tender: :itinerary)
+    def result_or_request
+      quotation_tool? ? results : shipment_requests
     end
 
     def clients
       @clients ||= Users::Client.where(organization: organization).where.not(email: blacklisted_emails)
+    end
+
+    def main_freight_sections
+      Journey::RouteSection.where(result: results).where.not(mode_of_transport: %w[relay carriage])
+    end
+
+    def main_freight_sections_with_route_points
+      main_freight_sections.joins("JOIN journey_route_points from_points ON journey_route_sections.from_id = from_points.id")
+        .joins("JOIN journey_route_points to_points ON journey_route_sections.to_id = to_points.id")
     end
 
     private
@@ -84,7 +89,7 @@ module Analytics
     def profile_join(reference:)
       <<~SQL
         INNER JOIN users_clients
-          ON #{reference}.user_id = users_clients.id
+          ON #{reference}.client_id = users_clients.id
         INNER JOIN users_client_profiles
           ON users_clients.id = users_client_profiles.user_id
       SQL
@@ -93,7 +98,7 @@ module Analytics
     def companies_join(reference:)
       <<~SQL
         INNER JOIN users_clients
-          ON #{reference}.user_id = users_clients.id
+          ON #{reference}.client_id = users_clients.id
         INNER JOIN companies_memberships
           ON companies_memberships.member_id = users_clients.id
           AND companies_memberships.member_type = 'Users::Client'

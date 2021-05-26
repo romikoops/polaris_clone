@@ -5,8 +5,8 @@ module Analytics
     class MostActiveCarriers < Analytics::Dashboard::Base
       def data
         @data ||= tally(
-          requests: tenders.joins(tenant_vehicle: :carrier),
-          grouping_attribute: "carriers.name",
+          requests: main_freight_sections,
+          grouping_attribute: "carrier",
           order_by_count: true,
           order: :desc
         )

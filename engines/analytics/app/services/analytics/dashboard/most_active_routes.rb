@@ -7,8 +7,8 @@ module Analytics
 
       def data
         @data ||= tally(
-          requests: tender_or_request_with_itinerary,
-          grouping_attribute: "itineraries.name",
+          requests: main_freight_sections_with_route_points,
+          grouping_attribute: "CONCAT(from_points.name, ' - ', to_points.name)",
           order_by_count: true,
           order: :desc,
           limit: TOP_ROUTES

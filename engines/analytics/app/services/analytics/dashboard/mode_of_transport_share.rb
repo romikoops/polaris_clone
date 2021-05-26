@@ -5,8 +5,8 @@ module Analytics
     class ModeOfTransportShare < Analytics::Dashboard::Base
       def data
         @data ||= tally(
-          requests: tenders.joins(:itinerary),
-          grouping_attribute: "itineraries.mode_of_transport",
+          requests: main_freight_sections,
+          grouping_attribute: "mode_of_transport",
           order_by_count: true,
           order: :desc
         )

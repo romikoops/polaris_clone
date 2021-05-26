@@ -4,57 +4,33 @@ require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::MostActiveCarriers, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:carrier_a) { FactoryBot.create(:legacy_carrier, name: "A", code: "a") }
-  let(:carrier_b) { FactoryBot.create(:legacy_carrier, name: "B", code: "b") }
-  let(:tenant_vehicle_a) {
-    FactoryBot.create(:legacy_tenant_vehicle, name: "TV- A", carrier: carrier_a, organization: organization)
-  }
-  let(:tenant_vehicle_b) {
-    FactoryBot.create(:legacy_tenant_vehicle, name: "TV-B", carrier: carrier_b, organization: organization)
-  }
-  let(:trip_a) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_a) }
-  let(:trip_b) { FactoryBot.create(:legacy_trip, tenant_vehicle: tenant_vehicle_b) }
-  let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
+  let(:user) { FactoryBot.create(:users_user) }
+  let(:client) { FactoryBot.create(:users_client, organization: organization) }
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
-  let(:result) {
+  let(:result) do
     described_class.data(user: user, organization: organization, start_date: start_date, end_date: end_date)
-  }
+  end
+  let(:query) do
+    FactoryBot.create(:journey_query,
+      client: client,
+      organization: organization,
+      result_set_count: 1)
+  end
 
   before do
-    client = clients.first
     Organizations.current_id = organization.id
-    [FactoryBot.create(:legacy_shipment,
-      trip: trip_a,
-      user: client,
-      organization: organization,
-      created_at: Time.zone.now - 2.months,
-      with_breakdown: true,
-      with_tenders: true),
-      FactoryBot.create(:legacy_shipment,
-        trip: trip_a,
-        user: clients.first,
-        organization: organization,
-        with_breakdown: true,
-        with_tenders: true),
-      FactoryBot.create(:legacy_shipment,
-        trip: trip_a,
-        user: clients.first,
-        organization: organization,
-        with_breakdown: true,
-        with_tenders: true),
-      FactoryBot.create(:legacy_shipment,
-        trip: trip_b,
-        user: clients.first,
-        organization: organization,
-        with_breakdown: true,
-        with_tenders: true)]
+    FactoryBot.create(:journey_result,
+      result_set: query.result_sets.first,
+      route_sections: [
+        FactoryBot.build(:journey_route_section, mode_of_transport: "ocean", carrier: "Maersk")
+      ])
+    FactoryBot.create(:journey_result, result_set: query.result_sets.first)
   end
 
   describe "data" do
     it "returns an array of most active carriers for the period" do
-      expect(result).to eq([{count: 2, label: "A"}, {count: 1, label: "B"}])
+      expect(result).to eq([{ count: 2, label: "MSC" }, { count: 1, label: "Maersk" }])
     end
   end
 end

@@ -9,9 +9,9 @@ RSpec.describe Analytics::Dashboard::ActiveClientCount, type: :service do
   let(:start_date) { Time.zone.now - 1.month }
   let(:end_date) { Time.zone.now }
 
-  let(:result) {
+  let(:result) do
     described_class.data(user: user, organization: organization, start_date: start_date, end_date: end_date)
-  }
+  end
 
   before do
     ::Organizations.current_id = organization.id

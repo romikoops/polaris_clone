@@ -3,7 +3,9 @@
 FactoryBot.define do
   factory :journey_line_item, class: "Journey::LineItem" do
     association :line_item_set, factory: :journey_line_item_set
-    association :route_section, factory: :journey_route_section
+    route_section do
+      association :journey_route_section, result: instance.line_item_set.result
+    end
     total_cents { 3000 }
     total_currency { "USD" }
     unit_price_cents { 1000 }

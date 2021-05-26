@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Notifications::ResultDecorator do
-  let(:scope) { {append_query_suffix: false} }
-  let(:decorated_query) { described_class.new(result, context: {scope: scope}) }
+  let(:scope) { { append_query_suffix: false } }
+  let(:decorated_query) { described_class.new(result, context: { scope: scope }) }
   let(:result) { FactoryBot.create(:journey_result) }
   let(:address) { FactoryBot.create(:legacy_address, country: factory_country_from_code(code: "SE")) }
   let(:origin_route_point) { result.route_sections.first.from }
@@ -25,7 +25,7 @@ RSpec.describe Notifications::ResultDecorator do
 
   describe ".total" do
     let(:expected_string) do
-      result.line_item_sets.first.line_items.inject(Money.new(0, "EUR")) { |sum, item| sum + item.total }
+      result.line_item_sets.first.line_items.inject(Money.new(0, "EUR")) { |sum, item| sum + Money.new(item.total_cents * item.exchange_rate, "EUR") }
         .format(rounded_infinite_precision: true)
     end
 

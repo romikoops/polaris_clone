@@ -11,7 +11,7 @@ module Analytics
           .order("count DESC")
           .limit(TOP_USERS)
           .pluck("CONCAT(users_client_profiles.first_name, ' ', users_client_profiles.last_name), COUNT(*) AS count")
-          .map { |label, count| {label: label, count: count} }
+          .map { |label, count| { label: label, count: count } }
       end
     end
   end

@@ -109,11 +109,11 @@ pricings *--> organization_manager
 pricings *--> trucking
 analytics *--> companies
 analytics *--> legacy
-analytics --> organizations
-analytics *--> organization_manager
+analytics --> journey
 analytics *--> pricings
-analytics *--> quotations
-analytics *--> shipments
+analytics *--> organization_manager
+analytics --> organizations
+analytics --> users
 api_auth --> users
 api_auth --> organizations
 cms_data --> organizations

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :journey_query, class: "Journey::Query" do
     transient do
@@ -7,6 +8,7 @@ FactoryBot.define do
       destination_latitude { 31.1443485 }
       destination_longitude { 121.8060843 }
       cargo_count { 1 }
+      result_set_count { 0 }
     end
 
     association :organization, factory: :organizations_organization
@@ -17,6 +19,16 @@ FactoryBot.define do
     cargo_units do
       Array.new(cargo_count) do
         association :journey_cargo_unit, query: instance
+      end
+    end
+
+    result_sets do
+      if result_set_count.zero?
+        []
+      else
+        Array.new(result_set_count) do
+          association :journey_result_set, query: instance, result_count: 1
+        end
       end
     end
 

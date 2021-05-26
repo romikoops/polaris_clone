@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Analytics::Base, type: :service, skip: :flaky do
+RSpec.describe Analytics::Base, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:mots) { %w[air ocean] }
@@ -10,53 +10,40 @@ RSpec.describe Analytics::Base, type: :service, skip: :flaky do
   let(:blacklisted_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:start_date) { 1.month.ago }
   let(:end_date) { Time.zone.now }
-  let(:service) {
+  let(:service) do
     described_class.new(user: user, organization: organization, start_date: start_date, end_date: end_date)
-  }
-  let(:itineraries) do
-    mots.map do |mot|
-      FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: mot, organization: organization)
-    end
   end
   let!(:requests) do
-    itineraries.product(clients).map do |itinerary, client|
-      FactoryBot.create(:legacy_shipment,
-        itinerary: itinerary,
-        user: client,
+    clients.flat_map do |client|
+      FactoryBot.create_list(:journey_query,
+        2,
+        client: client,
+        creator: client,
         organization: organization,
-        with_breakdown: true,
-        with_tenders: true)
+        result_set_count: 1)
     end
   end
 
   before do
-    itineraries.product([blacklisted_client]).map do |itinerary, client|
-      FactoryBot.create(:legacy_shipment,
-        itinerary: itinerary,
-        user: client,
-        organization: organization,
-        with_breakdown: true,
-        with_tenders: true)
-    end
+    FactoryBot.create_list(:journey_query,
+      2,
+      client: blacklisted_client,
+      creator: blacklisted_client,
+      organization: organization,
+      result_set_count: 1)
     ::Organizations.current_id = organization.id
-    organization.scope.update(content: {blacklisted_emails: [blacklisted_client.email]})
+    organization.scope.update(content: { blacklisted_emails: [blacklisted_client.email] })
   end
 
-  describe "quotations" do
-    it "returns all the quotations made in the period" do
-      expect(service.quotations.count).to eq(requests.length)
+  describe "queries" do
+    it "returns all the queries made in the period" do
+      expect(service.queries.count).to eq(requests.length)
     end
   end
 
-  describe "tenders" do
-    it "returns all the tenders made in the period" do
-      expect(service.tenders.count).to eq(requests.length)
-    end
-  end
-
-  describe "itineraries" do
-    it "returns all the itineraries made in the period" do
-      expect(service.itineraries.count).to eq(itineraries.length)
+  describe "results" do
+    it "returns all the results made in the period" do
+      expect(service.results.count).to eq(requests.length)
     end
   end
 
@@ -65,25 +52,18 @@ RSpec.describe Analytics::Base, type: :service, skip: :flaky do
       ::Organizations.current_id = organization.id
     end
 
-    it "returns all the clients made in the period" do
-      aggregate_failures do
-        expect(service.clients.count).to eq(3)
-        expect(service.clients.first).to be_a(Users::Client)
-      end
+    it "returns all the clients made in the period", :aggregate_failures do
+      expect(service.clients.count).to eq(3)
+      expect(service.clients.first).to be_a(Users::Client)
     end
   end
 
   context "when a quote shop" do
-    before do
-      Organizations::Scope.find_by(target: organization)
-        .update(content: {closed_quotation_tool: true, blacklisted_emails: [blacklisted_client.email]})
-    end
-
-    describe "tender_or_request" do
-      it "returns a collection of tenders" do
+    describe "result_or_request" do
+      it "returns a collection of results" do
         aggregate_failures do
-          expect(service.tender_or_request.count).to eq(requests.length)
-          expect(service.tender_or_request.first).to be_a(Quotations::Tender)
+          expect(service.result_or_request.count).to eq(requests.length)
+          expect(service.result_or_request.first).to be_a(Journey::Result)
         end
       end
     end
@@ -91,19 +71,21 @@ RSpec.describe Analytics::Base, type: :service, skip: :flaky do
 
   context "when a booking shop" do
     before do
-      Quotations::Tender.find_each do |tender|
-        ::Organizations.current_id = organization.id
-        FactoryBot.create(
-          :shipments_shipment_request, user: tender.quotation.user, organization: organization, tender: tender
-        )
+      Organizations::Scope.find_by(target: organization)
+        .update(content: { closed_quotation_tool: false, open_quotation_tool: false, blacklisted_emails: [blacklisted_client.email] })
+      Journey::Result.find_each do |result|
+        FactoryBot.create(:journey_shipment_request,
+          client_id: result.query.client_id,
+          result: result,
+          created_at: result.created_at)
       end
     end
 
-    describe "tender_or_request" do
+    describe "result_or_request" do
       it "returns a collection of tenders" do
         aggregate_failures do
-          expect(service.tender_or_request.count).to eq(requests.length)
-          expect(service.tender_or_request.first).to be_a(Shipments::ShipmentRequest)
+          expect(service.result_or_request.count).to eq(requests.length)
+          expect(service.result_or_request.first).to be_a(Journey::ShipmentRequest)
         end
       end
     end
