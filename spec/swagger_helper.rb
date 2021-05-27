@@ -1071,6 +1071,39 @@ RSpec.configure do |config|
               type
               attributes
             ]
+          },
+          analyticsCount: {
+            type: :number,
+            nullable: true
+          },
+          analyticsTotal: {
+            type: "object",
+            properties: {
+              symbol: {
+                description: "ISO Currency Code for the Total",
+                type: "string"
+              },
+              value: {
+                description: "Value in the base unit (cents) of the Total",
+                type: "number"
+              }
+            }
+          },
+          analyticsListCount: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                label: {
+                  description: "Label for displaying the context of the result",
+                  type: "string"
+                },
+                count: {
+                  description: "Value of the Analytic result",
+                  type: "number"
+                }
+              }
+            }
           }
         },
         securitySchemes: {

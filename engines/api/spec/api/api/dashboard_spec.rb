@@ -35,9 +35,12 @@ RSpec.describe "Dashboard", type: :request, swagger: true do
         schema type: :object,
                properties: {
                  data: {
-                   type: :number,
-                   nullable: true
-                  }
+                   oneOf: [
+                     { "$ref" => "#/components/schemas/analyticsCount" },
+                     { "$ref" => "#/components/schemas/analyticsTotal" },
+                     { "$ref" => "#/components/schemas/analyticsListCount" }
+                   ]
+                 }
                },
                required: ["data"]
 
