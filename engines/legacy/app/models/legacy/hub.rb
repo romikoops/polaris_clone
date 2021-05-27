@@ -31,14 +31,14 @@ module Legacy
     delegate :locode, to: :nexus
 
     pg_search_scope :name_search, against: %i[name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     pg_search_scope :locode_search, against: %i[hub_code],
                                     associated_against: {
                                       nexus: %i[locode]
                                     },
                                     using: {
-                                      tsearch: {prefix: true}
+                                      tsearch: { prefix: true }
                                     }
 
     pg_search_scope :country_search,
@@ -46,14 +46,14 @@ module Legacy
         country: %i[name code]
       },
       using: {
-        tsearch: {prefix: true}
+        tsearch: { prefix: true }
       }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
 
     pg_search_scope :list_search, against: %i[name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
-    validates :hub_code, format: {with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode"}, allow_nil: true
+    validates :hub_code, format: { with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode" }, allow_nil: true
 
     before_validation :set_point
 
@@ -123,6 +123,8 @@ end
 #  name                :string
 #  photo               :string
 #  point               :geometry         geometry, 4326
+#  terminal            :string
+#  terminal_code       :string
 #  trucking_type       :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -135,6 +137,8 @@ end
 #
 # Indexes
 #
+#  hub_terminal_upsert            (nexus_id,name,hub_type,organization_id,terminal) UNIQUE
+#  hub_upsert                     (nexus_id,hub_type,name,organization_id) UNIQUE WHERE (terminal IS NULL)
 #  index_hubs_on_organization_id  (organization_id)
 #  index_hubs_on_point            (point) USING gist
 #  index_hubs_on_sandbox_id       (sandbox_id)

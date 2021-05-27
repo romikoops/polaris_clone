@@ -7,7 +7,7 @@ RSpec.describe Shipments::BookingProcessController do
   let(:scope) { FactoryBot.create(:organizations_scope, content: scope_content) }
   let(:scope_content) { {} }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:shipment) {
+  let(:shipment) do
     FactoryBot.create(:completed_legacy_shipment,
       organization: organization,
       trip: trip,
@@ -15,12 +15,9 @@ RSpec.describe Shipments::BookingProcessController do
       itinerary: itinerary,
       with_breakdown: true,
       with_tenders: true)
-  }
-  let(:quotation) { Quotations::Quotation.find_by(legacy_shipment_id: shipment.id) }
-  let(:shipments_shipment) { Shipment.find(shipment.id) }
+  end
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:trip) { FactoryBot.create(:legacy_trip, itinerary: itinerary) }
-  let(:shipping_tools_double) { instance_double("ShippingTools") }
 
   before do
     ::Organizations.current_id = organization.id
@@ -30,9 +27,6 @@ RSpec.describe Shipments::BookingProcessController do
                                     to: "USD", rate: 1.3,
                                     created_at: tender.created_at - 30.seconds)
     end
-    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "shipper")
-    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "consignee")
-    FactoryBot.create(:legacy_shipment_contact, shipment: shipments_shipment, contact_type: "notifyee")
   end
 
   context "when sending admin emails on quote download" do
@@ -41,7 +35,7 @@ RSpec.describe Shipments::BookingProcessController do
     let(:quotes) do
       [
         {
-          meta: {tender_id: result.id}
+          meta: { tender_id: result.id }
         }.with_indifferent_access
       ]
     end
@@ -55,40 +49,36 @@ RSpec.describe Shipments::BookingProcessController do
 
     describe ".save_and_send_quotes" do
       it "successfully calls the mailer and return the quote Document" do
-        post :send_quotes, params: {organization_id: organization.id, shipment_id: result.id, quotes: quotes}
+        post :send_quotes, params: { organization_id: organization.id, shipment_id: result.id, quotes: quotes }
       end
     end
 
     describe ".download_quotations" do
       it "successfully calls the mailer and return the quote Document" do
         post :download_quotations, params: {
-          organization_id: organization.id, shipment_id: result.id, options: {quotes: quotes}
+          organization_id: organization.id, shipment_id: result.id, options: { quotes: quotes }
         }
-        expect(response_data.dig("url")).to include("active_storage/blobs")
+        expect(response_data["url"]).to include("active_storage/blobs")
       end
     end
   end
 
   describe "POST #get_offers" do
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-    let(:trip) { FactoryBot.create(:trip, itinerary_id: itinerary.id) }
-    let(:origin_hub) { itinerary.origin_hub }
-    let(:destination_hub) { itinerary.destination_hub }
     let(:shipment_params) do
       shipment.as_json.merge(
         origin: {
-          longitude: origin_hub.longitude,
-          latitude: origin_hub.latitude,
-          nexus_id: origin_hub.nexus.id,
-          nexus_name: origin_hub.nexus.name,
-          country: origin_hub.nexus.country.name
+          longitude: itinerary.origin_hub.longitude,
+          latitude: itinerary.origin_hub.latitude,
+          nexus_id: itinerary.origin_hub.nexus.id,
+          nexus_name: itinerary.origin_hub.nexus.name,
+          country: itinerary.origin_hub.nexus.country.name
         },
         destination: {
-          longitude: destination_hub.longitude,
-          latitude: destination_hub.latitude,
-          nexus_id: destination_hub.nexus.id,
-          nexus_name: destination_hub.nexus.name,
-          country: destination_hub.nexus.country.name
+          longitude: itinerary.destination_hub.longitude,
+          latitude: itinerary.destination_hub.latitude,
+          nexus_id: itinerary.destination_hub.nexus.id,
+          nexus_name: itinerary.destination_hub.nexus.name,
+          country: itinerary.destination_hub.nexus.country.name
         },
         direction: "export",
         selected_day: Time.zone.today,
@@ -97,8 +87,8 @@ RSpec.describe Shipments::BookingProcessController do
           quantity: 1,
           payload_in_kg: 12,
           dangerous_goods: false
-          }]
-        )
+        }]
+      )
     end
     let(:params) do
       {
@@ -108,19 +98,13 @@ RSpec.describe Shipments::BookingProcessController do
         async: true
       }
     end
-    let(:json_result) { json[:data] }
-    let(:query) { Journey::Query.find(json_result.dig(:quotationId)) }
+    let(:query) { Journey::Query.find(response_data["quotationId"]) }
 
-    it "returns the desired result" do
+    it "returns the desired result", :aggregate_failures do
       post :get_offers, params: params
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(query).to be_present
-        expect(query.load_type).to eq("fcl")
-        expect(json_result.dig(:shipment, :load_type)).to eq("container")
-        expect(json_result.dig(:completed)).to be_truthy
-      end
+      expect(query.load_type).to eq("fcl")
+      expect(response_data.dig("shipment", "load_type")).to eq("container")
+      expect(response_data["completed"]).to be_truthy
     end
 
     context "when user is nil" do
@@ -128,103 +112,45 @@ RSpec.describe Shipments::BookingProcessController do
         allow(controller).to receive(:current_user).and_return(nil)
       end
 
-      it "returns the desired result when user is nil" do
+      it "returns the desired result when user is nil", :aggregate_failures do
         post :get_offers, params: params
-
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(json_result.dig(:quotationId)).to eq(query.id)
-          expect(json_result.dig(:completed)).to be_truthy
-        end
+        expect(response).to have_http_status(:success)
+        expect(response_data["quotationId"]).to eq(query.id)
+        expect(response_data["completed"]).to be_truthy
       end
     end
+
     context "when user is nil and is ineligible" do
       before do
         allow(controller).to receive(:current_user).and_return(nil)
       end
 
-      let(:scope_content) { {closed_quotation_tool: true} }
+      let(:scope_content) { { closed_quotation_tool: true } }
 
       it "returns the desired result when user is nil" do
         post :get_offers, params: params
 
-        aggregate_failures do
-          expect(response).to have_http_status(400)
-        end
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
 
   describe "GET #refresh_quotes" do
-    it "returns an http status of success" do
-      get :refresh_quotes, params: {organization_id: shipment.organization, shipment_id: shipment.id}
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        json_response = JSON.parse(response.body)
-        expect(json_response.dig("data").length).to eq(1)
-        expect(json_response.dig("data", 0, "quote", "total", "value")).to eq("9.99")
-      end
-    end
-  end
-
-  describe "POST #choose_offer" do
-    before do
-      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
-      allow(shipping_tools_double).to receive(:choose_offer).and_return({shipment: shipment.as_json})
-    end
-
-    it "returns an http status of success" do
-      post :choose_offer, params: {organization_id: shipment.organization, shipment_id: shipment.id}
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-      end
-    end
-  end
-
-  describe "POST #update_shipment" do
-    before do
-      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
-      allow(shipping_tools_double).to receive(:update_shipment).and_return({shipment: shipment.as_json})
-    end
-
-    it "returns an http status of success" do
-      post :update_shipment, params: {organization_id: shipment.organization, shipment_id: shipment.id}
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-      end
-    end
-  end
-
-  describe "POST #request_shipment" do
-    before do
-      allow(ShippingTools).to receive(:new).and_return(shipping_tools_double)
-      allow(shipping_tools_double).to receive(:request_shipment).and_return(shipment)
-      allow(shipping_tools_double).to receive(:tenant_notification_email).and_return(true)
-      allow(shipping_tools_double).to receive(:shipper_notification_email).and_return(true)
-    end
-
-    it "returns an http status of success" do
-      post :request_shipment, params: {organization_id: shipment.organization, shipment_id: shipment.id}
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-      end
+    it "returns an http status of success", :aggregate_failures do
+      get :refresh_quotes, params: { organization_id: shipment.organization, shipment_id: shipment.id }
+      expect(response).to have_http_status(:success)
+      expect(response_data.length).to eq(1)
+      expect(response_data.dig(0, "quote", "total", "value")).to eq("9.99")
     end
   end
 
   describe "POST #create_shipment" do
-    it "returns an http status of success" do
+    it "returns an http status of success", :aggregate_failures do
       post :create_shipment, params: {
-        organization_id: shipment.organization, details: {loadType: "cargo_item", direction: "import"}
+        organization_id: shipment.organization, details: { loadType: "cargo_item", direction: "import" }
       }
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(json.dig(:data, :shipment, :id)).to be_present
-      end
+      expect(response).to have_http_status(:success)
+      expect(response_data.dig("shipment", "id")).to be_present
     end
   end
 end

@@ -1550,7 +1550,9 @@ CREATE TABLE public.hubs (
     sandbox_id uuid,
     free_out boolean DEFAULT false,
     point public.geometry(Geometry,4326),
-    organization_id uuid
+    organization_id uuid,
+    terminal character varying,
+    terminal_code character varying
 );
 
 
@@ -6981,6 +6983,20 @@ ALTER TABLE ONLY public.versions
 
 
 --
+-- Name: hub_terminal_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX hub_terminal_upsert ON public.hubs USING btree (nexus_id, name, hub_type, organization_id, terminal);
+
+
+--
+-- Name: hub_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX hub_upsert ON public.hubs USING btree (nexus_id, hub_type, name, organization_id) WHERE (terminal IS NULL);
+
+
+--
 -- Name: index_active_storage_attachments_on_blob_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12181,6 +12197,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210427175457'),
 ('20210504094632'),
 ('20210504143455'),
+('20210506103927'),
+('20210506103936'),
+('20210507103512'),
 ('20210512092712');
 
 

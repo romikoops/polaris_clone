@@ -3,59 +3,75 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::Base do
+  let(:base_class) { described_class.new }
   let(:organization) { FactoryBot.build(:organizations_organization) }
 
+  before { allow(base_class).to receive(:organization).and_return(organization) }
+
   describe "#find_hub_by_name_or_locode_with_info" do
-    let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+    let(:hub) { FactoryBot.create(:gothenburg_hub, organization: organization) }
     let(:mode_of_transport) { hub.hub_type }
     let(:name) { hub.name }
     let(:country) { hub.country.name }
     let(:locode) { hub.hub_code }
+    let(:hub_with_info) { base_class.find_hub_by_name_or_locode_with_info(args) }
 
-    context "name & country provided" do
-      it "finds a hub" do
-        allow(subject).to receive(:organization).and_return(organization)
-        hub_with_info = subject.find_hub_by_name_or_locode_with_info(
+    context "when name & country provided and the hub is found" do
+      let(:args) do
+        {
           name: name,
           country: country,
           mot: mode_of_transport,
           locode: nil
-        )
-        expect(hub_with_info).to eq({ hub: hub, found_by_info: [name, country].join(", ") })
+        }
       end
 
-      it "does not find a hub" do
-        allow(subject).to receive(:organization).and_return(organization)
-        hub_with_info = subject.find_hub_by_name_or_locode_with_info(
+      it "finds a hub" do
+        expect(hub_with_info).to eq({ hub: hub, found_by_info: [name, country].join(", ") })
+      end
+    end
+
+    context "when name & country provided and the hub is not found" do
+      let(:args) do
+        {
           name: "Not-existent",
           country: nil,
           mot: mode_of_transport,
           locode: nil
-        )
+        }
+      end
+
+      it "does not find a hub" do
         expect(hub_with_info).to eq({ hub: nil, found_by_info: "Not-existent" })
       end
     end
 
-    context "locode provided" do
-      it "finds a hub" do
-        allow(subject).to receive(:organization).and_return(organization)
-        hub_with_info = subject.find_hub_by_name_or_locode_with_info(
+    context "when locode provided and hub is found" do
+      let(:args) do
+        {
           name: nil,
           country: nil,
           mot: mode_of_transport,
           locode: locode
-        )
-        expect(hub_with_info).to eq({ hub: hub, found_by_info: locode })
+        }
       end
 
-      it "does not find a hub" do
-        allow(subject).to receive(:organization).and_return(organization)
-        hub_with_info = subject.find_hub_by_name_or_locode_with_info(
+      it "finds a hub" do
+        expect(hub_with_info).to eq({ hub: hub, found_by_info: locode })
+      end
+    end
+
+    context "when locode provided and hub is not found" do
+      let(:args) do
+        {
           name: nil,
           country: nil,
           mot: mode_of_transport,
           locode: "XXXXX"
-        )
+        }
+      end
+
+      it "does not find a hub" do
         expect(hub_with_info).to eq({ hub: nil, found_by_info: "XXXXX" })
       end
     end

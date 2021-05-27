@@ -5,19 +5,19 @@ require "rails_helper"
 module Pricings
   RSpec.describe Margin, type: :model do
     let!(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle_1]) }
-    let(:hub) { FactoryBot.create(:legacy_hub, organization: organization, name: "Gothenburg") }
+    let(:vehicle) { FactoryBot.create(:vehicle, tenant_vehicles: [tenant_vehicle]) }
+    let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-    let(:pricing) {
+    let(:pricing) do
       FactoryBot.create(:lcl_pricing,
-        tenant_vehicle: tenant_vehicle_1, organization: organization, itinerary: itinerary)
-    }
-    let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
+        tenant_vehicle: tenant_vehicle, organization: organization, itinerary: itinerary)
+    end
+    let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
 
-    context "instance methods" do
+    context "with instance methods" do
       let!(:no_pricing_margin) do
         FactoryBot.create(:pricings_margin,
-          tenant_vehicle: tenant_vehicle_1,
+          tenant_vehicle: tenant_vehicle,
           cargo_class: "lcl",
           itinerary: pricing.itinerary,
           organization: organization,
@@ -26,14 +26,6 @@ module Pricings
       let!(:pricing_margin) do
         FactoryBot.create(:pricings_margin,
           pricing: pricing,
-          organization: organization,
-          applicable: organization)
-      end
-      let!(:dates_margin) do
-        FactoryBot.create(:pricings_margin,
-          pricing: pricing,
-          effective_date: Date.parse("2019/01/01"),
-          expiration_date: Date.parse("2019/01/31"),
           organization: organization,
           applicable: organization)
       end
@@ -73,12 +65,21 @@ module Pricings
           applicable: organization)
       end
 
-      let!(:margin_detail) { FactoryBot.create(:bas_margin_detail, margin: margin) }
+      before do
+        FactoryBot.create(:pricings_margin,
+          pricing: pricing,
+          effective_date: Date.parse("2019/01/01"),
+          expiration_date: Date.parse("2019/01/31"),
+          organization: organization,
+          applicable: organization)
+        FactoryBot.create(:bas_margin_detail, margin: margin)
+      end
 
       describe ".get_pricing" do
         it "finds the pricing with pricing attached" do
           expect(pricing_margin.get_pricing).to eq(pricing)
         end
+
         it "finds the pricing with no pricing attached" do
           expect(no_pricing_margin.get_pricing).to eq(pricing)
         end
@@ -88,6 +89,7 @@ module Pricings
         it "renders the fee_code with pricing attached" do
           expect(pricing_margin.fee_code).to eq("N/A")
         end
+
         it "renders the fee_code with no pricing attached" do
           expect(no_pricing_margin.fee_code).to eq("N/A")
         end
@@ -97,6 +99,7 @@ module Pricings
         it "renders the service level with pricing attached" do
           expect(pricing_margin.service_level).to eq("slowly")
         end
+
         it "renders the service level with no pricing attached" do
           expect(no_pricing_margin.service_level).to eq("slowly")
         end
@@ -106,6 +109,7 @@ module Pricings
         it "renders the cargo_class with pricing attached" do
           expect(pricing_margin.cargo_class).to eq("lcl")
         end
+
         it "renders the cargo_class with no pricing attached" do
           expect(no_pricing_margin.cargo_class).to eq("lcl")
         end
@@ -115,19 +119,24 @@ module Pricings
         it "renders the itinerary_name with pricing attached" do
           expect(pricing_margin.itinerary_name).to eq("Gothenburg - Shanghai")
         end
+
         it "renders the itinerary_name with no pricing attached" do
           expect(no_pricing_margin.itinerary_name).to eq("Gothenburg - Shanghai")
         end
-        it "renders the itinerary_name with origin hub attached" do
-          expect(origin_hub_margin.itinerary_name).to eq("Departing Gothenburg")
+
+        it "renders the itinerary_name with origin hub attached (departing)" do
+          expect(origin_hub_margin.itinerary_name).to eq("Departing #{hub.name}")
         end
-        it "renders the itinerary_name with destination hub attached" do
-          expect(destination_hub_margin.itinerary_name).to eq("Entering Gothenburg")
+
+        it "renders the itinerary_name with destination hub attached (entering)" do
+          expect(destination_hub_margin.itinerary_name).to eq("Entering #{hub.name}")
         end
+
         it "renders the itinerary_name with destination hub attached" do
-          expect(all_hub_margin.itinerary_name).to eq("Gothenburg")
+          expect(all_hub_margin.itinerary_name).to eq(hub.name)
         end
-        it "renders the itinerary_name with destination hub attached" do
+
+        it "renders the itinerary_name with nothing attached" do
           expect(all_margin.itinerary_name).to eq("All")
         end
       end
@@ -136,13 +145,14 @@ module Pricings
         it "renders the mode_of_transport with pricing attached" do
           expect(pricing_margin.mode_of_transport).to eq("ocean")
         end
+
         it "renders the mode_of_transport with no pricing attached" do
           expect(no_pricing_margin.mode_of_transport).to eq("ocean")
         end
       end
     end
 
-    context "class methods" do
+    context "when methods are class methods" do
       let!(:lcl_margin) do
         FactoryBot.create(:pricings_margin,
           cargo_class: "lcl",
@@ -155,15 +165,16 @@ module Pricings
           organization: organization,
           applicable: organization)
       end
-      let!(:fcl_40_margin) do
-        FactoryBot.create(:pricings_margin,
-          cargo_class: "fcl_40",
-          organization: organization,
-          applicable: organization)
-      end
       let!(:fcl_40_hq_margin) do
         FactoryBot.create(:pricings_margin,
           cargo_class: "fcl_40_hq",
+          organization: organization,
+          applicable: organization)
+      end
+
+      before do
+        FactoryBot.create(:pricings_margin,
+          cargo_class: "fcl_40",
           organization: organization,
           applicable: organization)
       end
@@ -173,6 +184,7 @@ module Pricings
           margins = ::Pricings::Margin.for_cargo_classes(["lcl"])
           expect(margins).to eq([lcl_margin])
         end
+
         it "finds no margins for two of three fcl classes" do
           margins = ::Pricings::Margin.for_cargo_classes(%w[fcl_20 fcl_40_hq])
           expect(margins).to eq([fcl_20_margin, fcl_40_hq_margin])
