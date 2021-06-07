@@ -26,7 +26,7 @@ RSpec.describe Locations::Searchers::PostalCity do
       Locations::Name.reindex
       Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE",
         [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Vastra Volunda Gothenburg, Sweden",
           "city" => "Vastra Volunda Gothenburg",
           "country" => "Sweden",

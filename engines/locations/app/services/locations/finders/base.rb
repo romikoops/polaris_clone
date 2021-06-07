@@ -29,13 +29,13 @@ module Locations
 
       def results
         @results ||= Locations::Name
-          .where(country_code: country_code)
           .search(
             data[:terms],
             fields: %i[name display_name alternative_names city postal_code],
             match: :word_middle,
             limit: 30,
-            operator: "or"
+            operator: "or",
+            where: { country_code: country_code }
           )
           .results
       end

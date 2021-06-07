@@ -7,18 +7,18 @@ RSpec.describe Locations::Searchers::Locode do
 
   describe ".data" do
     let!(:target_location) { FactoryBot.create(:german_location, name: "DEHAM", country_code: "de") }
-    let(:query) { {locode: "DEHAM", country_code: "DE"} }
+    let(:query) { { locode: "DEHAM", country_code: "DE" } }
 
     it "finds the Name and returns the attached location" do
       expect(result).to eq(target_location.id)
     end
 
     context "with no result" do
-      let(:query) { {locode: "ZACPT", country_code: "ZA"} }
+      let(:query) { { locode: "ZACPT", country_code: "ZA" } }
 
       before do
         Geocoder::Lookup::Test.add_stub("ZACPT", [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Cape Town, South Africa",
           "city" => "Cape Town",
           "country" => "South Africa",

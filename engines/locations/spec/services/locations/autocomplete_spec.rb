@@ -51,26 +51,24 @@ module Locations
       Locations::Name.reindex
     end
 
-    context "with country codes" do
+    shared_examples_for "Finding Baoshun" do
       it "returns results including the desired object (en) with country codes", :aggregate_failures do
         expect(results.first.name).to eq("Baoshun")
         expect(results.first.city).to eq("Shanghai")
         expect(results.first.geojson).to eq(example_bounds)
-        expect(results.first.lat_lng).to eq({latitude: 31.2699895, longitude: 121.9318879})
+        expect(results.first.lat_lng).to eq({ latitude: 31.2699895, longitude: 121.9318879 })
         expect(results.first.class).to eq(Locations::NameDecorator)
       end
+    end
+
+    context "with country codes" do
+      it_behaves_like "Finding Baoshun"
     end
 
     context "without country_codes" do
       let(:country_codes) { [] }
 
-      it "returns results including the desired object (en) without country codes", :aggregate_failures do
-        expect(results.first.name).to eq("Baoshun")
-        expect(results.first.city).to eq("Shanghai")
-        expect(results.first.geojson).to eq(example_bounds)
-        expect(results.first.lat_lng).to eq({latitude: 31.2699895, longitude: 121.9318879})
-        expect(results.first.class).to eq(Locations::NameDecorator)
-      end
+      it_behaves_like "Finding Baoshun"
     end
   end
 end

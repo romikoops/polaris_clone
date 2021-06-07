@@ -7,11 +7,11 @@ RSpec.describe Locations::Searchers::Default do
 
   describe ".data" do
     let!(:target_location) { FactoryBot.create(:swedish_location, osm_id: 1, admin_level: 7) }
-    let(:query) { {terms: ["Vastra Volunda", "Gothenburg"], country_code: "SE"} }
+    let(:query) { { terms: ["Vastra Volunda", "Gothenburg"], country_code: "SE" } }
 
     before do
       Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE", [
-        "address_components" => [{"types" => ["premise"]}],
+        "address_components" => [{ "types" => ["premise"] }],
         "address" => "Vastra Volunda, Sweden",
         "city" => "Vastra Volunda",
         "country" => "Sweden",
@@ -31,11 +31,11 @@ RSpec.describe Locations::Searchers::Default do
     end
 
     context "with no result" do
-      let(:query) { {terms: ["Jonkoping"], country_code: "SE"} }
+      let(:query) { { terms: ["Jonkoping"], country_code: "SE" } }
 
       before do
         Geocoder::Lookup::Test.add_stub("Jonkoping SE", [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Jonkoping, Sweden",
           "city" => "Jonkoping",
           "country" => "Sweden",

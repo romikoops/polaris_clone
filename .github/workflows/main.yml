@@ -95,7 +95,7 @@ jobs:
           node-version: '12'
       - uses: ankane/setup-elasticsearch@v1
         with:
-          elasticsearch-version: 7.4
+          elasticsearch-version: 7.10
 
       - name: Install Dependencies
         run: |

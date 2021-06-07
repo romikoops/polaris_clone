@@ -12,9 +12,9 @@ RSpec.describe Locations::Finders::PostalCode do
         country_code: "SE"
       }
     end
-    let(:postal_location) {
+    let(:postal_location) do
       FactoryBot.create(:swedish_location, osm_id: 4, admin_level: 10, name: "21001", country_code: "SE")
-    }
+    end
     let(:point) { postal_location.bounds.centroid }
     let!(:target_location_name) do
       FactoryBot.create(:locations_name,
@@ -29,7 +29,7 @@ RSpec.describe Locations::Finders::PostalCode do
     before do
       Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE",
         [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Vastra Volunda Gothenburg, Sweden",
           "city" => "Vastra Volunda Gothenburg",
           "country" => "Sweden",

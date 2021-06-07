@@ -14,10 +14,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "shared-runtime"
 
-  spec.add_dependency "elasticsearch", "~> 7.3.0"
+  spec.add_dependency "elasticsearch", "~> 7.10.0"
   spec.add_dependency "rgeo"
   spec.add_dependency "rgeo-geojson"
-  spec.add_dependency "searchkick", "~> 4.1.0"
+  spec.add_dependency "searchkick", "~> 4.4.0"
 
   spec.add_dependency "legacy"
 

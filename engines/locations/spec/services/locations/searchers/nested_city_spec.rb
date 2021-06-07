@@ -9,12 +9,12 @@ RSpec.describe Locations::Searchers::NestedCity do
     let!(:target_area) { FactoryBot.create(:swedish_location, osm_id: 1, admin_level: 7) }
     let(:target_point) { target_area.bounds.centroid }
     let!(:city_location) { FactoryBot.create(:xl_swedish_location, admin_level: 6) }
-    let(:query) { {terms: ["Vastra Volunda", "Gothenburg"], country_code: "SE"} }
+    let(:query) { { terms: ["Vastra Volunda", "Gothenburg"], country_code: "SE" } }
 
     context "with cities present" do
       before do
         Geocoder::Lookup::Test.add_stub("Vastra Volunda Gothenburg SE", [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Vastra Volunda, Gothenburg, Sweden",
           "city" => "Gothenburg",
           "country" => "Sweden",
@@ -53,7 +53,7 @@ RSpec.describe Locations::Searchers::NestedCity do
       end
 
       context "when falling back to contains" do
-        let!(:target_area) { nil }
+        let(:target_area) { nil }
         let(:target_point) { city_location.bounds.centroid }
 
         it "finds the Name and returns the attached location" do
@@ -63,11 +63,11 @@ RSpec.describe Locations::Searchers::NestedCity do
     end
 
     context "with no result" do
-      let(:query) { {terms: ["Jonkoping"], country_code: "SE"} }
+      let(:query) { { terms: ["Jonkoping"], country_code: "SE" } }
 
       before do
         Geocoder::Lookup::Test.add_stub("Jonkoping SE", [
-          "address_components" => [{"types" => ["premise"]}],
+          "address_components" => [{ "types" => ["premise"] }],
           "address" => "Jonkoping, Sweden",
           "city" => "Jonkoping",
           "country" => "Sweden",

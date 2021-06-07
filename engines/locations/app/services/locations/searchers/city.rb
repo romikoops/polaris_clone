@@ -19,13 +19,13 @@ module Locations
 
       def primary_name
         @primary_name ||= Locations::Finders::Location.data(
-          data: {country_code: country_code, terms: terms}
+          data: { country_code: country_code, terms: terms }
         )
       end
 
       def secondary_name
         @secondary_name ||= Locations::Finders::Location.data(
-          data: {country_code: country_code, terms: [upper_term]}
+          data: { country_code: country_code, terms: [upper_term] }
         )
       end
 
@@ -42,7 +42,7 @@ module Locations
       end
 
       def upper_term
-        @upper_term ||= terms.is_a?(Array) ? terms.last : terms.split(" ").last
+        @upper_term ||= terms.is_a?(Array) ? terms.last : terms.split.last
       end
     end
   end

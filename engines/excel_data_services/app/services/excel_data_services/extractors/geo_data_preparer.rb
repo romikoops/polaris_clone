@@ -24,14 +24,14 @@ module ExcelDataServices
         {
           city: raw_data["primary"],
           province: raw_data["secondary"],
-          country_code: raw_data["country_code"].downcase
+          country_code: raw_data["country_code"]
         }
       end
 
       def city
         {
           terms: raw_data.values_at("primary", "secondary"),
-          country_code: raw_data["country_code"].downcase
+          country_code: raw_data["country_code"]
         }
       end
 
@@ -46,7 +46,7 @@ module ExcelDataServices
 
         {
           postal_code: postal_code,
-          country_code: raw_data["country_code"].downcase,
+          country_code: raw_data["country_code"],
           terms: [name]
         }
       end

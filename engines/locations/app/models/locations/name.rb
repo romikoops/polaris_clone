@@ -2,10 +2,10 @@
 
 module Locations
   class Name < ApplicationRecord
+    belongs_to :location, class_name: "Locations::Location", optional: true
     searchkick word_middle: %i[name display_name alternative_names city postal_code country_code],
                geo_shape: [:point],
-               settings: {blocks: {read_only: false}}
-    belongs_to :location, optional: true
+               settings: { blocks: { read_only: false } }
 
     def search_data
       {
@@ -14,7 +14,7 @@ module Locations
         city: city,
         postal_code: postal_code,
         alternative_names: alternative_names,
-        location: {lat: point&.y, lon: point&.x},
+        location: { lat: point&.y, lon: point&.x },
         country_code: country_code
       }
     end
