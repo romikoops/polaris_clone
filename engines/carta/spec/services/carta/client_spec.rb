@@ -25,7 +25,7 @@ module Carta
     describe "#lookup" do
       let(:geo_id) { "123" }
 
-      context "when carta responds with 200" do
+      context "when carta responds with 200 and a result" do
         before do
           stubs.get("/lookup?id=#{geo_id}") do
             [
@@ -42,6 +42,23 @@ module Carta
         end
       end
 
+      context "when carta responds with 200 and no result" do
+        before do
+          stubs.get("/lookup?id=#{geo_id}") do
+            [
+              200,
+              { 'Content-Type': "application/json" },
+              '{"data": {} }'
+            ]
+          end
+        end
+
+        it "calls the carta /lookup endpoint with the argument id as a param", :aggregate_failures do
+          expect { described_class.lookup(id: geo_id) }.to raise_error(Carta::Client::LocationNotFound)
+          stubs.verify_stubbed_calls
+        end
+      end
+
       context "when carta responds with 503" do
         before do
           stubs.get("/lookup?id=#{geo_id}") do
@@ -50,7 +67,7 @@ module Carta
         end
 
         it "retries after 1 second", :aggregate_failures do
-          expect { described_class.lookup(id: geo_id) }.to raise_error(Carta::Client::LocationNotFound)
+          expect { described_class.lookup(id: geo_id) }.to raise_error(Carta::Client::ServiceUnavailable)
           stubs.verify_stubbed_calls
         end
       end
@@ -59,7 +76,7 @@ module Carta
     describe "#suggest" do
       let(:locode) { "DEHAM" }
 
-      context "when carta responds with 200" do
+      context "when carta responds with 200 and a result" do
         before do
           stubs.get("/lookup?id=itsmycargo:locode:ABC123") do
             [200, { 'Content-Type': "application/json" }, lookup_resp]
@@ -79,6 +96,23 @@ module Carta
         end
       end
 
+      context "when carta responds with 200 and has no result" do
+        before do
+          stubs.get("/suggest?query=#{locode}") do
+            [
+              200,
+              { 'Content-Type': "application/json" },
+              '{"data": [] }'
+            ]
+          end
+        end
+
+        it "calls the carta /suggest endpoint with the argument query as a param", :aggregate_failures do
+          expect { described_class.suggest(query: locode) }.to raise_error(Carta::Client::LocationNotFound)
+          stubs.verify_stubbed_calls
+        end
+      end
+
       context "when carta responds with 503" do
         before do
           stubs.get("/suggest?query=#{locode}") do
@@ -87,7 +121,7 @@ module Carta
         end
 
         it "retries after 1 second", :aggregate_failures do
-          expect { described_class.suggest(query: locode) }.to raise_error(Carta::Client::LocationNotFound)
+          expect { described_class.suggest(query: locode) }.to raise_error(Carta::Client::ServiceUnavailable)
           stubs.verify_stubbed_calls
         end
       end

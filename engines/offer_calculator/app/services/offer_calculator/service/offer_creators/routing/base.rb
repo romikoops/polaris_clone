@@ -85,6 +85,10 @@ module OfferCalculator
 
           def geo_id_from_hub(hub:)
             Carta::Client.suggest(query: hub.nexus.locode).id
+          rescue Carta::Client::ServiceUnavailable
+            raise OfferCalculator::Errors::OfferBuilder
+          rescue Carta::Client::LocationNotFound
+            raise OfferCalculator::Errors::LocationNotFound
           end
 
           def geo_id_from_address(address:)

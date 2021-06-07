@@ -3,13 +3,14 @@
 module Carta
   class Client
     LocationNotFound = Class.new(StandardError)
+    ServiceUnavailable = Class.new(StandardError)
 
     class << self
       def lookup(id:)
         response = connection.get("lookup") do |req|
           req.params["id"] = id
         end
-        raise LocationNotFound unless response.success?
+        raise ServiceUnavailable unless response.success?
 
         result_from_carta(params: JSON.parse(response.body)["data"])
       end
@@ -20,9 +21,11 @@ module Carta
           req.params["mode"] = "internal"
         end
 
-        raise LocationNotFound unless response.success?
+        raise ServiceUnavailable unless response.success?
 
         id = JSON.parse(response.body).dig("data", 0, "id")
+        raise LocationNotFound if id.blank?
+
         lookup(id: id)
       end
 
