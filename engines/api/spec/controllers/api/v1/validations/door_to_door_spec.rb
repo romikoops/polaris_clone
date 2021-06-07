@@ -14,7 +14,7 @@ module Api
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:load_type) { "cargo_item" }
     let(:cargo_classes) { ["lcl"] }
-    let(:shipping_info) { {trucking_info: {pre_carriage: :pre}} }
+    let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:params) do
       {
         redirect_uri: app.redirect_uri,
@@ -45,13 +45,35 @@ module Api
         }
       ]
     end
-    let(:origin) { {latitude: pickup_address.latitude, longitude: pickup_address.longitude} }
-    let(:destination) { {latitude: delivery_address.latitude, longitude: delivery_address.longitude} }
+    let(:invalid_cargo_items_attributes) do
+      [
+        {
+          "id" => cargo_item_id,
+          "payload_in_kg" => 120,
+          "total_volume" => 0,
+          "total_weight" => 0,
+          "width" => 120,
+          "length" => 80,
+          "height" => 1200,
+          "quantity" => 1,
+          "dangerous_goods" => false,
+          "stackable" => true
+        }
+      ]
+    end
+    let(:origin) { { latitude: pickup_address.latitude, longitude: pickup_address.longitude } }
+    let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
     let(:cargo_item_id) { SecureRandom.uuid }
+
+    shared_examples_for "Expected errors are returned" do
+      it "returns an array of expected errors" do
+        expect(response_data.pluck("attributes")).to eq(expected_errors)
+      end
+    end
 
     describe "post #create" do
       context "when door to door complete request (no pricings)" do
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [{
             "id" => "routing",
@@ -71,16 +93,11 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
 
       context "when door to door complete request (no group pricings)" do
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [{
             "id" => "routing",
@@ -93,37 +110,17 @@ module Api
         end
 
         before do
-          organization.scope.update(content: {dedicated_pricings_only: true})
+          organization.scope.update(content: { dedicated_pricings_only: true })
           request.headers["Authorization"] = token_header
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
 
       context "when door to door complete request (invalid cargo)" do
-        let(:cargo_items_attributes) do
-          [
-            {
-              "id" => cargo_item_id,
-              "payload_in_kg" => 120,
-              "total_volume" => 0,
-              "total_weight" => 0,
-              "width" => 120,
-              "length" => 80,
-              "height" => 1200,
-              "quantity" => 1,
-              "dangerous_goods" => false,
-              "stackable" => true
-            }
-          ]
-        end
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:cargo_items_attributes) { invalid_cargo_items_attributes }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [
             {
@@ -150,32 +147,12 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
 
       context "when door to door complete request (invalid cargo  & multiple mots)" do
-        let(:cargo_items_attributes) do
-          [
-            {
-              "id" => cargo_item_id,
-              "payload_in_kg" => 120,
-              "total_volume" => 0,
-              "total_weight" => 0,
-              "width" => 120,
-              "length" => 80,
-              "height" => 1200,
-              "quantity" => 1,
-              "dangerous_goods" => false,
-              "stackable" => true
-            }
-          ]
-        end
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:cargo_items_attributes) { invalid_cargo_items_attributes }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [
             {
@@ -196,9 +173,9 @@ module Api
             }
           ]
         end
-        let(:air_itinerary) {
-          FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: "air", organization_id: organization.id)
-        }
+        let(:air_itinerary) do
+          FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
+        end
         let(:origin_airport) { air_itinerary.origin_hub }
         let(:destination_airport) { air_itinerary.destination_hub }
 
@@ -216,12 +193,7 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
     end
   end

@@ -2,40 +2,27 @@
 
 FactoryBot.define do
   factory :legacy_itinerary, class: "Legacy::Itinerary" do
-    transient do
-      num_stops { 2 }
-    end
-
     name { "Gothenburg - Shanghai" }
     mode_of_transport { "ocean" }
     transshipment { nil }
     association :organization, factory: :organizations_organization
-    association :origin_hub, factory: :legacy_hub
-    association :destination_hub, factory: :legacy_hub
-
-    trait :with_hubs do
-      after(:build) do |itinerary, evaluator|
-        if itinerary.stops.length >= 2
-          itinerary.origin_hub = itinerary.stops.find { |stop| stop.index == 0 }.hub
-          itinerary.destination_hub = itinerary.stops.find { |stop| stop.index == 1 }.hub
-        end
-      end
+    origin_hub do
+      association :legacy_hub, organization: instance.organization
+    end
+    destination_hub do
+      association :legacy_hub, organization: instance.organization
     end
 
-    trait :default do
-      after(:build) do |itinerary, evaluator|
-        next if itinerary.stops.length >= 2
+    after(:build) do |itinerary|
+      next if itinerary.stops.length >= 2
 
-        index = 0
-        evaluator.num_stops.times do
-          itinerary.stops << build(:legacy_stop,
-            itinerary: itinerary,
-            index: index,
-            hub: build(:legacy_hub,
-              organization: itinerary.organization,
-              hub_type: itinerary.mode_of_transport))
-          index += 1
-        end
+      index = 0
+      [itinerary.origin_hub, itinerary.destination_hub].each do |hub|
+        itinerary.stops << build(:legacy_stop,
+          itinerary: itinerary,
+          index: index,
+          hub: hub)
+        index += 1
       end
     end
 
@@ -58,171 +45,70 @@ FactoryBot.define do
 
     trait :gothenburg_shanghai do
       name { "Gothenburg - Shanghai" }
-
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(hub_code: "CNSHA",
-                                       hub_type: itinerary.mode_of_transport,
-                                       name: "Shanghai",
-                                       organization: itinerary.organization)
-        gothenburg = Legacy::Hub.find_by(hub_code: "SEGOT",
-                                         hub_type: itinerary.mode_of_transport,
-                                         name: "Gothenburg",
-                                         organization: itinerary.organization)
-
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: gothenburg || build(:gothenburg_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: (shanghai || build(:shanghai_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport)))
+      origin_hub do
+        factory_hub_from_name(name_string: "Gothenburg", locode: "SEGOT", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
     trait :shanghai_gothenburg do
       name { "Shanghai - Gothenburg" }
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(name: "Shanghai",
-                                       hub_type: itinerary.mode_of_transport,
-                                       organization: itinerary.organization)
-        gothenburg = Legacy::Hub.find_by(name: "Gothenburg",
-                                         hub_type: itinerary.mode_of_transport,
-                                         organization: itinerary.organization)
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: shanghai || build(:shanghai_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: gothenburg || build(:gothenburg_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
+      origin_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Gothenburg", locode: "SEGOT", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
     trait :felixstowe_shanghai do
       name { "Felixstowe - Shanghai" }
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(name: "Shanghai",
-                                       hub_type: itinerary.mode_of_transport,
-                                       organization: itinerary.organization)
-        felixstowe = Legacy::Hub.find_by(name: "Felixstowe",
-                                         hub_type: itinerary.mode_of_transport,
-                                         organization: itinerary.organization)
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: felixstowe || build(:felixstowe_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: (shanghai || build(:shanghai_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport)))
+      origin_hub do
+        factory_hub_from_name(name_string: "Felixstowe", locode: "GBFXT", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
     trait :shanghai_felixstowe do
       name { "Shanghai - Felixstowe" }
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(name: "Shanghai",
-                                       hub_type: itinerary.mode_of_transport,
-                                       organization: itinerary.organization)
-        felixstowe = Legacy::Hub.find_by(name: "Felixstowe",
-                                         hub_type: itinerary.mode_of_transport,
-                                         organization: itinerary.organization)
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: shanghai || build(:shanghai_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: felixstowe || build(:felixstowe_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
+      origin_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Felixstowe", locode: "GBFXT", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
     trait :hamburg_shanghai do
       name { "Hamburg - Shanghai" }
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(name: "Shanghai",
-                                       hub_type: itinerary.mode_of_transport,
-                                       organization: itinerary.organization)
-        hamburg = Legacy::Hub.find_by(name: "Hamburg",
-                                      hub_type: itinerary.mode_of_transport,
-                                      organization: itinerary.organization)
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: hamburg || build(:hamburg_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: (shanghai || build(:shanghai_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport)))
+      origin_hub do
+        factory_hub_from_name(name_string: "Hamburg", locode: "DEHAM", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
     trait :shanghai_hamburg do
       name { "Shanghai - Hamburg" }
-      after(:build) do |itinerary|
-        next if itinerary.stops.length >= 2
-
-        shanghai = Legacy::Hub.find_by(name: "Shanghai",
-                                       hub_type: itinerary.mode_of_transport,
-                                       organization: itinerary.organization)
-        hamburg = Legacy::Hub.find_by(name: "Hamburg",
-                                      hub_type: itinerary.mode_of_transport,
-                                      organization: itinerary.organization)
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 0,
-          hub: shanghai || build(:shanghai_hub,
-            hub_type: itinerary.mode_of_transport,
-            organization: itinerary.organization))
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: 1,
-          hub: hamburg || build(:hamburg_hub,
-            organization: itinerary.organization,
-            hub_type: itinerary.mode_of_transport))
+      origin_hub do
+        factory_hub_from_name(name_string: "Shanghai", locode: "CNSHA", mot: instance.mode_of_transport, organization: instance.organization)
+      end
+      destination_hub do
+        factory_hub_from_name(name_string: "Hamburg", locode: "DEHAM", mot: instance.mode_of_transport, organization: instance.organization)
       end
     end
 
-    factory :gothenburg_shanghai_itinerary, traits: [:gothenburg_shanghai, :with_hubs]
-    factory :shanghai_gothenburg_itinerary, traits: [:shanghai_gothenburg, :with_hubs]
-    factory :felixstowe_shanghai_itinerary, traits: [:felixstowe_shanghai, :with_hubs]
-    factory :shanghai_felixstowe_itinerary, traits: [:shanghai_felixstowe, :with_hubs]
-    factory :hamburg_shanghai_itinerary, traits: [:hamburg_shanghai, :with_hubs]
-    factory :shanghai_hamburg_itinerary, traits: [:shanghai_hamburg, :with_hubs]
-    factory :default_itinerary, traits: [:default, :with_hubs]
+    factory :gothenburg_shanghai_itinerary, traits: %i[gothenburg_shanghai]
+    factory :shanghai_gothenburg_itinerary, traits: %i[shanghai_gothenburg]
+    factory :felixstowe_shanghai_itinerary, traits: %i[felixstowe_shanghai]
+    factory :shanghai_felixstowe_itinerary, traits: %i[shanghai_felixstowe]
+    factory :hamburg_shanghai_itinerary, traits: %i[hamburg_shanghai]
+    factory :shanghai_hamburg_itinerary, traits: %i[shanghai_hamburg]
   end
 end
 

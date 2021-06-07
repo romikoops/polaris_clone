@@ -5,7 +5,7 @@ FactoryBot.define do
     start_date { Time.zone.today + 7.days }
     end_date { Time.zone.tomorrow + 20.days }
     closing_date { Time.zone.today + 2.days }
-    association :itinerary, factory: :default_itinerary
+    association :itinerary, factory: :legacy_itinerary
     load_type { "cargo_item" }
     association :tenant_vehicle, factory: :legacy_tenant_vehicle
     trait :with_layovers do

@@ -10371,6 +10371,13 @@ CREATE INDEX locations_names_to_tsvector_idx9 ON public.locations_names USING gi
 
 
 --
+-- Name: nexus_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX nexus_upsert ON public.nexuses USING btree (locode, organization_id);
+
+
+--
 -- Name: provider_uid_on_users_authentications; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12200,6 +12207,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210506103927'),
 ('20210506103936'),
 ('20210507103512'),
+('20210507132258'),
 ('20210512092712');
 
 

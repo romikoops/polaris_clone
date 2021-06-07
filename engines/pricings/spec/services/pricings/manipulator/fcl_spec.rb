@@ -17,7 +17,7 @@ RSpec.describe Pricings::Manipulator do
   let(:fcl_shipment) {
     FactoryBot.create(:legacy_shipment, organization: organization, user: user, load_type: "container")
   }
-  let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization) }
   let(:trips) do
     [1, 3, 5, 7, 11, 12].map do |num|
       base_date = num.days.from_now

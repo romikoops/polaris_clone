@@ -117,7 +117,7 @@ module Legacy
       before do
         %w[ocean air rail truck].each do |mot|
           FactoryBot.create(:legacy_shipment,
-            itinerary: FactoryBot.create(:default_itinerary, mode_of_transport: mot))
+            itinerary: FactoryBot.create(:legacy_itinerary, mode_of_transport: mot))
         end
       end
 

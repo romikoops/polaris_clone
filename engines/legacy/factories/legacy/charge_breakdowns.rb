@@ -12,9 +12,7 @@ FactoryBot.define do
 
     before(:create) do |charge_breakdown, evaluator|
       shipment = charge_breakdown.shipment
-      if (charge_breakdown.trip_id.nil? || charge_breakdown.freight_tenant_vehicle_id.nil?) && shipment.trip.present?
-        charge_breakdown.update(trip_id: shipment.trip_id, freight_tenant_vehicle_id: shipment.trip.tenant_vehicle_id)
-      end
+      charge_breakdown.update(trip_id: shipment.trip_id, freight_tenant_vehicle_id: shipment.trip.tenant_vehicle_id) if (charge_breakdown.trip_id.nil? || charge_breakdown.freight_tenant_vehicle_id.nil?) && shipment.trip.present?
       cargo_units = shipment.aggregated_cargo.present? ? [shipment.aggregated_cargo] : shipment.cargo_units
       cargo_unit_charge_category_code = if shipment.aggregated_cargo.present?
         "aggregated_cargo"
@@ -25,8 +23,9 @@ FactoryBot.define do
         tender = FactoryBot.create(:quotations_tender,
           carrier_name: charge_breakdown.trip.tenant_vehicle.carrier&.name,
           load_type: shipment.load_type,
-          origin_hub: charge_breakdown.trip.itinerary.hubs.first,
-          destination_hub: charge_breakdown.trip.itinerary.hubs.last,
+          origin_hub: charge_breakdown.trip.itinerary.origin_hub,
+          destination_hub: charge_breakdown.trip.itinerary.destination_hub,
+          itinerary: charge_breakdown.trip.itinerary,
           tenant_vehicle: charge_breakdown.trip.tenant_vehicle,
           amount: charge_breakdown&.grand_total&.price&.money,
           quotation: evaluator.quotation)
@@ -81,12 +80,12 @@ FactoryBot.define do
             detail_level: 2
           )
           trait = case section
-          when /trucking_/
-            :trucking_lcl
-          when "import", "export"
-            :thc
-          else
-            :bas
+                  when /trucking_/
+                    :trucking_lcl
+                  when "import", "export"
+                    :thc
+                  else
+                    :bas
           end
           child_charge_category = FactoryBot.create(:legacy_charge_categories,
             trait,

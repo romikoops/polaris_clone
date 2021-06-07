@@ -24,8 +24,8 @@ module Api
 
     describe "GET #origins" do
       it "Renders a json of origins for given a destination id" do
-        FactoryBot.create(:felixstowe_shanghai_itinerary, organization_id: organization.id)
-        FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
+        FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
+        FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
 
         get :origins, params: { organization_id: organization.id, id: destination_hub.nexus_id, load_type: load_type, client_id: client.id }
 

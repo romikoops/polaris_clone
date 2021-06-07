@@ -120,8 +120,8 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           name: "ADL",
           hub_code: "AUADL",
           organization: organization,
-          address: FactoryBot.create(:legacy_address, country: countries.first),
-          nexus: FactoryBot.create(:legacy_nexus,
+          address: FactoryBot.build(:legacy_address, country: countries.first),
+          nexus: FactoryBot.build(:legacy_nexus,
             name: "ADL",
             organization: organization,
             locode: "AUADL",
@@ -238,22 +238,22 @@ RSpec.describe ExcelDataServices::Inserters::Hubs do
           hub_type: "ocean",
           organization: organization,
           address: FactoryBot.create(:legacy_address, country: countries.first),
-          nexus: FactoryBot.create(:legacy_nexus,
-            name: "ADL",
-            organization: organization,
-            locode: "AUADL",
-            country: countries.first))
+          nexus: nexus)
         FactoryBot.create(:legacy_hub,
           name: "Abu Dhabi",
           hub_code: "AUADL",
           hub_type: "ocean",
           organization: organization,
           address: FactoryBot.create(:legacy_address, country: countries.first),
-          nexus: FactoryBot.create(:legacy_nexus,
-            name: "ADL",
-            organization: organization,
-            locode: "AUADL",
-            country: countries.first))
+          nexus: nexus)
+      end
+
+      let(:nexus) do
+        FactoryBot.create(:legacy_nexus,
+          name: "ADL",
+          organization: organization,
+          locode: "AUADL",
+          country: countries.first)
       end
 
       it "updates hub with the terminal/code combination, ignoring hubs with matching names" do

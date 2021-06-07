@@ -10,10 +10,10 @@ module Legacy
     belongs_to :country, class_name: "Legacy::Country"
 
     pg_search_scope :name_search, against: %i[name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
 
-    validates :locode, format: {with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode"}, allow_nil: true
+    validates :locode, format: { with: /\A[A-Z]{2}[A-Z\d]{3}\z/, message: "Invalid Locode" }, allow_nil: true
   end
 end
 
@@ -39,6 +39,7 @@ end
 #  index_nexuses_on_organization_id  (organization_id)
 #  index_nexuses_on_sandbox_id       (sandbox_id)
 #  index_nexuses_on_tenant_id        (tenant_id)
+#  nexus_upsert                      (locode,organization_id) UNIQUE
 #
 # Foreign Keys
 #

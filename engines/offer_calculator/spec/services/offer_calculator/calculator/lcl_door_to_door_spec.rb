@@ -59,29 +59,27 @@ RSpec.describe OfferCalculator::Calculator do
       cargo_items_attributes: cargo_items_attributes)
   end
   let(:creator) { FactoryBot.create(:users_client, organization: organization) }
-  let(:service) {
+  let(:service) do
     described_class.new(
       params: params,
       client: user,
       creator: creator,
       source: source
     ).perform
-  }
+  end
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
   let(:result_set) { service.result_sets.order(:created_at).last }
-  let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
-  let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
 
   include_context "complete_route_with_trucking"
 
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:companies_membership, member: user)
-    organization.scope.update(content: {closed_quotation_tool: true})
+    organization.scope.update(content: { closed_quotation_tool: true })
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
-    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(destination)
   end
 
   describe ".perform" do
@@ -119,7 +117,7 @@ RSpec.describe OfferCalculator::Calculator do
             cargo_class: cargo_class,
             load_type: load_type,
             truck_type: truck_type,
-            tenant_vehicle: trucking_tenant_vehicle_2,
+            tenant_vehicle: trucking_tenant_vehicle2,
             location: pickup_trucking_location)
           FactoryBot.create(:trucking_with_unit_rates,
             :with_fees,
@@ -128,19 +126,19 @@ RSpec.describe OfferCalculator::Calculator do
             cargo_class: cargo_class,
             load_type: load_type,
             truck_type: truck_type,
-            tenant_vehicle: trucking_tenant_vehicle_2,
+            tenant_vehicle: trucking_tenant_vehicle2,
             location: delivery_trucking_location,
             carriage: "on")
         end
       end
 
-      let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
+      let(:trucking_tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking2") }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id],
-          [tenant_vehicle.id, tenant_vehicle.id, trucking_tenant_vehicle_2.id],
-          [trucking_tenant_vehicle_2.id, tenant_vehicle.id, tenant_vehicle.id],
-          [trucking_tenant_vehicle_2.id, tenant_vehicle.id, trucking_tenant_vehicle_2.id]
+          [tenant_vehicle.id, tenant_vehicle.id, trucking_tenant_vehicle2.id],
+          [trucking_tenant_vehicle2.id, tenant_vehicle.id, tenant_vehicle.id],
+          [trucking_tenant_vehicle2.id, tenant_vehicle.id, trucking_tenant_vehicle2.id]
         ]
       end
 
@@ -153,52 +151,56 @@ RSpec.describe OfferCalculator::Calculator do
 
     context "with parallel routes" do
       before do
+        allow(Carta::Client).to receive(:suggest).with(query: itinerary2.origin_hub.nexus.locode).and_return(origin2)
+        allow(Carta::Client).to receive(:suggest).with(query: itinerary2.destination_hub.nexus.locode).and_return(destination2)
         cargo_classes.each do |cargo_class|
           FactoryBot.create(:trucking_with_unit_rates,
             :with_fees,
-            hub: itinerary_2.origin_hub,
+            hub: itinerary2.origin_hub,
             organization: organization,
             cargo_class: cargo_class,
             load_type: load_type,
             truck_type: truck_type,
-            tenant_vehicle: tenant_vehicle_2,
+            tenant_vehicle: tenant_vehicle2,
             location: pickup_trucking_location)
           FactoryBot.create(:trucking_with_unit_rates,
             :with_fees,
-            hub: itinerary_2.destination_hub,
+            hub: itinerary2.destination_hub,
             organization: organization,
             cargo_class: cargo_class,
             load_type: load_type,
             truck_type: truck_type,
-            tenant_vehicle: tenant_vehicle_2,
+            tenant_vehicle: tenant_vehicle2,
             location: delivery_trucking_location,
             carriage: "on")
           FactoryBot.create(:pricings_pricing,
             load_type: load_type,
             cargo_class: cargo_class,
             organization: organization,
-            itinerary: itinerary_2,
-            tenant_vehicle: tenant_vehicle_2,
-            fee_attrs: {rate: 250, rate_basis: :per_unit_rate_basis, min: nil})
+            itinerary: itinerary2,
+            tenant_vehicle: tenant_vehicle2,
+            fee_attrs: { rate: 250, rate_basis: :per_unit_rate_basis, min: nil })
           %w[import export].map do |direction|
             FactoryBot.create(:legacy_local_charge,
               direction: direction,
-              hub: direction == "export" ? itinerary_2.origin_hub : itinerary_2.destination_hub,
+              hub: direction == "export" ? itinerary2.origin_hub : itinerary2.destination_hub,
               load_type: cargo_class,
               organization: organization,
-              tenant_vehicle: tenant_vehicle_2)
+              tenant_vehicle: tenant_vehicle2)
           end
         end
       end
 
-      let!(:itinerary_2) { FactoryBot.create(:default_itinerary, organization: organization) }
-      let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
+      let!(:itinerary2) { FactoryBot.create(:legacy_itinerary, organization: organization) }
+      let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking2") }
       let(:desired_tenant_vehicle_combos) do
         [
           [tenant_vehicle.id, tenant_vehicle.id, tenant_vehicle.id, itinerary.id],
-          [tenant_vehicle_2.id, tenant_vehicle_2.id, tenant_vehicle_2.id, itinerary_2.id]
+          [tenant_vehicle2.id, tenant_vehicle2.id, tenant_vehicle2.id, itinerary2.id]
         ]
       end
+      let(:origin2) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+      let(:destination2) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
 
       it "perform a booking calculation" do
         aggregate_failures do

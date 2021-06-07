@@ -37,8 +37,8 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_locode_pricing) }
 
       before do
-        FactoryBot.create(:gothenburg_nexus, locode: nil).tap do |tapped_nexus|
-          FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil)
+        FactoryBot.create(:gothenburg_nexus, locode: nil, organization: organization).tap do |tapped_nexus|
+          FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil, organization: organization)
         end
       end
 
@@ -47,24 +47,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
           expect(stats).to eq(expected_stats)
           expect(itinerary.rates.count).to eq(1)
           expect(faux_itinerary.rates).to be_empty
-        end
-      end
-    end
-
-    context "with two identical locodes, different  names" do
-      let(:input_data) { FactoryBot.build(:excel_data_restructured_same_locode_pricing) }
-      let(:faux_origin_country) { FactoryBot.create(:country_se) }
-      let(:faux_destination_country) { FactoryBot.create(:country_cn) }
-      let(:faux_origin_name) { "Gothenburg - Key 4" }
-      let(:faux_destination_name) { "Shanghai" }
-      let(:faux_origin_locode) { "SEGOT" }
-      let(:faux_destination_locode) { "CNSHA" }
-
-      it "attaches the pricing to the correct itinerary" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-          expect(faux_itinerary.rates.count).to eq(1)
-          expect(itinerary.rates).to be_empty
         end
       end
     end

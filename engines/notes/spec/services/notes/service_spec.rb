@@ -7,13 +7,13 @@ RSpec.describe Notes::Service do
     let(:result_notes) { described_class.new(itinerary: itinerary, tenant_vehicle: tenant_vehicle).fetch }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-    let(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
-    let!(:pricing) {
+    let(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization) }
+    let!(:pricing) do
       FactoryBot.create(:pricings_pricing,
         itinerary: itinerary,
         tenant_vehicle: tenant_vehicle,
         organization: organization)
-    }
+    end
 
     context "when notes have duplicate bodies" do
       let(:body) { "Test" }
@@ -43,9 +43,9 @@ RSpec.describe Notes::Service do
     end
 
     context "when hub notes" do
-      let!(:note) {
+      let!(:note) do
         FactoryBot.create(:legacy_note, organization: organization, target: itinerary.origin_hub, pricings_pricing_id: nil)
-      }
+      end
 
       it "returns correct notes" do
         expect(result_notes).to match([note])
@@ -53,10 +53,10 @@ RSpec.describe Notes::Service do
     end
 
     context "when nexus notes" do
-      let!(:note) {
+      let!(:note) do
         FactoryBot.create(:legacy_note,
           organization: organization, target: itinerary.origin_hub.nexus, pricings_pricing_id: nil)
-      }
+      end
 
       it "returns correct notes" do
         expect(result_notes).to match([note])
@@ -64,10 +64,10 @@ RSpec.describe Notes::Service do
     end
 
     context "when country notes" do
-      let!(:note) {
+      let!(:note) do
         FactoryBot.create(:legacy_note,
           organization: organization, target: itinerary.origin_hub.nexus.country, pricings_pricing_id: nil)
-      }
+      end
 
       it "returns correct notes" do
         expect(result_notes).to match([note])

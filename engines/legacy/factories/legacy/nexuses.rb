@@ -7,6 +7,7 @@ FactoryBot.define do
     longitude { "11.854048" }
     association :organization, factory: :organizations_organization
     country { factory_country_from_code(code: "SE") }
+    sequence(:locode) { |n| "SEG#{('A'..'Z').to_a[n % 24]}T" }
 
     trait :segot do
       name { "Gothenburg" }
@@ -47,12 +48,12 @@ FactoryBot.define do
   end
 end
 
-def factory_nexus_from_locode(locode:, organization:)
-  nexus = Legacy::Nexus.find_by(locode: locode, organization: organization)
-  nexus || if locode && %w[segot cnsha deham gbfxt].include?(locode.downcase)
-             FactoryBot.build(:legacy_nexus, locode.downcase.to_sym, organization: organization)
-           else
-             FactoryBot.build(:legacy_nexus, locode: locode, organization: organization)
+def factory_nexus_from_locode(locode_string:, organization:)
+  existing_nexus = Legacy::Nexus.find_by(locode: locode_string, organization: organization)
+  existing_nexus || if locode_string && %w[segot cnsha deham gbfxt].include?(locode_string.downcase)
+                      FactoryBot.build(:legacy_nexus, locode_string.downcase.to_sym, organization: organization)
+                    else
+                      FactoryBot.build(:legacy_nexus, locode: locode_string, organization: organization)
            end
 end
 

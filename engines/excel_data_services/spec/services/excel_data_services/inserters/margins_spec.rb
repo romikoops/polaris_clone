@@ -4,13 +4,13 @@ require "rails_helper"
 
 RSpec.describe ExcelDataServices::Inserters::Margins do
   before do
-    FactoryBot.create(:default_itinerary, organization: organization, name: "Ningbo - Gothenburg")
+    FactoryBot.create(:legacy_itinerary, organization: organization, name: "Ningbo - Gothenburg")
   end
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:carrier) { FactoryBot.create(:legacy_carrier, code: "consolidation", name: "Consolidation") }
   let(:applicable) { organization }
-  let!(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Gothenburg") }
+  let!(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization, name: "Dalian - Gothenburg") }
   let!(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, carrier: carrier) }
   let!(:charge_category) { FactoryBot.create(:legacy_charge_categories, :bas, organization: organization) }
   let(:options) { { organization: organization, data: input_data, options: { applicable: applicable } } }

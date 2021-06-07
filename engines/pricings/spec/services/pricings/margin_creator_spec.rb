@@ -15,7 +15,7 @@ RSpec.describe Pricings::MarginCreator do
   let!(:currency) { FactoryBot.create(:legacy_currency) }
   let!(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:group_1) { FactoryBot.create(:groups_group, organization: organization) }
-  let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
+  let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, organization: organization) }
   let(:itinerary_ids) { [] }
   let(:tenant_vehicle_ids) { [] }
   let(:cargo_classes) { [] }

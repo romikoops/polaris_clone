@@ -2,9 +2,11 @@
 
 FactoryBot.define do
   factory :shipments_shipment_request, class: "Shipments::ShipmentRequest" do
-    association :user, factory: :users_client
     association :organization, factory: :organizations_organization
     association :tender, factory: :quotations_tender
+    user do
+      association :users_client, organization: instance.organization
+    end
 
     status { :created }
     submitted_at { Time.current }

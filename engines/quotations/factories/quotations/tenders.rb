@@ -9,10 +9,18 @@ FactoryBot.define do
     original_amount_cents { 30 }
     original_amount_currency { "USD" }
     association :quotation, factory: :quotations_quotation
-    association :itinerary, factory: :gothenburg_shanghai_itinerary
-    association :origin_hub, factory: :legacy_hub
-    association :destination_hub, factory: :legacy_hub
-    association :tenant_vehicle, factory: :legacy_tenant_vehicle
+    origin_hub do
+      association :legacy_hub, organization: instance.quotation.organization
+    end
+    destination_hub do
+      association :legacy_hub, organization: instance.quotation.organization
+    end
+    itinerary do
+      association :legacy_itinerary, origin_hub: instance.origin_hub, destination_hub: instance.destination_hub, organization: instance.quotation.organization
+    end
+    tenant_vehicle do
+      association :legacy_tenant_vehicle, organization: instance.quotation.organization
+    end
   end
 end
 

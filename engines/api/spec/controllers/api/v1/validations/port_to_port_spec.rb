@@ -14,10 +14,10 @@ module Api
     let(:destination_hub) { itinerary.destination_hub }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
     let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
-    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+    let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: organizations_user.id) }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:shipping_info) { {trucking_info: {pre_carriage: :pre}} }
+    let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:cargo_item_id) { SecureRandom.uuid }
     let(:load_type) { "cargo_item" }
     let(:group) do
@@ -54,16 +54,38 @@ module Api
         }
       ]
     end
-    let(:origin) { {nexus_id: origin_hub.nexus_id} }
-    let(:destination) { {nexus_id: destination_hub.nexus_id} }
+    let(:invalid_cargo_items_attributes) do
+      [
+        {
+          "id" => cargo_item_id,
+          "payload_in_kg" => 120,
+          "total_volume" => 0,
+          "total_weight" => 0,
+          "width" => 120,
+          "length" => 80,
+          "height" => 1200,
+          "quantity" => 1,
+          "dangerous_goods" => false,
+          "stackable" => true
+        }
+      ]
+    end
+    let(:origin) { { nexus_id: origin_hub.nexus_id } }
+    let(:destination) { { nexus_id: destination_hub.nexus_id } }
 
     before do
       ::Organizations.current_id = user.organization_id
     end
 
+    shared_examples_for "Expected errors are returned" do
+      it "returns an array of expected errors" do
+        expect(response_data.pluck("attributes")).to eq(expected_errors)
+      end
+    end
+
     describe "post #create" do
       context "when port to port complete request (no pricings)" do
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [{
             "id" => "routing",
@@ -81,18 +103,13 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like  "Expected errors are returned"
       end
 
       context "when port to port complete request (no group pricings)" do
-        let(:origin) { {nexus_id: origin_hub.nexus_id} }
-        let(:destination) { {nexus_id: destination_hub.nexus_id} }
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [{
             "id" => "routing",
@@ -105,40 +122,20 @@ module Api
         end
 
         before do
-          organization.scope.update(content: {dedicated_pricings_only: true})
+          organization.scope.update(content: { dedicated_pricings_only: true })
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers["Authorization"] = token_header
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
 
       context "when port to port complete request (invalid cargo)" do
-        let(:cargo_items_attributes) do
-          [
-            {
-              "id" => cargo_item_id,
-              "payload_in_kg" => 120,
-              "total_volume" => 0,
-              "total_weight" => 0,
-              "width" => 120,
-              "length" => 80,
-              "height" => 1200,
-              "quantity" => 1,
-              "dangerous_goods" => false,
-              "stackable" => true
-            }
-          ]
-        end
-        let(:origin) { {nexus_id: origin_hub.nexus_id} }
-        let(:destination) { {nexus_id: destination_hub.nexus_id} }
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:cargo_items_attributes) { invalid_cargo_items_attributes }
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [
             {
@@ -166,18 +163,13 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like  "Expected errors are returned"
       end
 
       context "with dedicated pricings" do
-        let(:origin) { {nexus_id: origin_hub.nexus_id} }
-        let(:destination) { {nexus_id: destination_hub.nexus_id} }
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
 
         before do
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary, group: group)
@@ -212,7 +204,7 @@ module Api
         end
         let(:origin) { {} }
         let(:destination) { {} }
-        let(:shipping_info) { {cargo_items_attributes: cargo_items_attributes} }
+        let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
           [
             {
@@ -240,12 +232,7 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
 
       context "when port to port complete request (invalid fcl cargo)" do
@@ -265,10 +252,10 @@ module Api
             }
           ]
         end
-        let(:origin) { {nexus_id: origin_hub.nexus_id} }
+        let(:origin) { { nexus_id: origin_hub.nexus_id } }
         let(:load_type) { "container" }
-        let(:destination) { {nexus_id: destination_hub.nexus_id} }
-        let(:shipping_info) { {containers_attributes: containers_attributes} }
+        let(:destination) { { nexus_id: destination_hub.nexus_id } }
+        let(:shipping_info) { { containers_attributes: containers_attributes } }
         let(:expected_errors) do
           [
             {
@@ -293,12 +280,7 @@ module Api
           post :create, params: params
         end
 
-        it "returns an array of one error" do
-          aggregate_failures do
-            expect(response).to be_successful
-            expect(response_data.pluck("attributes")).to eq(expected_errors)
-          end
-        end
+        it_behaves_like "Expected errors are returned"
       end
     end
   end

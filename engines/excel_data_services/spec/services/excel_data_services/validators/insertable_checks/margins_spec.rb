@@ -23,7 +23,7 @@ RSpec.describe ExcelDataServices::Validators::InsertableChecks::Margins do
   end
 
   before do
-    itinerary = FactoryBot.create(:default_itinerary, name: "Dalian - Gothenburg", organization: organization)
+    itinerary = FactoryBot.create(:legacy_itinerary, name: "Dalian - Gothenburg", organization: organization)
     FactoryBot.create(:pricings_margin,
       organization: organization,
       applicable: user,

@@ -6,14 +6,14 @@ module Api
   RSpec.describe V1::TruckingCapabilitiesController, type: :controller do
     routes { Engine.routes }
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+    let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
     let(:destination_hub) { itinerary.destination_hub }
     let(:user) { FactoryBot.create(:users_user, email: "test@example.com", organization_id: organization.id) }
 
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:params) { {load_type: "cargo_item", organization_id: organization.id} }
+    let(:params) { { load_type: "cargo_item", organization_id: organization.id } }
 
     describe "GET #index" do
       context "when origin and destination have no trucking" do

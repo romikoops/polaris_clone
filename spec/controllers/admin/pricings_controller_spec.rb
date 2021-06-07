@@ -202,16 +202,16 @@ RSpec.describe Admin::PricingsController, type: :controller do
 
   describe "GET #index" do
     let!(:itinerary) do
-      FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id)
+      FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization)
     end
 
     let!(:itinerary_two) do
-      FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
+      FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
     end
 
     before do
-      FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id)
-      FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary_two.id)
+      FactoryBot.create(:pricings_pricing, organization: organization, itinerary_id: itinerary.id)
+      FactoryBot.create(:pricings_pricing, organization: organization, itinerary_id: itinerary_two.id)
     end
 
     context "with base params" do
@@ -345,7 +345,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
   end
 
   describe "POST #disable" do
-    let(:pricing) { FactoryBot.create(:pricings_pricing, organization_id: organization.id, itinerary_id: itinerary.id) }
+    let(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization, itinerary_id: itinerary.id) }
 
     context "when enabling pricing" do
       before do

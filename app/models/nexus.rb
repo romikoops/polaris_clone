@@ -90,6 +90,7 @@ end
 #  index_nexuses_on_organization_id  (organization_id)
 #  index_nexuses_on_sandbox_id       (sandbox_id)
 #  index_nexuses_on_tenant_id        (tenant_id)
+#  nexus_upsert                      (locode,organization_id) UNIQUE
 #
 # Foreign Keys
 #

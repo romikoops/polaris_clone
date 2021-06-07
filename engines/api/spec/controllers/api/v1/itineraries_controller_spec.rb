@@ -22,11 +22,11 @@ module Api
       end
 
       before do
-        FactoryBot.create(:legacy_itinerary, :default, organization_id: organization.id, name: "Ningbo - Gothenburg")
-        FactoryBot.create(:legacy_itinerary, :default, organization_id: organization.id, name: "Shanghai - Gothenburg")
-        FactoryBot.create(:legacy_itinerary, :default, organization_id: organization.id, name: "Qingdao - Gothenburg")
-        FactoryBot.create(:legacy_itinerary, :default, organization_id: organization.id, name: "Bangkok - Gothenburg")
-        FactoryBot.create(:legacy_itinerary, :default, organization_id: organization.id, name: "Tokyo - Gothenburg")
+        FactoryBot.create(:legacy_itinerary, organization: organization, name: "Ningbo - Gothenburg")
+        FactoryBot.create(:legacy_itinerary, organization: organization, name: "Shanghai - Gothenburg")
+        FactoryBot.create(:legacy_itinerary, organization: organization, name: "Qingdao - Gothenburg")
+        FactoryBot.create(:legacy_itinerary, organization: organization, name: "Bangkok - Gothenburg")
+        FactoryBot.create(:legacy_itinerary, organization: organization, name: "Tokyo - Gothenburg")
       end
 
       it "has a successful respoonse" do

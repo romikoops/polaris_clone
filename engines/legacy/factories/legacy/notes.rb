@@ -8,7 +8,7 @@ FactoryBot.define do
     target { build(:legacy_hub) }
 
     association :organization, factory: :organizations_organization
-    association :itinerary, factory: :default_itinerary
+    association :itinerary, factory: :legacy_itinerary
     association :hub, factory: :legacy_hub
   end
 end

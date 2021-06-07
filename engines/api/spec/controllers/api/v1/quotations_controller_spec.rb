@@ -32,7 +32,7 @@ module Api
       let(:destination_hub) { itinerary.destination_hub }
       let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
       let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
-      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) do
         [tenant_vehicle, tenant_vehicle2].flat_map do |tv|

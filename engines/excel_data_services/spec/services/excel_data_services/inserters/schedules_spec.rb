@@ -18,14 +18,14 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
                                                 mode_of_transport: "air")
     end
 
-    let!(:itinerary) { FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe") }
+    let!(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization, name: "Dalian - Felixstowe") }
     let!(:transshipment_itinerary) do
-      FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe",
-                                            transshipment: "ZACPT")
+      FactoryBot.create(:legacy_itinerary, organization: organization, name: "Dalian - Felixstowe",
+                                           transshipment: "ZACPT")
     end
     let!(:air_itinerary) do
-      FactoryBot.create(:default_itinerary, organization: organization, name: "Dalian - Felixstowe",
-                                            mode_of_transport: "air")
+      FactoryBot.create(:legacy_itinerary, organization: organization, name: "Dalian - Felixstowe",
+                                           mode_of_transport: "air")
     end
 
     context "when uploading a schedules sheet" do

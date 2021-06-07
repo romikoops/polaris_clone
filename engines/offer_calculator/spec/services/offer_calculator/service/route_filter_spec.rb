@@ -195,7 +195,7 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
         ]
       end
       let!(:other_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
-      let!(:other_itinerary) { FactoryBot.create(:default_itinerary, organization: organization) }
+      let!(:other_itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization) }
       let(:future_pricing) do
         FactoryBot.create(:lcl_pricing,
           itinerary: other_itinerary,

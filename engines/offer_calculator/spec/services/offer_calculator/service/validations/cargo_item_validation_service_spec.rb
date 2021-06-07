@@ -367,7 +367,7 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:air_itinerary) do
-        FactoryBot.create(:default_itinerary, organization: organization, mode_of_transport: "air")
+        FactoryBot.create(:legacy_itinerary, organization: organization, mode_of_transport: "air")
       end
       let(:itinerary_ids) { [itinerary, air_itinerary].map(&:id) }
       let(:modes_of_transport) { %w[ocean air] }

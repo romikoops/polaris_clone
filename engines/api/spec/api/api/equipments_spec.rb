@@ -5,7 +5,7 @@ require "swagger_helper"
 RSpec.describe "Equipments", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-  let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, organization: organization) }
+  let(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization) }
 
   let!(:equipment) do
     [
@@ -34,8 +34,8 @@ RSpec.describe "Equipments", type: :request, swagger: true do
                 description: "the id of the destination"
 
       let(:organization_id) { organization.id }
-      let(:origin_nexus_id) { itinerary.hubs[0].nexus_id }
-      let(:destination_nexus_id) { itinerary.hubs[1].nexus_id }
+      let(:origin_nexus_id) { itinerary.origin_hub.nexus_id }
+      let(:destination_nexus_id) { itinerary.destination_hub.nexus_id }
 
       response "200", "successful operation" do
         schema type: :object,

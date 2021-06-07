@@ -8,7 +8,7 @@ RSpec.describe Pricings::ManipulatorResult do
   let(:instance) { FactoryBot.build(:manipulator_result, original: original, result: original.as_json) }
 
   context "with freight rates" do
-    let(:itinerary) { FactoryBot.create(:legacy_itinerary, :default, mode_of_transport: "rail") }
+    let(:itinerary) { FactoryBot.create(:legacy_itinerary, mode_of_transport: "rail") }
     let(:original) { FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary) }
 
     describe ".validity" do

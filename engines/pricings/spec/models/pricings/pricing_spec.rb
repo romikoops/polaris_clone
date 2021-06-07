@@ -9,7 +9,7 @@ module Pricings
       let(:tenant_vehicle_1) {
         FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization)
       }
-      let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
+      let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, organization: organization) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
       let!(:fcl_20_pricing) {
         FactoryBot.create(:fcl_20_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1)
@@ -68,7 +68,7 @@ module Pricings
     context "instance methods" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:tenant_vehicle_1) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", organization: organization) }
-      let(:itinerary_1) { FactoryBot.create(:default_itinerary, organization: organization) }
+      let(:itinerary_1) { FactoryBot.create(:legacy_itinerary, organization: organization) }
       let!(:lcl_pricing) { FactoryBot.create(:lcl_pricing, tenant_vehicle: tenant_vehicle_1, itinerary: itinerary_1) }
 
       describe ".for_table_json" do

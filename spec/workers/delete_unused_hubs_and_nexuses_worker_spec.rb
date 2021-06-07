@@ -4,7 +4,7 @@ RSpec.describe DeleteUnusedHubsAndNexusesWorker, type: :worker do
   context "when hub has no hub_code" do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:hub) { FactoryBot.create(:legacy_hub, hub_code: nil, organization: organization) }
-    let!(:legacy_itinerary) { FactoryBot.create(:legacy_itinerary, :default, origin_hub: hub, destination_hub: hub) }
+    let!(:legacy_itinerary) { FactoryBot.create(:legacy_itinerary, origin_hub: hub, destination_hub: hub) }
     let!(:local_charges) { FactoryBot.create(:legacy_local_charge, hub: hub, organization: organization) }
 
     it "deletes hubs" do

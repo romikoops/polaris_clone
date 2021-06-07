@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe Api::Routing::Trucking::CapabilityService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:load_type) { "cargo_item" }
-  let(:args) { {organization: organization, load_type: load_type} }
+  let(:args) { { organization: organization, load_type: load_type } }
 
   describe ".capability" do
     context "when origin and destination have no trucking" do

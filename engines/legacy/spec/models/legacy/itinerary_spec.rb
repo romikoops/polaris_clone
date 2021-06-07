@@ -6,12 +6,12 @@ module Legacy
   RSpec.describe Itinerary, type: :model do
     describe ".parse_load_type" do
       it "returns the cargo_item for lcl" do
-        itinerary = FactoryBot.create(:default_itinerary)
+        itinerary = FactoryBot.create(:legacy_itinerary)
         expect(itinerary.parse_load_type("lcl")).to eq("cargo_item")
       end
 
       it "returns the container for fcl" do
-        itinerary = FactoryBot.create(:default_itinerary)
+        itinerary = FactoryBot.create(:legacy_itinerary)
         expect(itinerary.parse_load_type("fcl")).to eq("container")
       end
     end
@@ -23,8 +23,10 @@ module Legacy
       let(:o_stop) { FactoryBot.build(:legacy_stop, hub: o_hub, index: 0) }
       let(:d_stop) { FactoryBot.build(:legacy_stop, hub: d_hub, index: 1) }
       let(:itinerary) do
-        FactoryBot.create(:default_itinerary,
+        FactoryBot.create(:legacy_itinerary,
           organization: organization,
+          origin_hub: o_hub,
+          destination_hub: d_hub,
           stops: [
             o_stop,
             d_stop

@@ -11,10 +11,10 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:air_itinerary) do
     FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
   end
-  let(:origin_hub) { itinerary.hubs.find_by(name: "Hamburg") }
+  let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let(:origin_airport) { air_itinerary.hubs.find_by(name: "Hamburg") }
-  let(:destination_airport) { air_itinerary.hubs.find_by(name: "Shanghai") }
+  let(:origin_airport) { air_itinerary.origin_hub }
+  let(:destination_airport) { air_itinerary.destination_hub }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
   let(:load_type) { "cargo_item" }

@@ -19,9 +19,12 @@ FactoryBot.define do
     group_id { default_group.id }
     vm_rate { 1 }
     association :organization, factory: :organizations_organization
-    association :itinerary, :default, factory: :legacy_itinerary
-    association :tenant_vehicle, factory: :legacy_tenant_vehicle
-
+    tenant_vehicle do
+      association :legacy_tenant_vehicle, organization: instance.organization
+    end
+    itinerary do
+      association :legacy_itinerary, organization: instance.organization
+    end
     after :create do |pricing, evaluator|
       next unless evaluator.fee_attrs
 

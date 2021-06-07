@@ -79,9 +79,11 @@ RSpec.shared_context "false_itinerary" do
     ]
   end
   let!(:faux_itinerary) do
-    FactoryBot.create(:default_itinerary,
+    FactoryBot.create(:legacy_itinerary,
       organization: organization,
       name: "Gothenburg - Shanghai",
+      origin_hub: faux_origin_hub,
+      destination_hub: faux_destination_hub,
       stops: faux_stops)
   end
 end

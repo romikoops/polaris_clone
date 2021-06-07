@@ -11,7 +11,7 @@ module Shipments
       let(:legacy_shipment) {
         FactoryBot.create(:complete_legacy_shipment, organization: organization, user: user, tender_id: tender.id)
       }
-      let(:tender) { FactoryBot.create(:quotations_tender) }
+      let(:tender) { FactoryBot.create(:quotations_tender, quotation: FactoryBot.build(:quotations_quotation, organization: organization)) }
 
       context "when creating a shipment request" do
         before do
@@ -29,11 +29,7 @@ module Shipments
         end
 
         it "associates to the chosen tender" do
-          aggregate_failures do
-            expect(shipment_request.tender).to be_present
-            expect(shipment_request.tender.origin_hub.hub_code).to eq(legacy_shipment.origin_hub.hub_code)
-            expect(shipment_request.tender.destination_hub.hub_code).to eq(legacy_shipment.destination_hub.hub_code)
-          end
+          expect(shipment_request.tender).to eq(tender)
         end
 
         it "attaches documents to the shipment request" do

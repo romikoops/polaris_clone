@@ -7,7 +7,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Gothenburg Port #{n}" }
     hub_type { "ocean" }
     hub_status { "active" }
-    hub_code { "SEGOT" }
+    sequence(:hub_code) { |n| "SEG#{('A'..'Z').to_a[n % 24]}T" }
     terminal { nil }
     terminal_code { nil }
     free_out { false }
@@ -17,7 +17,7 @@ FactoryBot.define do
 
     nexus do
       factory_nexus_from_locode(
-        locode: instance.hub_code, organization: instance.organization
+        locode_string: instance.hub_code, organization: instance.organization
       )
     end
 
@@ -66,6 +66,18 @@ FactoryBot.define do
     factory :hamburg_hub, traits: [:hamburg]
     factory :felixstowe_hub, traits: [:felixstowe]
   end
+end
+
+def factory_hub_from_name(name_string:, organization:, locode: nil, mot: "ocean")
+  existing_hubs = Legacy::Hub.where(name: name_string, organization: organization)
+  existing_hubs = existing_hubs.where(hub_code: locode) if locode.present?
+  existing_hubs = existing_hubs.where(hub_type: mot) if mot.present?
+  existing_hub = existing_hubs.first
+  existing_hub || if name_string && %w[gothenburg shanghai hamburg felixstowe].include?(name_string.downcase)
+                    FactoryBot.build(:legacy_hub, name_string.downcase.to_sym, hub_type: mot, hub_code: locode, organization: organization)
+                  else
+                    FactoryBot.build(:legacy_hub, name: name_string, hub_type: mot, hub_code: locode, organization: organization)
+           end
 end
 
 # == Schema Information

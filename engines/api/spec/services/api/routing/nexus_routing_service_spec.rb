@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe Api::Routing::NexusRoutingService, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) {
+  let(:user) do
     FactoryBot.create(:users_client, email: "test@example.com",
                                      password: "veryspeciallysecurehorseradish", organization: organization)
-  }
-  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization_id: organization.id) }
+  end
+  let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
   let(:origin_nexus) { origin_hub.nexus }
@@ -25,17 +25,17 @@ RSpec.describe Api::Routing::NexusRoutingService, type: :service do
   end
 
   before do
-    FactoryBot.create(:felixstowe_shanghai_itinerary, organization_id: organization.id)
-    FactoryBot.create(:hamburg_shanghai_itinerary, organization_id: organization.id)
+    FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
+    FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
   end
 
   describe ".nexuses" do
     context "when targeting the origin with destination id" do
       let(:nexus_id) { destination_hub.nexus_id }
       let(:target) { :origin_destination }
-      let(:origins) {
+      let(:origins) do
         Legacy::Itinerary.where(organization_id: organization.id).map { |itin| itin.first_nexus.name }.sort
-      }
+      end
 
       it "Renders a json of origins for given a destination id" do
         expect(result.pluck(:name)).to eq(origins)

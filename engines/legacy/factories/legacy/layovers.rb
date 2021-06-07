@@ -8,7 +8,7 @@ FactoryBot.define do
     sequence(:stop_index) { |n| n }
     association :stop, factory: :legacy_stop
     association :trip, factory: :legacy_trip
-    association :itinerary, factory: :default_itinerary
+    association :itinerary, factory: :legacy_itinerary
   end
 end
 
