@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Api::V1::UserDecorator do
-  let(:user) { FactoryBot.create(:users_client) }
+  let(:user) { FactoryBot.create(:users_client, profile: profile) }
+  let(:profile) { FactoryBot.build(:users_client_profile) }
   let(:decorated_user) { described_class.new(user) }
 
   describe ".decorate" do
@@ -26,6 +27,14 @@ RSpec.describe Api::V1::UserDecorator do
 
       it "returns the profile" do
         expect(decorated_user.profile).to eq(user.profile)
+      end
+    end
+
+    context "with profile that has no company_name" do
+      let(:profile) { FactoryBot.build(:users_client_profile, company_name: nil) }
+
+      it "returns the empty company name string" do
+        expect(decorated_user.company_name).to eq("")
       end
     end
   end

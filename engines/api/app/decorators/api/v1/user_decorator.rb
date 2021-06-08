@@ -4,16 +4,15 @@ module Api
   module V1
     class UserDecorator < ApplicationDecorator
       decorates "Users::User"
-
       delegate_all
-      delegate :first_name, :last_name, :phone, :company_name, to: :profile
+      delegate :first_name, :last_name, :phone, to: :profile
 
       def email
         object.email.to_s
       end
 
-      def organization_id
-        object.organization_id
+      def company_name
+        profile.company_name.to_s
       end
 
       def membership
