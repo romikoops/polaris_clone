@@ -245,7 +245,7 @@ RSpec.configure do |config|
 
               }
             },
-            required: %w[id code]
+            required: %w[id hs_code imo_class]
           },
           country: {
             type: "object",
@@ -449,11 +449,6 @@ RSpec.configure do |config|
               weight: {
                 description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
                 type: "number"
-              },
-              volume: {
-                description: "Volume is derived from Width, Length and Height values so this property is null",
-                type: "number",
-                nullable: true
               },
               commodities: {
                 description: "Commodity codes of the contents",

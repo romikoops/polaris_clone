@@ -42,9 +42,9 @@ RSpec.describe "Clients", type: :request, swagger: true do
                properties: {
                  data: {
                    type: :array,
-                   items: {"$ref" => "#/components/schemas/user"}
+                   items: { "$ref" => "#/components/schemas/user" }
                  },
-                 links: {"$ref" => "#/components/schemas/paginationLinks"}
+                 links: { "$ref" => "#/components/schemas/paginationLinks" }
                },
                required: ["data"]
 
@@ -68,29 +68,25 @@ RSpec.describe "Clients", type: :request, swagger: true do
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :query, in: :body, description: "Query", schema: {
-        type: :object,
-        properties: {
-          data: {"$ref" => "#/components/schemas/client"}
-        },
-        required: ["data"]
-      }
+      parameter name: :query, in: :body, description: "Query", schema: { "$ref" => "#/components/schemas/client" },
+      required: %w[email first_name last_name]
+
+      let(:query) do
+        {
+          email: "john@example.com",
+          first_name: "John",
+          last_name: "Doe",
+          company_name: "LumberJacks Ltd",
+          phone: "+1 2345 2345",
+          house_number: "1",
+          street: "Address Unknown",
+          postal_code: "12345",
+          country: "Canada",
+          group_id: group.id
+        }
+      end
 
       response "201", "successful operation" do
-        let(:query) do
-          {
-            email: "john@example.com",
-            first_name: "John",
-            last_name: "Doe",
-            company_name: "LumberJacks Ltd",
-            phone: "+1 2345 2345",
-            house_number: "1",
-            street: "Address Unknown",
-            postal_code: "12345",
-            country: "Canada",
-            group_id: group.id
-          }
-        end
 
         run_test!
       end
@@ -103,7 +99,6 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "401", "Invalid Credentials" do
         let(:Authorization) { "Basic deadbeef" }
-        let(:query) { {} }
 
         run_test!
       end
@@ -128,7 +123,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/user"},
+                 data: { "$ref" => "#/components/schemas/user" }
                },
                required: ["data"]
 
@@ -197,7 +192,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
                  data: {
                    type: :object,
                    properties: {
-                     password: {type: :string}
+                     password: { type: :string }
                    },
                    required: ["password"]
                  }
@@ -237,7 +232,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       parameter name: :client, in: :body, schema: {
         type: :object,
         properties: {
-          client: {"$ref" => "#/components/schemas/client"}
+          client: { "$ref" => "#/components/schemas/client" }
         },
         required: %w[client]
       }
@@ -246,13 +241,13 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "204", "successful operation", skip: "flaky" do
         let(:client) do
-          {client: {
+          { client: {
             email: "john@example.com",
             first_name: "John",
             last_name: "Doe",
             company_name: "LumberJacks Ltd",
             phone: "+1 2345 2345"
-          }}
+          } }
         end
 
         run_test!
@@ -260,13 +255,13 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "422", "Unprocessable Entity" do
         let(:client) do
-          {client: {
+          { client: {
             email: nil,
             first_name: "John",
             last_name: "Doe",
             company_name: "LumberJacks Ltd",
             phone: "+1 2345 2345"
-          }}
+          } }
         end
 
         run_test!

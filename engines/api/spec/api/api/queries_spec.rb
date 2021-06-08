@@ -118,7 +118,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
             height: nil,
             weight: 1200,
             volume: nil,
-            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
+            commodities: [{ imo_class: "0", description: "Unknown IMO Class", hs_code: "" }]
 
           }
         end
@@ -138,7 +138,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
             height: nil,
             volume: 1.44,
             weight: 1200,
-            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
+            commodities: [{ imo_class: "0", description: "Unknown IMO Class", hs_code: "" }]
 
           }
         end
@@ -158,7 +158,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
             height: 120,
             volume: nil,
             weight: 1200,
-            commodities: [{ imo_class: "0", description: "Unknown IMO Class" }]
+            commodities: [{ imo_class: nil, description: "No Dangerous Goods", hs_code: "" }]
           }
         end
 

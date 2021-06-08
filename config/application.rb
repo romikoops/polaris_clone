@@ -57,13 +57,13 @@ module Polaris
       config.middleware.use Committee::Middleware::RequestValidation,
         schema_path: "doc/api/swagger.json",
         coerce_date_times: true,
-        ignore_error: true,
+        ignore_error: !Rails.env.development?,
         parse_response_by_content_type: false,
         error_handler: error_handler
       config.middleware.use Committee::Middleware::ResponseValidation,
         schema_path: "doc/api/swagger.json",
         coerce_date_times: true,
-        ignore_error: true,
+        ignore_error: !Rails.env.development?,
         parse_response_by_content_type: false,
         error_handler: error_handler
     end
