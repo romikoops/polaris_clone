@@ -5,12 +5,13 @@ module ExcelDataServices
     module Runners
       class Base
         attr_reader :file, :arguments, :stats
+
         RunnerState = Struct.new(:file, :frame, :errors, :hub_id, :group_id, :organization_id, keyword_init: true)
 
         def initialize(file:, arguments:)
           @file = file
           @arguments = arguments.stringify_keys
-          @stats = {errors: []}
+          @stats = { errors: [] }
         end
 
         def merge_stats(result:)
@@ -22,6 +23,14 @@ module ExcelDataServices
         def handle_errors
           @stats[:errors] = coordinator_errors
           stats
+        end
+
+        def coordinator_errors
+          @coordinator_errors ||= coordinator.errors
+        end
+
+        def coordinator_frame
+          @coordinator_frame ||= coordinator.frame
         end
 
         def runner_state

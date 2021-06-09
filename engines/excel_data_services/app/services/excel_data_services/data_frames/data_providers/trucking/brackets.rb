@@ -24,6 +24,10 @@ module ExcelDataServices
           def label
             "bracket"
           end
+
+          def last_sheet_col_section
+            "main_data_col_headers"
+          end
         end
       end
     end

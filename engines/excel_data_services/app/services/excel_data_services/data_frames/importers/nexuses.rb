@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+module ExcelDataServices
+  module DataFrames
+    module Importers
+      class Nexuses < ExcelDataServices::DataFrames::Importers::Base
+        def model
+          ::Legacy::Nexus
+        end
+
+        def options
+          {
+            batch_size: BATCH_SIZE,
+            on_duplicate_key_ignore: true
+          }
+        end
+      end
+    end
+  end
+end

@@ -24,6 +24,10 @@ module ExcelDataServices
           def label
             "modifier"
           end
+
+          def last_sheet_col_section
+            "column_types"
+          end
         end
       end
     end

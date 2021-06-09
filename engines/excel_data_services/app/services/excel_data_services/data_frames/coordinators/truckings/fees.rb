@@ -4,7 +4,7 @@ module ExcelDataServices
   module DataFrames
     module Coordinators
       module Truckings
-        class Fees < ExcelDataServices::DataFrames::Coordinators::Truckings::Base
+        class Fees < ExcelDataServices::DataFrames::Coordinators::Base
           def combinator
             ExcelDataServices::DataFrames::Combinators::Truckings::Fees
           end

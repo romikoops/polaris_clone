@@ -21,13 +21,14 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::CountryCo
           "country_code" => "DE",
           "query_method" => "zipcode",
           "identifier" => "zipcode",
-          "sheet_name" => "Zones"
+          "sheet_name" => "Zones",
+          "organization_id" => organization.id
         }
       end
 
       it "returns the frame with the fee data", :aggregate_failures do
         expect(result.frame.count).to eq(2)
-        expect(result.frame.to_a.first.inspect).to eq(expected_result.inspect)
+        expect(result.frame.to_a.first).to eq(expected_result)
       end
     end
   end

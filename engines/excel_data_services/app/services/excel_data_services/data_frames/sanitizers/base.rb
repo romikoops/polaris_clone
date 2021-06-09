@@ -24,10 +24,22 @@ module ExcelDataServices
         attr_reader :value, :attribute
 
         def sanitizer_klass
-          "ExcelDataServices::Sanitizers::#{sanitizer_lookup[attribute].camelize}Sanitizer".safe_constantize
+          "ExcelDataServices::Sanitizers::#{merged_sanitizer_lookup[attribute].camelize}Sanitizer".safe_constantize
         end
 
         def default_values
+          {}
+        end
+
+        def merged_sanitizer_lookup
+          {
+            "group_id" => "string",
+            "organization_id" => "string",
+            "hub_id" => "integer"
+          }.merge(sanitizer_lookup)
+        end
+
+        def sanitizer_lookup
           {}
         end
       end

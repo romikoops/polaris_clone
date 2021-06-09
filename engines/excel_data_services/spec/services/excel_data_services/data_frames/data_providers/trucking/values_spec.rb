@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Values do
         { "value_row" => 6,
           "value_col" => 3,
           "value" => 28.392,
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 

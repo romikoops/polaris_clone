@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneRow d
         { "zone_row" => 6,
           "zone_col" => 1,
           "zone" => "1.0",
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 

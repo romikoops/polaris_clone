@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::BracketMi
         { "bracket_minimum_row" => 5,
           "bracket_minimum_col" => 3,
           "bracket_minimum" => 0.0,
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 

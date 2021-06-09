@@ -4,7 +4,7 @@ module ExcelDataServices
   module DataFrames
     module Coordinators
       module Truckings
-        class Metadata < ExcelDataServices::DataFrames::Coordinators::Truckings::Base
+        class Metadata < ExcelDataServices::DataFrames::Coordinators::Base
           def combinator
             ExcelDataServices::DataFrames::Combinators::Truckings::Metadata
           end

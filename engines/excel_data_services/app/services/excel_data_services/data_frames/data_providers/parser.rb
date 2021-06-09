@@ -27,11 +27,11 @@ module ExcelDataServices
         end
 
         def sanitizer_klass
-          "ExcelDataServices::DataFrames::Sanitizers::Trucking::#{section}".safe_constantize
+          "ExcelDataServices::DataFrames::Sanitizers::#{section}".safe_constantize
         end
 
         def validator_klass
-          "ExcelDataServices::DataFrames::Validators::Trucking::#{section}".safe_constantize
+          "ExcelDataServices::DataFrames::Validators::#{section}".safe_constantize
         end
       end
     end

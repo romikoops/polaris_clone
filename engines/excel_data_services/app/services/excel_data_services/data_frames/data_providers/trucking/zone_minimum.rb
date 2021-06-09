@@ -24,6 +24,10 @@ module ExcelDataServices
           def label
             "zone_minimum"
           end
+
+          def last_sheet_col_section
+            "row_minimum_data"
+          end
         end
       end
     end

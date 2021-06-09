@@ -17,7 +17,7 @@ module ExcelDataServices
 
         def frame
           @frame ||= Rover::DataFrame.new(data, types: self.class.column_types).tap do |frame|
-            frame["sheet_name"] = sheet_name
+            apply_state_data(frame: frame)
           end
         end
 
@@ -55,7 +55,7 @@ module ExcelDataServices
         end
 
         def basic_structure
-          self.class.column_types.keys.each_with_object({}) do |header, result|
+          (self.class.column_types.keys - state_keys).each_with_object({}) do |header, result|
             result[header] = []
           end
         end
@@ -87,7 +87,7 @@ module ExcelDataServices
           parser = ExcelDataServices::DataFrames::DataProviders::Parser.new(
             cell: cell,
             header: header,
-            section: self.class.name.demodulize
+            section: self.class.name.gsub("ExcelDataServices::DataFrames::DataProviders::", "")
           )
           state.errors << parser.error if parser.error.present?
           parser.value
@@ -117,6 +117,35 @@ module ExcelDataServices
 
         def identifier
           extract_from_schema(section: "identifier").first.value.downcase
+        end
+
+        def apply_state_data(frame:)
+          frame["sheet_name"] = sheet_name
+          state_keys.map.with_index do |key, i|
+            cell = ExcelDataServices::DataFrames::DataProviders::Cell.new(
+              value: state.send(key.to_sym),
+              row: 1,
+              col: last_sheet_col + i,
+              label: label,
+              sheet_name: sheet_name
+            )
+
+            frame[key] = [parse_cell_value(header: key, cell: cell)] * frame.count
+          end
+          frame
+        end
+
+        def state_keys
+          ["organization_id"]
+        end
+
+        def last_sheet_col
+          @last_sheet_col ||=
+            extract_from_schema(section: last_sheet_col_section).max_by(&:col).col + 1
+        end
+
+        def last_sheet_col_section
+          "headers"
         end
       end
     end

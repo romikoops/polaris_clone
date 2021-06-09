@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneMinim
         { "zone_minimum_row" => 6,
           "zone_minimum_col" => 2,
           "zone_minimum" => 0.0,
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 

@@ -19,10 +19,18 @@ module ExcelDataServices
         end
 
         def combinator_state
-          raise NotImplementedError, "This method must be implemented in #{self.class.name}"
+          @combinator_state ||= combinator.state(coordinator_state: state)
         end
 
         def restructured_data
+          @restructured_data ||= restructurer.data(frame: combinator_frame)
+        end
+
+        def combinator
+          raise NotImplementedError, "This method must be implemented in #{self.class.name}"
+        end
+
+        def restructurer
           raise NotImplementedError, "This method must be implemented in #{self.class.name}"
         end
 

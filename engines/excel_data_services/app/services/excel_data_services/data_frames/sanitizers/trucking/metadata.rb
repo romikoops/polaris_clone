@@ -28,12 +28,10 @@ module ExcelDataServices
               "effective_date" => "string",
               "expiration_date" => "string",
               "identifier_modifier" => "string",
-              "group_id" => "string",
-              "organization_id" => "string",
-              "hub_id" => "integer",
               "load_meterage_height" => "decimal",
               "load_meterage_area" => "decimal",
-              "load_meterage_limit" => "decimal"
+              "load_meterage_limit" => "decimal",
+              "hub_id" => "integer"
             }
           end
 

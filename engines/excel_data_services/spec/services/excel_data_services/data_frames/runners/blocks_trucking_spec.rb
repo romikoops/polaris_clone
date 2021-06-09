@@ -42,6 +42,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       end
 
       it "returns successfully", :aggregate_failures do
+        expect(result.dig("truckings", "created")).to eq(1)
         expect(truckings.count).to eq(1)
         expect(truckings.map { |tr| tr.rates["kg"].count }.uniq).to eq([23])
         expect(truckings.map(&:modifier).uniq).to eq(["kg"])
@@ -84,18 +85,19 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       let(:new_future_validity) { Range.new(Date.parse("2021/12/31"), Date.parse("2022/12/31"), exclude_end: true) }
 
       it "adjusts the existing trucking validity and inserts the new ones", :aggregate_failures do
+        expect(result.dig("truckings", "created")).to eq(1)
         expect(truckings.count).to eq(3)
         expect(truckings.map(&:validity)).to match_array([new_past_validity, sheet_validity, new_future_validity])
       end
     end
 
     context "with errors" do
-      let!(:result) do
+      let(:result) do
         described_class.run(file: trucking_file, arguments: arguments)
       end
 
       context "when locations dont exist" do
-        let!(:trucking_locations) { [] }
+        let(:trucking_locations) { [] }
         let(:error) { result.dig(:errors, 0) }
 
         it "returns the error", :aggregate_failures do

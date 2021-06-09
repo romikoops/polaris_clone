@@ -36,6 +36,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Fees do
           "percentage" => nil,
           "range_max" => nil,
           "range_min" => nil,
+          "organization_id" => organization.id,
           "sheet_name" => "Fees" }
       end
 

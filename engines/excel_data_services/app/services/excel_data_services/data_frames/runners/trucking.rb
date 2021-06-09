@@ -19,14 +19,6 @@ module ExcelDataServices
           )
         end
 
-        def coordinator_errors
-          @coordinator_errors ||= coordinator.errors
-        end
-
-        def coordinator_frame
-          @coordinator_frame ||= coordinator.frame
-        end
-
         def insert_truckings
           ExcelDataServices::DataFrames::Importers::Trucking.import(
             data: coordinator_frame,

@@ -4,7 +4,7 @@ module ExcelDataServices
   module DataFrames
     module Coordinators
       module Truckings
-        class TypeAvailabilities < ExcelDataServices::DataFrames::Coordinators::Truckings::Base
+        class TypeAvailabilities < ExcelDataServices::DataFrames::Coordinators::Base
           def combinator
             ExcelDataServices::DataFrames::Combinators::Truckings::TypeAvailabilities
           end

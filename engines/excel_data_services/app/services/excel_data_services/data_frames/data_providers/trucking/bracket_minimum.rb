@@ -24,6 +24,10 @@ module ExcelDataServices
           def label
             "bracket_minimum"
           end
+
+          def last_sheet_col_section
+            "col_minimum_data"
+          end
         end
       end
     end

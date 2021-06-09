@@ -4,7 +4,8 @@ module ExcelDataServices
   module Schemas
     class Detector
       SCHEMAS = [
-        ExcelDataServices::Schemas::Files::Trucking
+        ExcelDataServices::Schemas::Files::Trucking,
+        ExcelDataServices::Schemas::Files::Hubs
       ].freeze
 
       attr_reader :xlsx

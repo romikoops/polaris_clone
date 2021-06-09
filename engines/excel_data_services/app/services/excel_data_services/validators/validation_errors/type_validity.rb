@@ -108,6 +108,9 @@ module ExcelDataServices
 
         class OptionalInternalType < TypeValidity
         end
+
+        class UuidType < TypeValidity
+        end
       end
     end
   end

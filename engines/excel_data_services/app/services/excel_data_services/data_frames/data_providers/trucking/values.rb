@@ -22,6 +22,10 @@ module ExcelDataServices
           def label
             "value"
           end
+
+          def last_sheet_col_section
+            "main_data"
+          end
         end
       end
     end

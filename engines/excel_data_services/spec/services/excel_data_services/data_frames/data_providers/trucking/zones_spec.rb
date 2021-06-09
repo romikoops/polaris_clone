@@ -25,7 +25,8 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Zones do
           "zone_row" => 2,
           "sheet_name" => "Zones",
           "identifier" => "zipcode",
-          "query_method" => "zipcode"
+          "query_method" => "zipcode",
+          "organization_id" => organization.id
         }
       end
 

@@ -4,7 +4,7 @@ module ExcelDataServices
   module DataFrames
     module Coordinators
       module Truckings
-        class Locations < ExcelDataServices::DataFrames::Coordinators::Truckings::Base
+        class Locations < ExcelDataServices::DataFrames::Coordinators::Base
           def combinator
             ExcelDataServices::DataFrames::Combinators::Truckings::Locations
           end

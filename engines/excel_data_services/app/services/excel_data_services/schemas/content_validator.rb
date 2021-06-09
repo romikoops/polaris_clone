@@ -17,13 +17,23 @@ module ExcelDataServices
       end
 
       def perform
-        return true if required_content.blank?
+        content_present? && content_unique?
+      end
 
+      def content_present?
         (required_content - section_content).empty?
       end
 
+      def content_unique?
+        uniqueness_constrained? ? section_content.uniq.length == section_content.length : true
+      end
+
       def required_content
-        @required_content ||= schema.dig(section, "content")
+        @required_content ||= schema.dig(section, "content") || []
+      end
+
+      def uniqueness_constrained?
+        schema.dig(section, "unique")
       end
 
       def section_content

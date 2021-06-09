@@ -24,6 +24,10 @@ module ExcelDataServices
           def label
             "zone"
           end
+
+          def last_sheet_col_section
+            "main_data_row_headers"
+          end
         end
       end
     end

@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Modifiers
         { "modifier_row" => 3,
           "modifier_col" => 3,
           "modifier" => "kg",
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 

@@ -20,6 +20,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Brackets 
         { "bracket_row" => 4,
           "bracket_col" => 3,
           "bracket" => "0.0 - 100.0",
+          "organization_id" => organization.id,
           "sheet_name" => "Sheet3" }
       end
 
