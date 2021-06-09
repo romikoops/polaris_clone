@@ -595,6 +595,159 @@ RSpec.configure do |config|
               cargoClass
             ]
           },
+          v1CargoItem: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
+                description: "ID of the Cargo Item"
+              },
+              cargo_class: {
+                type: "string",
+                description: "Cargo Class of the Cargo Item. Must be `lcl`"
+              },
+              cargo_item_type_id: {
+                type: "string",
+                description: "ID of the CargoItemType - repesenting the Colli Type"
+              },
+              contents: {
+                type: "string",
+                description: "String desccribin the Items contents",
+                nullable: true
+              },
+              dangerous_goods: {
+                type: "boolean",
+                description: "Whether or not the Cargoitem contains dangerous goods"
+              },
+              width: {
+                type: "number",
+                description: "The width of the item in cm"
+              },
+              length: {
+                type: "number",
+                description: "The length of the item in cm"
+              },
+              height: {
+                type: "number",
+                description: "The height of the item in cm"
+              },
+              payload_in_kg: {
+                type: "number",
+                description: "The individual weight of each item in kg"
+              },
+              quantity: {
+                type: "number",
+                description: "The number of identical items in the group"
+              },
+              stackable: {
+                type: "boolean",
+                description: "Whether these items can be stacked"
+              },
+              total_volume: {
+                type: "number",
+                description: "The total volume of all items in the group in cubic meters"
+              },
+              total_weight: {
+                type: "number",
+                description: "The total weight of the group in kg."
+              }
+            }
+          },
+          v1Container: {
+            type: "object",
+            properties: {
+              id: {
+                type: "string",
+                description: "The ID of the Container"
+              },
+              cargo_class: {
+                type: "string",
+                description: "The Cargo Class of the Container",
+                enum: %w[
+                  fcl_10
+                  fcl_20
+                  fcl_20_ot
+                  fcl_20_rf
+                  fcl_20_frs
+                  fcl_20_frw
+                  fcl_40
+                  fcl_40_hq
+                  fcl_40_ot
+                  fcl_40_rf
+                  fcl_40_hq_rf
+                  fcl_40_frs
+                  fcl_40_frw
+                  fcl_45
+                  fcl_45_hq
+                  fcl_45_rf
+                ]
+              },
+              contents: {
+                type: "string",
+                description: "A string describing the contents of the Container",
+                nullable: true
+              },
+              dangerous_goods: {
+                type: "boolean",
+                description: "Whether or not the Container holds any dangerous goods"
+              },
+              payload_in_kg: {
+                type: "number",
+                description: "The weight of the payload per container in kg"
+              },
+              quantity: {
+                type: "number",
+                description: "The number of containers in the group"
+              },
+              size_class: {
+                type: "string",
+                description: "Duplicate of Cargo Class: Deprecated",
+                deprecated: true
+              }
+            }
+          },
+          v1ShipmentInfoContainers: {
+            type: :object,
+            properties: {
+              containers_attributes: {
+                type: :array,
+                items: { "$ref" => "#/components/schemas/v1Container" }
+              },
+              trucking_info: {
+                type: :object,
+                properties: {
+                  pre_carriage: { "$ref" => "#/components/schemas/v1TruckingInfo" },
+                  on_carriage: { "$ref" => "#/components/schemas/v1TruckingInfo" }
+                }
+              }
+            }, required: %w[containers_attributes trucking_info]
+          },
+          v1ShipmentInfoCargoItems: {
+            type: :object,
+            properties: {
+              cargo_items_attributes: {
+                type: :array,
+                items: { "$ref" => "#/components/schemas/v1CargoItem" }
+              },
+              trucking_info: {
+                type: :object,
+                properties: {
+                  pre_carriage: { "$ref" => "#/components/schemas/v1TruckingInfo" },
+                  on_carriage: { "$ref" => "#/components/schemas/v1TruckingInfo" }
+                }
+              }
+            }, required: %w[cargo_items_attributes trucking_info]
+          },
+          v1TruckingInfo: {
+            type: :object,
+            properties: {
+              truck_type: {
+                type: "string",
+                description: "Truck type desired for pre/on carriage"
+              }
+            },
+            nullable: true
+          },
           journeyError: {
             type: "object",
             properties: {

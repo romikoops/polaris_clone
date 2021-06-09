@@ -61,15 +61,12 @@ RSpec.describe "Quotations", type: :request, swagger: true do
           },
           shipment_info: {
             type: :object,
-            properties: {
-              cargo_item_attributes: { type: :object, properties: {} },
-              containers_attributes: { type: :object, properties: {} },
-              trucking_info: {
-                type: :object,
-                properties: {}
-              }
-            }, required: %w[cargo_item_attributes containers_attributes trucking_info]
-          }
+            oneOf: [
+              { "$ref" => "#/components/schemas/v1ShipmentInfoCargoItems" },
+              { "$ref" => "#/components/schemas/v1ShipmentInfoContainers" }
+            ]
+          },
+          async: { type: :boolean }
         }, required: %w[organization_id quote shipment_info]
       }
 
