@@ -4,7 +4,7 @@ module WritingTool
   def write_to_aws(dir, organization, filename, doc_type)
     new_doc = Legacy::File.create!(
       organization: organization,
-      file: {io: File.open(dir), filename: filename, content_type: "application/vnd.ms-excel"},
+      file: { io: File.open(dir), filename: filename, content_type: "application/vnd.ms-excel" },
       text: filename, doc_type: doc_type
     )
 
@@ -13,13 +13,13 @@ module WritingTool
 
   def filename_formatter(options, completing_string = "pricings_")
     if options[:mot]
-      "#{options[:mot]}_#{completing_string + formated_date}.xlsx"
+      "#{options[:mot]}_#{completing_string + formatted_date}.xlsx"
     else
-      "#{completing_string + formated_date}.xlsx"
+      "#{completing_string + formatted_date}.xlsx"
     end
   end
 
-  def formated_date
+  def formatted_date
     DateTime.now.strftime("%Y-%m-%d")
   end
 
@@ -49,7 +49,7 @@ module WritingTool
       workbook.add_worksheet
     end
     header_text.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format) }
-    {worksheet: worksheet, workbook: workbook}
+    { worksheet: worksheet, workbook: workbook }
   end
 
   def write_to_sheet(worksheet, row, start, data)
