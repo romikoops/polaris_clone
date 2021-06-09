@@ -37,5 +37,22 @@ RSpec.describe ExcelDataServices::Schemas::Validator do
         expect(described_class.valid?(source: source)).to eq(false)
       end
     end
+
+    context "with an empty sheet" do
+      let(:temp_file) { Tempfile.new(["empty", ".xlsx"], "tmp") }
+      let(:temp_xlsx) do
+        WriteXLSX.new(temp_file, tempdir: Rails.root.join("tmp/empty").to_s)
+      end
+      let(:xlsx) { Roo::Excelx.new(temp_file) }
+      let(:source) { FactoryBot.build(:schemas_sheets_trucking_fees, file: xlsx, sheet_name: xlsx.sheets.first) }
+
+      before { temp_xlsx.close }
+
+      after { temp_file.delete }
+
+      it "returns successfully" do
+        expect(described_class.valid?(source: source)).to eq(false)
+      end
+    end
   end
 end

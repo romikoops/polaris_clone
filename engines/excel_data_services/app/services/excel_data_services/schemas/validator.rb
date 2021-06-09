@@ -16,6 +16,8 @@ module ExcelDataServices
       end
 
       def perform
+        return false if sheet.first_row.nil?
+
         schema.reject { |section| section_valid?(section: section) }.empty?
       end
 
