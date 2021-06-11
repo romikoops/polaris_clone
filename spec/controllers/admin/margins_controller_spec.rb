@@ -373,4 +373,40 @@ RSpec.describe Admin::MarginsController, type: :controller do
       end
     end
   end
+
+  describe "POST update_multiple" do
+    let(:margin) { FactoryBot.create(:pricings_margin, organization: organization) }
+    let(:margin_detail) {FactoryBot.create(:pricings_detail, margin: margin) }
+    let(:params) do
+      {
+        margins: [
+          margin.as_json.transform_keys {|key| key.camelize(:lower) }.merge(
+            "value" => 155,
+            "operator" => "+",
+            "marginDetails" => [
+              margin_detail.as_json.merge(
+                "value" => 0.5,
+                "operator" => "%"
+              )
+            ]
+          )
+        ],
+        organization_id: organization.id
+      }
+    end
+
+    before do
+      Organizations.current_id = organization.id
+      post :update_multiple, params: params
+      margin.reload
+      margin_detail.reload
+    end
+
+    it "updates the margin and margin detail", :aggregate_failures do
+      expect(margin.value).to eq(155)
+      expect(margin.operator).to eq("+")
+      expect(margin_detail.value).to eq(0.5)
+      expect(margin_detail.operator).to eq("%")
+    end
+  end
 end

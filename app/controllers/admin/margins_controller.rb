@@ -26,17 +26,16 @@ class Admin::MarginsController < Admin::AdminBaseController
   end
 
   def update_multiple
-    updated_margins = []
-    params[:margins].each do |param_margin|
+    updated_margins = params[:margins].map do |param_margin|
       margin = Pricings::Margin.find(param_margin[:id])
-      margin.update(
+      margin.update!(
         operator: param_margin[:operator],
         value: param_margin[:value],
         effective_date: Date.parse(param_margin[:effectiveDate]).beginning_of_day,
         expiration_date: Date.parse(param_margin[:expirationDate]).end_of_day
       )
-      if param_margin[:margin_details].present?
-        param_margin[:margin_details].each do |param_margin_detail|
+      if param_margin[:marginDetails].present?
+        param_margin[:marginDetails].each do |param_margin_detail|
           detail = Pricings::Detail.find_by(
             margin: margin,
             charge_category_id: param_margin_detail[:charge_category_id]
@@ -44,7 +43,7 @@ class Admin::MarginsController < Admin::AdminBaseController
           detail.update(operator: param_margin_detail[:operator], value: param_margin_detail[:value])
         end
       end
-      updated_margins << for_list_json(margin)
+      for_list_json(margin)
     end
     response_handler(updated_margins)
   end
