@@ -28,6 +28,8 @@ module Pricings
 
     before_validation :set_application_order, :set_validity
 
+    accepts_nested_attributes_for :details
+
     def service_level
       (tenant_vehicle&.name || pricing&.tenant_vehicle&.name) || "All"
     end
