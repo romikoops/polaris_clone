@@ -47,6 +47,14 @@ RSpec.describe Admin::ClientsController do
       end
     end
 
+    context "with last name search and other sort applied" do
+      it "returns the correct matching results with search" do
+        get :index, params: { organization_id: organization.id, last_name: client.profile.last_name, company_name_desc: true }
+
+        expect(resp.dig("data", "clientData", 0, "email")).to eq(client.email)
+      end
+    end
+
     context "when searching via company names" do
       it "returns users matching the given company_name " do
         get :index, params: { organization_id: organization.id, company_name: company.name }
