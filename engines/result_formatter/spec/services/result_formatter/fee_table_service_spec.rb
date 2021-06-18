@@ -370,8 +370,7 @@ module ResultFormatter
       let(:edited_money) { Money.new(5555, "USD") }
       let(:format) { klass.send(:value_with_currency, money) }
       let(:line_items) { freight_line_items_with_cargo }
-      let(:edited_line_item_set) { line_item_set.dup.tap(&:save!) }
-
+      let(:edited_line_item_set) { FactoryBot.create(:journey_line_item_set, result: result) }
       let(:edited_line_items) do
         freight_line_items_with_cargo.map do |line_item|
           line_item.dup.tap do |edited_line_item|

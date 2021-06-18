@@ -46,10 +46,6 @@ module ResultFormatter
       @voyage_code ||= ""
     end
 
-    def imc_reference
-      Journey::ImcReference.new(date: created_at).reference
-    end
-
     delegate :mode_of_transport, to: :main_freight_section
 
     def grand_total_section
@@ -301,6 +297,10 @@ module ResultFormatter
 
     def current_line_item_set
       @current_line_item_set ||= line_item_sets.max_by(&:created_at)
+    end
+
+    def imc_reference
+      current_line_item_set.reference
     end
 
     delegate :line_items, to: :current_line_item_set

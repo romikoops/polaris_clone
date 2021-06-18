@@ -13,7 +13,7 @@ module Notifications
       @scope = scope
     end
 
-    delegate :query, :results, to: :offer
+    delegate :query, :results, :line_item_sets, to: :offer
     delegate :origin, :destination, :origin_coordinates, :destination_coordinates, :cargo_units, :client, to: :query
     delegate :profile, to: :client
 
@@ -52,7 +52,7 @@ module Notifications
     end
 
     def imc_references
-      results.map { |result| Journey::ImcReference.new(date: result.created_at).reference }
+      line_item_sets.map(&:reference)
     end
 
     def dynamic_origin

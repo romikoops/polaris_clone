@@ -1917,7 +1917,8 @@ CREATE TABLE public.journey_line_item_sets (
     shipment_request_id uuid,
     result_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    reference character varying
 );
 
 
@@ -12208,6 +12209,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210506103936'),
 ('20210507103512'),
 ('20210507132258'),
-('20210512092712');
+('20210512092712'),
+('20210615093819');
 
 

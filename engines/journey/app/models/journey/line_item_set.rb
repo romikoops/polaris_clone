@@ -7,6 +7,15 @@ module Journey
     belongs_to :shipment_request, optional: true
     has_many :offer_line_item_sets
     has_many :offers, through: :offer_line_item_sets
+    validates :reference, uniqueness: true
+
+    before_validation :set_reference
+
+    private
+
+    def set_reference
+      self.reference = Journey::ImcReference.new(date: Time.zone.now).reference if reference.blank?
+    end
   end
 end
 
@@ -15,6 +24,7 @@ end
 # Table name: journey_line_item_sets
 #
 #  id                  :uuid             not null, primary key
+#  reference           :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  result_id           :uuid

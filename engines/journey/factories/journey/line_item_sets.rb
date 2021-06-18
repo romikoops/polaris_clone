@@ -14,5 +14,7 @@ FactoryBot.define do
         end
       end
     end
+
+    sequence(:reference) { |n| "REFERENCE-#{n}" }
   end
 end

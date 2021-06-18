@@ -12,7 +12,6 @@ RSpec.describe Notifications::OfferSubjectLine do
   let(:context) { subject_line_service.context }
   let(:origin_city) { "Hamburg" }
   let(:destination_city) { "Shanghai" }
-  let(:dummy_reference) { "XXXXX" }
 
   before do
     ::Organizations.current_id = organization.id
@@ -32,7 +31,6 @@ RSpec.describe Notifications::OfferSubjectLine do
       "country_code" => factory_country_from_code(code: "CN").code,
       "postal_code" => "22000"
     ])
-    allow(Journey::ImcReference).to receive(:new).and_return(instance_double("Journey::ImcReference", reference: dummy_reference))
   end
 
   describe ".subject_line" do
@@ -71,9 +69,9 @@ RSpec.describe Notifications::OfferSubjectLine do
       end
       let(:expected_string) do
         [
-          "ItsMyCargo Quotation Tool: #{dummy_reference} - from:",
-          "'#{origin_city}' \"DE-20457\" - to: '#{query.destination[0, 21]}..."
-        ].join(" ")
+          "ItsMyCargo Quotation Tool: #{line_item_set.reference} - from: '#{origin_city}' \"DE-20457\" - to: '#{query.destination}"[0, 90],
+          "..."
+        ].join
       end
 
       it "renders properly with escaped values" do
@@ -111,7 +109,7 @@ RSpec.describe Notifications::OfferSubjectLine do
 
   describe ".context" do
     let(:expected_base) do
-      { "imc_reference" => "XXXXX",
+      { "imc_reference" => line_item_set.reference,
         "external_id" => nil,
         "origin_locode" => "DEHAM",
         "origin_city" => "438 80 Landvetter, Sweden",
@@ -120,7 +118,7 @@ RSpec.describe Notifications::OfferSubjectLine do
         "destination_city" => "88 Henan Middle Road, Shanghai",
         "destination" => "CNSHA",
         "client_name" => query.client.profile.full_name,
-        "references" => "Refs: XXXXX",
+        "references" => "Refs: #{line_item_set.reference}",
         "routing" => "438 80 Landvetter, Sweden - 88 Henan Middle Road, Shanghai",
         "noun" => "Quotation" }
     end
@@ -196,7 +194,7 @@ RSpec.describe Notifications::OfferSubjectLine do
           "total_weight" => 1000.0,
           "total_volume" => 1.0,
           "load_type" => "LCL",
-          "references" => "Refs: XXXXX",
+          "references" => "Refs: #{line_item_set.reference}",
           "routing" => "Hamburg - Shanghai"
         )
       end

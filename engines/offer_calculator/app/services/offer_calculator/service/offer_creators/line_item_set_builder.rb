@@ -17,9 +17,7 @@ module OfferCalculator
         end
 
         def line_item_set
-          Journey::LineItemSet.new(
-            line_items: line_items
-          )
+          Journey::LineItemSet.new(line_items: line_items)
         end
 
         private
