@@ -69,13 +69,15 @@ RSpec.describe ShipmentsController do
       end
     end
 
-    let(:target_exchange_rate) { result.line_item_sets.first.line_items.first.exchange_rate }
+    let(:line_item) { result.line_item_sets.first.line_items.first }
+    let(:target_exchange_rate) { line_item.exchange_rate }
+    let(:decimals) { [line_item.total_cents.to_s.length, 6].max }
 
     it "returns requested result" do
       get :show, params: { id: result.id, organization_id: organization.id }
 
       expect(json_response.dig("data", "exchange_rates")).to include(
-        "base" => "EUR", "usd" => (1 / target_exchange_rate).round(2).to_s
+        "base" => "EUR", "usd" => (1 / target_exchange_rate).round(decimals).to_s
       )
     end
 
