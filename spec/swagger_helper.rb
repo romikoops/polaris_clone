@@ -1090,6 +1090,10 @@ RSpec.configure do |config|
                 description: "Unique identifier of the offer",
                 type: "string"
               },
+              loginMandatory: {
+                type: "boolean",
+                description: "This boolean signals whether it is mandatory for a user to log in before they can access the quoting tool itself"
+              },
               links: {
                 type: "object",
                 properties: {
