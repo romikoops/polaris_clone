@@ -34,7 +34,7 @@ RSpec.describe OfferCalculator::Service::HubFinder do
 
   before do
     ::Organizations.current_id = organization.id
-    allow(request).to receive(:has_on_carriage?).and_return(false)
+    allow(request).to receive(:on_carriage?).and_return(false)
     allow(request).to receive(:pickup_address).and_return(address)
     FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization)
     FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)

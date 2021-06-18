@@ -13,6 +13,7 @@ module OfferCalculator
             hub_ids: hub_ids_by_carriage(target: first_target)
           )
           return base_query if targets.length == 1
+
           last_target = targets.last
           base_query.or(
             carriage_association(carriage: last_target,
@@ -24,8 +25,8 @@ module OfferCalculator
 
         def targets
           @targets ||= {
-            "pre" => request.has_pre_carriage? ? true : nil,
-            "on" => request.has_on_carriage? ? true : nil
+            "pre" => request.pre_carriage? ? true : nil,
+            "on" => request.on_carriage? ? true : nil
           }.compact.keys
         end
 
@@ -52,7 +53,7 @@ module OfferCalculator
         end
 
         def selected_trucking_ids(results:, carriage:)
-          filter_combos(results: results, carriage: carriage).map { |filters|
+          filter_combos(results: results, carriage: carriage).map do |filters|
             cargo_class, hub_id, truck_type, tenant_vehicle_id = filters
             target_trucking = nil
             hierarchy.each do |group|
@@ -67,7 +68,7 @@ module OfferCalculator
               )
             end
             target_trucking&.id
-          }.compact
+          end.compact
         end
 
         def filter_combos(results:, carriage:)

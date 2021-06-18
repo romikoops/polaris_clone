@@ -39,8 +39,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before do
         FactoryBot.create(:legacy_local_charge,
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        allow(request).to receive(:has_pre_carriage?).and_return(false)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(false)
+        allow(request).to receive(:on_carriage?).and_return(false)
       end
 
       it "returns the one pricing" do
@@ -54,7 +54,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
       }
 
-      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
+      before { allow(request).to receive(:pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
         expect(results).to match_array([local_charge])
@@ -77,7 +77,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
         ]
       end
 
-      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
+      before { allow(request).to receive(:pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
         expect(results).to match_array([local_charge, local_charge_2])
@@ -107,7 +107,7 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
         ]
       end
 
-      before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
+      before { allow(request).to receive(:pre_carriage?).and_return(true) }
 
       it "returns the one pricing" do
         expect(results).to match_array([local_charge, local_charge_2])
@@ -126,8 +126,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       }
 
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
       end
 
       it "returns the one pricing" do
@@ -149,8 +149,8 @@ RSpec.describe OfferCalculator::Service::Finders::LocalCharges do
       before do
         FactoryBot.create(:legacy_local_charge,
           hub: origin_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
       end
 
       it "returns the one pricing" do

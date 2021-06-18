@@ -114,71 +114,54 @@ RSpec.describe Admin::MarginsController, type: :controller do
   describe "POST #test" do
     let(:args) do
       {
-        selectedOriginHub: itinerary.hubs.first.id,
-        selectedDestinationHub: itinerary.hubs.last.id,
-        selectedCargoClass: "lcl",
-        organization_id: organization.id
+        "selectedOriginHub" => itinerary.hubs.first.id.to_s,
+        "selectedDestinationHub" => itinerary.hubs.last.id.to_s,
+        "selectedCargoClass" => "lcl",
+        "organization_id" => organization.id
       }
     end
-    let(:json) { JSON.parse(response.body) }
-    let(:results) { json.dig("data", "results") }
+    let(:expected_results) { [{ "freight" => {} }] }
+    let(:preview_double) { instance_double("Wheelhouse::PreviewService", perform: expected_results) }
+    let(:expected_args) do
+      {   target: target,
+          creator: user,
+          origin: { hub_id: itinerary.origin_hub_id.to_s },
+          destination: { hub_id: itinerary.destination_hub_id.to_s },
+          cargo_class: "lcl",
+          source: access_token.application }
+    end
 
-    it "returns http success for a User target" do
-      user_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing,
-                                                       organization: organization, applicable: client)
-      params = args.merge(targetId: client.id, targetType: "user")
+    before do
+      allow(Wheelhouse::PreviewService).to receive(:new).and_return(preview_double)
+    end
 
-      post :test, params: params
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(results.length).to eq(1)
-        expect(
-          results.first
-        ).to include(
-          FactoryBot.build(:margin_preview_result,
-            target: client, target_name: "#{client.profile.first_name} #{client.profile.last_name}",
-            margin: user_margin, service_level: tenant_vehicle)
-        )
+    shared_examples_for "triggering the service with the correct params" do
+      it "receives the correct params and returns the result", :aggregate_failures do
+        post :test, params: params
+        expect(Wheelhouse::PreviewService).to have_received(:new).with(expected_args)
+        expect(response_data["results"]).to match_array(expected_results)
       end
     end
 
-    it "returns http success for a Company target" do
-      company_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, organization: organization,
-                                                          applicable: company)
-      params = args.merge(targetId: company.id, targetType: "company")
+    context "when a User is target" do
+      let(:params) { args.merge("targetId" => client.id, "targetType" => "user") }
+      let(:target) { client }
 
-      post :test, params: params
-
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(results.length).to eq(1)
-        expect(
-          results.first
-        ).to include(
-          FactoryBot.build(:margin_preview_result,
-            target: company, target_name: company.name, margin: company_margin,
-            service_level: tenant_vehicle)
-        )
-      end
+      it_behaves_like "triggering the service with the correct params"
     end
 
-    it "returns http success for a Group target" do
-      group_margin = FactoryBot.create(:freight_margin, pricing: lcl_pricing, organization: organization,
-                                                        applicable: group)
-      params = args.merge(targetId: group.id, targetType: "group")
+    context "when a Company is target" do
+      let(:params) { args.merge("targetId" => company.id, "targetType" => "company") }
+      let(:target) { company }
 
-      post :test, params: params
+      it_behaves_like "triggering the service with the correct params"
+    end
 
-      aggregate_failures do
-        expect(response).to have_http_status(:success)
-        expect(results.length).to eq(1)
-        expect(results.first).to include(
-          FactoryBot.build(:margin_preview_result,
-            target: group, target_name: group.name, margin: group_margin,
-            service_level: tenant_vehicle)
-        )
-      end
+    context "when a Group is target" do
+      let(:params) { args.merge("targetId" => group.id, "targetType" => "group") }
+      let(:target) { group }
+
+      it_behaves_like "triggering the service with the correct params"
     end
   end
 
@@ -438,7 +421,6 @@ RSpec.describe Admin::MarginsController, type: :controller do
       let(:new_params) do
         params.dup.tap do |par|
           par[:margins].first["marginDetails"].first["id"] = ""
-          par
         end
       end
 

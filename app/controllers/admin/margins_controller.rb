@@ -91,10 +91,13 @@ module Admin
     end
 
     def test
-      results = Pricings::Preview.new(
+      results = Wheelhouse::PreviewService.new(
         target: get_target(type: test_params[:targetType], id: test_params[:targetId]),
-        params: test_params,
-        organization: current_organization
+        creator: current_user,
+        origin: test_origin,
+        destination: test_destination,
+        cargo_class: test_params[:selectedCargoClass],
+        source: doorkeeper_application
       ).perform
       response_handler(results: results)
     end
@@ -360,6 +363,14 @@ module Admin
           organizationId
         ] }
       ])
+    end
+
+    def test_origin
+      test_params[:selectedOriginHub].present? ? { hub_id: test_params[:selectedOriginHub] } : test_params[:selectedOriginTrucking]
+    end
+
+    def test_destination
+      test_params[:selectedDestinationHub].present? ? { hub_id: test_params[:selectedDestinationHub] } : test_params[:selectedDestinationTrucking]
     end
   end
 end

@@ -95,7 +95,7 @@ module OfferCalculator
       end
 
       def origin_local_charges
-        return unless @request.has_pre_carriage?
+        return unless @request.pre_carriage?
 
         "JOIN local_charges AS origin_local_charges
           ON origin_local_charges.hub_id = origin_hubs.id
@@ -107,7 +107,7 @@ module OfferCalculator
       end
 
       def destination_local_charges
-        return unless @request.has_on_carriage?
+        return unless @request.on_carriage?
 
         "JOIN local_charges AS destination_local_charges
           ON destination_local_charges.hub_id = destination_hubs.id

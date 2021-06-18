@@ -103,7 +103,7 @@ module OfferCalculator
         end
 
         def trucking_involved?
-          request.has_pre_carriage? || request.has_on_carriage?
+          request.pre_carriage? || request.on_carriage?
         end
 
         def itinerary_ids

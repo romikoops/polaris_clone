@@ -74,7 +74,7 @@ module OfferCalculator
         end
 
         def hub_pairings
-          @hub_pairings ||= uniq_route_schedules.flat_map { |schedule|
+          @hub_pairings ||= uniq_route_schedules.flat_map do |schedule|
             cargo_classes.map do |cargo_class|
               [
                 cargo_class,
@@ -83,7 +83,7 @@ module OfferCalculator
                 schedule.tenant_vehicle_id
               ]
             end
-          }
+          end
         end
 
         def uniq_route_schedules
@@ -109,11 +109,11 @@ module OfferCalculator
         end
 
         def export_required?
-          request.has_pre_carriage? || origin_mandatory_charges
+          request.pre_carriage? || origin_mandatory_charges
         end
 
         def import_required?
-          request.has_on_carriage? || destination_mandatory_charges
+          request.on_carriage? || destination_mandatory_charges
         end
 
         def origin_mandatory_charges

@@ -53,14 +53,14 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
         itinerary: itinerary,
         organization: organization,
         tenant_vehicle: tenant_vehicle)
-        organization.scope.update(content: {departure_query_type: departure_type})
+      organization.scope.update(content: { departure_query_type: departure_type })
       allow(request).to receive(:pickup_address).and_return(address)
     end
 
     describe ".perform" do
       context "without trucking" do
         before do
-          allow(request).to receive(:has_pre_carriage?).and_return(false)
+          allow(request).to receive(:pre_carriage?).and_return(false)
         end
 
         it "return the valid schedules" do
@@ -74,7 +74,7 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
 
       context "with trucking" do
         before do
-          allow(request).to receive(:has_pre_carriage?).and_return(true)
+          allow(request).to receive(:pre_carriage?).and_return(true)
           google_directions = instance_double("Trucking::GoogleDirections")
           allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
           allow(google_directions).to receive(:driving_time_in_seconds).and_return(10_000)
@@ -92,7 +92,7 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
 
       context "with no driving time" do
         before do
-          allow(request).to receive(:has_pre_carriage?).and_return(true)
+          allow(request).to receive(:pre_carriage?).and_return(true)
           google_directions = instance_double("Trucking::GoogleDirections")
           allow(Trucking::GoogleDirections).to receive(:new).and_return(google_directions)
           allow(google_directions).to receive(:driving_time_in_seconds)

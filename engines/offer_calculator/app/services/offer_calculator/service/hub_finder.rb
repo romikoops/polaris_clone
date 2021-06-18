@@ -4,7 +4,7 @@ module OfferCalculator
   module Service
     class HubFinder < Base
       def perform
-        {origin: "pre", destination: "on"}.reduce({}) do |hubs, (target, carriage)|
+        { origin: "pre", destination: "on" }.reduce({}) do |hubs, (target, carriage)|
           found_hubs = hubs_for_target(target, carriage)
           raise OfferCalculator::Errors::HubNotFound if found_hubs.empty?
 
@@ -15,7 +15,7 @@ module OfferCalculator
       private
 
       def hubs_for_target(target, carriage)
-        if request.has_carriage?(carriage: carriage)
+        if request.carriage?(carriage: carriage)
           trucking_hubs(carriage: carriage, target: target)
         else
           Legacy::Hub.where(organization: organization,

@@ -3,13 +3,14 @@
 module OfferCalculator
   module Service
     class Base
-      CARRIAGE_MAP = {"export" => "pre", "import" => "on"}.freeze
+      CARRIAGE_MAP = { "export" => "pre", "import" => "on" }.freeze
 
       def initialize(request:)
         @request = request
       end
 
       attr_reader :request
+
       delegate :organization, :client, :creator, to: :request
 
       private
@@ -24,11 +25,11 @@ module OfferCalculator
       def check_for_fee_type(type:, results:)
         return check_for_freight(results: results) if type == :pricings
 
-        fee_type_map = {truckings: "Carriage", local_charges: "Fees"}
+        fee_type_map = { truckings: "Carriage", local_charges: "Fees" }
 
         %w[export import].each do |direction|
           carriage = CARRIAGE_MAP[direction]
-          next unless request.has_carriage?(carriage: carriage)
+          next unless request.carriage?(carriage: carriage)
 
           error = error_for_fee_type(
             results: results,

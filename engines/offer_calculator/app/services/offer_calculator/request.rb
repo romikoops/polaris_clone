@@ -20,20 +20,20 @@ module OfferCalculator
       ).perform
     end
 
-    def has_pre_carriage?
+    def pre_carriage?
       nexus_id(target: "origin").blank? && params.dig("origin", "latitude").present?
     end
 
-    def has_on_carriage?
+    def on_carriage?
       nexus_id(target: "destination").blank? && params.dig("destination", "latitude").present?
     end
 
-    def has_carriage?(carriage:)
-      send("has_#{carriage}_carriage?")
+    def carriage?(carriage:)
+      send("#{carriage}_carriage?")
     end
 
     def trucking_params
-      @trucking_params ||= params.dig("trucking")
+      @trucking_params ||= params["trucking"]
     end
 
     def pickup_address
@@ -56,15 +56,15 @@ module OfferCalculator
     end
 
     def estimated
-      params.dig("estimated")
+      params["estimated"]
     end
 
     def delay
-      params.dig("delay")
+      params["delay"]
     end
 
     def async
-      params.dig("async").present?
+      params["async"].present?
     end
 
     def load_type
@@ -76,7 +76,7 @@ module OfferCalculator
     end
 
     def persist_cargo?
-      persist? || params["estimated"].present?
+      params.key?("estimated") ? !params["estimated"] : persist?
     end
 
     def geo_id(target:)
@@ -86,7 +86,7 @@ module OfferCalculator
     def currency
       client_currency = client.settings&.currency
 
-      client_currency || scope.dig(:default_currency)
+      client_currency || scope[:default_currency]
     end
 
     def persist?

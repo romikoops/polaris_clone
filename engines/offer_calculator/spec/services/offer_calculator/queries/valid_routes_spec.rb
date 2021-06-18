@@ -39,8 +39,8 @@ RSpec.describe OfferCalculator::Queries::ValidRoutes do
 
     allow(request).to receive(:cargo_classes).and_return(["lcl"])
     allow(request).to receive(:load_type).and_return("cargo_item")
-    allow(request).to receive(:has_pre_carriage?).and_return(false)
-    allow(request).to receive(:has_on_carriage?).and_return(false)
+    allow(request).to receive(:pre_carriage?).and_return(false)
+    allow(request).to receive(:on_carriage?).and_return(false)
   end
 
   describe ".perform", :vcr do
@@ -66,8 +66,8 @@ RSpec.describe OfferCalculator::Queries::ValidRoutes do
 
     context "with trucking and no local charges" do
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
       end
 
       it "return the valid routes for cargo_item" do
@@ -81,7 +81,7 @@ RSpec.describe OfferCalculator::Queries::ValidRoutes do
       before do
         FactoryBot.create(:legacy_local_charge,
           hub: origin_hub_1, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
       end
 
       it "return the valid routes for cargo_item" do
@@ -104,8 +104,8 @@ RSpec.describe OfferCalculator::Queries::ValidRoutes do
       end
 
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(false)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(false)
+        allow(request).to receive(:on_carriage?).and_return(false)
         FactoryBot.create(:lcl_pricing,
           itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle_1, group_id: group.id)
       end

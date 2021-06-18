@@ -2,7 +2,7 @@
 
 module OfferCalculator
   module Service
-    class QueryGenerator < OfferCalculator::Service::Base
+    class QueryGenerator
       attr_reader :source, :client, :creator, :params, :persist
 
       def initialize(source:, client:, creator:, params:, persist: true)
@@ -13,7 +13,7 @@ module OfferCalculator
         @persist = persist
       end
 
-      alias_method :persist?, :persist
+      alias persist? persist
 
       def query
         @query ||= Journey::Query.new(
@@ -56,12 +56,12 @@ module OfferCalculator
 
       def origin_string
         @origin_string ||= params.dig(:origin, :address).presence ||
-          (has_pre_carriage? ? origin.geocoded_address : origin.name)
+          (pre_carriage? ? origin.geocoded_address : origin.name)
       end
 
       def destination_string
         @destination_string ||= params.dig(:destination, :address).presence ||
-          (has_on_carriage? ? destination.geocoded_address : destination.name)
+          (on_carriage? ? destination.geocoded_address : destination.name)
       end
 
       def origin_coordinates
@@ -86,11 +86,11 @@ module OfferCalculator
         Companies::Membership.find_by(member: client)&.company
       end
 
-      def has_pre_carriage?
+      def pre_carriage?
         params.dig(:origin, :nexus_id).blank?
       end
 
-      def has_on_carriage?
+      def on_carriage?
         params.dig(:destination, :nexus_id).blank?
       end
 
@@ -126,12 +126,18 @@ module OfferCalculator
       end
 
       def blacklisted?
-        blacklisted_emails = scope.dig(:blacklisted_emails)
         blacklisted_emails.include?(creator&.email) || blacklisted_emails.include?(client&.email)
       end
 
       def organization
         @organization ||= Organizations::Organization.find(Organizations.current_id)
+      end
+
+      def blacklisted_emails
+        @blacklisted_emails ||= OrganizationManager::ScopeService.new(
+          target: client,
+          organization: organization
+        ).fetch(:blacklisted_emails)
       end
     end
   end

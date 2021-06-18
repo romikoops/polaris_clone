@@ -27,7 +27,7 @@ module OfferCalculator
       end
 
       def longest_trucking_time(hubs)
-        return 0 unless request.has_pre_carriage?
+        return 0 unless request.pre_carriage?
 
         hubs_by_distance = request.pickup_address.furthest_hubs(hubs[:origin])
 

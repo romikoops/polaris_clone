@@ -97,8 +97,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
       before do
         FactoryBot.create(:trucking_trucking,
           hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1)
-        allow(request).to receive(:has_pre_carriage?).and_return(false)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(false)
+        allow(request).to receive(:on_carriage?).and_return(false)
       end
 
       it "returns the no truckings" do
@@ -117,8 +117,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
       }
       before do
         allow(request).to receive(:pickup_address).and_return(pickup_address)
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(false)
       end
 
       it "returns the one trucking" do
@@ -142,8 +142,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
           hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1,
           location: origin_trucking_location)
         allow(request).to receive(:pickup_address).and_return(pickup_address)
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(false)
       end
 
       it "returns the one trucking" do
@@ -167,8 +167,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
           hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1,
           location: origin_trucking_location)
         allow(request).to receive(:pickup_address).and_return(pickup_address)
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(false)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(false)
       end
 
       it "returns the one trucking" do

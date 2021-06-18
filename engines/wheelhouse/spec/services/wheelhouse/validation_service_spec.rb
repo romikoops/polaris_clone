@@ -19,12 +19,12 @@ module Wheelhouse
       ]
     end
     let(:scope_content) { {} }
-    let(:query) {
+    let(:query) do
       FactoryBot.build(:journey_query,
         client: user,
         organization: organization,
         load_type: load_type == "cargo_item" ? "lcl" : "fcl")
-    }
+    end
     let(:request) do
       FactoryBot.build(:offer_calculator_request,
         organization: organization,
@@ -39,9 +39,9 @@ module Wheelhouse
         destination_hub: destination_hub,
         client: user)
     end
-    let(:origin) { {nexus_id: origin_hub.nexus_id} }
-    let(:destination) { {nexus_id: destination_hub.nexus_id} }
-    let(:routing) { {origin: origin, destination: destination} }
+    let(:origin) { { nexus_id: origin_hub.nexus_id } }
+    let(:destination) { { nexus_id: destination_hub.nexus_id } }
+    let(:routing) { { origin: origin, destination: destination } }
     let(:load_type) { "cargo_item" }
     let(:cargo_classes) { ["lcl"] }
     let(:final) { false }
@@ -92,7 +92,7 @@ module Wheelhouse
         let(:expected_error_codes) do
           [4016]
         end
-        let(:routing) { {origin: nil, destination: nil} }
+        let(:routing) { { origin: nil, destination: nil } }
         let(:final) { true }
 
         it "returns an array of one error" do
@@ -112,7 +112,7 @@ module Wheelhouse
           let(:expected_error_codes) do
             [4009]
           end
-          let(:scope_content) { {dedicated_pricings_only: true} }
+          let(:scope_content) { { dedicated_pricings_only: true } }
 
           it "returns an no errors" do
             aggregate_failures do
@@ -132,7 +132,7 @@ module Wheelhouse
           let(:expected_error_codes) do
             [4009]
           end
-          let(:scope_content) { {dedicated_pricings_only: true} }
+          let(:scope_content) { { dedicated_pricings_only: true } }
 
           it "returns an array of one error" do
             aggregate_failures do
@@ -241,16 +241,16 @@ module Wheelhouse
           end
 
           let(:origin) { pickup_address }
-          let(:routing) { {origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination} }
+          let(:routing) { { origin: { latitude: origin.latitude, longitude: origin.longitude }, destination: destination } }
 
           before do
             FactoryBot.create(:legacy_max_dimensions_bundle,
               cargo_class: "lcl",
               organization: organization, payload_in_kg: 100,
               mode_of_transport: "truck_carriage")
-            allow(request).to receive(:has_pre_carriage?).and_return(true)
+            allow(request).to receive(:pre_carriage?).and_return(true)
             Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
-              "address_components" => [{"types" => ["premise"]}],
+              "address_components" => [{ "types" => ["premise"] }],
               "address" => origin.geocoded_address,
               "city" => origin.city,
               "country" => origin.country.name,
@@ -281,16 +281,16 @@ module Wheelhouse
           let(:expected_error_codes) do
             [4001]
           end
-          let(:routing) { {origin: {latitude: pickup_address.latitude, longitude: pickup_address.longitude}, destination: destination} }
+          let(:routing) { { origin: { latitude: pickup_address.latitude, longitude: pickup_address.longitude }, destination: destination } }
 
           before do
             FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: "fcl_20",
                                                              organization: organization, payload_in_kg: 80_000)
             FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: "fcl_20", organization: organization,
                                                              payload_in_kg: 30_000, mode_of_transport: "truck_carriage")
-            allow(request).to receive(:has_pre_carriage?).and_return(true)
+            allow(request).to receive(:pre_carriage?).and_return(true)
             Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-              "address_components" => [{"types" => ["premise"]}],
+              "address_components" => [{ "types" => ["premise"] }],
               "address" => pickup_address.geocoded_address,
               "city" => pickup_address.city,
               "country" => pickup_address.country.name,
@@ -309,14 +309,14 @@ module Wheelhouse
         context "when port to door (invalid aggregate on trucking)" do
           before do
             Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
-              "address_components" => [{"types" => ["premise"]}],
+              "address_components" => [{ "types" => ["premise"] }],
               "address" => origin.geocoded_address,
               "city" => origin.city,
               "country" => origin.country.name,
               "country_code" => origin.country.code,
               "postal_code" => origin.zip_code
             ])
-            allow(request).to receive(:has_pre_carriage?).and_return(true)
+            allow(request).to receive(:pre_carriage?).and_return(true)
             FactoryBot.create(:legacy_max_dimensions_bundle,
               aggregate: true,
               organization: organization,
@@ -344,7 +344,7 @@ module Wheelhouse
           end
 
           let(:origin) { pickup_address }
-          let(:routing) { {origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination} }
+          let(:routing) { { origin: { latitude: origin.latitude, longitude: origin.longitude }, destination: destination } }
 
           let(:expected_help_text) do
             [
@@ -375,14 +375,14 @@ module Wheelhouse
           end
 
           let(:origin) { pickup_address }
-          let(:routing) { {origin: {latitude: origin.latitude, longitude: origin.longitude}, destination: destination} }
+          let(:routing) { { origin: { latitude: origin.latitude, longitude: origin.longitude }, destination: destination } }
 
           before do
             FactoryBot.create(:legacy_max_dimensions_bundle, cargo_class: "lcl", organization: organization,
                                                              payload_in_kg: 150, mode_of_transport: "truck_carriage")
 
             Geocoder::Lookup::Test.add_stub([origin.latitude, origin.longitude], [
-              "address_components" => [{"types" => ["premise"]}],
+              "address_components" => [{ "types" => ["premise"] }],
               "address" => origin.geocoded_address,
               "city" => origin.city,
               "country" => origin.country.name,

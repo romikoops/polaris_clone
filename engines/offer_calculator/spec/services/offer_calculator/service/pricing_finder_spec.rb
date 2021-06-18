@@ -12,7 +12,7 @@ RSpec.describe OfferCalculator::Service::PricingFinder do
 
   context "when no trucking exists" do
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
       allow(request).to receive(:pickup_address).and_return(FactoryBot.create(:legacy_address, :gothenburg))
     end
 
@@ -24,8 +24,8 @@ RSpec.describe OfferCalculator::Service::PricingFinder do
   context "when no export local charges exists" do
     before do
       FactoryBot.create(:trucking_trucking, organization: organization)
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
-      allow(request).to receive(:has_on_carriage?).and_return(false)
+      allow(request).to receive(:pre_carriage?).and_return(true)
+      allow(request).to receive(:on_carriage?).and_return(false)
       allow(OfferCalculator::Service::Finders::Truckings).to receive(:prices).and_return(Trucking::Trucking.all)
     end
 
@@ -36,10 +36,11 @@ RSpec.describe OfferCalculator::Service::PricingFinder do
 
   context "when no pricings exists" do
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(false)
-      allow(request).to receive(:has_on_carriage?).and_return(false)
+      allow(request).to receive(:pre_carriage?).and_return(false)
+      allow(request).to receive(:on_carriage?).and_return(false)
       allow(OfferCalculator::Service::Finders::Truckings).to receive(:prices).and_return(Trucking::Trucking.all)
     end
+
     it "raises an error" do
       expect { results }.to raise_error(OfferCalculator::Errors::NoPricingsFound)
     end

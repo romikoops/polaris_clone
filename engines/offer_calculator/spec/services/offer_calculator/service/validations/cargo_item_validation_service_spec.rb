@@ -94,7 +94,7 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
         FactoryBot.create(:legacy_max_dimensions_bundle,
           aggregate: false,
           mode_of_transport: "truck_carriage",

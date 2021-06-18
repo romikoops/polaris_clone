@@ -11,14 +11,20 @@ module OfferCalculator
 
     def perform
       OfferCalculator::Service::OfferCreators::ResultSetBuilder.results_set(
-        request: request, offers: sorted_offers
-      ).tap do |offer|
+        request: request, offers: offers
+      ).tap do |_offer|
         update_status(status: "completed")
       end
-    rescue OfferCalculator::Errors::Failure => error
-      persist_error(error: error)
+    rescue OfferCalculator::Errors::Failure => e
+      persist_error(error: e)
       update_status(status: "failed")
-      raise error unless async
+      raise e unless async
+    end
+
+    def offers
+      @offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
+        request: request, charges: charges, schedules: schedules
+      )
     end
 
     def hubs
@@ -35,12 +41,6 @@ module OfferCalculator
     end
 
     delegate :async, :organization, :client, :creator, :delay, :cargo_ready_date, :result_set, to: :request
-
-    def sorted_offers
-      @sorted_offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
-        request: request, charges: charges, schedules: schedules
-      )
-    end
 
     def charges
       @charges ||= OfferCalculator::Service::ChargeCalculator.charges(

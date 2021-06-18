@@ -63,8 +63,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     let(:raw_objects) { pricing_group_1 | pricing_group_2 }
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(false)
-      allow(request).to receive(:has_on_carriage?).and_return(false)
+      allow(request).to receive(:pre_carriage?).and_return(false)
+      allow(request).to receive(:on_carriage?).and_return(false)
     end
 
     it "returns two sorted offers" do
@@ -82,8 +82,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
-      allow(request).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
+      allow(request).to receive(:on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do
@@ -125,8 +125,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
-      allow(request).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
+      allow(request).to receive(:on_carriage?).and_return(true)
     end
 
     context "with end to end and pricings and all permutations" do
@@ -135,8 +135,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       }
 
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
       end
 
       it "returns two sorted offers" do
@@ -151,8 +151,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       let(:carrier_lock) { true }
 
       before do
-        allow(request).to receive(:has_pre_carriage?).and_return(true)
-        allow(request).to receive(:has_on_carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
       end
 
       it "returns two sorted offers" do

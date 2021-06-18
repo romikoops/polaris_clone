@@ -8,18 +8,18 @@ RSpec.describe OfferCalculator::Service::PricingManipulator do
   let(:cargo_classes) { ["lcl"] }
   let(:trip) { FactoryBot.create(:legacy_trip) }
   let(:schedules) { [OfferCalculator::Schedule.from_trip(trip)] }
-  let(:results) {
+  let(:results) do
     described_class.manipulated_pricings(
       request: request,
       associations: associations,
       schedules: schedules
     )
-  }
+  end
 
   context "when no trucking exists" do
-    before { allow(request).to receive(:has_pre_carriage?).and_return(true) }
+    before { allow(request).to receive(:pre_carriage?).and_return(true) }
 
-    let(:associations) { {truckings: Trucking::Trucking.none} }
+    let(:associations) { { truckings: Trucking::Trucking.none } }
 
     it "returns the one pricing" do
       expect { results }.to raise_error(OfferCalculator::Errors::NoManipulatedPreCarriageFound)
@@ -28,13 +28,13 @@ RSpec.describe OfferCalculator::Service::PricingManipulator do
 
   context "when no export local charges exists" do
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
       allow(OfferCalculator::Service::Manipulators::Truckings).to receive(:results).and_return([trucking_result])
     end
 
     let(:trucking) { FactoryBot.create(:trucking_trucking) }
     let(:trucking_result) { FactoryBot.build(:manipulator_result, original: trucking, result: trucking.as_json) }
-    let(:associations) { {truckings: Trucking::Trucking.all, local_charges: Legacy::LocalCharge.none} }
+    let(:associations) { { truckings: Trucking::Trucking.all, local_charges: Legacy::LocalCharge.none } }
 
     it "returns the one pricing" do
       expect { results }.to raise_error(OfferCalculator::Errors::NoManipulatedExportFeesFound)
@@ -42,7 +42,7 @@ RSpec.describe OfferCalculator::Service::PricingManipulator do
   end
 
   context "when no pricings exists" do
-    let(:associations) { {pricings: Pricings::Pricing.none} }
+    let(:associations) { { pricings: Pricings::Pricing.none } }
 
     it "raises an error" do
       expect { results }.to raise_error(OfferCalculator::Errors::NoManipulatedPricingsFound)

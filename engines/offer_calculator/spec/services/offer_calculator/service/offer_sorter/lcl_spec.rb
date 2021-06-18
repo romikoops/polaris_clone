@@ -11,7 +11,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   let(:cargo_trait) { :lcl }
   let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
 
-  let(:pricing_1) do
+  let(:pricing1) do
     FactoryBot.create(:lcl_pricing,
       organization: organization,
       itinerary: itinerary,
@@ -19,7 +19,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       expiration_date: 20.days.from_now,
       tenant_vehicle: tenant_vehicle)
   end
-  let(:pricing_2) do
+  let(:pricing2) do
     FactoryBot.create(:lcl_pricing,
       organization: organization,
       itinerary: itinerary,
@@ -28,7 +28,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       tenant_vehicle: tenant_vehicle)
   end
   let(:pricings) do
-    [pricing_1, pricing_2]
+    [pricing1, pricing2]
   end
 
   let(:charges) do
@@ -45,7 +45,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   }
 
   context "with no valid responses" do
-    let(:raw_objects) { [pricing_1, pricing_2] }
+    let(:raw_objects) { [pricing1, pricing2] }
     let(:trips) do
       {trips: []}
     end
@@ -56,7 +56,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   end
 
   context "with only freight and pricings split over period" do
-    let(:raw_objects) { [pricing_1, pricing_2] }
+    let(:raw_objects) { [pricing1, pricing2] }
     let(:trips) do
       FactoryBot.build(:trip_generator,
         organization: organization,
@@ -66,8 +66,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(false)
-      allow(request).to receive(:has_on_carriage?).and_return(false)
+      allow(request).to receive(:pre_carriage?).and_return(false)
+      allow(request).to receive(:on_carriage?).and_return(false)
     end
 
     it "returns two sorted offers" do
@@ -81,7 +81,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
 
   context "with end to end and pricings split by period" do
     let(:raw_objects) do
-      [pricing_1, pricing_2] | local_charges | truckings
+      [pricing1, pricing2] | local_charges | truckings
     end
     let(:trips) do
       FactoryBot.build(:trip_generator,
@@ -92,8 +92,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     end
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
-      allow(request).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
+      allow(request).to receive(:on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do
@@ -106,50 +106,50 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   end
 
   context "with parallel routes" do
-    let(:pricing_2) do
+    let(:pricing2) do
       FactoryBot.create(:lcl_pricing,
         organization: organization,
-        itinerary: itinerary_2,
-        tenant_vehicle: tenant_vehicle_2)
+        itinerary: itinerary2,
+        tenant_vehicle: tenant_vehicle2)
     end
     let(:raw_objects) do
-      [pricing_1, pricing_2] | local_charges | local_charges_2 | truckings | truckings_2
+      [pricing1, pricing2] | local_charges | local_charges2 | truckings | truckings2
     end
-    let(:itinerary_2) {
+    let(:itinerary2) {
       FactoryBot.create(:felixstowe_shanghai_itinerary, organization: organization)
     }
-    let(:tenant_vehicle_2) {
+    let(:tenant_vehicle2) {
       FactoryBot.create(:legacy_tenant_vehicle, name: "tv_2", organization: organization)
     }
-    let(:local_charges_2) do
+    let(:local_charges2) do
       cargo_classes.flat_map do |cc|
         %w[import export].map do |direction|
           FactoryBot.create(:legacy_local_charge,
             direction: direction,
-            hub: direction == "export" ? itinerary_2.origin_hub : itinerary_2.destination_hub,
+            hub: direction == "export" ? itinerary2.origin_hub : itinerary2.destination_hub,
             load_type: cc,
             organization: organization,
-            tenant_vehicle: tenant_vehicle_2)
+            tenant_vehicle: tenant_vehicle2)
         end
       end
     end
-    let(:truckings_2) do
+    let(:truckings2) do
       cargo_classes.flat_map do |cargo_class|
         [FactoryBot.create(:trucking_with_unit_rates,
-          hub: itinerary_2.origin_hub,
+          hub: itinerary2.origin_hub,
           organization: organization,
           cargo_class: cargo_class,
           load_type: load_type,
           truck_type: truck_type,
-          tenant_vehicle: tenant_vehicle_2,
+          tenant_vehicle: tenant_vehicle2,
           location: pickup_trucking_location),
           FactoryBot.create(:trucking_with_unit_rates,
-            hub: itinerary_2.destination_hub,
+            hub: itinerary2.destination_hub,
             organization: organization,
             cargo_class: cargo_class,
             load_type: load_type,
             truck_type: truck_type,
-            tenant_vehicle: tenant_vehicle_2,
+            tenant_vehicle: tenant_vehicle2,
             location: delivery_trucking_location,
             carriage: "on")]
       end
@@ -157,14 +157,14 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
     let(:trips) do
       FactoryBot.build(:trip_generator,
         organization: organization,
-        itineraries: [itinerary, itinerary_2],
-        tenant_vehicles: [tenant_vehicle, tenant_vehicle_2],
+        itineraries: [itinerary, itinerary2],
+        tenant_vehicles: [tenant_vehicle, tenant_vehicle2],
         days: [1, 7, 10, 15])
     end
 
     before do
-      allow(request).to receive(:has_pre_carriage?).and_return(true)
-      allow(request).to receive(:has_on_carriage?).and_return(true)
+      allow(request).to receive(:pre_carriage?).and_return(true)
+      allow(request).to receive(:on_carriage?).and_return(true)
     end
 
     it "returns two sorted offers" do

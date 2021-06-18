@@ -11,10 +11,10 @@ RSpec.describe OfferCalculator::Request do
       origin_hub: origin_hub,
       destination_hub: destination_hub)
   end
-  let(:pickup_address) {}
-  let(:delivery_address) {}
-  let(:origin_hub) {}
-  let(:destination_hub) {}
+  let(:pickup_address) { nil }
+  let(:delivery_address) { nil }
+  let(:origin_hub) { nil }
+  let(:destination_hub) { nil }
   let(:query) { FactoryBot.create(:journey_query) }
   let(:persist) { false }
   let(:request) { described_class.new(query: query, params: params, persist: persist) }
@@ -25,12 +25,12 @@ RSpec.describe OfferCalculator::Request do
     end
   end
 
-  describe ".has_pre_carriage?" do
+  describe ".pre_carriage?" do
     context "when there is pre carriage" do
       let(:pickup_address) { FactoryBot.create(:legacy_address) }
 
       it "returns true when there is pre carriage" do
-        expect(request.has_pre_carriage?).to eq(true)
+        expect(request.pre_carriage?).to eq(true)
       end
     end
 
@@ -38,17 +38,17 @@ RSpec.describe OfferCalculator::Request do
       let(:origin_hub) { FactoryBot.create(:legacy_hub) }
 
       it "returns false when there is no pre carriage" do
-        expect(request.has_pre_carriage?).to eq(false)
+        expect(request.pre_carriage?).to eq(false)
       end
     end
   end
 
-  describe ".has_on_carriage?" do
+  describe ".on_carriage?" do
     context "when there is on carriage" do
       let(:delivery_address) { FactoryBot.create(:legacy_address) }
 
       it "returns true when there is on carriage" do
-        expect(request.has_on_carriage?).to eq(true)
+        expect(request.on_carriage?).to eq(true)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe OfferCalculator::Request do
       let(:destination_hub) { FactoryBot.create(:legacy_hub) }
 
       it "returns false when there is no on carriage" do
-        expect(request.has_on_carriage?).to eq(false)
+        expect(request.on_carriage?).to eq(false)
       end
     end
   end
