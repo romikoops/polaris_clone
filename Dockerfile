@@ -39,7 +39,7 @@ RUN npm install -g 'mjml@4.3.1'
 WORKDIR /app
 
 # Collect all internal gems and engines
-FROM busybox:1.32 AS dependencies
+FROM busybox:1.33.1 AS dependencies
 
 COPY . /app
 RUN find /app -type f ! -name "Gemfile*" ! -name "*.gemspec" ! -name ".rails-version" -delete
