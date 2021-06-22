@@ -3,9 +3,10 @@
 module Api
   module V2
     class ScopeSerializer < Api::ApplicationSerializer
-      attributes %i[links id loginMandatory]
+      attributes %i[links id auth_methods loginSamlText loginMandatory]
 
       attribute :loginMandatory, &:closed_shop
+      attribute :loginSamlText, &:saml_text
     end
   end
 end

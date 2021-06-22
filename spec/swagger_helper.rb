@@ -1123,6 +1123,15 @@ RSpec.configure do |config|
                     nullable: true
                   }
                 }
+              },
+              authMethods: {
+                type: "array",
+                description: "This contains the auth methods this Organization accepts",
+                schema: "string"
+              },
+              loginSamlText: {
+                type: "string",
+                description: "Custom text to be displayed in the 'Log in Via SAML' button"
               }
             }
           },
