@@ -8,23 +8,6 @@ on:
     branches: [master]
 
 jobs:
-  lint:
-    name: Lint Code Base
-    runs-on: ubuntu-20.04
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: github/super-linter@v4.2.2
-        env:
-          DEFAULT_BRANCH: master
-          FILTER_REGEX_EXCLUDE: "^(.*/spec/api/api/.*|db/data_schema.rb|db/structure.sql)$"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: /
-          RUBY_CONFIG_FILE: .rubocop.yml
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_DOCKERFILE: false
-
   test-gems:
     name: Test / Gems
     runs-on: ubuntu-20.04
