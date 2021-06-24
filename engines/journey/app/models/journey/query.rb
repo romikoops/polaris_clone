@@ -24,7 +24,7 @@ module Journey
     validates :load_type, presence: true
 
     validates :delivery_date, date: { after: :cargo_ready_date }
-    validates :cargo_ready_date, date: { after: proc { Time.zone.now } }
+    validates :cargo_ready_date, date: { after_or_equal_to: proc { |obj| obj.created_at || Time.zone.now } }
 
     enum load_type: {
       lcl: "lcl",

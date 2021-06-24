@@ -126,5 +126,43 @@ module Carta
         end
       end
     end
+
+    describe "#reverse_geocode" do
+      let(:latitude) { 10.5 }
+      let(:longitude) { 120.7 }
+
+      context "when carta responds with 200" do
+        before do
+          stubs.get("/lookup?id=itsmycargo:locode:ABC123") do
+            [200, { 'Content-Type': "application/json" }, lookup_resp]
+          end
+          stubs.get("/reverse_geocode?latitude=#{latitude}&longitude=#{longitude}") do
+            [
+              200,
+              { 'Content-Type': "application/json" },
+              '{"data": [{"id": "itsmycargo:locode:ABC123"}] }'
+            ]
+          end
+        end
+
+        it "calls the carta /reverse_geocode endpoint with the argument latitiude and longitude as params", :aggregate_failures do
+          expect(described_class.reverse_geocode(latitude: latitude, longitude: longitude)).to eq(result)
+          stubs.verify_stubbed_calls
+        end
+      end
+
+      context "when carta responds with 503" do
+        before do
+          stubs.get("/reverse_geocode?latitude=#{latitude}&longitude=#{longitude}") do
+            server_error_response
+          end
+        end
+
+        it "raises an error when the service is unavailable", :aggregate_failures do
+          expect { described_class.reverse_geocode(latitude: latitude, longitude: longitude) }.to raise_error(Carta::Client::ServiceUnavailable)
+          stubs.verify_stubbed_calls
+        end
+      end
+    end
   end
 end

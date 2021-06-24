@@ -23,10 +23,18 @@ module Carta
 
         raise ServiceUnavailable unless response.success?
 
-        id = JSON.parse(response.body).dig("data", 0, "id")
-        raise LocationNotFound if id.blank?
+        suggestion_to_result(response: response)
+      end
 
-        lookup(id: id)
+      def reverse_geocode(latitude:, longitude:)
+        response = connection.get("reverse_geocode") do |req|
+          req.params["latitude"] = latitude
+          req.params["longitude"] = longitude
+        end
+
+        raise ServiceUnavailable unless response.success?
+
+        suggestion_to_result(response: response)
       end
 
       private
@@ -35,6 +43,13 @@ module Carta
         raise LocationNotFound if params.blank?
 
         Carta::Result.new(params.transform_keys(&:underscore))
+      end
+
+      def suggestion_to_result(response:)
+        id = JSON.parse(response.body).dig("data", 0, "id")
+        raise LocationNotFound if id.blank?
+
+        lookup(id: id)
       end
 
       def connection
