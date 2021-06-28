@@ -25,16 +25,16 @@ RSpec.describe ExcelDataServices::DataFrames::Combinators::Truckings::Fees do
        "direction" => "export",
        "currency" => "EUR",
        "rate_basis" => "PER_SHIPMENT",
-       "ton" => Float::NAN,
-       "cbm" => Float::NAN,
-       "kg" => Float::NAN,
-       "item" => Float::NAN,
+       "ton" => nil,
+       "cbm" => nil,
+       "kg" => nil,
+       "item" => nil,
        "shipment" => 120.0,
-       "bill" => Float::NAN,
-       "container" => Float::NAN,
-       "minimum" => Float::NAN,
-       "wm" => Float::NAN,
-       "percentage" => Float::NAN,
+       "bill" => nil,
+       "container" => nil,
+       "minimum" => nil,
+       "wm" => nil,
+       "percentage" => nil,
        "carriage" => "pre" }]
   end
 
@@ -44,7 +44,7 @@ RSpec.describe ExcelDataServices::DataFrames::Combinators::Truckings::Fees do
     end
 
     it "returns successfully" do
-      expect(result.frame.to_a.first.inspect).to eq(expected_result.first.inspect)
+      expect(result.frame).to eq(Rover::DataFrame.new(expected_result))
     end
   end
 end

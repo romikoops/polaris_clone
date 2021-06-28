@@ -41,6 +41,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
     shared_examples_for "successfully uploads the sample sheet" do
       it "returns successfully", :aggregate_failures do
         expect(hubs.pluck(:hub_code)).to match_array(%w[DEHAM AUSYD])
+        expect(hubs.pluck(:terminal)).to match_array([nil, "North Harbour"])
         expect(nexii.pluck(:locode)).to match_array(%w[DEHAM AUSYD])
       end
     end

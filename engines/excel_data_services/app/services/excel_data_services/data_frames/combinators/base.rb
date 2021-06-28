@@ -5,6 +5,7 @@ module ExcelDataServices
     module Combinators
       class Base
         attr_reader :coordinator_state
+
         delegate :file, to: :coordinator_state
 
         DefaultSheetIteration = Struct.new(:default_state, keyword_init: true)
@@ -40,15 +41,15 @@ module ExcelDataServices
         end
 
         def frame
-          @frame ||= iterations.inject(Rover::DataFrame.new) { |memo, iteration|
+          @frame ||= iterations.inject(Rover::DataFrame.new) do |memo, iteration|
             memo.concat(combined_state_frames(iteration: iteration))
-          }
+          end
         end
 
         def errors
-          @errors ||= iterations.inject([]) { |memo, iteration|
+          @errors ||= iterations.inject([]) do |memo, iteration|
             memo.concat(combined_state_errors(iteration: iteration))
-          }
+          end
         end
 
         def combined_state_frames(iteration:)

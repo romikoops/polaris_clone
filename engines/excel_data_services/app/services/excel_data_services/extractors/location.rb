@@ -22,13 +22,11 @@ module ExcelDataServices
       end
 
       def batched_locations
-        batched_frame = Rover::DataFrame.new
-        primaries.each_slice(BATCH_SIZE) do |primary_batch|
+        primaries.each_slice(BATCH_SIZE).each_with_object(blank_frame) do |primary_batch, batched_frame|
           batched_frame.concat(Rover::DataFrame.new(filtered_locations.where(data: primary_batch).select(
             "trucking_locations.id as location_id, trucking_locations.data"
           )))
         end
-        batched_frame
       end
 
       def city_locations
@@ -74,6 +72,16 @@ module ExcelDataServices
       def geometry_from_row(row:)
         prepared_data = GeoDataPreparer.data(identifier: identifier, raw_data: row)
         ::Locations::LocationSearcher.get(identifier: identifier).id(data: prepared_data)
+      end
+
+      def blank_frame
+        Rover::DataFrame.new([], types: { "location_id" => :object, "zone" => :object })
+      end
+
+      def frame_types
+        return { "zone" => :object} if identifier == "city"
+
+        { "primary" => :object }
       end
     end
   end

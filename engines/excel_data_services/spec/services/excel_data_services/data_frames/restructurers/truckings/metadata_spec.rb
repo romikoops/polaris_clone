@@ -48,7 +48,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Metadata
        "tenant_vehicle_id" => 1,
        "truck_type" => "default",
        "load_meterage" => expected_load_meterage,
-       "identifier_modifier" => Float::NAN,
+       "identifier_modifier" => nil,
        "modifier" => "cbm_kg",
        "validity" => "[#{Time.zone.today}, #{Time.zone.today + 1.year})" }]
   end
@@ -69,7 +69,7 @@ RSpec.describe ExcelDataServices::DataFrames::Restructurers::Truckings::Metadata
   describe ".data" do
     shared_examples_for "Restructuring the Fees Sheet" do
       it "returns a single metadata row" do
-        expect(result.to_a.first.inspect).to match(expected_result.first.inspect)
+        expect(result.to_a.first).to match(expected_result.first)
       end
     end
     let(:result) do

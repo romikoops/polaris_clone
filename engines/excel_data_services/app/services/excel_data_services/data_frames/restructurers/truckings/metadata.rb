@@ -38,7 +38,7 @@ module ExcelDataServices
               .transform_keys { |key| key.delete_prefix("load_meterage_") }
               .tap do |datum|
                 legacy_limit_type = %w[area height].find { |type| row["load_meterage_#{type}"].present? }
-                datum["hard_limit"] = datum["hard_limit"].positive?
+                datum["hard_limit"] = datum["hard_limit"].present?
                 datum["stackable_type"] ||= legacy_limit_type
                 datum["stackable_limit"] ||= row["load_meterage_#{legacy_limit_type}"]
               end

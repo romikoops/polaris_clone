@@ -55,6 +55,8 @@ module ExcelDataServices
           def postal_code_location_data
             non_validated_country_codes.reduce(Rover::DataFrame.new) do |memo, country_code|
               locations = postal_code_rows[postal_code_rows["country_code"] == country_code][%w[primary country_code]]
+              next memo if locations.empty?
+
               locations["data"] = locations.delete("primary")
               locations["query"] = "postal_code"
 
@@ -69,6 +71,7 @@ module ExcelDataServices
           def valid_postal_code_frame
             country_codes.reduce(Rover::DataFrame.new) do |memo, country_code|
               country_rows = postal_code_rows[postal_code_rows["country_code"] == country_code]
+              next memo if country_rows.empty?
 
               if validated_country_codes.include?(country_code)
                 country_rows = country_rows.inner_join(

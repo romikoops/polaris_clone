@@ -25,6 +25,8 @@ module ExcelDataServices
         end
 
         def error_rows
+          return frame.to_a unless frame.include?(required_key)
+
           frame[frame[required_key].missing].to_a
         end
 

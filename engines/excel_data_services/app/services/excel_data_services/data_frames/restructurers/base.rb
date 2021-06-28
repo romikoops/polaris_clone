@@ -16,7 +16,7 @@ module ExcelDataServices
         end
 
         def perform
-          Rover::DataFrame.new(restructured_data)
+          Rover::DataFrame.new(restructured_data, types: column_types)
         end
 
         def trimmed_row(row:)
@@ -25,6 +25,14 @@ module ExcelDataServices
             result.delete(key) if result[key].to_s == "NaN"
           end
           result
+        end
+
+        def column_types
+          data_provider = self.class.name.gsub("Restructurers", "DataProviders").safe_constantize
+
+          return {} unless data_provider
+
+          data_provider.column_types
         end
       end
     end
