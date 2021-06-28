@@ -5,7 +5,9 @@ require "active_support/core_ext/digest/uuid"
 module Legacy
   class Itinerary < ApplicationRecord
     self.table_name = "itineraries"
+
     UUID_V5_NAMESPACE = "473a6d88-f6d4-494c-9c84-ede1942f93b8"
+
     include PgSearch::Model
 
     MODES_OF_TRANSPORT = %w[
@@ -484,6 +486,7 @@ end
 #  index_itineraries_on_origin_hub_id       (origin_hub_id)
 #  index_itineraries_on_sandbox_id          (sandbox_id)
 #  index_itineraries_on_tenant_id           (tenant_id)
+#  itinerary_upsert                         (upsert_id) UNIQUE
 #
 # Foreign Keys
 #

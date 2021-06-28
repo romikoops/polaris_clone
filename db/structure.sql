@@ -10305,6 +10305,13 @@ CREATE INDEX index_versions_on_item_type_and_item_id ON public.versions USING bt
 
 
 --
+-- Name: itinerary_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX itinerary_upsert ON public.itineraries USING btree (upsert_id);
+
+
+--
 -- Name: ledger_delta_target_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12229,6 +12236,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210512092712'),
 ('20210615093819'),
 ('20210624093825'),
+('20210624095931'),
 ('20210624143502'),
 ('20210624143634'),
 ('20210625072154');

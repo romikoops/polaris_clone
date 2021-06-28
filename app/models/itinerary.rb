@@ -447,6 +447,7 @@ end
 #  index_itineraries_on_origin_hub_id       (origin_hub_id)
 #  index_itineraries_on_sandbox_id          (sandbox_id)
 #  index_itineraries_on_tenant_id           (tenant_id)
+#  itinerary_upsert                         (upsert_id) UNIQUE
 #
 # Foreign Keys
 #
