@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/digest/uuid"
+
 module Legacy
   class Itinerary < ApplicationRecord
     self.table_name = "itineraries"
-
+    UUID_V5_NAMESPACE = "473a6d88-f6d4-494c-9c84-ede1942f93b8"
     include PgSearch::Model
 
     MODES_OF_TRANSPORT = %w[
@@ -31,14 +33,23 @@ module Legacy
 
     validate :must_have_stops
     pg_search_scope :list_search, against: %i[name], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     pg_search_scope :mot_search, against: %i[mode_of_transport], using: {
-      tsearch: {prefix: true}
+      tsearch: { prefix: true }
     }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
-    validates :origin_hub_id,
-      uniqueness: {scope: %i[destination_hub_id organization_id transshipment mode_of_transport]}
+    validates :upsert_id, uniqueness: true
+
+    before_validation :generate_upsert_id
+
+    def generate_upsert_id
+      return if [origin_hub_id, destination_hub_id, organization_id, mode_of_transport].any?(&:blank?)
+
+      # rubocop:disable GitHub/InsecureHashAlgorithm
+      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
+      # rubocop:enable GitHub/InsecureHashAlgorithm
+    end
 
     def generate_schedules_from_sheet(stops:,
       start_date:,
@@ -396,15 +407,15 @@ module Legacy
 
       itineraries = shipment.organization.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
-      {itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs}
+      { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
     end
 
     def self.update_hubs
       its = Itinerary.all
       its.each do |it|
-        hub_arr = it.stops.order(:index).map { |s|
-          {hub_id: s.hub_id, index: s.index}
-        }
+        hub_arr = it.stops.order(:index).map do |s|
+          { hub_id: s.hub_id, index: s.index }
+        end
         it.hubs = hub_arr
         it.save!
       end
@@ -417,8 +428,8 @@ module Legacy
             include: {
               hub: {
                 include: {
-                  nexus: {only: %i[id name]},
-                  address: {only: %i[longitude latitude geocoded_address]}
+                  nexus: { only: %i[id name] },
+                  address: { only: %i[longitude latitude geocoded_address] }
                 },
                 only: %i[id name]
               }
@@ -462,6 +473,7 @@ end
 #  origin_hub_id      :bigint
 #  sandbox_id         :uuid
 #  tenant_id          :integer
+#  upsert_id          :uuid
 #
 # Indexes
 #

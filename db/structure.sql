@@ -1753,7 +1753,8 @@ CREATE TABLE public.itineraries (
     transshipment character varying,
     origin_hub_id bigint,
     destination_hub_id bigint,
-    organization_id uuid
+    organization_id uuid,
+    upsert_id uuid
 );
 
 
@@ -12210,6 +12211,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210507103512'),
 ('20210507132258'),
 ('20210512092712'),
-('20210615093819');
+('20210615093819'),
+('20210624093825');
 
 

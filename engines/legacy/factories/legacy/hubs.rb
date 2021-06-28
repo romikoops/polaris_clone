@@ -74,9 +74,9 @@ def factory_hub_from_name(name_string:, organization:, locode: nil, mot: "ocean"
   existing_hubs = existing_hubs.where(hub_type: mot) if mot.present?
   existing_hub = existing_hubs.first
   existing_hub || if name_string && %w[gothenburg shanghai hamburg felixstowe].include?(name_string.downcase)
-                    FactoryBot.build(:legacy_hub, name_string.downcase.to_sym, hub_type: mot, hub_code: locode, organization: organization)
+                    FactoryBot.create(:legacy_hub, name_string.downcase.to_sym, hub_type: mot, hub_code: locode, organization: organization)
                   else
-                    FactoryBot.build(:legacy_hub, name: name_string, hub_type: mot, hub_code: locode, organization: organization)
+                    FactoryBot.create(:legacy_hub, name: name_string, hub_type: mot, hub_code: locode, organization: organization)
            end
 end
 

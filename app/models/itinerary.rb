@@ -436,6 +436,7 @@ end
 #  origin_hub_id      :bigint
 #  sandbox_id         :uuid
 #  tenant_id          :integer
+#  upsert_id          :uuid
 #
 # Indexes
 #
