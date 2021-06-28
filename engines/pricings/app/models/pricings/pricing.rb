@@ -36,6 +36,8 @@ module Pricings
 
     before_validation :set_validity
 
+    acts_as_paranoid
+
     scope :current, -> { where("validity @> CURRENT_DATE") }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
     scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: {mode_of_transport: mot.downcase}) }
@@ -103,6 +105,7 @@ end
 #
 #  id                :uuid             not null, primary key
 #  cargo_class       :string
+#  deleted_at        :datetime
 #  effective_date    :datetime
 #  expiration_date   :datetime
 #  internal          :boolean          default(FALSE)
@@ -126,6 +129,7 @@ end
 # Indexes
 #
 #  index_pricings_pricings_on_cargo_class        (cargo_class)
+#  index_pricings_pricings_on_deleted_at         (deleted_at)
 #  index_pricings_pricings_on_group_id           (group_id)
 #  index_pricings_pricings_on_itinerary_id       (itinerary_id)
 #  index_pricings_pricings_on_legacy_user_id     (legacy_user_id)

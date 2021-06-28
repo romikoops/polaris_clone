@@ -81,7 +81,7 @@ module ExcelDataServices
           number_deleted: 0
         }
 
-        if data_record.destroyed?
+        if data_record.destroyed? || data_record.respond_to?(:deleted_at) && data_record.deleted_at?
           @stats[descriptor][:number_deleted] += 1
         elsif !data_record.valid?
           add_error_to_stats(data_record: data_record, row_nr: row_nr)

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
@@ -9,6 +8,8 @@ module Pricings
     belongs_to :rate_basis, class_name: "::Pricings::RateBasis"
     belongs_to :hw_rate_basis, class_name: "::Pricings::RateBasis", optional: true
     belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
+
+    acts_as_paranoid
 
     def to_fee_hash
       return if charge_category.blank?
@@ -52,6 +53,7 @@ end
 #  id                 :uuid             not null, primary key
 #  base               :decimal(, )
 #  currency_name      :string
+#  deleted_at         :datetime
 #  hw_threshold       :decimal(, )
 #  metadata           :jsonb
 #  min                :decimal(, )
@@ -71,6 +73,7 @@ end
 #
 # Indexes
 #
+#  index_pricings_fees_on_deleted_at       (deleted_at)
 #  index_pricings_fees_on_organization_id  (organization_id)
 #  index_pricings_fees_on_pricing_id       (pricing_id)
 #  index_pricings_fees_on_sandbox_id       (sandbox_id)
