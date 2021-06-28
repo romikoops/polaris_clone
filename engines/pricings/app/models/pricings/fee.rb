@@ -1,7 +1,12 @@
 # frozen_string_literal: true
+
+require "active_support/core_ext/digest/uuid"
 module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
+
+    UUID_V5_NAMESPACE = "69a77639-079e-4dbd-bea8-9e527b34c412"
+
     has_paper_trail
     belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :pricing, class_name: "::Pricings::Pricing"
@@ -9,6 +14,9 @@ module Pricings
     belongs_to :hw_rate_basis, class_name: "::Pricings::RateBasis", optional: true
     belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
 
+    before_validation :generate_upsert_id
+
+    validates_uniqueness_of :upsert_id
     acts_as_paranoid
 
     def to_fee_hash
@@ -43,6 +51,12 @@ module Pricings
     def fee_name_and_code
       "#{fee_code&.upcase} - #{fee_name}"
     end
+
+    def generate_upsert_id
+      # rubocop:disable GitHub/InsecureHashAlgorithm
+      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [pricing_id, charge_category_id, organization_id].map(&:to_s).join)
+      # rubocop:enable GitHub/InsecureHashAlgorithm
+    end
   end
 end
 
@@ -70,6 +84,7 @@ end
 #  rate_basis_id      :uuid
 #  sandbox_id         :uuid
 #  tenant_id          :bigint
+#  upsert_id          :uuid
 #
 # Indexes
 #
@@ -78,6 +93,7 @@ end
 #  index_pricings_fees_on_pricing_id       (pricing_id)
 #  index_pricings_fees_on_sandbox_id       (sandbox_id)
 #  index_pricings_fees_on_tenant_id        (tenant_id)
+#  index_pricings_fees_on_upsert_id        (upsert_id)
 #
 # Foreign Keys
 #

@@ -3119,7 +3119,8 @@ CREATE TABLE public.pricings_fees (
     sandbox_id uuid,
     metadata jsonb DEFAULT '{}'::jsonb,
     organization_id uuid,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    upsert_id uuid
 );
 
 
@@ -3196,7 +3197,8 @@ CREATE TABLE public.pricings_pricings (
     organization_id uuid,
     user_id uuid,
     vm_rate numeric,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    upsert_id uuid
 );
 
 
@@ -8548,6 +8550,13 @@ CREATE INDEX index_pricings_fees_on_tenant_id ON public.pricings_fees USING btre
 
 
 --
+-- Name: index_pricings_fees_on_upsert_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pricings_fees_on_upsert_id ON public.pricings_fees USING btree (upsert_id);
+
+
+--
 -- Name: index_pricings_margins_on_applicable_type_and_applicable_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8734,6 +8743,13 @@ CREATE INDEX index_pricings_pricings_on_tenant_id ON public.pricings_pricings US
 --
 
 CREATE INDEX index_pricings_pricings_on_tenant_vehicle_id ON public.pricings_pricings USING btree (tenant_vehicle_id);
+
+
+--
+-- Name: index_pricings_pricings_on_upsert_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pricings_pricings_on_upsert_id ON public.pricings_pricings USING btree (upsert_id);
 
 
 --
@@ -12239,6 +12255,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210624095931'),
 ('20210624143502'),
 ('20210624143634'),
-('20210625072154');
+('20210624143755'),
+('20210625072154'),
+('20210628083535'),
+('20210628083553');
 
 

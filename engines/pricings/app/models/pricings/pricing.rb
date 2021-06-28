@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/digest/uuid"
+
 module Pricings
   class Pricing < ApplicationRecord
     WM_RATIO_LOOKUP = {ocean: 1000,
@@ -8,6 +10,8 @@ module Pricings
                        truck: 333}.freeze
     attr_accessor :transient_marked_as_old
     self.ignored_columns = ["disabled"]
+
+    UUID_V5_NAMESPACE = "0411d7c3-b309-4964-9bed-1ef2e470a1df"
 
     has_paper_trail
 
@@ -34,7 +38,7 @@ module Pricings
         transshipment ]
     }
 
-    before_validation :set_validity
+    before_validation :set_validity, :generate_upsert_id
 
     acts_as_paranoid
 
@@ -96,6 +100,16 @@ module Pricings
     def set_validity
       self.validity = Range.new(effective_date.to_date, expiration_date.to_date)
     end
+
+    def generate_upsert_id
+      # rubocop:disable GitHub/InsecureHashAlgorithm
+      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [itinerary_id,
+        tenant_vehicle_id,
+        cargo_class,
+        group_id,
+        organization_id].map(&:to_s).join)
+      # rubocop:enable GitHub/InsecureHashAlgorithm
+    end
   end
 end
 
@@ -124,6 +138,7 @@ end
 #  sandbox_id        :uuid
 #  tenant_id         :bigint
 #  tenant_vehicle_id :integer
+#  upsert_id         :uuid
 #  user_id           :uuid
 #
 # Indexes
@@ -138,6 +153,7 @@ end
 #  index_pricings_pricings_on_sandbox_id         (sandbox_id)
 #  index_pricings_pricings_on_tenant_id          (tenant_id)
 #  index_pricings_pricings_on_tenant_vehicle_id  (tenant_vehicle_id)
+#  index_pricings_pricings_on_upsert_id          (upsert_id)
 #  index_pricings_pricings_on_user_id            (user_id)
 #  index_pricings_pricings_on_validity           (validity) USING gist
 #
