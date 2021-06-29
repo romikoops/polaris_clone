@@ -38,19 +38,19 @@ module ResultFormatter
       let(:expected_descriptions) do
         [nil,
           "Trucking pre",
-          "1 x Fcl 20",
+          "1 x FCL 20",
           pre_carriage_line_items_with_cargo.first.description,
           "Export",
-          "1 x Fcl 20",
+          "1 x FCL 20",
           origin_transfer_line_items_with_cargo.first.description,
           "Cargo",
-          "1 x Fcl 20",
+          "1 x FCL 20",
           freight_line_items_with_cargo.first.description,
           "Import",
-          "1 x Fcl 20",
+          "1 x FCL 20",
           destination_transfer_line_items_with_cargo.first.description,
           "Trucking on",
-          "1 x Fcl 20",
+          "1 x FCL 20",
           on_carriage_line_items_with_cargo.first.description]
       end
 

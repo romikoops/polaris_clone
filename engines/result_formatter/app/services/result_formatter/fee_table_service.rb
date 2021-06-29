@@ -168,7 +168,9 @@ module ResultFormatter
       return "Consolidated Cargo" if cargo_units.map(&:cargo_class).include?("aggregated_lcl") || cargo_units.length > 1
 
       cargo = cargo_units.first
-      description = (cargo.cargo_class == "lcl" ? cargo.colli_type.to_s : cargo.cargo_class).humanize
+      is_lcl = cargo.cargo_class == "lcl"
+      description = (is_lcl ? cargo.colli_type.to_s : cargo.cargo_class).humanize
+      description.upcase! unless is_lcl
       "#{cargo.quantity} x #{description}"
     end
 
