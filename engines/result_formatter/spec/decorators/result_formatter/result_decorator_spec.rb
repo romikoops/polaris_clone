@@ -217,4 +217,26 @@ RSpec.describe ResultFormatter::ResultDecorator do
       end
     end
   end
+
+  describe ".modes_of_transport" do
+    context "when relays are present" do
+      it "returns an empty string" do
+        expect(klass.modes_of_transport).to eq([freight_section.mode_of_transport])
+      end
+    end
+
+    context "with multiple modes of transport" do
+      let(:route_sections) do
+        [
+          freight_section,
+          destination_transfer_section,
+          FactoryBot.build(:journey_route_section, mode_of_transport: "air")
+        ]
+      end
+
+      it "returns an empty string" do
+        expect(klass.modes_of_transport).to eq([freight_section.mode_of_transport, "air"])
+      end
+    end
+  end
 end

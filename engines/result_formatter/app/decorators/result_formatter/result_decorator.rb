@@ -360,7 +360,7 @@ module ResultFormatter
     end
 
     def modes_of_transport
-      route_sections.pluck(:mode_of_transport).uniq.reject { |mot| mot == "carriage" }
+      route_sections.pluck(:mode_of_transport).uniq.reject { |mot| %w[carriage relay].include?(mot) }
     end
   end
 end
