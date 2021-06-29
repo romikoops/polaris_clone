@@ -7,17 +7,13 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content) }
   let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
   let(:air_itinerary) do
-    FactoryBot.create(:hamburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
+    FactoryBot.create(:gothenburg_shanghai_itinerary, mode_of_transport: "air", organization: organization)
   end
-  let(:origin_hub) { itinerary.origin_hub }
-  let(:destination_hub) { itinerary.destination_hub }
   let(:origin_airport) { air_itinerary.origin_hub }
   let(:destination_airport) { air_itinerary.destination_hub }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-  let(:load_type) { "cargo_item" }
   let(:direction) { "export" }
   let(:base_shipping_info) do
     {
@@ -64,48 +60,26 @@ RSpec.describe Wheelhouse::QuotationService do
     input[:destination] = { nexus_id: destination_hub.nexus_id }
     input
   end
-  let(:shanghai_address) { FactoryBot.create(:shanghai_address) }
-  let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
   let(:door_to_door_input) do
     input[:origin] = {
-      latitude: hamburg_address.latitude,
-      longitude: hamburg_address.longitude,
-      fullAddress: hamburg_address.geocoded_address,
-      country: hamburg_address.country.name,
-      number: hamburg_address.street_number,
-      street: hamburg_address.street,
-      zip_code: hamburg_address.zip_code
+      latitude: pickup_address.latitude,
+      longitude: pickup_address.longitude,
+      fullAddress: pickup_address.geocoded_address,
+      country: pickup_address.country.name,
+      number: pickup_address.street_number,
+      street: pickup_address.street,
+      zip_code: pickup_address.zip_code
     }
     input[:destination] = {
-      latitude: shanghai_address.latitude,
-      longitude: shanghai_address.longitude,
-      fullAddress: shanghai_address.geocoded_address,
-      country: shanghai_address.country.name,
-      number: shanghai_address.street_number,
-      street: shanghai_address.street,
-      zip_code: shanghai_address.zip_code
+      latitude: delivery_address.latitude,
+      longitude: delivery_address.longitude,
+      fullAddress: delivery_address.geocoded_address,
+      country: delivery_address.country.name,
+      number: delivery_address.street_number,
+      street: delivery_address.street,
+      zip_code: delivery_address.zip_code
     }
     input
-  end
-  let(:origin_location) do
-    FactoryBot.create(:locations_location,
-      bounds: FactoryBot.build(:legacy_bounds, lat: hamburg_address.latitude, lng: hamburg_address.longitude,
-                                               delta: 0.4),
-      country_code: "de")
-  end
-  let(:destination_location) do
-    FactoryBot.create(:locations_location,
-      bounds: FactoryBot.build(:legacy_bounds, lat: shanghai_address.latitude, lng: shanghai_address.longitude,
-                                               delta: 0.4),
-      country_code: "cn")
-  end
-  let(:origin_trucking_location) do
-    FactoryBot.create(:trucking_location, query: :location, location: origin_location,
-                                          country_code: "DE")
-  end
-  let(:destination_trucking_location) do
-    FactoryBot.create(:trucking_location, query: :location, location: destination_location,
-                                          country_code: "CN")
   end
   let(:quotation_details) { port_to_port_input }
   let(:shipping_info) { base_shipping_info }
@@ -122,12 +96,16 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
   let(:results) { query.result_sets.order(:created_at).last.results }
+  let(:load_type) { "container" }
+  let(:cargo_classes) { ["fcl_20"] }
+
+  include_context "complete_route_with_trucking"
 
   before do
-    [itinerary, air_itinerary].product(%w[container cargo_item]).each do |it, load|
-      FactoryBot.create(:trip_with_layovers, itinerary: it, load_type: load, tenant_vehicle: tenant_vehicle)
+    %w[container cargo_item].each do |load|
+      FactoryBot.create(:trip_with_layovers, itinerary: air_itinerary, load_type: load, tenant_vehicle: tenant_vehicle)
       FactoryBot.create(:trip_with_layovers,
-        itinerary: it,
+        itinerary: air_itinerary,
         load_type: load,
         tenant_vehicle: tenant_vehicle,
         start_date: 10.days.from_now,
@@ -136,8 +114,6 @@ RSpec.describe Wheelhouse::QuotationService do
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
     FactoryBot.create(:legacy_tenant_cargo_item_type, cargo_item_type: pallet, organization: organization)
-    FactoryBot.create(:lcl_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
-    FactoryBot.create(:fcl_20_pricing, itinerary: itinerary, organization: organization, tenant_vehicle: tenant_vehicle)
     FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, organization: organization,
                                     tenant_vehicle: tenant_vehicle)
     %w[ocean trucking local_charge].flat_map do |mot|
@@ -183,7 +159,7 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context "when door to door (defaults & container)" do
-      include_context "complete_route_with_trucking"
+
       before do
         # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time)
@@ -213,9 +189,7 @@ RSpec.describe Wheelhouse::QuotationService do
       let(:load_type) { "container" }
 
       it "perform a quote calulation" do
-        aggregate_failures do
-          expect(results.length).to eq(1)
-        end
+        expect(results.length).to eq(1)
       end
     end
 

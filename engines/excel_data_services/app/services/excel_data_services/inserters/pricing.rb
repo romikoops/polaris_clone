@@ -133,28 +133,25 @@ module ExcelDataServices
 
       def act_on_overlapping_pricings(pricings_with_actions, notes, row_nr)
         new_pricings = []
-        pricings_with_actions.slice(:destroy).values.each do |pricings|
-          pricings.each do |pricing|
-            pricing_details = pricing.fees
-            pricing_details.each do |pricing_detail|
-              pricing_detail.destroy
-              add_stats(pricing_detail, row_nr)
-            end
-
-            pricing.destroy
-            add_stats(pricing, row_nr)
+        pricings_with_actions[:destroy]&.each do |pricing|
+          pricing_details = pricing.fees
+          pricing_details.each do |pricing_detail|
+            pricing_detail.destroy
+            add_stats(pricing_detail, row_nr)
           end
+
+          pricing.destroy
+          add_stats(pricing, row_nr)
         end
+        return if pricings_with_actions[:save].blank?
 
-        pricings_with_actions.slice(:save).values.each do |pricings|
-          pricings.each do |pricing|
-            new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
-            add_stats(pricing, row_nr)
-            pricing.save
+        pricings_with_actions[:save].sort_by { |pricing| pricing.created_at || Time.zone.now }.each do |pricing|
+          new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
+          add_stats(pricing, row_nr)
+          pricing.save
 
-            update_notes_params(notes, pricing.id)
-            Legacy::Note.import!(notes)
-          end
+          update_notes_params(notes, pricing.id)
+          Legacy::Note.import!(notes)
         end
 
         new_pricings

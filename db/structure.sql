@@ -6301,6 +6301,14 @@ ALTER TABLE ONLY public.prices
 
 
 --
+-- Name: pricings_pricings pricing_upsert; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pricings_pricings
+    ADD CONSTRAINT pricing_upsert EXCLUDE USING gist (upsert_id WITH =, validity WITH &&) WHERE ((deleted_at IS NULL));
+
+
+--
 -- Name: pricings_breakdowns pricings_breakdowns_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12266,6 +12274,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210625072154'),
 ('20210628083535'),
 ('20210628083553'),
-('20210628094743');
+('20210628094743'),
+('20210628130133');
 
 

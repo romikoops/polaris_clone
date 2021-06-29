@@ -11,7 +11,8 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   let(:cargo_trait) { :fcl }
   let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
   let(:cargo_cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
-  let(:pricing_group_1) do
+  let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
+  let(:pricing_group1) do
     cargo_classes.map do |cargo_class|
       FactoryBot.create("#{cargo_class}_pricing".to_sym,
         organization: organization,
@@ -21,19 +22,19 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
         tenant_vehicle: tenant_vehicle)
     end
   end
-  let(:pricing_group_2) do
+  let(:pricing_group2) do
     cargo_classes.map do |cargo_class|
       FactoryBot.create("#{cargo_class}_pricing".to_sym,
         organization: organization,
         itinerary: itinerary,
-        effective_date: 20.days.from_now,
+        effective_date: 21.days.from_now,
         expiration_date: 40.days.from_now,
         tenant_vehicle: tenant_vehicle)
     end
   end
 
   let(:pricings) do
-    pricing_group_1 | pricing_group_2
+    pricing_group1 | pricing_group2
   end
 
   let(:charges) do
@@ -48,7 +49,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       organization: organization,
       itineraries: [itinerary],
       tenant_vehicles: [tenant_vehicle],
-      days: [1, 7, 10, 15])
+      days: [1, 7, 10, 16])
   end
 
   let(:schedules) {
@@ -60,7 +61,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   }
 
   context "with only freight and pricings split over period" do
-    let(:raw_objects) { pricing_group_1 | pricing_group_2 }
+    let(:raw_objects) { pricing_group1 | pricing_group2 }
 
     before do
       allow(request).to receive(:pre_carriage?).and_return(false)
@@ -121,7 +122,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       end
     end
     let(:raw_objects) do
-      pricing_group_1 | pricing_group_2 | local_charges | truckings | other_truckings
+      pricing_group1 | pricing_group2 | local_charges | truckings | other_truckings
     end
 
     before do
@@ -142,7 +143,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       it "returns two sorted offers" do
         aggregate_failures do
           expect(results.length).to eq(8)
-          expect(results.map { |r| r.schedules.count }.uniq).to eq([3, 1])
+          expect(results.map { |r| r.schedules.count }.uniq).to match_array([3, 1])
         end
       end
     end
@@ -158,7 +159,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       it "returns two sorted offers" do
         aggregate_failures do
           expect(results.length).to eq(2)
-          expect(results.map { |r| r.schedules.count }.uniq).to eq([3, 1])
+          expect(results.map { |r| r.schedules.count }.uniq).to match_array([3, 1])
         end
       end
     end

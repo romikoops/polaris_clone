@@ -16,7 +16,7 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
       organization: organization,
       itinerary: itinerary,
       effective_date: Time.zone.yesterday,
-      expiration_date: 20.days.from_now,
+      expiration_date: 19.days.from_now,
       tenant_vehicle: tenant_vehicle)
   end
   let(:pricing2) do

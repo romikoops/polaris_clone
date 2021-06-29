@@ -156,6 +156,7 @@ end
 #  index_pricings_pricings_on_upsert_id          (upsert_id)
 #  index_pricings_pricings_on_user_id            (user_id)
 #  index_pricings_pricings_on_validity           (validity) USING gist
+#  pricing_upsert                                (upsert_id,validity) WHERE (deleted_at IS NULL) USING gist
 #
 # Foreign Keys
 #
