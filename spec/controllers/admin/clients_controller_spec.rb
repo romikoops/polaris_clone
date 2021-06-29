@@ -57,9 +57,19 @@ RSpec.describe Admin::ClientsController do
 
     context "when searching via company names" do
       it "returns users matching the given company_name " do
-        get :index, params: { organization_id: organization.id, company_name: company.name }
+        get :index, params: { organization_id: organization.id, company_name: company.name[0, 3] }
 
         expect(resp["data"]["clientData"].pluck("email")).to include(users.first.email)
+      end
+    end
+
+    context "when user does not belong to a company" do
+      let!(:other_client) { FactoryBot.create(:users_client, organization: organization) }
+
+      it "returns users matching the given company_name " do
+        get :index, params: { organization_id: organization.id, email: other_client.email[0, 4] }
+
+        expect(resp["data"]["clientData"].pluck("email")).to include(other_client.email)
       end
     end
 

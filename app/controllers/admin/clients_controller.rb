@@ -93,15 +93,16 @@ module Admin
       profile_query = profiles
       profile_query = profile_query.first_name_search(params[:first_name]) if params[:first_name]
       profile_query = profile_query.last_name_search(params[:last_name]) if params[:last_name]
-      profile_query = profile_query.email_search(params[:email]) if params[:email]
-      query = clients.joins(:profile).merge(profile_query).joins(
-        "JOIN companies_memberships ON companies_memberships.member_id = users_clients.id
-          JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
+      query = clients.joins(:profile).merge(profile_query)
+      query = query.where("users_clients.email ILIKE ?", "#{params[:email]}%") if params[:email]
+      query = query.joins(
+        "LEFT OUTER JOIN companies_memberships ON companies_memberships.member_id = users_clients.id
+          LEFT OUTER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
       )
 
       return query if params[:company_name].blank?
 
-      query.where("companies_companies.name ILIKE ?", "%#{params[:company_name]}")
+      query.where("companies_companies.name ILIKE ?", "#{params[:company_name]}%")
     end
 
     def upload_params

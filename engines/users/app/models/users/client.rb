@@ -2,6 +2,7 @@
 
 module Users
   class Client < ::Users::Base
+    include PgSearch::Model
     self.inheritance_column = nil
 
     default_scope { where(organization_id: ::Organizations.current_id) }
@@ -22,6 +23,8 @@ module Users
                       format: { with: URI::MailTo::EMAIL_REGEXP }
 
     acts_as_paranoid
+
+    pg_search_scope :email_search, against: %i[email], using: { tsearch: { prefix: true, any_word: true } }
 
     def profile
       super || Users::ClientProfile.new(first_name: "", last_name: "")
