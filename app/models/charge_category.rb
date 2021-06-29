@@ -19,6 +19,7 @@ end
 #
 # Indexes
 #
+#  charge_category_upsert                      (code,organization_id) UNIQUE WHERE (cargo_unit_id IS NULL)
 #  index_charge_categories_on_cargo_unit_id    (cargo_unit_id)
 #  index_charge_categories_on_code             (code)
 #  index_charge_categories_on_organization_id  (organization_id)

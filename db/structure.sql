@@ -6989,6 +6989,13 @@ ALTER TABLE ONLY public.versions
 
 
 --
+-- Name: charge_category_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX charge_category_upsert ON public.charge_categories USING btree (code, organization_id) WHERE (cargo_unit_id IS NULL);
+
+
+--
 -- Name: hub_terminal_upsert; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12258,6 +12265,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210624143755'),
 ('20210625072154'),
 ('20210628083535'),
-('20210628083553');
+('20210628083553'),
+('20210628094743');
 
 
