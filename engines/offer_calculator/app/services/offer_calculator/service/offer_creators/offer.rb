@@ -22,9 +22,9 @@ module OfferCalculator
         end
 
         def valid_until
-          @valid_until ||= begin
-            return scope.fetch(:validity_period).days.from_now.to_date if scope.dig(:validity_period).present?
-
+          @valid_until ||= if validity_period_in_days.present?
+            validity_period_in_days.days.from_now.to_date
+          else
             charges.map { |charge_section| charge_section.validity.last }
               .select { |date| date > Time.zone.today.end_of_day }.min
           end
@@ -35,9 +35,9 @@ module OfferCalculator
         end
 
         def total
-          @total ||= charges.inject(Money.new(0, currency_for_user)) { |sum, item|
+          @total ||= charges.inject(Money.new(0, currency_for_user)) do |sum, item|
             sum + item.value
-          }.round
+          end.round
         end
 
         def sections
@@ -49,7 +49,7 @@ module OfferCalculator
         end
 
         def section(key:)
-          result.dig(key)
+          result[key]
         end
 
         def pricing_ids(section_key:)
@@ -77,6 +77,10 @@ module OfferCalculator
           return if target.blank?
 
           target.first.truck_type
+        end
+
+        def validity_period_in_days
+          scope[:validity_period]&.to_i
         end
       end
     end

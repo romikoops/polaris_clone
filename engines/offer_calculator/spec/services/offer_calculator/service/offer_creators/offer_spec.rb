@@ -8,9 +8,9 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
   let(:valid_from) { offer.charges.map { |charge_section| charge_section.validity.first }.max }
   let(:valid_until) { offer.charges.map { |charge_section| charge_section.validity.last }.min }
   let(:total) do
-    offer.charges.inject(Money.new(0, "EUR")) { |sum, item|
+    offer.charges.inject(Money.new(0, "EUR")) do |sum, item|
       sum + item.value
-    }.round
+    end.round
   end
 
   describe ".valid_from" do
@@ -34,11 +34,21 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
 
     context "with custom period" do
       before do
-        organization.scope.update(content: {validity_period: 14})
+        organization.scope.update(content: { validity_period: 14 })
       end
 
       it "returns a the valid until date" do
         expect(offer.valid_until).to eq(14.days.from_now.to_date)
+      end
+    end
+
+    context "with custom period saved as string" do
+      before do
+        organization.scope.update(content: { validity_period: "35" })
+      end
+
+      it "returns a the valid until date" do
+        expect(offer.valid_until).to eq(35.days.from_now.to_date)
       end
     end
   end
