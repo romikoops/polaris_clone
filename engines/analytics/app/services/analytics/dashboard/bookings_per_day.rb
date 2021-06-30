@@ -6,7 +6,7 @@ module Analytics
       def data
         @data ||= tally(
           requests: requests,
-          grouping_attribute: "DATE_TRUNC('day', created_at)::date",
+          grouping_attribute: "DATE_TRUNC('day', #{target_table}.created_at)::date",
           order_by_count: false,
           order: :asc
         )

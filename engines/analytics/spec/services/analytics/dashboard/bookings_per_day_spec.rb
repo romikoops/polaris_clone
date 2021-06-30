@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe Analytics::Dashboard::BookingsPerDay, type: :service do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
+  let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
   let(:start_date) { DateTime.new(2020, 2, 10) }
@@ -31,7 +32,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerDay, type: :service do
   end
 
   context "when a quote shop" do
-    before { organization.scope.update(content: { closed_quotation_tool: true }) }
+    let(:scope_content) { { closed_quotation_tool: true } }
 
     describe ".data" do
       it "returns a count of requests and their date times" do
@@ -46,9 +47,11 @@ RSpec.describe Analytics::Dashboard::BookingsPerDay, type: :service do
         FactoryBot.create(:journey_shipment_request,
           client_id: result.query.client_id,
           result: result,
-          created_at: result.created_at)
+          created_at: result.query.created_at)
       end
     end
+
+    let(:scope_content) { { closed_quotation_tool: false, open_quotation_tool: false } }
 
     describe ".data" do
       it "returns a count of requests and their date times" do

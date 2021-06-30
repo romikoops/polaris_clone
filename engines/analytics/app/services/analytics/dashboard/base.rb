@@ -13,8 +13,7 @@ module Analytics
         result = requests.group(grouping_attribute)
         result = result.order("#{order_by_count ? 'count_all' : grouping_attribute} #{order}") if order
         result = result.limit(limit) if limit
-        result.count
-          .map { |label, count| { label: label, count: count } }
+        result.count.map { |label, count| { label: label, count: count } }
       end
     end
   end

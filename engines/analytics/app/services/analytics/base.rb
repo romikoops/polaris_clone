@@ -36,22 +36,26 @@ module Analytics
 
     def requests_with_profiles
       if quotation_tool?
-        queries.joins(profile_join(reference: "journey_queries"))
+        queries.joins(profile_join)
       else
-        shipment_requests.joins(profile_join(reference: "shipments_shipment_requests"))
+        shipment_requests.joins(profile_join)
       end
     end
 
     def requests_with_companies
       if quotation_tool?
-        queries.joins(companies_join(reference: "journey_queries"))
+        queries.joins(companies_join)
       else
-        shipment_requests.joins(companies_join(reference: "shipments_shipment_requests"))
+        shipment_requests.joins(companies_join)
       end
     end
 
     def result_or_request
       quotation_tool? ? results : shipment_requests
+    end
+
+    def target_table
+      quotation_tool? ? "journey_queries" : "journey_shipment_requests"
     end
 
     def clients
@@ -86,19 +90,19 @@ module Analytics
       ).fetch
     end
 
-    def profile_join(reference:)
+    def profile_join
       <<~SQL
         INNER JOIN users_clients
-          ON #{reference}.client_id = users_clients.id
+          ON journey_queries.client_id = users_clients.id
         INNER JOIN users_client_profiles
           ON users_clients.id = users_client_profiles.user_id
       SQL
     end
 
-    def companies_join(reference:)
+    def companies_join
       <<~SQL
         INNER JOIN users_clients
-          ON #{reference}.client_id = users_clients.id
+          ON journey_queries.client_id = users_clients.id
         INNER JOIN companies_memberships
           ON companies_memberships.member_id = users_clients.id
           AND companies_memberships.member_type = 'Users::Client'
