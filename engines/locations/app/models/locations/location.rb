@@ -48,4 +48,5 @@ end
 #  index_locations_locations_on_deleted_at  (deleted_at)
 #  index_locations_locations_on_name        (name)
 #  index_locations_locations_on_osm_id      (osm_id)
+#  locations_locations_upsert               (name,country_code) UNIQUE
 #
