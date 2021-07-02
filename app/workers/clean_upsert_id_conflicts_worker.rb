@@ -19,6 +19,8 @@ class CleanUpsertIdConflictsWorker
 
       pricings.pluck(:validity).uniq.each do |validity|
         temporal_duplicates = pricings.for_dates(validity.first, validity.last).order(created_at: :desc).to_a
+        next if temporal_duplicates.empty?
+
         valid = temporal_duplicates.shift
         temporal_duplicates.map(&:destroy)
         valid.save
