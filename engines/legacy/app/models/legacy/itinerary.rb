@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-
-require "active_support/core_ext/digest/uuid"
-
 module Legacy
   class Itinerary < ApplicationRecord
     self.table_name = "itineraries"
@@ -48,9 +45,7 @@ module Legacy
     def generate_upsert_id
       return if [origin_hub_id, destination_hub_id, organization_id, mode_of_transport].any?(&:blank?)
 
-      # rubocop:disable GitHub/InsecureHashAlgorithm
-      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
-      # rubocop:enable GitHub/InsecureHashAlgorithm
+      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
     end
 
     def generate_schedules_from_sheet(stops:,

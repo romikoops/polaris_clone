@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-
-require "active_support/core_ext/digest/uuid"
 module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
@@ -53,9 +51,7 @@ module Pricings
     end
 
     def generate_upsert_id
-      # rubocop:disable GitHub/InsecureHashAlgorithm
-      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [pricing_id, charge_category_id, organization_id].map(&:to_s).join)
-      # rubocop:enable GitHub/InsecureHashAlgorithm
+      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [pricing_id, charge_category_id, organization_id].map(&:to_s).join)
     end
   end
 end

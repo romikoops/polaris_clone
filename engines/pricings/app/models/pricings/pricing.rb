@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "active_support/core_ext/digest/uuid"
-
 module Pricings
   class Pricing < ApplicationRecord
     WM_RATIO_LOOKUP = {ocean: 1000,
@@ -102,13 +100,11 @@ module Pricings
     end
 
     def generate_upsert_id
-      # rubocop:disable GitHub/InsecureHashAlgorithm
-      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [itinerary_id,
+      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [itinerary_id,
         tenant_vehicle_id,
         cargo_class,
         group_id,
         organization_id].map(&:to_s).join)
-      # rubocop:enable GitHub/InsecureHashAlgorithm
     end
   end
 end

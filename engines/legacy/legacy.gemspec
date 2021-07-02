@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "money-rails"
   spec.add_dependency "paranoia"
   spec.add_dependency "pg_search", "~> 2.3.0"
+  spec.add_dependency "uuidtools"
 
   spec.add_development_dependency "cargo"
   spec.add_development_dependency "companies"

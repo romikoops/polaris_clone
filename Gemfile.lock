@@ -219,6 +219,7 @@ PATH
       pg_search (~> 2.3.0)
       profiles
       shared-runtime
+      uuidtools
 
 PATH
   remote: engines/locations
@@ -322,6 +323,7 @@ PATH
       organizations
       shared-runtime
       trucking
+      uuidtools
 
 PATH
   remote: engines/profiles
@@ -448,6 +450,7 @@ PATH
       roo
       roo-xls
       shared-runtime
+      uuidtools
       will_paginate
 
 PATH
@@ -656,7 +659,6 @@ GEM
     bootsnap (1.5.1)
       msgpack (~> 1.0)
     bounded_context (1.2.2)
-    brakeman (5.0.4)
     builder (3.2.4)
     byebug (11.0.1)
     case_transform (0.2)
@@ -1313,7 +1315,6 @@ DEPENDENCIES
   aws-sdk-sqs (~> 1.30.0)
   better_errors
   binding_of_caller
-  brakeman (~> 5.0)
   byebug
   cargo!
   cargo_packer!

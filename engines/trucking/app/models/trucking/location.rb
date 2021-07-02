@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-
-require "active_support/core_ext/digest/uuid"
 module Trucking
   class Location < ApplicationRecord
     UUID_V5_NAMESPACE = "404827a9-bc4d-4c97-b813-d925588215d6"
@@ -23,9 +21,7 @@ module Trucking
     before_validation :generate_upsert_id
 
     def generate_upsert_id
-      # rubocop:disable GitHub/InsecureHashAlgorithm
-      self.upsert_id = Digest::UUID.uuid_v5(UUID_V5_NAMESPACE, [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
-      # rubocop:enable GitHub/InsecureHashAlgorithm
+      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
     end
   end
 end
