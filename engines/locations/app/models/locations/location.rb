@@ -3,7 +3,7 @@
 module Locations
   class Location < ApplicationRecord
     validates :osm_id, uniqueness: true, if: :osm_data?
-    validates :name, uniqueness: {scope: [:country_code]}
+    validates :name, uniqueness: { scope: [:country_code] }
 
     acts_as_paranoid
 

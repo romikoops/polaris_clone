@@ -10364,6 +10364,13 @@ CREATE UNIQUE INDEX line_service_unique_index ON public.routing_line_services US
 
 
 --
+-- Name: locations_locations_upsert; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX locations_locations_upsert ON public.locations_locations USING btree (name, country_code);
+
+
+--
 -- Name: locations_names_to_tsvector_idx1; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12275,6 +12282,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210628083535'),
 ('20210628083553'),
 ('20210628094743'),
-('20210628130133');
+('20210628130133'),
+('20210630075906');
 
 
