@@ -89,7 +89,7 @@ end
 #  index_pricings_fees_on_pricing_id       (pricing_id)
 #  index_pricings_fees_on_sandbox_id       (sandbox_id)
 #  index_pricings_fees_on_tenant_id        (tenant_id)
-#  index_pricings_fees_on_upsert_id        (upsert_id)
+#  index_pricings_fees_on_upsert_id        (upsert_id) UNIQUE WHERE (deleted_at IS NULL)
 #
 # Foreign Keys
 #

@@ -8568,7 +8568,7 @@ CREATE INDEX index_pricings_fees_on_tenant_id ON public.pricings_fees USING btre
 -- Name: index_pricings_fees_on_upsert_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_pricings_fees_on_upsert_id ON public.pricings_fees USING btree (upsert_id);
+CREATE UNIQUE INDEX index_pricings_fees_on_upsert_id ON public.pricings_fees USING btree (upsert_id) WHERE (deleted_at IS NULL);
 
 
 --
@@ -12283,6 +12283,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210628083553'),
 ('20210628094743'),
 ('20210628130133'),
-('20210630075906');
+('20210630075906'),
+('20210702094000'),
+('20210702094008');
 
 
