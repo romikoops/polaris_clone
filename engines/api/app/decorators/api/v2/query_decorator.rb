@@ -34,7 +34,7 @@ module Api
       end
 
       def modes_of_transport
-        route_sections.where.not(mode_of_transport: %w[relay carriage]).pluck(:mode_of_transport) # Query can have  multiple MOT's
+        route_sections.where.not(mode_of_transport: %w[relay carriage]).pluck(:mode_of_transport).uniq # Query can have  multiple MOT's
       end
 
       def reference

@@ -20,7 +20,8 @@ module Api
         reference: line_item_set.reference,
         modesOfTransport: decorated_query.modes_of_transport,
         loadType: decorated_query.load_type,
-        offerId: offer.id
+        offerId: offer.id,
+        issueDate: query.created_at
       }
     end
 
