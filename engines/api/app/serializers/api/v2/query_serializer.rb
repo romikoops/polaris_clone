@@ -3,14 +3,14 @@
 module Api
   module V2
     class QuerySerializer < Api::ApplicationSerializer
-      attributes [:id, :aggregated, :load_type, :origin_name, :destination_name]
+      attributes %i[id aggregated load_type origin_name destination_name reference modes_of_transport client load_type offer_id]
 
-      attribute :origin_name do |query|
-        query.origin
-      end
+      attribute :origin_name, &:origin
 
-      attribute :destination_name do |query|
-        query.destination
+      attribute :destination_name, &:destination
+
+      attribute :client do |query|
+        query.client && ClientSerializer.new(ClientDecorator.new(query.client))
       end
     end
   end

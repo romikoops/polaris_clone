@@ -33,6 +33,18 @@ module Api
         end
       end
 
+      def modes_of_transport
+        route_sections.where.not(mode_of_transport: %w[relay carriage]).pluck(:mode_of_transport) # Query can have  multiple MOT's
+      end
+
+      def reference
+        Journey::LineItemSet.where(result: results).first&.reference # Not sure what to do here as we do not have Ref numbers for queries, maybe we should?
+      end
+
+      def offer_id
+        Wheelhouse::OfferBuilder.new(results: results).existing_offer&.id # so the pdf can be downloaded easily
+      end
+
       private
 
       def route_sections
@@ -44,7 +56,7 @@ module Api
       end
 
       def scope
-        context.dig(:scope) || {}
+        context[:scope] || {}
       end
     end
   end

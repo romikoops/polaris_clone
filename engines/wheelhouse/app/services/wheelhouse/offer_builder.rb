@@ -13,37 +13,37 @@ module Wheelhouse
     end
 
     def offer
-      @returnable_offer = old_offer || new_offer
+      @returnable_offer = existing_offer || new_offer
       generate_pdf if generate_pdf?
       publish_event if offer_created?
       returnable_offer
     end
 
-    private
+    def existing_offer
+      @existing_offer ||= begin
+        if results.present?
+          query = "
+            SELECT *
+            FROM journey_offers
+            WHERE id = (
+              SELECT offer_id
+              FROM journey_offer_line_item_sets
+              JOIN journey_offers on journey_offer_line_item_sets.offer_id = journey_offers.id
+              WHERE line_item_set_id IN (:line_item_set_ids)
+              AND journey_offers.query_id = :query_id
+              GROUP BY journey_offer_line_item_sets.id
+              HAVING COUNT(DISTINCT line_item_set_id) = :result_count
+              LIMIT 1
+            )
+          "
+          binds = {
+            line_item_set_ids: line_item_sets.map(&:id),
+            result_count: results.count,
+            query_id: results.first.query.id
+          }
 
-    def old_offer
-      @old_offer ||= begin
-        query = """
-          SELECT *
-          FROM journey_offers
-          WHERE id = (
-            SELECT offer_id
-            FROM journey_offer_line_item_sets
-            JOIN journey_offers on journey_offer_line_item_sets.offer_id = journey_offers.id
-            WHERE line_item_set_id IN (:line_item_set_ids)
-            AND journey_offers.query_id = :query_id
-            GROUP BY journey_offer_line_item_sets.id
-            HAVING COUNT(DISTINCT line_item_set_id) = :result_count
-            LIMIT 1
-          )
-        """
-        binds = {
-          line_item_set_ids: line_item_sets.map(&:id),
-          result_count: results.count,
-          query_id: results.first.query.id
-        }
-
-        Journey::Offer.find_by_sql([query, binds]).first
+          Journey::Offer.find_by_sql([query, binds]).first
+        end
       end
     end
 

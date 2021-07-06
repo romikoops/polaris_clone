@@ -143,7 +143,7 @@ module Api
           cargo_ready_date: 3.days.from_now,
           created_at: 2.hours.ago,
           client: user,
-          result_sets: [FactoryBot.build(:journey_result_set)])
+          result_sets: [FactoryBot.build(:journey_result_set, result_count: 1)])
       end
       let!(:query_b) do
         FactoryBot.create(:journey_query,
@@ -154,7 +154,7 @@ module Api
           created_at: 5.hours.ago,
           client: user,
           billable: false,
-          result_sets: [FactoryBot.build(:journey_result_set)])
+          result_sets: [FactoryBot.build(:journey_result_set, result_count: 1)])
       end
 
       let(:params) { { organization_id: organization.id } }
