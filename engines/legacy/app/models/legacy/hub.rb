@@ -11,7 +11,7 @@ module Legacy
     belongs_to :nexus, class_name: "Legacy::Nexus"
     belongs_to :mandatory_charge, optional: true
     belongs_to :address, class_name: "Legacy::Address"
-    has_one :country, through: :address, class_name: "Legacy::Country"
+    has_one :country, through: :nexus, class_name: "Legacy::Country"
     has_many :addons, dependent: :destroy
     has_many :as_origin_itineraries, class_name: "Legacy::Itinerary",
                                      foreign_key: "origin_hub_id",
