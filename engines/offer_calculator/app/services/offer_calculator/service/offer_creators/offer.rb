@@ -22,8 +22,8 @@ module OfferCalculator
         end
 
         def valid_until
-          @valid_until ||= if validity_period_in_days.present?
-            validity_period_in_days.days.from_now.to_date
+          @valid_until ||= if validity_period.present?
+            validity_period.to_i.days.from_now.to_date
           else
             charges.map { |charge_section| charge_section.validity.last }
               .select { |date| date > Time.zone.today.end_of_day }.min
@@ -79,8 +79,8 @@ module OfferCalculator
           target.first.truck_type
         end
 
-        def validity_period_in_days
-          scope[:validity_period]&.to_i
+        def validity_period
+          scope[:validity_period]
         end
       end
     end

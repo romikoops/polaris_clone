@@ -51,5 +51,15 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
         expect(offer.valid_until).to eq(35.days.from_now.to_date)
       end
     end
+
+    context "with custom period saved as empty string" do
+      before do
+        organization.scope.update(content: { validity_period: "" })
+      end
+
+      it "returns a the valid until date" do
+        expect(offer.valid_until).to eq(valid_until)
+      end
+    end
   end
 end
