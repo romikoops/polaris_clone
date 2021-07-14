@@ -52,7 +52,8 @@ RSpec.describe IDP::SamlController, type: :request do
     let(:redirect_location) { response.location }
     let(:response_params) { Rack::Utils.parse_nested_query(redirect_location.split("success?").second) }
     let(:created_user) { Users::Client.unscoped.find_by(id: response_params["userId"], organization_id: organization.id) }
-    let(:attributes) { { "firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "customerID" => ["ABCDE"] } }
+    let(:base_attributes) { { "firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "customerID" => ["ABCDE"] } }
+    let(:attributes) { base_attributes }
     let(:saml_attributes) { OneLogin::RubySaml::Attributes.new(attributes) }
     let(:expected_keys) { %w[access_token created_at expires_in organizationId refresh_token scope token_type userId] }
 
@@ -96,7 +97,7 @@ RSpec.describe IDP::SamlController, type: :request do
     end
 
     context "with successful login and group param present" do
-      let(:attributes) { { "firstName" => ["Test"], "lastName" => ["User"], "phoneNumber" => [123_456_789], "groups" => [group.name] } }
+      let(:attributes) { base_attributes.merge("groups" => [group.name]) }
 
       before do
         post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
@@ -113,12 +114,7 @@ RSpec.describe IDP::SamlController, type: :request do
       let!(:second_group) { FactoryBot.create(:groups_group, name: "Test Group 2", organization: organization) }
       let!(:third_group) { FactoryBot.create(:groups_group, name: "Test Group 3", organization: organization) }
       let(:attributes) do
-        {
-          "firstName" => ["Test"],
-          "lastName" => ["User"],
-          "phoneNumber" => [123_456_789],
-          "groups" => [group.name, second_group.name]
-        }
+        base_attributes.merge("groups" => [group.name, second_group.name])
       end
 
       before do
@@ -160,9 +156,7 @@ RSpec.describe IDP::SamlController, type: :request do
 
       context "when company is present" do
         let(:attributes) do
-          { "firstName" => ["Test"],
-            "companyID" => [external_id],
-            "companyName" => ["companyname"] }.merge(address_params)
+          base_attributes.merge("companyID" => [external_id], "companyName" => ["companyname"]).merge(address_params)
         end
 
         before do
@@ -191,7 +185,7 @@ RSpec.describe IDP::SamlController, type: :request do
       end
 
       context "when company is not present" do
-        let(:attributes) { { "firstName" => ["Test"], "companyID" => [external_id], "companyName" => ["new_company"] }.merge(address_params) }
+        let(:attributes) { base_attributes.merge("companyName" => ["new_company"]).merge(address_params) }
 
         before do
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }

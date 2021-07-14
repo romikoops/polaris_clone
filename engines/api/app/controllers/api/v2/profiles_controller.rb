@@ -8,10 +8,7 @@ module Api
       def update
         ActiveRecord::Base.transaction do
           current_user.update!(user_update_params) unless user_update_params.empty?
-          profile.update!(
-            first_name: profile_params[:first_name],
-            last_name: profile_params[:last_name]
-          )
+          profile.update!(profile_update_params) unless profile_update_params.empty?
         end
         render json: Api::V2::ProfileSerializer.new(profile)
       rescue ActiveRecord::RecordInvalid => e
@@ -29,7 +26,14 @@ module Api
       end
 
       def profile_params
-        params.require(:profile).permit(:email, :password, :first_name, :last_name)
+        params.require(:profile).permit(:email, :password, :firstName, :lastName)
+      end
+
+      def profile_update_params
+        {
+          first_name: profile_params[:firstName],
+          last_name: profile_params[:lastName]
+        }.compact
       end
 
       def user_update_params

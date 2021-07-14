@@ -49,13 +49,15 @@ module Api
         end
 
         let(:request_object) do
-          patch :update, params: { organization_id: organization.id,
-                                   profile: {
-                                     email: expected_data["email"],
-                                     first_name: expected_data["firstName"],
-                                     last_name: expected_data["lastName"],
-                                     password: "NEWPASSWORD"
-                                   } }, as: :json
+          patch :update, params: {
+            organization_id: organization.id,
+            profile: {
+              email: expected_data["email"],
+              firstName: expected_data["firstName"],
+              lastName: expected_data["lastName"],
+              password: "NEWPASSWORD"
+            }
+          }, as: :json
         end
 
         it "returns an http status of success" do
@@ -79,12 +81,7 @@ module Api
       context "when update email request is invalid" do
         let(:other_client) { FactoryBot.create(:users_client, organization: organization) }
         let(:request_object) do
-          patch :update, params: { organization_id: organization.id,
-                                   profile: {
-                                     email: other_client.email,
-                                     first_name: "Bassam",
-                                     last_name: "Aziz"
-                                   } }, as: :json
+          patch :update, params: { organization_id: organization.id, profile: { email: other_client.email } }, as: :json
         end
 
         it "returns with a 422 response" do

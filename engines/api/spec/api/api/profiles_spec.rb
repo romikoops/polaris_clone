@@ -53,37 +53,55 @@ RSpec.describe "Profiles", type: :request, swagger: true do
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-
       parameter name: :profile, in: :body, schema: {
         type: :object,
         properties: {
-          profile: { "$ref" => "#/components/schemas/profile" }
+          profile: {
+            type: "object",
+            properties: {
+              email: {
+                description: "The new email of the client",
+                type: "string",
+                pattern: "email"
+              },
+              firstName: {
+                description: "First name of the user",
+                type: "string"
+              },
+              lastName: {
+                description: "Last name of the user",
+                type: "string"
+              },
+              password: {
+                description: "A new password for the user account",
+                type: "string",
+                minLength: 8
+              }
+            }
+          }
         },
-        required: %w[profile]
+        required: ["profile"]
       }
-
+      let(:profile) do
+        {
+          profile: {
+            email: "john@example.com",
+            firstName: "John",
+            lastName: "Doe"
+          }
+        }
+      end
       let(:id) { client.profile.id }
 
       response 200, "successful operation" do
-        let(:profile) do
-          { profile: {
-            email: "john@example.com",
-            first_name: "John",
-            last_name: "Doe"
-          } }
-        end
-
         run_test!
       end
 
       response 422, "Unprocessable Entity" do
-        let(:other_client) { FactoryBot.create(:users_client, organization: organization) }
         let(:profile) do
-          { profile: {
-            email: other_client.email,
-            first_name: "John",
-            last_name: "Doe"
-          } }
+          {
+            profile: { email: FactoryBot.create(:users_client, organization: organization).email }
+          }
         end
 
         run_test!

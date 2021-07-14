@@ -124,6 +124,7 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       end
       let(:attributes) do
         { "firstName" => ["Test"],
+          "lastName" => ["User"],
           "companyID" => [external_id],
           "companyName" => ["companyname"] }.merge(address_params)
       end
@@ -180,7 +181,7 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       context "when company is not present" do
         let(:attributes) do
           {
-            "firstName" => ["Test"], "companyID" => [external_id], "companyName" => ["new_company"]
+            "firstName" => ["Test"], "lastName" => ["User"], "companyID" => [external_id], "companyName" => ["new_company"]
           }.merge(address_params)
         end
 

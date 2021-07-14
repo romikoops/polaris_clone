@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fb1403ecaa8@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ff4640e43f8@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -854,109 +854,118 @@ end
 #      callback GET  /callback(.:format)      google_sign_in/callbacks#show
 #
 # Routes for Trestle::Engine:
-#                                         new_admin GET    /admins/new(.:format)                       admins_admin/admin#new
-#                                        edit_admin GET    /admins/:id/edit(.:format)                  admins_admin/admin#edit
-#                                        new_client GET    /clients/new(.:format)                      clients_admin/admin#new
-#                                       edit_client GET    /clients/:id/edit(.:format)                 clients_admin/admin#edit
-#                               new_charge_category GET    /charge_categories/new(.:format)            charge_categories_admin/admin#new
-#                              edit_charge_category GET    /charge_categories/:id/edit(.:format)       charge_categories_admin/admin#edit
-#                                        new_domain GET    /domains/new(.:format)                      domains_admin/admin#new
-#                                       edit_domain GET    /domains/:id/edit(.:format)                 domains_admin/admin#edit
-#                         new_max_dimensions_bundle GET    /max_dimensions_bundles/new(.:format)       max_dimensions_bundles_admin/admin#new
-#                        edit_max_dimensions_bundle GET    /max_dimensions_bundles/:id/edit(.:format)  max_dimensions_bundles_admin/admin#edit
-#                                        new_margin GET    /margins/new(.:format)                      margins_admin/admin#new
-#                                       edit_margin GET    /margins/:id/edit(.:format)                 margins_admin/admin#edit
-#                                    new_membership GET    /memberships/new(.:format)                  memberships_admin/admin#new
-#                                   edit_membership GET    /memberships/:id/edit(.:format)             memberships_admin/admin#edit
-#                                  new_organization GET    /organizations/new(.:format)                organizations_admin/admin#new
-#                                 edit_organization GET    /organizations/:id/edit(.:format)           organizations_admin/admin#edit
-#                                         new_query GET    /queries/new(.:format)                      queries_admin/admin#new
-#                                        edit_query GET    /queries/:id/edit(.:format)                 queries_admin/admin#edit
-#                                  new_subscription GET    /subscriptions/new(.:format)                subscriptions_admin/admin#new
-#                                 edit_subscription GET    /subscriptions/:id/edit(.:format)           subscriptions_admin/admin#edit
-#                                         new_theme GET    /themes/new(.:format)                       themes_admin/admin#new
-#                                        edit_theme GET    /themes/:id/edit(.:format)                  themes_admin/admin#edit
-#                        new_tenant_cargo_item_type GET    /tenant_cargo_item_types/new(.:format)      tenant_cargo_item_types_admin/admin#new
-#                       edit_tenant_cargo_item_type GET    /tenant_cargo_item_types/:id/edit(.:format) tenant_cargo_item_types_admin/admin#edit
-#                                            signin GET    /signin(.:format)                           trestle/auth/sessions#create
-#                                       sidekiq_web        /sidekiq/web                                Sidekiq::Web
-#                                                   GET    /sidekiq/web(.:format)                      redirect(302, login)
-#                      ruby_event_store_browser_app        /rails_event_store                          RubyEventStore::Browser::App
-#                                 rails_event_store GET    /rails_event_store(.:format)                redirect(302, login)
-#                                             login GET    /login(.:format)                            trestle/auth/sessions#new
-#                                                   POST   /login(.:format)                            trestle/auth/sessions#create
-#                                            logout GET    /logout(.:format)                           trestle/auth/sessions#destroy
-#                                admins_admin_index GET    /admins(.:format)                           admins_admin/admin#index
-#                                                   POST   /admins(.:format)                           admins_admin/admin#create
-#                                      admins_admin GET    /admins/:id(.:format)                       admins_admin/admin#show
-#                                                   PATCH  /admins/:id(.:format)                       admins_admin/admin#update
-#                                                   PUT    /admins/:id(.:format)                       admins_admin/admin#update
-#                                                   DELETE /admins/:id(.:format)                       admins_admin/admin#destroy
-#                     charge_categories_admin_index GET    /charge_categories(.:format)                charge_categories_admin/admin#index
-#                                                   POST   /charge_categories(.:format)                charge_categories_admin/admin#create
-#                           charge_categories_admin GET    /charge_categories/:id(.:format)            charge_categories_admin/admin#show
-#                                                   PATCH  /charge_categories/:id(.:format)            charge_categories_admin/admin#update
-#                                                   PUT    /charge_categories/:id(.:format)            charge_categories_admin/admin#update
-#                                                   DELETE /charge_categories/:id(.:format)            charge_categories_admin/admin#destroy
-#                               clients_admin_index GET    /clients(.:format)                          clients_admin/admin#index
-#                                                   POST   /clients(.:format)                          clients_admin/admin#create
-#                                     clients_admin GET    /clients/:id(.:format)                      clients_admin/admin#show
-#                                                   PATCH  /clients/:id(.:format)                      clients_admin/admin#update
-#                                                   PUT    /clients/:id(.:format)                      clients_admin/admin#update
-#                                                   DELETE /clients/:id(.:format)                      clients_admin/admin#destroy
-#                               domains_admin_index GET    /domains(.:format)                          domains_admin/admin#index
-#                                                   POST   /domains(.:format)                          domains_admin/admin#create
-#                                     domains_admin GET    /domains/:id(.:format)                      domains_admin/admin#show
-#                                                   PATCH  /domains/:id(.:format)                      domains_admin/admin#update
-#                                                   PUT    /domains/:id(.:format)                      domains_admin/admin#update
-#                                                   DELETE /domains/:id(.:format)                      domains_admin/admin#destroy
-#                               margins_admin_index GET    /margins(.:format)                          margins_admin/admin#index
-#                                                   POST   /margins(.:format)                          margins_admin/admin#create
-#                                     margins_admin GET    /margins/:id(.:format)                      margins_admin/admin#show
-#                                                   PATCH  /margins/:id(.:format)                      margins_admin/admin#update
-#                                                   PUT    /margins/:id(.:format)                      margins_admin/admin#update
-#                                                   DELETE /margins/:id(.:format)                      margins_admin/admin#destroy
-#                max_dimensions_bundles_admin_index GET    /max_dimensions_bundles(.:format)           max_dimensions_bundles_admin/admin#index
-#                                                   POST   /max_dimensions_bundles(.:format)           max_dimensions_bundles_admin/admin#create
-#                      max_dimensions_bundles_admin GET    /max_dimensions_bundles/:id(.:format)       max_dimensions_bundles_admin/admin#show
-#                                                   PATCH  /max_dimensions_bundles/:id(.:format)       max_dimensions_bundles_admin/admin#update
-#                                                   PUT    /max_dimensions_bundles/:id(.:format)       max_dimensions_bundles_admin/admin#update
-#                                                   DELETE /max_dimensions_bundles/:id(.:format)       max_dimensions_bundles_admin/admin#destroy
-#                           memberships_admin_index GET    /memberships(.:format)                      memberships_admin/admin#index
-#                                                   POST   /memberships(.:format)                      memberships_admin/admin#create
-#                                 memberships_admin GET    /memberships/:id(.:format)                  memberships_admin/admin#show
-#                                                   PATCH  /memberships/:id(.:format)                  memberships_admin/admin#update
-#                                                   PUT    /memberships/:id(.:format)                  memberships_admin/admin#update
-#                                                   DELETE /memberships/:id(.:format)                  memberships_admin/admin#destroy
-#                         organizations_admin_index GET    /organizations(.:format)                    organizations_admin/admin#index
-#                                                   POST   /organizations(.:format)                    organizations_admin/admin#create
-#                               organizations_admin GET    /organizations/:id(.:format)                organizations_admin/admin#show
-#                                                   PATCH  /organizations/:id(.:format)                organizations_admin/admin#update
-#                                                   PUT    /organizations/:id(.:format)                organizations_admin/admin#update
-#                            download_queries_admin GET    /queries/:id/download(.:format)             queries_admin/admin#download
-#                               queries_admin_index GET    /queries(.:format)                          queries_admin/admin#index
-#                                     queries_admin GET    /queries/:id(.:format)                      queries_admin/admin#show
-#                         subscriptions_admin_index GET    /subscriptions(.:format)                    subscriptions_admin/admin#index
-#                                                   POST   /subscriptions(.:format)                    subscriptions_admin/admin#create
-#                               subscriptions_admin GET    /subscriptions/:id(.:format)                subscriptions_admin/admin#show
-#                                                   PATCH  /subscriptions/:id(.:format)                subscriptions_admin/admin#update
-#                                                   PUT    /subscriptions/:id(.:format)                subscriptions_admin/admin#update
-#                                                   DELETE /subscriptions/:id(.:format)                subscriptions_admin/admin#destroy
-#               tenant_cargo_item_types_admin_index GET    /tenant_cargo_item_types(.:format)          tenant_cargo_item_types_admin/admin#index
-#                                                   POST   /tenant_cargo_item_types(.:format)          tenant_cargo_item_types_admin/admin#create
-#                     tenant_cargo_item_types_admin GET    /tenant_cargo_item_types/:id(.:format)      tenant_cargo_item_types_admin/admin#show
-#                                                   PATCH  /tenant_cargo_item_types/:id(.:format)      tenant_cargo_item_types_admin/admin#update
-#                                                   PUT    /tenant_cargo_item_types/:id(.:format)      tenant_cargo_item_types_admin/admin#update
-#                                                   DELETE /tenant_cargo_item_types/:id(.:format)      tenant_cargo_item_types_admin/admin#destroy
-#                                themes_admin_index GET    /themes(.:format)                           themes_admin/admin#index
-#                                                   POST   /themes(.:format)                           themes_admin/admin#create
-#                                      themes_admin GET    /themes/:id(.:format)                       themes_admin/admin#show
-#                                                   PATCH  /themes/:id(.:format)                       themes_admin/admin#update
-#                                                   PUT    /themes/:id(.:format)                       themes_admin/admin#update
-#                                                   DELETE /themes/:id(.:format)                       themes_admin/admin#destroy
-#                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                          trestle/sidekiq/sidekiq_admin/admin#index
-# trestle_rails_event_store_rails_event_store_admin GET    /rails_event_store(.:format)                trestle/rails_event_store/rails_event_store_admin/admin#index
-#                                              root GET    /                                           trestle/dashboard#index
+#                                         new_admin GET    /admins/new(.:format)                         admins_admin/admin#new
+#                                        edit_admin GET    /admins/:id/edit(.:format)                    admins_admin/admin#edit
+#                                        new_client GET    /clients/new(.:format)                        clients_admin/admin#new
+#                                       edit_client GET    /clients/:id/edit(.:format)                   clients_admin/admin#edit
+#                                       new_country GET    /countries/new(.:format)                      countries_admin/admin#new
+#                                      edit_country GET    /countries/:id/edit(.:format)                 countries_admin/admin#edit
+#                               new_charge_category GET    /charge_categories/new(.:format)              charge_categories_admin/admin#new
+#                              edit_charge_category GET    /charge_categories/:id/edit(.:format)         charge_categories_admin/admin#edit
+#                                        new_domain GET    /domains/new(.:format)                        domains_admin/admin#new
+#                                       edit_domain GET    /domains/:id/edit(.:format)                   domains_admin/admin#edit
+#                         new_max_dimensions_bundle GET    /max_dimensions_bundles/new(.:format)         max_dimensions_bundles_admin/admin#new
+#                        edit_max_dimensions_bundle GET    /max_dimensions_bundles/:id/edit(.:format)    max_dimensions_bundles_admin/admin#edit
+#                                        new_margin GET    /margins/new(.:format)                        margins_admin/admin#new
+#                                       edit_margin GET    /margins/:id/edit(.:format)                   margins_admin/admin#edit
+#                                    new_membership GET    /memberships/new(.:format)                    memberships_admin/admin#new
+#                                   edit_membership GET    /memberships/:id/edit(.:format)               memberships_admin/admin#edit
+#                                  new_organization GET    /organizations/new(.:format)                  organizations_admin/admin#new
+#                                 edit_organization GET    /organizations/:id/edit(.:format)             organizations_admin/admin#edit
+#                                         new_query GET    /queries/new(.:format)                        queries_admin/admin#new
+#                                        edit_query GET    /queries/:id/edit(.:format)                   queries_admin/admin#edit
+#                                  new_subscription GET    /subscriptions/new(.:format)                  subscriptions_admin/admin#new
+#                                 edit_subscription GET    /subscriptions/:id/edit(.:format)             subscriptions_admin/admin#edit
+#                                         new_theme GET    /themes/new(.:format)                         themes_admin/admin#new
+#                                        edit_theme GET    /themes/:id/edit(.:format)                    themes_admin/admin#edit
+#                        new_tenant_cargo_item_type GET    /tenant_cargo_item_types/new(.:format)        tenant_cargo_item_types_admin/admin#new
+#                       edit_tenant_cargo_item_type GET    /tenant_cargo_item_types/:id/edit(.:format)   tenant_cargo_item_types_admin/admin#edit
+#                                            signin GET    /signin(.:format)                             trestle/auth/sessions#create
+#                                       sidekiq_web        /sidekiq/web                                  Sidekiq::Web
+#                                                   GET    /sidekiq/web(.:format)                        redirect(302, login)
+#                      ruby_event_store_browser_app        /rails_event_store                            RubyEventStore::Browser::App
+#                                 rails_event_store GET    /rails_event_store(.:format)                  redirect(302, login)
+#                                             login GET    /login(.:format)                              trestle/auth/sessions#new
+#                                                   POST   /login(.:format)                              trestle/auth/sessions#create
+#                                            logout GET    /logout(.:format)                             trestle/auth/sessions#destroy
+#                                admins_admin_index GET    /admins(.:format)                             admins_admin/admin#index
+#                                                   POST   /admins(.:format)                             admins_admin/admin#create
+#                                      admins_admin GET    /admins/:id(.:format)                         admins_admin/admin#show
+#                                                   PATCH  /admins/:id(.:format)                         admins_admin/admin#update
+#                                                   PUT    /admins/:id(.:format)                         admins_admin/admin#update
+#                                                   DELETE /admins/:id(.:format)                         admins_admin/admin#destroy
+#                     charge_categories_admin_index GET    /charge_categories(.:format)                  charge_categories_admin/admin#index
+#                                                   POST   /charge_categories(.:format)                  charge_categories_admin/admin#create
+#                           charge_categories_admin GET    /charge_categories/:id(.:format)              charge_categories_admin/admin#show
+#                                                   PATCH  /charge_categories/:id(.:format)              charge_categories_admin/admin#update
+#                                                   PUT    /charge_categories/:id(.:format)              charge_categories_admin/admin#update
+#                                                   DELETE /charge_categories/:id(.:format)              charge_categories_admin/admin#destroy
+#                               clients_admin_index GET    /clients(.:format)                            clients_admin/admin#index
+#                                                   POST   /clients(.:format)                            clients_admin/admin#create
+#                                     clients_admin GET    /clients/:id(.:format)                        clients_admin/admin#show
+#                                                   PATCH  /clients/:id(.:format)                        clients_admin/admin#update
+#                                                   PUT    /clients/:id(.:format)                        clients_admin/admin#update
+#                                                   DELETE /clients/:id(.:format)                        clients_admin/admin#destroy
+#              update_from_data_hub_countries_admin POST   /countries/:id/update_from_data_hub(.:format) countries_admin/admin#update_from_data_hub
+#                             countries_admin_index GET    /countries(.:format)                          countries_admin/admin#index
+#                                                   POST   /countries(.:format)                          countries_admin/admin#create
+#                                   countries_admin GET    /countries/:id(.:format)                      countries_admin/admin#show
+#                                                   PATCH  /countries/:id(.:format)                      countries_admin/admin#update
+#                                                   PUT    /countries/:id(.:format)                      countries_admin/admin#update
+#                                                   DELETE /countries/:id(.:format)                      countries_admin/admin#destroy
+#                               domains_admin_index GET    /domains(.:format)                            domains_admin/admin#index
+#                                                   POST   /domains(.:format)                            domains_admin/admin#create
+#                                     domains_admin GET    /domains/:id(.:format)                        domains_admin/admin#show
+#                                                   PATCH  /domains/:id(.:format)                        domains_admin/admin#update
+#                                                   PUT    /domains/:id(.:format)                        domains_admin/admin#update
+#                                                   DELETE /domains/:id(.:format)                        domains_admin/admin#destroy
+#                               margins_admin_index GET    /margins(.:format)                            margins_admin/admin#index
+#                                                   POST   /margins(.:format)                            margins_admin/admin#create
+#                                     margins_admin GET    /margins/:id(.:format)                        margins_admin/admin#show
+#                                                   PATCH  /margins/:id(.:format)                        margins_admin/admin#update
+#                                                   PUT    /margins/:id(.:format)                        margins_admin/admin#update
+#                                                   DELETE /margins/:id(.:format)                        margins_admin/admin#destroy
+#                max_dimensions_bundles_admin_index GET    /max_dimensions_bundles(.:format)             max_dimensions_bundles_admin/admin#index
+#                                                   POST   /max_dimensions_bundles(.:format)             max_dimensions_bundles_admin/admin#create
+#                      max_dimensions_bundles_admin GET    /max_dimensions_bundles/:id(.:format)         max_dimensions_bundles_admin/admin#show
+#                                                   PATCH  /max_dimensions_bundles/:id(.:format)         max_dimensions_bundles_admin/admin#update
+#                                                   PUT    /max_dimensions_bundles/:id(.:format)         max_dimensions_bundles_admin/admin#update
+#                                                   DELETE /max_dimensions_bundles/:id(.:format)         max_dimensions_bundles_admin/admin#destroy
+#                           memberships_admin_index GET    /memberships(.:format)                        memberships_admin/admin#index
+#                                                   POST   /memberships(.:format)                        memberships_admin/admin#create
+#                                 memberships_admin GET    /memberships/:id(.:format)                    memberships_admin/admin#show
+#                                                   PATCH  /memberships/:id(.:format)                    memberships_admin/admin#update
+#                                                   PUT    /memberships/:id(.:format)                    memberships_admin/admin#update
+#                                                   DELETE /memberships/:id(.:format)                    memberships_admin/admin#destroy
+#                         organizations_admin_index GET    /organizations(.:format)                      organizations_admin/admin#index
+#                                                   POST   /organizations(.:format)                      organizations_admin/admin#create
+#                               organizations_admin GET    /organizations/:id(.:format)                  organizations_admin/admin#show
+#                                                   PATCH  /organizations/:id(.:format)                  organizations_admin/admin#update
+#                                                   PUT    /organizations/:id(.:format)                  organizations_admin/admin#update
+#                            download_queries_admin GET    /queries/:id/download(.:format)               queries_admin/admin#download
+#                               queries_admin_index GET    /queries(.:format)                            queries_admin/admin#index
+#                                     queries_admin GET    /queries/:id(.:format)                        queries_admin/admin#show
+#                         subscriptions_admin_index GET    /subscriptions(.:format)                      subscriptions_admin/admin#index
+#                                                   POST   /subscriptions(.:format)                      subscriptions_admin/admin#create
+#                               subscriptions_admin GET    /subscriptions/:id(.:format)                  subscriptions_admin/admin#show
+#                                                   PATCH  /subscriptions/:id(.:format)                  subscriptions_admin/admin#update
+#                                                   PUT    /subscriptions/:id(.:format)                  subscriptions_admin/admin#update
+#                                                   DELETE /subscriptions/:id(.:format)                  subscriptions_admin/admin#destroy
+#               tenant_cargo_item_types_admin_index GET    /tenant_cargo_item_types(.:format)            tenant_cargo_item_types_admin/admin#index
+#                                                   POST   /tenant_cargo_item_types(.:format)            tenant_cargo_item_types_admin/admin#create
+#                     tenant_cargo_item_types_admin GET    /tenant_cargo_item_types/:id(.:format)        tenant_cargo_item_types_admin/admin#show
+#                                                   PATCH  /tenant_cargo_item_types/:id(.:format)        tenant_cargo_item_types_admin/admin#update
+#                                                   PUT    /tenant_cargo_item_types/:id(.:format)        tenant_cargo_item_types_admin/admin#update
+#                                                   DELETE /tenant_cargo_item_types/:id(.:format)        tenant_cargo_item_types_admin/admin#destroy
+#                                themes_admin_index GET    /themes(.:format)                             themes_admin/admin#index
+#                                                   POST   /themes(.:format)                             themes_admin/admin#create
+#                                      themes_admin GET    /themes/:id(.:format)                         themes_admin/admin#show
+#                                                   PATCH  /themes/:id(.:format)                         themes_admin/admin#update
+#                                                   PUT    /themes/:id(.:format)                         themes_admin/admin#update
+#                                                   DELETE /themes/:id(.:format)                         themes_admin/admin#destroy
+#                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                            trestle/sidekiq/sidekiq_admin/admin#index
+# trestle_rails_event_store_rails_event_store_admin GET    /rails_event_store(.:format)                  trestle/rails_event_store/rails_event_store_admin/admin#index
+#                                              root GET    /                                             trestle/dashboard#index
 #
 # Routes for Admiralty::Engine:
 #   root GET  /           redirect(301, /admin)

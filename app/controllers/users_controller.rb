@@ -67,7 +67,7 @@ class UsersController < ApplicationController
     ).perform
     response = generate_token_for(user: user, scope: "public")
     response_handler(Doorkeeper::OAuth::TokenResponse.new(response).body)
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved => e
     response_handler(
       ApplicationError.new(
         http_code: 422,
