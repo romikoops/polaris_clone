@@ -80,8 +80,8 @@ RSpec.describe Pricings::Manipulator do
     end
   end
 
-  describe ".find_applicable_margins" do
-    let(:margins) { klass.find_applicable_margins }
+  describe ".applicable_margins" do
+    let(:margins) { klass.applicable_margins }
 
     context "with freight pricings and user margin" do
       let!(:user_margin) {

@@ -23,42 +23,36 @@ module Pricings
     end
 
     def perform
-      @applicable_margins = find_applicable_margins
-      @margins_to_apply = sort_margins
-      manipulate_pricings
       pricings_to_return.compact
     end
 
-    def find_applicable_margins
-      hierarchy = OrganizationManager::HierarchyService.new(target: target, organization: organization).fetch
-      target_hierarchy = hierarchy.reverse.reject { |hier| hier == organization }
-        .map.with_index { |hier, i| {rank: i, data: hier} }
-      all_margins = apply_hierarchy(hierarchy: target_hierarchy)
-
-      return all_margins unless all_margins.empty?
-
-      organization_hierarchy = [
-        {rank: 0, data: [organization]}
-      ]
-
-      apply_hierarchy(hierarchy: organization_hierarchy, for_organization: true)
+    def applicable_margins
+      @applicable_margins ||= target_margins.presence || organization_margins
     end
 
-    def apply_hierarchy(hierarchy:, for_organization: false)
-      return [] if hierarchy.empty?
+    def target_margins
+      apply_hierarchy(target_hierarchy: hierarchy)
+    end
 
-      permutations = margin_params.product(hierarchy)
+    def organization_margins
+      apply_hierarchy(target_hierarchy: [{ rank: 0, data: [organization] }], for_organization: true)
+    end
+
+    def apply_hierarchy(target_hierarchy:, for_organization: false)
+      return [] if target_hierarchy.empty?
+
+      permutations = margin_params.product(target_hierarchy).uniq
       base_args, base_target = permutations.first
       base_query = margins.where(base_args.merge(applicable: base_target[:data]))
 
-      margin_relation = permutations.drop(1).inject(base_query) { |query, (args, hier)|
+      margin_relation = permutations.drop(1).inject(base_query) do |query, (args, hier)|
         next query unless margins.exists?(args.merge(applicable: hier[:data]))
 
         query.or(margins.where(args.merge(applicable: hier[:data])))
-      }
+      end
 
-      all_margins = decorate_margins(target_margins: margin_relation.distinct.to_a, target_hierarchy: hierarchy)
-      handle_default_margin(margins: all_margins, for_organization: for_organization)
+      decorated_margins = decorate_margins(input_margins: margin_relation.distinct.to_a, target_hierarchy: target_hierarchy)
+      handle_default_margin(margins: decorated_margins, for_organization: for_organization)
     end
 
     def handle_default_margin(margins:, for_organization:)
@@ -68,6 +62,11 @@ module Pricings
       for_organization_and_empty = for_organization && margins.empty?
       margins << {priority: 0, margin: default_margin, rank: 0} if not_empty_non_dedicated || for_organization_and_empty
       margins
+    end
+
+    def hierarchy
+      OrganizationManager::HierarchyService.new(target: target, organization: organization).fetch
+        .reverse.reject { |hier| hier == organization }.map.with_index { |hier, rank| { rank: rank, data: hier } }
     end
 
     def margin_params
@@ -153,27 +152,29 @@ module Pricings
       end
     end
 
-    def sort_margins
-      margin_periods = applicable_margins.group_by { |x| x[:margin].slice(:effective_date, :expiration_date) }
-      if margin_periods.keys.length == 1
-        margin_periods.values.first.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
-        return margin_periods
-      end
+    def margins_to_apply
+      @margins_to_apply = begin
+        margin_periods = applicable_margins.group_by { |x| x[:margin].slice(:effective_date, :expiration_date) }
+        if margin_periods.keys.length == 1
+          margin_periods.values.first.sort_by! { |x| [x[:margin][:application_order], x[:rank], x[:priority]] }
+          return margin_periods
+        end
 
-      final_margin_periods(margin_periods: margin_periods)
+        final_margin_periods(margin_periods: margin_periods)
+      end
     end
 
-    def decorate_margins(target_margins:, target_hierarchy:)
-      target_margins.map do |margin|
+    def decorate_margins(target_hierarchy:, input_margins:)
+      input_margins.map do |margin|
         hierarchy_data = target_hierarchy.find { |hier| hier[:data] == margin.applicable }
         rank = hierarchy_data ? hierarchy_data[:rank] : 0
         priority = hierarchy_data ? target_hierarchy.index(hierarchy_data) : 0
-        {priority: priority, margin: margin, rank: rank}
+        { priority: priority, margin: margin, rank: rank }
       end
     end
 
-    def manipulate_pricings
-      if type == :freight_margin
+    def pricings_to_return
+      @pricings_to_return ||= if type == :freight_margin
         manipulate_freight_pricings
       elsif %i[trucking_pre_margin trucking_on_margin].include?(type)
         manipulate_trucking_pricings
@@ -187,7 +188,7 @@ module Pricings
     end
 
     def manipulate_freight_pricings
-      @pricings_to_return = margins_to_apply.map { |date_keys, data|
+      margins_to_apply.map do |date_keys, data|
         fees = pricing.fees
         new_effective_date, new_expiration_date = manipulate_dates(pricing, date_keys)
         next if new_effective_date > new_expiration_date || fees.empty? || data.pluck(:margin).empty?
@@ -204,11 +205,11 @@ module Pricings
         adjusted_flat_margins = adjust_flat_margins_for_fees(margins: flat_margins)
         @result[:flat_margins] = adjusted_flat_margins
         final_handling(manipulated_pricing: manipulated_pricing)
-      }
+      end
     end
 
     def manipulate_local_charges
-      @pricings_to_return = margins_to_apply.map { |date_keys, data|
+      margins_to_apply.map do |date_keys, data|
         fees = local_charge.fees.deep_dup
         manipulated_pricing = local_charge.as_json
         update_meta(manipulated_pricing)
@@ -224,7 +225,7 @@ module Pricings
         manipulated_pricing["fees"] = fee_hash
         @result[:flat_margins] = adjust_flat_margins_for_fees(margins: flat_margins)
         final_handling(manipulated_pricing: manipulated_pricing)
-      }
+      end
     end
 
     def final_handling(manipulated_pricing:)
@@ -233,7 +234,7 @@ module Pricings
     end
 
     def manipulate_trucking_pricings
-      @pricings_to_return = margins_to_apply.map { |date_keys, data|
+      margins_to_apply.map do |date_keys, data|
         manipulated_pricing = update_result_effective_periods(
           effective_date: date_keys[:effective_date],
           expiration_date: date_keys[:expiration_date]
@@ -247,7 +248,7 @@ module Pricings
         )
         @result[:flat_margins] = adjust_flat_margins_for_fees(margins: flat_margins)
         final_handling(manipulated_pricing: manipulated_pricing)
-      }
+      end
     end
 
     def trucking_value_for_manipulation(result:, key:, range:)
@@ -264,7 +265,7 @@ module Pricings
         data.each do |mdata|
           result = handle_manipulation(
             margin: mdata[:margin],
-            charge_category: metadata_charge_category,
+            charge_category: trucking_charge_category,
             fee_json: trucking_value_for_manipulation(result: hash, key: adjusted_key, range: range),
             fee_count: 1,
             fee_format: :trucking
@@ -541,7 +542,7 @@ module Pricings
         divided_margin_value = total_margin.value / (fee_keys.count * cargo_count)
 
         update_meta_for_margin(
-          fee_code: key.include?("trucking") ? metadata_charge_category.code : key,
+          fee_code: key.include?("trucking") ? trucking_charge_category.code : key,
           margin_value: divided_margin_value,
           margin_or_detail: total_margin,
           result: {}
@@ -579,7 +580,6 @@ module Pricings
       find_freight_pricing_and_margins(args: args)
       @origin_hub_id = itinerary.ordered_hub_ids.first
       @destination_hub_id = itinerary.ordered_hub_ids.last
-      @pricing_to_return = pricing&.as_json
     end
 
     def build_from_freight_pricing(pricing:)
@@ -628,20 +628,16 @@ module Pricings
       find_dates(args: args)
       @trucking_pricing = args[:trucking_pricing]
       is_pre_carriage = type == :trucking_pre_margin
-      @trucking_charge_category = ::Legacy::ChargeCategory.from_code(
-        organization_id: organization.id,
-        code: "trucking_#{is_pre_carriage ? "pre" : "on"}"
-      )
       @cargo_class = trucking_pricing.cargo_class
+      @trucking_charge_category = ::Legacy::ChargeCategory.from_code(
+        code: "trucking_#{cargo_class}",
+        organization_id: Organizations.current_id
+      )
       if is_pre_carriage
         @destination_hub_id = trucking_pricing.hub_id
       else
         @origin_hub_id = trucking_pricing.hub_id
       end
-      @metadata_charge_category = ::Legacy::ChargeCategory.from_code(
-        code: "trucking_#{cargo_class}",
-        organization_id: trucking_pricing.organization_id
-      )
       @tenant_vehicle_id = trucking_pricing.tenant_vehicle_id
       find_margins(default_for: "trucking")
     end
@@ -673,10 +669,9 @@ module Pricings
     private
 
     attr_reader :target, :organization, :scope, :shipment, :cargo_unit_id, :meta, :type,
-      :applicable_margins, :margins_to_apply, :pricings_to_return, :default_margin, :itinerary,
+      :default_margin, :itinerary,
       :origin_hub_id, :destination_hub_id, :tenant_vehicle_id, :cargo_class, :pricing, :end_date,
       :local_charge, :margins, :trucking_pricing, :trucking_charge_category, :direction, :schedules,
-      :start_date, :pricing_to_return, :counterpart_hub_id, :metadata_list, :metadata_charge_category,
-      :flat_margins, :cargo_count
+      :start_date, :counterpart_hub_id, :metadata_list, :flat_margins, :cargo_count
   end
 end
