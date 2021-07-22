@@ -33,24 +33,6 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
     end
 
-    context "with two identical names, different  locode" do
-      let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_locode_pricing) }
-
-      before do
-        FactoryBot.create(:gothenburg_nexus, locode: nil, organization: organization).tap do |tapped_nexus|
-          FactoryBot.create(:gothenburg_hub, nexus: tapped_nexus, hub_code: nil, organization: organization)
-        end
-      end
-
-      it "attaches the pricing to the correct itinerary" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-          expect(itinerary.rates.count).to eq(1)
-          expect(faux_itinerary.rates).to be_empty
-        end
-      end
-    end
-
     context "with notes" do
       let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_notes) }
 

@@ -22,9 +22,7 @@ module ExcelDataServices
 
     def find_nexus_by_locode_or_name(name:, country:, locode:)
       nexuses = ::Legacy::Nexus.where(organization: organization)
-      nexus = nexuses.joins(:country).find_by(name: name, countries: { name: country }) if name.present? && country.present?
-
-      nexus || nexuses.find_by(locode: locode)
+      nexuses.find_by(locode: locode) || nexuses.joins(:country).find_by(name: name, countries: { name: country })
     end
 
     def find_hub_by_name_and_mot(name:, country:, mot:, nexus:, locode:)

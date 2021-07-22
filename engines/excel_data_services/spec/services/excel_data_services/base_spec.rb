@@ -75,5 +75,28 @@ RSpec.describe ExcelDataServices::Base do
         expect(hub_with_info).to eq({ hub: nil, found_by_info: "XXXXX" })
       end
     end
+
+    context "when name & country exist for different locodeand the hub is found" do
+      let(:args) do
+        {
+          name: name,
+          country: country,
+          mot: mode_of_transport,
+          locode: hub.locode
+        }
+      end
+
+      before do
+        FactoryBot.create(:legacy_hub,
+          name: hub.name,
+          hub_type: hub.hub_type,
+          organization: organization,
+          nexus: FactoryBot.build(:legacy_nexus, locode: "XEGOT", organization: organization))
+      end
+
+      it "finds a hub" do
+        expect(hub_with_info).to eq({ hub: hub, found_by_info: [name, country, locode].join(", ") })
+      end
+    end
   end
 end
