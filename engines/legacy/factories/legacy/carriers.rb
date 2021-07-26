@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :legacy_carrier, class: "Legacy::Carrier" do
     name { "Hapag Lloyd" }

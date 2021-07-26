@@ -2,6 +2,7 @@
 module Routing
   class Carrier < ApplicationRecord
     validates :name, presence: true, uniqueness: {case_sensitive: false}
+    has_one_attached :logo
   end
 end
 

@@ -3,6 +3,10 @@ FactoryBot.define do
   factory :routing_carrier, class: "Routing::Carrier" do
     sequence(:name) { |n| "Carrier - #{n}" }
     sequence(:abbreviated_name) { |n| "C#{n}" }
+
+    after(:build) do |carrier|
+      carrier.logo.attach(io: StringIO.new, filename: "test-image.jpg", content_type: "image/jpg")
+    end
   end
 end
 
