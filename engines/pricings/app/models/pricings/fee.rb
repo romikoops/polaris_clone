@@ -18,11 +18,9 @@ module Pricings
     acts_as_paranoid
 
     def to_fee_hash
-      return if charge_category.blank?
+      return {} if fee_code.nil?
 
-      {
-        fee_code => fee_data
-      }.compact.with_indifferent_access
+      { fee_code => fee_data }.compact.with_indifferent_access
     end
 
     def fee_data
