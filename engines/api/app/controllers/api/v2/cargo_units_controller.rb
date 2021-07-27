@@ -7,13 +7,13 @@ module Api
     class CargoUnitsController < ApiController
       def index
         render json: Api::V2::CargoUnitSerializer.new(
-          Api::V1::CargoUnitDecorator.decorate_collection(cargo_units)
+          Api::V2::CargoUnitDecorator.decorate_collection(cargo_units)
         )
       end
 
       def show
         render json: Api::V2::CargoUnitSerializer.new(
-          Api::V1::CargoUnitDecorator.new(cargo_unit)
+          Api::V2::CargoUnitDecorator.new(cargo_unit)
         )
       end
 

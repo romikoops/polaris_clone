@@ -22,17 +22,16 @@ RSpec.describe "CargoUnits", type: :request, swagger: true do
       parameter name: :query_id, in: :path, type: :string, description: "Query ID"
 
       let(:organization_id) { organization.id }
-      let!(:cargo_units) {
-        FactoryBot.create_list(:journey_cargo_unit, 3, query: query)
-      }
       let(:query_id) { query.id }
+
+      before { FactoryBot.create_list(:journey_cargo_unit, 3, query: query) }
 
       response "200", "successful operation" do
         schema type: :object,
                properties: {
                  data: {
                    type: :array,
-                   items: {"$ref" => "#/components/schemas/cargo_item_type"}
+                   items: { "$ref" => "#/components/schemas/item_response" }
                  }
                },
                required: ["data"]
@@ -44,8 +43,8 @@ RSpec.describe "CargoUnits", type: :request, swagger: true do
 
   path "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units/{id}" do
     get "Fetch CargoUnit for the Query" do
-      tags "CargoUnits"
-      description "Fetch Cergo Units"
+      tags "CargoUnit"
+      description "Fetch Cargo Unit"
       operationId "getCargoUnit"
 
       security [oauth: []]
@@ -64,7 +63,7 @@ RSpec.describe "CargoUnits", type: :request, swagger: true do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: {"$ref" => "#/components/schemas/cargo_item_type"}
+                 data: { "$ref" => "#/components/schemas/item_response" }
                },
                required: ["data"]
 

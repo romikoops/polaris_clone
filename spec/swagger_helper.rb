@@ -595,6 +595,84 @@ RSpec.configure do |config|
               cargoClass
             ]
           },
+          item_response: {
+            type: "object",
+            properties: {
+              attributes: {
+                type: "object",
+                properties: {
+                  cargoClass: {
+                    description: "Cargo classification code",
+                    type: "string",
+                    enum: %w[
+                      lcl
+                      aggregated_lcl
+                      fcl_10
+                      fcl_20
+                      fcl_20_ot
+                      fcl_20_rf
+                      fcl_20_frs
+                      fcl_20_frw
+                      fcl_40
+                      fcl_40_hq
+                      fcl_40_ot
+                      fcl_40_rf
+                      fcl_40_hq_rf
+                      fcl_40_frs
+                      fcl_40_frw
+                      fcl_45
+                      fcl_45_hq
+                      fcl_45_rf
+                    ]
+                  },
+                  stackable: {
+                    description: "If cargo item is stackable or not",
+                    type: "boolean"
+                  },
+                  quantity: {
+                    description: "Quantity",
+                    type: "integer"
+                  },
+                  length: {
+                    description: "Length of the item expressed as a decimal on the centimeter (cm) scale",
+                    type: "number"
+                  },
+                  width: {
+                    description: "Width of the item expressed as a decimal on the centimeter (cm) scale",
+                    type: "number"
+                  },
+                  height: {
+                    description: "Height of the item expressed as a decimal on the centimeter (cm) scale",
+                    type: "number"
+                  },
+                  weight: {
+                    description: "Weight of the item expressed as a decimal on the kilogram (kg) scale",
+                    type: "number"
+                  },
+                  volume: {
+                    description: "Volume of the item expressed as a decimal on the cubic meter (m3) scale",
+                    type: "number"
+                  },
+                  commodities: {
+                    description: "Commodity codes of the contents",
+                    type: "array",
+                    items: { "$ref": "#/components/schemas/commodityInfo" }
+                  }
+                },
+                required: %w[
+                  stackable
+                  colliType
+                  quantity
+                  length
+                  width
+                  height
+                  weight
+                  commodities
+                ]
+              }
+            },
+            required: %w[attributes]
+          },
           v1CargoItem: {
             type: "object",
             properties: {
