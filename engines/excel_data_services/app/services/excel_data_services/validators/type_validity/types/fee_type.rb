@@ -7,8 +7,10 @@ module ExcelDataServices
         class FeeType < ExcelDataServices::Validators::TypeValidity::Types::Base
           def valid?
             case value
+            when NilClass
+              true
             when String
-              ["n/a", "incl"].include?(value)
+              ["n/a", "incl", " ", "-"].include?(value)
             when Money
               value.amount.positive?
             else

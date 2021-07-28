@@ -11,12 +11,13 @@ module ExcelDataServices
         restructurer_name
         internal
         destination_country
+        destination_terminal
         destination_hub
         destination_locode
         origin_hub
         origin_locode
         carrier
-        transshipment_via
+        transshipment
       ].freeze
       ADDITIONAL_KEYS_SAME_FOR_ALL = %i[
         effective_date
@@ -71,6 +72,7 @@ module ExcelDataServices
         replace_blank_with_false_for_internal_flag
         clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
         combine_terminal_and_destination
+        rename_transshipment_attribute
         @restructured_data = expand_to_multiple
         @restructured_data = remove_data_without_main_freight(restructured_data)
         restructured_data_pricings, restructured_data_local_charges =
@@ -132,6 +134,10 @@ module ExcelDataServices
 
       def correctly_mark_internal_row_data
         restructured_data.each { |row_data| row_data[:internal] = row_data[:internal].to_s.casecmp?("x") }
+      end
+
+      def rename_transshipment_attribute
+        restructured_data.each { |row_data| row_data[:transshipment] = row_data.delete(:transshipment_via) }
       end
 
       def expand_to_multiple
@@ -340,7 +346,7 @@ module ExcelDataServices
             header: header,
             body: val.to_s.casecmp?("x") ? nil : val,
             remarks: header == "Remarks",
-            transshipment: header == "Transshipment Via"
+            transshipment: header == "Transshipment"
           }
         end
       end

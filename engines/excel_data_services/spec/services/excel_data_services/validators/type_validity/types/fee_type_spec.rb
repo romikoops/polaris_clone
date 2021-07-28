@@ -7,7 +7,7 @@ RSpec.describe ExcelDataServices::Validators::TypeValidity::Types::FeeType do
     end
 
     it "returns false if fee is invalid" do
-      expect(described_class.new(nil)).not_to be_valid
+      expect(described_class.new(1)).not_to be_valid
     end
   end
 end

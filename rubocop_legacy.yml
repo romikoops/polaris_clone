@@ -49,3 +49,7 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/VariableName:
   Exclude:
   - 'engines/api/spec/api/api/*_spec.rb'
+
+Style/ExponentialNotation:
+  Exclude:
+  - 'engines/excel_data_services/factories/excel_data_restructured.rb'

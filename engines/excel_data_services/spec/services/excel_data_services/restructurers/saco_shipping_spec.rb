@@ -14,13 +14,11 @@ RSpec.describe ExcelDataServices::Restructurers::SacoShipping do
     let(:output_data_local_charges) do
       { "LocalCharges" => FactoryBot.build(:excel_data_restructured_correct_saco_shipping_local_charges) }
     end
+    let(:result) { described_class.restructure(options) }
 
-    it "restructures the data correctly" do
-      result = described_class.restructure(options)
-      aggregate_failures do
-        expect(result.slice("Pricing")).to eq(output_data_pricings)
-        expect(result.slice("LocalCharges")).to eq(output_data_local_charges)
-      end
+    it "restructures the data correctly", :aggregate_failures do
+      expect(result.slice("Pricing")).to eq(output_data_pricings)
+      expect(result.slice("LocalCharges")).to eq(output_data_local_charges)
     end
   end
 end
