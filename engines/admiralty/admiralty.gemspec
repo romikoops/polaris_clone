@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"
   spec.add_dependency "quotations"
+  spec.add_dependency "routing"
   spec.add_dependency "shipments"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"

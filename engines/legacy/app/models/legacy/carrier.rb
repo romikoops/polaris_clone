@@ -7,7 +7,7 @@ module Legacy
     acts_as_paranoid
 
     has_many :tenant_vehicles
-    validates_uniqueness_of :code
+    validates :code, uniqueness: { case_sensitive: false }, presence: true
 
     def get_tenant_vehicle(tenant_id, mode_of_transport, name)
       tv = tenant_vehicles.find_by(

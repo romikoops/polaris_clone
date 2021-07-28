@@ -56,6 +56,7 @@ module ExcelDataServices
 
       def carrier_from_code(name:)
         Legacy::Carrier.find_or_initialize_by(code: name.downcase).tap do |carrier|
+          Routing::Carrier.create_with(name: name).find_or_create_by(code: name.downcase)
           carrier.name ||= name
           carrier.save
         end

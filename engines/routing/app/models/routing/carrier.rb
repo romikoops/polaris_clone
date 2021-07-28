@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 module Routing
   class Carrier < ApplicationRecord
-    validates :name, presence: true, uniqueness: {case_sensitive: false}
+    validates :name, presence: true, uniqueness: { case_sensitive: false }
+    validates :code, presence: true, uniqueness: { case_sensitive: false }
     has_one_attached :logo
   end
 end

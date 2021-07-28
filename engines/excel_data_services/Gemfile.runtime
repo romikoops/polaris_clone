@@ -15,6 +15,9 @@ eval_gemfile "../locations/Gemfile.runtime"
 gem "pricings", path: "../pricings"
 eval_gemfile "../pricings/Gemfile.runtime"
 
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"
 

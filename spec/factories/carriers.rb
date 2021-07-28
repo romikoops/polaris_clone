@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :carrier do
     name { "Hapag Lloyd" }
+    sequence(:code) { |n| "hpg#{n}" }
   end
 end
 

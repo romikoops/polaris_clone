@@ -95,6 +95,7 @@ admiralty --> legacy
 admiralty --> organization_manager
 admiralty --> organizations
 admiralty --> quotations
+admiralty --> routing
 admiralty --> shipments
 locations *--> legacy
 trucking *--> groups
@@ -171,6 +172,7 @@ excel_data_services *--> groups
 excel_data_services *--> legacy
 excel_data_services *--> locations
 excel_data_services *--> pricings
+excel_data_services *--> routing
 excel_data_services --> organizations
 excel_data_services *--> organization_manager
 excel_data_services *--> trucking

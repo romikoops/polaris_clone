@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "legacy"
   spec.add_dependency "locations"
   spec.add_dependency "pricings"
+  spec.add_dependency "routing"
   spec.add_dependency "organizations"
   spec.add_dependency "organization_manager"
   spec.add_dependency "trucking"
