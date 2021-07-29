@@ -1,0 +1,60 @@
+<%- if @app_name.present?%>
+  <tr>
+    <td class="content-block">
+      Source application: <b><%= @app_name %></b>
+    </td>
+  </tr>
+<%- end %>
+
+<tr>
+  <td class="content-block">
+    Your Scientist experiment <b><%= @experiment_name  %></b> has been completed. Please see the results below:
+  </td>
+</tr>
+
+
+<tr>
+  <td class="content-block aligncenter">
+    <h4>Diff:</h4>
+    <table>
+      <tr>
+        <td>
+          <table cellpadding="0" cellspacing="0">
+          <%- if @has_errors %>
+            <tr>
+              <td class="aligncenter"><i>Control</i></td><td class="aligncenter"><i>Candidate</i></td>
+            </tr>
+            <tr>
+              <td><%= sanitize @control_diff %></td>
+              <td><%= sanitize @candidate_diff %></td>
+            </tr>
+          <%- else %>
+            <tr>
+              <td class="content-block">
+                <b>No errors - the results match!</b>
+              </td>
+            </tr>
+          <%- end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+<tr>
+  <td class="content-block aligncenter">
+    <h4>Input Params:</h4>
+    <table>
+      <tr>
+        <td>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td><pre><%= JSON.pretty_generate(@query_input_params) %></pre></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  <td>
+</tr>

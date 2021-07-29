@@ -21,6 +21,7 @@ module OfferCalculator
           offers.each do |offer|
             ResultBuilder.result(request: request, offer: offer)
           end
+
           result_set
         end
       end

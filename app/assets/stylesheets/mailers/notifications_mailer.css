@@ -2,6 +2,7 @@
     GLOBAL
     A very basic CSS reset
 ------------------------------------- */
+
 * {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -24,6 +25,7 @@ body {
 }
 
 /* Let's make sure all tables have defaults */
+
 table td {
   vertical-align: top;
 }
@@ -31,6 +33,7 @@ table td {
 /* -------------------------------------
     BODY & CONTAINER
 ------------------------------------- */
+
 body {
   background-color: #f6f6f6;
 }
@@ -58,6 +61,7 @@ body {
 /* -------------------------------------
     HEADER, FOOTER, MAIN
 ------------------------------------- */
+
 .main {
   background-color: #fff;
   border: 1px solid #e9e9e9;
@@ -83,6 +87,7 @@ body {
   color: #999;
   padding: 20px;
 }
+
 .footer p, .footer a, .footer td {
   color: #999;
   font-size: 12px;
@@ -91,6 +96,7 @@ body {
 /* -------------------------------------
     TYPOGRAPHY
 ------------------------------------- */
+
 h1, h2, h3 {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   color: #000;
@@ -127,6 +133,7 @@ p, ul, ol {
   margin-bottom: 10px;
   font-weight: normal;
 }
+
 p li, ul li, ol li {
   margin-left: 5px;
   list-style-position: inside;
@@ -135,6 +142,7 @@ p li, ul li, ol li {
 /* -------------------------------------
     LINKS & BUTTONS
 ------------------------------------- */
+
 a {
   color: #348eda;
   text-decoration: underline;
@@ -160,6 +168,7 @@ a {
 /* -------------------------------------
     OTHER STYLES THAT MIGHT BE USEFUL
 ------------------------------------- */
+
 .last {
   margin-bottom: 0;
 }
@@ -188,6 +197,7 @@ a {
     ALERTS
     Change the class depending on warning email, good email or bad email
 ------------------------------------- */
+
 .alert {
   font-size: 16px;
   color: #fff;
@@ -196,18 +206,22 @@ a {
   text-align: center;
   border-radius: 3px 3px 0 0;
 }
+
 .alert a {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
   font-size: 16px;
 }
+
 .alert.alert-warning {
   background-color: #FF9F00;
 }
+
 .alert.alert-bad {
   background-color: #D0021B;
 }
+
 .alert.alert-good {
   background-color: #68B90F;
 }
@@ -216,20 +230,25 @@ a {
     INVOICE
     Styles for the billing table
 ------------------------------------- */
+
 .invoice {
   margin: 40px auto;
   text-align: left;
   width: 80%;
 }
+
 .invoice td {
   padding: 5px 0;
 }
+
 .invoice .invoice-items {
   width: 100%;
 }
+
 .invoice .invoice-items td {
   border-top: #eee 1px solid;
 }
+
 .invoice .invoice-items .total td {
   border-top: 2px solid #333;
   border-bottom: 2px solid #333;
@@ -239,42 +258,103 @@ a {
 /* -------------------------------------
     RESPONSIVE AND MOBILE FRIENDLY STYLES
 ------------------------------------- */
+
 @media only screen and (max-width: 640px) {
   body {
     padding: 0 !important;
   }
-
   h1, h2, h3, h4 {
     font-weight: 800 !important;
     margin: 20px 0 5px !important;
   }
-
   h1 {
     font-size: 22px !important;
   }
-
   h2 {
     font-size: 18px !important;
   }
-
   h3 {
     font-size: 16px !important;
   }
-
   .container {
     padding: 0 !important;
     width: 100% !important;
   }
-
   .content {
     padding: 0 !important;
   }
-
   .content-wrap {
     padding: 10px !important;
   }
-
   .invoice {
     width: 100% !important;
   }
+}
+
+/* -------------------------------------
+    DIFFS
+------------------------------------- */
+
+.diff {
+  overflow: auto;
+}
+
+.diff ul {
+  background: #fff;
+  overflow: auto;
+  font-size: 13px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: table;
+  width: 100%;
+}
+
+.diff del, .diff ins {
+  display: block;
+  text-decoration: none;
+}
+
+.diff li {
+  padding: 0;
+  display: table-row;
+  margin: 0;
+  height: 1em;
+}
+
+.diff li.ins {
+  background: #dfd;
+  color: #080
+}
+
+.diff li.del {
+  background: #fee;
+  color: #b00
+}
+
+.diff li:hover {
+  background: #ffc
+}
+
+.diff del, .diff ins, .diff span {
+  white-space: pre-wrap;
+  font-family: courier;
+}
+
+.diff del strong {
+  font-weight: normal;
+  background: #fcc;
+}
+
+.diff ins strong {
+  font-weight: normal;
+  background: #9f9;
+}
+
+.diff li.diff-comment {
+  display: none;
+}
+
+.diff li.diff-block-info {
+  background: none repeat scroll 0 0 gray;
 }

@@ -2,6 +2,8 @@
 
 module OfferCalculator
   class Results
+    include Scientist
+
     attr_reader :query, :wheelhouse, :params, :offer
 
     def initialize(query:, params:)
@@ -22,9 +24,38 @@ module OfferCalculator
     end
 
     def offers
-      @offers ||= OfferCalculator::Service::OfferSorter.sorted_offers(
-        request: request, charges: charges, schedules: schedules
-      )
+      @offers ||= science "quotation-calculation" do |experiment|
+        experiment.run_if { Rails.env.development? } # Only run in development until some basics are working
+
+        experiment.context request: request
+
+        # Original
+        experiment.use do
+          OfferCalculator::Service::OfferSorter.sorted_offers(
+            request: request, charges: charges, schedules: schedules
+          )
+        end
+
+        # New, Phoenix based
+        experiment.try do
+          # TODO: Phoenix Logic
+          # Next steps:
+          # - Cherry pick `Results` engine code from old branch. https://github.com/itsmycargo/imc-react-api/pull/1764
+          # - Call `Results` engine process runner
+
+          # Empty collection that satisfies the `experiment.clean` method for now.
+          [{}]
+        end
+
+        # Prepare values to compare old to new
+        experiment.clean do |value|
+          # Control:   returns array of OfferCalculator::Service::OfferCreators::Offer
+          # Candidate: returns array of ???
+
+          # Compare hash representation of the class data for now
+          value.map(&:as_json) # TODO: more complex comparison payload
+        end
+      end
     end
 
     def hubs
