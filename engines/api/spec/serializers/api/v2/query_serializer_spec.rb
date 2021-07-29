@@ -21,7 +21,9 @@ module Api
         modesOfTransport: decorated_query.modes_of_transport,
         loadType: decorated_query.load_type,
         offerId: offer.id,
-        issueDate: query.created_at
+        issueDate: query.created_at,
+        originId: pickup_point.geo_id,
+        destinationId: delivery_point.geo_id
       }
     end
 
