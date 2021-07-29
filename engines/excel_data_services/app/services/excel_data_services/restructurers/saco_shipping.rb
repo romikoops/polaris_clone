@@ -71,7 +71,7 @@ module ExcelDataServices
         correctly_mark_internal_row_data
         replace_blank_with_false_for_internal_flag
         clean_html_format_artifacts(restructured_data) # TODO: change method to use instance variable
-        combine_terminal_and_destination
+        rename_terminal_attribute
         rename_transshipment_attribute
         @restructured_data = expand_to_multiple
         @restructured_data = remove_data_without_main_freight(restructured_data)
@@ -126,9 +126,9 @@ module ExcelDataServices
         end
       end
 
-      def combine_terminal_and_destination
+      def rename_terminal_attribute
         restructured_data.each do |row_data|
-          row_data[:destination_hub] = [row_data[:destination_hub], row_data.delete(:terminal)].compact.join(" - ")
+          row_data[:destination_terminal] = row_data.delete(:terminal)
         end
       end
 

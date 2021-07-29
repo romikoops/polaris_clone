@@ -46,6 +46,14 @@ module ExcelDataServices
       def vm_ratio
         @vm_ratio ||= data[:vm_ratio] ? (data[:vm_ratio].to_d / 1000.0) : 1.0
       end
+
+      def origin_terminal
+        @origin_terminal ||= data[:origin_terminal]
+      end
+
+      def destination_terminal
+        @destination_terminal ||= data[:destination_terminal]
+      end
     end
   end
 end

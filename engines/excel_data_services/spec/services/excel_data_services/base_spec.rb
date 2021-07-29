@@ -9,11 +9,12 @@ RSpec.describe ExcelDataServices::Base do
   before { allow(base_class).to receive(:organization).and_return(organization) }
 
   describe "#find_hub_by_name_or_locode_with_info" do
-    let(:hub) { FactoryBot.create(:gothenburg_hub, organization: organization) }
+    let(:hub) { FactoryBot.create(:gothenburg_hub, terminal: terminal, organization: organization) }
     let(:mode_of_transport) { hub.hub_type }
     let(:name) { hub.name }
     let(:country) { hub.country.name }
     let(:locode) { hub.hub_code }
+    let(:terminal) { nil }
     let(:hub_with_info) { base_class.find_hub_by_name_or_locode_with_info(args) }
 
     context "when name & country provided and the hub is found" do
@@ -76,7 +77,7 @@ RSpec.describe ExcelDataServices::Base do
       end
     end
 
-    context "when name & country exist for different locodeand the hub is found" do
+    context "when name & country exist for different locode and the hub is found" do
       let(:args) do
         {
           name: name,
@@ -96,6 +97,27 @@ RSpec.describe ExcelDataServices::Base do
 
       it "finds a hub" do
         expect(hub_with_info).to eq({ hub: hub, found_by_info: [name, country, locode].join(", ") })
+      end
+    end
+
+    context "when the terminal is present" do
+      let(:args) do
+        {
+          name: name,
+          country: country,
+          mot: mode_of_transport,
+          locode: hub.locode,
+          terminal: hub.terminal
+        }
+      end
+      let(:terminal) { "1-A" }
+
+      before do
+        hub.dup.tap { |new_hub| new_hub.update(terminal: nil) }
+      end
+
+      it "finds a hub" do
+        expect(hub_with_info).to eq({ hub: hub, found_by_info: [name, country, locode, terminal].join(", ") })
       end
     end
   end

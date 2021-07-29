@@ -47,6 +47,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
 
   before do
     FactoryBot.create(:groups_group, :default, organization: organization)
+    FactoryBot.create(:gothenburg_hub, terminal: "1-A", organization: organization)
     ::Organizations.current_id = organization.id
   end
 

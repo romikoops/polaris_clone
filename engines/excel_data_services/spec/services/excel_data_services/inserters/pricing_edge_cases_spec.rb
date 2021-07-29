@@ -24,23 +24,19 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
     context "with two identical names" do
       let(:input_data) { FactoryBot.build(:excel_data_restructured_same_name_pricing) }
 
-      it "attaches the pricing to the correct itinerary" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-          expect(itinerary.rates.count).to eq(1)
-          expect(faux_itinerary.rates).to be_empty
-        end
+      it "attaches the pricing to the correct itinerary", :aggregate_failures do
+        expect(stats).to eq(expected_stats)
+        expect(itinerary.rates.count).to eq(1)
+        expect(faux_itinerary.rates).to be_empty
       end
     end
 
     context "with notes" do
       let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_notes) }
 
-      it "creates notes attached to the pricings" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-          expect(Legacy::Note.where.not(pricings_pricing_id: nil).count).to eq(2)
-        end
+      it "creates notes attached to the pricings", :aggregate_failures do
+        expect(stats).to eq(expected_stats)
+        expect(Legacy::Note.where.not(pricings_pricing_id: nil).count).to eq(2)
       end
     end
 
@@ -50,9 +46,7 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       before { FactoryBot.create(:groups_group, name: "Test", organization: organization) }
 
       it "creates notes attached to the pricings" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-        end
+        expect(stats).to eq(expected_stats)
       end
     end
 
@@ -63,9 +57,19 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       before { input_data.each { |data| data.first[:group_id] = group.id } }
 
       it "creates notes attached to the pricings" do
-        aggregate_failures do
-          expect(stats).to eq(expected_stats)
-        end
+        expect(stats).to eq(expected_stats)
+      end
+    end
+
+    context "with terminals" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_terminal) }
+      let(:origin_hub) { FactoryBot.create(:gothenburg_hub, terminal: "1-A", organization: organization) }
+      let(:destination_hub) { FactoryBot.create(:shanghai_hub, terminal: "A-1", organization: organization) }
+
+      before { FactoryBot.create(:legacy_itinerary, origin_hub: origin_hub, destination_hub: destination_hub, organization: organization) }
+
+      it "creates notes attached to the pricings" do
+        expect(stats).to eq(expected_stats)
       end
     end
   end

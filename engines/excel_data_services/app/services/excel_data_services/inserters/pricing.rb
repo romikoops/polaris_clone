@@ -13,14 +13,16 @@ module ExcelDataServices
             name: row.origin,
             country: row.origin_country,
             mot: row.mot,
-            locode: row.origin_locode
+            locode: row.origin_locode,
+            terminal: row.origin_terminal
           )[:hub]
 
           destination_hub = find_hub_by_name_or_locode_with_info(
             name: row.destination,
             country: row.destination_country,
             mot: row.mot,
-            locode: row.destination_locode
+            locode: row.destination_locode,
+            terminal: row.destination_terminal
           )[:hub]
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
