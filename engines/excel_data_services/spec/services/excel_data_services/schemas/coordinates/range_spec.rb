@@ -8,9 +8,9 @@ RSpec.describe ExcelDataServices::Schemas::Coordinates::Range do
   let(:axis) { "cols" }
   let(:columns) { described_class.new(source: source, section: section, axis: axis).perform }
 
-  describe ".valid?" do
+  describe "#valid?" do
     it "returns successfully" do
-      expect(columns).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+      expect(columns).to eq((1..11).to_a)
     end
   end
 end

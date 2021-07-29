@@ -9,7 +9,7 @@ RSpec.describe ExcelDataServices::Schemas::Coordinates::List do
   let(:axis) { "cols" }
   let(:columns) { described_class.new(source: source, section: section, axis: axis).perform }
 
-  describe ".valid?" do
+  describe "#valid?" do
     it "returns successfully" do
       expect(columns).to eq([2, 3, 4])
     end

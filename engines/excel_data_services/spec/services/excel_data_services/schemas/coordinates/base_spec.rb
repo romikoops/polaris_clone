@@ -11,7 +11,7 @@ RSpec.describe ExcelDataServices::Schemas::Coordinates::Base do
   let(:axis) { "cols" }
   let(:klass) { described_class.get(coordinates: coordinates) }
 
-  describe "self.get" do
+  describe ".get" do
     context "when section is dynamic" do
       it "returns the correct child class" do
         expect(klass).to eq(ExcelDataServices::Schemas::Coordinates::Dynamic)
@@ -35,7 +35,7 @@ RSpec.describe ExcelDataServices::Schemas::Coordinates::Base do
       end
     end
 
-    context "when section is a range" do
+    context "when section is relative" do
       let(:section) { "metadata_data" }
 
       it "returns the correct child class" do
