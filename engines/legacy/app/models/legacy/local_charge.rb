@@ -2,13 +2,17 @@
 
 module Legacy
   class LocalCharge < ApplicationRecord
+    include PgSearch::Model
+
     self.table_name = "local_charges"
 
     has_paper_trail
 
     belongs_to :hub, class_name: "Legacy::Hub"
     belongs_to :organization, class_name: "Organizations::Organization"
+    belongs_to :group, class_name: "Groups::Group"
     belongs_to :tenant_vehicle, class_name: "Legacy::TenantVehicle", optional: true
+    has_one :carrier, class_name: "Legacy::Carrier", through: :tenant_vehicle
     belongs_to :counterpart_hub, class_name: "Legacy::Hub", optional: true
     has_many :notes, dependent: :destroy, as: :target
 
@@ -18,6 +22,31 @@ module Legacy
       where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
     scope :current, -> { where("validity::daterange @> ?::date", Time.zone.now) }
+
+    pg_search_scope :hub_search, associated_against: {
+      hub: %i[name hub_code]
+    },
+                                 using: {
+                                   tsearch: { prefix: true }
+                                 }
+    pg_search_scope :counterpart_search, associated_against: {
+      counterpart_hub: %i[name hub_code]
+    },
+                                         using: {
+                                           tsearch: { prefix: true }
+                                         }
+    pg_search_scope :service_search, associated_against: {
+      tenant_vehicle: %i[name]
+    },
+                                     using: {
+                                       tsearch: { prefix: true }
+                                     }
+    pg_search_scope :carrier_search, associated_against: {
+      carrier: %i[name]
+    },
+                                     using: {
+                                       tsearch: { prefix: true }
+                                     }
 
     before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
     before_validation :set_validity

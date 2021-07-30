@@ -214,6 +214,7 @@ PATH
       draper
       fixer_currency (~> 3.4)
       geocoder
+      groups
       mobility
       money-rails
       organizations

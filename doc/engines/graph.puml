@@ -7,10 +7,10 @@ package "bookings" {
   class address_book << (D,orange) >>
 }
 package "service" {
+  class groups << (S,yellow) >>
   class profiles << (S,yellow) >>
   class legacy << (S,yellow) >>
   class companies << (S,yellow) >>
-  class groups << (S,yellow) >>
   class organization_manager << (S,yellow) >>
   class cargo << (S,yellow) >>
   class quotations << (S,yellow) >>
@@ -57,10 +57,13 @@ package "direct" {
   class idp << (*,blue) >>
 }
 address_book *--> organizations
+groups --> organizations
+groups *--> companies
 users *--> organizations
 profiles --> users
 profiles --> organizations
 legacy --> organizations
+legacy *--> groups
 legacy *--> profiles
 legacy *--> cargo
 legacy *--> companies
@@ -69,8 +72,6 @@ legacy *--> quotations
 companies --> organizations
 companies *--> legacy
 companies *--> groups
-groups --> organizations
-groups *--> companies
 organization_manager *--> companies
 organization_manager *--> groups
 organization_manager *--> legacy

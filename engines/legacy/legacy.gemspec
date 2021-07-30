@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "shared-runtime"
 
+  spec.add_dependency "groups"
   spec.add_dependency "organizations"
   spec.add_dependency "profiles"
 
