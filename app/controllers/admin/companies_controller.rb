@@ -64,10 +64,12 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def edit_employees
-    Companies::Membership.where(company: company).where.not(member_id: params[:addedMembers].pluck(:id)).destroy_all
-    if params[:addedMembers].present?
-      params[:addedMembers].each do |user|
-        Companies::Membership.find_or_create_by(company: company, member: ::Users::Client.find(user[:id]))
+    if added_members.present?
+      clients = ::Users::Client.where(id: added_members.pluck(:id))
+      Companies::Membership.where(company: company).where.not(member: clients).destroy_all
+      Companies::Membership.with_deleted.where(company: company, member: clients).map(&:restore)
+      clients.each do |client|
+        Companies::Membership.find_or_create_by(company: company, member: client)
       end
     end
     response_handler(company)
@@ -169,5 +171,9 @@ class Admin::CompaniesController < Admin::AdminBaseController
     return "addresses_companies_companies" if search_params[:address].present? && search_params[:address_desc].present?
 
     "addresses"
+  end
+
+  def added_members
+    params.require(:addedMembers)
   end
 end

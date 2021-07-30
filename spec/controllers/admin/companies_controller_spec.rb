@@ -253,15 +253,25 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     }
     let!(:user_c) { FactoryBot.create(:users_client, organization: organization) }
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let(:params) { {organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json)} }
-    let(:result) { json.dig(:data) }
+    let(:params) { { organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json) } }
 
-    it "returns all the companies for the organization" do
-      post :edit_employees, params: params
-      aggregate_failures do
-        expect(Companies::Membership.exists?(company: company, member: user_a)).to be_truthy
-        expect(Companies::Membership.exists?(company: company, member: user_b)).to be_falsy
-        expect(Companies::Membership.exists?(company: company, member: user_c)).to be_truthy
+    context "when removing one and adding antoher Membership" do
+      it "updates the employees for the Company", :aggregate_failures do
+        post :edit_employees, params: params
+        expect(Companies::Membership.find_by(company: company, member: user_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, member: user_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, member: user_c)).to be_present
+      end
+    end
+
+    context "when a soft deleted Membership exists" do
+      before { FactoryBot.create(:companies_membership, company: company, member: user_c).tap(&:destroy) }
+
+      it "updates the employees for the Company, restoring the soft deleted Membership", :aggregate_failures do
+        post :edit_employees, params: params
+        expect(Companies::Membership.find_by(company: company, member: user_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, member: user_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, member: user_c)).to be_present
       end
     end
   end
