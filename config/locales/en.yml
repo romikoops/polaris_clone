@@ -330,3 +330,11 @@ en:
     invalid_quotation_error:
       code: 6004
       message: 'A problem occured building your shipment'
+
+    # Carta Errors
+    location_not_found:
+      code: 7001
+      message: "We were unable to retrieve information about one of the points in your route. Please try again in a minute."
+    service_unavailable:
+      code: 7002
+      message: "We seem to be having some difficulties fetching your data. Please try again in a minute."
