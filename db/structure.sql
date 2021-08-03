@@ -2949,7 +2949,7 @@ CREATE TABLE public.organizations_scopes (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     target_type character varying,
     target_id uuid,
-    content jsonb,
+    content jsonb DEFAULT '{}'::jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -12285,6 +12285,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210628130133'),
 ('20210630075906'),
 ('20210702094000'),
-('20210702094008');
+('20210702094008'),
+('20210730110214');
 
 

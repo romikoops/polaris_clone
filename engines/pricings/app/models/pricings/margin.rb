@@ -23,8 +23,7 @@ module Pricings
     scope :for_dates, (lambda do |start_date, end_date|
       where("validity && daterange(?::date, ?::date)", start_date, end_date)
     end)
-    validates :operator, inclusion: {in: %w[+ %],
-                                     message: "%{value} is not a valid operator for a parent margin"}
+    validates :operator, inclusion: { in: %w[+ %], message: "Operator for a Parent Margin must be either '%' or '+'." }
 
     before_validation :set_application_order, :set_validity
 

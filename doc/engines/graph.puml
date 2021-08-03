@@ -62,8 +62,8 @@ groups *--> companies
 users *--> organizations
 profiles --> users
 profiles --> organizations
-legacy --> organizations
 legacy *--> groups
+legacy --> organizations
 legacy *--> profiles
 legacy *--> cargo
 legacy *--> companies

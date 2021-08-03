@@ -118,10 +118,12 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
     tab :margins do
       fields_for :margins do
         row do
-          col(sm: 3) { select :margin_type,  Pricings::Margin.margin_types.keys }
-          col(sm: 3) { select :default_for,  ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil] }
-          col(sm: 3) { select :operator, ["+", "%"] }
-          col(sm: 3) { number_field :value, label: "Value", help: "The margin value to be applied to the rates" }
+          col(sm: 2) { select :margin_type,  Pricings::Margin.margin_types.keys }
+          col(sm: 2) { select :default_for,  ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil] }
+          col(sm: 2) { select :operator, ["+", "%"] }
+          col(sm: 2) { number_field :value, label: "Value", help: "The margin value to be applied to the rates" }
+          col(sm: 2) { date_field :effective_date, label: "Effective Date", help: "The date the margin comes into effect." }
+          col(sm: 2) { date_field :expiration_date, label: "Expiration Date", help: "The date the margin becomes invalid" }
         end
       end
 
@@ -136,6 +138,20 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
       end
 
       concat admin_link_to("New Cargo Item Types", admin: :tenant_cargo_item_types, action: :new, params: { tenant_cargo_item_type: { organization_id: organization.id } }, class: "btn btn-success") if organization.id
+    end
+  end
+
+  controller do
+    def new
+      %w[trucking_pre export cargo import trucking_on].each do |section|
+        instance.charge_categories << Legacy::ChargeCategory.new(code: section, name: section.humanize)
+      end
+      instance.tenant_cargo_item_types << Legacy::TenantCargoItemType.new(
+        cargo_item_type: Legacy::CargoItemType.find_by(category: "Pallet", width: nil, length: nil)
+      )
+      instance.scope = Organizations::Scope.new(content: {})
+      instance.theme = Organizations::Theme.new
+      super
     end
   end
 end

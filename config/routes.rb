@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ff4640e43f8@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ffb2ff30f20@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -858,6 +858,8 @@ end
 #                                        edit_admin GET    /admins/:id/edit(.:format)                    admins_admin/admin#edit
 #                                        new_client GET    /clients/new(.:format)                        clients_admin/admin#new
 #                                       edit_client GET    /clients/:id/edit(.:format)                   clients_admin/admin#edit
+#                                       new_carrier GET    /carriers/new(.:format)                       carriers_admin/admin#new
+#                                      edit_carrier GET    /carriers/:id/edit(.:format)                  carriers_admin/admin#edit
 #                                       new_country GET    /countries/new(.:format)                      countries_admin/admin#new
 #                                      edit_country GET    /countries/:id/edit(.:format)                 countries_admin/admin#edit
 #                               new_charge_category GET    /charge_categories/new(.:format)              charge_categories_admin/admin#new
@@ -894,6 +896,12 @@ end
 #                                                   PATCH  /admins/:id(.:format)                         admins_admin/admin#update
 #                                                   PUT    /admins/:id(.:format)                         admins_admin/admin#update
 #                                                   DELETE /admins/:id(.:format)                         admins_admin/admin#destroy
+#                              carriers_admin_index GET    /carriers(.:format)                           carriers_admin/admin#index
+#                                                   POST   /carriers(.:format)                           carriers_admin/admin#create
+#                                    carriers_admin GET    /carriers/:id(.:format)                       carriers_admin/admin#show
+#                                                   PATCH  /carriers/:id(.:format)                       carriers_admin/admin#update
+#                                                   PUT    /carriers/:id(.:format)                       carriers_admin/admin#update
+#                                                   DELETE /carriers/:id(.:format)                       carriers_admin/admin#destroy
 #                     charge_categories_admin_index GET    /charge_categories(.:format)                  charge_categories_admin/admin#index
 #                                                   POST   /charge_categories(.:format)                  charge_categories_admin/admin#create
 #                           charge_categories_admin GET    /charge_categories/:id(.:format)              charge_categories_admin/admin#show
