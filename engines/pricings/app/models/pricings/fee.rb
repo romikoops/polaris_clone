@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Pricings
   class Fee < ApplicationRecord
     include ::Pricings::Legacy
@@ -69,7 +70,7 @@ end
 #  rate               :decimal(, )
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  charge_category_id :integer
+#  charge_category_id :integer          not null
 #  currency_id        :bigint
 #  hw_rate_basis_id   :uuid
 #  legacy_id          :integer
@@ -91,5 +92,6 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (charge_category_id => charge_categories.id)
 #  fk_rails_...  (organization_id => organizations_organizations.id)
 #

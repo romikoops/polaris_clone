@@ -3107,7 +3107,7 @@ CREATE TABLE public.pricings_fees (
     min numeric,
     hw_threshold numeric,
     hw_rate_basis_id uuid,
-    charge_category_id integer,
+    charge_category_id integer NOT NULL,
     range jsonb DEFAULT '[]'::jsonb,
     currency_name character varying,
     currency_id bigint,
@@ -11454,6 +11454,14 @@ ALTER TABLE ONLY public.customs_fees
 
 
 --
+-- Name: pricings_fees fk_rails_e55c65ff8f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pricings_fees
+    ADD CONSTRAINT fk_rails_e55c65ff8f FOREIGN KEY (charge_category_id) REFERENCES public.charge_categories(id);
+
+
+--
 -- Name: pricings_margins fk_rails_e63b427b7b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12286,6 +12294,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210630075906'),
 ('20210702094000'),
 ('20210702094008'),
+('20210727122646'),
+('20210727123338'),
+('20210727130923'),
 ('20210730110214');
 
 
