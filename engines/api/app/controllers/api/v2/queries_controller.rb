@@ -8,14 +8,18 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create result_set show]
 
       def index
-        render json: Api::V2::QuerySerializer.new(
-          Api::V2::QueryDecorator.decorate_collection(
-            filtered_queries.paginate(
-              page: index_params[:page],
-              per_page: index_params[:per_page]
+        if search_by_is_valid?
+          render json: Api::V2::QuerySerializer.new(
+            Api::V2::QueryDecorator.decorate_collection(
+              filtered_queries.paginate(
+                page: index_params[:page],
+                per_page: index_params[:per_page]
+              )
             )
           )
-        )
+        else
+          render json: { error: "#{index_params[:search_by]} is not a valid 'search_by' option" }, status: :unprocessable_entity
+        end
       end
 
       def create
@@ -39,9 +43,10 @@ module Api
       private
 
       def filterrific_params
-        return {} if index_params[:sort_by].blank?
-
-        { sorted_by: [index_params[:sort_by], index_params[:direction]].compact.join("_") }
+        {
+          sorted_by: sort_by && [sort_by, index_params[:direction]].compact.join("_"),
+          "#{search_by}_search": search_by && index_params[:search_query]
+        }.compact
       end
 
       def filtered_queries
@@ -117,7 +122,30 @@ module Api
       end
 
       def index_params
-        params.permit(:sort_by, :direction, :page, :per_page)
+        params.permit(:sort_by, :direction, :page, :per_page, :search_by, :search_query)
+      end
+
+      def search_by_is_valid?
+        return true if search_by.blank? && index_params[:search_query].blank?
+
+        %w[
+          reference
+          client_email
+          client_name
+          company_name
+          origin
+          destination
+          imo_class
+          hs_code
+        ].include?(search_by)
+      end
+
+      def sort_by
+        index_params[:sort_by]
+      end
+
+      def search_by
+        index_params[:search_by]
       end
     end
   end

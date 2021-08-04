@@ -13,7 +13,6 @@ module Journey
     belongs_to :organization, class_name: "Organizations::Organization"
 
     has_one :profile, through: :client
-
     validates :source_id, presence: true
     validates :cargo_ready_date, presence: true
     validates :delivery_date, presence: true

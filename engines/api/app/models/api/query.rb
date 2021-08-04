@@ -17,8 +17,16 @@ module Api
 
     filterrific(
       default_filter_params: { sorted_by: "created_at_desc" },
-      available_filters: [
-        :sorted_by
+      available_filters: %i[
+        sorted_by
+        reference_search
+        client_email_search
+        client_name_search
+        company_name_search
+        origin_search
+        destination_search
+        imo_class_search
+        hs_code_search
       ]
     )
 
@@ -41,6 +49,38 @@ module Api
       else
         raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
       end
+    }
+
+    scope :reference_search, lambda { |input|
+      joins(result_sets: { results: :line_item_sets }).where("reference ILIKE ?", "%#{input}%").distinct("journey_queries.id")
+    }
+
+    scope :client_email_search, lambda { |input|
+      joins(:client).where("email ILIKE ?", "%#{input}%")
+    }
+
+    scope :client_name_search, lambda { |input|
+      joins(client: :profile).where("first_name ILIKE ? OR last_name ILIKE ?", "%#{input}%", "%#{input}%")
+    }
+
+    scope :company_name_search, lambda { |input|
+      joins(:company).where("name ILIKE ?", "%#{input}%")
+    }
+
+    scope :origin_search, lambda { |input|
+      where("origin ILIKE ?", "%#{input}%")
+    }
+
+    scope :destination_search, lambda { |input|
+      where("destination ILIKE ?", "%#{input}%")
+    }
+
+    scope :imo_class_search, lambda { |input|
+      joins(cargo_units: :commodity_infos).where("hs_code is NULL AND description ILIKE ?", "%#{input}%")
+    }
+
+    scope :hs_code_search, lambda { |input|
+      joins(cargo_units: :commodity_infos).where("imo_class IS NULL AND description ILIKE ?", "%#{input}%")
     }
   end
 end

@@ -179,11 +179,42 @@ RSpec.describe "Queries", type: :request, swagger: true do
       parameter name: :sort_by,
                 in: :query,
                 type: :string,
-                description: "The attribute by which to sort the Queries"
+                description: "The attribute by which to sort the Queries",
+                enum: %w[
+                  load_type
+                  last_name
+                  origin
+                  destination
+                  selected_date
+                  cargo_ready_date
+                  created_at
+                ]
       parameter name: :direction,
                 in: :query,
                 type: :string,
-                description: "The defining whether the sorting is ascending or descending"
+                description: "The defining whether the sorting is ascending or descending",
+                enum: %w[
+                  asc
+                  desc
+                ]
+      parameter name: :search_by,
+                in: :query,
+                type: :string,
+                description: "The attribute of the Query model to search through",
+                enum: %w[
+                  reference
+                  client_email
+                  client_name
+                  company_name
+                  origin
+                  destination
+                  imo_class
+                  hs_code
+                ]
+      parameter name: :search_query,
+                in: :query,
+                type: :string,
+                description: "The value we want to use in our search"
       parameter name: :page,
                 in: :query,
                 type: :string,
@@ -196,6 +227,8 @@ RSpec.describe "Queries", type: :request, swagger: true do
       response "200", "successful operation" do
         let(:sort_by) { "created_at" }
         let(:direction) { "desc" }
+        let(:search_by) { "client_email" }
+        let(:search_query) { user.email }
         let(:page) { "1" }
         let(:per_page) { "10" }
 

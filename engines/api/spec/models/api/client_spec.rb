@@ -16,8 +16,8 @@ RSpec.describe Api::Client, type: :model do
 
   context "when sorted by email" do
     let(:sort_by) { "email" }
-    let!(:asc_user) { FactoryBot.create(:api_client, organization: organization) }
-    let!(:desc_user) { FactoryBot.create(:api_client, organization: organization) }
+    let!(:asc_user) { FactoryBot.create(:api_client, email: "aaa@itsmycargo.test", organization: organization) }
+    let!(:desc_user) { FactoryBot.create(:api_client, email: "bbb@itsmycargo.test", organization: organization) }
     let(:sorted_users) { described_class.sorted_by(sort_by, direction) }
 
     context "when sorted by email asc" do
