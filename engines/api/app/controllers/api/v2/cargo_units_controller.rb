@@ -5,6 +5,8 @@ require_dependency "api/api_controller"
 module Api
   module V2
     class CargoUnitsController < ApiController
+      skip_before_action :doorkeeper_authorize!, if: :guest_user?
+
       def index
         render json: Api::V2::CargoUnitSerializer.new(
           Api::V2::CargoUnitDecorator.decorate_collection(cargo_units)
@@ -29,6 +31,10 @@ module Api
 
       def cargo_unit
         @cargo_unit ||= Journey::CargoUnit.find(params[:id])
+      end
+
+      def guest_user?
+        !current_scope["closed_shop"] && query.client_id.blank? && current_user.blank?
       end
     end
   end
