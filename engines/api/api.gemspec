@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "pricings"
   spec.add_dependency "profiles"
   spec.add_dependency "result_formatter"
+  spec.add_dependency "routing"
   spec.add_dependency "treasury"
   spec.add_dependency "trucking"
   spec.add_dependency "users"

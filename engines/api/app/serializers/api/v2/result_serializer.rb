@@ -6,6 +6,7 @@ module Api
       attributes [
         :id,
         :carrier,
+        :carrier_logo,
         :modes_of_transport,
         :schedules,
         :total,
@@ -24,10 +25,6 @@ module Api
 
       attribute :destination do |result|
         result.destination_route_point.name
-      end
-
-      attribute :service_level do |result|
-        result.service
       end
 
       attribute :valid_until do |result|

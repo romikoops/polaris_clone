@@ -113,6 +113,47 @@ RSpec.configure do |config|
               attributes
             ]
           },
+          carrier: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the given Carrier",
+                type: "string"
+              },
+              type: {
+                description: "Generic type of the Carrier",
+                type: "string"
+              },
+              attributes: {
+                type: "object",
+                properties: {
+                  id: {
+                    description: "The ID of the Carrier record",
+                    type: "string"
+                  },
+                  name: {
+                    description: "The Carrier's name",
+                    type: "string"
+                  },
+                  code: {
+                    description: "The Carrier's code. Preferably SCAC or IATA but customs code are allowed.",
+                    type: "string"
+                  },
+                  logo: {
+                    description: "URL for accesing the logo of the Carrier",
+                    type: "string",
+                    nullable: true
+                  }
+                },
+                required: %w[id name code logo]
+              }
+            },
+            required: %w[
+              id
+              type
+              attributes
+            ]
+          },
           client: {
             type: "object",
             properties: {

@@ -31,6 +31,9 @@ eval_gemfile "../profiles/Gemfile.runtime"
 gem "result_formatter", path: "../result_formatter"
 eval_gemfile "../result_formatter/Gemfile.runtime"
 
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
 gem "cms_data", path: "../cms_data"
 eval_gemfile "../cms_data/Gemfile.runtime"
 

@@ -83,6 +83,7 @@ Api::Engine.routes.draw do
       resource :theme, only: [:show]
       resource :scope, only: [:show]
       resource :profile, only: %i[show update]
+      resources :carriers, only: %i[index show]
     end
   end
 end

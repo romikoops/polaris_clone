@@ -5,12 +5,19 @@ require "rails_helper"
 module Api
   RSpec.describe V2::ResultSerializer do
     let(:result) { FactoryBot.create(:journey_result) }
-    let(:decorated_result) { Api::V1::ResultDecorator.new(result) }
+    let(:decorated_result) { Api::V2::ResultDecorator.new(result) }
     let(:serialized_result) { described_class.new(decorated_result).serializable_hash }
     let(:target) { serialized_result.dig(:data, :attributes) }
+    let(:routing_carrier) { FactoryBot.create(:routing_carrier) }
+
+    before { allow(decorated_result).to receive(:routing_carrier).and_return(routing_carrier) }
 
     it "returns the correct modes of transport for the object passed" do
       expect(target[:modesOfTransport]).to eq(["ocean"])
+    end
+
+    it "returns the carrier logo" do
+      expect(target[:carrierLogo]).to include(routing_carrier.logo.filename.to_s)
     end
   end
 end

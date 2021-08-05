@@ -164,6 +164,7 @@ api --> organizations
 api --> pricings
 api --> profiles
 api --> result_formatter
+api --> routing
 api --> treasury
 api --> trucking
 api --> users

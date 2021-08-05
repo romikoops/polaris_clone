@@ -362,5 +362,11 @@ module ResultFormatter
     def modes_of_transport
       route_sections.pluck(:mode_of_transport).uniq.reject { |mot| %w[carriage relay].include?(mot) }
     end
+
+    def routing_carrier
+      @routing_carrier ||= Routing::Carrier.find_by(name: main_freight_section.carrier)
+    end
+
+    delegate :logo, to: :routing_carrier
   end
 end
