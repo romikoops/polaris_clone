@@ -3,16 +3,6 @@
 module OfferCalculator
   module Service
     module RateBuilders
-      FeeInputs = Struct.new(
-        :charge_category,
-        :rate_basis,
-        :min_value,
-        :max_value,
-        :measures,
-        :targets,
-        keyword_init: true
-      )
-
       class Base
         STANDARD_RATE_BASES = OfferCalculator::Service::RateBuilders::Lookups::STANDARD_RATE_BASES
         NON_STANDARD_RATE_BASIS_MODIFIER_LOOKUP =
@@ -36,7 +26,7 @@ module OfferCalculator
             @fees |= handle_json_fees(json: object.fees, target_measure: target_measure)
           end
           @fees
-        rescue
+        rescue StandardError
           raise OfferCalculator::Errors::RateBuilderError
         end
 

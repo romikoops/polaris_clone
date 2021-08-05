@@ -166,6 +166,10 @@ en:
       http_code: 400
       code: 3002
       message: "Your shipment has exceeded the load meterage limits for online booking."
+    trucking_rate_not_found:
+      http_code: 400
+      code: 3003
+      message: "Unfortunately we cannot find rates for a package of this size. Please change your inputs and try again."
 
     # ...:
     #   http_code: 400

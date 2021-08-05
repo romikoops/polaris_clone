@@ -36,7 +36,7 @@ module OfferCalculator
         MODIFIER_LOOKUP = {
           cbm_kg: %w[cbm kg],
           unit_per_km: %w[unit km],
-          unit_and_kg: %w[kg unit_in_kg],
+          unit_in_kg: %w[kg unit_in_kg],
           unit: ["unit"],
           cbm: ["cbm"],
           wm: ["wm"],

@@ -24,6 +24,7 @@ module OfferCalculator
     CalculationError = Class.new(Failure)
     RateBuilderError = Class.new(Failure)
     LoadMeterageExceeded = Class.new(Failure)
+    TruckingRateNotFound = Class.new(Failure)
     OfferBuilder = Class.new(Failure)
     NoValidOffers = Class.new(Failure)
     NoPreCarriageFound = Class.new(Failure)
@@ -70,9 +71,10 @@ module OfferCalculator
       2018 => OfferCalculator::Errors::NoManipulatedImportFeesFound,
       3001 => OfferCalculator::Errors::MissingTruckingData,
       3002 => OfferCalculator::Errors::LoadMeterageExceeded,
+      3003 => OfferCalculator::Errors::TruckingRateNotFound,
       6001 => OfferCalculator::Errors::OfferBuilder,
       6002 => OfferCalculator::Errors::NoValidOffers
-    }
+    }.freeze
 
     def self.from_code(code:)
       CODE_LOOKUP[code] || OfferCalculator::Errors::Failure

@@ -484,8 +484,8 @@ FactoryBot.define do
       end
     end
 
-    trait :unit_and_kg do
-      modifier { "unit_and_kg" }
+    trait :unit_in_kg do
+      modifier { "unit_in_kg" }
       rates do
         {
           unit_in_kg: [
@@ -546,7 +546,7 @@ FactoryBot.define do
     factory :trucking_with_cbm_kg_rates, traits: [:cbm_kg_rates]
     factory :trucking_with_wm_rates, traits: [:wm_rates]
     factory :trucking_with_unit_rates, traits: [:unit_rates]
-    factory :trucking_with_unit_and_kg, traits: [:unit_and_kg]
+    factory :trucking_with_unit_in_kg, traits: [:unit_in_kg]
     factory :trucking_with_unit_per_km, traits: [:unit_per_km_rates]
     factory :trucking_with_kg_cbm_special, traits: [:kg_cbm_special_rates]
   end
