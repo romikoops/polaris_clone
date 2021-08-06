@@ -17,12 +17,18 @@ Trestle.resource(:admins, model: Users::User) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:profile)
         .where("email ILIKE :query \
         OR users_profiles.first_name ILIKE :query\
         OR users_profiles.last_name ILIKE :query",
-          query: "%#{query}%")
+          query: query)
     else
       collection
     end

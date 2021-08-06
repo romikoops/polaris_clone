@@ -5,7 +5,13 @@ Trestle.resource(:countries, model: Admiralty::Country) do
 
   search do |query|
     if query
-      collection.where("name ILIKE :query", query: "%#{query}%")
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
+      collection.where("name ILIKE :query", query: query)
     else
       collection
     end

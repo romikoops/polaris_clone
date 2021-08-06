@@ -7,6 +7,12 @@ Trestle.resource(:files, model: Legacy::File) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:organization)
         .joins('LEFT JOIN "users_users" ON "users_users"."id" = "legacy_files"."user_id"')
@@ -17,7 +23,7 @@ Trestle.resource(:files, model: Legacy::File) do
           OR users_users.email ILIKE :query \
           OR users_clients.email ILIKE :query \
           OR organizations_organizations.slug ILIKE :query",
-          query: "%#{query}%")
+          query: query)
     else
       collection
     end

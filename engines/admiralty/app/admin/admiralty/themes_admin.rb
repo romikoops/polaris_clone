@@ -3,7 +3,7 @@
 Trestle.resource(:themes, model: Organizations::Theme) do
   menu :themes, icon: "fa fa-paint-brush", group: :organizations
 
-  form do |theme|
+  form do |_theme|
     text_field :name
 
     row do

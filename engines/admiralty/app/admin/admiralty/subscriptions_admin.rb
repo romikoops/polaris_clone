@@ -9,13 +9,19 @@ Trestle.resource(:subscriptions, model: Notifications::Subscription) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:organization)
         .where("\
           notifications_subscriptions.email ILIKE :query \
           OR event_type ILIKE :query \
           OR organizations_organizations.slug ILIKE :query
-          ", query: "%#{query}%")
+          ", query: query)
     else
       collection
     end
@@ -26,14 +32,14 @@ Trestle.resource(:subscriptions, model: Notifications::Subscription) do
   end
 
   table do
-    column :organization, -> (membership) { membership.organization.slug }, sort: :organization
+    column :organization, ->(membership) { membership.organization.slug }, sort: :organization
     column :email, link: false, sort: { default: true }
     column :event_type
 
     actions
   end
 
-  form do |subscription|
+  form do |_subscription|
     collection_select :organization_id, Organizations::Organization.all, :id, :slug
     text_field :email
     select :event_type, (RailsEventStore::Event.descendants - [RubyEventStore::Proto]).map(&:to_s).sort.uniq

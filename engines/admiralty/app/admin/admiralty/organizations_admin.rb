@@ -6,7 +6,17 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
   menu :organizations, icon: "fa fa-building", group: :organizations
 
   search do |query|
-    query ? collection.where("slug ILIKE ?", "%#{query}%") : collection
+    if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
+      collection.where("slug ILIKE ?", query)
+    else
+      collection
+    end
   end
 
   collection do

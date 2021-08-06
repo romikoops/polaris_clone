@@ -8,7 +8,16 @@ Trestle.resource(:tenant_cargo_item_types, model: Legacy::TenantCargoItemType) d
       .joins(:organization)
       .joins(:cargo_item_type)
     if query
-      filtered_collection.where("category ILIKE :query OR description ILIKE :query OR organizations_organizations.slug ILIKE :query", query: "%#{query}%")
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
+      filtered_collection.where(
+        "category ILIKE :query OR description ILIKE :query OR organizations_organizations.slug ILIKE :query",
+        query: query
+      )
     else
       filtered_collection
     end

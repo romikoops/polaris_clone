@@ -11,6 +11,12 @@ Trestle.resource(:queries, model: Journey::Query) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:organization)
         .joins('LEFT JOIN "users_clients" ON "users_clients"."id" = "journey_queries"."client_id"')
@@ -19,7 +25,7 @@ Trestle.resource(:queries, model: Journey::Query) do
           OR destination ILIKE :query \
           OR users_clients.email ILIKE :query \
           OR organizations_organizations.slug ILIKE :query",
-          query: "%#{query}%")
+          query: query)
     else
       collection
     end
@@ -43,30 +49,26 @@ Trestle.resource(:queries, model: Journey::Query) do
   # Customize the table columns shown on the index view.
   #
   table do
-    column :created_at, sort: {default: true, default_order: :desc}
-    column :organization, -> (query) { query.organization.slug }
+    column :created_at, sort: { default: true, default_order: :desc }
+    column :organization, ->(query) { query.organization.slug }
     column :user do |query|
       creator = query.creator_type.present? ? query.creator_type.safe_constantize.unscoped.find_by(id: query.creator_id) : nil
       client = query.client_id.present? ? Users::Client.unscoped.find_by(id: query.client_id) : nil
 
       content = []
-      if client
-        content << content_tag(:span, client.email)
-      end
-      if creator && creator != client
-        content << content_tag(:small, creator.email)
-      end
+      content << tag.span(client.email) if client
+      content << tag.small(creator.email) if creator && creator != client
 
       safe_join(content, tag(:br))
     end
     column :origin
     column :destination
-    column :load_type, -> (query) { query.load_type.upcase }, align: :center
+    column :load_type, ->(query) { query.load_type.upcase }, align: :center
     column :billable, align: :center
     column :status, align: :center do |query|
       result_set = query.result_sets.order(:created_at).first
       if result_set
-        status_tag("#{result_set.status.upcase}", result_set.completed? ? :success : :danger)
+        status_tag(result_set.status.upcase.to_s, result_set.completed? ? :success : :danger)
       else
         status_tag("N/A", :danger)
       end
@@ -75,16 +77,16 @@ Trestle.resource(:queries, model: Journey::Query) do
     column :results do |query|
       result_set = query.result_sets.order(:created_at).first
       if result_set
-        errors = result_set.result_errors.map(&:property).sort.uniq.map { |error| content_tag(:small, error) }
+        errors = result_set.result_errors.map(&:property).sort.uniq.map { |error| tag.small(error) }
         safe_join([
-          content_tag(:span, "#{result_set.results.count} Results"),
+          tag.span("#{result_set.results.count} Results"),
           *errors
         ], tag(:br))
       else
         "N/A"
       end
     end
-    column :source, -> (query) { Doorkeeper::Application.find(query.source_id).name }
+    column :source, ->(query) { Doorkeeper::Application.find(query.source_id).name }
 
     actions do |a, instance|
       a.button icon("fa fa-file-pdf"), download_queries_admin_path(instance), class: instance.offers.present? ? "btn-primary" : "btn disabled"
@@ -110,9 +112,9 @@ Trestle.resource(:queries, model: Journey::Query) do
     tab :results do
       table query.results, admin: :results do
         column :id
-        column :mot, -> (result) { result.route_sections.where.not(mode_of_transport: "carriage").pluck(:mode_of_transport).uniq.join(", ") }
-        column :origin, -> (result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).first&.from }
-        column :destination, -> (result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).last&.to }
+        column :mot, ->(result) { result.route_sections.where.not(mode_of_transport: "carriage").pluck(:mode_of_transport).uniq.join(", ") }
+        column :origin, ->(result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).first&.from }
+        column :destination, ->(result) { result.route_sections.where.not(mode_of_transport: :carriage).order(:order).last&.to }
       end
     end
   end

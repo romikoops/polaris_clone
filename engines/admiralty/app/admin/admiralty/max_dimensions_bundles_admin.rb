@@ -5,16 +5,22 @@ Trestle.resource(:max_dimensions_bundles, model: Legacy::MaxDimensionsBundle) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:organization)
-        .where("organizations_organizations.slug ILIKE :query", query: "%#{query}%")
+        .where("organizations_organizations.slug ILIKE :query", query: query)
     else
       collection
     end
   end
 
   table do
-    column :organization, -> (max_dimensions_bundle) { max_dimensions_bundle.organization.slug }
+    column :organization, ->(max_dimensions_bundle) { max_dimensions_bundle.organization.slug }
 
     column :aggregate
     column :cargo_class
@@ -27,8 +33,8 @@ Trestle.resource(:max_dimensions_bundles, model: Legacy::MaxDimensionsBundle) do
     column :volume
     column :chargeable_weight
 
-    column :carrier, -> (max_dimensions_bundle) { max_dimensions_bundle.carrier&.name }
-    column :tenant_vehicle, -> (max_dimensions_bundle) { max_dimensions_bundle.tenant_vehicle&.name }
+    column :carrier, ->(max_dimensions_bundle) { max_dimensions_bundle.carrier&.name }
+    column :tenant_vehicle, ->(max_dimensions_bundle) { max_dimensions_bundle.tenant_vehicle&.name }
 
     actions
   end
@@ -38,9 +44,9 @@ Trestle.resource(:max_dimensions_bundles, model: Legacy::MaxDimensionsBundle) do
 
     collection_select :tenant_vehicle_id,
       Legacy::TenantVehicle.where(organization_id: max_dimensions_bundle.organization_id),
-      :id, :name, {include_blank: true, prompt: "- None -"}
+      :id, :name, { include_blank: true, prompt: "- None -" }
     collection_select :carrier_id,
-      Legacy::Carrier.order(:name), :id, :name, {include_blank: true, prompt: "- None -"}
+      Legacy::Carrier.order(:name), :id, :name, { include_blank: true, prompt: "- None -" }
 
     row do
       col(sm: 4) { check_box :aggregate }

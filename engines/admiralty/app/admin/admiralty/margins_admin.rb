@@ -5,7 +5,13 @@ Trestle.resource(:margins, model: Pricings::Margin) do
 
   search do |query|
     if query
-      collection.joins(:organization).where("organizations_organizations.slug ILIKE :query", query: "%#{query}%")
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
+      collection.joins(:organization).where("organizations_organizations.slug ILIKE :query", query: query)
     else
       collection
     end

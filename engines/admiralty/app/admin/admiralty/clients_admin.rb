@@ -25,6 +25,12 @@ Trestle.resource(:clients, model: Users::Client) do
 
   search do |query|
     if query
+      query = if (match = query.match(/\A"(.*)"\z/))
+        match[1]
+      else
+        "%#{query}%"
+      end
+
       collection
         .joins(:organization)
         .joins(:profile)
@@ -32,7 +38,7 @@ Trestle.resource(:clients, model: Users::Client) do
           OR users_client_profiles.first_name ILIKE :query \
           OR users_client_profiles.last_name ILIKE :query \
           OR organizations_organizations.slug ILIKE :query",
-          query: "%#{query}%")
+          query: query)
     else
       collection
     end
@@ -42,16 +48,16 @@ Trestle.resource(:clients, model: Users::Client) do
   #
   table do
     column :email, link: true
-    column :first_name, -> (user) { user.profile.first_name }, sort: :first_name
-    column :last_name, -> (user) { user.profile.last_name }, sort: :last_name
-    column :organization, -> (user) { user.organization.slug }, sort: :organization
+    column :first_name, ->(user) { user.profile.first_name }, sort: :first_name
+    column :last_name, ->(user) { user.profile.last_name }, sort: :last_name
+    column :organization, ->(user) { user.organization.slug }, sort: :organization
     column :last_login_at
     column :last_activity_at
     column :activation_state
-    column :created_at, sort: {default: true, default_order: :desc}
+    column :created_at, sort: { default: true, default_order: :desc }
   end
 
-  form do |user|
+  form do
     collection_select :organization_id, Organizations::Organization.all, :id, :slug
 
     text_field :email
