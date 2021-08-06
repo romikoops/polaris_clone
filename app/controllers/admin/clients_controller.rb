@@ -98,7 +98,7 @@ module Admin
       query = query.joins(
         "LEFT OUTER JOIN companies_memberships ON companies_memberships.member_id = users_clients.id
           LEFT OUTER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
-      )
+      ).where("companies_memberships.deleted_at IS NULL")
 
       return query if params[:company_name].blank?
 

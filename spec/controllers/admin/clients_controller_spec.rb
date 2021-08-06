@@ -63,6 +63,16 @@ RSpec.describe Admin::ClientsController do
       end
     end
 
+    context "when the user has soft deleted their membership" do
+      before { FactoryBot.create(:companies_membership, member: client, deleted_at: 5.minutes.ago) }
+
+      it "returns only one user" do
+        get :index, params: { organization_id: organization.id, email: client.email }
+
+        expect(resp["data"]["clientData"].pluck("id")).to match_array([client.id])
+      end
+    end
+
     context "when user does not belong to a company" do
       let!(:other_client) { FactoryBot.create(:users_client, organization: organization) }
 
