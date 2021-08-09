@@ -94,6 +94,7 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
         row do
           col(sm: 4) { select :fee_detail, %w[name key key_and_name] }
           col(sm: 3) { select :default_direction, %w[import export] }
+          col(sm: 3) { select :default_currency, Treasury::ExchangeRate.where("created_at > ?", 36.hours.ago).select("to").distinct.pluck("to") }
         end
 
         %i[has_customs has_insurance fixed_currency dangerous_goods detailed_billing
