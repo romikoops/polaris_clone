@@ -169,60 +169,60 @@ module Api
 
         context "when sorting by created_at" do
           it "returns the Queries sorted by created_at desc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "created_at", direction: "desc"), as: :json
+            get :index, params: params.merge(sortBy: "created_at", direction: "desc"), as: :json
             expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
           end
 
           it "returns the Queries sorted by created_at asc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "created_at", direction: "asc"), as: :json
+            get :index, params: params.merge(sortBy: "created_at", direction: "asc"), as: :json
             expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
           end
         end
 
         context "when sorting by origin" do
           it "returns the Queries sorted by origin desc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "origin", direction: "desc"), as: :json
+            get :index, params: params.merge(sortBy: "origin", direction: "desc"), as: :json
             expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
           end
 
           it "returns the Queries sorted by origin asc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "origin", direction: "asc"), as: :json
+            get :index, params: params.merge(sortBy: "origin", direction: "asc"), as: :json
             expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
           end
         end
 
         context "when sorting by destination" do
           it "returns the Queries sorted by destination desc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "destination", direction: "desc"), as: :json
+            get :index, params: params.merge(sortBy: "destination", direction: "desc"), as: :json
             expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
           end
 
           it "returns the Queries sorted by destination asc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "destination", direction: "asc"), as: :json
+            get :index, params: params.merge(sortBy: "destination", direction: "asc"), as: :json
             expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
           end
         end
 
         context "when sorting by cargo_ready_date" do
           it "returns the Queries sorted by cargo_ready_date desc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "cargo_ready_date", direction: "desc"), as: :json
+            get :index, params: params.merge(sortBy: "cargo_ready_date", direction: "desc"), as: :json
             expect(response_data.pluck("id")).to eq([query_a.id, query_b.id])
           end
 
           it "returns the Queries sorted by cargo_ready_date asc", :aggregate_failures do
-            get :index, params: params.merge(sort_by: "cargo_ready_date", direction: "asc"), as: :json
+            get :index, params: params.merge(sortBy: "cargo_ready_date", direction: "asc"), as: :json
             expect(response_data.pluck("id")).to eq([query_b.id, query_a.id])
           end
         end
 
         context "when paginating" do
           it "returns one Query per page (Page 1)", :aggregate_failures do
-            get :index, params: params.merge(page: 1, per_page: 1), as: :json
+            get :index, params: params.merge(page: 1, perPage: 1), as: :json
             expect(response_data.pluck("id")).to eq([query_a.id])
           end
 
           it "returns one Query per page (Page 2)", :aggregate_failures do
-            get :index, params: params.merge(page: 2, per_page: 1), as: :json
+            get :index, params: params.merge(page: 2, perPage: 1), as: :json
             expect(response_data.pluck("id")).to eq([query_b.id])
           end
         end
@@ -234,7 +234,7 @@ module Api
         before do
           FactoryBot.create_list(:api_query, 2, result_set_count: 1, organization: organization, client: user)
           Organizations.current_id = organization.id
-          get :index, params: params.merge(search_by: search_by, search_query: search_query), as: :json
+          get :index, params: params.merge(searchBy: search_by, searchQuery: search_query), as: :json
         end
 
         shared_examples_for "finding the right Query" do
@@ -297,6 +297,32 @@ module Api
           let(:search_by) { "hs_code" }
 
           it_behaves_like "finding the right Query"
+        end
+
+        context "when searching by load_type with a valid search_query" do
+          let!(:query) { FactoryBot.create(:api_query, load_type: "fcl", client: user, result_set_count: 1, organization: organization) }
+          let(:search_query) { query.load_type }
+          let(:search_by) { "load_type" }
+
+          it_behaves_like "finding the right Query"
+        end
+
+        context "when searching by load_type with an invalid search_query" do
+          let(:search_query) { "aaa" }
+          let(:search_by) { "load_type" }
+
+          it "returns 422 Unprocessable Entity" do
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
+        end
+
+        context "when search_by is missing but search_query is valid" do
+          let(:search_query) { "John" }
+          let(:search_by) { nil }
+
+          it "returns 422 Unprocessable Entity" do
+            expect(response).to have_http_status(:unprocessable_entity)
+          end
         end
       end
     end

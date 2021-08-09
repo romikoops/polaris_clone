@@ -27,6 +27,7 @@ module Api
         destination_search
         imo_class_search
         hs_code_search
+        load_type_search
       ]
     )
 
@@ -73,6 +74,10 @@ module Api
 
     scope :destination_search, lambda { |input|
       where("destination ILIKE ?", "%#{input}%")
+    }
+
+    scope :load_type_search, lambda { |input|
+      where(load_type: input)
     }
 
     scope :imo_class_search, lambda { |input|

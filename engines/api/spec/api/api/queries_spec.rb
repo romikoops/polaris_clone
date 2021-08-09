@@ -176,7 +176,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
-      parameter name: :sort_by,
+      parameter name: :sortBy,
                 in: :query,
                 type: :string,
                 description: "The attribute by which to sort the Queries",
@@ -197,21 +197,22 @@ RSpec.describe "Queries", type: :request, swagger: true do
                   asc
                   desc
                 ]
-      parameter name: :search_by,
+      parameter name: :searchBy,
                 in: :query,
                 type: :string,
                 description: "The attribute of the Query model to search through",
                 enum: %w[
-                  reference
                   client_email
                   client_name
                   company_name
-                  origin
                   destination
-                  imo_class
                   hs_code
+                  imo_class
+                  load_type
+                  origin
+                  reference
                 ]
-      parameter name: :search_query,
+      parameter name: :searchQuery,
                 in: :query,
                 type: :string,
                 description: "The value we want to use in our search"
@@ -219,18 +220,18 @@ RSpec.describe "Queries", type: :request, swagger: true do
                 in: :query,
                 type: :string,
                 description: "The page of result requested"
-      parameter name: :per_page,
+      parameter name: :perPage,
                 in: :query,
                 type: :string,
                 description: "The number of results requested per page"
 
       response "200", "successful operation" do
-        let(:sort_by) { "created_at" }
+        let(:sortBy) { "created_at" }
         let(:direction) { "desc" }
-        let(:search_by) { "client_email" }
-        let(:search_query) { user.email }
+        let(:searchBy) { "client_email" }
+        let(:searchQuery) { user.email }
         let(:page) { "1" }
-        let(:per_page) { "10" }
+        let(:perPage) { "10" }
 
         run_test!
       end

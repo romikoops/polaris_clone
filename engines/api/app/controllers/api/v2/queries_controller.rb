@@ -8,18 +8,12 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: %i[create result_set show]
 
       def index
-        if search_by_is_valid?
-          render json: Api::V2::QuerySerializer.new(
-            Api::V2::QueryDecorator.decorate_collection(
-              filtered_queries.paginate(
-                page: index_params[:page],
-                per_page: index_params[:per_page]
-              )
-            )
-          )
-        else
-          render json: { error: "#{index_params[:search_by]} is not a valid 'search_by' option" }, status: :unprocessable_entity
-        end
+        render json: index_search_response and return if [search_by, search_query].all?(&:blank?)
+        render json: { error: "'searchQuery' must not be blank when providing 'searchBy'" }, status: :unprocessable_entity and return if search_query.blank?
+        render json: { error: "#{search_by} is not a valid 'searchBy' option" }, status: :unprocessable_entity and return unless index_search_by_option_valid?
+        render json: { error: "#{search_query} is not a valid 'load_type' option" }, status: :unprocessable_entity and return unless index_search_query_valid?
+
+        render json: index_search_response
       end
 
       def create
@@ -42,10 +36,41 @@ module Api
 
       private
 
+      def index_search_response
+        Api::V2::QuerySerializer.new(
+          Api::V2::QueryDecorator.decorate_collection(
+            filtered_queries.paginate(
+              page: index_params[:page],
+              per_page: index_params[:perPage]
+            )
+          )
+        )
+      end
+
+      def index_search_by_option_valid?
+        search_by.in?(%w[
+          load_type
+          reference
+          client_email
+          client_name
+          company_name
+          origin
+          destination
+          imo_class
+          hs_code
+        ])
+      end
+
+      def index_search_query_valid?
+        return true if search_by != "load_type"
+
+        search_query.in?(%w[fcl lcl])
+      end
+
       def filterrific_params
         {
           sorted_by: sort_by && [sort_by, index_params[:direction]].compact.join("_"),
-          "#{search_by}_search": search_by && index_params[:search_query]
+          "#{search_by}_search": search_by && search_query
         }.compact
       end
 
@@ -122,30 +147,19 @@ module Api
       end
 
       def index_params
-        params.permit(:sort_by, :direction, :page, :per_page, :search_by, :search_query)
-      end
-
-      def search_by_is_valid?
-        return true if search_by.blank? && index_params[:search_query].blank?
-
-        %w[
-          reference
-          client_email
-          client_name
-          company_name
-          origin
-          destination
-          imo_class
-          hs_code
-        ].include?(search_by)
+        params.permit(:sortBy, :direction, :page, :perPage, :searchBy, :searchQuery)
       end
 
       def sort_by
-        index_params[:sort_by]
+        index_params[:sortBy]
+      end
+
+      def search_query
+        index_params[:searchQuery]
       end
 
       def search_by
-        index_params[:search_by]
+        index_params[:searchBy]
       end
     end
   end
