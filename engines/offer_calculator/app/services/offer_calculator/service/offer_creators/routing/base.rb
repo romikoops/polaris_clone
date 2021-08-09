@@ -46,8 +46,9 @@ module OfferCalculator
 
           def carrier_name
             legacy_carrier = tenant_vehicle.carrier
-            carrier_code = tenant_vehicle.carrier.code if legacy_carrier
-            carrier_code || request.organization.slug
+            carrier_code = legacy_carrier ? legacy_carrier.code : request.organization.slug
+
+            ::Routing::Carrier.find_by(code: carrier_code).name
           end
 
           def route_point(location:)

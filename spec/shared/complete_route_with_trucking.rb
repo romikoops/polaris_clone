@@ -152,5 +152,6 @@ RSpec.shared_context "complete_route_with_trucking" do
       "country_code" => delivery_address.country.code,
       "postal_code" => delivery_address.zip_code
     ])
+    FactoryBot.create(:routing_carrier, name: carrier.name, code: carrier.code)
   end
 end

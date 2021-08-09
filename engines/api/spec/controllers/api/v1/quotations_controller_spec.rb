@@ -30,8 +30,9 @@ module Api
       let(:destination_nexus) { destination_hub.nexus }
       let(:origin_hub) { itinerary.origin_hub }
       let(:destination_hub) { itinerary.destination_hub }
-      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
-      let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
+      let(:carrier) { FactoryBot.create(:legacy_carrier).tap { |carrier| FactoryBot.create(:routing_carrier, name: carrier.name, code: carrier.code) } }
+      let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly", carrier: carrier, organization: organization) }
+      let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly", carrier: carrier, organization: organization) }
       let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:trips) do

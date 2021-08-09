@@ -146,6 +146,7 @@ RSpec.describe OfferCalculator::Calculator do
             location: delivery_trucking_location,
             carriage: "on")
         end
+        FactoryBot.create(:routing_carrier, name: trucking_tenant_vehicle_2.carrier.name, code: trucking_tenant_vehicle_2.carrier.code)
       end
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
       let(:desired_tenant_vehicle_combos) do
