@@ -123,7 +123,7 @@ jobs:
       - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' --fail-fast .
         timeout-minutes: 35
 
-  docs:
+  apidocs:
     name: API Docs
     needs: [test-app]
     if: github.event_name == 'pull_request'
@@ -264,6 +264,36 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: RELEASE=${{ steps.meta.outputs.sha }}
+
+  guides:
+    needs: [test-gems, test-app, docker]
+
+    name: Confluence / Guides
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: itsmycargo/action-sphinx@main
+        with:
+          sourcedir: guides
+          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
+          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
+          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
+          sphinx_builder: ${{github.ref == 'refs/heads/master' && 'confluence' || 'html'}}
+
+  docs:
+    needs: [test-gems, test-app, docker]
+
+    name: Confluence / Documentation
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: itsmycargo/action-sphinx@main
+        with:
+          sourcedir: doc
+          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
+          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
+          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
+          sphinx_builder: ${{github.ref == 'refs/heads/master' && 'confluence' || 'html'}}
 
   sentry:
     if: github.ref == 'refs/heads/master'

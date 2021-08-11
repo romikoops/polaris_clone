@@ -94,3 +94,7 @@ config/environments/*.local.yml
 
 # Ignore VS Code files
 .vscode
+
+# Ignore Build Documentation
+/doc/_build
+/guides/_build

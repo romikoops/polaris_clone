@@ -10,21 +10,13 @@ class CobraHelper
     "service" => "(S,yellow)",
     "data" => "(D,orange)",
     "direct" => "(*,blue)"
-  }
+  }.freeze
 
   def self.uml(output: Pathname.new("../doc/engines").expand_path(__dir__))
     FileUtils.mkdir output unless File.directory?(output)
     output_file = output.join("graph.puml")
-    previous_sha = Digest::SHA256.file(output_file) if output_file.exist?
     output_file.open("w") do |io|
       io.puts new.uml
-    end
-
-    if (plantuml = `which plantuml`.strip)
-      (previous_sha == Digest::SHA256.file(output_file) && output.join("graph.svg").exist?) ||
-        system("#{plantuml} -nometadata -duration -tsvg -o#{output} #{output_file}")
-    else
-      puts "Please install PlantUML (brew install plantuml) to generate graph"
     end
   end
 
@@ -36,7 +28,7 @@ class CobraHelper
       uml << "package \"#{package}\" {"
 
       specs.each do |spec|
-        uml << "  class #{spec.name} << #{TYPE[spec.metadata["type"]]} >>"
+        uml << "  class #{spec.name} << #{TYPE[spec.metadata['type']]} >>"
       end
 
       uml << "}"
@@ -63,8 +55,7 @@ class CobraHelper
   def specs
     @specs ||= definition.specs
       .select { |spec| spec.source.respond_to?(:path) && spec.source.path.to_s[/engines/] }
-      .map { |spec| [spec.name, spec] }
-      .to_h
+      .index_by(&:name)
   end
 
   def packages
