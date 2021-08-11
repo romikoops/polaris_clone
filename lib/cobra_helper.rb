@@ -55,7 +55,7 @@ class CobraHelper
   def specs
     @specs ||= definition.specs
       .select { |spec| spec.source.respond_to?(:path) && spec.source.path.to_s[/engines/] }
-      .index_by(&:name)
+      .map { |spec| [spec.name, spec] }.to_h
   end
 
   def packages
