@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Carta
-  class Client
+  class Client < Carta::Connection
     LocationNotFound = Class.new(StandardError)
     ServiceUnavailable = Class.new(StandardError)
 
@@ -50,19 +50,6 @@ module Carta
         raise LocationNotFound if id.blank?
 
         lookup(id: id)
-      end
-
-      def connection
-        Faraday.new(
-          url: Settings.carta.url,
-          headers: {
-            "Content-Type" => "application/json",
-            "Accept" => "application/json",
-            "Authorization" => "Token token=#{Settings.carta.token}"
-          }
-        ) do |f|
-          f.request :retry, retry_options
-        end
       end
 
       def retry_options

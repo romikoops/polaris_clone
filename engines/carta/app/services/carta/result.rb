@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 module Carta
-  class Result < Struct.new(
+  Result = Struct.new(
     :id,
     :type,
     :address,
@@ -13,8 +14,7 @@ module Carta
     :administrative_area,
     :country,
     keyword_init: true
-  )
-
+  ) do
     def city
       nexus? ? address : locality
     end
