@@ -80,6 +80,21 @@ RSpec.describe Admin::PricingsController, type: :controller do
       get :route, params: { organization_id: organization.id, id: itinerary.id }
       expect(JSON.parse(response.body)["data"]).to eq(expected_response)
     end
+
+    context "with effective pricing date is in future" do
+      let(:pricings) do
+        [
+          FactoryBot.create(:pricings_pricing, organization: organization,
+                                               itinerary_id: itinerary.id,
+                                               effective_date: Time.zone.today + 1)
+        ]
+      end
+
+      it "returns pricings with future effective pricing date" do
+        get :route, params: { organization_id: organization.id, id: itinerary.id }
+        expect(JSON.parse(response.body)["data"]).to eq(expected_response)
+      end
+    end
   end
 
   describe "POST #upload" do
