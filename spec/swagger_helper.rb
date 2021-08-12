@@ -1138,6 +1138,64 @@ RSpec.configure do |config|
               }
             }
           },
+          result: {
+            type: "object",
+            properties: {
+              id: {
+                description: "ID",
+                type: "string"
+              },
+              carrier: {
+                description: "Name of the Carrier",
+                type: "string"
+              },
+              modes_of_transport: {
+                description: "Main Modes of Transport for the route",
+                type: "array",
+                items: { type: "string" }
+              },
+              total: {
+                description: "The total value of the Result",
+                schema: { "$ref" => "#/components/schemas/money" }
+              },
+              service_level: {
+                description: "Name of the main freight service level",
+                type: "string"
+              },
+              valid_until: {
+                description: "Date until which this quote is valid",
+                type: "string"
+              },
+              transit_time: {
+                description: "A figure denoting the number of days the journey will likely take",
+                type: "integer",
+                format: "int32"
+              },
+              cargo_ready_date: {
+                description: "A date and time indicating after which the cargo will be ready for loading",
+                type: "string",
+                format: "date-time"
+              },
+              cargo_delivery_date: {
+                description: "A date and time indicating by when the cargo needs to be delivered by",
+                type: "string",
+                format: "date-time"
+              },
+              origin: {
+                description: "The full name of the start point of the quoted journey",
+                type: "string"
+              },
+              destination: {
+                description: "The full name of the end point of the quoted journey",
+                type: "string"
+              },
+              routing: {
+                description: "The ID of the RouteSection that carries this information",
+                type: "array",
+                items: { "$ref" => "#/components/schemas/routingSection" }
+              }
+            }
+          },
           offer: {
             type: "object",
             properties: {
@@ -1147,6 +1205,62 @@ RSpec.configure do |config|
               }
             },
             required: ["id"]
+          },
+          routingSection: {
+            type: "object",
+            description: "Details regarding the start, end, service and mode of transport of each section of the quoted Journey",
+            properties: {
+              id: {
+                type: "string",
+                description: "The ID of the RouteSection"
+              },
+              service: {
+                type: "string",
+                description: "The service level of this part of the journey"
+              },
+              carrier: {
+                type: "string",
+                description: "The Carrier operating the service on this part of the journey"
+              },
+              mode_of_transport: {
+                type: "string",
+                description: "The mode of transport for the section of the journey."
+              },
+              transit_time: {
+                description: "The time in days that this part of the journey will take.",
+                type: "integer",
+                format: "int32"
+              },
+              origin: {
+                type: "object",
+                description: "The start point of this section",
+                properties: { "$ref" => "#/components/schemas/resultDetailedRoutingLocation" }
+              },
+              destination: {
+                type: "object",
+                description: "The end point of this section",
+                properties: { "$ref" => "#/components/schemas/resultDetailedRoutingLocation" }
+              }
+            }
+          },
+          resultDetailedRoutingLocation: {
+            type: "object",
+            description: "A object containing the address, locode and city of the location",
+            properties: {
+              address: {
+                type: "string",
+                description: "The city name or address of the location"
+              },
+              locode: {
+                type: "string",
+                description: "The UN/LOCODE of the location",
+                nullable: true
+              },
+              city: {
+                type: "string",
+                description: "The city name of the location. Will only differ from name if the location is an Address"
+              }
+            }
           },
           settings: {
             type: "object",

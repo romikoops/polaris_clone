@@ -3,20 +3,20 @@
 module Api
   module V2
     class ResultSerializer < Api::ApplicationSerializer
-      attributes [
-        :id,
-        :carrier,
-        :carrier_logo,
-        :modes_of_transport,
-        :schedules,
-        :total,
-        :service_level,
-        :valid_until,
-        :transit_time,
-        :cargo_ready_date,
-        :cargo_delivery_date,
-        :origin,
-        :destination
+      attributes %i[
+        id
+        carrier
+        carrier_logo
+        modes_of_transport
+        total
+        service_level
+        valid_until
+        transit_time
+        cargo_ready_date
+        cargo_delivery_date
+        origin
+        destination
+        routing
       ]
 
       attribute :origin do |result|
@@ -27,9 +27,7 @@ module Api
         result.destination_route_point.name
       end
 
-      attribute :valid_until do |result|
-        result.expiration_date
-      end
+      attribute :valid_until, &:expiration_date
 
       attribute :total do |result|
         {
@@ -38,13 +36,7 @@ module Api
         }
       end
 
-      attribute :schedules do
-        []
-      end
-
-      attribute :transit_time do |result|
-        result.transit_time
-      end
+      attribute :transit_time, &:transit_time
 
       attribute :cargo_ready_date do |result|
         result.query.cargo_ready_date

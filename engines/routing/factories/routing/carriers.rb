@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :routing_carrier, class: "Routing::Carrier" do
     sequence(:name) { |n| "Carrier - #{n}" }

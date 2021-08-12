@@ -31,7 +31,7 @@ module Api
 
       it "successfully returns the Errors for the given ResultSet" do
         get :show, params: params, as: :json
-        expect(response_data.dig("id")).to eq(result.id)
+        expect(response_data["id"]).to eq(result.id)
       end
     end
   end

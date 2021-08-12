@@ -5,7 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V2
     class ResultsController < ApiController
-      skip_before_action :doorkeeper_authorize!, only: [:show, :index]
+      skip_before_action :doorkeeper_authorize!, only: %i[show index]
 
       def show
         render json: Api::V2::ResultSerializer.new(
