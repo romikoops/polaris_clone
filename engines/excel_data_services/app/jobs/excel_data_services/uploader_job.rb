@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ExcelDataServices
   class UploaderJob < ApplicationJob
     queue_as :default
@@ -7,6 +8,7 @@ module ExcelDataServices
       document = Legacy::File.find(document_id)
       organization = document.organization
       user = Users::User.find(options[:user_id])
+      bcc = []
 
       set_sentry_context(document, user)
 
@@ -14,19 +16,32 @@ module ExcelDataServices
 
       options = {
         organization: document.organization,
-        options: options.merge({user: user})
+        options: options.merge({ user: user })
       }
 
-      result = Processor.new(blob: document.file.blob).process { |file|
+      result = Processor.new(blob: document.file.blob).process do |file|
         ExcelDataServices::Loaders::Uploader.new(options.merge(file_or_path: file)).perform
+      end
+    rescue StandardError => e
+      Sentry.capture_exception(e)
+      result = {
+        has_errors: true,
+        errors: [
+          {
+            sheet_name: document.doc_type,
+            reason: "We are sorry, but something has gone wrong while inserting your #{document.doc_type.humanize} data. The Operations Team has been notified of the error."
+          }
+        ]
       }
-
+      bcc = ["ops@itsmycargo.com"]
+    ensure
       UploadMailer
         .with(
           user_id: user.id,
           organization: document.organization,
           result: JSON.parse(result.to_json),
-          file: document.file.blob.filename.sanitized
+          file: document.file.blob.filename.sanitized,
+          bcc: bcc
         )
         .complete_email
         .deliver_later

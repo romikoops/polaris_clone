@@ -41,13 +41,15 @@ module ExcelDataServices
             name: row.origin,
             country: row.origin_country,
             mot: row.mot,
-            locode: row.origin_locode
+            locode: row.origin_locode,
+            terminal: row.origin_terminal
           )
           destination_hub_with_info = find_hub_by_name_or_locode_with_info(
             name: row.destination,
             country: row.destination_country,
             mot: row.mot,
-            locode: row.destination_locode
+            locode: row.destination_locode,
+            terminal: row.destination_terminal
           )
           origin_hub = origin_hub_with_info[:hub]
           destination_hub = destination_hub_with_info[:hub]
