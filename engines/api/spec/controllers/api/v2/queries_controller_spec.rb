@@ -66,7 +66,7 @@ module Api
               width: 100,
               height: 120,
               weight: 1200,
-              commodityCodes: []
+              commodities: []
             }
           ]
         end
@@ -87,7 +87,7 @@ module Api
               cargoClass: "fcl_20",
               quantity: 1,
               weight: 1200,
-              commodityCodes: []
+              commodities: []
             }
           ]
         end

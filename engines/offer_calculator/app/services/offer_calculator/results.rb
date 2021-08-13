@@ -25,7 +25,7 @@ module OfferCalculator
 
     def offers
       @offers ||= science "quotation-calculation" do |experiment|
-        experiment.run_if { Rails.env.development? } # Only run in development until some basics are working
+        experiment.run_if { false } # Only run in development until some basics are working
 
         experiment.context request: request
 

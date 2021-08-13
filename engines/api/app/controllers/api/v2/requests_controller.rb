@@ -12,12 +12,12 @@ module Api
           Journey::RequestCreated.new(data: {
             query: query.to_global_id,
             organization_id: Organizations.current_id,
-            mode_of_transport: request_params[:mode_of_transport],
+            mode_of_transport: request_params[:modeOfTransport],
             note: request_params[:note]
           }),
           stream_name: "Organization$#{Organizations.current_id}"
         )
-        render json: {status: 200}
+        render json: { status: 200 }
       end
 
       private
@@ -28,7 +28,7 @@ module Api
 
       def request_params
         params.permit(
-          :mode_of_transport,
+          :modeOfTransport,
           :query_id,
           :note
         )

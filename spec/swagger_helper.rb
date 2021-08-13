@@ -259,7 +259,7 @@ RSpec.configure do |config|
           commodityInfo: {
             type: "object",
             properties: {
-              imo_class: {
+              imoClass: {
                 type: "string",
                 enum: Journey::CommodityInfo::VALID_IMO_CLASSES,
                 nullable: true,
@@ -268,15 +268,15 @@ RSpec.configure do |config|
 
                   To see list of possible classes and sub-classes, please see for example https://www.searates.com/reference/imo/
 
-                  If dangerous goods category is unknown, please use `0.0` as IMO class, which is used internally for unknown dangerous goods class but known that it is dangerous goods.
-                  If cargo item contains no dangerous goods, set this field as `null`.
+                  If the cargo item is known to contain dangerous goods, but the specific class is unknown, please use `0` as IMO class, which is used internally for unknown dangerous goods class.
+                  If the cargo item is known to contain no dangerous goods, set this field as `null`.
                 DOC
               },
               description: {
                 type: "string",
                 description: "The description of the IMO Class/ HSCode chosen"
               },
-              hs_code: {
+              hsCode: {
                 type: "string",
                 nullable: true,
                 description: <<~DOC
@@ -286,7 +286,7 @@ RSpec.configure do |config|
 
               }
             },
-            required: %w[id hs_code imo_class]
+            required: %w[id hsCode imoClass]
           },
           country: {
             type: "object",
@@ -1251,11 +1251,11 @@ RSpec.configure do |config|
                 type: "string",
                 description: "The Carrier operating the service on this part of the journey"
               },
-              mode_of_transport: {
+              modeOfTransport: {
                 type: "string",
                 description: "The mode of transport for the section of the journey."
               },
-              transit_time: {
+              transitTime: {
                 description: "The time in days that this part of the journey will take.",
                 type: "integer",
                 format: "int32"
@@ -1270,7 +1270,16 @@ RSpec.configure do |config|
                 description: "The end point of this section",
                 properties: { "$ref" => "#/components/schemas/resultDetailedRoutingLocation" }
               }
-            }
+            },
+            required: %w[
+              id
+              service
+              carrier
+              modeOfTransport
+              transitTime
+              origin
+              destination
+            ]
           },
           resultDetailedRoutingLocation: {
             type: "object",

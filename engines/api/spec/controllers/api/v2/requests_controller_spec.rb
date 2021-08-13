@@ -20,7 +20,7 @@ module Api
 
     describe "POST #create" do
       let(:query) { FactoryBot.create(:journey_query, organization: organization) }
-      let(:params) { {query_id: query.id, organization_id: organization.id} }
+      let(:params) { { query_id: query.id, organization_id: organization.id, modeOfTransport: "ocean" } }
 
       it "successfully creates the event", :aggregate_failures do
         post :create, params: params, as: :json

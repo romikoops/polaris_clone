@@ -133,7 +133,7 @@ module Api
             :length,
             :volume,
             :weight,
-            { commodities: %i[description hs_code imo_class] }
+            { commodities: %i[description hsCode imoClass] }
           ]
         )
       end
