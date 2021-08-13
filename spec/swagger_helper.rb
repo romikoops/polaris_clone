@@ -1196,6 +1196,35 @@ RSpec.configure do |config|
               }
             }
           },
+          schedule: {
+            type: "object",
+            properties: {
+              id: {
+                description: "ID",
+                type: "string"
+              },
+              estimated_departure_time: {
+                description: "Estimated departure date",
+                type: "datetime"
+              },
+              estimated_arrival_time: {
+                description: "Estimation of arrival time",
+                type: "datetime"
+              },
+              voyage_code: {
+                description: "voyage code",
+                type: "string"
+              },
+              vessel_no: {
+                description: "vessel number",
+                type: "string"
+              },
+              closing_date: {
+                description: "schedule closing date",
+                type: "datetime"
+              }
+            }
+          },
           offer: {
             type: "object",
             properties: {
