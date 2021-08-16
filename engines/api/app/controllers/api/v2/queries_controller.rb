@@ -58,6 +58,7 @@ module Api
           destination
           imo_class
           hs_code
+          billable
         ])
       end
 
@@ -122,6 +123,7 @@ module Api
           :destinationId,
           :loadType,
           :aggregated,
+          :billable,
           items: [
             :cargoClass,
             :stackable,

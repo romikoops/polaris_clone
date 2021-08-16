@@ -28,6 +28,7 @@ module Api
         imo_class_search
         hs_code_search
         load_type_search
+        billable_search
       ]
     )
 
@@ -78,6 +79,10 @@ module Api
 
     scope :load_type_search, lambda { |input|
       where(load_type: input)
+    }
+
+    scope :billable_search, lambda { |input|
+      where(billable: input)
     }
 
     scope :imo_class_search, lambda { |input|

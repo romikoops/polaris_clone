@@ -188,9 +188,14 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @contacts ||= []
   end
 
+  def billable
+    params[:billable] || true
+  end
+
   def filtered_results
     @filtered_results ||= begin
       @filtered_results = organization_results
+      @filtered_results = @filtered_results.joins(result_set: :query).where(journey_queries: { billable: billable })
 
       if params[:origin_nexus]
         nexus = Legacy::Nexus.find(params[:origin_nexus])
@@ -272,7 +277,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
           )
         )
       end
-
       @filtered_results
     end
   end

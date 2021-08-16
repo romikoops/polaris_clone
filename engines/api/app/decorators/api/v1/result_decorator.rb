@@ -14,6 +14,7 @@ module Api
         {
           "id": id,
           "status": "quoted",
+          "billable": query.billable,
           "load_type": load_type,
           "planned_pickup_date": selected_date,
           "has_pre_carriage": query.pre_carriage?,

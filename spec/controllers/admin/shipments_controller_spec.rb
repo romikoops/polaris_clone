@@ -105,6 +105,19 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
         expect(json.dig(:data, :quoted).pluck(:id)).to include(result.id)
       end
     end
+
+    context "when billable is given" do
+      let(:query_billable) { FactoryBot.create(:journey_query, organization: organization, billable: false) }
+
+      before { FactoryBot.create(:journey_result_set, query: query_billable) }
+
+      it "returns an http status of success", :aggregate_failures do
+        get :index, params: { organization_id: organization.id, billable: false }
+
+        expect(response).to have_http_status(:success)
+        expect(json.dig(:data, :quoted).pluck(:billable)).not_to include(!query_billable.billable)
+      end
+    end
   end
 
   describe "GET #search_shipments" do

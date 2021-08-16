@@ -5,7 +5,8 @@ module ResultFormatter
     delegate_all
 
     delegate :pickup_address, :delivery_address, :client,
-      :planned_delivery_date, :planned_pickup_date, :cargo_units, :organization, to: :query
+      :planned_delivery_date, :planned_pickup_date, :cargo_units,
+      :organization, :billable, to: :query
 
     def valid_until
       @valid_until ||= expiration_date

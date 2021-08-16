@@ -15,6 +15,7 @@ module Api
       {
         id: query.id,
         aggregated: false,
+        billable: query.billable,
         originName: query.origin,
         destinationName: query.destination,
         reference: line_item_set.reference,

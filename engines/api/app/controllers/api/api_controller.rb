@@ -115,7 +115,7 @@ module Api
       @organization_results ||= Journey::Result.joins(result_set: :query).joins(:route_sections)
         .where(
           journey_result_sets: { status: "completed" },
-          journey_queries: { billable: true, organization_id: current_organization.id }
+          journey_queries: { organization_id: current_organization.id }
         )
     end
   end

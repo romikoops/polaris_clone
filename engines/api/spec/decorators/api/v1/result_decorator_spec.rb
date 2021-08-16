@@ -19,6 +19,7 @@ RSpec.describe Api::V1::ResultDecorator do
     %i[
       id
       status
+      billable
       load_type
       planned_pickup_date
       has_pre_carriage
