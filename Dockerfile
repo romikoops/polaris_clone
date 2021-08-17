@@ -82,7 +82,7 @@ RUN apt-get update \
     gnupg2 \
     graphicsmagick \
     less \
-    libgeos-3.7.1 \
+    libgeos-3.9.0 \
     libgeos-dev \
     nodejs \
     npm \
