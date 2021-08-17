@@ -205,7 +205,7 @@ RSpec.describe ResultFormatter::ResultDecorator do
       end
     end
 
-    context "when deafult currency has changed" do
+    context "when default currency has changed" do
       let(:scope_content) do
         {
           "default_currency" => "SEK"
@@ -218,8 +218,28 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
   end
 
+  describe ".load_type" do
+    let(:query) { FactoryBot.create(:journey_query, organization: organization, load_type: load_type) }
+
+    context "when fcl" do
+      let(:load_type) { "fcl" }
+
+      it "returns 'container'" do
+        expect(klass.load_type).to eq("container")
+      end
+    end
+
+    context "when lcl" do
+      let(:load_type) { "lcl" }
+
+      it "returns 'cargo_item'" do
+        expect(klass.load_type).to eq("cargo_item")
+      end
+    end
+  end
+
   describe ".modes_of_transport" do
-    context "when relays are present" do
+    context "when single mode of transport" do
       it "returns an empty string" do
         expect(klass.modes_of_transport).to eq([freight_section.mode_of_transport])
       end

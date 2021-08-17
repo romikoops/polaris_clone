@@ -90,6 +90,10 @@ module ResultFormatter
       end
     end
 
+    def load_type
+      super == "lcl" ? "cargo_item" : "container"
+    end
+
     def total_volume
       @total_volume ||= cargo_units.inject(Measured::Volume.new(0, "m3")) do |memo, unit|
         memo + unit.total_volume

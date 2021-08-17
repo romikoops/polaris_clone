@@ -3,10 +3,11 @@
 module ResultFormatter
   class ResultDecorator < ApplicationDecorator
     delegate_all
+    decorates_association :query, with: QueryDecorator
 
     delegate :pickup_address, :delivery_address, :client,
       :planned_delivery_date, :planned_pickup_date, :cargo_units,
-      :organization, :billable, to: :query
+      :organization, :billable, :load_type, to: :query
 
     def valid_until
       @valid_until ||= expiration_date
@@ -338,10 +339,6 @@ module ResultFormatter
 
     def scope
       context[:scope] || {}
-    end
-
-    def load_type
-      query.load_type == "fcl" ? "container" : "cargo_item"
     end
 
     def legacy_origin_hub
