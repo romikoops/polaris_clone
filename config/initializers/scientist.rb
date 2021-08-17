@@ -89,7 +89,7 @@ module Scientist
           query_input_params: query_input_params,
           control_value: control.cleaned_value,
           candidate_value: candidate.cleaned_value
-        }
+        }.as_json.deep_symbolize_keys
       end
 
       private
@@ -121,7 +121,7 @@ module Scientist
       end
 
       def app_name
-        Doorkeeper::Application.where(id: query.source_id).select(:name).first
+        Doorkeeper::Application.find_by(id: query.source_id).name
       end
 
       def extracted_value(observation:)
