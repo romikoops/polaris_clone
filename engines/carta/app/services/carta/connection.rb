@@ -11,8 +11,8 @@ module Carta
             "Accept" => "application/json",
             "Authorization" => "Token token=#{Settings.carta.token}"
           }
-        ) do |f|
-          f.request :retry, retry_options
+        ) do |conn|
+          conn.request :retry, retry_options
         end
       end
 
