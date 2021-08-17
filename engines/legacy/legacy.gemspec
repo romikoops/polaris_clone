@@ -16,7 +16,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "groups"
   spec.add_dependency "organizations"
-  spec.add_dependency "profiles"
 
   spec.add_dependency "active_model_serializers"
   spec.add_dependency "activerecord-import"

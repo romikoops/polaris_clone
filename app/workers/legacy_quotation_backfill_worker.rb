@@ -40,7 +40,7 @@ class LegacyQuotationBackfillWorker
             creator: user,
             billable: shipment.billing != "test",
             load_type: shipment.load_type == "cargo_item" ? "lcl" : "fcl",
-            company: Companies::Membership.find_by(member: user)&.company,
+            company: Companies::Membership.find_by(client: user)&.company,
             cargo_ready_date: cargo_ready_date,
             delivery_date: [(shipment.planned_delivery_date || shipment.planned_destination_collection_date || shipment.planned_eta || cargo_ready_date), cargo_ready_date + 25.days].max,
             source_id: Doorkeeper::Application.find_by(name: "dipper").id,

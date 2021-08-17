@@ -8,7 +8,7 @@ RSpec.describe OrganizationManager::HierarchyService do
     let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
     let(:user) { FactoryBot.create(:users_client, organization: organization) }
 
-    context "user is nil" do
+    context "when user is nil" do
       let(:user) { nil }
 
       it "returns an empty array" do
@@ -16,7 +16,7 @@ RSpec.describe OrganizationManager::HierarchyService do
       end
     end
 
-    context "user is not nil" do
+    context "when user is not nil" do
       it "returns the correct hierarchy" do
         expect(described_class.new(target: user, organization: organization).fetch).to eq(
           [organization, default_group, user]
@@ -26,7 +26,7 @@ RSpec.describe OrganizationManager::HierarchyService do
 
     context "when target is a group" do
       let(:group) { FactoryBot.create(:groups_group, organization: organization) }
-      let!(:membership) { FactoryBot.create(:groups_membership, group: group, member: user) }
+      let(:membership) { FactoryBot.create(:groups_membership, group: group, member: user) }
 
       it "returns the correct hierarchy with one group" do
         expect(described_class.new(target: group, organization: organization).fetch).to eq(
@@ -37,7 +37,7 @@ RSpec.describe OrganizationManager::HierarchyService do
 
     context "when target is a company" do
       let(:company) { FactoryBot.create(:companies_company, organization: organization) }
-      let!(:member) { FactoryBot.create(:companies_membership, member: user, company: company) }
+      let(:member) { FactoryBot.create(:companies_membership, client: user, company: company) }
 
       it "returns the correct hierarchy with one group" do
         expect(described_class.new(target: company, organization: organization).fetch).to eq(

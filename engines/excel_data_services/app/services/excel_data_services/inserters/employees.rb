@@ -29,7 +29,7 @@ module ExcelDataServices
         add_stats(user, params[:row_nr], true)
         return unless user.save
 
-        ::Companies::Membership.first_or_create(company: params[:company], member: user)
+        ::Companies::Membership.first_or_create(company: params[:company], client: user)
       end
     end
   end

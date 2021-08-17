@@ -229,7 +229,7 @@ module Api
 
       before do
         FactoryBot.create(:groups_membership, group: organization_group, member: client)
-        FactoryBot.create(:companies_membership, company: company, member: client)
+        FactoryBot.create(:companies_membership, company: company, client: client)
       end
 
       context "when request is successful" do
@@ -250,7 +250,7 @@ module Api
 
         it "deletes the user's company membership" do
           perform_request
-          expect(Companies::Membership.where(member: client)).not_to exist
+          expect(Companies::Membership.where(client: client)).not_to exist
         end
 
         it "deletes the authentication user successfully" do

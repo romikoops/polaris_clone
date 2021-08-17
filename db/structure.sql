@@ -1213,7 +1213,8 @@ CREATE TABLE public.companies_memberships (
     company_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    client_id uuid
 );
 
 
@@ -7004,6 +7005,13 @@ CREATE UNIQUE INDEX charge_category_upsert ON public.charge_categories USING btr
 
 
 --
+-- Name: companies_memberships_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX companies_memberships_client_id ON public.companies_memberships USING btree (client_id) WHERE (deleted_at IS NULL);
+
+
+--
 -- Name: hub_terminal_upsert; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10790,6 +10798,14 @@ ALTER TABLE ONLY public.tenant_vehicles
 
 
 --
+-- Name: companies_memberships fk_rails_522d52c095; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.companies_memberships
+    ADD CONSTRAINT fk_rails_522d52c095 FOREIGN KEY (client_id) REFERENCES public.users_clients(id) ON DELETE CASCADE;
+
+
+--
 -- Name: journey_shipment_requests fk_rails_58ba0dc412; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12297,6 +12313,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210727122646'),
 ('20210727123338'),
 ('20210727130923'),
-('20210730110214');
+('20210730110214'),
+('20210811144330');
 
 

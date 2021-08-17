@@ -44,6 +44,7 @@ RSpec.describe Api::ClientCreationService do
   let!(:company) { FactoryBot.create(:companies_company, organization: organization, name: company_name) }
   let(:client) { service.perform }
   let(:client_address) { Legacy::UserAddress.find_by(user: client) }
+  let!(:default_company) { FactoryBot.create(:companies_company, organization: organization, name: "default") }
 
   describe ".perform" do
     before do
@@ -79,7 +80,16 @@ RSpec.describe Api::ClientCreationService do
     end
 
     it "attaches the user to the correct company", :aggregate_failures do
-      expect(Companies::Membership.find_by(member: client, company: company)).to be_valid
+      expect(Companies::Membership.find_by(client: client, company: company)).to be_valid
+    end
+
+    context "when the company does not exist for the given company name" do
+      let(:company) { FactoryBot.create(:companies_company, organization: organization) }
+      let(:company_name) { "non-existent" }
+
+      it "attaches the default company, to the user's company" do
+        expect(Companies::Membership.find_by(client: client, company: default_company)).to be_valid
+      end
     end
 
     context "when creating client with email belonging to a soft deleted user" do

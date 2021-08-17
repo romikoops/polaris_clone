@@ -24,9 +24,14 @@ module Wheelhouse
     private
 
     def client_from_target(target:)
-      return target if target.is_a?(Users::Client)
-
-      target.memberships.first.member
+      case target.class.to_s
+      when "Users::Client"
+        target
+      when "Companies::Company"
+        target.clients.first
+      when "Groups::Group"
+        target.memberships.first.member
+      end
     end
 
     def offers

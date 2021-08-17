@@ -5,3 +5,6 @@ eval_gemfile "../organizations/Gemfile.runtime"
 
 gem "legacy", path: "../legacy"
 eval_gemfile "../legacy/Gemfile.runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"

@@ -56,7 +56,7 @@ module Admin
       ActiveRecord::Base.transaction do
         user = Users::Client.find_by(id: params[:id])
         Groups::Membership.where(member: user).destroy_all
-        Companies::Membership.where(member: user).destroy_all
+        Companies::Membership.where(client: user).destroy_all
         user.destroy!
       end
 
@@ -96,7 +96,7 @@ module Admin
       query = clients.joins(:profile).merge(profile_query)
       query = query.where("users_clients.email ILIKE ?", "#{params[:email]}%") if params[:email]
       query = query.joins(
-        "LEFT OUTER JOIN companies_memberships ON companies_memberships.member_id = users_clients.id
+        "LEFT OUTER JOIN companies_memberships ON companies_memberships.client_id = users_clients.id
           LEFT OUTER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
       ).where("companies_memberships.deleted_at IS NULL")
 

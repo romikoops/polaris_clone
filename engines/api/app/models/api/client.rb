@@ -16,7 +16,7 @@ module Api
       if sort_by == "email"
         order(sanitize_sql_for_order("email #{direction}"))
       elsif sort_by == "company_name"
-        joins("INNER JOIN companies_memberships ON users_clients.id = companies_memberships.member_id
+        joins("INNER JOIN companies_memberships ON users_clients.id = companies_memberships.client_id
                INNER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id")
           .order(sanitize_sql_for_order("name #{direction}"))
       elsif PROFILE_ATTRIBUTES.include?(sort_by)

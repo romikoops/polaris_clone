@@ -15,8 +15,8 @@ module Api
         client.save!
         attach_associations
         Rails.configuration.event_store.publish(
-          Users::UserCreated.new(data: { user: client.to_global_id, organization_id: client.organization_id }),
-          stream_name: "Organization$#{client.organization_id}"
+          Users::UserCreated.new(data: { user: client.to_global_id, organization_id: Organizations.current_id }),
+          stream_name: "Organization$#{Organizations.current_id}"
         )
         client
       end
@@ -35,9 +35,13 @@ module Api
 
     def company
       Companies::Company.find_by(
-        name: profile_attributes[:company_name] || "default",
-        organization: client.organization
-      )
+        name: profile_attributes[:company_name],
+        organization: Organizations.current_id
+      ) ||
+        Companies::Company.find_by(
+          name: "default",
+          organization: Organizations.current_id
+        )
     end
 
     def address
@@ -75,7 +79,7 @@ module Api
     def attach_company
       return if company.blank?
 
-      Companies::Membership.create!(member: client, company: company)
+      Companies::Membership.create!(client: client, company: company)
     end
 
     def restorable_client

@@ -14,7 +14,7 @@ FactoryBot.define do
 
       after(:create) do |company, evaluator|
         if evaluator.member
-          FactoryBot.create(:companies_membership, company: company, member: evaluator.member)
+          FactoryBot.create(:companies_membership, company: company, client: evaluator.member)
         end
       end
     end

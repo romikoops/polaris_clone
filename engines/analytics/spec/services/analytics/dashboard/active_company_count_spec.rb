@@ -14,7 +14,7 @@ RSpec.describe Analytics::Dashboard::ActiveCompanyCount, type: :service do
 
   before do
     ::Organizations.current_id = organization.id
-    FactoryBot.create(:companies_membership, company: company, member: user)
+    FactoryBot.create(:companies_membership, company: company, client: user)
   end
 
   context "with one active company" do

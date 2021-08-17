@@ -133,7 +133,7 @@ RSpec.describe IDP::SamlController, type: :request do
       let(:external_id) { "companyid" }
       let!(:country) { FactoryBot.create(:legacy_country, code: "sweet_country") }
       let(:company_membership) do
-        Companies::Membership.find_by(member: created_user, company: company)
+        Companies::Membership.find_by(client: created_user, company: company)
       end
       let(:company) do
         Companies::Company.find_by(name: saml_attributes[:companyName], organization: organization)

@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :companies_membership, class: "Companies::Membership" do
     association :company, factory: :companies_company
+    association :client, factory: :users_client
     member { nil }
   end
 end

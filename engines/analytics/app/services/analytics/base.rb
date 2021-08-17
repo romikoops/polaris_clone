@@ -104,8 +104,7 @@ module Analytics
         INNER JOIN users_clients
           ON journey_queries.client_id = users_clients.id
         INNER JOIN companies_memberships
-          ON companies_memberships.member_id = users_clients.id
-          AND companies_memberships.member_type = 'Users::Client'
+          ON companies_memberships.client_id = users_clients.id
         INNER JOIN companies_companies
           ON companies_memberships.company_id = companies_companies.id
       SQL

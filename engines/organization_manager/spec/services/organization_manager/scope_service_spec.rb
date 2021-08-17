@@ -8,11 +8,11 @@ RSpec.describe OrganizationManager::ScopeService do
     let(:organizations_scope) { FactoryBot.build(:organizations_scope, content: content) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:user) { FactoryBot.create(:users_client, organization: organization) }
-    let!(:member) { FactoryBot.create(:companies_membership, member: user, company: company) }
     let(:content) { {} }
     let(:scope) { described_class.new(target: user, organization: organization) }
 
     before do
+      FactoryBot.create(:companies_membership, client: user, company: company)
       Organizations.current_id = organization.id
     end
 
@@ -23,7 +23,7 @@ RSpec.describe OrganizationManager::ScopeService do
     end
 
     context "when key given" do
-      let(:content) { {foo: "bar"} }
+      let(:content) { { foo: "bar" } }
 
       it "returns correct value of the correct scope" do
         expect(scope.fetch(:foo)).to eq("bar")
@@ -32,7 +32,7 @@ RSpec.describe OrganizationManager::ScopeService do
 
     context "when merging scopes" do
       before do
-        FactoryBot.create(:organizations_scope, target: company, content: {foo: "baz"})
+        FactoryBot.create(:organizations_scope, target: company, content: { foo: "baz" })
       end
 
       it "returns combined scope" do
@@ -45,7 +45,7 @@ RSpec.describe OrganizationManager::ScopeService do
       let(:content) { default_content }
 
       before do
-        FactoryBot.create(:organizations_scope, target: company, content: default_content.merge({default_direction: "export"}))
+        FactoryBot.create(:organizations_scope, target: company, content: default_content.merge({ default_direction: "export" }))
       end
 
       it "returns the highest value in the hierarchy" do

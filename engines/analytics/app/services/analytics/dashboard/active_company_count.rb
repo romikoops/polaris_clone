@@ -17,8 +17,7 @@ module Analytics
       def companies_join
         <<-SQL
           INNER JOIN companies_memberships
-            ON companies_memberships.member_id = users_clients.id
-            AND companies_memberships.member_type = 'Users::Client'
+            ON companies_memberships.client_id = users_clients.id
         SQL
       end
     end

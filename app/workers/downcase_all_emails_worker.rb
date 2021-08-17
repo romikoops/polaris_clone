@@ -9,7 +9,7 @@ class DowncaseAllEmailsWorker
       if existing_client.present?
         # rubocop:disable Rails/SkipsModelValidations
         Journey::Query.where(client: client).update_all(client_id: existing_client)
-        Companies::Membership.where(member: client).update_all(member_id: existing_client)
+        Companies::Membership.where(client: client).update_all(member_id: existing_client)
         Groups::Membership.where(member: client).update_all(member_id: existing_client)
         # rubocop:enable Rails/SkipsModelValidations
         client.really_destroy!

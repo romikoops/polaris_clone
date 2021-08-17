@@ -58,7 +58,7 @@ module Api
       end
 
       def company_memberships
-        @company_memberships ||= Companies::Membership.where(member: client)
+        @company_memberships ||= Companies::Membership.where(client: client)
       end
 
       def client_params

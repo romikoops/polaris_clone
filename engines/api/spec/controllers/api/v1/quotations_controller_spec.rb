@@ -11,7 +11,7 @@ module Api
       { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
         FactoryBot.create(:treasury_exchange_rate, from: currency, to: "EUR", rate: rate)
       end
-      FactoryBot.create(:companies_membership, member: user)
+      FactoryBot.create(:companies_membership, client: user)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }

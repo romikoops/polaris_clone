@@ -117,7 +117,7 @@ RSpec.describe Pricings::Manipulator do
       }
       let(:company) do
         FactoryBot.create(:companies_companies, organization: organization).tap do |tapped_company|
-          FactoryBot.create(:companies_membership, member: user, company: tapped_company)
+          FactoryBot.create(:companies_membership, client: user, company: tapped_company)
         end
       end
 

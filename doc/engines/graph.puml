@@ -8,7 +8,6 @@ package "bookings" {
 }
 package "service" {
   class groups << (S,yellow) >>
-  class profiles << (S,yellow) >>
   class legacy << (S,yellow) >>
   class companies << (S,yellow) >>
   class organization_manager << (S,yellow) >>
@@ -21,6 +20,7 @@ package "service" {
   class pricings << (S,yellow) >>
   class carta << (S,yellow) >>
   class cms_data << (S,yellow) >>
+  class profiles << (S,yellow) >>
   class result_formatter << (S,yellow) >>
   class notes << (S,yellow) >>
   class offer_calculator << (S,yellow) >>
@@ -59,18 +59,16 @@ package "direct" {
 address_book *--> organizations
 groups --> organizations
 groups *--> companies
-users *--> organizations
-profiles --> users
-profiles --> organizations
 legacy *--> groups
 legacy --> organizations
-legacy *--> profiles
 legacy *--> cargo
 legacy *--> companies
 legacy *--> organization_manager
 legacy *--> quotations
+users *--> organizations
 companies --> organizations
 companies *--> legacy
+companies --> users
 companies *--> groups
 organization_manager *--> companies
 organization_manager *--> groups
@@ -119,6 +117,8 @@ analytics --> users
 api_auth --> users
 api_auth --> organizations
 cms_data --> organizations
+profiles --> users
+profiles --> organizations
 result_formatter *--> legacy
 result_formatter --> journey
 result_formatter *--> pricings

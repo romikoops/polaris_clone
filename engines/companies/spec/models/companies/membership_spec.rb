@@ -6,7 +6,7 @@ module Companies
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_client, organization: organization) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let!(:membership) { FactoryBot.create(:companies_membership, company: company, member: user) }
+    let!(:membership) { FactoryBot.create(:companies_membership, company: company, client: user) }
 
     context "with rails validations" do
       it "raises an rails validation error" do

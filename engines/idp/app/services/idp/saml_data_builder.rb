@@ -45,7 +45,7 @@ module IDP
     def attach_to_company
       return if company.nil?
 
-      Companies::Membership.find_or_create_by!(member: user, company: company)
+      Companies::Membership.find_or_create_by!(client: user, company: company)
     end
 
     def set_user

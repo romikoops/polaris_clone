@@ -98,7 +98,7 @@ RSpec.describe OfferCalculator::Calculator do
   include_context "complete_route_with_trucking"
 
   before do
-    FactoryBot.create(:companies_membership, member: user)
+    FactoryBot.create(:companies_membership, client: user)
     Organizations.current_id = organization.id
   end
 

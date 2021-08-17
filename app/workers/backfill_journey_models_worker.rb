@@ -246,8 +246,7 @@ class BackfillJourneyModelsWorker
         LEFT JOIN quotations_line_items
           ON quotations_tenders.id = quotations_line_items.tender_id
         LEFT JOIN companies_memberships
-          ON quotations_quotations.user_id = companies_memberships.member_id
-          AND companies_memberships.member_type = 'Users::Client' ,
+          ON quotations_quotations.user_id = companies_memberships.client_id,
           oauth_applications
         WHERE quotations_quotations.id = '#{quotation_id}'
         RETURNING id

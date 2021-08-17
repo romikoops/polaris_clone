@@ -9,7 +9,7 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      FactoryBot.create(:companies_membership, member: user)
+      FactoryBot.create(:companies_membership, client: user)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }

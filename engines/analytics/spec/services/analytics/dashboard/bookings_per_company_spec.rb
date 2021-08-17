@@ -16,7 +16,7 @@ RSpec.describe Analytics::Dashboard::BookingsPerCompany, type: :service do
   before do
     Organizations.current_id = organization.id
     clients.each do |client|
-      FactoryBot.create(:companies_membership, company: company, member: client)
+      FactoryBot.create(:companies_membership, company: company, client: client)
     end
     FactoryBot.create_list(:journey_query,
       2,

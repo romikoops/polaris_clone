@@ -184,7 +184,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   describe "GET #show" do
     before do
       FactoryBot.create_list(:users_client, 5, organization: organization).each do |employee|
-        FactoryBot.create(:companies_membership, company: company, member: employee)
+        FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     end
 
@@ -211,7 +211,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   describe "DELETE #destroy" do
     before do
       FactoryBot.create_list(:users_client, 5, organization: organization).each do |employee|
-        FactoryBot.create(:companies_membership, company: company, member: employee)
+        FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     end
 
@@ -243,35 +243,35 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   describe "POST #edit_employees" do
     let!(:user_a) {
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
-        FactoryBot.create(:companies_membership, company: company, member: employee)
+        FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     }
     let!(:user_b) {
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
-        FactoryBot.create(:companies_membership, company: company, member: employee)
+        FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     }
     let!(:user_c) { FactoryBot.create(:users_client, organization: organization) }
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:params) { { organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json) } }
 
-    context "when removing one and adding antoher Membership" do
+    context "when removing one and adding another Membership" do
       it "updates the employees for the Company", :aggregate_failures do
         post :edit_employees, params: params
-        expect(Companies::Membership.find_by(company: company, member: user_a)).to be_present
-        expect(Companies::Membership.find_by(company: company, member: user_b)).not_to be_present
-        expect(Companies::Membership.find_by(company: company, member: user_c)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_c)).to be_present
       end
     end
 
     context "when a soft deleted Membership exists" do
-      before { FactoryBot.create(:companies_membership, company: company, member: user_c).tap(&:destroy) }
+      before { FactoryBot.create(:companies_membership, company: company, client: user_c).tap(&:destroy) }
 
       it "updates the employees for the Company, restoring the soft deleted Membership", :aggregate_failures do
         post :edit_employees, params: params
-        expect(Companies::Membership.find_by(company: company, member: user_a)).to be_present
-        expect(Companies::Membership.find_by(company: company, member: user_b)).not_to be_present
-        expect(Companies::Membership.find_by(company: company, member: user_c)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, client: user_c)).to be_present
       end
     end
   end

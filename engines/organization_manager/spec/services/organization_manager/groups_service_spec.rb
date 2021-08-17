@@ -51,7 +51,7 @@ RSpec.describe OrganizationManager::GroupsService do
       let(:company_group) { FactoryBot.create(:groups_group, organization: organization) }
 
       before do
-        FactoryBot.create(:companies_membership, member: user, company: company)
+        FactoryBot.create(:companies_membership, client: user, company: company)
         FactoryBot.create(:groups_membership, group: company_group, member: company)
       end
 

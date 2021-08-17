@@ -26,7 +26,7 @@ module OrganizationManager
     end
 
     def company_hierachy
-      membership = ::Companies::Membership.find_by(member: target)
+      membership = ::Companies::Membership.find_by(client: target)
       return [] unless membership
 
       groups_for(members: [membership.company])

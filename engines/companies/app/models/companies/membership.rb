@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # frozen_string_literal
 
 module Companies
@@ -6,9 +7,10 @@ module Companies
     acts_as_paranoid
 
     belongs_to :company, class_name: "Companies::Company"
-    belongs_to :member, polymorphic: true
+    belongs_to :client, class_name: "::Users::Client"
+    belongs_to :member, polymorphic: true, optional: true
 
-    validates :member_id, uniqueness: {scope: :company}
+    validates :client_id, uniqueness: { scope: :company }
   end
 end
 
@@ -21,11 +23,13 @@ end
 #  member_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  client_id   :uuid
 #  company_id  :uuid
 #  member_id   :uuid
 #
 # Indexes
 #
+#  companies_memberships_client_id                           (client_id) UNIQUE WHERE (deleted_at IS NULL)
 #  index_companies_memberships_on_company_id                 (company_id)
 #  index_companies_memberships_on_deleted_at                 (deleted_at)
 #  index_companies_memberships_on_member_id_and_company_id   (member_id,company_id) UNIQUE
@@ -33,5 +37,6 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (client_id => users_clients.id) ON DELETE => cascade
 #  fk_rails_...  (company_id => companies_companies.id)
 #

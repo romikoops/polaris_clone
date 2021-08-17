@@ -37,7 +37,7 @@ module Wheelhouse
 
     before do
       Organizations.current_id = organization.id
-      FactoryBot.create(:companies_membership, company: company, member: user)
+      FactoryBot.create(:companies_membership, company: company, client: user)
       FactoryBot.create(:groups_membership, group: group, member: user)
       allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
       allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
@@ -54,28 +54,37 @@ module Wheelhouse
 
     shared_examples_for "a pricing with one margin" do
       it "returns the examples for the target", :aggregate_failures do
-        expect{ results }.not_to change { Journey::Query.count }
+        expect { results }.not_to(change { Journey::Query.count })
         expect(results.length).to eq(1)
         expect(results.dig(0, :freight, :fees, :bas, :margins, 0, :source_id)).to eq(margin.id)
         expect(results.dig(0, :freight, :fees, :bas, :final, :rate)).to eq(275)
       end
     end
 
+    shared_examples_for "determining the correct client attribute from target param" do
+      it "sets the target param as client attribute" do
+        expect(preview_service.client).to eq(user)
+      end
+    end
+
     describe ".perform" do
       context "with user" do
         it_behaves_like "a pricing with one margin"
+        it_behaves_like "determining the correct client attribute from target param"
       end
 
       context "with group" do
         let(:target) { group }
 
         it_behaves_like "a pricing with one margin"
+        it_behaves_like "determining the correct client attribute from target param"
       end
 
       context "with company" do
         let(:target) { company }
 
         it_behaves_like "a pricing with one margin"
+        it_behaves_like "determining the correct client attribute from target param"
       end
 
       context "with multiple margins" do

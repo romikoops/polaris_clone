@@ -17,7 +17,7 @@ RSpec.describe Api::Routing::LegacyRoutingService, type: :service do
   end
   let(:company) do
     FactoryBot.create(:companies_company, name: "Test", organization: organization).tap do |tapped_company|
-      FactoryBot.create(:companies_membership, member: user, company: tapped_company)
+      FactoryBot.create(:companies_membership, client: user, company: tapped_company)
     end
   end
   let(:result) do

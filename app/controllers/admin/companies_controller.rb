@@ -16,7 +16,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
 
   def show
     employees = Companies::Membership.where(company: company).map { |membership|
-      user = membership.member
+      user = membership.client
       ProfileTools.merge_profile(
         target: user.as_json,
         profile: user.profile
@@ -39,7 +39,7 @@ class Admin::CompaniesController < Admin::AdminBaseController
 
     if create_params[:addedMembers].present?
       ::Users::Client.where(id: create_params[:addedMembers]).each do |user|
-        ::Companies::Membership.create!(member: user, company: new_company)
+        ::Companies::Membership.create!(client: user, company: new_company)
       end
     end
 
@@ -66,10 +66,11 @@ class Admin::CompaniesController < Admin::AdminBaseController
   def edit_employees
     if added_members.present?
       clients = ::Users::Client.where(id: added_members.pluck(:id))
-      Companies::Membership.where(company: company).where.not(member: clients).destroy_all
-      Companies::Membership.with_deleted.where(company: company, member: clients).map(&:restore)
+      Companies::Membership.where(company: company).where.not(client: clients).destroy_all
+      Companies::Membership.with_deleted.where(company: company, client: clients).map(&:restore)
       clients.each do |client|
-        Companies::Membership.find_or_create_by(company: company, member: client)
+        Companies::Membership.where(client: clients).where.not(company: company).destroy_all
+        Companies::Membership.find_or_create_by!(company: company, client: client)
       end
     end
     response_handler(company)

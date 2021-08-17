@@ -101,7 +101,7 @@ RSpec.describe RateExtractor::MarginFilter do
   context "when applicable to a company" do
     let(:company) do
       FactoryBot.create(:companies_company, organization: organization).tap do |c|
-        FactoryBot.create(:companies_membership, company: c, member: user)
+        FactoryBot.create(:companies_membership, company: c, client: user)
       end
     end
 

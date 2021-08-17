@@ -22,7 +22,7 @@ RSpec.describe Admin::ClientsController do
     before do
       ::Organizations.current_id = organization.id
       users.each do |other_user|
-        FactoryBot.create(:companies_membership, company: company, member: other_user)
+        FactoryBot.create(:companies_membership, company: company, client: other_user)
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe Admin::ClientsController do
     end
 
     context "when the user has soft deleted their membership" do
-      before { FactoryBot.create(:companies_membership, member: client, deleted_at: 5.minutes.ago) }
+      before { FactoryBot.create(:companies_membership, client: client, deleted_at: 5.minutes.ago) }
 
       it "returns only one user" do
         get :index, params: { organization_id: organization.id, email: client.email }
@@ -161,7 +161,7 @@ RSpec.describe Admin::ClientsController do
 
     before do
       FactoryBot.create(:groups_membership, group: group, member: user)
-      FactoryBot.create(:companies_membership, company: company, member: user)
+      FactoryBot.create(:companies_membership, company: company, client: user)
     end
 
     it "returns an http status of success" do
@@ -176,7 +176,7 @@ RSpec.describe Admin::ClientsController do
 
     it "deletes the users company memberships" do
       delete :destroy, params: { organization_id: organization, id: user.id }
-      expect(Companies::Membership.where(member: user)).not_to exist
+      expect(Companies::Membership.where(client: user)).not_to exist
     end
 
     it "deletes the user" do

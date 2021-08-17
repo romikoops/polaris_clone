@@ -9,6 +9,7 @@ module Companies
     belongs_to :organization, class_name: "Organizations::Organization"
     has_one :country, through: :address, class_name: "Legacy::Country"
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
+    has_many :clients, class_name: "Users::Client", through: :memberships
 
     validates :external_id, uniqueness: { scope: %i[name organization_id] }, allow_nil: true
 

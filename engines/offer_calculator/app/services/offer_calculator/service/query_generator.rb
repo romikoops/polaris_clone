@@ -83,7 +83,7 @@ module OfferCalculator
       end
 
       def company
-        Companies::Membership.find_by(member: client)&.company
+        Companies::Membership.find_by(client: client)&.company
       end
 
       def pre_carriage?

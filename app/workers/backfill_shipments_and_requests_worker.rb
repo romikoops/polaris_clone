@@ -21,7 +21,7 @@ class BackfillShipmentsAndRequestsWorker
           creator: user,
           billable: shipment.billing != "test",
           load_type: shipment.load_type == "cargo_item" ? "lcl" : "fcl",
-          company: Companies::Membership.find_by(member: user)&.company,
+          company: Companies::Membership.find_by(client: user)&.company,
           cargo_ready_date: cargo_ready_date,
           delivery_date: [delivery_date, cargo_ready_date + 25.days].max,
           source_id: Doorkeeper::Application.find_by(name: "dipper").id,
@@ -313,7 +313,7 @@ class BackfillShipmentsAndRequestsWorker
 
   def create_shipment_request(shipment:)
     Journey::ShipmentRequest.new(
-      company: Companies::Membership.where(member_id: shipment.user_id).first&.company,
+      company: Companies::Membership.where(client_id: shipment.user_id).first&.company,
       client_id: shipment.user_id,
       contacts: create_contacts(shipment: shipment).compact,
       shipment: create_shipment(shipment: shipment)
