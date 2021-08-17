@@ -40,26 +40,6 @@ module Trucking
 
     # Instance Methods
     delegate :nexus_id, to: :hub
-
-    def as_index_result
-      {
-        "truckingPricing" => as_json,
-        "countryCode" => location.country.code,
-        "courier" => tenant_vehicle.name
-      }.merge(location_info)
-    end
-
-    def location_info
-      return {} if location.nil?
-
-      if location&.zipcode
-        {"zipCode" => location.zipcode}
-      elsif location&.distance
-        {"distance" => location.distance}
-      else
-        {"city" => location.city_name || location.location&.name}
-      end
-    end
   end
 end
 

@@ -10,7 +10,7 @@ class Admin::TruckingController < Admin::AdminBaseController
   def show
     response_handler(
       hub: hub,
-      truckingPricings: paginated_truckings.map(&:as_index_result),
+      truckingPricings: as_index_result(truckings: paginated_truckings),
       page: show_params[:page],
       pages: paginated_truckings.total_pages,
       groups: groups,
@@ -105,6 +105,33 @@ class Admin::TruckingController < Admin::AdminBaseController
   end
 
   def paginated_truckings
-    truckings_by_hub.paginate(page: show_params[:page] || 1, per_page: show_params[:per_page] || 20)
+    @paginated_truckings ||= truckings_by_hub.paginate(page: show_params[:page] || 1, per_page: show_params[:per_page] || 20)
+  end
+
+  def as_index_result(truckings:)
+    truckings.includes(:location, :tenant_vehicle).map do |trucking|
+      {
+        "truckingPricing" => trucking.as_json,
+        "countryCode" => trucking.location.country.code,
+        "courier" => trucking.tenant_vehicle.name
+      }.merge(location_info(trucking: trucking))
+    end
+  end
+
+  def location_info(trucking:)
+    trucking_location = trucking.location
+    return {} if trucking_location.nil?
+
+    key =
+      case trucking_location.query
+      when "postal_code"
+        "zipCode"
+      when "distance"
+        "distance"
+      else
+        "city"
+      end
+
+    { key => trucking_location.data }
   end
 end

@@ -18,6 +18,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
       allow(ExcelDataServices::UploaderJob).to receive(:perform_later)
       allow(Legacy::File).to receive(:create!).and_return(dummy_file)
     end
+
     let(:base_params) do
       {
         file: Rack::Test::UploadedFile.new(File.expand_path("../../test_sheets/spec_sheet.xlsx", __dir__)),
@@ -71,18 +72,50 @@ RSpec.describe Admin::TruckingController, type: :controller do
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
     let(:carrier) { FactoryBot.create(:legacy_carrier, name: courier_name) }
     let(:courier) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, organization: organization, mode_of_transport: "truck_carriage") }
+    let(:location) { FactoryBot.create(:trucking_location) }
 
     before do
-      FactoryBot.create(:trucking_trucking, hub: hub, tenant_vehicle: courier, organization: organization, group: group)
+      FactoryBot.create(:trucking_trucking, hub: hub, tenant_vehicle: courier, organization: organization, group: group, location: location)
     end
 
     it "returns the truckings for the requested hub" do
-      get :show, params: {id: hub.id, organization_id: organization.id, group: group.id, courier: courier_name}
+      get :show, params: { id: hub.id, organization_id: organization.id, group: group.id, courier: courier_name }
       aggregate_failures do
         expect(response).to have_http_status(:success)
         expect(json_response.dig("data", "groups")).not_to be_empty
         expect(json_response.dig("data", "truckingPricings").first.dig("truckingPricing", "hub_id")).to eq(hub.id)
         expect(json_response.dig("data", "providers")).to include(courier_name)
+      end
+    end
+
+    context "with different types of location info for truckings" do
+      before { location }
+
+      context "when query type is location" do
+        let(:location) { FactoryBot.create(:trucking_location, query: :location) }
+
+        it "returns location with zipcode when query type is location" do
+          get :show, params: { id: hub.id, organization_id: organization.id, group: group.id }
+          expect(json_response.dig("data", "truckingPricings").first).to include({ "city" => location.data })
+        end
+      end
+
+      context "when query type is zip code" do
+        let(:location) { FactoryBot.create(:trucking_location, query: :postal_code) }
+
+        it "returns location with zipcode when query type is postal_code" do
+          get :show, params: { id: hub.id, organization_id: organization.id, group: group.id }
+          expect(json_response.dig("data", "truckingPricings").first).to include({ "zipCode" => location.data })
+        end
+      end
+
+      context "when query type is distance" do
+        let(:location) { FactoryBot.create(:trucking_location, query: :distance) }
+
+        it "returns location with zipcode when query type is distance" do
+          get :show, params: { id: hub.id, organization_id: organization.id, group: group.id }
+          expect(json_response.dig("data", "truckingPricings").first).to include({ "distance" => location.data })
+        end
       end
     end
   end
