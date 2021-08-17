@@ -1235,7 +1235,7 @@ RSpec.configure do |config|
             },
             required: ["id"]
           },
-          routingSection: {
+          routeSection: {
             type: "object",
             description: "Details regarding the start, end, service and mode of transport of each section of the quoted Journey",
             properties: {
@@ -1269,6 +1269,11 @@ RSpec.configure do |config|
                 type: "object",
                 description: "The end point of this section",
                 properties: { "$ref" => "#/components/schemas/resultDetailedRoutingLocation" }
+              },
+              carrierLogo: {
+                description: "URL for accesing the logo of the route section's Carrier",
+                type: "string",
+                nullable: true
               }
             },
             required: %w[

@@ -73,6 +73,7 @@ Api::Engine.routes.draw do
       end
       resources :results, only: [:show] do
         resources :charges, only: [:index]
+        resources :route_sections, only: [:index]
         resources :schedules, only: [:index]
       end
       resources :offers, only: [:create] do

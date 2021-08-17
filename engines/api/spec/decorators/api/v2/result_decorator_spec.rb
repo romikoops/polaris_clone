@@ -21,24 +21,6 @@ RSpec.describe Api::V2::ResultDecorator do
     Organizations.current_id = organization.id
   end
 
-  describe "#routing" do
-    let(:routing) { decorated_result.routing }
-    let(:expected_keys) do
-      %w[id
-        service
-        carrier
-        mode_of_transport
-        transit_time
-        origin
-        destination]
-    end
-
-    it "returns the legacy response format for the index list", :aggregate_failures do
-      expect(routing.pluck("id")).to eq(route_sections.reject { |route_section| route_section.mode_of_transport == "relay" }.pluck(:id))
-      expect(routing.first.keys).to eq(expected_keys)
-    end
-  end
-
   describe ".carrier_logo" do
     context "with logo attached" do
       it "returns the url for accessing the logo of the freight carrier" do

@@ -16,7 +16,6 @@ module Api
         cargo_delivery_date
         origin
         destination
-        routing
       ]
 
       attribute :origin do |result|
