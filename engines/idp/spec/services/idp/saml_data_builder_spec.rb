@@ -191,6 +191,15 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
 
         it_behaves_like "Company creation from SAML"
       end
+
+      context "when company is present and user belongs to other Company" do
+        before do
+          FactoryBot.create(:companies_membership, client: FactoryBot.create(:users_client, email: email, organization: organization))
+          saml_data_builder.perform
+        end
+
+        it_behaves_like "Company creation from SAML"
+      end
     end
   end
 end

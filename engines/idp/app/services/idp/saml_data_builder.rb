@@ -45,6 +45,7 @@ module IDP
     def attach_to_company
       return if company.nil?
 
+      Companies::Membership.where(client: user).where.not(company: company).destroy_all
       Companies::Membership.find_or_create_by!(client: user, company: company)
     end
 
