@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :companies_company, class: "Companies::Company" do
     association :organization, factory: :organizations_organization
     sequence(:name) { |n| "company#{n}" }
+    sequence(:payment_terms) { "Some quotation payment terms" }
     sequence(:vat_number) { |n| "DE-VATNUMBER#{n}" }
     sequence(:external_id) { |n| "DE-External#{n}" }
 
@@ -13,9 +14,7 @@ FactoryBot.define do
       end
 
       after(:create) do |company, evaluator|
-        if evaluator.member
-          FactoryBot.create(:companies_membership, company: company, client: evaluator.member)
-        end
+        FactoryBot.create(:companies_membership, company: company, client: evaluator.member) if evaluator.member
       end
     end
   end

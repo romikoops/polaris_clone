@@ -5,6 +5,8 @@ module Companies
     acts_as_paranoid
     include PgSearch::Model
 
+    before_save :set_payment_terms_to_nil, if: -> { payment_terms.blank? }
+
     belongs_to :address, class_name: "Legacy::Address", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
     has_one :country, through: :address, class_name: "Legacy::Country"
@@ -37,6 +39,10 @@ module Companies
       }
 
     scope :ordered_by, ->(col, desc = false) { reorder(col => desc.to_s == "true" ? :desc : :asc) }
+
+    def set_payment_terms_to_nil
+      self.payment_terms = nil
+    end
   end
 end
 
@@ -48,6 +54,7 @@ end
 #  deleted_at         :datetime
 #  email              :string
 #  name               :string
+#  payment_terms      :text
 #  phone              :string
 #  vat_number         :string
 #  created_at         :datetime         not null

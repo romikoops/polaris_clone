@@ -13,5 +13,8 @@ Admiralty
     ItsMyCargo Employee Overview and Management Interface
 
 .. toctree::
+   :glob:
+   :hidden:
 
    engines/index.md
+   engines/companies/models/*
