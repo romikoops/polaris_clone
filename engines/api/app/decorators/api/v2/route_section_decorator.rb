@@ -4,7 +4,10 @@ module Api
   module V2
     class RouteSectionDecorator < Draper::Decorator
       decorates "Journey::RouteSection"
+      decorates_association :result, with: Api::V2::ResultDecorator
       delegate_all
+
+      delegate :transshipment, to: :result
 
       def origin
         route_point_info(route_point: from)

@@ -1274,6 +1274,11 @@ RSpec.configure do |config|
                 description: "URL for accesing the logo of the route section's Carrier",
                 type: "string",
                 nullable: true
+              },
+              transshipment: {
+                description: "Text describing the transshipment points(s) of this section of the journey",
+                type: "string",
+                nullable: true
               }
             },
             required: %w[
@@ -1284,6 +1289,7 @@ RSpec.configure do |config|
               transitTime
               origin
               destination
+              transshipment
             ]
           },
           resultDetailedRoutingLocation: {

@@ -18,12 +18,18 @@ module Api
       }
     end
 
+    before { allow(decorated_route_section).to receive(:transshipment).and_return("ZACPT") }
+
     it "returns the correct data for the origin of the RouteSection for the object passed" do
       expect(target[:origin]).to eq(expected_origin)
     end
 
     it "returns the carrier logo" do
       expect(target[:carrierLogo]).to include(routing_carrier.logo.filename.to_s)
+    end
+
+    it "returns the transshipment" do
+      expect(target[:transshipment]).to eq("ZACPT")
     end
   end
 end

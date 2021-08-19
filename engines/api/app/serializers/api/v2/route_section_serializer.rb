@@ -8,6 +8,7 @@ module Api
         carrier
         carrier_logo
         mode_of_transport
+        transshipment
         transit_time
         origin
         destination]
