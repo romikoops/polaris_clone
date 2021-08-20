@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Api
   RSpec.describe V2::RouteSectionSerializer do
-    let(:route_section) { FactoryBot.create(:journey_route_section, carrier: routing_carrier.name) }
+    let(:route_section) { FactoryBot.create(:journey_route_section, transshipment: "ZACPT", carrier: routing_carrier.name) }
     let(:decorated_route_section) { Api::V2::RouteSectionDecorator.new(route_section) }
     let(:serialized_route_section) { described_class.new(decorated_route_section).serializable_hash }
     let(:target) { serialized_route_section.dig(:data, :attributes) }
@@ -17,8 +17,6 @@ module Api
         "address" => route_section.from.name
       }
     end
-
-    before { allow(decorated_route_section).to receive(:transshipment).and_return("ZACPT") }
 
     it "returns the correct data for the origin of the RouteSection for the object passed" do
       expect(target[:origin]).to eq(expected_origin)
