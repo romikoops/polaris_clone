@@ -40,7 +40,8 @@ module OfferCalculator
               service: tenant_vehicle.name,
               carrier: carrier_name,
               order: order,
-              transit_time: transit_time
+              transit_time: transit_time,
+              transshipment: transshipment
             )
           end
 
@@ -94,6 +95,10 @@ module OfferCalculator
 
           def geo_id_from_address(address:)
             request.geo_id(target: address == request.pickup_address ? "origin" : "destination")
+          end
+
+          def transshipment
+            nil
           end
         end
       end

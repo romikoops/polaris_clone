@@ -1189,10 +1189,13 @@ RSpec.configure do |config|
                 description: "The full name of the end point of the quoted journey",
                 type: "string"
               },
-              routing: {
-                description: "The ID of the RouteSection that carries this information",
-                type: "array",
-                items: { "$ref" => "#/components/schemas/routingSection" }
+              transshipment: {
+                description: "Information regarding the transhipments (if any) that happen during the main section of the journey",
+                type: "string"
+              },
+              numberOfStops: {
+                description: "The number of times the cargo will be loaded and unloaded during the journey",
+                type: "integer"
               }
             }
           },
@@ -1276,7 +1279,7 @@ RSpec.configure do |config|
                 nullable: true
               },
               transshipment: {
-                description: "Text describing the transshipment points(s) of this section of the journey",
+                description: "Information regarding the transhipments (if any) that happen during this section of the journey",
                 type: "string",
                 nullable: true
               }

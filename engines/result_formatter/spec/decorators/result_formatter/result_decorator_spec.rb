@@ -113,6 +113,12 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
   end
 
+  describe ".transshipment" do
+    it "returns the transshipment from the main freight RouteSection" do
+      expect(klass.transshipment).to eq(freight_section.transshipment)
+    end
+  end
+
   describe ".chargeable_weight_string" do
     context "when import/export" do
       it "returns an empty string" do

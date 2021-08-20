@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ffb2ff30f20@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f9cb3dc2290@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -927,6 +927,9 @@ end
 #                                                   PATCH  /domains/:id(.:format)                        domains_admin/admin#update
 #                                                   PUT    /domains/:id(.:format)                        domains_admin/admin#update
 #                                                   DELETE /domains/:id(.:format)                        domains_admin/admin#destroy
+#                              download_files_admin GET    /files/:id/download(.:format)                 files_admin/admin#download
+#                                 files_admin_index GET    /files(.:format)                              files_admin/admin#index
+#                                       files_admin GET    /files/:id(.:format)                          files_admin/admin#show
 #                               margins_admin_index GET    /margins(.:format)                            margins_admin/admin#index
 #                                                   POST   /margins(.:format)                            margins_admin/admin#create
 #                                     margins_admin GET    /margins/:id(.:format)                        margins_admin/admin#show
@@ -950,6 +953,9 @@ end
 #                               organizations_admin GET    /organizations/:id(.:format)                  organizations_admin/admin#show
 #                                                   PATCH  /organizations/:id(.:format)                  organizations_admin/admin#update
 #                                                   PUT    /organizations/:id(.:format)                  organizations_admin/admin#update
+#                           download_pricings_admin GET    /pricings/:id/download(.:format)              pricings_admin/admin#download
+#                              pricings_admin_index GET    /pricings(.:format)                           pricings_admin/admin#index
+#                                    pricings_admin GET    /pricings/:id(.:format)                       pricings_admin/admin#show
 #                            download_queries_admin GET    /queries/:id/download(.:format)               queries_admin/admin#download
 #                               queries_admin_index GET    /queries(.:format)                            queries_admin/admin#index
 #                                     queries_admin GET    /queries/:id(.:format)                        queries_admin/admin#show
@@ -1042,6 +1048,8 @@ end
 #           v2_organization_result_set_errors GET    /v2/organizations/:organization_id/result_sets/:result_set_id/errors(.:format)           api/v2/errors#index
 #                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
+#       v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index
+#            v2_organization_result_schedules GET    /v2/organizations/:organization_id/results/:result_id/schedules(.:format)                api/v2/schedules#index
 #                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
 #                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
 #                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
@@ -1053,6 +1061,8 @@ end
 #                     v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show
 #                                             PATCH  /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                                             PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
+#                    v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
+#                     v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #
 # Routes for Easymon::Engine:

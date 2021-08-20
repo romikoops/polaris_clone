@@ -19,5 +19,13 @@ module Api
     it "returns the carrier logo" do
       expect(target[:carrierLogo]).to include(routing_carrier.logo.filename.to_s)
     end
+
+    it "returns the transshipment" do
+      expect(target[:transshipment]).to eq(decorated_result.main_freight_section.transshipment)
+    end
+
+    it "returns the number of stops" do
+      expect(target[:numberOfStops]).to eq(0)
+    end
   end
 end

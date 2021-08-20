@@ -32,6 +32,7 @@ end
 #  order             :integer          not null
 #  service           :string           not null
 #  transit_time      :integer          not null
+#  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  from_id           :uuid

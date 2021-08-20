@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Journey
   class Error < ApplicationRecord
     belongs_to :result_set

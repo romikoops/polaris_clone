@@ -16,6 +16,8 @@ module Api
         cargo_delivery_date
         origin
         destination
+        transshipment
+        number_of_stops
       ]
 
       attribute :origin do |result|
@@ -34,8 +36,6 @@ module Api
           currency: result.total.currency.iso_code
         }
       end
-
-      attribute :transit_time, &:transit_time
 
       attribute :cargo_ready_date do |result|
         result.query.cargo_ready_date

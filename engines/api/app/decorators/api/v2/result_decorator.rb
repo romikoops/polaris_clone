@@ -16,6 +16,11 @@ module Api
       def carrier_logo
         @carrier_logo ||= logo.attached? ? Rails.application.routes.url_helpers.rails_blob_url(logo) : nil
       end
+
+      def number_of_stops
+        transshipment_count = transshipment.nil? || transshipment.casecmp("direct").zero? ? 1 : 0
+        route_sections.where.not(mode_of_transport: "relay").count - transshipment_count
+      end
     end
   end
 end

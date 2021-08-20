@@ -23,6 +23,10 @@ module OfferCalculator
             itinerary.mode_of_transport
           end
 
+          def transshipment
+            itinerary.transshipment
+          end
+
           def transit_time
             Legacy::TransitTime.find_by(itinerary: itinerary, tenant_vehicle: tenant_vehicle)&.duration ||
               OfferCalculator::Schedule::DURATION

@@ -29,7 +29,7 @@ module ResultFormatter
     end
 
     def transshipment
-      @transshipment ||= itinerary.transshipment
+      main_freight_section.transshipment
     end
 
     def vessel_name

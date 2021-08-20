@@ -13,9 +13,17 @@ RSpec.describe Api::V2::ResultDecorator do
     [
       FactoryBot.build(:journey_route_section, order: 1, mode_of_transport: "carriage"),
       FactoryBot.build(:journey_route_section, order: 2, mode_of_transport: "relay"),
-      FactoryBot.build(:journey_route_section, order: 3, mode_of_transport: "ocean", carrier: routing_carrier.name)
+      main_freight_section
     ]
   end
+  let(:main_freight_section) do
+    FactoryBot.build(:journey_route_section,
+      order: 3,
+      mode_of_transport: "ocean",
+      transshipment: transshipment,
+      carrier: routing_carrier.name)
+  end
+  let(:transshipment) { nil }
 
   before do
     Organizations.current_id = organization.id
@@ -40,6 +48,28 @@ RSpec.describe Api::V2::ResultDecorator do
   describe ".routing_carrier" do
     it "returns the Routing::Carrier based off the main freight Section" do
       expect(decorated_result.routing_carrier).to eq(routing_carrier)
+    end
+  end
+
+  describe ".number_of_stops" do
+    it "returns the Relay count as the number of stops " do
+      expect(decorated_result.number_of_stops).to eq(1)
+    end
+
+    context "with transshipment" do
+      let(:transshipment) { "ZACPT" }
+
+      it "returns the Relay count + 1 for the transshipment as the number of stops " do
+        expect(decorated_result.number_of_stops).to eq(2)
+      end
+    end
+
+    context "with transshipment as 'DIRECT'" do
+      let(:transshipment) { "DIRECT" }
+
+      it "returns the Relay count + 1 for the transshipment as the number of stops " do
+        expect(decorated_result.number_of_stops).to eq(1)
+      end
     end
   end
 end
