@@ -16,7 +16,11 @@ module Api
         commodities
       ]
 
-      attribute :commodities, &:commodity_infos
+      attribute :commodities do |cargo_unit|
+        cargo_unit.commodity_infos.map do |commodity_info|
+          commodity_info.as_json.transform_keys { |key| key.camelize(:lower) }
+        end
+      end
     end
   end
 end
