@@ -5,7 +5,7 @@ module Api
     class ResultDecorator < ResultFormatter::ResultDecorator
       delegate_all
 
-      delegate :organization, :cargo_units, to: :query
+      delegate :organization, :cargo_units, :payment_terms, to: :query
 
       decorates_association :user, with: UserDecorator
       decorates_association :query, with: QueryDecorator

@@ -3,14 +3,12 @@
 module Api
   module V1
     class QuerySerializer < Api::ApplicationSerializer
-      attribute :completed, &:completed
+      attributes %i[completed load_type payment_terms company_name]
 
       attributes :selected_date, &:cargo_ready_date
 
-      attribute :load_type, &:load_type
-
       attribute :user do |query|
-        query.client && UserSerializer.new(UserDecorator.new(query.client))
+        query.client && UserSerializer.new(query.client)
       end
 
       attribute :creator do |query|

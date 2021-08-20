@@ -225,7 +225,7 @@ module Api
           let(:async) { true }
           let(:cargo_items_attributes) { default_cargo_items_attributes }
           let(:expected_keys) do
-            %w[selectedDate loadType user creator origin destination containers cargoItems tenders completed]
+            %w[selectedDate loadType paymentTerms companyName user creator origin destination containers cargoItems tenders completed]
           end
 
           it "returns prices with default margins" do

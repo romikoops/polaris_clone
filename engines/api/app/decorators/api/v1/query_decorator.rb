@@ -10,6 +10,8 @@ module Api
       decorates_association :origin_route_point, with: RoutePointDecorator
       decorates_association :destination_route_point, with: RoutePointDecorator
       decorates_association :results, with: ResultDecorator
+      delegate :payment_terms, :name, to: :company, allow_nil: true
+      alias company_name name
 
       def legacy_json
         {
