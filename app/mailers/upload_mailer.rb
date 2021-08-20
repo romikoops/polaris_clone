@@ -6,7 +6,7 @@ class UploadMailer < ApplicationMailer
 
   def complete_email
     @user = Users::User.find(params[:user_id])
-    @result = params[:result]
+    @result = params[:result] || error_result
     @result["errors"] ||= []
     @file = params[:file]
     @notification_type = @result.fetch("errors", []).empty? ? "good" : "bad"
@@ -16,5 +16,17 @@ class UploadMailer < ApplicationMailer
     @notification_title = "Upload of #{@file} completed #{verdict}."
 
     mail(to: @user.email, bcc: bcc, subject: "[ItsMyCargo] #{@file} uploaded #{verdict}")
+  end
+
+  def error_result
+    {
+      "has_errors" => true,
+      "errors" => [
+        {
+          "sheet_name": @file,
+          "reason": "We are sorry, but something has gone wrong while inserting your #{@file} data. The Operations Team has been notified of the error."
+        }
+      ]
+    }
   end
 end

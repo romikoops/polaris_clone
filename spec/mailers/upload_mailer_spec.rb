@@ -49,5 +49,23 @@ RSpec.describe UploadMailer, type: :mailer do
         expect(mail.bcc).to eq(["test-ops@itsmycargo.test"])
       end
     end
+
+    context "with missing result" do
+      let(:arguments) do
+        {
+          user_id: user.id,
+          result: nil,
+          file: "test.xlsx",
+          bcc: ["test-ops@itsmycargo.test"]
+        }
+      end
+
+      it "renders", :aggregate_failures do
+        expect(mail.subject).to eq("[ItsMyCargo] test.xlsx uploaded with errors")
+        expect(mail.from).to eq(["notifications@itsmycargo.shop"])
+        expect(mail.to).to eq([user.email])
+        expect(mail.bcc).to eq(["test-ops@itsmycargo.test"])
+      end
+    end
   end
 end

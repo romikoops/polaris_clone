@@ -22,7 +22,9 @@ module ExcelDataServices
       result = Processor.new(blob: document.file.blob).process do |file|
         ExcelDataServices::Loaders::Uploader.new(options.merge(file_or_path: file)).perform
       end
-    rescue StandardError => e
+      # rubocop:disable Style/RescueStandardError
+    rescue => e
+      # rubocop:enable Style/RescueStandardError
       Sentry.capture_exception(e)
       result = {
         has_errors: true,
