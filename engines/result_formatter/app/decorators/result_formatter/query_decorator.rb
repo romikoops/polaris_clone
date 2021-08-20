@@ -61,13 +61,13 @@ module ResultFormatter
     delegate :external_id, :full_name, to: :user_profile
     alias client_name full_name
 
-    def company
-      Companies::Company.joins(:memberships)
-        .find_by(organization: organization,
-                 companies_memberships: {
-                   member_id: client_id,
-                   member_type: "Users::User"
-                 })
+    def render_payment_terms
+      return "" if company&.payment_terms.blank?
+
+      h.render(
+        template: "pdf/partials/quotation/_payment_terms",
+        locals: { payment_terms: company.payment_terms }
+      )
     end
 
     def note_remarks

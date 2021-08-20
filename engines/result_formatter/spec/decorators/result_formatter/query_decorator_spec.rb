@@ -16,6 +16,17 @@ RSpec.describe ResultFormatter::QueryDecorator do
     end
   end
 
+  describe ".render_payment_terms" do
+    it "validates there is no content, when payment_terms is not present" do
+      query.company.payment_terms = nil
+      expect(decorated_query.render_payment_terms).to eq("")
+    end
+
+    it "validates there is content, when payment_terms is present" do
+      expect(decorated_query.render_payment_terms.strip).to be_present
+    end
+  end
+
   describe ".currency" do
     let(:currency) { decorated_query.currency }
 
