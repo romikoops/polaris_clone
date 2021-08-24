@@ -4937,7 +4937,8 @@ CREATE TABLE public.users_clients (
     activation_state character varying,
     activation_token_expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT email_not_lower_case CHECK (((email)::text = lower((email)::text)))
 );
 
 
@@ -12318,6 +12319,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210730110214'),
 ('20210811144330'),
 ('20210816152036'),
-('20210818141843');
+('20210818141843'),
+('20210824074647');
 
 
