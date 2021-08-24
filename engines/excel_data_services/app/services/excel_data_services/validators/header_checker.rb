@@ -168,7 +168,8 @@ module ExcelDataServices
           phone: :required,
           vat_number: :required,
           external_id: :required,
-          address: :required
+          address: :required,
+          payment_terms: :optional
         }.freeze
 
         EMPLOYEES = {

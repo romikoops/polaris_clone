@@ -13,24 +13,20 @@ RSpec.describe ExcelDataServices::Restructurers::Companies do
           phone: "1234567879",
           vat_number: "987654321",
           external_id: "abcde",
-          address: "Brooktorkai 7, 20457, Hamburg, Germany"
+          address: "Brooktorkai 7, 20457, Hamburg, Germany",
+          payment_terms: "Show me the money!"
         }] }
     end
     let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:result) { described_class.restructure(organization: organization, data: data) }
 
     before do
-      address = instance_double("Legacy::Address", id: 1)
-      allow(Legacy::Address).to receive(:geocoded_address).and_return(address)
+      allow(Legacy::Address).to receive(:geocoded_address).and_return(instance_double("Legacy::Address", id: 1))
     end
 
-    it "extracts the row data from the sheet hash" do
-      result = described_class.restructure(organization: organization, data: data)
-      aggregate_failures do
-        expect(result).to eq("Companies" => data[:rows_data])
-        expect(result["Companies"].length).to be(1)
-        expect(result.class).to be(Hash)
-        expect(result["Companies"].first[:address_id]).to eq(1)
-      end
+    it "extracts the row data from the sheet hash", :aggregate_failures do
+      expect(result["Companies"]).to match_array(data[:rows_data])
+      expect(result["Companies"].first[:address_id]).to eq(1)
     end
   end
 end

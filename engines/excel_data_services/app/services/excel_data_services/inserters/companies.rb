@@ -25,6 +25,7 @@ module ExcelDataServices
           vat_number: params[:vat_number],
           phone: params[:phone],
           email: params[:email],
+          payment_terms: params[:payment_terms],
           address_id: params[:address_id]
         )
       end
