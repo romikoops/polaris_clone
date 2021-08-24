@@ -4938,7 +4938,7 @@ CREATE TABLE public.users_clients (
     activation_token_expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT email_not_lower_case CHECK (((email)::text = lower((email)::text)))
+    CONSTRAINT email_is_lower_case CHECK (((email)::text = lower((email)::text)))
 );
 
 
