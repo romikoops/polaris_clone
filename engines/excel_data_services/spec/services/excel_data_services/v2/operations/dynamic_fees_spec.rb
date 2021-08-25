@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V2::Operations::DynamicFees do
-  include_context "for excel_data_services extractor setup"
+  include_context "for excel_data_services setup"
 
   let(:row) do
     { "service" => "standard",

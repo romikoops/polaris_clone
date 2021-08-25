@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable RSpec/ContextWording
-RSpec.shared_context "for excel_data_services extractor setup" do
+RSpec.shared_context "for excel_data_services setup" do
   # rubocop:enable RSpec/ContextWording
   let(:frame) { Rover::DataFrame.new(rows) }
   let(:rows) { [row] }

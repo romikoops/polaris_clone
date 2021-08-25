@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V2::Extractors::MandatoryCharge do
-  include_context "for excel_data_services extractor setup"
+  include_context "for excel_data_services setup"
 
   let(:result) { described_class.state(state: state_arguments) }
   let(:extracted_table) { result.frame }
