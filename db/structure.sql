@@ -2051,7 +2051,8 @@ CREATE TABLE public.journey_results (
     expiration_date timestamp without time zone NOT NULL,
     issued_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    query_id uuid
 );
 
 
@@ -7757,6 +7758,13 @@ CREATE INDEX index_journey_result_sets_on_query_id ON public.journey_result_sets
 
 
 --
+-- Name: index_journey_results_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_results_on_query_id ON public.journey_results USING btree (query_id);
+
+
+--
 -- Name: index_journey_results_on_result_set_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10641,6 +10649,14 @@ ALTER TABLE ONLY public.rates_sections
 
 
 --
+-- Name: journey_results fk_rails_1f1de1a163; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_results
+    ADD CONSTRAINT fk_rails_1f1de1a163 FOREIGN KEY (query_id) REFERENCES public.journey_queries(id);
+
+
+--
 -- Name: trucking_couriers fk_rails_23e353cdb4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12320,6 +12336,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210811144330'),
 ('20210816152036'),
 ('20210818141843'),
-('20210824074647');
+('20210824074647'),
+('20210825145528');
 
 
