@@ -24,7 +24,7 @@ module Pricings
     end
 
     def validity
-      (effective_date.to_date..expiration_date.to_date)
+      Range.new(effective_date.to_date, expiration_date.to_date + 1.day, exclude_end: true)
     end
 
     def cbm_ratio

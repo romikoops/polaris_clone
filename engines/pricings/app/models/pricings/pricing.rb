@@ -2,11 +2,12 @@
 
 module Pricings
   class Pricing < ApplicationRecord
-    WM_RATIO_LOOKUP = {ocean: 1000,
-                       air: 167,
-                       rail: 500,
-                       truck: 333}.freeze
+    WM_RATIO_LOOKUP = { ocean: 1000,
+                        air: 167,
+                        rail: 500,
+                        truck: 333 }.freeze
     attr_accessor :transient_marked_as_old
+
     self.ignored_columns = ["disabled"]
 
     UUID_V5_NAMESPACE = "0411d7c3-b309-4964-9bed-1ef2e470a1df"
@@ -42,7 +43,7 @@ module Pricings
 
     scope :current, -> { where("validity @> CURRENT_DATE") }
     scope :ordered_by, ->(col, desc = false) { order(col => desc.to_s == "true" ? :desc : :asc) }
-    scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: {mode_of_transport: mot.downcase}) }
+    scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
     scope :for_load_type, (lambda do |load_type|
       where(load_type: load_type.downcase)
     end)
@@ -96,7 +97,7 @@ module Pricings
     end
 
     def set_validity
-      self.validity = Range.new(effective_date.to_date, expiration_date.to_date)
+      self.validity = Range.new(effective_date.to_date, expiration_date.to_date + 1.day, exclude_end: true)
     end
 
     def generate_upsert_id
