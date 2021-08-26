@@ -8,12 +8,16 @@ RSpec.describe "Clients", type: :request, swagger: true do
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:clients) { FactoryBot.create_list(:users_client, 5, organization: organization) }
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
+  let(:company) { FactoryBot.create(:companies_company, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
     Organizations.current_id = organization_id
-    FactoryBot.create(:companies_company, organization: organization, name: "default")
+    FactoryBot.create(:companies_membership, client: user, company: company)
+    clients.each do |clients|
+      FactoryBot.create(:companies_membership, client: clients, company: company)
+    end
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
       .to_return(status: 200)
   end
@@ -42,7 +46,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
                properties: {
                  data: {
                    type: :array,
-                   items: { "$ref" => "#/components/schemas/user" }
+                   items: { "$ref" => "#/components/schemas/v1Client" }
                  },
                  links: { "$ref" => "#/components/schemas/paginationLinks" }
                },
@@ -69,7 +73,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :query, in: :body, description: "Query", schema: { "$ref" => "#/components/schemas/client" },
-      required: %w[email first_name last_name]
+                required: %w[email first_name last_name]
 
       let(:query) do
         {
@@ -87,7 +91,6 @@ RSpec.describe "Clients", type: :request, swagger: true do
       end
 
       response "201", "successful operation" do
-
         run_test!
       end
 
@@ -123,7 +126,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       response "200", "successful operation" do
         schema type: :object,
                properties: {
-                 data: { "$ref" => "#/components/schemas/user" }
+                 data: { "$ref" => "#/components/schemas/v1Client" }
                },
                required: ["data"]
 

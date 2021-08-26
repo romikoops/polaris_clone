@@ -4,11 +4,11 @@ module Api
   module V1
     class ClientsController < ApiController
       def index
-        render json: UserSerializer.new(decorated_clients)
+        render json: ClientSerializer.new(decorated_clients)
       end
 
       def show
-        render json: UserSerializer.new(UserDecorator.decorate(client))
+        render json: ClientSerializer.new(ClientDecorator.decorate(client))
       end
 
       def update
@@ -16,13 +16,13 @@ module Api
           render(json: { error: client.errors.full_messages }, status: :unprocessable_entity)
           return
         end
-        render json: UserSerializer.new(UserDecorator.decorate(client))
+        render json: ClientSerializer.new(ClientDecorator.decorate(client))
       end
 
       def create
         ActiveRecord::Base.transaction do
-          decorated_user = UserDecorator.decorate(new_client)
-          render json: UserSerializer.new(decorated_user), status: :created
+          decorated_user = ClientDecorator.decorate(new_client)
+          render json: ClientSerializer.new(decorated_user), status: :created
         end
       rescue ActiveRecord::RecordInvalid => e
         render(json: { error: e.message }, status: :bad_request)
@@ -105,7 +105,7 @@ module Api
         ) || return
 
         paginated = paginate(clients.model_class)
-        UserDecorator.decorate_collection(paginated, { context: { links: pagination_links(paginated) } })
+        ClientDecorator.decorate_collection(paginated, { context: { links: pagination_links(paginated) } })
       end
 
       def filtered_profiles
