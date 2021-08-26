@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f9cb3dc2290@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fa569f037d0@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1063,6 +1063,9 @@ end
 #                                             PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                    v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
 #                     v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
+#                     v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
+#                                             PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
+#                                             PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #
 # Routes for Easymon::Engine:

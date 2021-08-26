@@ -73,6 +73,41 @@ RSpec.configure do |config|
               }
             }
           },
+          company: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the company",
+                type: "string"
+              },
+              type: {
+                description: "Generic type of the company",
+                type: "string"
+              },
+              attributes: {
+                email: {
+                  description: "email of the company",
+                  type: "string"
+                },
+                name: {
+                  description: "name of the company",
+                  type: "string"
+                },
+                payment_terms: {
+                  description: "payment terms set out by the company",
+                  type: "string"
+                },
+                phone: {
+                  description: "phone number of the company",
+                  type: "string"
+                },
+                vatNumber: {
+                  description: "VAT number of the company",
+                  type: "string"
+                }
+              }
+            }
+          },
           cargo_item_type: {
             type: "object",
             properties: {
