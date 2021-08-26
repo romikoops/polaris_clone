@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 module Notifications
   class ApplicationMailer < ActionMailer::Base
     default from: "no-reply@itsmycargo.shop"
     layout "notifications/mailer"
+    ADMIN_SUPPORT_EMAIL = "support@itsmycargo.com"
 
     def shop_url(path = "")
       domain = current_organization.domains.find(&:default).domain
