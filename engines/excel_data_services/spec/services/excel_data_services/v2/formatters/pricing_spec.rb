@@ -8,12 +8,14 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
   describe "#insertable_data" do
     let(:first_datum) { rows.first }
     let(:service) { described_class.state(state: state_arguments) }
+    let(:start_date) { Time.zone.today.to_date.to_s }
+    let(:end_date) { (Time.zone.today + 1.year).to_date.to_s }
 
     context "with no ranges" do
       let(:expected_data) do
         [{ "cargo_class" => "lcl",
-           "effective_date" => Time.zone.today,
-           "expiration_date" => Time.zone.today + 1.year,
+           "effective_date" => start_date,
+           "expiration_date" => end_date,
            "vm_rate" => 1.0,
            "wm_rate" => 1.0,
            "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -38,7 +40,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
                "range" => [] }],
            "internal" => false,
            "load_type" => "cargo_item",
-           "validity" => "[2021-08-25, 2022-08-25)",
+           "validity" => "[#{start_date}, #{end_date})",
            "upsert_id" => "ae71d529-8c65-5c9d-9629-67a03e7bc8e6" }]
       end
 
@@ -48,8 +50,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
            "service" => "standard",
            "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
            "group_name" => "TEST_GROUP",
-           "effective_date" => Time.zone.today,
-           "expiration_date" => Time.zone.today + 1.year,
+           "effective_date" => start_date,
+           "expiration_date" => end_date,
            "origin_locode" => "SEGOT",
            "origin" => nil,
            "country_origin" => nil,
@@ -88,8 +90,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
             "group_name" => "TEST_GROUP",
-            "effective_date" => Time.zone.today,
-            "expiration_date" => Time.zone.today + 1.year,
+            "effective_date" => start_date,
+            "expiration_date" => end_date,
             "origin_locode" => nil,
             "origin" => "Gothenburg",
             "country_origin" => "Sweden",
@@ -138,8 +140,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
             "group_name" => "TEST_GROUP",
-            "effective_date" => Time.zone.today,
-            "expiration_date" => Time.zone.today + 1.year,
+            "effective_date" => start_date,
+            "expiration_date" => end_date,
             "origin_locode" => "SEGOT",
             "origin" => "Gothenburg",
             "country_origin" => "Sweden",
@@ -178,8 +180,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
             "group_name" => "TEST_GROUP",
-            "effective_date" => Time.zone.today,
-            "expiration_date" => Time.zone.today + 1.year,
+            "effective_date" => start_date,
+            "expiration_date" => end_date,
             "origin_locode" => "SEGOT",
             "origin" => "Gothenburg",
             "country_origin" => "Sweden",
@@ -216,8 +218,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
 
       let(:expected_data) do
         [{ "cargo_class" => "lcl",
-           "effective_date" => Time.zone.today,
-           "expiration_date" => Time.zone.today + 1.year,
+           "effective_date" => start_date,
+           "expiration_date" => end_date,
            "vm_rate" => 1.0,
            "wm_rate" => 1.0,
            "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -235,7 +237,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
               "range" => [{ "min" => 0.0, "max" => 100.0, "rate" => 210.0 }, { "min" => 100.0, "max" => 500.0, "rate" => 210.0 }] }],
            "internal" => false,
            "load_type" => "cargo_item",
-           "validity" => "[2021-08-25, 2022-08-25)",
+           "validity" => "[#{start_date}, #{end_date})",
            "upsert_id" => "ae71d529-8c65-5c9d-9629-67a03e7bc8e6" }]
       end
 
