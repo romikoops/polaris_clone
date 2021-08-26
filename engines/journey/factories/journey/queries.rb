@@ -44,5 +44,6 @@ FactoryBot.define do
     created_at { DateTime.now.change(usec: 0) }
     billable { true }
     load_type { "lcl" }
+    parent { nil }
   end
 end

@@ -2018,6 +2018,7 @@ CREATE TABLE public.journey_queries (
     creator_type character varying,
     billable boolean DEFAULT false,
     load_type public.journey_load_type NOT NULL,
+    parent_id uuid,
     CONSTRAINT delivery_after_cargo_ready_date CHECK ((delivery_date > cargo_ready_date)),
     CONSTRAINT journey_queries_destination_coordinates_presence CHECK (((destination_coordinates IS NOT NULL) AND ((destination_coordinates)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
@@ -7751,6 +7752,13 @@ CREATE INDEX index_journey_queries_on_organization_id ON public.journey_queries 
 
 
 --
+-- Name: index_journey_queries_on_parent_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_queries_on_parent_id ON public.journey_queries USING btree (parent_id);
+
+
+--
 -- Name: index_journey_result_sets_on_query_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10737,6 +10745,14 @@ ALTER TABLE ONLY public.pricings_details
 
 
 --
+-- Name: journey_queries fk_rails_3d0c562ec0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_queries
+    ADD CONSTRAINT fk_rails_3d0c562ec0 FOREIGN KEY (parent_id) REFERENCES public.journey_queries(id);
+
+
+--
 -- Name: journey_shipments fk_rails_4028c4cb14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12337,6 +12353,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210816152036'),
 ('20210818141843'),
 ('20210824074647'),
-('20210825145528');
+('20210825145528'),
+('20210826083534');
 
 
