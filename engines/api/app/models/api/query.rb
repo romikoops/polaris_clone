@@ -117,6 +117,7 @@ end
 #  company_id              :uuid
 #  creator_id              :uuid
 #  organization_id         :uuid
+#  parent_id               :uuid
 #  source_id               :uuid             not null
 #
 # Indexes
@@ -126,9 +127,11 @@ end
 #  index_journey_queries_on_company_id                   (company_id)
 #  index_journey_queries_on_creator_id_and_creator_type  (creator_id,creator_type)
 #  index_journey_queries_on_organization_id              (organization_id)
+#  index_journey_queries_on_parent_id                    (parent_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies_companies.id) ON DELETE => cascade
 #  fk_rails_...  (organization_id => organizations_organizations.id) ON DELETE => cascade
+#  fk_rails_...  (parent_id => journey_queries.id)
 #

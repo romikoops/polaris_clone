@@ -47,13 +47,16 @@ end
 #  issued_at       :datetime         not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  query_id        :uuid
 #  result_set_id   :uuid
 #
 # Indexes
 #
+#  index_journey_results_on_query_id       (query_id)
 #  index_journey_results_on_result_set_id  (result_set_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (query_id => journey_queries.id)
 #  fk_rails_...  (result_set_id => journey_result_sets.id) ON DELETE => cascade
 #
