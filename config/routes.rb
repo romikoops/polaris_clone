@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fa569f037d0@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f8d383cc450@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1036,6 +1036,8 @@ end
 # enabled_v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
 #         v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
 #                 v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
+#                     v1_organization_company PATCH  /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
+#                                             PUT    /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
 #                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
 #            v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
 #              v2_organization_query_requests POST   /v2/organizations/:organization_id/queries/:query_id/requests(.:format)                  api/v2/requests#create

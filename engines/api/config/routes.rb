@@ -57,6 +57,7 @@ Api::Engine.routes.draw do
           end
         end
       end
+      resources :companies, only: :update
     end
   end
 

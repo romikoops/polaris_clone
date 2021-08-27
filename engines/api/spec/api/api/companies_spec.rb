@@ -20,6 +20,66 @@ RSpec.describe "Companies", type: :request, swagger: true do
       .to_return(status: 200)
   end
 
+  path "/v1/organizations/{organization_id}/companies/{company_id}" do
+    put "Update a company" do
+      tags "Companies"
+      description "Update a specific company"
+      operationId "updateCompany"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_id, in: :path, type: :string, description: "The current company id"
+      parameter name: :query, in: :body, schema: {
+        type: :object,
+        properties: {
+          company: {
+            type: :object,
+            properties: {
+              email: { type: :string, description: "The email address of the company" },
+              name: { type: :string, description: "The name of the company" },
+              paymentTerms: { type: :string, description: "The payment terms, set out by the company" },
+              phone: { type: :string, description: "The phone number of the company" },
+              vatNumber: { type: :number, description: "The VAT number of the company" }
+            }
+          }
+        }
+      }
+
+      response "200", "successful operation" do
+        let(:query) do
+          {
+            company: {
+              email: "awesome@company.com",
+              name: "awesome company",
+              paymentTerms: "an awesome payment term",
+              phone: "112233",
+              vatNumber: "VAT12345"
+            }
+          }
+        end
+
+        schema type: :object,
+               properties: {
+                 data: {
+                   "$ref" => "#/components/schemas/company"
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+
+      response "422", "Unprocessable Entity" do
+        let(:query) { { company: { foo: "bar" } } }
+
+        run_test!
+      end
+    end
+  end
+
   path "/v2/organizations/{organization_id}/companies/{company_id}" do
     get "Fetch a company" do
       tags "Companies"

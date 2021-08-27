@@ -85,6 +85,10 @@ RSpec.configure do |config|
                 type: "string"
               },
               attributes: {
+                id: {
+                  description: "Unique identifier of the company",
+                  type: "string"
+                },
                 email: {
                   description: "email of the company",
                   type: "string"

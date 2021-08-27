@@ -22,15 +22,18 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  cargo_unit_id     :uuid
+#  query_id          :uuid
 #  result_set_id     :uuid
 #
 # Indexes
 #
 #  index_journey_errors_on_cargo_unit_id  (cargo_unit_id)
+#  index_journey_errors_on_query_id       (query_id)
 #  index_journey_errors_on_result_set_id  (result_set_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (cargo_unit_id => journey_cargo_units.id) ON DELETE => cascade
+#  fk_rails_...  (query_id => journey_queries.id) ON DELETE => cascade
 #  fk_rails_...  (result_set_id => journey_result_sets.id) ON DELETE => cascade
 #
