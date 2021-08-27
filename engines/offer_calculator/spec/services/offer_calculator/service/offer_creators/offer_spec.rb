@@ -6,7 +6,9 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
   include_context "full_offer"
 
   let(:valid_from) { offer.charges.map { |charge_section| charge_section.validity.first }.max }
-  let(:valid_until) { offer.charges.map { |charge_section| charge_section.validity.last }.min }
+  let(:valid_until) do
+    offer.charges.map { |charge_section| charge_section.validity.last - 1.day }.min.end_of_day
+  end
   let(:total) do
     offer.charges.inject(Money.new(0, "EUR")) do |sum, item|
       sum + item.value
