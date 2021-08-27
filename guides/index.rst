@@ -15,6 +15,6 @@ Admiralty
 
 .. toctree::
    :hidden:
-   :glob:
 
    admiralty/index.rst
+   data/index.rst

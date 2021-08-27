@@ -1,5 +1,5 @@
 Engines
-=======
+#######
 
 CBRA (or cobra) is an architecture where monolithic Rails application is split to
 multiple Rails engines. This allows easy separation of responsibility, separating view,
@@ -42,20 +42,20 @@ Currently our application supports three different engine types and separation o
   @enduml
 
 Data
-^^^^
+====
 
 Data engines are providing raw data. Models in data engines own database tables, manage
 migrations and provide basic wrappers over accessing data. Data engines are allowed to
 have ActiveRecord relationships across engines if required.
 
 Service
-^^^^^^^
+=======
 
 View
-^^^^
+====
 
 Creating New Engines
---------------------
+====================
 
 Main application has custom Rails generator that allows to create new engines easily.
 By simply running __engine__ generator:
@@ -82,7 +82,7 @@ Engine type is mandatory argument and that defines what files are
 generated in the new engine.
 
 Dependencies
-------------
+============
 
 Engine is most likely requiring external dependencies as well other engines.
 
@@ -113,12 +113,17 @@ usual to gemspec. All external gems needs to be explicitly required in
 `lib/ENGINE/engine.rb` file.
 
 Documentation
--------------
+=============
 
 Everytime there is changes in engines or their gemspec, always
 generate corresponding dependency graph with `rails docs:engines`.
 
-.. toctree::
-   :glob:
+Dependencies
+============
+.. uml:: graph.puml
 
-   *
+
+.. toctree::
+   :hidden:
+
+   companies/index.rst

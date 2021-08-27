@@ -14,6 +14,14 @@ help:
 
 .PHONY: help Makefile
 
+test: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) \
+		-b confluence \
+		-D confluence_server_user=$(JIRA_USER) \
+		-D confluence_server_pass=$(JIRA_TOKEN) \
+  	-D confluence_space_name=TEST \
+  	-D confluence_publish_prefix='Polaris - '
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
