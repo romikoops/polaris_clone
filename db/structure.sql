@@ -164,6 +164,19 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: excel_data_services_uploads_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.excel_data_services_uploads_status AS ENUM (
+    'not_started',
+    'superseded',
+    'processing',
+    'failed',
+    'done'
+);
+
+
+--
 -- Name: journey_colli_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1463,6 +1476,22 @@ CREATE SEQUENCE public.event_store_events_in_streams_id_seq
 --
 
 ALTER SEQUENCE public.event_store_events_in_streams_id_seq OWNED BY public.event_store_events_in_streams.id;
+
+
+--
+-- Name: excel_data_services_uploads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.excel_data_services_uploads (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid NOT NULL,
+    file_id uuid NOT NULL,
+    user_id uuid,
+    status public.excel_data_services_uploads_status NOT NULL,
+    last_job_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -5723,6 +5752,14 @@ ALTER TABLE ONLY public.event_store_events
 
 
 --
+-- Name: excel_data_services_uploads excel_data_services_uploads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.excel_data_services_uploads
+    ADD CONSTRAINT excel_data_services_uploads_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: exchange_rates exchange_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7434,6 +7471,41 @@ CREATE INDEX index_event_store_events_on_created_at ON public.event_store_events
 --
 
 CREATE INDEX index_event_store_events_on_event_type ON public.event_store_events USING btree (event_type);
+
+
+--
+-- Name: index_excel_data_services_uploads_on_file_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_excel_data_services_uploads_on_file_id ON public.excel_data_services_uploads USING btree (file_id);
+
+
+--
+-- Name: index_excel_data_services_uploads_on_last_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_excel_data_services_uploads_on_last_job_id ON public.excel_data_services_uploads USING btree (last_job_id);
+
+
+--
+-- Name: index_excel_data_services_uploads_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_excel_data_services_uploads_on_organization_id ON public.excel_data_services_uploads USING btree (organization_id);
+
+
+--
+-- Name: index_excel_data_services_uploads_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_excel_data_services_uploads_on_status ON public.excel_data_services_uploads USING btree (status);
+
+
+--
+-- Name: index_excel_data_services_uploads_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_excel_data_services_uploads_on_user_id ON public.excel_data_services_uploads USING btree (user_id);
 
 
 --
@@ -10665,6 +10737,14 @@ ALTER TABLE ONLY public.journey_results
 
 
 --
+-- Name: excel_data_services_uploads fk_rails_21913cd4d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.excel_data_services_uploads
+    ADD CONSTRAINT fk_rails_21913cd4d2 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: trucking_couriers fk_rails_23e353cdb4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11145,6 +11225,14 @@ ALTER TABLE ONLY public.journey_cargo_units
 
 
 --
+-- Name: excel_data_services_uploads fk_rails_8c486f7319; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.excel_data_services_uploads
+    ADD CONSTRAINT fk_rails_8c486f7319 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+
+
+--
 -- Name: organizations_domains fk_rails_8c6c49b797; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11558,6 +11646,14 @@ ALTER TABLE ONLY public.groups_groups
 
 ALTER TABLE ONLY public.notes
     ADD CONSTRAINT fk_rails_eef74d5cc8 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: excel_data_services_uploads fk_rails_f1ab7e90d9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.excel_data_services_uploads
+    ADD CONSTRAINT fk_rails_f1ab7e90d9 FOREIGN KEY (file_id) REFERENCES public.legacy_files(id);
 
 
 --
@@ -12354,6 +12450,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210818141843'),
 ('20210824074647'),
 ('20210825145528'),
-('20210826083534');
+('20210826083534'),
+('20210826171456');
 
 

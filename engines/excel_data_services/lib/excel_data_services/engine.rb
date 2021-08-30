@@ -24,8 +24,16 @@ module ExcelDataServices
       generator.view_specs false
     end
 
-    if defined?(FactoryBotRails)
-      config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)]
+    initializer :append_migrations do |app|
+      config.paths["db/migrate"].expanded.each do |expanded_path|
+        app.config.paths["db/migrate"] << expanded_path
+      end
+
+      DataMigrate.configure do |config|
+        config.data_migrations_path << File.expand_path("../../db/data", __dir__)
+      end
     end
+
+    config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)] if defined?(FactoryBotRails)
   end
 end

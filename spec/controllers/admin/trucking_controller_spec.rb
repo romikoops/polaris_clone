@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Admin::TruckingController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) { FactoryBot.create(:users_client, organization: organization) }
+  let!(:user) { FactoryBot.create(:users_user) }
   let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:json_response) { JSON.parse(response.body) }
 
@@ -16,7 +16,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
   describe "POST #upload" do
     before do
       allow(ExcelDataServices::UploaderJob).to receive(:perform_later)
-      allow(Legacy::File).to receive(:create!).and_return(dummy_file)
+      allow(ExcelDataServices::Upload).to receive(:create!).and_return(dummy_upload)
     end
 
     let(:base_params) do
@@ -26,7 +26,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
         id: hub.id
       }
     end
-    let(:dummy_file) { FactoryBot.create(:legacy_file) }
+    let(:dummy_upload) { FactoryBot.create(:excel_data_services_upload) }
 
     context "when missing the param" do
       it "the request is unsuccessful without the param group_id" do
@@ -55,7 +55,7 @@ RSpec.describe Admin::TruckingController, type: :controller do
           expect(response).to have_http_status(:success)
           expect(json_response["data"]).to be_truthy
           expect(ExcelDataServices::UploaderJob).to have_received(:perform_later).with(
-            document_id: dummy_file.id,
+            upload_id: dummy_upload.id,
             options: {
               user_id: user.id,
               group_id: group_id,

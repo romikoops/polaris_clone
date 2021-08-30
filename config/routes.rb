@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f8d383cc450@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fd73e47a7f8@/Users/henry/imc/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -977,6 +977,9 @@ end
 #                                                   PATCH  /themes/:id(.:format)                         themes_admin/admin#update
 #                                                   PUT    /themes/:id(.:format)                         themes_admin/admin#update
 #                                                   DELETE /themes/:id(.:format)                         themes_admin/admin#destroy
+#                            download_uploads_admin GET    /uploads/:id/download(.:format)               uploads_admin/admin#download
+#                               uploads_admin_index GET    /uploads(.:format)                            uploads_admin/admin#index
+#                                     uploads_admin GET    /uploads/:id(.:format)                        uploads_admin/admin#show
 #                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                            trestle/sidekiq/sidekiq_admin/admin#index
 # trestle_rails_event_store_rails_event_store_admin GET    /rails_event_store(.:format)                  trestle/rails_event_store/rails_event_store_admin/admin#index
 #                                              root GET    /                                             trestle/dashboard#index
@@ -1058,6 +1061,7 @@ end
 #                  v2_organization_offer_xlsx GET    /v2/organizations/:organization_id/offers/:offer_id/xlsx(.:format)                       api/v2/offers#xlsx
 #                      v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
 #                     v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
+#                      v2_organization_upload GET    /v2/organizations/:organization_id/uploads/:id(.:format)                                 api/v2/uploads#show
 #                       v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show
 #                       v2_organization_scope GET    /v2/organizations/:organization_id/scope(.:format)                                       api/v2/scopes#show
 #                     v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show

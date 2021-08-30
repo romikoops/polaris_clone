@@ -82,7 +82,7 @@ Api::Engine.routes.draw do
         get "pdf"
         get "xlsx"
       end
-      resources :uploads, only: [:create]
+      resources :uploads, only: [:create, :show]
       resource :theme, only: [:show]
       resource :scope, only: [:show]
       resource :profile, only: %i[show update]
