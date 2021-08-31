@@ -217,7 +217,7 @@ PATH
       fixer_currency (~> 3.4)
       geocoder
       groups
-      mobility
+      mobility (~> 0.8.6)
       money-rails
       organizations
       paranoia

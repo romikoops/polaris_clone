@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "draper"
   spec.add_dependency "fixer_currency", "~> 3.4"
   spec.add_dependency "geocoder"
-  spec.add_dependency "mobility"
+  spec.add_dependency "mobility", "~> 0.8.6"
   spec.add_dependency "money-rails"
   spec.add_dependency "paranoia"
   spec.add_dependency "pg_search", "~> 2.3.0"
