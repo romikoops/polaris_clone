@@ -26,7 +26,7 @@ module OfferCalculator
             validity_period.to_i.days.from_now.to_date
           else
             charges.map { |charge_section| charge_section.validity.last - 1.day } # ranges are exclusive of the end
-              .select { |date| date > Time.zone.today.end_of_day }.min.end_of_day
+              .select { |date| date >= Time.zone.today }.min.end_of_day
           end
         end
 

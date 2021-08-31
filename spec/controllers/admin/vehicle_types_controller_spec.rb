@@ -12,7 +12,7 @@ RSpec.describe Admin::VehicleTypesController, type: :controller do
 
   describe "GET #index" do
     let!(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-    let(:carrier) { FactoryBot.create(:carrier, name: "MSC") }
+    let(:carrier) { FactoryBot.create(:legacy_carrier, name: "MSC") }
     let!(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, carrier: carrier, organization: organization) }
     let!(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
     let(:params) { {organization_id: organization.id} }

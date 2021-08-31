@@ -28,6 +28,14 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Offer do
   end
 
   describe ".valid_until" do
+    context "when the expiration date is today" do
+      it "returns a the valid until date" do
+        Timecop.freeze(valid_until) do
+          expect(offer.valid_until).to eq(valid_until)
+        end
+      end
+    end
+
     context "without custom period" do
       it "returns a the valid until date" do
         expect(offer.valid_until).to eq(valid_until)
