@@ -62,7 +62,7 @@ module IDP
     end
 
     def update_or_create_profile(saml_user:)
-      if saml_user.profile.user_id.present?
+      if saml_user.profile.present?
         saml_user.profile.assign_attributes(saml_response.profile_attributes)
       else
         saml_user.profile = Users::ClientProfile.new(saml_response.profile_attributes)
@@ -70,7 +70,11 @@ module IDP
     end
 
     def update_or_create_settings(saml_user:)
-      saml_user.settings.update(currency: default_currency)
+      if saml_user.settings.present?
+        saml_user.profile.assign_attributes(saml_response.profile_attributes)
+      else
+        saml_user.settings = Users::ClientSettings.new(currency: default_currency)
+      end
     end
 
     def create_token

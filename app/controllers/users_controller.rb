@@ -81,7 +81,7 @@ class UsersController < ApplicationController
     raise ActiveRecord::RecordInvalid if passwordless_new_user_params[:email].blank?
 
     user = Users::Client.find_by(passwordless_new_user_params)
-    user ||= Users::Client.new(passwordless_new_user_params.merge(profile_attributes: profile_params))
+    user ||= Users::Client.new(passwordless_new_user_params.merge(profile_attributes: profile_params, settings_attributes: settings_params))
     ActiveRecord::Base.transaction do
       user.save!
       response = generate_token_for(user: user, scope: "public")
@@ -141,6 +141,10 @@ class UsersController < ApplicationController
 
   def profile_params
     params.require(:user).permit(%i[first_name last_name phone company_name])
+  end
+
+  def settings_params
+    params.require(:user).permit(%i[currency language locale])
   end
 
   def user_params

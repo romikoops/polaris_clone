@@ -3,7 +3,9 @@
 module Api
   class Query < ::Journey::Query
     include PgSearch::Model
+    belongs_to :client, class_name: "Api::Client"
     has_one :client_profile, through: :client, source: :profile
+
     pg_search_scope :search,
       against: %i[origin destination],
       associated_against: {
@@ -92,6 +94,10 @@ module Api
     scope :hs_code_search, lambda { |input|
       joins(cargo_units: :commodity_infos).where("imo_class IS NULL AND description ILIKE ?", "%#{input}%")
     }
+
+    def client
+      super || Users::Client.new
+    end
   end
 end
 

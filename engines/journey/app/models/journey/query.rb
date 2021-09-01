@@ -37,10 +37,6 @@ module Journey
       current
     end
 
-    def client
-      super || Users::Client.new
-    end
-
     def results
       return Journey::Result.none if result_sets.empty?
 

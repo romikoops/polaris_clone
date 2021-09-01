@@ -4,9 +4,9 @@ module Api
   class Client < ::Users::Client
     self.inheritance_column = nil
 
-    PROFILE_ATTRIBUTES = ["first_name", "last_name", "phone"]
+    PROFILE_ATTRIBUTES = %w[first_name last_name phone].freeze
     filterrific(
-      default_filter_params: {sorted_by: "email_asc"},
+      default_filter_params: { sorted_by: "email_asc" },
       available_filters: [
         :sorted_by
       ]
@@ -26,6 +26,17 @@ module Api
         raise(ArgumentError, "Invalid sort option: #{sort_by.inspect}")
       end
     }
+
+    def profile
+      super || Users::ClientProfile.new(first_name: "", last_name: "")
+    end
+
+    def settings
+      super || Users::ClientSettings.new(
+        currency: organization_currency,
+        user: self
+      )
+    end
   end
 end
 

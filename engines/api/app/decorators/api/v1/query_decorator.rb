@@ -5,7 +5,6 @@ module Api
     class QueryDecorator < ApplicationDecorator
       delegate_all
 
-      decorates_association :client, with: UserDecorator
       decorates_association :creator, with: UserDecorator
       decorates_association :origin_route_point, with: RoutePointDecorator
       decorates_association :destination_route_point, with: RoutePointDecorator
@@ -32,6 +31,10 @@ module Api
 
       def selected_date
         cargo_ready_date
+      end
+
+      def client
+        Api::V1::UserDecorator.new(object.client.presence || Api::Client.new)
       end
 
       def completed

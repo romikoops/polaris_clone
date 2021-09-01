@@ -15,7 +15,7 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:api_client, organization_id: organization.id) }
     let(:source) { FactoryBot.create(:application, name: "bridge") }
     let(:access_token) do
       FactoryBot.create(:access_token,

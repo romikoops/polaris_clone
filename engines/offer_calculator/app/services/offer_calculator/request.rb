@@ -10,7 +10,7 @@ module OfferCalculator
 
     attr_reader :params, :query
 
-    delegate :source, :client, :creator, :organization, :cargo_ready_date, to: :query
+    delegate :source, :creator, :organization, :cargo_ready_date, to: :query
 
     def cargo_units
       @cargo_units ||= OfferCalculator::Service::CargoCreator.new(
@@ -18,6 +18,10 @@ module OfferCalculator
         params: params,
         persist: persist_cargo?
       ).perform
+    end
+
+    def client
+      query.client.presence || Users::Client.new
     end
 
     def pre_carriage?

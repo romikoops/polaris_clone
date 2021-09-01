@@ -5,9 +5,9 @@ module Api
     class ResultDecorator < ResultFormatter::ResultDecorator
       delegate_all
 
-      delegate :organization, :cargo_units, :payment_terms, to: :query
+      delegate :organization, :client, :cargo_units, :payment_terms, to: :query
 
-      decorates_association :user, with: UserDecorator
+      decorates_association :user, with: ClientDecorator
       decorates_association :query, with: QueryDecorator
 
       def legacy_json
@@ -30,10 +30,6 @@ module Api
           "booking_placed_at": query.created_at,
           "imc_reference": imc_reference
         }
-      end
-
-      def client
-        Api::V1::UserDecorator.new(query.client)
       end
 
       def legacy_address_json

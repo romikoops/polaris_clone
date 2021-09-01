@@ -5,8 +5,6 @@ module Api
     class QueryDecorator < ApplicationDecorator
       delegate_all
 
-      decorates_association :client, with: Api::V1::UserDecorator
-
       def aggregated
         cargo_units.exists?(cargo_class: "aggregated_lcl")
       end
@@ -43,6 +41,10 @@ module Api
 
       def offer_id
         Wheelhouse::OfferBuilder.new(results: results).existing_offer&.id # so the pdf can be downloaded easily
+      end
+
+      def client
+        Api::V1::UserDecorator.new(object.client.presence || Api::Client.new)
       end
 
       private

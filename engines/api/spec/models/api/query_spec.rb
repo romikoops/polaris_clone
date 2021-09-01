@@ -7,12 +7,12 @@ RSpec.describe Api::Query, type: :model do
 
   context "when sorting" do
     let(:asc_client) do
-      FactoryBot.build(:users_client,
+      FactoryBot.build(:api_client,
         organization: organization,
         profile: FactoryBot.build(:users_client_profile, last_name: "AAAA"))
     end
     let(:desc_client) do
-      FactoryBot.build(:users_client,
+      FactoryBot.build(:api_client,
         organization: organization,
         profile: FactoryBot.build(:users_client_profile, last_name: "BBBB"))
     end
@@ -163,7 +163,7 @@ RSpec.describe Api::Query, type: :model do
   end
 
   context "when searching" do
-    let(:client) { FactoryBot.build(:users_client, organization: organization) }
+    let(:client) { FactoryBot.build(:api_client, organization: organization) }
     let!(:query) { FactoryBot.create(:api_query, result_set_count: 1, client: client, organization: organization) }
 
     before do
@@ -189,7 +189,7 @@ RSpec.describe Api::Query, type: :model do
 
     describe ".client_name_search" do
       let(:target_client) do
-        FactoryBot.create(:users_client,
+        FactoryBot.create(:api_client,
           organization: organization,
           profile: FactoryBot.build(:users_client_profile, first_name: "Bob", last_name: "Dylan"))
       end

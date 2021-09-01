@@ -14,11 +14,15 @@ module Api
       end
 
       def companies_membership
-        Companies::Membership.find_by(client: object)
+        @companies_membership ||= Companies::Membership.find_by(client: object)
       end
 
       def default_company
-        Companies::Company.find_by(name: "default", organization: organization)
+        @default_company ||= Companies::Company.find_by(name: "default", organization: organization)
+      end
+
+      def profile
+        object.profile || Users::ClientProfile.new
       end
     end
   end

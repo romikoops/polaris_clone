@@ -13,7 +13,7 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:api_client, organization_id: organization.id) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: FactoryBot.create(:application, name: "siren")) }
     let(:token_header) { "Bearer #{access_token.token}" }
 

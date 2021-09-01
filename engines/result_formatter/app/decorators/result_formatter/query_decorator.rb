@@ -4,6 +4,8 @@ module ResultFormatter
   class QueryDecorator < ApplicationDecorator
     delegate_all
 
+    decorates_association :client, with: ClientDecorator
+
     def pickup_address
       Legacy::Address.new(
         latitude: origin_coordinates.y,
@@ -24,6 +26,10 @@ module ResultFormatter
         mode_of_transport: :carriage,
         order: 0
       )
+    end
+
+    def client
+      object.client.presence || Users::Client.new
     end
 
     def planned_delivery_date
@@ -51,7 +57,7 @@ module ResultFormatter
     end
 
     def user_profile
-      @user_profile ||= client.profile || Users::ClientProfile.new
+      @user_profile ||= client.profile
     end
 
     def references

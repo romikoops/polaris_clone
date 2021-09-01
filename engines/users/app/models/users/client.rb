@@ -26,17 +26,6 @@ module Users
 
     pg_search_scope :email_search, against: %i[email], using: { tsearch: { prefix: true, any_word: true } }
 
-    def profile
-      super || Users::ClientProfile.new(first_name: "", last_name: "")
-    end
-
-    def settings
-      super || Users::ClientSettings.new(
-        currency: organization_currency,
-        user: self
-      )
-    end
-
     def organization_currency
       return Organizations::DEFAULT_SCOPE["default_currency"] if organization.nil? || organization.scope.nil?
 
