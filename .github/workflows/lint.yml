@@ -50,6 +50,6 @@ jobs:
           ruby-version: 2.6.6
       - uses: reviewdog/action-reek@v1
         with:
-          # reek_version: gemfile
+          reek_version: gemfile
           github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
+          reporter: github-check

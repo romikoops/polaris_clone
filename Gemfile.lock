@@ -880,6 +880,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
+    kwalify (0.7.2)
     launchy (2.4.3)
       addressable (~> 2.3)
     lefthook (0.7.2)
@@ -1064,6 +1065,10 @@ GEM
     recipient_interceptor (0.2.0)
       mail
     redis (4.2.1)
+    reek (6.0.6)
+      kwalify (~> 0.7.0)
+      parser (~> 3.0.0)
+      rainbow (>= 2.0, < 4.0)
     regexp_parser (2.1.1)
     rein (5.1.0)
       activerecord (>= 4.0.0)
@@ -1363,7 +1368,6 @@ DEPENDENCIES
   mimemagic (~> 0.3.8)
   mini_magick
   mjml-rails (~> 4.1)
-  mobility (~> 0.8.6)
   monetize
   money
   money-open-exchange-rates
@@ -1395,6 +1399,7 @@ DEPENDENCIES
   rate_extractor!
   rates!
   recipient_interceptor
+  reek
   result_formatter!
   rgeo (~> 2.1.1)
   rgeo-geojson

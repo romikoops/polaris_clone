@@ -71,6 +71,7 @@ group :development do
   gem "letter_opener", "~> 1.6"
   gem "listen", ">= 3.0.5", "< 3.3"
   gem "rails-erd"
+  gem "reek"
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "traceroute"
@@ -97,10 +98,10 @@ end
 
 group :test do
   gem "fuubar"
-  gem "rspec-instafail"
-  gem "rspec-retry"
   gem "rspec_count_formatter"
+  gem "rspec-instafail"
   gem "rspec_junit_formatter"
+  gem "rspec-retry"
   gem "shoulda-matchers"
   gem "simplecov", require: false
   gem "simplecov-cobertura", require: false
