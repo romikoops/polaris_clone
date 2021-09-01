@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "treasury"
   spec.add_dependency "trucking"
   spec.add_dependency "users"
+  spec.add_dependency "user_services"
   spec.add_dependency "wheelhouse"
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"

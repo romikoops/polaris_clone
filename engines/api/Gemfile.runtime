@@ -46,5 +46,8 @@ eval_gemfile "../trucking/Gemfile.runtime"
 gem "users", path: "../users"
 eval_gemfile "../users/Gemfile.runtime"
 
+gem "user_services", path: "../user_services"
+eval_gemfile "../user_services/Gemfile.runtime"
+
 gem "wheelhouse", path: "../wheelhouse"
 eval_gemfile "../wheelhouse/Gemfile.runtime"

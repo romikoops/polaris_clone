@@ -35,12 +35,7 @@ module Api
       end
 
       def destroy
-        ActiveRecord::Base.transaction do
-          profile.destroy!
-          group_memberships.destroy_all
-          company_memberships.destroy_all
-          client.destroy!
-        end
+        user_services_client.destroy!
       end
 
       private
@@ -49,16 +44,12 @@ module Api
         @client ||= Users::Client.find(params[:id])
       end
 
+      def user_services_client
+        @user_services_client ||= ::UserServices::Client.find(params[:id])
+      end
+
       def profile
         @profile ||= client.profile
-      end
-
-      def group_memberships
-        @group_memberships ||= Groups::Membership.where(member: client.id)
-      end
-
-      def company_memberships
-        @company_memberships ||= Companies::Membership.where(client: client)
       end
 
       def client_params

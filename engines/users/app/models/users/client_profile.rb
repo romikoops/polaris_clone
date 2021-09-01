@@ -28,6 +28,8 @@ module Users
       tsearch: { prefix: true }
     }
 
+    acts_as_paranoid
+
     def full_name
       [first_name, last_name].compact.join(" ")
     end

@@ -2,8 +2,11 @@
 
 module Users
   class Client < ::Users::Base
+    acts_as_paranoid
     include PgSearch::Model
     self.inheritance_column = nil
+
+    acts_as_paranoid
 
     default_scope { where(organization_id: ::Organizations.current_id) }
     scope :global, -> { unscoped.where(deleted_at: nil) }
@@ -11,7 +14,7 @@ module Users
     belongs_to :organization, class_name: "Organizations::Organization"
 
     has_one :profile, class_name: "Users::ClientProfile", inverse_of: :user,
-                      foreign_key: :user_id, required: true
+                      foreign_key: :user_id, required: true, dependent: :destroy
 
     accepts_nested_attributes_for :profile
 
@@ -22,9 +25,12 @@ module Users
     validates :email, presence: true, uniqueness: { scope: :organization_id },
                       format: { with: URI::MailTo::EMAIL_REGEXP }
 
-    acts_as_paranoid
-
     pg_search_scope :email_search, against: %i[email], using: { tsearch: { prefix: true, any_word: true } }
+
+    # Restore has been made recursive so that anytime a user is restored, it restors its related associations.
+    def restore
+      super(recursive: true)
+    end
 
     def organization_currency
       return Organizations::DEFAULT_SCOPE["default_currency"] if organization.nil? || organization.scope.nil?

@@ -216,7 +216,7 @@ module Api
     end
 
     describe "DELETE #destroy" do
-      let(:client) { FactoryBot.create(:users_client, organization: organization) }
+      let(:client) { FactoryBot.create(:user_services_client, organization: organization) }
       let!(:profile) { Users::ClientProfile.find_by(user_id: client.id) }
       let(:organization_user) { Users::Client.with_deleted.find_by(id: client.id) }
       let(:company) { FactoryBot.create(:companies_company, organization: organization) }
@@ -225,11 +225,6 @@ module Api
           params: { organization_id: organization.id,
                     id: client.id },
           as: :json
-      end
-
-      before do
-        FactoryBot.create(:groups_membership, group: organization_group, member: client)
-        FactoryBot.create(:companies_membership, company: company, client: client)
       end
 
       context "when request is successful" do
