@@ -102,6 +102,8 @@ module OfferCalculator
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index
           AND   pricings_pricings.load_type = :load_type
+          AND   pricings_pricings.deleted_at IS NULL
+          AND   pricings_pricings.expiration_date > now()
           GROUP BY origin_stops.id, destination_stops.id
         SQL
       end
