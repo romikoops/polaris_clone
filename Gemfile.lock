@@ -75,6 +75,7 @@ PATH
       shared-runtime
       treasury
       trucking
+      user_services
       users
       wheelhouse
 
@@ -458,6 +459,16 @@ PATH
       will_paginate
 
 PATH
+  remote: engines/user_services
+  specs:
+    user_services (1)
+      companies
+      groups
+      organizations
+      shared-runtime
+      users
+
+PATH
   remote: engines/users
   specs:
     users (1)
@@ -790,51 +801,52 @@ GEM
     fuubar (2.5.0)
       rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
-    gapic-common (0.3.4)
-      google-protobuf (~> 3.12, >= 3.12.2)
-      googleapis-common-protos (>= 1.3.9, < 2.0)
-      googleapis-common-protos-types (>= 1.0.4, < 2.0)
-      googleauth (~> 0.9)
-      grpc (~> 1.25)
+    gapic-common (0.7.0)
+      faraday (~> 1.3)
+      google-protobuf (~> 3.14)
+      googleapis-common-protos (>= 1.3.11, < 2.a)
+      googleapis-common-protos-types (>= 1.0.6, < 2.a)
+      googleauth (>= 0.17.0, < 2.a)
+      grpc (~> 1.36)
     geocoder (1.5.1)
     git (1.6.0)
       rchardet (~> 1.8)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    google-cloud-core (1.5.0)
+    google-cloud-core (1.6.0)
       google-cloud-env (~> 1.0)
       google-cloud-errors (~> 1.0)
-    google-cloud-env (1.4.0)
+    google-cloud-env (1.5.0)
       faraday (>= 0.17.3, < 2.0)
-    google-cloud-errors (1.0.1)
-    google-iam-credentials (1.0.0)
-      google-cloud-core (~> 1.5)
-      google-iam-credentials-v1 (~> 0.3)
-    google-iam-credentials-v1 (0.3.0)
-      gapic-common (~> 0.3)
+    google-cloud-errors (1.1.0)
+    google-iam-credentials (1.0.2)
+      google-cloud-core (~> 1.6)
+      google-iam-credentials-v1 (>= 0.3, < 2.a)
+    google-iam-credentials-v1 (0.3.3)
+      gapic-common (>= 0.7, < 2.a)
       google-cloud-errors (~> 1.0)
     google-id-token (1.4.2)
       jwt (>= 1)
-    google-protobuf (3.13.0)
+    google-protobuf (3.17.3)
     google_sign_in (1.2.0)
       google-id-token (>= 1.4.0)
       oauth2 (>= 1.4.0)
       rails (>= 5.2.0)
-    googleapis-common-protos (1.3.10)
-      google-protobuf (~> 3.11)
-      googleapis-common-protos-types (>= 1.0.5, < 2.0)
+    googleapis-common-protos (1.3.11)
+      google-protobuf (~> 3.14)
+      googleapis-common-protos-types (>= 1.0.6, < 2.0)
       grpc (~> 1.27)
-    googleapis-common-protos-types (1.0.5)
-      google-protobuf (~> 3.11)
-    googleauth (0.14.0)
+    googleapis-common-protos-types (1.1.0)
+      google-protobuf (~> 3.14)
+    googleauth (0.17.1)
       faraday (>= 0.17.3, < 2.0)
       jwt (>= 1.4, < 3.0)
       memoist (~> 0.16)
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
-      signet (~> 0.14)
-    grpc (1.32.0)
-      google-protobuf (~> 3.13)
+      signet (~> 0.15)
+    grpc (1.38.0)
+      google-protobuf (~> 3.15)
       googleapis-common-protos-types (~> 1.0)
     guard (2.16.2)
       formatador (>= 0.2.4)
@@ -1444,6 +1456,7 @@ DEPENDENCIES
   traceroute
   treasury!
   trucking!
+  user_services!
   users!
   validator!
   webmock
