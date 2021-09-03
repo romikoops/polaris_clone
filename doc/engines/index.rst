@@ -127,3 +127,4 @@ Dependencies
    :hidden:
 
    companies/index.rst
+   journey/index.rst

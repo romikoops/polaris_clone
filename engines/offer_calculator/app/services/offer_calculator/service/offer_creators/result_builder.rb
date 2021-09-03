@@ -21,6 +21,7 @@ module OfferCalculator
               line_item_sets: [line_item_set],
               route_sections: route_sections,
               result_set: result_set,
+              query_id: result_set.query_id,
               issued_at: Time.zone.now,
               expiration_date: offer.valid_until
             ).tap do |new_result|

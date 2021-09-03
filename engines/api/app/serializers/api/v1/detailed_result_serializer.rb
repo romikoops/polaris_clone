@@ -4,6 +4,7 @@ module Api
   module V1
     class DetailedResultSerializer < Api::ApplicationSerializer
       attributes %i[
+        query_id
         payment_terms
         charges
         route

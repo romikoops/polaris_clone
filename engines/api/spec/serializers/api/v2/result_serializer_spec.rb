@@ -4,7 +4,8 @@ require "rails_helper"
 
 module Api
   RSpec.describe V2::ResultSerializer do
-    let(:result) { FactoryBot.create(:journey_result) }
+    let(:journey_query) { FactoryBot.create(:journey_query) }
+    let(:result) { FactoryBot.create(:journey_result, query_id: journey_query.id) }
     let(:decorated_result) { Api::V2::ResultDecorator.new(result) }
     let(:serialized_result) { described_class.new(decorated_result).serializable_hash }
     let(:target) { serialized_result.dig(:data, :attributes) }
@@ -26,6 +27,10 @@ module Api
 
     it "returns the number of stops" do
       expect(target[:numberOfStops]).to eq(0)
+    end
+
+    it "validates queryId is present in the serialized attributes" do
+      expect(target[:queryId]).to be_present
     end
   end
 end

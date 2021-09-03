@@ -18,6 +18,7 @@ module Api
         destination
         transshipment
         number_of_stops
+        query_id
       ]
 
       attribute :origin do |result|

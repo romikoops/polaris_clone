@@ -18,6 +18,10 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultBuilder do
       expect(result).to be_persisted
     end
 
+    it "returns the correct query_id" do
+      expect(result.query.id).to eq result.query_id
+    end
+
     context "when an error occurs" do
       before { allow(OfferCalculator::Service::OfferCreators::LineItemBuilder).to receive(:line_items).and_raise(ActiveRecord::RecordInvalid) }
 
