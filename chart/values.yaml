@@ -1,0 +1,205 @@
+# Default values for polaris.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Stage of the application (production, staging or review)
+stage: review
+
+securityGroups: []
+
+# Application Version Information
+version:
+  type: PATCH
+  last_updated: ~
+  release: ~
+
+image:
+  repository: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+webserver:
+  replicaCount: 2
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: alb
+      # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:003688427525:certificate/30553e1b-8dc4-43ca-bd7e-d39977a53b1c
+      alb.ingress.kubernetes.io/group.name: default
+      alb.ingress.kubernetes.io/healthcheck-path: /healthz
+      alb.ingress.kubernetes.io/listen-ports: "[{\"HTTP\":80},{\"HTTPS\":443}]"
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/target-type: "ip"
+    host: polaris.local
+
+  resources:
+    limits:
+      memory: 4000Mi
+    requests:
+      cpu: 1000m
+      memory: 4000Mi
+
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - polaris
+          - key: app.kubernetes.io/component
+            operator: In
+            values:
+            - webserver
+        topologyKey: kubernetes.io/hostname
+
+worker:
+  replicaCount: 2
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  resources:
+    default:
+      limits:
+        memory: 12000Mi
+      requests:
+        cpu: 1000m
+        memory: 12000Mi
+    critical:
+      limits:
+        memory: 12000Mi
+      requests:
+        cpu: 1000m
+        memory: 12000Mi
+
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity:
+    default:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - polaris
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - worker
+          topologyKey: kubernetes.io/hostname
+    critical:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - polaris
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - critical-worker
+          topologyKey: kubernetes.io/hostname
+
+migrate:
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+
+  podAnnotations: {}
+
+  podSecurityContext:
+    fsGroup: 1000
+
+  securityContext:
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

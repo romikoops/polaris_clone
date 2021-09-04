@@ -63,6 +63,22 @@ COPY . ./
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
+# OpenAPI Documentation
+FROM node:16-slim AS docs
+
+WORKDIR /app
+
+RUN npm i -g redoc-cli
+
+COPY doc/api/swagger.json ./openapi.json
+
+RUN redoc-cli bundle \
+  --options.expand-single-schema-field="true" \
+  --options.json-sample-expand-level="4" \
+  --options.path-in-middle-panel="true" \
+  --options.required-props-first="true" \
+  openapi.json
+
 #
 #
 # PRODUCTION TARGET
@@ -119,6 +135,7 @@ USER app
 # Copy app with gems from former build stage
 COPY --from=builder --chown=app:app /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
+COPY --from=docs --chown=app:app /app/redoc-static.html /app/public/docs/index.html
 
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true

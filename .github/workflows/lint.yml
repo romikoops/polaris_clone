@@ -30,16 +30,6 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
 
-  detect-secrets:
-    runs-on: ubuntu-20.04
-    timeout-minutes: 15
-    steps:
-    - uses: actions/checkout@v2.3.4
-    - uses: reviewdog/action-detect-secrets@master
-      with:
-        github_token: ${{ secrets.github_token }}
-        reporter: github-pr-review
-
   reek:
     runs-on: ubuntu-20.04
     timeout-minutes: 15

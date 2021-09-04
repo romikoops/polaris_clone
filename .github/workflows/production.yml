@@ -1,0 +1,155 @@
+name: Production
+
+concurrency:
+  group: production-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_run:
+    workflows: [Tests]
+    branches: [master, sre-34-better-infra]
+    types: [completed]
+
+jobs:
+  docker:
+    runs-on: ubuntu-20.04
+    outputs:
+      tag: ${{ steps.publish.outputs.tag }}
+    steps:
+      - uses: itsmycargo/action-docker-publish@main
+        with:
+          repository: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+  production:
+    needs: [docker]
+    runs-on: ubuntu-20.04
+    steps:
+      - id: meta
+        run: |
+          echo "::set-output name=namespace::polaris-production"
+          echo "::set-output name=url::api.itsmycargo.com"
+          echo "::set-output name=branch::$(echo ${GITHUB_REF##*/} | tr -cd '[a-zA-Z0-9-]' | head -c63)"
+
+      - name: start deployment
+        uses: bobheadxi/deployments@v0.6.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          auto_inactive: false
+          env: production
+          transient: false
+          ref: ${{ github.ref }}
+
+      - uses: actions/checkout@master
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+          role-to-assume: ${{ secrets.AWS_CLUSTER_ROLE }}
+          role-duration-seconds: 1200
+      - uses: Azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG_PRODUCTION }}
+      - uses: azure/setup-kubectl@v1
+        with:
+          version: latest
+      - uses: azure/setup-helm@v1
+        with:
+          version: latest
+      - run: |
+          (cat << EOF
+          image:
+            tag: ${{ github.sha }}
+          webserver:
+            ingress:
+              host: polaris-production.itsmycargo.tech
+              annotations:
+                alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:003688427525:certificate/30553e1b-8dc4-43ca-bd7e-d39977a53b1c
+            serviceAccount:
+              annotations:
+                eks.amazonaws.com/role-arn: ${{ secrets.ROLE_PRODUCTION }}
+          worker:
+            serviceAccount:
+              annotations:
+                eks.amazonaws.com/role-arn: ${{ secrets.ROLE_PRODUCTION }}
+          securityGroups:
+            - ${{ secrets.SECURITY_GROUP_PRODUCTION }}
+          EOF
+          ) > overrides.yaml
+      - run: |
+          sed -i "s/^appVersion: \(.*\)/appVersion: \"$(echo ${GITHUB_SHA} | head -c8)\"/" chart/Chart.yaml
+      - run: |
+          helm upgrade --atomic --install --timeout 15m --wait --wait-for-jobs \
+            --namespace ${{ steps.meta.outputs.namespace }} \
+            --create-namespace \
+            --values overrides.yaml \
+            --set stage=production \
+            --set version.release=${{ github.sha }} \
+            --set version.last_updated=${{ github.event.head_commit.timestamp }} \
+            ${{ steps.meta.outputs.namespace }} ./chart
+
+      - uses: getsentry/action-release@v1
+        if: success()
+        with:
+          environment: Production
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: polaris
+
+      - name: update deployment status
+        uses: bobheadxi/deployments@v0.6.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env_url: https://api.itsmycargo.com
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+  guides:
+    needs: [production]
+
+    name: Confluence / Guides
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.6
+        with:
+          path: guides/_build
+          key: ${{ runner.os }}-guides-${{ hashFiles('guides/_build/**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-guides-
+      - uses: itsmycargo/action-sphinx@main
+        with:
+          sourcedir: guides
+          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
+          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
+          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
+          sphinx_builder: confluence
+
+  docs:
+    needs: [production]
+
+    name: Confluence / Documentation
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.6
+        with:
+          path: doc/_build
+          key: ${{ runner.os }}-doc-${{ hashFiles('doc/_build/**/*') }}
+          restore-keys: |
+            ${{ runner.os }}-doc-
+      - uses: itsmycargo/action-sphinx@main
+        with:
+          sourcedir: doc
+          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
+          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
+          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
+          sphinx_builder: confluence

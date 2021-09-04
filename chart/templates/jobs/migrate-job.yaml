@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "polaris.fullname" . }}-migrate
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migrate
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      {{- with .Values.migrate.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "polaris.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "migrate.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.migrate.podSecurityContext | nindent 8 }}
+      containers:
+        - name: migrate
+          securityContext:
+            {{- toYaml .Values.migrate.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - bundle
+            - exec
+            - rails
+            - db:migrate:with_data
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: RELEASE
+              value: {{ .Values.version.release }}
+            - name: STAGE
+              value: {{ .Values.stage }}
+          volumeMounts:
+            - mountPath: /app/config/master.key
+              name: config
+              readOnly: true
+              subPath: master.key
+            - mountPath: /app/.env
+              name: config
+              readOnly: true
+              subPath: env
+
+      {{- with .Values.migrate.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "polaris.fullname" . }}

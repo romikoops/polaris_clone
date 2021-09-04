@@ -1,0 +1,27 @@
+{{- if .Values.webserver.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "polaris.fullname" . }}-webserver
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+    app.kubernetes.io/component: webserver
+  {{- with .Values.webserver.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.webserver.ingress.className }}
+  ingressClassName: {{ .Values.webserver.ingress.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.webserver.ingress.host | quote }}
+      http:
+        paths:
+          - pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "polaris.fullname" . }}-webserver
+                port:
+                  number: {{ .Values.webserver.service.port }}
+{{- end }}

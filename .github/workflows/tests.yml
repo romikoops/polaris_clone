@@ -1,20 +1,28 @@
----
-name: CI
+name: Tests
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
 
 on:
   push:
-    branches: [master]
   pull_request:
     branches: [master]
 
 jobs:
   test-gems:
-    name: Test / Gems
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        gem:
+          - cargo_packer
+          - measured-itsmycargo
+          - money_cache
 
     defaults:
       run:
-        working-directory: gems/money_cache
+        working-directory: gems/${{ matrix.gem }}
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -24,19 +32,16 @@ jobs:
       - uses: actions/cache@v2.1.6
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/money_cache.gemspec') }}
+          key: ${{ runner.os }}-gems-${{ matrix.gem }}-${{ hashFiles('**/*.gemspec') }}
           restore-keys: |
-            ${{ runner.os }}-gems-
+            ${{ runner.os }}-gems-${{ matrix.gem }}-
 
-      - name: Bundle install
-        run: |
+      - run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       - run: bundle exec rspec
 
   test-app:
-    name: Test / App
-
     runs-on: ubuntu-20.04
 
     services:
@@ -122,10 +127,9 @@ jobs:
       - run: bundle exec rspec --exclude-pattern '{gems,vendor}/**/*_spec.rb' .
         timeout-minutes: 35
 
-  apidocs:
-    name: API Docs
-    needs: [test-app]
+  api-docs:
     if: github.event_name == 'pull_request'
+    needs: [test-app]
 
     runs-on: ubuntu-20.04
 
@@ -216,94 +220,4 @@ jobs:
       - if: steps.committed.outputs.state != 'no_changes'
         run: |
           echo "::error file=doc/api/swagger.json::Updated OpenAPI Specification has not been committed."
-
           exit 1
-
-  docker:
-    name: Docker
-    runs-on: ubuntu-20.04
-    steps:
-      - id: meta
-        uses: itsmycargo/docker-meta-action@v1.0.0
-        with:
-          image: 003688427525.dkr.ecr.eu-central-1.amazonaws.com/polaris
-
-      - name: Checkout Code
-        uses: actions/checkout@v2.3.4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: RELEASE=${{ steps.meta.outputs.sha }}
-
-  guides:
-    needs: [test-gems, test-app, docker]
-
-    name: Confluence / Guides
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: itsmycargo/action-sphinx@main
-        with:
-          sourcedir: guides
-          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
-          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
-          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
-          sphinx_builder: ${{github.ref == 'refs/heads/master' && 'confluence' || 'html'}}
-
-  docs:
-    needs: [test-gems, test-app, docker]
-
-    name: Confluence / Documentation
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: itsmycargo/action-sphinx@main
-        with:
-          sourcedir: doc
-          confluence_user: ${{ secrets.JIRA_USER_EMAIL }}
-          confluence_pass: ${{ secrets.JIRA_API_TOKEN }}
-          confluence_server: ${{ secrets.JIRA_BASE_URL }}/wiki/
-          sphinx_builder: ${{github.ref == 'refs/heads/master' && 'confluence' || 'html'}}
-
-  sentry:
-    if: github.ref == 'refs/heads/master'
-    needs: [test-gems, test-app, docker]
-
-    name: Sentry
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: polaris

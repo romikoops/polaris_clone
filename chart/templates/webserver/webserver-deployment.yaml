@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "polaris.fullname" . }}-webserver
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+    app.kubernetes.io/component: webserver
+spec:
+  {{- if not .Values.webserver.autoscaling.enabled }}
+  replicas: {{ .Values.webserver.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "polaris.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: webserver
+  template:
+    metadata:
+      {{- with .Values.webserver.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "polaris.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: webserver
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "webserver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.webserver.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wait-for-migrations
+          securityContext:
+            {{- toYaml .Values.webserver.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+          - bundle
+          - exec
+          - rails
+          - db:abort_if_pending_migrations
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: RELEASE
+              value: {{ .Values.version.release }}
+            - name: STAGE
+              value: {{ .Values.stage }}
+          volumeMounts:
+            - mountPath: /app/config/master.key
+              name: config
+              readOnly: true
+              subPath: master.key
+            - mountPath: /app/.env
+              name: config
+              readOnly: true
+              subPath: env
+      containers:
+        - name: webserver
+          securityContext:
+            {{- toYaml .Values.webserver.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /up
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 1
+            timeoutSeconds: 5
+            failureThreshold: 60
+          resources:
+            {{- toYaml .Values.webserver.resources | nindent 12 }}
+          env:
+            - name: RAILS_ENV
+              value: production
+            - name: RELEASE
+              value: {{ .Values.version.release }}
+            - name: STAGE
+              value: {{ .Values.stage }}
+            - name: ENABLE_CLOUDWATCH
+              value: "true"
+          volumeMounts:
+            - mountPath: /app/config/master.key
+              name: config
+              readOnly: true
+              subPath: master.key
+            - mountPath: /app/.env
+              name: config
+              readOnly: true
+              subPath: env
+
+      {{- with .Values.webserver.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webserver.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.webserver.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "polaris.fullname" . }}

@@ -1,0 +1,17 @@
+apiVersion: vpcresources.k8s.aws/v1beta1
+kind: SecurityGroupPolicy
+metadata:
+  name: {{ include "polaris.fullname" . }}
+  labels:
+    {{- include "polaris.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "polaris.selectorLabels" . | nindent 6 }}      
+  securityGroups:
+    groupIds:
+      {{- range .Values.securityGroups }}
+      - {{ . | quote }}
+      {{- end }}

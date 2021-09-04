@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/mikian/sidekiq-cloudwatchmetrics.git
+  revision: 55cd329f1a758ea906f37e5dc699701395ac500d
+  specs:
+    sidekiq-cloudwatchmetrics (2.1.0)
+      aws-sdk-cloudwatch (~> 1.6)
+      sidekiq (>= 5.0, < 7.0)
+
 PATH
   remote: engines/address_book
   specs:
@@ -645,6 +653,9 @@ GEM
       activerecord (>= 4.2, < 6.1)
     aws-eventstream (1.1.0)
     aws-partitions (1.354.0)
+    aws-sdk-cloudwatch (1.44.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-core (3.104.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -715,6 +726,10 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.0.3)
       railties (>= 4.2)
+    dotenv (2.7.6)
+    dotenv-rails (2.7.6)
+      dotenv (= 2.7.6)
+      railties (>= 3.2)
     draper (4.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -1003,7 +1018,6 @@ GEM
     premailer-rails (1.11.1)
       actionmailer (>= 3)
       premailer (~> 1.7, >= 1.7.9)
-    prometheus_exporter (0.5.2)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -1012,6 +1026,8 @@ GEM
     public_suffix (4.0.6)
     puma (5.1.0)
       nio4r (~> 2.0)
+    puma-cloudwatch (0.4.4)
+      aws-sdk-cloudwatch
     raabro (1.4.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -1348,6 +1364,7 @@ DEPENDENCIES
   dalli
   debase
   diffy (~> 3.4.0)
+  dotenv-rails
   easymon
   excel_data_services!
   faraday_middleware-aws-sigv4
@@ -1401,9 +1418,9 @@ DEPENDENCIES
   premailer-rails
   pricings!
   profiles!
-  prometheus_exporter (~> 0.5.2)
   pry-rails
   puma (< 6)
+  puma-cloudwatch
   quotations!
   rack-cors
   rails-erd
@@ -1440,6 +1457,7 @@ DEPENDENCIES
   shared-runtime!
   shipments!
   shoulda-matchers
+  sidekiq-cloudwatchmetrics!
   sidekiq-cron (~> 1.1)
   sidekiq-failures
   sidekiq_liveness (~> 0.5.0)
