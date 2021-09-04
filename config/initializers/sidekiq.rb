@@ -14,5 +14,5 @@ Sidekiq.configure_server do |config|
 end
 
 if ENV["ENABLE_CLOUDWATCH"]
-  Sidekiq::CloudWatchMetrics.enable!(additional_dimensions: { Stage: Rails.env })
+  Sidekiq::CloudWatchMetrics.enable!(additional_dimensions: { Environment: Rails.env })
 end
