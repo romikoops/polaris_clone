@@ -60,6 +60,7 @@ module OfferCalculator
         errors.each do |error|
           Journey::Error.create(
             result_set: request.result_set,
+            query: request.query,
             cargo_unit_id: error.id,
             code: error.code,
             service: service.name,

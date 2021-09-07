@@ -46,6 +46,7 @@ module OfferCalculator
             target_ranges.each do |target_range|
               Journey::Error.create(
                 result_set: result_set,
+                query: request.query,
                 code: target_range.error.new.code,
                 service: service_name,
                 carrier: carrier_name,

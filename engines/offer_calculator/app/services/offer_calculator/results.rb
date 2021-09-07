@@ -132,7 +132,7 @@ module OfferCalculator
     end
 
     def persist_error(error:)
-      Journey::Error.create(result_set: request.result_set, code: error.code, property: error.message)
+      Journey::Error.create(result_set: request.result_set, code: error.code, property: error.message, query: query)
     end
 
     def update_status(status:)

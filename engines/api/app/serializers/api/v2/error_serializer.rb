@@ -3,7 +3,7 @@
 module Api
   module V2
     class ErrorSerializer < Api::ApplicationSerializer
-      attributes %i[id carrier code limit mode_of_transport property service value cargo_unit_id]
+      attributes %i[id carrier code limit mode_of_transport property service value cargo_unit_id query_id]
     end
   end
 end

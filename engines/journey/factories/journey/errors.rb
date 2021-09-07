@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :journey_error, class: "Journey::Error" do
     association :result_set, factory: :journey_result_set
     association :cargo_unit, factory: :journey_cargo_unit
+    association :query, factory: :journey_query
     code { "1001" }
     service { "Standard" }
     carrier { "MSC" }

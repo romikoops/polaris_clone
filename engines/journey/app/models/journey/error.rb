@@ -4,6 +4,7 @@ module Journey
   class Error < ApplicationRecord
     belongs_to :result_set
     belongs_to :cargo_unit, optional: true
+    belongs_to :query
   end
 end
 
@@ -34,6 +35,6 @@ end
 # Foreign Keys
 #
 #  fk_rails_...  (cargo_unit_id => journey_cargo_units.id) ON DELETE => cascade
-#  fk_rails_...  (query_id => journey_queries.id) ON DELETE => cascade
+#  fk_rails_...  (query_id => journey_queries.id)
 #  fk_rails_...  (result_set_id => journey_result_sets.id) ON DELETE => cascade
 #

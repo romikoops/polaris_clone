@@ -1483,7 +1483,7 @@ ALTER SEQUENCE public.event_store_events_in_streams_id_seq OWNED BY public.event
 --
 
 CREATE TABLE public.excel_data_services_uploads (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     organization_id uuid NOT NULL,
     file_id uuid NOT NULL,
     user_id uuid,
@@ -1923,7 +1923,8 @@ CREATE TABLE public.journey_errors (
     value character varying,
     "limit" character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    query_id uuid
 );
 
 
@@ -7698,6 +7699,13 @@ CREATE INDEX index_journey_errors_on_cargo_unit_id ON public.journey_errors USIN
 
 
 --
+-- Name: index_journey_errors_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_errors_on_query_id ON public.journey_errors USING btree (query_id);
+
+
+--
 -- Name: index_journey_errors_on_result_set_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11577,6 +11585,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: journey_errors fk_rails_d967051689; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_errors
+    ADD CONSTRAINT fk_rails_d967051689 FOREIGN KEY (query_id) REFERENCES public.journey_queries(id);
+
+
+--
 -- Name: journey_queries fk_rails_dad02b35f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12451,6 +12467,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210824074647'),
 ('20210825145528'),
 ('20210826083534'),
-('20210826171456');
+('20210826171456'),
+('20210906173157');
 
 
