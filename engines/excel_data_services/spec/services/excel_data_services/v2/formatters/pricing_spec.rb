@@ -24,32 +24,23 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
            "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
            "transshipment" => nil,
            "fees" =>
-            [{ "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
+           [{ "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
+              "base" => nil,
+              "charge_category_id" => 7640,
+              "rate_basis_id" => nil,
+              "rate" => 210.0,
+              "currency_name" => nil,
+              "range" => [] },
+             { "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
                "base" => nil,
-               "charge_category_id" => 7640,
+               "charge_category_id" => 5,
                "rate_basis_id" => nil,
-               "rate" => 210.0,
+               "rate" => 40.0,
                "currency_name" => nil,
-               "range" => [],
-               "metadata" =>
-                { "row_number" => "1",
-                  "file_name" => "test-sheet.xlsx",
-                  "document_id" => file.id } },
-              { "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
-                "base" => nil,
-                "charge_category_id" => 5,
-                "rate_basis_id" => nil,
-                "rate" => 40.0,
-                "currency_name" => nil,
-                "range" => [],
-                "metadata" =>
-                { "row_number" => "2",
-                  "file_name" => "test-sheet.xlsx",
-                  "document_id" => file.id } }],
+               "range" => [] }],
            "internal" => false,
            "load_type" => "cargo_item",
            "validity" => "[#{start_date}, #{end_date})",
-           "notes" => [],
            "upsert_id" => "ae71d529-8c65-5c9d-9629-67a03e7bc8e6" }]
       end
 
@@ -93,8 +84,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
            "tenant_vehicle_id" => 4,
            "wm_rate" => 1.0,
            "vm_rate" => 1.0,
-           "charge_category_id" => 7640,
-           "remarks" => nil },
+           "charge_category_id" => 7640 },
           { "row" => 2,
             "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
             "service" => "standard",
@@ -134,8 +124,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "wm_rate" => 1.0,
             "vm_rate" => 1.0,
             "tenant_vehicle_id" => 4,
-            "charge_category_id" => 5,
-            "remarks" => nil }]
+            "charge_category_id" => 5 }]
       end
 
       it "returns the formatted data" do
@@ -185,8 +174,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "wm_rate" => 1.0,
             "vm_rate" => 1.0,
             "tenant_vehicle_id" => 4,
-            "charge_category_id" => 6,
-            "remarks" => nil },
+            "charge_category_id" => 6 },
           { "row" => 4,
             "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
             "service" => "standard",
@@ -224,8 +212,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "destination_name" => "Shanghai",
             "itinerary_id" => 3,
             "tenant_vehicle_id" => 4,
-            "charge_category_id" => 7,
-            "remarks" => nil }
+            "charge_category_id" => 7 }
         ]
       end
 
@@ -247,15 +234,10 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
               "rate_basis_id" => nil,
               "rate" => 210.0,
               "currency_name" => nil,
-              "range" => [{ "min" => 0.0, "max" => 100.0, "rate" => 210.0 }, { "min" => 100.0, "max" => 500.0, "rate" => 210.0 }],
-              "metadata" =>
-              { "row_number" => "3,4",
-                "file_name" => "test-sheet.xlsx",
-                "document_id" => file.id } }],
+              "range" => [{ "min" => 0.0, "max" => 100.0, "rate" => 210.0 }, { "min" => 100.0, "max" => 500.0, "rate" => 210.0 }] }],
            "internal" => false,
            "load_type" => "cargo_item",
            "validity" => "[#{start_date}, #{end_date})",
-           "notes" => [],
            "upsert_id" => "ae71d529-8c65-5c9d-9629-67a03e7bc8e6" }]
       end
 

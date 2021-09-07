@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
-  include_context "for excel_data_services setup"
+  let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:pricing) do
     FactoryBot.create(:pricings_pricing,
       organization: organization,
@@ -15,15 +15,18 @@ RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
   let(:validity) { Range.new(Time.zone.today, 6.months.from_now.to_date, exclude_end: true) }
   let(:start_date) { Time.zone.today }
   let(:end_date) { 6.months.from_now.to_date }
-  let(:rows) do
+  let(:default_group) { FactoryBot.create(:groups_group, organization: organization, name: "default") }
+  let(:frame_data) do
     [
       pricing.slice(*conflict_keys)
         .merge("effective_date" => start_date, "expiration_date" => end_date)
     ]
   end
-  let(:conflict_keys) { %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id] }
+  let(:conflict_keys) { %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id effective_date expiration_date] }
+  let(:frame) { Rover::DataFrame.new(frame_data) }
   let(:pricings) { Pricings::Pricing.all }
-  let(:results) { described_class.state(state: state_arguments, model: Pricings::Pricing, keys: conflict_keys) }
+  let(:state) { instance_double("State", frame: frame, errors: [], failed?: false) }
+  let(:results) { described_class.state(state: state, model: Pricings::Pricing, keys: conflict_keys) }
 
   describe "#perform" do
     context "when the date matches exactly" do
@@ -100,21 +103,6 @@ RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
         expect(results.errors).to be_empty
         expect(pricings.count).to eq(2)
         expect(pricings.pluck(:validity)).to match_array(expected_validities)
-      end
-    end
-
-    context "when conflict exists in the sheet" do
-      let(:rows) do
-        [
-          pricing.slice(*conflict_keys)
-            .merge("effective_date" => start_date, "expiration_date" => end_date),
-          pricing.slice(*conflict_keys)
-            .merge("effective_date" => end_date - 5.days, "expiration_date" => end_date + 30.days)
-        ]
-      end
-
-      it "detects the overlap and updates the existing pricing validity", :aggregate_failures do
-        expect(results.errors).to be_present
       end
     end
   end

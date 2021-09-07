@@ -7,8 +7,6 @@ module ExcelDataServices
         ATTRIBUTE_KEYS = %w[origin_name destination_name pricing_id organization_id remarks].freeze
 
         def insertable_data
-          return [] unless frame.include?("remarks")
-
           frame[!frame["remarks"].missing][ATTRIBUTE_KEYS].to_a.uniq.map do |row|
             {
               "header" => [row.delete("origin_name"), row.delete("destination_name")].join(" - "),

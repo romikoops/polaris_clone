@@ -4,10 +4,10 @@ module ExcelDataServices
   module V2
     class State
       # The State object gets passed along throughout the entire pipeline, carrying data and error information from step to step. It also holds the overrides provided to the uploader class for use in the different Sections
-      attr_reader :file, :section, :overrides
+      attr_reader :xlsx, :section, :overrides
 
-      def initialize(file:, section:, overrides:)
-        @file = file
+      def initialize(xlsx:, section:, overrides:)
+        @xlsx = xlsx
         @section = section
         @overrides = overrides
         @frame = Rover::DataFrame.new
@@ -27,7 +27,11 @@ module ExcelDataServices
         send(key)
       end
 
-      delegate :group_id, :document_id, to: :overrides
+      def failed?
+        errors.present?
+      end
+
+      delegate :group_id, to: :overrides
 
       def organization_id
         Organizations.current_id
@@ -36,16 +40,6 @@ module ExcelDataServices
       def organization
         @organization ||= Organizations::Organization.find(organization_id)
       end
-
-      def file_name
-        file.file.filename.to_s
-      end
-
-      def spreadsheet
-        @spreadsheet ||= ExcelDataServices::V2::Spreadsheet.new(document: file)
-      end
-
-      delegate :xlsx, to: :spreadsheet
     end
   end
 end

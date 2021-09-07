@@ -7,7 +7,6 @@ module ExcelDataServices
         # The Resolver class will take the conflict keys andd extract the permutations from the data frame.
         # It will then find all conflicts that exists for each pair and execute the Overlaps handler for that conflict type
 
-        DATE_KEYS = %w[effective_date expiration_date].freeze
         delegate :frame, to: :state
 
         def self.state(state:, model:, keys:)
@@ -21,10 +20,9 @@ module ExcelDataServices
         end
 
         def perform
-          append_internal_conflict_rows
-          return state if state.errors.present?
+          return state if state.failed?
 
-          frame[conflict_keys].to_a.uniq.each do |conflict_targets|
+          frame[keys].to_a.uniq.each do |conflict_targets|
             handle_overlap(arguments: conflict_targets)
           end
           state
@@ -40,39 +38,6 @@ module ExcelDataServices
           ).each do |conflict_type|
             ExcelDataServices::V2::Overlaps.const_get(conflict_type.camelize).new(model: model, arguments: arguments).perform
           end
-        end
-
-        def append_internal_conflict_rows
-          frame[keys].to_a.uniq.each do |indentifying_attributes|
-            sub_frame = row_frame(row: indentifying_attributes)
-            add_internal_conflict_error(rows: sub_frame.to_a) if internal_conflict_exists(sub_frame: sub_frame)
-          end
-        end
-
-        def internal_conflict_exists(sub_frame:)
-          validities = sub_frame[DATE_KEYS].to_a.uniq.map { |row| Range.new(*row.values_at(*DATE_KEYS)) }
-          return false if validities.length == 1
-
-          validities.combination(2).any? { |validity_a, validity_b| validity_a.overlaps?(validity_b) }
-        end
-
-        def row_frame(row:)
-          frame[row.keys.map { |key| (frame[key] == row[key]) }.reduce(&:&)]
-        end
-
-        def add_internal_conflict_error(rows:)
-          row_list = rows.pluck("row").to_a.join(", ")
-          @state.errors << ExcelDataServices::V2::Error.new(
-            type: :error,
-            row_nr: row_list,
-            sheet_name: rows.dig(0, "sheet_name"),
-            reason: "The rows listed have conflicting validity dates. Please correct before reuploading.",
-            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
-          )
-        end
-
-        def conflict_keys
-          model.column_names.include?(DATE_KEYS.first) ? keys + DATE_KEYS : keys
         end
       end
     end

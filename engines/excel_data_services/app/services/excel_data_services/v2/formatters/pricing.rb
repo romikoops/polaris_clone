@@ -17,13 +17,11 @@ module ExcelDataServices
           tenant_vehicle_id
           organization_id
         ].freeze
-        GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id].freeze
         NAMESPACE_UUID = UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
         UUID_KEYS = %w[itinerary_id tenant_vehicle_id cargo_class group_id organization_id].freeze
 
         def insertable_data
           frame[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
-            loop_frame = row_frame(row: row)
             row.slice(
               "cargo_class",
               "effective_date",
@@ -37,8 +35,7 @@ module ExcelDataServices
               "transshipment"
             )
               .merge(
-                "fees" => RowFees.new(frame: loop_frame, state: state).fees,
-                "notes" => RowNotes.new(frame: loop_frame).notes,
+                "fees" => RowFees.new(frame: frame, row: row).fees,
                 "internal" => row["internal"].present?,
                 "load_type" => row["cargo_class"] == "lcl" ? "cargo_item" : "container",
                 "validity" => "[#{row['effective_date'].to_date}, #{row['expiration_date'].to_date})",
@@ -47,24 +44,23 @@ module ExcelDataServices
           end
         end
 
-        def row_frame(row:)
-          frame[GROUPING_KEYS.map { |key| (frame[key] == row[key]) }.reduce(&:&)]
-        end
-
         class RowFees
-          attr_reader :frame, :state
+          attr_reader :row, :frame
 
-          def initialize(frame:, state:)
+          GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id fee_code].freeze
+
+          def initialize(frame:, row:)
             @frame = frame
-            @state = state
+            @row = row
           end
 
           def fees
-            fee_codes.map { |fee_code| fee_from_grouping_rows(grouped_rows: rows_from_grouping(fee_code: fee_code)) }
+            groupings.map { |grouping| fee_from_grouping_rows(grouped_rows: rows_from_grouping(grouping: grouping)) }
           end
 
-          def rows_from_grouping(fee_code:)
-            frame[frame["fee_code"] == fee_code]
+          def rows_from_grouping(grouping:)
+            mask = GROUPING_KEYS.map { |key| frame[key] == grouping[key] }.reduce(&:&)
+            frame[mask]
           end
 
           def range_from_grouping_rows(grouped_rows:)
@@ -77,50 +73,16 @@ module ExcelDataServices
           end
 
           def fee_from_grouping_rows(grouped_rows:)
-            group_row = grouped_rows.to_a.first
-            group_row.slice("organization_id", "base", "min", "charge_category_id", "rate_basis_id", "rate")
+            row = grouped_rows.to_a.first
+            row.slice("organization_id", "base", "metadata", "min", "charge_category_id", "rate_basis_id", "rate")
               .merge(
-                "currency_name" => group_row["currency_name"],
-                "range" => range_from_grouping_rows(grouped_rows: grouped_rows),
-                "metadata" => metadata(row_grouping: grouped_rows)
+                "currency_name" => row["currency_name"],
+                "range" => range_from_grouping_rows(grouped_rows: grouped_rows)
               )
           end
 
-          def fee_codes
-            frame["fee_code"].to_a.uniq
-          end
-
-          def metadata(row_grouping:)
-            first_of_group = row_grouping.to_a.first
-            first_of_group.slice("sheet_name").tap do |combined_metadata|
-              combined_metadata["row_number"] = row_grouping["row"].to_a.join(",")
-              combined_metadata["file_name"] = state.file_name
-              combined_metadata["document_id"] = state.file.id
-            end
-          end
-        end
-
-        class RowNotes
-          attr_reader :frame
-
-          def initialize(frame:)
-            @frame = frame
-          end
-
-          def notes
-            note_frame.to_a
-              .uniq { |note_row| note_row["remarks"] }
-              .map do |note_row|
-              {
-                "header" => [note_row["origin_name"], note_row["destination_name"]].join(" - "),
-                "body" => note_row["remarks"],
-                "organization_id" => note_row["organization_id"]
-              }
-            end
-          end
-
-          def note_frame
-            @note_frame ||= frame[!frame["remarks"].missing]
+          def groupings
+            frame[GROUPING_KEYS].to_a.uniq
           end
         end
       end

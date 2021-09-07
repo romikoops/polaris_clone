@@ -12,7 +12,7 @@ module ExcelDataServices
 
         def overlap_clause
           <<~SQL
-            (daterange(:start_date, :end_date, '[]') @> validity  OR daterange(:start_date, :end_date, '[]') = validity)
+            (lower(validity) >= :start_date AND upper(validity) <= :end_date)
           SQL
         end
 

@@ -9,7 +9,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::Nexus do
   let(:extracted_table) { result.frame }
   let(:nexus) { FactoryBot.create(:legacy_nexus, :segot, organization: organization) }
 
-  describe "#state" do
+  describe ".state" do
     context "when found" do
       let(:row) do
         {
@@ -42,7 +42,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::Nexus do
       end
 
       it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
+        expect(result).to be_failed
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end

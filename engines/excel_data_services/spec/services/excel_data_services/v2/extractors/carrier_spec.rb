@@ -7,14 +7,13 @@ RSpec.describe ExcelDataServices::V2::Extractors::Carrier do
 
   let(:result) { described_class.state(state: state_arguments) }
   let(:extracted_table) { result.frame }
-  let(:carrier) { FactoryBot.create(:legacy_carrier, name: "test") }
+  let(:carrier) { FactoryBot.create(:legacy_carrier) }
 
-  describe "#state" do
+  describe ".state" do
     context "when found" do
       let(:row) do
         {
-          "carrier" => carrier.name,
-          "carrier_code" => carrier.code,
+          "carrier" => carrier.code,
           "row" => 2
         }
       end
@@ -28,7 +27,6 @@ RSpec.describe ExcelDataServices::V2::Extractors::Carrier do
       let(:row) do
         {
           "carrier" => "AAA",
-          "carrier_code" => "aaa",
           "row" => 2
         }
       end
@@ -38,7 +36,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::Carrier do
       end
 
       it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
+        expect(result).to be_failed
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end

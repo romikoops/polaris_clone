@@ -19,7 +19,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
       mode_of_transport: "ocean")
   end
 
-  describe "#state" do
+  describe ".state" do
     shared_examples_for "finding the Origin/Destination hub ids" do
       it "returns the frame with the origin_hub_id && destination_hub_id", :aggregate_failures do
         expect(extracted_table["origin_hub_id"].to_a).to eq([origin_hub.id])
@@ -111,7 +111,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
       end
 
       it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
+        expect(result).to be_failed
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end

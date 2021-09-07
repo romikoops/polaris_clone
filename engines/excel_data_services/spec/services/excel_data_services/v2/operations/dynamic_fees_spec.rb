@@ -40,7 +40,7 @@ RSpec.describe ExcelDataServices::V2::Operations::DynamicFees do
   end
   let(:extracted_table) { described_class.state(state: state_arguments).frame }
 
-  describe "#data" do
+  describe ".data" do
     it "returns the turns each row into a row for each fee defined in the dynamic columns", :aggregate_failures do
       expect(extracted_table[extracted_table["fee_code"] == "ofr"]["rate"].to_a).to eq([row["ofr"]])
       expect(extracted_table[extracted_table["fee_code"] == "lss"]["rate"].to_a).to eq([row["lss"]])

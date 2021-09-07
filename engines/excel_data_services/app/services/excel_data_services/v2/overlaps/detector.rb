@@ -33,10 +33,10 @@ module ExcelDataServices
         def raw_query
           <<~SQL
             SELECT
-            (validity @> daterange(:effective_date, :expiration_date, '[]') AND daterange(:effective_date, :expiration_date, '[]') != validity) as contained_by_existing,
+              (validity @> daterange(:effective_date, :expiration_date) AND daterange(:effective_date, :expiration_date) != validity) as contained_by_existing,
               (lower(validity) <= :effective_date::date AND upper(validity) < :expiration_date::date) as extends_past_existing,
               (lower(validity) > :effective_date::date AND upper(validity) >= :expiration_date::date) as extends_before_existing,
-              (daterange(:effective_date, :expiration_date, '[]') @> validity  OR daterange(:effective_date, :expiration_date, '[]') = validity) as contained_by_new
+              (lower(validity) >= :effective_date::date AND upper(validity) <= :expiration_date::date  OR daterange(:effective_date, :expiration_date) = validity) as contained_by_new
             FROM #{table}
             WHERE #{attributes_as_sql_where_clause}
             AND validity && daterange(:effective_date, :expiration_date)

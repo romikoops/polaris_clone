@@ -9,9 +9,8 @@ module ExcelDataServices
 
         def insertable_data
           sliced_frame = frame[ATTRIBUTE_KEYS]
-          sliced_frame["name"] = sliced_frame["carrier"]
           sliced_frame["code"] = sliced_frame["carrier"].map(&:downcase)
-          sliced_frame.delete("carrier")
+          sliced_frame["name"] = sliced_frame.delete("carrier")
           sliced_frame.to_a.uniq
         end
       end
