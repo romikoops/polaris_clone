@@ -128,7 +128,7 @@ module ExcelDataServices
             new_pricing_detail.range = range_data if range_data
 
             add_stats(new_pricing_detail, row[:row_nr])
-            new_pricing_detail.save!
+            new_pricing_detail.save
           end
         end
       end

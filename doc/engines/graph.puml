@@ -22,6 +22,7 @@ package "service" {
   class cms_data << (S,yellow) >>
   class profiles << (S,yellow) >>
   class result_formatter << (S,yellow) >>
+  class user_services << (S,yellow) >>
   class notes << (S,yellow) >>
   class offer_calculator << (S,yellow) >>
   class pdf << (S,yellow) >>
@@ -124,6 +125,10 @@ result_formatter --> journey
 result_formatter *--> pricings
 result_formatter *--> quotations
 result_formatter --> treasury
+user_services *--> companies
+user_services *--> groups
+user_services --> organizations
+user_services --> users
 notes *--> legacy
 notes --> organizations
 notes *--> pricings
@@ -168,6 +173,7 @@ api --> routing
 api --> treasury
 api --> trucking
 api --> users
+api --> user_services
 api --> wheelhouse
 excel_data_services *--> companies
 excel_data_services *--> groups
