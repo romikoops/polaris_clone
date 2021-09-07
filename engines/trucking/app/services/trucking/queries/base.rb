@@ -14,9 +14,9 @@ module Trucking
         @address = args[:address]
         @latitude = args[:latitude] || args[:address].try(:latitude) || 0
         @longitude = args[:longitude] || args[:address].try(:longitude) || 0
+        @country_code = args[:country_code] || args[:address].try(:country).try(:code)
         @zipcode = sanitized_postal_code(args: args)
         @city_name = args[:city_name] || args[:address].try(:city)
-        @country_code = args[:country_code] || args[:address].try(:country).try(:code)
         @organization_id = args[:organization_id]
         @load_type = args[:load_type]
         @carriage = args[:carriage]
@@ -191,7 +191,7 @@ module Trucking
       end
 
       def country
-        @country ||= address.present? ? address.country : Legacy::Country.find_by(code: country_code)
+        @country ||= address&.country.presence || Legacy::Country.find_by(code: country_code)
       end
 
       def country_code
