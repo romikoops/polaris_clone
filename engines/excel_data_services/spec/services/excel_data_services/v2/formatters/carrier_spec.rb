@@ -8,7 +8,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Carrier do
   let(:result) { described_class.state(state: state_arguments) }
   let(:insertable_data) { result.insertable_data }
 
-  describe ".state" do
+  describe "#state" do
     context "when found" do
       let(:row) do
         {

@@ -18,7 +18,7 @@ module OfferCalculator
       attr_reader :options, :itinerary_ids
 
       def binds
-        {itinerary_ids: itinerary_ids, load_type: options[:load_type]}
+        { itinerary_ids: itinerary_ids, load_type: options[:load_type] }
       end
 
       def raw_query

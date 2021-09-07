@@ -9,7 +9,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::ChargeCategory do
   let(:extracted_table) { result.frame }
   let(:charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization) }
 
-  describe ".state" do
+  describe "#state" do
     context "when found" do
       let(:row) do
         {
@@ -38,7 +38,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::ChargeCategory do
       end
 
       it "appends an error to the state", :aggregate_failures do
-        expect(result).to be_failed
+        expect(result.errors).to be_present
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end

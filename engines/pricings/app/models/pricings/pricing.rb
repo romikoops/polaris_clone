@@ -23,6 +23,8 @@ module Pricings
     has_many :margins, class_name: "Pricings::Margin"
     belongs_to :group, class_name: "Groups::Group", optional: true
     has_many :notes, class_name: "Legacy::Note", foreign_key: "pricings_pricing_id", dependent: :destroy
+    accepts_nested_attributes_for :fees
+    accepts_nested_attributes_for :notes
 
     validates :itinerary_id, uniqueness: {
       scope: %i[ organization_id

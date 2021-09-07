@@ -5,11 +5,11 @@ module ExcelDataServices
     module Extractors
       class Carrier < ExcelDataServices::V2::Extractors::Base
         def frame_data
-          Legacy::Carrier.select("carriers.id as carrier_id, carriers.code AS carrier")
+          Legacy::Carrier.select("carriers.id as carrier_id, carriers.code AS carrier_code")
         end
 
         def join_arguments
-          { "carrier" => "carrier" }
+          { "carrier_code" => "carrier_code" }
         end
 
         def frame_types
