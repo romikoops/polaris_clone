@@ -5,7 +5,7 @@ module Trucking
     class Base
       MANDATORY_ARGS = %i[organization_id carriage].freeze
 
-      attr_reader :address, :latitude, :longitude, :zipcode, :city_name, :country_code,
+      attr_reader :address, :latitude, :longitude, :zipcode, :city_name,
         :organization_id, :load_type, :carriage, :truck_type, :cargo_classes, :nexus_ids,
         :hub_ids, :distance, :groups
 
@@ -177,9 +177,8 @@ module Trucking
 
       def sanitized_postal_code(args:)
         postal_code = args[:zipcode]&.tr(" ", "") || args[:address].try(:get_zip_code)
-        country_code = args[:country_code] || args[:address]&.country&.code
 
-        case country_code
+        case country.code
         when "NL"
           postal_code[0..-3]
         else
@@ -192,7 +191,16 @@ module Trucking
       end
 
       def country
-        @country ||= address.present? ? address.country : Legacy::Country.find_by(code: @country_code)
+        @country ||= address.present? ? address.country : Legacy::Country.find_by(code: country_code)
+      end
+
+      def country_code
+        return @country_code if @country_code.present?
+
+        country_location = Locations::Location.contains(point: point).find_by(admin_level: 2)
+        return if country_location.nil?
+
+        country_location.country_code.upcase
       end
 
       def cache_key
