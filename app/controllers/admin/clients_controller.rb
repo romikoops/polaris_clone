@@ -97,9 +97,9 @@ module Admin
       query = query.where("users_clients.email ILIKE ?", "#{params[:email]}%") if params[:email]
       query = query.joins(
         "LEFT OUTER JOIN companies_memberships ON companies_memberships.client_id = users_clients.id
-          LEFT OUTER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
-      ).where("companies_memberships.deleted_at IS NULL")
-
+        AND companies_memberships.deleted_at IS NULL
+        LEFT OUTER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id"
+      )
       return query if params[:company_name].blank?
 
       query.where("companies_companies.name ILIKE ?", "#{params[:company_name]}%")

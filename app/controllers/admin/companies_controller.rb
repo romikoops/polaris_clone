@@ -29,21 +29,15 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def create
-    new_company = ::Companies::Company.find_or_create_by(
+    @company = ::Companies::Company.find_or_create_by(
       name: create_params[:name],
       email: create_params[:email],
       vat_number: create_params[:vatNumber],
       organization: current_organization,
       address: address_from_params
     )
-
-    if create_params[:addedMembers].present?
-      ::Users::Client.where(id: create_params[:addedMembers]).each do |user|
-        ::Companies::Membership.create!(client: user, company: new_company)
-      end
-    end
-
-    response_handler(new_company)
+    company_membership_service.add_membership(users: create_params[:addedMembers]) if create_params[:addedMembers].present?
+    response_handler(company)
   end
 
   def company
@@ -64,19 +58,20 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def edit_employees
-    if added_members.present?
-      clients = ::Users::Client.where(id: added_members.pluck(:id))
+    if added_members
+      add_member_ids = added_members.pluck(:id)
+      clients = ::UserServices::Client.where(id: add_member_ids)
       Companies::Membership.where(company: company).where.not(client: clients).destroy_all
-      Companies::Membership.with_deleted.where(company: company, client: clients).map(&:restore)
-      clients.each do |client|
-        Companies::Membership.where(client: clients).where.not(company: company).destroy_all
-        Companies::Membership.find_or_create_by!(company: company, client: client)
-      end
+      company_membership_service.add_membership(users: add_member_ids)
     end
     response_handler(company)
   end
 
   private
+
+  def company_membership_service
+    @company_membership_service ||= ::UserServices::CompanyMembership.new(company: company)
+  end
 
   def handle_search
     companies_relation = ::Companies::Company.where(organization: current_organization).left_joins(:address)

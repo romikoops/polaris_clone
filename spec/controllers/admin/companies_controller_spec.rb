@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe Admin::CompaniesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) {
+  let!(:user) do
     FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
-  }
+  end
 
   before do
     ::Organizations.current_id = organization.id
@@ -15,14 +15,14 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   end
 
   describe "POST #create" do
-    let(:params) {
+    let(:params) do
       {
         name: "Test",
         email: "owner@dummy.com",
         vatNumber: "XXX123",
         organization_id: organization.id
       }
-    }
+    end
     let(:result) { Companies::Company.find_by(params.slice(:name, :email)) }
 
     context "without addedMembers" do
@@ -38,6 +38,8 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     end
 
     context "with addedMembers" do
+      before { FactoryBot.create(:companies_membership, client: user) }
+
       it "creates a new Company" do
         post :create, params: params.merge(addedMembers: [user.id])
         aggregate_failures do
@@ -51,14 +53,14 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     end
 
     context "with address" do
-      let(:address_params) {
+      let(:address_params) do
         {
           address: {
             streetNumber: 1,
             street: "Test"
           }
         }.merge(params)
-      }
+      end
       let(:company_address) { FactoryBot.create(:gothenburg_address) }
 
       before { allow(Legacy::Address).to receive(:geocoded_address).and_return(company_address) }
@@ -79,7 +81,7 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   describe "GET #index" do
     before { FactoryBot.create_list(:companies_company, 5, organization: organization) }
 
-    let(:params) { {organization_id: organization.id} }
+    let(:params) { { organization_id: organization.id } }
     let(:results) { json.dig(:data, :companiesData) }
 
     context "without filters" do
@@ -107,12 +109,12 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     end
 
     context "with Vat filters" do
-      let!(:target_company) {
+      let!(:target_company) do
         FactoryBot.create(:companies_company, organization: organization, vat_number: "BE-ABCDE")
-      }
-      let!(:second_company) {
+      end
+      let!(:second_company) do
         FactoryBot.create(:companies_company, organization: organization, vat_number: "BE-GHIJ")
-      }
+      end
       let(:vat_params) { params.merge(vat_number_desc: false, vat_number: "BE-") }
 
       it "returns all the companies matching the filter" do
@@ -188,21 +190,21 @@ RSpec.describe Admin::CompaniesController, type: :controller do
       end
     end
 
-    let!(:group) {
+    let!(:group) do
       FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
         FactoryBot.create(:groups_membership, member: company, group: tapped_group)
       end
-    }
+    end
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let(:params) { {organization_id: organization.id, id: company.id} }
-    let(:results) { json.dig(:data) }
+    let(:params) { { organization_id: organization.id, id: company.id } }
+    let(:results) { json[:data] }
 
     it "returns all the companies for the organization" do
       get :show, params: params
       aggregate_failures do
         expect(results.dig(:groups, 0, :id)).to eq(group.id)
         expect(results.dig(:data, :id)).to eq(company.id)
-        expect(results.dig(:employees).length).to eq(5)
+        expect(results[:employees].length).to eq(5)
         expect(results.dig(:employees, 0, :first_name)).to be_present
       end
     end
@@ -216,15 +218,15 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     end
 
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let(:params) { {organization_id: organization.id, id: company.id} }
-    let(:result) { json.dig(:data) }
+    let(:params) { { organization_id: organization.id, id: company.id } }
+    let(:result) { json[:data] }
 
     it "returns all the companies for the organization" do
       delete :destroy, params: params
       aggregate_failures do
         expect(result).to be_truthy
-        expect(Companies::Company.exists?(id: company.id)).to be_falsy
-        expect(Companies::Membership.exists?(company: company)).to be_falsy
+        expect(Companies::Company).not_to exist(id: company.id)
+        expect(Companies::Membership).not_to exist(company: company)
       end
     end
 
@@ -241,16 +243,16 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   end
 
   describe "POST #edit_employees" do
-    let!(:user_a) {
+    let!(:user_a) do
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, client: employee)
       end
-    }
-    let!(:user_b) {
+    end
+    let!(:user_b) do
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, client: employee)
       end
-    }
+    end
     let!(:user_c) { FactoryBot.create(:users_client, organization: organization) }
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:params) { { organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json) } }
