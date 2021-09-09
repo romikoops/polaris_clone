@@ -15,13 +15,13 @@ module ExcelDataServices
 
         def overlap_clause
           <<~SQL
-            (validity @> daterange(:start_date, :end_date))
+            (validity @> daterange(:start_date, :end_date, '[]') AND daterange(:start_date, :end_date, '[]') != validity)
           SQL
         end
 
         def past_set_clause
           <<~SQL
-            validity = daterange(lower(validity), :start_date) #{legacy_keys? ? ', effective_date = lower(validity), expiration_date = :start_date' : ''}
+            validity = daterange(lower(validity), :start_date, '[)') #{legacy_keys? ? ', effective_date = lower(validity), expiration_date = :start_date' : ''}
           SQL
         end
 
@@ -43,7 +43,7 @@ module ExcelDataServices
                 validity @> :adjusted_date::date
             )
             INSERT INTO #{table_name} (#{model_attributes_string}, validity#{legacy_keys? ? ', effective_date, expiration_date' : ''}, created_at, updated_at)
-            SELECT #{model_attributes_string}, daterange(:end_date, :new_validity_end)#{legacy_keys? ? ', :end_date, :new_end_date' : ''}, now(), now()
+            SELECT #{model_attributes_string}, daterange(:new_validity_start, :new_validity_end)#{legacy_keys? ? ', :end_date, :new_end_date' : ''}, now(), now()
             FROM targets
           SQL
         end
@@ -56,7 +56,8 @@ module ExcelDataServices
           super.merge(
             adjusted_date: adjusted_date,
             new_end_date: new_end_date,
-            new_validity_end: new_validity_end
+            new_validity_end: new_validity_end,
+            new_validity_start: new_validity_start
           )
         end
 
@@ -70,6 +71,10 @@ module ExcelDataServices
 
         def new_validity_end
           @new_validity_end ||= conflicting_validity.last
+        end
+
+        def new_validity_start
+          @new_validity_start ||= end_date + 1.day
         end
 
         def conflicting_validity

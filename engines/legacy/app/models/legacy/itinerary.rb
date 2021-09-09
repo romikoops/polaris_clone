@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Legacy
   class Itinerary < ApplicationRecord
     self.table_name = "itineraries"
@@ -30,7 +31,6 @@ module Legacy
     scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
     scope :for_organization, ->(organization_id) { where(organization_id: organization_id) }
 
-    validate :must_have_stops
     pg_search_scope :list_search, against: %i[name], using: {
       tsearch: { prefix: true }
     }
@@ -41,6 +41,10 @@ module Legacy
     validates :upsert_id, uniqueness: true
 
     before_validation :generate_upsert_id
+
+    validate :must_have_stops
+
+    accepts_nested_attributes_for :stops
 
     def generate_upsert_id
       return if [origin_hub_id, destination_hub_id, organization_id, mode_of_transport].any?(&:blank?)

@@ -6,7 +6,7 @@ RSpec.describe ExcelDataServices::V2::Sanitizers::Boolean do
   let(:value) { nil }
   let(:sanitized_result) { described_class.sanitize(value: value) }
 
-  describe ".sanitize" do
+  describe "#sanitize" do
     context "when value is nil" do
       it "returns a boolean value" do
         expect(sanitized_result).to eq(false)
