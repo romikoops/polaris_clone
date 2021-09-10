@@ -195,7 +195,7 @@ module OfferCalculator
         hub = direction == "export" ? itinerary.origin_hub : itinerary.destination_hub
         carriage = direction == "export" ? "pre" : "on"
         mandatory_and_exists = hub.mandatory_charge.send("#{direction}_charges") &&
-          hub.local_charges.current.exists?(tenant_vehicle_id: grouping_keys[:tenant_vehicle_id], direction: direction)
+          present_charge_sections.include?(direction)
         request.carriage?(carriage: carriage) || mandatory_and_exists
       end
 
@@ -210,6 +210,10 @@ module OfferCalculator
             destination_hub_id: schedule.destination_hub_id
           }
         end
+      end
+
+      def present_charge_sections
+        @present_charge_sections ||= charges.map(&:section).uniq
       end
     end
   end

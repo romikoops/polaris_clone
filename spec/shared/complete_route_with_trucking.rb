@@ -9,9 +9,9 @@ RSpec.shared_context "complete_route_with_trucking" do
   let(:delivery_address) { FactoryBot.create(:shanghai_address, country: destination_hub.address.country) }
   let(:carrier_lock) { false }
   let(:carrier) { FactoryBot.create(:legacy_carrier, name: "IMC", code: "imc") }
-  let(:tenant_vehicle) {
+  let(:tenant_vehicle) do
     FactoryBot.create(:legacy_tenant_vehicle, organization: organization, carrier_lock: carrier_lock, carrier: carrier)
-  }
+  end
   let(:truck_type) { load_type == "cargo_item" ? "default" : "chassis" }
   let!(:max_dimensions) { FactoryBot.create(:legacy_max_dimensions_bundle, organization: organization) }
   let!(:pricings) do
@@ -22,7 +22,7 @@ RSpec.shared_context "complete_route_with_trucking" do
         organization: organization,
         itinerary: itinerary,
         tenant_vehicle: tenant_vehicle,
-        fee_attrs: {rate: 250, rate_basis: :per_unit_rate_basis, min: nil})
+        fee_attrs: { rate: 250, rate_basis: :per_unit_rate_basis, min: nil })
     end
   end
   let!(:local_charges) do
@@ -137,7 +137,7 @@ RSpec.shared_context "complete_route_with_trucking" do
 
   before do
     Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-      "address_components" => [{"types" => ["premise"]}],
+      "address_components" => [{ "types" => ["premise"] }],
       "address" => pickup_address.geocoded_address,
       "city" => pickup_address.city,
       "country" => pickup_address.country.name,
@@ -145,7 +145,7 @@ RSpec.shared_context "complete_route_with_trucking" do
       "postal_code" => pickup_address.zip_code
     ])
     Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
-      "address_components" => [{"types" => ["premise"]}],
+      "address_components" => [{ "types" => ["premise"] }],
       "address" => delivery_address.geocoded_address,
       "city" => delivery_address.city,
       "country" => delivery_address.country.name,
