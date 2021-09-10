@@ -22,5 +22,15 @@ RSpec.describe Pdf::Quotation::Client do
         expect(pdf.file.filename.to_s).to eq("offer_#{offer.id}.pdf")
       end
     end
+
+    context "when Query has no client" do
+      let(:client) { nil }
+
+      it "generates the admin quote pdf", :aggregate_failures do
+        expect(pdf).to be_a(Journey::Offer)
+        expect(pdf.file).to be_attached
+        expect(pdf.file.filename.to_s).to eq("offer_#{offer.id}.pdf")
+      end
+    end
   end
 end
