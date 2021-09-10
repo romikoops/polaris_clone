@@ -137,6 +137,7 @@ module OfferCalculator
 
     def update_status(status:)
       request.result_set.update(status: status)
+      query.update(status: status)
     end
   end
 end

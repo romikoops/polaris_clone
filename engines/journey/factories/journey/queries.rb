@@ -45,5 +45,7 @@ FactoryBot.define do
     billable { true }
     load_type { "lcl" }
     parent { nil }
+    currency { "EUR" }
+    status { "completed" }
   end
 end

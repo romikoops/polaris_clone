@@ -1483,7 +1483,7 @@ ALTER SEQUENCE public.event_store_events_in_streams_id_seq OWNED BY public.event
 --
 
 CREATE TABLE public.excel_data_services_uploads (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     organization_id uuid NOT NULL,
     file_id uuid NOT NULL,
     user_id uuid,
@@ -2049,6 +2049,8 @@ CREATE TABLE public.journey_queries (
     billable boolean DEFAULT false,
     load_type public.journey_load_type NOT NULL,
     parent_id uuid,
+    status public.journey_status,
+    currency character varying,
     CONSTRAINT delivery_after_cargo_ready_date CHECK ((delivery_date > cargo_ready_date)),
     CONSTRAINT journey_queries_destination_coordinates_presence CHECK (((destination_coordinates IS NOT NULL) AND ((destination_coordinates)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
@@ -12468,6 +12470,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210825145528'),
 ('20210826083534'),
 ('20210826171456'),
-('20210906173157');
+('20210906173157'),
+('20210909101042');
 
 

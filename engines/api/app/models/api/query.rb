@@ -109,6 +109,7 @@ end
 #  billable                :boolean          default(FALSE)
 #  cargo_ready_date        :datetime         not null
 #  creator_type            :string
+#  currency                :string
 #  customs                 :boolean          default(FALSE)
 #  delivery_date           :datetime         not null
 #  destination             :string           not null
@@ -117,6 +118,7 @@ end
 #  load_type               :enum             not null
 #  origin                  :string           not null
 #  origin_coordinates      :geometry         not null, geometry, 4326
+#  status                  :enum
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  client_id               :uuid

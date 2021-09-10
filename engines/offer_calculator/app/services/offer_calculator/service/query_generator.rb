@@ -29,7 +29,9 @@ module OfferCalculator
           source_id: source.id,
           load_type: load_type,
           organization: organization,
-          billable: billable?
+          billable: billable?,
+          currency: currency,
+          status: "running"
         ).tap do |new_query|
           new_query.save! if persist?
         end
@@ -138,6 +140,16 @@ module OfferCalculator
           target: client,
           organization: organization
         ).fetch(:blacklisted_emails)
+      end
+
+      def currency
+        client_currency = client.settings&.currency if client.present?
+
+        client_currency || scope[:default_currency]
+      end
+
+      def scope
+        @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
       end
     end
   end

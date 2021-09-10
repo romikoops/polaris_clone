@@ -12,6 +12,14 @@ module Journey
     let(:cargo_ready_date) { Time.zone.tomorrow }
     let(:delivery_date) { 2.weeks.from_now }
 
+    it "validates that the currency attribute is present" do
+      expect(query.currency).to be_present
+    end
+
+    it "validates that the status attribute is present" do
+      expect(query.status).to be_present
+    end
+
     context "when cargo ready date preceeds delivery date" do
       it "passes validation" do
         expect(query).to be_valid
