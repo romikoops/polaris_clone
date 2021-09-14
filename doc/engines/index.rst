@@ -126,5 +126,6 @@ Dependencies
 .. toctree::
    :hidden:
 
+   api/index.rst
    companies/index.rst
    journey/index.rst

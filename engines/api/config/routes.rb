@@ -88,6 +88,7 @@ Api::Engine.routes.draw do
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
       resources :companies, only: %i[show update]
+      resources :shipment_requests, only: %i[show create]
     end
   end
 end

@@ -112,6 +112,19 @@ RSpec.configure do |config|
               }
             }
           },
+          shipment_request: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the shipment request",
+                type: "string"
+              },
+              preferred_voyage: {
+                description: "Code of preferred voyage",
+                type: "string"
+              }
+            }
+          },
           cargo_item_type: {
             type: "object",
             properties: {
