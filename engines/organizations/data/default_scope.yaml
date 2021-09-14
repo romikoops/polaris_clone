@@ -208,3 +208,4 @@ primary_freight_code: 'BAS'
 cargo_price_notes: {}
 hide_chargeable_weight_values: false
 atomic_insert: false
+upload_v2_enabled: false

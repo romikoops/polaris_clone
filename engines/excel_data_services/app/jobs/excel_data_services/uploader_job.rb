@@ -8,7 +8,8 @@ module ExcelDataServices
       upload = ExcelDataServices::Upload.find(upload_id)
       document = upload.file
       organization = document.organization
-      user = Users::User.find(options[:user_id])
+      Organizations.current_id = organization.id
+      user = upload.user
 
       set_sentry_context(document, user)
 
@@ -22,16 +23,10 @@ module ExcelDataServices
       end
 
       update_status!(upload: upload, status: "processing")
-      result = Processor.new(blob: document.file.blob).process do |file|
-        ExcelDataServices::Loaders::Uploader.new(
-          {
-            organization: organization,
-            file_or_path: file,
-            options: options.merge({ user: user })
-          }
-        ).perform
-      end
-
+      result = ExcelDataServices::Loaders::Uploader.new(
+        file: document,
+        options: options
+      ).perform
       update_status!(upload: upload, status: result[:errors].empty? ? "done" : "failed")
       email_wrapper.enqueue_email(result: result)
       # rubocop:disable Style/RescueStandardError
@@ -124,26 +119,6 @@ module ExcelDataServices
       private
 
       attr_reader :organization, :user, :document, :mailer
-    end
-
-    class Processor
-      include ActiveStorage::Downloading
-
-      attr_reader :blob
-
-      def initialize(blob:)
-        @blob = blob
-      end
-
-      def process
-        Tempfile.create(["", blob.filename.extension_with_delimiter]) do |file|
-          file.binmode
-          file.write(blob.download)
-          file.rewind
-
-          yield file
-        end
-      end
     end
   end
 end

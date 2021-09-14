@@ -10,26 +10,26 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
     end
     let(:slightly_wrong_headers) do
       %i[
-        group_id
-        group_name
-        efffffffective_date
-        expiration_date
-        origin
-        country_origin
-        destination
-        country_destination
-        mot
-        carrier
-        service_level
-        load_type
-        rate_basis
-        wm_rate
-        currency
-        bas
-        lss
-        rate
+        status
+        type
+        name
+        locode
+        terminal
+        terminal_code
+        latitude
+        longitude
+        countryyy
+        full_address
+        free_out
+        import_charges
+        export_charges
+        pre_carriage
+        on_carriage
+        alternative_names
       ]
     end
+
+    before { Organizations.current_id = FactoryBot.create(:organizations_organization).id }
 
     describe ".validate" do
       context "with completely wrong headers (below threshold)" do
@@ -61,9 +61,10 @@ RSpec.describe ExcelDataServices::Validators::HeaderChecker do
 
           expect(validator.errors_and_warnings).to eq(
             [{ exception_class: ExcelDataServices::Validators::ValidationErrors::HeaderChecker,
-               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers for this sheet"\
-                " are: \"EXPIRATION_DATE, MOT, CARRIER, SERVICE_LEVEL, LOAD_TYPE, RATE_BASIS, CURRENCY\",\nMissing "\
-                "static headers are               : \"EFFECTIVE_DATE\"",
+               reason: "The following headers of sheet \"Sheet1\" are not valid:\nCorrect static headers"\
+                " for this sheet are: \"STATUS, TYPE, NAME, LOCODE, LATITUDE, LONGITUDE, FULL_ADDRESS, FREE_OUT,"\
+                " IMPORT_CHARGES, EXPORT_CHARGES, PRE_CARRIAGE, ON_CARRIAGE, ALTERNATIVE_NAMES\",\nMissing static"\
+                " headers are               : \"COUNTRY\"",
                row_nr: 1,
                sheet_name: "Sheet1",
                type: :error }]

@@ -17,12 +17,6 @@ module ExcelDataServices
 
       attr_accessor :insertable_data, :stats, :errors, :frame
 
-      def email_result
-        stats.group_by(&:type).inject({ errors: errors }) do |result, (type, stats)|
-          result.merge(type.to_sym => { created: stats.sum(&:created), failed: stats.sum(&:failed) })
-        end
-      end
-
       def [](key)
         send(key)
       end

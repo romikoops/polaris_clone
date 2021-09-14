@@ -3,74 +3,77 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::Loaders::Uploader do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:category_identifier) {}
-  let(:file_or_path) {}
+  let(:organization) { FactoryBot.create(:organizations_organization, scope: FactoryBot.build(:organizations_scope, content: scope_content)) }
+  let(:user) { FactoryBot.create(:users_user) }
+  let(:scope_content) { Organizations::DEFAULT_SCOPE }
+  let(:upload) { FactoryBot.create(:excel_data_services_upload, user: user, file: file, organization: organization) }
+  let!(:file) do
+    FactoryBot.create(:legacy_file, organization: organization, doc_type: "pricings").tap do |file_object|
+      file_object.file.attach(io: xlsx, filename: "test-sheet.xlsx", content_type: "vnd.ms-excel")
+    end
+  end
+  let(:options) { {} }
+  let(:v2_uploader) do
+    ExcelDataServices::V2::Upload.new(
+      file: file,
+      arguments: options
+    )
+  end
   let(:uploader) do
     described_class.new(
-      organization: organization,
-      file_or_path: file_fixture("dummy.xlsx")
+      file: file,
+      options: options
     )
+  end
+  let(:dummy_result) do
+    { has_errors: false, errors: [] }
+  end
+  let(:legacy_spy) { instance_double("LegacyUploader", perform: dummy_result) }
+  let(:v2_spy) { instance_double("ExcelDataServices::V2::Files::SheetType", valid?: true, perform: dummy_state) }
+  let(:dummy_state) { instance_double("ExcelDataServices::V2::State", stats: [stat], errors: []) }
+  let(:stat) { FactoryBot.build(:excel_data_services_stats) }
+
+  before do
+    Organizations.current_id = organization.id
+    FactoryBot.create(:excel_data_services_upload, user: user, file: file, organization: organization)
+    allow(ExcelDataServices::V2::Files::SheetType).to receive(:new).and_return(v2_spy)
+    allow(ExcelDataServices::Loaders::LegacyUploader).to receive(:new).and_return(legacy_spy)
+    uploader.perform
   end
 
   describe "#perform" do
-    context "when the uploader performs correctly" do
-      let(:header_validator) { instance_double("HeaderChecker") }
-      let(:flavor_based_validator_klass) { instance_double("FlavorBasedValidator") }
-      let(:flavor_based_validator) { instance_double("FlavorBasedValidator") }
-      let(:inserter_klass) { instance_double("Inserter") }
-      let(:type_validator_class) { class_double(ExcelDataServices::Validators::TypeValidity::Base) }
-      let(:type_validator_instance) { instance_double(ExcelDataServices::Validators::TypeValidity::Base) }
-
-      before do
-        allow(ExcelDataServices::Validators::TypeValidity::Base).to receive(:get).and_return(type_validator_class)
-        allow(type_validator_class).to receive(:new).and_return(type_validator_instance)
-        allow(type_validator_instance).to receive(:type_errors).and_return([])
-        allow(ExcelDataServices::Validators::HeaderChecker).to receive(:new).twice.and_return(header_validator)
-        allow(header_validator).to receive(:perform).twice
-        allow(header_validator).to receive(:valid?).twice.and_return(true)
-        allow(header_validator).to receive(:valid?).twice.and_return(true)
-        allow(header_validator).to receive(:restructurer_name).twice.and_return("")
-        allow(ExcelDataServices::FileParser).to receive(:parse).and_return([{ sheet_name: "DummySheet" }])
-        allow(ExcelDataServices::Restructurers::Base).to receive(:restructure).and_return(DummyInsertionType: [])
-        allow(ExcelDataServices::Validators::Base).to receive(:get)
-          .exactly(3).times.and_return(flavor_based_validator_klass)
-        allow(flavor_based_validator_klass).to receive(:new).exactly(3).times.and_return(flavor_based_validator)
-        allow(flavor_based_validator).to receive(:perform).exactly(3).times
-        allow(flavor_based_validator).to receive(:valid?).exactly(3).times.and_return(true)
-        allow(ExcelDataServices::Inserters::Base).to receive(:get).and_return(inserter_klass)
-        allow(inserter_klass).to receive(:insert).and_return({})
-        allow(uploader).to receive(:valid_excel_filetype?).and_return(true)
-      end
-
-      it "reads the excel file in and calls the correct methods." do
-        results = uploader.perform
-        expect(results.count).to eq(0)
+    shared_examples_for "triggering the V2 upload path" do
+      it "calls the perform method of the V2 uploader" do
+        expect(v2_spy).to have_received(:perform)
       end
     end
 
-    context "with an incorrect filetype" do
-      let(:header_validator) { instance_double("HeaderChecker") }
-      let(:flavor_based_validator_klass) { instance_double("FlavorBasedValidator") }
-      let(:flavor_based_validator) { instance_double("FlavorBasedValidator") }
-      let(:inserter_klass) { instance_double("Inserter") }
-      let(:type_validator_class) { class_double(ExcelDataServices::Validators::TypeValidity::Base) }
-      let(:type_validator_instance) { instance_double(ExcelDataServices::Validators::TypeValidity::Base) }
+    shared_examples_for "triggering the Legacy upload path" do
+      it "calls the perform method of the Legacy uploader" do
+        expect(legacy_spy).to have_received(:perform)
+      end
+    end
 
-      before do
-        allow(MimeMagic).to receive(:by_magic).and_return(nil)
-        allow(MimeMagic).to receive(:by_path).and_return(nil)
+    context "when V2 is enabled" do
+      context "when it is a Pricings Sheet" do
+        let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
+        let(:scope_content) { { upload_v2_enabled: true } }
+
+        it_behaves_like "triggering the V2 upload path"
+      end
+    end
+
+    context "when V2 is not enabled" do
+      context "when it is a Pricings Sheet" do
+        let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
+
+        it_behaves_like "triggering the Legacy upload path"
       end
 
-      it "reads the excel file in and calls the correct methods." do
-        results = uploader.perform
-        expect(results[:errors]).to eq([{
-          type: :error,
-          row_nr: 1,
-          sheet_name: "",
-          reason: "The file uploaded was of an unsupported file type. Please use .xlsx or .xls filetypes.",
-          exception_class: ExcelDataServices::Validators::ValidationErrors::UnsupportedFiletype
-        }])
+      context "when it is a Hub Sheet" do
+        let(:xlsx) { File.open(file_fixture("excel/example_hubs.xlsx")) }
+
+        it_behaves_like "triggering the Legacy upload path"
       end
     end
   end

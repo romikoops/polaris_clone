@@ -286,12 +286,12 @@ module ExcelDataServices
       end
 
       def restructurer_names
-        names = self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) { |constant, constants|
+        names = self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) do |constant, constants|
           name = constant.to_s.downcase
           constants << name unless name.starts_with?("optional")
-        }
+        end
 
-        names -= ["pricing_one_fee_col_and_ranges"] unless parsed_headers.include?(:fee_code)
+        names -= %w[pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges] if v2_enabled?
         names
       end
 
@@ -313,6 +313,10 @@ module ExcelDataServices
 
       def stringify(headers)
         headers.join(", ").upcase
+      end
+
+      def v2_enabled?
+        OrganizationManager::ScopeService.new(target: nil, organization: Organizations::Organization.find(Organizations.current_id)).fetch(:upload_v2_enabled)
       end
     end
   end

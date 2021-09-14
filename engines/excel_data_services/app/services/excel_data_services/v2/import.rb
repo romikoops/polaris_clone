@@ -24,7 +24,7 @@ module ExcelDataServices
         stats
       rescue ActiveRecord::StatementInvalid => e
         Sentry.capture(e)
-        ExcelDataServices::DataFrames::Importers::Stats.new(
+        ExcelDataServices::V2::Stats.new(
           type: type,
           created: 0,
           failed: data.length,
@@ -51,7 +51,7 @@ module ExcelDataServices
       end
 
       def stats
-        ExcelDataServices::DataFrames::Importers::Stats.new(
+        ExcelDataServices::V2::Stats.new(
           type: type,
           created: import_result.ids.count,
           failed: import_result.failed_instances.count,
