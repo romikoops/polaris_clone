@@ -3,8 +3,10 @@
 module OfferCalculator
   module Service
     module RateBuilders
-      class FeeBuilder < Base
+      class FeeBuilder < OfferCalculator::Service::RateBuilders::Base
         delegate :object, to: :measures
+        MAX_KEYS = %w[max max_value maximum].freeze
+        MIN_KEYS = %w[min min_value minimum].freeze
 
         def self.fee(request:, fee:, code:, measures:)
           new(request: request, fee: fee, code: code, measures: measures).perform
@@ -38,13 +40,13 @@ module OfferCalculator
         end
 
         def min_value
-          value_in_cents = (fee.dig("min") || fee.dig("min_value") || 0) * 100.0
-          Money.new(value_in_cents, fee.dig("currency"))
+          value_in_cents = (fee.values_at(*MIN_KEYS).find(&:present?) || 0).to_d * 100.0
+          Money.new(value_in_cents, fee["currency"])
         end
 
         def max_value
-          value_in_cents = (fee.dig("max") || fee.dig("max_value") || DEFAULT_MAX) * 100.0
-          Money.new(value_in_cents, fee.dig("currency"))
+          value_in_cents = (fee.values_at(*MAX_KEYS).find(&:present?) || DEFAULT_MAX).to_d * 100.0
+          Money.new(value_in_cents, fee["currency"])
         end
       end
     end

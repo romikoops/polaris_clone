@@ -17,8 +17,8 @@ FactoryBot.define do
           "min" => 5,
           "name" => "Wharfage / Quay Dues",
           "range" => [
-            {"max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR"},
-            {"cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR"}
+            { "max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR" },
+            { "cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR" }
           ],
           "currency" => "EUR",
           "rate_basis" => "PER_UNIT_TON_CBM_RANGE"
@@ -45,6 +45,19 @@ FactoryBot.define do
           "key" => "FSC",
           "max" => nil,
           "min" => 5,
+          "name" => "Fuel Surcharge",
+          "percentage" => 0.325,
+          "currency" => "EUR",
+          "rate_basis" => "PERCENTAGE"
+        }
+      end
+    end
+    trait :maximum_minimum do
+      data do
+        {
+          "key" => "FSC",
+          "maximum" => 100,
+          "minimum" => 5,
           "name" => "Fuel Surcharge",
           "percentage" => 0.325,
           "currency" => "EUR",
