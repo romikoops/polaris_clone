@@ -16,9 +16,9 @@ jobs:
           rubocop_version: gemfile
           rubocop_extensions: rubocop-github:gemfile rubocop-rspec:gemfile
           github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
+          reporter: github-pr-check
           fail_on_error: true
-          level: warning
+          level: error
 
   hadolint:
     runs-on: ubuntu-20.04
