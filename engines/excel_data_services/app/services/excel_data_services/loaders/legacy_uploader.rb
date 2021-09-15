@@ -31,7 +31,7 @@ module ExcelDataServices
 
         # intercept upload process here for new schema/library based inserter
         file = ExcelDataServices::Schemas::Detector.detect(xlsx: xlsx)
-        return ExcelDataServices::DataFrames::Runners::Blocks.run(file: file, arguments: runner_options) if file.present?
+        return ExcelDataServices::DataFrames::Runners::Blocks.run(file: file, arguments: options.merge(organization_id: organization.id)) if file.present?
 
         # Header validation and data restructurer names
         header_errors = []
@@ -145,9 +145,7 @@ module ExcelDataServices
 
       def insert_into_database(insertion_type, data)
         inserter = ExcelDataServices::Inserters::Base.get(insertion_type)
-        # rubocop:disable Rails/SkipsModelValidations
         inserter.insert(organization: organization, data: data, options: options)
-        # rubocop:enable Rails/SkipsModelValidations
       end
 
       def combine_stats(stats, partial_stats)

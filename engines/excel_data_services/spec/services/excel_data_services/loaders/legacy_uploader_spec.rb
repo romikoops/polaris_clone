@@ -7,9 +7,10 @@ RSpec.describe ExcelDataServices::Loaders::LegacyUploader do
   let(:uploader) do
     described_class.new(
       organization: organization,
-      file_or_path: file_fixture("dummy.xlsx")
+      file_or_path: xlsx
     )
   end
+  let(:xlsx) { file_fixture("dummy.xlsx") }
   let(:results) { uploader.perform }
 
   describe "#perform" do
@@ -71,6 +72,19 @@ RSpec.describe ExcelDataServices::Loaders::LegacyUploader do
 
       it "reads the excel file in and calls the correct methods." do
         expect(results[:errors]).to eq(expected_errors)
+      end
+    end
+
+    context "when it is a trucking file" do
+      let(:xlsx) { File.open(file_fixture("excel/example_trucking.xlsx")) }
+
+      before do
+        allow(ExcelDataServices::DataFrames::Runners::Blocks).to receive(:run).and_return(true)
+        uploader.perform
+      end
+
+      it "detects the file type and triggers the Trucking Uploader" do
+        expect(ExcelDataServices::DataFrames::Runners::Blocks).to have_received(:run)
       end
     end
   end
