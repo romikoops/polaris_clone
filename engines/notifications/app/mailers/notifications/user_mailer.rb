@@ -12,22 +12,22 @@ module Notifications
     def activation_needed_email
       @confirmation_url = shop_url("authentication/confirmation/#{@user.activation_token}")
 
-      mail to: @user.email, subject: default_i18n_subject(company: current_organization.theme.name)
+      mail to: @user.email, subject: default_i18n_subject(company: company_name)
     end
 
     def reset_password_email
       @reset_url = shop_url("password_reset?reset_password_token=#{@user.reset_password_token}")
 
-      mail to: @user.email, subject: default_i18n_subject(company: current_organization.theme.name)
+      mail to: @user.email, subject: default_i18n_subject(company: company_name)
     end
 
     def logo_for_attaching
-      return File.expand_path("../../assets/images/notifications/logo-blue.png", __dir__) unless current_organization
+      return File.expand_path("../../assets/images/notifications/logo-blue.png", __dir__) if admin?
 
       if current_organization.theme.large_logo.attached?
         current_organization.theme.large_logo.download
       else
-        ""
+        File.expand_path("../../assets/images/notifications/logo-blue.png", __dir__)
       end
     end
 
@@ -38,6 +38,18 @@ module Notifications
         ADMIN_SUPPORT_EMAIL
       end
       ERB::Util.url_encode(email_address).gsub("%40", "@")
+    end
+
+    def company_name
+      @company_name ||= if admin?
+        IMC_COMPANY_NAME
+      else
+        current_organization.theme.name
+        end
+    end
+
+    def admin?
+      @user.is_a?(Users::User)
     end
   end
 end

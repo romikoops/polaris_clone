@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Notifications
   # Preview all emails at http://localhost:3000/rails/mailers/notifications/user
   class UserPreview < ActionMailer::Preview
@@ -23,7 +24,7 @@ module Notifications
     end
 
     def user
-      FactoryBot.build(:users_client, organization: organization)
+      FactoryBot.build(:users_user)
     end
   end
 end

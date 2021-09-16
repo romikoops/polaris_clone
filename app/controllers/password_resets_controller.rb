@@ -8,8 +8,9 @@ class PasswordResetsController < ApplicationController
 
     if @user
       @user.generate_reset_password_token!
-      Notifications::UserMailer.with(
-        organization: @user.respond_to?(:organization) ? @user.organization : nil,
+      mailer_class = @user.is_a?(Users::User) ? Notifications::UserMailer : Notifications::ClientMailer
+      mailer_class.with(
+        organization: current_organization,
         user: @user
       ).reset_password_email.deliver_later
 
@@ -37,18 +38,14 @@ class PasswordResetsController < ApplicationController
       return
     end
 
-    if params[:password] != params[:password_confirmation]
-      render json: {success: false}, status: :unprocessable_entity
-    end
+    render json: { success: false }, status: :unprocessable_entity if params[:password] != params[:password_confirmation]
 
-    if @user.change_password!(params[:password])
-      render json: {success: true}
-    end
+    render json: { success: true } if @user.change_password!(params[:password])
   end
 
   private
 
   def not_authenticated
-    render json: {success: false}, status: :unauthorized
+    render json: { success: false }, status: :unauthorized
   end
 end

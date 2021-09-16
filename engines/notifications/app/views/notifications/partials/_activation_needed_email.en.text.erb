@@ -1,0 +1,14 @@
+Hello <%= @profile.full_name %>,
+
+Your account is all set up and you're ready to start discovering the best quotes.
+Please verify your email address.
+
+Confirm your email address (<%= @confirmation_url %>)
+
+If you did not create a new account or changed recently your email, please
+ignore this email or
+contact support (<%= current_organization.theme.emails["support"]["general"] %>)
+if you have questions.
+
+Thanks,
+The <%= company_name %> Team

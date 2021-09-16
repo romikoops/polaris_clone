@@ -5,6 +5,7 @@ module Notifications
     default from: "no-reply@itsmycargo.shop"
     layout "notifications/mailer"
     ADMIN_SUPPORT_EMAIL = "support@itsmycargo.com"
+    IMC_COMPANY_NAME = "ItsMyCargo"
 
     def shop_url(path = "")
       domain = current_organization.domains.find(&:default).domain

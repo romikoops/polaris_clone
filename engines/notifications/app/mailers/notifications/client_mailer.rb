@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Notifications
   class ClientMailer < UserMailer
     def offer_email

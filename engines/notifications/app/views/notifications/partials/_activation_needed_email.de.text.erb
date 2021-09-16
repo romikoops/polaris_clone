@@ -1,0 +1,14 @@
+Hallo <%= @profile.full_name %>,
+
+Ihr Konto ist fertig eingerichtet und ist bereit, für Sie die besten Angebote zu
+entdecken. Bitte bestätigen Sie noch Ihre Email-Adresse.
+
+(<%= @confirmation_url %>)
+
+Wenn Sie kein neues Konto erstellt oder kürzlich Ihre E-Mail-Adresse geändert haben,
+ignorieren Sie bitte diese E-Mail oder wenden Sie sich an den Support
+(<%= current_organization.theme.emails["support"]["general"] %>),
+wenn Sie Fragen haben.
+
+Mit freundlichen Grüßen,
+Ihr <%= company_name %> Team
