@@ -28,9 +28,7 @@ module ResultFormatter
       end
     end
 
-    def transshipment
-      main_freight_section.transshipment
-    end
+    delegate :transshipment, to: :main_freight_section
 
     def vessel_name
       @vessel_name ||= ""
@@ -123,11 +121,11 @@ module ResultFormatter
     end
 
     def origin_hub
-      @origin_hub ||= Legacy::HubDecorator.decorate(legacy_origin_hub, context: { scope: scope })
+      @origin_hub ||= HubDecorator.decorate(legacy_origin_hub, context: { scope: scope })
     end
 
     def destination_hub
-      @destination_hub ||= Legacy::HubDecorator.decorate(legacy_destination_hub, context: { scope: scope })
+      @destination_hub ||= HubDecorator.decorate(legacy_destination_hub, context: { scope: scope })
     end
 
     def origin

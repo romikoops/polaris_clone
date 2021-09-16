@@ -170,7 +170,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def decorate_table_list(hubs:)
-    Legacy::HubDecorator.decorate_collection(hubs, context: {scope: current_scope})
+    ResultFormatter::HubDecorator.decorate_collection(hubs, context: { scope: current_scope })
   end
 
   def pagination_options
@@ -255,6 +255,6 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def decorated_hub(hub:)
-    Legacy::HubDecorator.new(hub, context: {scope: current_scope})
+    ResultFormatter::HubDecorator.new(hub, context: { scope: current_scope })
   end
 end

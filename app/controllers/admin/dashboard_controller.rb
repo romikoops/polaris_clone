@@ -32,7 +32,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     Hub.where(organization_id: current_organization.id)
       .limit(8)
       .map { |hub|
-      {data: Legacy::HubDecorator.new(hub), address: hub.address.to_custom_hash}
+      { data: ResultFormatter::HubDecorator.new(hub), address: hub.address.to_custom_hash }
     }
   end
 

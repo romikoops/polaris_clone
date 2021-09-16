@@ -6,7 +6,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
     response_handler(
       pagination_options.merge(
-        itinerariesData: paginated_itineraries,
+        itinerariesData: Api::V1::ItineraryDecorator.decorate_collection(paginated_itineraries).map(&:legacy_json),
         numPages: paginated_itineraries.total_pages
       )
     )
@@ -49,6 +49,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     itinerary_relation = ::Legacy::Itinerary.where(organization: current_organization)
 
     {
+      origin: ->(query, param) { query.origin_search(param) },
+      destination: ->(query, param) { query.destination_search(param) },
       name: ->(query, param) { query.list_search(param) },
       name_desc: ->(query, param) { query.ordered_by(:name, param) },
       mot: ->(query, param) { query.where(mode_of_transport: param) },
@@ -81,13 +83,13 @@ class Admin::ItinerariesController < Admin::AdminBaseController
       :transshipment_desc,
       :name_desc,
       :name,
+      :origin_desc,
+      :origin,
+      :destination_desc,
+      :destination,
       :page_size,
       :per_page
     )
-  end
-
-  def hub_address(current_hub_type, el)
-    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el)
   end
 
   def first_sheet

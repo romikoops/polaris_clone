@@ -47,6 +47,7 @@ RSpec/MultipleMemoizedHelpers:
   - 'spec/controllers/admin/clients_controller_spec.rb'
   - 'spec/controllers/admin/margins_controller_spec.rb'
   - 'spec/controllers/trucking_availability_controller_spec.rb'
+  - 'spec/controllers/admin/itineraries_controller_spec.rb'
   - 'spec/shared/metadata_sheet.rb'
   - 'spec/workers/back_fill_exchange_rate_onto_line_items_worker_spec.rb'
 
