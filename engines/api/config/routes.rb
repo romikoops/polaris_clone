@@ -67,10 +67,11 @@ Api::Engine.routes.draw do
         get "result_set"
         resources :requests, only: [:create]
         resources :cargo_units, only: %i[index show]
+        resources :results, only: [:index]
+        resources :errors, only: [:index]
       end
       resources :result_sets, only: [:show] do
         resources :results, only: [:index]
-        resources :errors, only: [:index]
       end
       resources :results, only: [:show] do
         resources :charges, only: [:index]

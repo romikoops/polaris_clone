@@ -7,15 +7,15 @@ RSpec.describe "Results", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-  let(:result_set) { FactoryBot.create(:journey_result_set) }
-  let(:result) { FactoryBot.create(:journey_result, result_set: result_set) }
+  let(:query) { FactoryBot.create(:journey_query) }
+  let(:result) { FactoryBot.create(:journey_result, query: query) }
 
   before { FactoryBot.create(:routing_carrier, with_logo: true, name: result.route_sections.first.carrier) }
 
-  path "/v2/organizations/{organization_id}/result_sets/{result_set_id}/results" do
-    get "Fetch Results for the Result Set" do
+  path "/v2/organizations/{organization_id}/queries/{query_id}/results" do
+    get "Fetch Results for the query" do
       tags "Results"
-      description "Fetch Results for the Result Set"
+      description "Fetch Results for the query"
       operationId "getResults"
 
       security [oauth: []]
@@ -23,10 +23,10 @@ RSpec.describe "Results", type: :request, swagger: true do
       produces "application/json"
 
       parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
-      parameter name: :result_set_id, in: :path, type: :string, description: "ResultSet ID"
+      parameter name: :query_id, in: :path, type: :string, description: "Query ID"
 
       let(:organization_id) { organization.id }
-      let(:result_set_id) { result_set.id }
+      let(:query_id) { query.id }
 
       response "200", "successful operation" do
         schema type: :object,

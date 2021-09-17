@@ -70,7 +70,7 @@ module Api
       end
 
       def results
-        @results ||= Journey::Result.where(result_set: current_result_set)
+        @results ||= object.results
       end
 
       def pre_carriage?
@@ -140,10 +140,6 @@ module Api
 
       def route_sections
         @route_sections ||= Journey::RouteSection.where(result: results)
-      end
-
-      def current_result_set
-        @current_result_set ||= result_sets.where(status: "completed").order(:created_at).last
       end
 
       def scope

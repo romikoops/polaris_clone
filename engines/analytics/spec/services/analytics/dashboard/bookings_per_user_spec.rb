@@ -23,16 +23,16 @@ RSpec.describe Analytics::Dashboard::BookingsPerUser, type: :service do
       2,
       client: client_a,
       organization: organization,
-      result_set_count: 1)
+      result_count: 1)
     FactoryBot.create(:journey_query,
       client: client_b,
       organization: organization,
-      result_set_count: 1)
+      result_count: 1)
     FactoryBot.create(:journey_query,
       client: client_b,
       organization: organization,
       created_at: Time.zone.now - 2.months,
-      result_set_count: 1)
+      result_count: 1)
   end
 
   context "when a quote shop" do

@@ -33,7 +33,7 @@ module Api
       end
 
       attribute :quotation_id do |result|
-        result.result_set.query_id
+        result.query_id
       end
 
       attribute :transshipment do |result|

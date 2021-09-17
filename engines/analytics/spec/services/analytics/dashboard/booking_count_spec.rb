@@ -17,7 +17,7 @@ RSpec.describe Analytics::Dashboard::BookingCount, type: :service do
         2,
         client: client,
         organization: organization,
-        result_set_count: 1)
+        result_count: 1)
     end
   end
 
@@ -28,7 +28,7 @@ RSpec.describe Analytics::Dashboard::BookingCount, type: :service do
       client: clients.first,
       organization: organization,
       created_at: Time.zone.now - 2.months,
-      result_set_count: 1)
+      result_count: 1)
   end
 
   context "when a quote shop" do

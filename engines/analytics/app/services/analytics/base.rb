@@ -23,11 +23,7 @@ module Analytics
     end
 
     def results
-      Journey::Result.where(result_set: result_sets)
-    end
-
-    def result_sets
-      Journey::ResultSet.where(query: queries, status: "completed")
+      Journey::Result.where(query_id: queries.where(status: "completed"))
     end
 
     def requests

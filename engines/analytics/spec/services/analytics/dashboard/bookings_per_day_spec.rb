@@ -20,14 +20,14 @@ RSpec.describe Analytics::Dashboard::BookingsPerDay, type: :service do
       2,
       client: clients.first,
       organization: organization,
-      result_set_count: 1,
+      result_count: 1,
       created_at: shipment_date)
     clients.map do |client|
       FactoryBot.create_list(:journey_query,
         2,
         client: client,
         organization: organization,
-        result_set_count: 1)
+        result_count: 1)
     end
   end
 

@@ -3,7 +3,7 @@
 module Notifications
   class ResultDecorator < ResultFormatter::ResultDecorator
     delegate_all
-    delegate :currency, to: :result_set
+    delegate :currency, to: :query
 
     def total
       super.format(rounded_infinite_precision: true)

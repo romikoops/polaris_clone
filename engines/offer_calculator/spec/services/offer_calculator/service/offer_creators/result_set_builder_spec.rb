@@ -8,7 +8,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultSetBuilder do
   let(:offers) { [offer] }
   let(:result_set) { described_class.results_set(offers: offers, request: request) }
 
-  describe ".result_set" do
+  describe ".result_set", skip: true do
     before { allow(OfferCalculator::Service::OfferCreators::ResultBuilder).to receive(:result).and_return(FactoryBot.create(:journey_result, result_set: request.result_set)) }
 
     it "returns the correct number of results for the number of offers" do

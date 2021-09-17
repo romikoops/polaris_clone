@@ -8,7 +8,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultBuilder do
   let(:offers) { [offer] }
   let(:result) { described_class.result(offer: offer, request: request) }
 
-  describe ".result_set" do
+  describe ".result" do
     before do
       Organizations.current_id = organization.id
       allow(Carta::Client).to receive(:suggest).and_return(FactoryBot.build(:carta_result))

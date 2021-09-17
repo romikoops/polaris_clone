@@ -39,7 +39,7 @@ module ResultFormatter
     end
 
     def currency
-      @currency ||= result_set.currency
+      @currency ||= query.currency
     end
 
     def voyage_code

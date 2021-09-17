@@ -27,7 +27,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
   describe "GET #index" do
     before do
-      FactoryBot.create(:journey_result, :empty, sections: 0, result_set: result_set.dup)
+      FactoryBot.create(:journey_result, :empty, sections: 0, query: query.dup)
     end
 
     it "returns an http status of success" do
@@ -64,8 +64,6 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
     context "when a user id is given" do
       let(:other_query) { FactoryBot.create(:journey_query, organization: organization) }
       let(:result_ids) { json.dig(:data, :quoted).pluck(:id) }
-
-      before { FactoryBot.create(:journey_result_set, result_count: 1, query: other_query) }
 
       it "returns an http status of success", :aggregate_failures do
         get :index, params: { organization_id: organization.id, target_user_id: query.client_id }
@@ -108,8 +106,6 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
     context "when billable is given" do
       let(:query_billable) { FactoryBot.create(:journey_query, organization: organization, billable: false) }
-
-      before { FactoryBot.create(:journey_result_set, query: query_billable) }
 
       it "returns an http status of success", :aggregate_failures do
         get :index, params: { organization_id: organization.id, billable: false }

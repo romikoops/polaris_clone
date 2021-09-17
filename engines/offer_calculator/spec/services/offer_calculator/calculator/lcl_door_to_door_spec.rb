@@ -59,7 +59,7 @@ RSpec.describe OfferCalculator::Calculator do
       cargo_items_attributes: cargo_items_attributes)
   end
   let(:creator) { FactoryBot.create(:users_client, organization: organization) }
-  let(:service) do
+  let(:query) do
     described_class.new(
       params: params,
       client: user,
@@ -69,7 +69,6 @@ RSpec.describe OfferCalculator::Calculator do
   end
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:result_set) { service.result_sets.order(:created_at).last }
 
   include_context "complete_route_with_trucking"
 
@@ -83,7 +82,7 @@ RSpec.describe OfferCalculator::Calculator do
   end
 
   describe ".perform" do
-    let(:results) { result_set.results }
+    let(:results) { query.results }
 
     context "with single trucking Availability" do
       it "perform a booking calculation" do

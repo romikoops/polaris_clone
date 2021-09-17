@@ -57,7 +57,7 @@ module Api
     end
 
     def currency
-      @currency ||= result.result_set.currency
+      @currency ||= query.currency
     end
 
     def legacy_section_format(route_section:)
@@ -228,7 +228,7 @@ module Api
     end
 
     def query
-      @query ||= result.result_set.query
+      @query ||= result.query
     end
 
     def currency_count

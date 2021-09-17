@@ -10,8 +10,8 @@ module Api
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:result_set) { FactoryBot.create(:journey_result_set) }
-    let(:params) { { result_set_id: result_set.id, organization_id: organization.id } }
+    let(:query) { FactoryBot.create(:journey_query, result_count: 1) }
+    let(:params) { { query_id: query.id, organization_id: organization.id } }
 
     before do
       request.headers["Authorization"] = token_header
@@ -21,17 +21,26 @@ module Api
     describe "GET #index" do
       it "successfully returns the Result ids for the given ResultSet" do
         get :index, params: params, as: :json
-        expect(response_data.pluck("id")).to match_array(result_set.results.ids)
+        expect(response_data.pluck("id")).to match_array(query.results.ids)
       end
     end
 
     describe "GET #show" do
-      let(:result) { result_set.results.first }
+      let(:result) { query.results.first }
       let(:params) { { id: result.id, organization_id: organization.id } }
 
-      it "successfully returns the Errors for the given ResultSet" do
+      it "returns the correct result id" do
         get :show, params: params, as: :json
         expect(response_data["id"]).to eq(result.id)
+      end
+
+      context "with support for result set id" do
+        let(:params) { { result_set_id: query.id, id: result.id, organization_id: organization.id } }
+
+        it "returns the correct result id" do
+          get :show, params: params, as: :json
+          expect(response_data["id"]).to eq(result.id)
+        end
       end
     end
   end

@@ -30,8 +30,6 @@ module OfferCalculator
 
           attr_reader :measure, :modifier, :request
 
-          delegate :result_set, to: :request
-
           def raise_exception
             load_meterage_exceeded = target_ranges.find { |target_range| target_range.error == OfferCalculator::Errors::LoadMeterageExceeded }
 
@@ -45,7 +43,6 @@ module OfferCalculator
             carrier_name = service.carrier.name
             target_ranges.each do |target_range|
               Journey::Error.create(
-                result_set: result_set,
                 query: request.query,
                 code: target_range.error.new.code,
                 service: service_name,

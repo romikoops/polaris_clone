@@ -15,17 +15,17 @@ RSpec.describe Analytics::Dashboard::MostActiveCarriers, type: :service do
     FactoryBot.create(:journey_query,
       client: client,
       organization: organization,
-      result_set_count: 1)
+      result_count: 1)
   end
 
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:journey_result,
-      result_set: query.result_sets.first,
+      query: query,
       route_sections: [
         FactoryBot.build(:journey_route_section, mode_of_transport: "ocean", carrier: "Maersk")
       ])
-    FactoryBot.create(:journey_result, result_set: query.result_sets.first)
+    FactoryBot.create(:journey_result, query: query)
   end
 
   describe "data" do

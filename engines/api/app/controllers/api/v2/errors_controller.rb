@@ -13,12 +13,12 @@ module Api
 
       private
 
-      def result_set
-        @result_set ||= Journey::ResultSet.find(params[:result_set_id])
+      def query
+        @query ||= Journey::Query.find(params[:query_id])
       end
 
       def errors
-        Journey::Error.where(result_set: result_set)
+        query.result_errors
       end
     end
   end

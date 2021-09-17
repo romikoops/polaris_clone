@@ -31,7 +31,7 @@ module Api
       end
 
       def result_set
-        render json: Api::V2::ResultSetSerializer.new(current_result_set)
+        render json: Api::V2::QueryStatusSerializer.new(query)
       end
 
       private
@@ -76,10 +76,10 @@ module Api
       end
 
       def filtered_queries
-        queries = Api::Query.joins(:result_sets).where(
+        queries = Api::Query.where(
           client: current_user,
           organization_id: current_organization.id,
-          journey_result_sets: { status: "completed" }
+          status: "completed"
         )
 
         @filterrific = initialize_filterrific(
@@ -92,10 +92,6 @@ module Api
 
       def query
         @query ||= Journey::Query.find(params[:id] || params[:query_id])
-      end
-
-      def current_result_set
-        Journey::ResultSet.where(query: query).order(created_at: :desc).first
       end
 
       def wheelhouse_query_service

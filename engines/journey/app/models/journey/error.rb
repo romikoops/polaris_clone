@@ -2,7 +2,6 @@
 
 module Journey
   class Error < ApplicationRecord
-    belongs_to :result_set
     belongs_to :cargo_unit, optional: true
     belongs_to :query
   end

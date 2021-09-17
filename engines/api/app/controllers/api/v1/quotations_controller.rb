@@ -76,12 +76,6 @@ module Api
         Wheelhouse::OfferBuilder.offer(results: results)
       end
 
-      def result_ids
-        return download_params[:tenders] if download_params[:tenders].present?
-
-        query.result_sets.order(created_at: :desc).first.results.ids
-      end
-
       def validator
         @validator ||= Wheelhouse::ValidationService.new(
           request: query_request,
@@ -222,18 +216,9 @@ module Api
       end
 
       def check_for_errors
-        return if result_set_errors.empty?
-        return if latest_result_set.results.present?
+        return if query.result_errors.empty? && query.results.present?
 
-        raise OfferCalculator::Errors.from_code(code: result_set_errors.first.code)
-      end
-
-      def result_set_errors
-        @result_set_errors ||= Journey::Error.where(result_set: latest_result_set)
-      end
-
-      def latest_result_set
-        @latest_result_set ||= query.result_sets.order(:created_at).last
+        raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code)
       end
 
       def validation_params
@@ -247,10 +232,10 @@ module Api
       end
 
       def filtered_queries
-        queries = Api::Query.joins(:result_sets).where(
+        queries = Api::Query.where(
           billable: true,
           organization_id: current_organization.id,
-          journey_result_sets: { status: "completed" }
+          status: "completed"
         )
 
         queries = queries.where("cargo_ready_date >= ?", index_params[:start_date]) if index_params[:start_date].present?
@@ -265,7 +250,9 @@ module Api
       end
 
       def results
-        Journey::Result.where(id: result_ids)
+        return Journey::Result.where(id: download_params[:tenders]) if download_params[:tenders].present?
+
+        query.results
       end
     end
   end

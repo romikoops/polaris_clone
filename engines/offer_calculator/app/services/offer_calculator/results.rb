@@ -12,11 +12,14 @@ module OfferCalculator
     end
 
     def perform
-      OfferCalculator::Service::OfferCreators::ResultSetBuilder.results_set(
-        request: request, offers: offers
-      ).tap do |_offer|
-        update_status(status: "completed")
+      results = []
+      offers.each do |offer|
+        results << OfferCalculator::Service::OfferCreators::ResultBuilder.result(
+          request: request, offer: offer
+        )
       end
+      update_status(status: "completed")
+      results
     rescue OfferCalculator::Errors::Failure => e
       persist_error(error: e)
       update_status(status: "failed")
@@ -71,7 +74,7 @@ module OfferCalculator
       )
     end
 
-    delegate :async, :organization, :client, :creator, :delay, :cargo_ready_date, :result_set, to: :request
+    delegate :async, :organization, :client, :creator, :delay, :cargo_ready_date, to: :request
 
     def charges
       @charges ||= OfferCalculator::Service::ChargeCalculator.charges(
@@ -132,11 +135,10 @@ module OfferCalculator
     end
 
     def persist_error(error:)
-      Journey::Error.create(result_set: request.result_set, code: error.code, property: error.message, query: query)
+      Journey::Error.create(code: error.code, property: error.message, query: query)
     end
 
     def update_status(status:)
-      request.result_set.update(status: status)
       query.update(status: status)
     end
   end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe BackfillQueryIdToResultWorker, type: :worker do
-  describe "#perform" do
+  describe "#perform", skip: true do
     let!(:journey_result) { FactoryBot.create(:journey_result) }
 
     it "backfills result_set query id to result query_id" do

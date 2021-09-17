@@ -26,16 +26,8 @@ module OfferCalculator
 
         private
 
-        def result_set
-          @result_set ||= request.result_set
-        end
-
         def currency
-          result_set.currency
-        end
-
-        def cargo_units
-          result_set.query.cargo_units
+          request.currency
         end
 
         def line_item_from_charge(charge:, order:)

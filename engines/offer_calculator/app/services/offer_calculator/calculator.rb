@@ -13,15 +13,16 @@ module OfferCalculator
     def perform
       return async_calculation if async?
 
-      results_set.perform.query
+      results.perform
+      query
     end
 
     private
 
     attr_reader :source, :organization, :params, :client, :creator
 
-    def results_set
-      @results_set ||= OfferCalculator::Results.new(
+    def results
+      @results ||= OfferCalculator::Results.new(
         query: query,
         params: params
       )
@@ -45,7 +46,7 @@ module OfferCalculator
         query: query,
         params: params
       )
-      results_set.query
+      results.query
     end
 
     def wheelhouse

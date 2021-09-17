@@ -26,8 +26,7 @@ RSpec.describe QuotationsController, type: :controller do
     end
 
     context "when async error has occurred " do
-      let(:error_result_set) { FactoryBot.create(:journey_result_set, query: query, result_count: 0) }
-      before { FactoryBot.create(:journey_error, result_set: error_result_set, code: 3002) }
+      before { FactoryBot.create(:journey_error, query: query, code: 3002) }
 
       it "renders error code and message" do
         get :show, params: {organization_id: organization.id, id: query.id}

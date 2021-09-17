@@ -128,7 +128,7 @@ module Api
       include_context "journey_pdf_setup"
       let(:params) { { query_id: query.id, organization_id: organization.id } }
 
-      it "successfuly returns the latest ResultSet", :aggregate_failures do
+      it "successfuly returns the latest query and its status", :aggregate_failures do
         get :result_set, params: params, as: :json
         expect(response_data["id"]).to be_present
       end
@@ -146,7 +146,7 @@ module Api
             cargo_ready_date: 3.days.from_now,
             created_at: 2.hours.ago,
             client: user,
-            result_sets: [FactoryBot.build(:journey_result_set, result_count: 1)])
+            results: [FactoryBot.build(:journey_result)])
         end
         let!(:query_b) do
           FactoryBot.create(:journey_query,
@@ -157,7 +157,7 @@ module Api
             created_at: 5.hours.ago,
             client: user,
             billable: false,
-            result_sets: [FactoryBot.build(:journey_result_set, result_count: 1)])
+            results: [FactoryBot.build(:journey_result)])
         end
 
         context "when no sorting applied" do
@@ -229,10 +229,10 @@ module Api
       end
 
       context "when searching" do
-        let!(:query) { FactoryBot.create(:api_query, result_set_count: 1, client: user, organization: organization) }
+        let!(:query) { FactoryBot.create(:api_query, result_count: 1, client: user, organization: organization) }
 
         before do
-          FactoryBot.create_list(:api_query, 2, result_set_count: 1, organization: organization, client: user)
+          FactoryBot.create_list(:api_query, 2, result_count: 1, organization: organization, client: user)
           Organizations.current_id = organization.id
           get :index, params: params.merge(searchBy: search_by, searchQuery: search_query), as: :json
         end
@@ -268,7 +268,7 @@ module Api
         end
 
         context "when searching by origin" do
-          let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", client: user, result_set_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", client: user, result_count: 1, organization: organization) }
           let(:search_query) { query.origin }
           let(:search_by) { "origin" }
 
@@ -276,7 +276,7 @@ module Api
         end
 
         context "when searching by destination" do
-          let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", client: user, result_set_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", client: user, result_count: 1, organization: organization) }
           let(:search_query) { query.destination }
           let(:search_by) { "destination" }
 
@@ -300,7 +300,7 @@ module Api
         end
 
         context "when searching by load_type with a valid search_query" do
-          let!(:query) { FactoryBot.create(:api_query, load_type: "fcl", client: user, result_set_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, load_type: "fcl", client: user, result_count: 1, organization: organization) }
           let(:search_query) { query.load_type }
           let(:search_by) { "load_type" }
 

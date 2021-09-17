@@ -56,7 +56,7 @@ module Api
     }
 
     scope :reference_search, lambda { |input|
-      joins(result_sets: { results: :line_item_sets }).where("reference ILIKE ?", "%#{input}%").distinct("journey_queries.id")
+      joins(results: :line_item_sets).where("reference ILIKE ?", "%#{input}%").distinct("journey_queries.id")
     }
 
     scope :client_email_search, lambda { |input|

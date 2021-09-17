@@ -20,7 +20,7 @@ RSpec.describe Analytics::Base, type: :service do
         client: client,
         creator: client,
         organization: organization,
-        result_set_count: 1)
+        result_count: 1)
     end
   end
 
@@ -30,7 +30,7 @@ RSpec.describe Analytics::Base, type: :service do
       client: blacklisted_client,
       creator: blacklisted_client,
       organization: organization,
-      result_set_count: 1)
+      result_count: 1)
     ::Organizations.current_id = organization.id
     organization.scope.update(content: { blacklisted_emails: [blacklisted_client.email] })
   end

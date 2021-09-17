@@ -5,6 +5,7 @@ module ResultFormatter
     delegate_all
 
     decorates_association :client, with: ClientDecorator
+    decorates_association :results, with: ResultDecorator
 
     def pickup_address
       Legacy::Address.new(
@@ -84,12 +85,6 @@ module ResultFormatter
       end.uniq.pluck(:body)
     end
 
-    def results
-      @results ||= result_sets.order(created_at: :desc).first.results.map do |result|
-        ResultFormatter::ResultDecorator.new(result, context: context)
-      end
-    end
-
     def total_weight
       @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) do |memo, unit|
         memo + unit.total_weight
@@ -108,12 +103,6 @@ module ResultFormatter
 
     def modes_of_transport
       results.map(&:mode_of_transport).uniq
-    end
-
-    def currency
-      return scope[:default_currency] if client_id.nil?
-
-      client.settings.currency
     end
   end
 end

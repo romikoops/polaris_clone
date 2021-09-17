@@ -95,7 +95,7 @@ RSpec.describe Wheelhouse::QuotationService do
   let(:query) { service.result }
   let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
-  let(:results) { query.result_sets.order(:created_at).last.results }
+  let(:results) { query.results }
   let(:load_type) { "container" }
   let(:cargo_classes) { ["fcl_20"] }
 

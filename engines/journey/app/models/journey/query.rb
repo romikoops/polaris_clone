@@ -4,8 +4,9 @@ module Journey
   class Query < ApplicationRecord
     has_many :cargo_units
     has_many :documents
-    has_many :result_sets
     has_many :offers, inverse_of: :query
+    has_many :results, dependent: :delete_all, inverse_of: :query
+    has_many :result_errors, class_name: "Journey::Error"
 
     belongs_to :company, class_name: "Companies::Company", optional: true
     belongs_to :creator, polymorphic: true, optional: true
@@ -42,12 +43,6 @@ module Journey
       current = self
       current = current.parent while current.parent.present?
       current
-    end
-
-    def results
-      return Journey::Result.none if result_sets.empty?
-
-      result_sets.order(:created_at).last.results || []
     end
   end
 end

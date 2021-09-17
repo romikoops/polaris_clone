@@ -80,7 +80,7 @@ RSpec.describe OfferCalculator::Calculator do
     }.with_indifferent_access
   end
   let(:creator) { FactoryBot.create(:users_client, organization: organization) }
-  let(:service) do
+  let(:query) do
     described_class.new(
       params: params,
       client: user,
@@ -88,8 +88,7 @@ RSpec.describe OfferCalculator::Calculator do
       creator: creator
     ).perform
   end
-  let(:result_set) { service.result_sets.order(:created_at).last }
-  let(:results) { result_set.results }
+  let(:results) { query.results }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
 
@@ -119,8 +118,8 @@ RSpec.describe OfferCalculator::Calculator do
 
       it "set the Query billable as false" do
         aggregate_failures do
-          expect(result_set.status).to eq("completed")
-          expect(result_set.query.billable).to be(false)
+          expect(query.status).to eq("completed")
+          expect(query.billable).to be(false)
         end
       end
     end

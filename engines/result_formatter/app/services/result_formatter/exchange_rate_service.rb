@@ -19,7 +19,7 @@ module ResultFormatter
     end
 
     def base_currency
-      @base_currency ||= line_items.first.result.result_set.currency
+      @base_currency ||= line_items.first.result.query.currency
     end
   end
 end

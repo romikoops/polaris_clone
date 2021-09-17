@@ -275,13 +275,13 @@ module ResultFormatter
     end
 
     def query
-      @query ||= result.result_set.query
+      @query ||= result.query
     end
 
     delegate :organization, :client, :cargo_units, to: :query
 
     def base_currency
-      @base_currency ||= result.result_set.currency
+      @base_currency ||= query.currency
     end
 
     def current_line_item_set

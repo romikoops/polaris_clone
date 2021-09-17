@@ -10,7 +10,7 @@ module OfferCalculator
 
     attr_reader :params, :query
 
-    delegate :source, :creator, :organization, :cargo_ready_date, to: :query
+    delegate :source, :creator, :organization, :cargo_ready_date, :currency, to: :query
 
     def cargo_units
       @cargo_units ||= OfferCalculator::Service::CargoCreator.new(
@@ -99,12 +99,6 @@ module OfferCalculator
 
     def scope
       @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
-    end
-
-    def result_set
-      @result_set ||= Journey::ResultSet.new(query: query, currency: currency, status: "running").tap do |new_result_set|
-        new_result_set.save! if persist?
-      end
     end
   end
 end

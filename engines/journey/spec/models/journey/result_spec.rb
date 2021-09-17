@@ -60,10 +60,8 @@ module Journey
           cargo_units: [FactoryBot.create(:journey_cargo_unit)])
       end
 
-      let(:asc_result_set) { FactoryBot.build(:journey_result_set, query: asc_query, result_count: 0) }
-      let(:desc_result_set) { FactoryBot.build(:journey_result_set, query: desc_query, result_count: 0) }
-      let(:asc_result) { FactoryBot.build(:journey_result, result_set: asc_result_set, route_sections: []) }
-      let(:desc_result) { FactoryBot.build(:journey_result, result_set: desc_result_set, route_sections: []) }
+      let(:asc_result) { FactoryBot.build(:journey_result, query: asc_query, route_sections: []) }
+      let(:desc_result) { FactoryBot.build(:journey_result, query: desc_query, route_sections: []) }
       let(:sorted_results) { described_class.sorted(sort_by: sort_key, direction: direction_key) }
 
       context "sorted by load_type" do

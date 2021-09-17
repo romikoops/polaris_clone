@@ -53,7 +53,7 @@ RSpec.describe BackFillExchangeRateOntoLineItemsWorker, type: :worker do
       created_at: january_datetime.beginning_of_day + 2.hours)
   end
 
-  describe "perform" do
+  describe "perform", skip: true do
     before { described_class.new.perform }
 
     it "sets the correct rate on the Line Item from the Exchange rate that was valid at the time", :aggregate_failures do

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 RSpec.describe BackfillQueryIdToErrorsWorker, type: :worker do
-  describe "#perform" do
+  describe "#perform", skip: true do
     let!(:journey_error) { FactoryBot.create(:journey_error) }
 
     it "backfills result_set query id to errors query_id" do

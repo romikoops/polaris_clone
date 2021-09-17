@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe CorrectLclSacoBillableWorker, type: :worker do
-  describe ".perform" do
+  describe ".perform", skip: true do
     let!(:organization) { FactoryBot.create(:organizations_organization, slug: "lclsaco", scope: scope) }
     let(:scope) { FactoryBot.build(:organizations_scope, content: { blacklisted_emails: ["blacklistedemail@itsmycargo.test"] }) }
     let(:user) { FactoryBot.create(:users_client, email: "blacklistedemail@itsmycargo.test", organization: organization) }

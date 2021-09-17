@@ -8,7 +8,7 @@ FactoryBot.define do
       destination_latitude { 31.1443485 }
       destination_longitude { 121.8060843 }
       cargo_count { 1 }
-      result_set_count { 0 }
+      result_count { 0 }
     end
 
     association :organization, factory: :organizations_organization
@@ -22,12 +22,12 @@ FactoryBot.define do
       end
     end
 
-    result_sets do
-      if result_set_count.zero?
+    results do
+      if result_count.zero?
         []
       else
-        Array.new(result_set_count) do
-          association :journey_result_set, query: instance, result_count: 1
+        Array.new(result_count) do
+          association :journey_result, query: instance
         end
       end
     end

@@ -28,17 +28,8 @@ class QuotationsController < ApplicationController
   end
 
   def check_for_errors
-    return if result_set_errors.empty?
-    return if latest_result_set.results.present?
+    return if query.result_errors.empty? && query.results.present?
 
-    raise OfferCalculator::Errors.from_code(code: result_set_errors.first.code)
-  end
-
-  def result_set_errors
-    @result_set_errors ||= Journey::Error.where(result_set: latest_result_set)
-  end
-
-  def latest_result_set
-    @latest_result_set ||= query.result_sets.order(:created_at).last
+    raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code)
   end
 end

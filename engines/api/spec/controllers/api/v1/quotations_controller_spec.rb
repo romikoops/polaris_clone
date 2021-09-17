@@ -254,9 +254,7 @@ module Api
     describe "GET #show" do
       include_context "journey_pdf_setup"
       context "when async error has occurred " do
-        let(:error_result_set) { FactoryBot.create(:journey_result_set, query: query, result_count: 0) }
-
-        before { FactoryBot.create(:journey_error, result_set: error_result_set, code: 3002) }
+        before { FactoryBot.create(:journey_error, query: query, code: 3002) }
 
         it "renders the errors" do
           get :show, params: { organization_id: organization.id, id: query.id }
@@ -320,7 +318,7 @@ module Api
         before do
           FactoryBot.create_list(:journey_query, 3, organization: organization).tap do |queries|
             queries.each do |query|
-              FactoryBot.create(:journey_result_set, query: query)
+              FactoryBot.create(:journey_result, query: query)
             end
           end
         end
@@ -368,8 +366,8 @@ module Api
         end
 
         before do
-          FactoryBot.create(:journey_result_set, query: older_query)
-          FactoryBot.create(:journey_result_set, query: newer_query)
+          FactoryBot.create(:journey_result, query: older_query)
+          FactoryBot.create(:journey_result, query: newer_query)
         end
 
         it "sorts by selected date desc" do

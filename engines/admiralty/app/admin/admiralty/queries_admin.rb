@@ -66,26 +66,17 @@ Trestle.resource(:queries, model: Journey::Query) do
     column :load_type, ->(query) { query.load_type.upcase }, align: :center
     column :billable, align: :center
     column :status, align: :center do |query|
-      result_set = query.result_sets.order(:created_at).first
-      if result_set
-        status_tag(result_set.status.upcase.to_s, result_set.completed? ? :success : :danger)
-      else
-        status_tag("N/A", :danger)
-      end
+      status_tag(query.status.upcase.to_s, query.completed? ? :success : :danger)
     end
 
     column :results do |query|
-      result_set = query.result_sets.order(:created_at).first
-      if result_set
-        errors = result_set.result_errors.map(&:property).sort.uniq.map { |error| tag.small(error) }
-        safe_join([
-          tag.span("#{result_set.results.count} Results"),
-          *errors
-        ], tag(:br))
-      else
-        "N/A"
-      end
+      errors = query.result_errors.map(&:property).sort.uniq.map { |error| tag.small(error) }
+      safe_join([
+        tag.span("#{query.results.count} Results"),
+        *errors
+      ], tag(:br))
     end
+
     column :source, ->(query) { Doorkeeper::Application.find(query.source_id).name }
 
     actions do |a, instance|

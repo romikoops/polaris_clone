@@ -14,7 +14,7 @@ module Api
       end
 
       def index
-        render json: Api::V2::RestfulSerializer.new(results)
+        render json: Api::V2::RestfulSerializer.new(query.results)
       end
 
       private
@@ -23,12 +23,8 @@ module Api
         @result ||= Journey::Result.find(params[:id])
       end
 
-      def result_set
-        @result_set ||= Journey::ResultSet.find(params[:result_set_id])
-      end
-
-      def results
-        Journey::Result.where(result_set: result_set)
+      def query
+        @query ||= Journey::Query.find(params[:result_set_id] || params[:query_id])
       end
     end
   end

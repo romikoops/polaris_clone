@@ -21,9 +21,9 @@ module Api
       end
 
       def results
-        @results ||= Journey::Result.where(result_set: current_result_set).map { |result|
+        @results ||= object.results.map do |result|
           LegacyResultDecorator.new(result, context: context)
-        }
+        end
       end
 
       def legacy_shipment
@@ -35,7 +35,7 @@ module Api
       end
 
       def legacy_cargo_units
-        Api::V1::LegacyCargoUnitDecorator.decorate_collection(cargo_units, context: {scope: scope}).map(&:legacy_format)
+        Api::V1::LegacyCargoUnitDecorator.decorate_collection(cargo_units, context: { scope: scope }).map(&:legacy_format)
       end
 
       def legacy_aggregated_cargo
@@ -43,7 +43,7 @@ module Api
 
         Api::V1::LegacyCargoUnitDecorator.new(
           aggregated_cargo,
-          context: {scope: scope}
+          context: { scope: scope }
         ).aggregate_format
       end
 

@@ -164,10 +164,10 @@ RSpec.describe Api::Query, type: :model do
 
   context "when searching" do
     let(:client) { FactoryBot.build(:api_client, organization: organization) }
-    let!(:query) { FactoryBot.create(:api_query, result_set_count: 1, client: client, organization: organization) }
+    let!(:query) { FactoryBot.create(:api_query,  result_count: 1, client: client, organization: organization) }
 
     before do
-      FactoryBot.create_list(:api_query, 2, result_set_count: 1, organization: organization, client: client)
+      FactoryBot.create_list(:api_query, 2, organization: organization, client: client)
       Organizations.current_id = organization.id
     end
 
@@ -180,7 +180,7 @@ RSpec.describe Api::Query, type: :model do
     end
 
     describe ".client_email_search" do
-      let!(:query) { FactoryBot.create(:api_query, result_set_count: 1, organization: organization) }
+      let!(:query) { FactoryBot.create(:api_query, organization: organization) }
 
       it "finds the correct Query for the client email" do
         expect(described_class.client_email_search(query.client.email)).to match_array([query])
@@ -193,7 +193,7 @@ RSpec.describe Api::Query, type: :model do
           organization: organization,
           profile: FactoryBot.build(:users_client_profile, first_name: "Bob", last_name: "Dylan"))
       end
-      let!(:query) { FactoryBot.create(:api_query, result_set_count: 1, client: target_client, organization: organization) }
+      let!(:query) { FactoryBot.create(:api_query, client: target_client, organization: organization) }
 
       it "finds the correct Query for the client first name" do
         expect(described_class.client_name_search(target_client.profile.first_name).ids).to match_array([query.id])
@@ -211,7 +211,7 @@ RSpec.describe Api::Query, type: :model do
     end
 
     describe ".origin_search" do
-      let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", result_set_count: 1, organization: organization) }
+      let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", organization: organization) }
 
       it "finds the correct Query" do
         expect(described_class.origin_search(query.origin).ids).to match_array([query.id])
@@ -219,7 +219,7 @@ RSpec.describe Api::Query, type: :model do
     end
 
     describe ".destination_search" do
-      let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", result_set_count: 1, organization: organization) }
+      let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", organization: organization) }
 
       it "finds the correct Query" do
         expect(described_class.destination_search(query.destination).ids).to match_array([query.id])

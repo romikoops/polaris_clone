@@ -27,7 +27,7 @@ RSpec.describe ShipmentsController do
 
   describe "GET #index" do
     before do
-      FactoryBot.create(:journey_result, :empty, sections: 0, result_set: result_set.dup)
+      FactoryBot.create(:journey_result, :empty, sections: 0, query: query)
     end
 
     it "returns an http status of success" do

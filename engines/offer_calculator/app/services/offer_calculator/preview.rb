@@ -3,7 +3,7 @@
 module OfferCalculator
   class Preview < Calculator
     def perform
-      results_set.offers
+      results.offers
     end
 
     def query

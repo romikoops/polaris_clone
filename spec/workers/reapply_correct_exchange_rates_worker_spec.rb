@@ -15,7 +15,7 @@ RSpec.describe ReapplyCorrectExchangeRatesWorker, type: :worker, skip: "flaky" d
       created_at: datetime.beginning_of_day + 2.hours)
   end
 
-  describe "perform" do
+  describe "perform", skip: true do
     before do
       FactoryBot.create(:journey_result_set, results: [result], currency: "USD", created_at: datetime)
       described_class.new.perform

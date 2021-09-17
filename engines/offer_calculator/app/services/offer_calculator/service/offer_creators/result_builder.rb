@@ -20,8 +20,7 @@ module OfferCalculator
             Journey::Result.create!(
               line_item_sets: [line_item_set],
               route_sections: route_sections,
-              result_set: result_set,
-              query_id: result_set.query_id,
+              query: query,
               issued_at: Time.zone.now,
               expiration_date: offer.valid_until
             ).tap do |new_result|
@@ -34,7 +33,7 @@ module OfferCalculator
 
         private
 
-        delegate :query, :result_set, to: :request
+        delegate :query, to: :request
 
         def route_sections
           @route_sections ||= RouteSectionBuilder.route_sections(offer: offer, request: request)

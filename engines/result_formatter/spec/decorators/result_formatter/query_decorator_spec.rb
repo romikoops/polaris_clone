@@ -6,7 +6,7 @@ RSpec.describe ResultFormatter::QueryDecorator do
   include_context "organization"
   include_context "journey_pdf_setup"
   let(:scope) { { default_currency: "EUR" } }
-  let(:decorated_query) { described_class.new(query, context: { scope: scope }) }
+  let(:decorated_query) { described_class.new(query.reload, context: { scope: scope }) }
 
   describe ".references" do
     let(:refs) { decorated_query.references }
@@ -18,7 +18,7 @@ RSpec.describe ResultFormatter::QueryDecorator do
 
   describe ".render_payment_terms" do
     it "validates there is no content, when payment_terms is not present" do
-      query.company.payment_terms = nil
+      query.company.update(payment_terms: nil)
       expect(decorated_query.render_payment_terms).to eq("")
     end
 
@@ -28,17 +28,17 @@ RSpec.describe ResultFormatter::QueryDecorator do
   end
 
   describe ".currency" do
-    let(:currency) { decorated_query.currency }
+    let(:currency_value) { decorated_query.currency }
 
     it "returns the client's currency" do
-      expect(currency).to eq(client.settings.currency)
+      expect(currency_value).to eq(client.settings.currency)
     end
 
     context "when client is nil" do
       let(:client) { nil }
 
       it "returns the default currency currency" do
-        expect(currency).to eq(scope[:default_currency])
+        expect(currency_value).to eq(scope[:default_currency])
       end
     end
   end

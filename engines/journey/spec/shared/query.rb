@@ -12,6 +12,7 @@ RSpec.shared_context "journey_query" do
   let(:client) { FactoryBot.build(:users_client, organization: organization) }
   let(:cargo_units) { [] }
   let(:journey_load_type) { "lcl" }
+  let(:currency) { "EUR" }
 
   let(:query) do
     FactoryBot.create(:journey_query,
@@ -23,6 +24,8 @@ RSpec.shared_context "journey_query" do
       cargo_units: cargo_units,
       client: client,
       load_type: journey_load_type,
-      result_sets: [])
+      result_count: 0,
+      currency: currency,
+      results: [])
   end
 end

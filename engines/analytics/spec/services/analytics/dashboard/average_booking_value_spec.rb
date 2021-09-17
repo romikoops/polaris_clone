@@ -18,7 +18,7 @@ RSpec.describe Analytics::Dashboard::AverageBookingValue, type: :service do
       2,
       client: client,
       organization: organization,
-      result_set_count: 1)
+      result_count: 1)
   end
 
   context "when a quote shop" do

@@ -39,17 +39,16 @@ module Analytics
       def query
         <<-SQL
         SELECT
-          journey_results.id, journey_result_sets.currency, SUM(journey_line_items.total_cents * journey_line_items.exchange_rate)
+          journey_results.id, journey_queries.currency, SUM(journey_line_items.total_cents * journey_line_items.exchange_rate)
           FROM journey_results
-          JOIN journey_result_sets ON journey_result_sets.id = journey_results.result_set_id
+          JOIN journey_queries ON journey_queries.id = journey_results.query_id
           JOIN journey_line_item_sets ON journey_line_item_sets.result_id = journey_results.id
           JOIN journey_line_items ON journey_line_item_sets.id = journey_line_items.line_item_set_id
-          JOIN journey_queries ON journey_queries.id = journey_result_sets.query_id
           WHERE journey_queries.organization_id = :organization_id
-          AND journey_result_sets.status = 'completed'
+          AND journey_queries.status = 'completed'
           AND journey_queries.created_at > :start_date
           AND journey_queries.created_at < :end_date
-          GROUP BY journey_results.id, journey_result_sets.currency
+          GROUP BY journey_results.id, journey_queries.currency
         SQL
       end
     end

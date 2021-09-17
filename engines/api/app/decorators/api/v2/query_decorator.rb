@@ -54,7 +54,7 @@ module Api
       end
 
       def results
-        @results ||= Journey::Result.where(result_set: result_sets.order(:created_at).last)
+        @results ||= Journey::Result.where(query_id: object.id)
       end
 
       def scope
