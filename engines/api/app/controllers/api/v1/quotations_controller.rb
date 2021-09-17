@@ -146,6 +146,7 @@ module Api
           :user_id,
           :load_type,
           :delay,
+          :parent_id,
           origin: [*address_params, { hub_ids: [] }],
           destination: [*address_params, { hub_ids: [] }]
         )

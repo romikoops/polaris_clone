@@ -159,7 +159,6 @@ RSpec.describe Wheelhouse::QuotationService do
     end
 
     context "when door to door (defaults & container)" do
-
       before do
         # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time)

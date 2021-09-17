@@ -3,7 +3,7 @@
 module Api
   module V1
     class QuerySerializer < Api::ApplicationSerializer
-      attributes %i[completed load_type payment_terms company_name]
+      attributes %i[completed load_type payment_terms company_name parent_id]
 
       attributes :selected_date, &:cargo_ready_date
 

@@ -17,6 +17,7 @@ module OfferCalculator
 
       def query
         @query ||= Journey::Query.new(
+          parent: parent_query,
           cargo_ready_date: cargo_ready_date,
           delivery_date: delivery_date,
           origin: origin_string,
@@ -121,6 +122,10 @@ module OfferCalculator
           latitude: params.dig(target, :latitude),
           longitude: params.dig(target, :longitude)
         ).reverse_geocode
+      end
+
+      def parent_query
+        Journey::Query.find(params[:parent_id]) if params[:parent_id]
       end
 
       def billable?

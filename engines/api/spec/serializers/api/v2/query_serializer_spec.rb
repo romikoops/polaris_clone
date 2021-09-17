@@ -24,7 +24,8 @@ module Api
         offerId: offer.id,
         issueDate: query.created_at,
         originId: pickup_point.geo_id,
-        destinationId: delivery_point.geo_id
+        destinationId: delivery_point.geo_id,
+        parentId: nil
       }
     end
 

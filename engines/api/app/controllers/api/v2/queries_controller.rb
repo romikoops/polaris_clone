@@ -49,6 +49,7 @@ module Api
 
       def index_search_by_option_valid?
         search_by.in?(%w[
+          parent_id
           load_type
           reference
           client_email
@@ -118,6 +119,7 @@ module Api
           :originId,
           :destinationId,
           :loadType,
+          :parentId,
           :aggregated,
           :billable,
           items: [

@@ -79,7 +79,8 @@ RSpec.describe "Quotations", type: :request, swagger: true do
               user_id: user.id,
               load_type: "container",
               origin: { nexus_id: origin_hub.nexus_id },
-              destination: { nexus_id: destination_hub.nexus_id }
+              destination: { nexus_id: destination_hub.nexus_id },
+              parent_id: nil
             },
             shipment_info: {
               trucking_info: {}

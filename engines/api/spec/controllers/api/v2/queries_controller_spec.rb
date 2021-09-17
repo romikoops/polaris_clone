@@ -24,6 +24,7 @@ module Api
       let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
       let(:items) { [] }
       let(:load_type) { "container" }
+      let(:parent_id) { nil }
       let(:aggregated) { false }
       let(:origin) do
         FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
@@ -36,6 +37,7 @@ module Api
           aggregated: aggregated,
           items: items,
           loadType: load_type,
+          parentId: parent_id,
           originId: origin.id,
           destinationId: destination.id,
           organization_id: organization.id
@@ -107,6 +109,17 @@ module Api
         it "successfuly triggers the job and returns the query" do
           post :create, params: params, as: :json
           expect(response_data["id"]).to be_present
+        end
+      end
+
+      context "when parent_id is part of params" do
+        let(:parent_id) do
+          FactoryBot.create(:journey_query).id
+        end
+
+        it "successfuly triggers the job and returns the query" do
+          post :create, params: params, as: :json
+          expect(response_data["attributes"]["parentId"]).to be_present
         end
       end
     end

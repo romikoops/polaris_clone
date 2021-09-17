@@ -17,6 +17,7 @@ module Wheelhouse
       @destination = quotation_details.fetch(:destination)
       @load_type = quotation_details.fetch(:load_type)
       @selected_date = quotation_details.fetch(:selected_date)
+      @parent_id = quotation_details[:parent_id]
       @shipping_info = shipping_info.to_h.deep_symbolize_keys
       @organization = organization
       @async = async
@@ -37,14 +38,14 @@ module Wheelhouse
 
     def offer_calculator
       @offer_calculator ||= OfferCalculator::Calculator.new(
-        params: shipping_params.merge(estimated: @estimated, async: async),
+        params: shipping_params.merge(estimated: @estimated, async: async, parent_id: parent_id),
         client: user,
         creator: creator,
         source: source
       )
     end
 
-    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination, :async, :creator
+    attr_reader :shipment, :shipping_info, :selected_date, :user, :origin, :destination, :async, :creator, :parent_id
 
     def shipping_params
       {

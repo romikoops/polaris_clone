@@ -102,6 +102,7 @@ RSpec.describe Shipments::BookingProcessController do
 
     it "returns the desired result", :aggregate_failures do
       post :get_offers, params: params
+      expect(query.parent_id).to be_nil
       expect(query.load_type).to eq("fcl")
       expect(response_data.dig("shipment", "load_type")).to eq("container")
       expect(response_data["completed"]).to be_truthy
@@ -131,6 +132,22 @@ RSpec.describe Shipments::BookingProcessController do
         post :get_offers, params: params
 
         expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "when parent query is specified" do
+      let(:parent_query) { FactoryBot.create(:journey_query) }
+
+      before do
+        params[:shipment][:parent_id] = parent_query.id
+      end
+
+      it "returns the desired result with associated parent id", :aggregate_failures do
+        post :get_offers, params: params
+        expect(query.parent_id).to eq(parent_query.id)
+        expect(response).to have_http_status(:success)
+        expect(response_data["quotationId"]).to eq(query.id)
+        expect(response_data["completed"]).to be true
       end
     end
   end

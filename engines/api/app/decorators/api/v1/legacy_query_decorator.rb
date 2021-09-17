@@ -6,6 +6,7 @@ module Api
       def legacy_json
         {
           quotationId: object.id,
+          parentId: object.parent_id,
           completed: true,
           shipment: legacy_shipment,
           results: decorated_results,

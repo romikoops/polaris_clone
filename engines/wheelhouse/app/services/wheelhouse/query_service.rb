@@ -40,7 +40,8 @@ module Wheelhouse
         origin: route_target_params(target: origin),
         destination: route_target_params(target: destination),
         aggregated_cargo_attributes: aggregated_cargo_attributes,
-        async: true
+        async: true,
+        parent_id: params[:parent_id]
       }
     end
 

@@ -225,7 +225,7 @@ module Api
           let(:async) { true }
           let(:cargo_items_attributes) { default_cargo_items_attributes }
           let(:expected_keys) do
-            %w[selectedDate loadType paymentTerms companyName user creator origin destination containers cargoItems tenders completed]
+            %w[selectedDate loadType paymentTerms companyName user creator origin destination containers cargoItems tenders completed parentId]
           end
 
           it "returns prices with default margins" do
@@ -234,6 +234,17 @@ module Api
               expect(response.code).to eq "200"
               expect(response_data["attributes"].keys).to match_array(expected_keys)
             end
+          end
+        end
+
+        context "with parent_id" do
+          let(:parent_query) { FactoryBot.create(:journey_query) }
+
+          before { params[:quote][:parent_id] = parent_query.id }
+
+          it "returns parentId with parent_query id in response" do
+            post :create, params: params, as: :json
+            expect(response_data["attributes"]["parentId"]).to eq parent_query.id
           end
         end
       end
