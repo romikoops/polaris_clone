@@ -10,10 +10,13 @@ RSpec.describe ExcelDataServices::Inserters::Notes do
 
   describe ".perform" do
     context "with existing note" do
-      before { FactoryBot.create(:legacy_note, target: target, header: target.name, organization: organization) }
+      let!(:note) { FactoryBot.create(:legacy_note, target: target, header: target.name, organization: organization) }
 
-      it "finds a note record with the same header and organization and updates it with new data" do
+      it "finds a note record with the same header and organization and updates it with new data", :aggregate_failures do
         expect(result[:"legacy/notes"][:number_created]).to eq(0)
+        note.reload
+        expect(note.body).to eq(note_data.dig(0, :note))
+        expect(note.contains_html).to eq(note_data.dig(0, :contains_html))
       end
     end
 

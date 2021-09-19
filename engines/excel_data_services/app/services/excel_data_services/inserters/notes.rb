@@ -15,19 +15,15 @@ module ExcelDataServices
 
       def update_or_create_note(params:)
         target = determine_target(params: params)
-
         return unless target
 
-        note = Legacy::Note.create_with(
+        note = Legacy::Note.find_or_initialize_by(header: target.name, target: target, organization: organization)
+        note.assign_attributes(
           header: target.name,
           target: target,
           body: params[:note],
-          organization: organization,
           contains_html: params[:contains_html]
-        ).find_or_initialize_by(header: target.name,
-                                target: target,
-                                organization: organization)
-
+        )
         add_stats(note, params[:row_nr])
         note.save
 

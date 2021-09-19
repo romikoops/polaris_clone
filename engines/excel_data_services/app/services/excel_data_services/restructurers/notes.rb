@@ -3,7 +3,7 @@
 module ExcelDataServices
   module Restructurers
     class Notes < ExcelDataServices::Restructurers::Base
-      HTML_FLAGS = ["</p>", "</ol>", "</ul>", "</li>", "</i>"].freeze
+      HTML_FLAGS = ["</p>", "</ol>", "</ul>", "</li>", "</i>", "</a>"].freeze
 
       def perform
         restructured_data = data[:rows_data].map { |data|
