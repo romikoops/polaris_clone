@@ -230,4 +230,19 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
       end
     end
   end
+
+  context "without cargo units" do
+    before do
+      FactoryBot.create(:fcl_20_pricing,
+        organization: organization,
+        itinerary: itinerary,
+        tenant_vehicle: tenant_vehicle)
+    end
+
+    let(:cargo_units) { [] }
+
+    it "returns an empty array" do
+      expect(result).to be_empty
+    end
+  end
 end

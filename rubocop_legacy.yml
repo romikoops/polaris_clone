@@ -33,6 +33,7 @@ RSpec/MultipleMemoizedHelpers:
   - 'engines/offer_calculator/spec/services/offer_calculator/service/rate_builders/truckings_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/route_filter_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/validations/cargo_item_validation_service_spec.rb'
+  - 'engines/offer_calculator/spec/services/offer_calculator/service/validations/container_validation_service_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/offer_sorter/lcl_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/offer_sorter_spec.rb'
   - 'engines/pricings/spec/models/pricings/margin_spec.rb'

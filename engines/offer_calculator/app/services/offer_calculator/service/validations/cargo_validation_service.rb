@@ -174,7 +174,7 @@ module OfferCalculator
 
           validate_volume(lcl_max_dimensions: lcl_max_dimensions, cargo_unit: cargo_unit)
 
-          if attributes == STANDARD_ATTRIBUTES && load_type == :cargo_item
+          if attributes == STANDARD_ATTRIBUTES && request.load_type == "cargo_item"
             validate_attribute(
               max_dimensions: lcl_max_dimensions,
               id: cargo_unit.id,
@@ -197,10 +197,6 @@ module OfferCalculator
             measurement: cargo_unit.total_volume,
             cargo: cargo_unit
           )
-        end
-
-        def load_type
-          @load_type ||= cargo_units.first.cargo_class == "lcl" ? :cargo_item : :container
         end
 
         def final_validation(cargo_unit:)
