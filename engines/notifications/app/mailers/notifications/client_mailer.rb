@@ -5,7 +5,6 @@ module Notifications
     def offer_email
       @offer = params[:offer]
       @query = @offer.query
-      @user = @query.client
       @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
 
       attachments["offer_#{@offer.id}.pdf"] = {

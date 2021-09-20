@@ -30,8 +30,8 @@ module Notifications
 
     def organization_from_email(mode_of_transport:)
       emails = current_organization.theme.emails
-      emails.dig("sales", mode_of_transport) ||
-        emails.dig("sales", "general") ||
+      emails.dig("sales", mode_of_transport).presence ||
+        emails.dig("sales", "general").presence ||
         "no-reply@itsmycargo.shop"
     end
     helper_method :organization_from_email

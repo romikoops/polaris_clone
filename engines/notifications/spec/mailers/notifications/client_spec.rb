@@ -44,5 +44,39 @@ module Notifications
         expect(mail.body.encoded).to match("Hello #{client.profile.name}")
       end
     end
+
+    describe ".offer_email" do
+      it "returns the headers", :aggregate_failures do
+        journey_offer = FactoryBot.create(:journey_offer)
+        mail = offer_email(offer: journey_offer)
+        expect(mail.subject).to eq("LCL Quotation: 20457, Hamburg - Shanghai Airport, Refs: #{journey_offer.line_item_sets.first.reference}")
+        expect(mail.to).to eq([client.email])
+        expect(mail.from).to eq(["sales.general@demo.com"])
+      end
+
+      it "returns no-reply@itsmycargo.shop in the 'from' header, when mode of transport and general key is not present in the organization's theme's emails" do
+        theme = FactoryBot.build(:organizations_theme)
+        theme.emails["sales"] = {}
+        mail = offer_email(organization: FactoryBot.build(:organizations_organization, theme: theme))
+        expect(mail.from).to eq(["no-reply@itsmycargo.shop"])
+      end
+
+      it "returns new_ocean@sales.com in the 'from' header, when the mode of transport provided, matches a key in the organization's theme's emails" do
+        theme = FactoryBot.build(:organizations_theme)
+        theme.emails["sales"]["ocean"] = "new_ocean@sales.com"
+        mail = offer_email(organization: FactoryBot.build(:organizations_organization, theme: theme))
+        expect(mail.from).to eq(["new_ocean@sales.com"])
+      end
+
+      it "includes the offer as an attachment" do
+        journey_offer = FactoryBot.create(:journey_offer)
+        mail = offer_email(offer: journey_offer)
+        expect(mail.attachments.last.filename).to eq("offer_#{journey_offer.id}.pdf")
+      end
+
+      def offer_email(organization: FactoryBot.build(:organizations_organization), offer: FactoryBot.create(:journey_offer))
+        described_class.with(organization: organization, offer: offer, user: client).offer_email
+      end
+    end
   end
 end
