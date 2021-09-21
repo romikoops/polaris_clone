@@ -598,6 +598,7 @@ end
 
 # == Route Map
 #
+# Couldn't find the MJML 4. binary.. have you run $ npm install mjml?
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
@@ -606,7 +607,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fd8d5279538@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fa8a68bd5e8@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1046,11 +1047,12 @@ end
 #              v2_organization_query_requests POST   /v2/organizations/:organization_id/queries/:query_id/requests(.:format)                  api/v2/requests#create
 #           v2_organization_query_cargo_units GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units(.:format)               api/v2/cargo_units#index
 #            v2_organization_query_cargo_unit GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units/:id(.:format)           api/v2/cargo_units#show
+#               v2_organization_query_results GET    /v2/organizations/:organization_id/queries/:query_id/results(.:format)                   api/v2/results#index
+#                v2_organization_query_errors GET    /v2/organizations/:organization_id/queries/:query_id/errors(.:format)                    api/v2/errors#index
 #                     v2_organization_queries GET    /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#index
 #                                             POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
 #                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
 #          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
-#           v2_organization_result_set_errors GET    /v2/organizations/:organization_id/result_sets/:result_set_id/errors(.:format)           api/v2/errors#index
 #                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
 #       v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index

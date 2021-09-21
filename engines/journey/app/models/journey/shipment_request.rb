@@ -16,19 +16,26 @@ end
 #
 # Table name: journey_shipment_requests
 #
-#  id               :uuid             not null, primary key
-#  preferred_voyage :string           not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  client_id        :uuid
-#  company_id       :uuid
-#  result_id        :uuid
+#  id                        :uuid             not null, primary key
+#  commercial_value_cents    :integer
+#  commercial_value_currency :string
+#  notes                     :text
+#  preferred_voyage          :string           not null
+#  status                    :enum
+#  with_customs_handling     :boolean          default(FALSE)
+#  with_insurance            :boolean          default(FALSE)
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  client_id                 :uuid
+#  company_id                :uuid
+#  result_id                 :uuid
 #
 # Indexes
 #
 #  index_journey_shipment_requests_on_client_id   (client_id)
 #  index_journey_shipment_requests_on_company_id  (company_id)
 #  index_journey_shipment_requests_on_result_id   (result_id)
+#  index_journey_shipment_requests_on_status      (status)
 #
 # Foreign Keys
 #

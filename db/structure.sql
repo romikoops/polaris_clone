@@ -255,6 +255,18 @@ CREATE TYPE public.journey_status AS ENUM (
 
 
 --
+-- Name: shipment_request_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.shipment_request_status AS ENUM (
+    'requested',
+    'in_progress',
+    'rejected',
+    'completed'
+);
+
+
+--
 -- Name: get_latin_name(text, text, text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -2147,6 +2159,12 @@ CREATE TABLE public.journey_shipment_requests (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     company_id uuid,
+    with_customs_handling boolean DEFAULT false,
+    with_insurance boolean DEFAULT false,
+    commercial_value_cents integer,
+    commercial_value_currency character varying,
+    notes text,
+    status public.shipment_request_status,
     CONSTRAINT journey_shipment_requests_preferred_voyage_presence CHECK (((preferred_voyage IS NOT NULL) AND ((preferred_voyage)::text !~ '^\s*$'::text)))
 );
 
@@ -7904,6 +7922,13 @@ CREATE INDEX index_journey_shipment_requests_on_result_id ON public.journey_ship
 
 
 --
+-- Name: index_journey_shipment_requests_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_shipment_requests_on_status ON public.journey_shipment_requests USING btree (status);
+
+
+--
 -- Name: index_journey_shipments_on_creator_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12465,6 +12490,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210826171456'),
 ('20210906173157'),
 ('20210909101042'),
-('20210920071806');
+('20210920071806'),
+('20210920145722');
 
 

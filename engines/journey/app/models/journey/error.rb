@@ -22,11 +22,13 @@ end
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  cargo_unit_id     :uuid
+#  query_id          :uuid
 #  result_set_id     :uuid
 #
 # Indexes
 #
 #  index_journey_errors_on_cargo_unit_id  (cargo_unit_id)
+#  index_journey_errors_on_query_id       (query_id)
 #  index_journey_errors_on_result_set_id  (result_set_id)
 #
 # Foreign Keys
