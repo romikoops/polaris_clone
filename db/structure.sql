@@ -2080,7 +2080,7 @@ CREATE TABLE public.journey_result_sets (
 
 CREATE TABLE public.journey_results (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    result_set_id uuid,
+    result_set_id_20210922 uuid,
     expiration_date timestamp without time zone NOT NULL,
     issued_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -7855,13 +7855,6 @@ CREATE INDEX index_journey_results_on_query_id ON public.journey_results USING b
 
 
 --
--- Name: index_journey_results_on_result_set_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_journey_results_on_result_set_id ON public.journey_results USING btree (result_set_id);
-
-
---
 -- Name: index_journey_route_sections_on_from_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11543,7 +11536,7 @@ ALTER TABLE ONLY public.shipments_cargos
 --
 
 ALTER TABLE ONLY public.journey_results
-    ADD CONSTRAINT fk_rails_cf8579713a FOREIGN KEY (result_set_id) REFERENCES public.journey_result_sets(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_cf8579713a FOREIGN KEY (result_set_id_20210922) REFERENCES public.journey_result_sets(id) ON DELETE CASCADE;
 
 
 --
@@ -12471,6 +12464,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210826083534'),
 ('20210826171456'),
 ('20210906173157'),
-('20210909101042');
+('20210909101042'),
+('20210920071806');
 
 

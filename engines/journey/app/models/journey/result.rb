@@ -41,21 +41,20 @@ end
 #
 # Table name: journey_results
 #
-#  id              :uuid             not null, primary key
-#  expiration_date :datetime         not null
-#  issued_at       :datetime         not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  query_id        :uuid
-#  result_set_id   :uuid
+#  id                     :uuid             not null, primary key
+#  expiration_date        :datetime         not null
+#  issued_at              :datetime         not null
+#  result_set_id_20210922 :uuid
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  query_id               :uuid
 #
 # Indexes
 #
-#  index_journey_results_on_query_id       (query_id)
-#  index_journey_results_on_result_set_id  (result_set_id)
+#  index_journey_results_on_query_id  (query_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (query_id => journey_queries.id)
-#  fk_rails_...  (result_set_id => journey_result_sets.id) ON DELETE => cascade
+#  fk_rails_...  (result_set_id_20210922 => journey_result_sets.id) ON DELETE => cascade
 #
