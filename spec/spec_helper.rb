@@ -12,7 +12,7 @@ SimpleCov.start do
   add_filter %r{^/gems}
   add_filter %r{^/lib/generators/}
   add_filter %r{^/vendor/ruby}
-  add_filter %r{/engines/admiralty}
+  add_filter %r{^/engines/admiralty/app/admin/}
 
   add_group "Controllers", "app/controllers"
   add_group "Channels", "app/channels"
