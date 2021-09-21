@@ -4,11 +4,11 @@ Trestle.resource(:clients, model: Users::Client) do
   menu :clients, icon: "fa fa-users", group: :users
 
   collection do
-    Users::Client.unscoped.order(created_at: :desc)
+    Api::Client.unscoped.order(created_at: :desc)
   end
 
   instance do |params|
-    Users::Client.unscoped.find(params[:id])
+    Api::Client.unscoped.find(params[:id])
   end
 
   sort_column(:organization) do |collection, order|
