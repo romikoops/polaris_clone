@@ -209,3 +209,4 @@ cargo_price_notes: {}
 hide_chargeable_weight_values: false
 atomic_insert: false
 upload_v2_enabled: false
+local_charges_required_with_trucking: true

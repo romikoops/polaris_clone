@@ -36,6 +36,7 @@ RSpec/MultipleMemoizedHelpers:
   - 'engines/offer_calculator/spec/services/offer_calculator/service/validations/container_validation_service_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/offer_sorter/lcl_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/offer_sorter_spec.rb'
+  - 'engines/offer_calculator/spec/services/offer_calculator/queries/valid_routes_spec.rb'
   - 'engines/pricings/spec/models/pricings/margin_spec.rb'
   - 'engines/pricings/spec/services/pricings/manipulator/helpers_spec.rb'
   - 'engines/pricings/spec/services/pricings/manipulator/trucking_spec.rb'

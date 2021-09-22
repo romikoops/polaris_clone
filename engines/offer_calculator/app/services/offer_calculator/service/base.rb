@@ -26,10 +26,11 @@ module OfferCalculator
         return check_for_freight(results: results) if type == :pricings
 
         fee_type_map = { truckings: "Carriage", local_charges: "Fees" }
+        dynamic_local_charge_check = (type == :truckings || scope[:local_charges_required_with_trucking])
 
         %w[export import].each do |direction|
           carriage = CARRIAGE_MAP[direction]
-          next unless request.carriage?(carriage: carriage)
+          next unless request.carriage?(carriage: carriage) && dynamic_local_charge_check
 
           error = error_for_fee_type(
             results: results,

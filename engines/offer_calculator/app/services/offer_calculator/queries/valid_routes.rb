@@ -95,7 +95,7 @@ module OfferCalculator
       end
 
       def origin_local_charges
-        return unless @request.pre_carriage?
+        return unless @request.pre_carriage? && local_charges_required_with_trucking?
 
         "JOIN local_charges AS origin_local_charges
           ON origin_local_charges.hub_id = origin_hubs.id
@@ -107,7 +107,7 @@ module OfferCalculator
       end
 
       def destination_local_charges
-        return unless @request.on_carriage?
+        return unless @request.on_carriage? && local_charges_required_with_trucking?
 
         "JOIN local_charges AS destination_local_charges
           ON destination_local_charges.hub_id = destination_hubs.id
@@ -120,6 +120,10 @@ module OfferCalculator
 
       def quotation_tool
         @scope[:closed_quotation_tool] || @scope[:open_quotation_tool]
+      end
+
+      def local_charges_required_with_trucking?
+        @scope[:local_charges_required_with_trucking]
       end
     end
   end
