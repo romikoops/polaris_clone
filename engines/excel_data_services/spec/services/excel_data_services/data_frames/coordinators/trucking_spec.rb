@@ -24,7 +24,6 @@ RSpec.describe ExcelDataServices::DataFrames::Coordinators::Trucking do
         {
           "FSC" => {
             "fee" => "Fuel Surcharge",
-            "mot" => "truck_carriage",
             "currency" => "EUR",
             "rate_basis" => "PER_SHIPMENT",
             "shipment" => 120.0,

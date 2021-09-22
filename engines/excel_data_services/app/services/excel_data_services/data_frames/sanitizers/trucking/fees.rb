@@ -7,6 +7,10 @@ module ExcelDataServices
         class Fees < ExcelDataServices::DataFrames::Sanitizers::Base
           def sanitizer_lookup
             {
+              "zone" => "string",
+              "service" => "string",
+              "carrier" => "string",
+              "cargo_class" => "downcase",
               "fee" => "string",
               "mot" => "downcase",
               "fee_code" => "upcase",

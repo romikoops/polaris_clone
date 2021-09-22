@@ -11,6 +11,7 @@ RSpec.shared_context "with trucking_sheet" do
   include_context "with trucking_metadata_sheet"
   include_context "with trucking_zone_rows_sheet"
   include_context "with trucking_country_codes_sheet"
+  include_context "with trucking_fee_metadata_sheet"
 
   let(:fees) { [] }
   let(:zone_type) { :alphanumeric }

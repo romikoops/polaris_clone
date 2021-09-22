@@ -1,6 +1,6 @@
 headers:
   rows: '1:1'
-  cols: 'A:S'
+  cols: 'A:W'
   required: true
   content:
     - "FEE"
@@ -28,9 +28,9 @@ fee_row:
   required: false
 fee_data:
   rows: '2:fee_row.last_row'
-  cols: 'B:S'
+  cols: 'B:W'
   required: false
 data:
   rows: '2:fee_row.last_row'
-  cols: 'A:S'
+  cols: 'A:W'
   required: false

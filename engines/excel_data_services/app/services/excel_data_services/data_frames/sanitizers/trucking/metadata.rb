@@ -50,7 +50,7 @@ module ExcelDataServices
           end
 
           def default_group
-            Groups::Group.find_by(name: "default", organization_id: Organizations.current_id)
+            @default_group ||= Groups::Group.find_by(name: "default", organization_id: Organizations.current_id)
           end
 
           def today

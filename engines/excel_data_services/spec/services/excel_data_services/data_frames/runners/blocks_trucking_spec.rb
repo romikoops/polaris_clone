@@ -9,10 +9,11 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
   before do
     Organizations.current_id = organization.id
     tenant_vehicle
+    FactoryBot.create(:legacy_tenant_vehicle, name: "Faster", organization: organization, carrier: carrier)
   end
 
   let!(:trucking_locations) do
-    "20000".upto("20051").map do |postal_code|
+    ("20037".upto("20039").to_a | ["20457"]).map do |postal_code|
       FactoryBot.create(:trucking_location,
         :zipcode,
         data: postal_code,
@@ -42,8 +43,8 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       end
 
       it "returns successfully", :aggregate_failures do
-        expect(result.dig("truckings", "created")).to eq(1)
-        expect(truckings.count).to eq(1)
+        expect(result.dig("truckings", "created")).to eq(2)
+        expect(truckings.count).to eq(2)
         expect(truckings.map { |tr| tr.rates["kg"].count }.uniq).to eq([23])
         expect(truckings.map(&:modifier).uniq).to eq(["kg"])
       end
@@ -85,9 +86,9 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       let(:new_future_validity) { Range.new(Date.parse("2021/12/31"), Date.parse("2022/12/31"), exclude_end: true) }
 
       it "adjusts the existing trucking validity and inserts the new ones", :aggregate_failures do
-        expect(result.dig("truckings", "created")).to eq(1)
-        expect(truckings.count).to eq(3)
-        expect(truckings.map(&:validity)).to match_array([new_past_validity, sheet_validity, new_future_validity])
+        expect(result.dig("truckings", "created")).to eq(2)
+        expect(truckings.count).to eq(4)
+        expect(truckings.map(&:validity).uniq).to match_array([new_past_validity, sheet_validity, new_future_validity])
       end
     end
 
@@ -102,7 +103,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
 
         it "returns the error", :aggregate_failures do
           expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::InsertableChecks)
-          expect(error.reason).to eq("The location '20038, 20000 - 20050' cannot be found.")
+          expect(error.reason).to eq("The location '20038, 20037 - 20039' cannot be found.")
           expect(error.type).to eq(:warning)
         end
       end

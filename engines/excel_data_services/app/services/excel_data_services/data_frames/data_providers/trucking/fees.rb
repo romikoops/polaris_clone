@@ -7,6 +7,10 @@ module ExcelDataServices
         class Fees < ExcelDataServices::DataFrames::DataProviders::Base
           def self.column_types
             {
+              "service" => :object,
+              "carrier" => :object,
+              "cargo_class" => :object,
+              "zone" => :object,
               "fee" => :object,
               "mot" => :object,
               "fee_code" => :object,

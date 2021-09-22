@@ -10,8 +10,13 @@ module ExcelDataServices
 
         def complete_truckings
           @complete_truckings ||= rates_locations_and_metadata
-            .inner_join(default_fees_frame, on: "hub_id")
-            .left_join(fees.frame, on: { "truck_type" => "truck_type", "carriage" => "carriage" })
+            .inner_join(fees.frame, on: {
+              "zone" => "zone",
+              "tenant_vehicle_id" => "tenant_vehicle_id",
+              "truck_type" => "truck_type",
+              "cargo_class" => "cargo_class",
+              "carriage" => "carriage"
+            })
         end
 
         def rates_locations_and_metadata
@@ -61,10 +66,6 @@ module ExcelDataServices
             truck_type
             validity
           ]
-        end
-
-        def default_fees_frame
-          Rover::DataFrame.new([{ "fees" => {}, "hub_id" => state.hub_id }])
         end
       end
     end

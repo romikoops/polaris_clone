@@ -9,8 +9,8 @@ RSpec.describe ExcelDataServices::Extractors::TenantVehicle do
   let(:result) { described_class.state(state: combinator_arguments) }
   let(:extracted_table) { result.frame }
   let(:frame) { Rover::DataFrame.new([row]) }
-  let(:row) { { service: "standard", carrier: "SACO", mode_of_transport: "truck_carriage" }.stringify_keys }
-  let(:carrier) { FactoryBot.create(:legacy_carrier, name: "SACO") }
+  let(:row) { { service: "standard", carrier_code: "saco", mode_of_transport: "truck_carriage" }.stringify_keys }
+  let(:carrier) { FactoryBot.create(:legacy_carrier, name: "SACO", code: "saco") }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:tenant_vehicle) do
     FactoryBot.create(:legacy_tenant_vehicle,

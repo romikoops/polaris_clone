@@ -7,7 +7,8 @@ module ExcelDataServices
         class ZoneRow < ExcelDataServices::DataFrames::Base
           def performing_modules
             [
-              ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneRow
+              ExcelDataServices::DataFrames::DataProviders::Trucking::ZoneRow,
+              ExcelDataServices::DataFrames::Augmenters::Trucking::ZoneRow
             ]
           end
         end

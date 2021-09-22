@@ -9,14 +9,14 @@ module ExcelDataServices
           .select(
             "tenant_vehicles.id as tenant_vehicle_id,
             tenant_vehicles.name AS service,
-            carriers.name AS carrier,
+            carriers.code AS carrier_code,
             mode_of_transport"
           )
       end
 
       def join_arguments
-        args = {"service" => "service", "mode_of_transport" => "mode_of_transport"}
-        args["carrier"] = "carrier" unless frame["carrier"].all?(&:blank?)
+        args = { "service" => "service", "mode_of_transport" => "mode_of_transport" }
+        args["carrier_code"] = "carrier_code" unless frame["carrier_code"].all?(&:blank?)
         args
       end
 
@@ -25,7 +25,7 @@ module ExcelDataServices
       end
 
       def frame_types
-        {"tenant_vehicle_id" => :object}
+        { "tenant_vehicle_id" => :object }
       end
     end
   end

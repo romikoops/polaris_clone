@@ -19,7 +19,7 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Zones do
       let(:expected_result) do
         {
           "primary" => nil,
-          "secondary" => "20000 - 20050",
+          "secondary" => "20037 - 20039",
           "country_code" => "DE",
           "zone" => "1.0",
           "zone_row" => 2,

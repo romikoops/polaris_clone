@@ -7,6 +7,10 @@ module ExcelDataServices
         class Fees < ExcelDataServices::DataFrames::Validators::Base
           def schema_validator_lookup
             {
+              "zone" => ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+              "service" => ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+              "carrier" => ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
+              "cargo_class" => ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
               "fee" => ExcelDataServices::Validators::TypeValidity::Types::StringType,
               "mot" => ExcelDataServices::Validators::TypeValidity::Types::ModeOfTransportType,
               "fee_code" => ExcelDataServices::Validators::TypeValidity::Types::StringType,

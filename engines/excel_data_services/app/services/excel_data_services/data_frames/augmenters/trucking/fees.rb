@@ -8,6 +8,7 @@ module ExcelDataServices
           def perform
             super
             remove_sheet_name
+            correct_service_and_carrier_keys
             return state if frame.empty?
 
             Legacy::ChargeCategory.import(charge_data, validate_uniqueness: true)

@@ -5,6 +5,9 @@ FactoryBot.define do
     transient do
       fees { [] }
       sheet_name { "Fees" }
+      carrier { "SACO" }
+      service { "standard" }
+      organization { FactoryBot.create(:organizations_organization) }
     end
     initialize_with do
       new(fees, types: ExcelDataServices::DataFrames::DataProviders::Trucking::Fees.column_types)
@@ -31,7 +34,12 @@ FactoryBot.define do
             "minimum" => [],
             "wm" => [],
             "percentage" => [],
-            "sheet_name" => []
+            "sheet_name" => [],
+            "carrier" => [],
+            "service" => [],
+            "cargo_class" => [],
+            "zone" => [],
+            "organization_id" => []
           }
         end
       end
@@ -59,7 +67,12 @@ FactoryBot.define do
               "minimum" => nil,
               "wm" => nil,
               "percentage" => nil,
-              "sheet_name" => sheet_name
+              "sheet_name" => sheet_name,
+              "carrier" => nil,
+              "service" => nil,
+              "cargo_class" => nil,
+              "zone" => nil,
+              "organization_id" => organization.id
             }
           ]
         end
@@ -88,7 +101,46 @@ FactoryBot.define do
               "minimum" => nil,
               "wm" => nil,
               "percentage" => nil,
-              "sheet_name" => sheet_name
+              "sheet_name" => sheet_name,
+              "carrier" => nil,
+              "service" => nil,
+              "cargo_class" => nil,
+              "zone" => nil,
+              "organization_id" => organization.id
+            }
+          ]
+        end
+      end
+    end
+
+    trait :with_all_options_set do
+      transient do
+        fees do
+          [
+            {
+              "fee" => "Fuel Surcharge",
+              "mot" => "truck_carriage",
+              "fee_code" => "FSC",
+              "truck_type" => "default",
+              "direction" => "export",
+              "currency" => "EUR",
+              "rate_basis" => "PER_SHIPMENT",
+              "ton" => nil,
+              "cbm" => nil,
+              "kg" => nil,
+              "item" => nil,
+              "shipment" => 100.0,
+              "bill" => nil,
+              "container" => nil,
+              "minimum" => nil,
+              "wm" => nil,
+              "percentage" => nil,
+              "sheet_name" => sheet_name,
+              "carrier" => carrier,
+              "service" => service,
+              "cargo_class" => "lcl",
+              "zone" => 1.0,
+              "organization_id" => organization.id
             }
           ]
         end

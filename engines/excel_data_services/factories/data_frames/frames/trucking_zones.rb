@@ -6,6 +6,7 @@ FactoryBot.define do
       zone_count { 3 }
       country_code { "DE" }
       sheet_name { "Zones" }
+      organization_id { nil }
     end
 
     initialize_with do
@@ -31,6 +32,7 @@ FactoryBot.define do
             "primary" => "AB10",
             "secondary" => nil,
             "identifier" => "postal_code",
+            "organization_id" => organization_id,
             "country_code" => "GB",
             "query_method" => "location" },
           { "sheet_name" => sheet_name,
@@ -38,6 +40,7 @@ FactoryBot.define do
             "primary" => "AB19",
             "secondary" => nil,
             "identifier" => "postal_code",
+            "organization_id" => organization_id,
             "country_code" => "GB",
             "query_method" => "location" },
           { "sheet_name" => sheet_name,
@@ -45,6 +48,7 @@ FactoryBot.define do
             "primary" => nil,
             "identifier" => "postal_code",
             "secondary" => "SW1-SW11",
+            "organization_id" => organization_id,
             "country_code" => "GB",
             "query_method" => "location" }
         ]
@@ -58,6 +62,7 @@ FactoryBot.define do
             "zone" => 1.0,
             "primary" => "20457",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "zipcode",
             "query_method" => "zipcode" },
@@ -65,6 +70,7 @@ FactoryBot.define do
             "zone" => 2.0,
             "primary" => nil,
             "secondary" => "30000 - 30025",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "zipcode",
             "query_method" => "zipcode" },
@@ -72,6 +78,7 @@ FactoryBot.define do
             "zone" => 3.0,
             "primary" => nil,
             "secondary" => "10000 - 10025",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "zipcode",
             "query_method" => "zipcode" }
@@ -86,6 +93,7 @@ FactoryBot.define do
             "zone" => 1.0,
             "primary" => "10",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "distance",
             "query_method" => "distance" },
@@ -93,6 +101,7 @@ FactoryBot.define do
             "zone" => 2.0,
             "primary" => nil,
             "secondary" => "20 - 50",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "distance",
             "query_method" => "distance" },
@@ -100,6 +109,7 @@ FactoryBot.define do
             "zone" => 3.0,
             "primary" => nil,
             "secondary" => "60-130",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "distance",
             "query_method" => "distance" }
@@ -114,18 +124,21 @@ FactoryBot.define do
             "zone" => 1.0,
             "primary" => "20457",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "query_method" => "location" },
           { "sheet_name" => sheet_name,
             "zone" => 2.0,
             "primary" => nil,
             "secondary" => "30000 - 30555",
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "query_method" => "location" },
           { "sheet_name" => sheet_name,
             "zone" => 3.0,
             "primary" => nil,
             "secondary" => "10000 - 10200",
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "query_method" => "location" }
         ]
@@ -162,6 +175,7 @@ FactoryBot.define do
             "zone" => 1.0,
             "primary" => "Cape Town",
             "secondary" => "Western Cape",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "city",
             "query_method" => "location" },
@@ -169,6 +183,7 @@ FactoryBot.define do
             "zone" => 2.0,
             "primary" => "Durban",
             "secondary" => "KwaZulu Natal",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "city",
             "query_method" => "location" },
@@ -176,6 +191,7 @@ FactoryBot.define do
             "zone" => 3.0,
             "primary" => "Johannesburg",
             "secondary" => "Gauteng",
+            "organization_id" => organization_id,
             "country_code" => "ZA",
             "identifier" => "city",
             "query_method" => "location" }
@@ -199,6 +215,7 @@ FactoryBot.define do
             "zone" => 1.0,
             "primary" => "DEHAM",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "identifier" => "locode",
             "query_method" => "location" },
@@ -206,6 +223,7 @@ FactoryBot.define do
             "zone" => 2.0,
             "primary" => "DEBRV",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "identifier" => "locode",
             "query_method" => "location" },
@@ -213,6 +231,7 @@ FactoryBot.define do
             "zone" => 3.0,
             "primary" => "DEFRA",
             "secondary" => nil,
+            "organization_id" => organization_id,
             "country_code" => "DE",
             "identifier" => "locode",
             "query_method" => "location" }
@@ -228,6 +247,7 @@ FactoryBot.define do
             "zone" => 1.0,
             "zipcode" => nil,
             "secondary" => "234www",
+            "organization_id" => organization_id,
             "country_code" => "ghfy"
           }
         ]

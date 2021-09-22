@@ -7,7 +7,7 @@ RSpec.shared_context "with trucking_fees_sheet" do
   let(:fee_schema) do
     FactoryBot.build(:schemas_sheets_trucking_fees, file: instance_double("xlsx"), sheet_name: "Zones")
   end
-  let(:trucking_fees_frame) { FactoryBot.build(:trucking_fees_frame, fee_trait) }
+  let(:trucking_fees_frame) { FactoryBot.build(:trucking_fees_frame, fee_trait, carrier: carrier_name, organization: organization) }
   let(:trucking_fees_state) do
     ExcelDataServices::DataFrames::Combinators::State.new(
       frame: trucking_fees_frame,
