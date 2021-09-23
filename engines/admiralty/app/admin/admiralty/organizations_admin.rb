@@ -108,7 +108,8 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           no_aggregated_cargo offer_disclaimers closed_after_map
           feature_uploaders dedicated_pricings_only
           exclude_analytics address_fields default_total_dimensions
-          append_hub_suffix expand_non_counterpart_local_charges local_charges_required_with_trucking].each_slice(4) do |slice|
+          append_hub_suffix expand_non_counterpart_local_charges
+          local_charges_required_with_trucking upload_v2_enabled].each_slice(4) do |slice|
           row do
             slice.each do |key|
               col(sm: 3) { check_box key }
