@@ -405,6 +405,12 @@ PATH
       shared-runtime
 
 PATH
+  remote: engines/schedules
+  specs:
+    schedules (1)
+      shared-runtime
+
+PATH
   remote: engines/sequential
   specs:
     sequential (1)
@@ -1448,6 +1454,7 @@ DEPENDENCIES
   ruby-debug-ide
   ruby-saml (~> 1.11.0)
   sass-rails
+  schedules!
   scientist (~> 1.6.0)
   sentry-rails
   sentry-ruby

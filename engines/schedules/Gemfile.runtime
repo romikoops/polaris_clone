@@ -1,0 +1,1 @@
+gem "shared-runtime", path: "../../gems/shared-runtime"

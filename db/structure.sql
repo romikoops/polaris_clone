@@ -3787,6 +3787,32 @@ CREATE TABLE public.routing_terminals (
 
 
 --
+-- Name: schedules_schedules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.schedules_schedules (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    voyage_code character varying DEFAULT ''::character varying,
+    vessel_name character varying DEFAULT ''::character varying,
+    vessel_code character varying DEFAULT ''::character varying,
+    carrier character varying DEFAULT ''::character varying,
+    service character varying DEFAULT ''::character varying,
+    origin character varying NOT NULL,
+    destination character varying NOT NULL,
+    origin_departure timestamp without time zone NOT NULL,
+    destination_arrival timestamp without time zone NOT NULL,
+    closing_date timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT arrival_after_departure CHECK ((destination_arrival > origin_departure)),
+    CONSTRAINT departure_after_or_equal_to_closing_date CHECK ((origin_departure >= closing_date)),
+    CONSTRAINT schedules_schedules_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
+    CONSTRAINT schedules_schedules_origin_presence CHECK (((origin IS NOT NULL) AND ((origin)::text !~ '^\s*$'::text)))
+);
+
+
+--
 -- Name: schema_migration_details; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6605,6 +6631,14 @@ ALTER TABLE ONLY public.routing_terminals
 
 
 --
+-- Name: schedules_schedules schedules_schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schedules_schedules
+    ADD CONSTRAINT schedules_schedules_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migration_details schema_migration_details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9357,6 +9391,13 @@ CREATE INDEX index_routing_terminals_on_center ON public.routing_terminals USING
 
 
 --
+-- Name: index_schedules_schedules_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_schedules_schedules_on_organization_id ON public.schedules_schedules USING btree (organization_id);
+
+
+--
 -- Name: index_schema_migration_details_on_version; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11645,6 +11686,14 @@ ALTER TABLE ONLY public.pricings_margins
 
 
 --
+-- Name: schedules_schedules fk_rails_e814bf8535; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schedules_schedules
+    ADD CONSTRAINT fk_rails_e814bf8535 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id) ON DELETE CASCADE;
+
+
+--
 -- Name: journey_errors fk_rails_e919efdd24; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12492,6 +12541,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210909101042'),
 ('20210920071806'),
 ('20210920145722'),
-('20210922115034');
+('20210922115034'),
+('20210923083433');
 
 
