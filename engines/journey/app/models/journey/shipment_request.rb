@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Journey
   class ShipmentRequest < ApplicationRecord
     belongs_to :result
@@ -9,6 +10,8 @@ module Journey
     has_one :shipment
 
     validates :preferred_voyage, presence: true
+
+    accepts_nested_attributes_for :contacts
   end
 end
 

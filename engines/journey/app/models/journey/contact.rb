@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module Journey
   class Contact < ApplicationRecord
     belongs_to :shipment_request
-    belongs_to :original, class_name: "AddressBook::Contact"
+    belongs_to :original, class_name: "AddressBook::Contact", optional: true
   end
 end
 

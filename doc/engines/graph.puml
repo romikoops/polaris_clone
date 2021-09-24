@@ -43,6 +43,7 @@ package "data" {
   class journey << (D,orange) >>
   class treasury << (D,orange) >>
   class notifications << (D,orange) >>
+  class schedules << (D,orange) >>
 }
 package "admiralty" {
   class admiralty << (*,blue) >>

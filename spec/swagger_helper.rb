@@ -3,6 +3,7 @@
 require "rails_helper"
 
 RSpec.configure do |config|
+  # rubocop:disable Naming/VariableNumber
   # Auto-generate example
   config.after(:each, swagger: true) do |example|
     if response && response.body.present?
@@ -112,16 +113,108 @@ RSpec.configure do |config|
               }
             }
           },
+          contact: {
+            type: "object",
+            properties: {
+              address_line_1: {
+                description: "Address line 1",
+                type: "string"
+              },
+              address_line_2: {
+                description: "address line 2",
+                type: "string"
+              },
+              address_line_3: {
+                description: "address line 3",
+                type: "string"
+              },
+              city: {
+                description: "City",
+                type: "string"
+              },
+              company_name: {
+                description: "Company name",
+                type: "string"
+              },
+              country_code: {
+                description: "Country code",
+                type: "string"
+              },
+              email: {
+                description: "Email address",
+                type: "string"
+              },
+              function: {
+                description: "Function",
+                type: "string"
+              },
+              geocoded_address: {
+                description: "Geocoded address",
+                type: "string"
+              },
+              name: {
+                description: "Name",
+                type: "string"
+              },
+              phone: {
+                description: "Phone",
+                type: "string"
+              },
+              point: {
+                description: "Point",
+                type: "string"
+              },
+              postal_code: {
+                description: "Postal code",
+                type: "string"
+              }
+            }
+          },
           shipment_request: {
             type: "object",
             properties: {
-              id: {
-                description: "Unique identifier of the shipment request",
+              result_id: {
+                description: "Result ID",
+                type: "string"
+              },
+              company_id: {
+                description: "Company ID",
+                type: "string"
+              },
+              client_id: {
+                description: "Client ID",
+                type: "string"
+              },
+              with_insurance: {
+                description: "Any insurance on the cargo",
+                type: "boolean"
+              },
+              with_customs_handling: {
+                description: "Any customs handling service needed",
+                type: "boolean"
+              },
+              status: {
+                description: "Status of the shipment request",
                 type: "string"
               },
               preferred_voyage: {
-                description: "Code of preferred voyage",
+                description: "Preferred voyage",
                 type: "string"
+              },
+              notes: {
+                description: "Notes about the shipment request",
+                type: "string"
+              },
+              commercial_value: {
+                description: "Commercial value with integer and currency",
+                type: "object"
+              },
+              contacts_attributes: {
+                description: "Array of contact attributes as objects",
+                type: "array",
+                items: {
+                  "$ref": "#/components/schemas/contact"
+                }
               }
             }
           },
@@ -1712,4 +1805,5 @@ RSpec.configure do |config|
   config.swagger_format = :json
 
   config.swagger_dry_run = true
+  # rubocop:enable Naming/VariableNumber
 end
