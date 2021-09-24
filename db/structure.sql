@@ -1895,10 +1895,6 @@ CREATE TABLE public.journey_contacts (
     country_code character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT journey_contacts_city_presence CHECK (((city IS NOT NULL) AND ((city)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_contacts_company_name_presence CHECK (((company_name IS NOT NULL) AND ((company_name)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_contacts_country_code_length CHECK ((length((country_code)::text) = 2)),
-    CONSTRAINT journey_contacts_country_code_presence CHECK (((country_code IS NOT NULL) AND ((country_code)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_contacts_email_presence CHECK (((email IS NOT NULL) AND ((email)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_contacts_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_contacts_phone_presence CHECK (((phone IS NOT NULL) AND ((phone)::text !~ '^\s*$'::text)))
@@ -3791,7 +3787,7 @@ CREATE TABLE public.routing_terminals (
 --
 
 CREATE TABLE public.schedules_schedules (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     organization_id uuid,
     voyage_code character varying DEFAULT ''::character varying,
     vessel_name character varying DEFAULT ''::character varying,
@@ -12542,6 +12538,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210920071806'),
 ('20210920145722'),
 ('20210922115034'),
-('20210923083433');
+('20210923083433'),
+('20210924113302');
 
 
