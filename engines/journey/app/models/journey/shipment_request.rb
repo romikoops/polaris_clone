@@ -12,6 +12,13 @@ module Journey
     validates :preferred_voyage, presence: true
 
     accepts_nested_attributes_for :contacts
+
+    enum status: {
+      requested: "requested",
+      in_progress: "in_progress",
+      rejected: "rejected",
+      completed: "completed"
+    }
   end
 end
 

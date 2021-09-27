@@ -218,6 +218,51 @@ RSpec.configure do |config|
               }
             }
           },
+          shipment_request_params: {
+            type: :object,
+            properties: {
+              withInsurance: {
+                type: :boolean,
+                description: "Any insurance on the cargo"
+              },
+              withCustomsHandling: {
+                type: :boolean,
+                description: "Any customs handling service needed"
+              },
+              preferredVoyage: {
+                type: "string",
+                description: "Preferred voyage"
+              },
+              notes: {
+                type: :string,
+                description: "notes about the shipment request"
+              },
+              commercialValueCents: {
+                nullable: true,
+                type: :integer,
+                description: "Commercial value as an integer expressed as cent or other equivalent base unit"
+              },
+              commercialValueCurrency: {
+                nullable: true,
+                type: :string,
+                description: "Commercial value's currency in three letter ISO format"
+              },
+              contactsAttributes: {
+                type: :array,
+                description: "Contact info for client",
+                items: { "$ref" => "#/components/schemas/contact" }
+              }
+            },
+            required: %w[
+              withInsurance
+              withCustomsHandling
+              preferredVoyage
+              notes
+              commercialValueCents
+              commercialValueCurrency
+              contactsAttributes
+            ]
+          },
           cargo_item_type: {
             type: "object",
             properties: {
@@ -431,7 +476,7 @@ RSpec.configure do |config|
 
               }
             },
-            required: %w[id hsCode imoClass]
+            required: %w[description hsCode imoClass]
           },
           country: {
             type: "object",

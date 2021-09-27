@@ -8,7 +8,13 @@ RSpec.describe Api::ShipmentRequestCreationService do
     Organizations.current_id = organization.id
   end
 
-  let(:result) { FactoryBot.create(:journey_result) }
+  let(:result) do
+    FactoryBot.create(:journey_result,
+      query: FactoryBot.build(:journey_query,
+        client: users_client,
+        company: company,
+        organization: organization))
+  end
   let(:company) { FactoryBot.create(:companies_company, organization: organization) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:users_client) { FactoryBot.create(:users_client, organization: organization) }
@@ -36,6 +42,7 @@ RSpec.describe Api::ShipmentRequestCreationService do
 
     def perform
       Api::ShipmentRequestCreationService.new(
+        result: result,
         shipment_request_params: shipment_request_params,
         commodity_info_params: commodity_info_params
       ).perform
@@ -43,8 +50,7 @@ RSpec.describe Api::ShipmentRequestCreationService do
 
     def shipment_request_params
       {
-        result_id: result.id, company_id: company.id, client_id: users_client.id,
-        with_insurance: false, with_customs_handling: false, status: "requested",
+        with_insurance: false, with_customs_handling: false,
         preferred_voyage: "1234", notes: "some notes", commercial_value_cents: 10,
         commercial_value_currency: :eur, contacts_attributes: contacts_attributes
       }

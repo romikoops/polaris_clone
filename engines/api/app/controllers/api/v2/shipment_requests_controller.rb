@@ -22,6 +22,7 @@ module Api
 
       def shipment_request_creation_service
         ShipmentRequestCreationService.new(
+          result: result,
           shipment_request_params: shipment_request_params,
           commodity_info_params: commodity_info_params
         )
@@ -32,28 +33,28 @@ module Api
       end
 
       def creation_error_message
-        "Please provide params of result_id, company_id, client_id, with_insurance, with_customs_handling, status, "\
-        "preferred_voyage, notes, commercial_value_cents, commercial_value_currency, contacts_attributes"
+        "Please provide params of withInsurance, withCustomsHandling, status, "\
+        "preferredVoyage, notes, commercialValueCents, commercialValueCurrency, contactsAttributes"
       end
 
       def shipment_request_params
-        # rubocop:disable Naming/VariableNumber
-        params.require(:shipment_request).permit(
-          :result_id, :company_id, :client_id, :with_insurance,
-          :with_customs_handling, :status, :preferred_voyage, :notes,
-          :commercial_value_cents, :commercial_value_currency, contacts_attributes: %i[
-            address_line_1 address_line_2 address_line_3 city
-            company_name country_code email function geocoded_address
-            name phone point postal_code
+        params.require(:shipmentRequest).permit(
+          :withInsurance, :withCustomsHandling, :preferredVoyage, :notes,
+          :commercialValueCents, :commercialValueCurrency, contactsAttributes: %i[
+            addressLine1 addressLine2 addressLine3 city
+            companyName countryCode email function geocodedAddress
+            name phone point postalCode
           ]
-        )
-        # rubocop:enable Naming/VariableNumber
+        ).to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym }
       end
 
       def commodity_info_params
-        params.require(:commodity_infos).map do |commodity_info|
-          commodity_info.permit(:description, :hs_code, :imo_class).to_hash
-        end
+        params.permit(commodityInfos: %i[description hsCode imoClass])[:commodityInfos]
+          .map { |commodity_info_param| commodity_info_param.to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym } }
+      end
+
+      def result
+        @result ||= Journey::Result.find(params[:result_id])
       end
     end
   end

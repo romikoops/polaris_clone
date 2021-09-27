@@ -77,6 +77,7 @@ Api::Engine.routes.draw do
         resources :charges, only: [:index]
         resources :route_sections, only: [:index]
         resources :schedules, only: [:index]
+        resources :shipment_requests, only: %i[create]
       end
       resources :offers, only: [:create] do
         get "email"
@@ -89,7 +90,7 @@ Api::Engine.routes.draw do
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
       resources :companies, only: %i[show update]
-      resources :shipment_requests, only: %i[show create]
+      resources :shipment_requests, only: %i[show]
     end
   end
 end

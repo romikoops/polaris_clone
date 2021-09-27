@@ -48,52 +48,43 @@ module Api
     end
 
     describe "POST #create" do
-      let(:company) { FactoryBot.create(:companies_company) }
-      let(:result) { FactoryBot.create(:journey_result) }
-
-      it "returns a 201 response" do
-        post :create, params: valid_params, as: :json
-        expect(response).to have_http_status(:created)
+      let(:company) { FactoryBot.create(:companies_company, organization: organization) }
+      let(:result) do
+        FactoryBot.create(:journey_result,
+          query: FactoryBot.build(:journey_query,
+            client: users_client,
+            company: company,
+            organization: organization))
       end
-
-      it "returns the data for the shipment request, after creation was a success" do
-        post :create, params: valid_params, as: :json
-        expect(response_data).to include(successful_response_data)
+      let(:commodity_infos) do
+        [
+          { description: "Description 1", hsCode: "1504.90.60.00", imoClass: "1" },
+          { description: "Description 2", hsCode: "2504.90.60.00", imoClass: "2" }
+        ]
       end
-
-      it "returns a 422 response, when none of the shipment request params are not present" do
-        post :create, params: { organization_id: organization.id, shipment_request: { foo: "bar" } }, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-
-      it "returns a suitable message, when none of the shipment request params are present" do
-        post :create, params: { organization_id: organization.id, shipment_request: { foo: "bar" } }, as: :json
-        expect(response_error).to eq(
-          "Please provide params of result_id, company_id, client_id, with_insurance, with_customs_handling, "\
-          "status, preferred_voyage, notes, commercial_value_cents, commercial_value_currency, contacts_attributes"
-        )
-      end
-
-      def valid_params
+      let(:contact_attributes) do
         {
-          organization_id: organization.id, result_id: result.id, company_id: company.id, client_id: users_client.id, with_insurance: false,
-          with_customs_handling: false, status: "requested", preferred_voyage: "1234", notes: "Some notes", commercial_value_cents: 10, commercial_value_currency: :eur,
-          contacts_attributes: [{
-            address_line_1: "1 street", address_line_2: "2 street", address_line_3: "3 street", city: "Hamburg",
-            company_name: "Foo GmBH", country_code: "de", email: "foo@bar.com", function: "notifyee", geocoded_address: "GEOCODE_ADDRESS_12345",
-            name: "John Smith", phone: "+49123456", point: "On point", postal_code: "PC12"
-          }],
-          commodity_infos: [
-            { description: "Description 1", hs_code: "1504.90.60.00", imo_class: "1" },
-            { description: "Description 2", hs_code: "2504.90.60.00", imo_class: "2" }
-          ]
+          addressLine1: "1 street", addressLine2: "2 street", addressLine3: "3 street", city: "Hamburg",
+          companyName: "Foo GmBH", countryCode: "de", email: "foo@bar.com", function: "notifyee", geocodedAddress: "GEOCODE_ADDRESS_12345",
+          name: "John Smith", phone: "+49123456", point: "On point", postalCode: "PC12"
+        }
+      end
+      let(:valid_params) do
+        {
+          organization_id: organization.id, result_id: result.id,
+          shipmentRequest: {
+            withInsurance: false,
+            withCustomsHandling: false, preferredVoyage: "1234", notes: "Some notes", commercialValueCents: 10, commercialValueCurrency: "EUR",
+            contactsAttributes: [contact_attributes]
+          },
+          commodityInfos: commodity_infos
         }
       end
 
-      def successful_response_data
+      let(:successful_response_data) do
         {
           "attributes" => {
-            "clientId" => users_client.id, "commercialValue" => { "currency" => "eur", "value" => 10 },
+            "clientId" => users_client.id, "commercialValue" => { "currency" => "EUR", "value" => 10 },
             "companyId" => company.id, "notes" => "Some notes", "preferredVoyage" => "1234", "resultId" => result.id,
             "status" => "requested", "withCustomsHandling" => false, "withInsurance" => false
           },
@@ -101,6 +92,39 @@ module Api
           "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [] } },
           "type" => "shipmentRequest"
         }
+      end
+
+      shared_examples_for "a successful Create" do
+        before { post :create, params: valid_params, as: :json }
+
+        it "returns a 201 response" do
+          expect(response).to have_http_status(:created)
+        end
+
+        it "returns the data for the shipment request, after creation was a success" do
+          expect(response_data).to include(successful_response_data)
+        end
+      end
+
+      it_behaves_like "a successful Create"
+
+      it "returns a 422 response, when none of the shipment request params are not present" do
+        post :create, params: { organization_id: organization.id, result_id: result.id, shipmentRequest: { foo: "bar" } }, as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "returns a suitable message, when none of the shipment request params are present" do
+        post :create, params: { organization_id: organization.id, result_id: result.id, shipmentRequest: { foo: "bar" } }, as: :json
+        expect(response_error).to eq(
+          "Please provide params of withInsurance, withCustomsHandling, "\
+          "status, preferredVoyage, notes, commercialValueCents, commercialValueCurrency, contactsAttributes"
+        )
+      end
+
+      context "without commodity infos" do
+        let(:commodity_infos) { [] }
+
+        it_behaves_like "a successful Create"
       end
     end
     # rubocop:enable Naming/VariableNumber
