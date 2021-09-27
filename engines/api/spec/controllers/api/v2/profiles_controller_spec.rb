@@ -25,10 +25,17 @@ module Api
 
     describe "Get #show" do
       let(:request_object) { get :show, params: { organization_id: organization.id }, as: :json }
-      let(:expected_data) { { "email" => client.email, "firstName" => profile.first_name, "lastName" => profile.last_name } }
+      let(:expected_data) do
+        {
+          "email" => client.email,
+          "firstName" => profile.first_name,
+          "lastName" => profile.last_name,
+          "phone" => profile.phone
+        }
+      end
 
       context "when successful" do
-        it "resturns 200" do
+        it "returns 200" do
           perform_request
 
           expect(response.status).to eq 200
@@ -45,7 +52,12 @@ module Api
     describe "PATCH #update" do
       context "when request is successful" do
         let(:expected_data) do
-          { "email" => "updated@itsmycargo.com", "firstName" => "new first name", "lastName" => "new last name" }
+          {
+            "email" => "updated@itsmycargo.com",
+            "firstName" => "new first name",
+            "lastName" => "new last name",
+            "phone" => profile.phone
+          }
         end
 
         let(:request_object) do

@@ -1711,8 +1711,8 @@ RSpec.configure do |config|
                     description: "User's last or family name. In cases user only has one name, last name is used for identifying that.",
                     type: "string"
                   },
-                  password: {
-                    description: "User's desired new password for their account",
+                  phone: {
+                    description: "User's phone number for contact purposes",
                     type: "string"
                   }
                 },
