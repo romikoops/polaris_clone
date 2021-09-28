@@ -35,7 +35,12 @@ Trestle.resource(:countries, model: Admiralty::Country) do
     end
 
     sidebar do
-      link_to("Update From S3!", admin.path(:update_from_data_hub, id: instance.id), method: :post, class: "btn btn-primary btn-block")
+      link_to(
+        "Update From S3!",
+        admin.path(:update_from_data_hub, id: instance.id),
+        method: :post,
+        class: instance.locations_enabled? ? "btn btn-primary btn-block" : "btn btn-primary btn-block disabled"
+      )
     end
   end
 
