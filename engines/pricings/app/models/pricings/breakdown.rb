@@ -9,7 +9,7 @@ module Pricings
     belongs_to :cargo_unit, polymorphic: true, optional: true
     belongs_to :target, polymorphic: true, optional: true
     validates :source_id, uniqueness: {scope: %i[charge_id charge_category_id metadatum_id]}
-    validates :line_item_id, uniqueness: true, presence: true
+    validates :line_item_id, presence: true
 
     belongs_to :margin, optional: true
     deprecate margin: "Converted to source"

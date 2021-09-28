@@ -16,6 +16,7 @@ module ResultFormatter
     let(:custom_scope) { { primary_freight_code: "BAF", fee_detail: "name", default_currency: "USD" } }
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:type) { :table }
+    let(:cargo_class) { "fcl_20" }
     let(:cargo_unit_params) do
       [
         {
@@ -29,12 +30,13 @@ module ResultFormatter
         }
       ]
     end
-    let(:cargo_class) { "fcl_20" }
     let(:decorated_result) { ResultFormatter::ResultDecorator.new(result, context: { scope: scope }) }
     let(:klass) { described_class.new(result: decorated_result, scope: scope, type: type) }
     let(:results) { klass.perform }
 
-    describe ".perform" do
+    before { Organizations.current_id = organization.id }
+
+    describe "#perform" do
       let(:expected_descriptions) do
         [nil,
           "Trucking pre",
@@ -158,6 +160,7 @@ module ResultFormatter
             line_item_set: line_item_set,
             route_section: freight_section,
             cargo_units: line_item.cargo_units,
+            total_currency: "SEK",
             fee_code: "baf")
         end
         let(:results) { klass.perform }
@@ -166,7 +169,8 @@ module ResultFormatter
         let(:second_fee_item_index) { results.index(results.find { |r| r[:lineItemId] == line_item.id }) }
 
         before do
-          line_item_set.line_items << second_line_item
+          freight_section.line_items << second_line_item
+          freight_section.save
         end
 
         it "returns rows for each level of charge table" do
@@ -233,7 +237,8 @@ module ResultFormatter
           Treasury::ExchangeRate.create(from: "USD",
                                         to: "SEK", rate: 1.2,
                                         created_at: result.created_at - 30.seconds)
-          line_item_set.line_items << second_line_item
+          second_line_item.save
+          line_item_set.reload
         end
 
         include_examples "FeeTableService results"
@@ -335,63 +340,21 @@ module ResultFormatter
         end
       end
     end
+  end
 
-    describe ".value_with_currency" do
-      let(:amount) { 10_000 }
-      let(:currency) { "USD" }
-      let(:money) { Money.new(amount, currency) }
-      let(:format) { klass.send(:value_with_currency, money) }
+  RSpec.describe FeeTableService::LineItemsTotal, type: :service do
+    include_context "journey_pdf_setup"
+    let(:service) { described_class.new(line_items: target_line_items, original: original) }
+    let(:target_line_items) { freight_line_items_with_cargo }
 
-      context "with complete dollar value" do
-        let(:type) { :pdf }
-
-        it "returns the value with suffix .00" do
-          expect(format[:amount]).to eq("100.00")
-        end
-      end
-
-      context "with raw value" do
-        it "returns the raw value" do
-          expect(format[:amount]).to eq(100.0)
-        end
-      end
-
-      context "with finer values (pdf)" do
-        let(:type) { :pdf }
-        let(:amount) { 123.456789 }
-
-        it "returns the raw value" do
-          expect(format[:amount]).to eq("1.23")
-        end
-      end
-    end
-
-    describe ".original_value" do
-      let(:edited_money) { Money.new(5555, "USD") }
-      let(:format) { klass.send(:value_with_currency, money) }
-      let(:line_items) { freight_line_items_with_cargo }
-      let(:edited_line_item_set) { FactoryBot.create(:journey_line_item_set, result: result) }
-      let(:edited_line_items) do
-        freight_line_items_with_cargo.map do |line_item|
-          line_item.dup.tap do |edited_line_item|
-            edited_line_item.update(line_item_set: edited_line_item_set, total: edited_money)
-          end
-        end
-      end
-
-      it "returns the subtotal of the items provided from the original LineItemSet" do
-        expect(klass.send(:original_value, items: edited_line_items, currency: "USD")).to eq(freight_line_items_with_cargo.sum(&:total))
-      end
-    end
-
-    describe ".value" do
-      let(:line_items) { freight_line_items_with_cargo }
+    describe "#value (current)" do
+      let(:original) { false }
 
       context "when the currency is the same" do
         let(:currency) { "USD" }
 
         it "returns the subtotal of the items provided from the original LineItemSet" do
-          expect(klass.send(:value, items: line_items, currency: currency)).to eq(freight_line_items_with_cargo.sum(&:total))
+          expect(service.value).to eq(freight_line_items_with_cargo.sum(&:total))
         end
       end
 
@@ -408,7 +371,60 @@ module ResultFormatter
         end
 
         it "returns the subtotal of the items provided from the original LineItemSet" do
-          expect(klass.send(:value, items: line_items, currency: currency)).to eq(expected_amount)
+          expect(service.value).to eq(expected_amount)
+        end
+      end
+    end
+
+    describe "#value (original)" do
+      let(:edited_money) { Money.new(5555, "USD") }
+      let(:currency) { "USD" }
+      let(:edited_line_item_set) { FactoryBot.create(:journey_line_item_set, result: result) }
+      let(:target_line_items) do
+        freight_line_items_with_cargo.map do |line_item|
+          line_item.dup.tap do |edited_line_item|
+            edited_line_item.update(line_item_set: edited_line_item_set, total: edited_money)
+          end
+        end
+      end
+      let(:original) { true }
+
+      it "returns the subtotal of the items provided from the original LineItemSet" do
+        expect(service.value).to eq(freight_line_items_with_cargo.sum(&:total))
+      end
+    end
+  end
+
+  RSpec.describe FeeTableService::MoneyFormatter, type: :service do
+    let(:format) { described_class.new(value: money, type: type).format }
+    let(:line_items) { freight_line_items_with_cargo }
+    let(:amount) { 10_000 }
+    let(:currency) { "USD" }
+    let(:money) { Money.new(amount, currency) }
+
+    describe "#format" do
+      context "with complete dollar value" do
+        let(:type) { :pdf }
+
+        it "returns the value with suffix .00" do
+          expect(format[:amount]).to eq("100.00")
+        end
+      end
+
+      context "with raw value" do
+        let(:type) { :table }
+
+        it "returns the raw value" do
+          expect(format[:amount]).to eq(100.0)
+        end
+      end
+
+      context "with finer values (pdf)" do
+        let(:type) { :pdf }
+        let(:amount) { 123.456789 }
+
+        it "returns the raw value" do
+          expect(format[:amount]).to eq("1.23")
         end
       end
     end

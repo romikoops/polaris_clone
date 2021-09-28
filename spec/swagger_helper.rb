@@ -431,6 +431,14 @@ RSpec.configure do |config|
               level: {
                 description: "Nesting level",
                 type: "integer"
+              },
+              rate: {
+                description: "The rate at which the LineItem was charged",
+                type: "string"
+              },
+              rateFactor: {
+                description: "The value (with unit) that was applied to the Rate to achieve the final price of the LineItem",
+                type: "string"
               }
             },
             required: %w[

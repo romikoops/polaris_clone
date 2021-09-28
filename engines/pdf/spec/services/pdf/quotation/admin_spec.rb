@@ -14,6 +14,8 @@ RSpec.describe Pdf::Quotation::Admin do
   let(:pdf_service) { described_class.new(offer: offer) }
   let(:pdf) { pdf_service.file }
 
+  before { Organizations.current_id = organization.id }
+
   describe ".perform" do
     context "when the Offer is provided" do
       it "generates the admin quote pdf", :aggregate_failures do
