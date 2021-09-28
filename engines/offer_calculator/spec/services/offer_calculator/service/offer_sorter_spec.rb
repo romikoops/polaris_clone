@@ -36,15 +36,13 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
 
     context "when mandatory local charges is set but no local charges exists" do
       let!(:local_charges) do
-        cargo_classes.flat_map do |cc|
-          %w[export].map do |direction|
-            FactoryBot.create(:legacy_local_charge,
-              direction: direction,
-              hub: direction == "export" ? origin_hub : destination_hub,
-              load_type: cc,
-              organization: organization,
-              tenant_vehicle: tenant_vehicle)
-          end
+        cargo_classes.map do |cc|
+          FactoryBot.create(:legacy_local_charge,
+            direction: "export",
+            hub: origin_hub,
+            load_type: cc,
+            organization: organization,
+            tenant_vehicle: tenant_vehicle)
         end
       end
       let(:mandatory_charge) { FactoryBot.create(:legacy_mandatory_charge, import_charges: true, export_charges: true) }
@@ -55,6 +53,32 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
 
       it "returns an offer even though no import charges are found" do
         expect(offers.first.section_keys).to eq(%w[export cargo])
+      end
+    end
+
+    context "when trucking has carrier_lock set to `true`" do
+      let(:truckings) do
+        cargo_classes.map do |cargo_class|
+          FactoryBot.create(:trucking_with_unit_rates,
+            hub: itinerary.origin_hub,
+            organization: organization,
+            cargo_class: cargo_class,
+            load_type: load_type,
+            truck_type: truck_type,
+            tenant_vehicle: trucking_tenant_vehicle,
+            location: pickup_trucking_location)
+        end
+      end
+      let(:trucking_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, mode_of_transport: "truck_carriage", carrier_lock: true) }
+
+      before do
+        allow(request).to receive(:carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
+      end
+
+      it "returns no offers as carrier dont match" do
+        expect { offers }.to raise_error(OfferCalculator::Errors::NoValidOffers)
       end
     end
 

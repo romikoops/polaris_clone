@@ -6,6 +6,8 @@ module OfferCalculator
       EXPORT_SECTIONS = %w[trucking_pre export cargo].freeze
       TRUCKING_SECTIONS = %w[trucking_pre trucking_on].freeze
 
+      OfferDefiningAttributes = Struct.new(:tenant_vehicle_id, :itinerary_id, :carrier_lock, :carrier_id, :origin_hub_id, :destination_hub_id, :cargo_classes, keyword_init: true)
+
       def self.sorted_offers(request:, charges:, schedules:)
         new(request: request, charges: charges, schedules: schedules).perform
       end
@@ -31,7 +33,7 @@ module OfferCalculator
         schedules_groupings.flat_map do |grouping_keys, grouped_schedules|
           grouped_schedules_and_results(
             grouped_schedules: grouped_schedules,
-            grouping: Grouping.new(**grouping_keys.merge(cargo_classes: request.cargo_classes))
+            offer_attributes: OfferDefiningAttributes.new(**grouping_keys.merge(cargo_classes: request.cargo_classes))
           )
         end
       end
@@ -63,25 +65,23 @@ module OfferCalculator
         end
       end
 
-      def grouped_schedules_and_results(grouped_schedules:, grouping:)
+      def grouped_schedules_and_results(grouped_schedules:, offer_attributes:)
         grouped_schedules
-          .flat_map { |schedule| ScheduleCharges.new(grouping: grouping, charges: charges, schedule: schedule, request: request).results_with_schedule }
+          .flat_map { |schedule| ScheduleCharges.new(offer_attributes: offer_attributes, charges: charges, schedule: schedule, request: request).results_with_schedule }
           .compact
       end
 
-      Grouping = Struct.new(:tenant_vehicle_id, :itinerary_id, :carrier_lock, :carrier_id, :origin_hub_id, :destination_hub_id, :cargo_classes, keyword_init: true)
-
       class ScheduleCharges
-        def initialize(charges:, grouping:, schedule:, request:)
-          @grouping = grouping
+        def initialize(charges:, offer_attributes:, schedule:, request:)
+          @offer_attributes = offer_attributes
           @charges = charges
           @schedule = schedule
           @request = request
         end
 
-        attr_reader :grouping, :charges, :schedule, :request
+        attr_reader :offer_attributes, :charges, :schedule, :request
 
-        delegate :tenant_vehicle_id, :itinerary_id, :carrier_lock, :carrier_id, :origin_hub_id, :destination_hub_id, to: :grouping
+        delegate :tenant_vehicle_id, :itinerary_id, :carrier_lock, :carrier_id, :origin_hub_id, :destination_hub_id, to: :offer_attributes
 
         delegate :scope, to: :request
 
@@ -175,23 +175,23 @@ module OfferCalculator
               charge: charge,
               section: section,
               date: date,
-              grouping: grouping
+              offer_attributes: offer_attributes
             ).valid?
           end
         end
       end
 
       class DateSectionCharge
-        def initialize(date:, section:, charge:, grouping:)
+        def initialize(date:, section:, charge:, offer_attributes:)
           @date = date
           @section = section
           @charge = charge
-          @grouping = grouping
+          @offer_attributes = offer_attributes
         end
 
-        attr_reader :date, :section, :charge, :grouping
+        attr_reader :date, :section, :charge, :offer_attributes
 
-        delegate :tenant_vehicle_id, :itinerary_id, :carrier_lock, :carrier_id, :origin_hub_id, :destination_hub_id, :cargo_classes, to: :grouping
+        delegate :tenant_vehicle_id, :itinerary_id, :carrier_id, :origin_hub_id, :destination_hub_id, :cargo_classes, to: :offer_attributes
 
         def valid?
           case section
@@ -228,7 +228,7 @@ module OfferCalculator
           charge.section == section &&
             validity_covers? &&
             hub_id_matches? &&
-            (carrier_lock.blank? || charge.carrier_id == carrier_id)
+            satisfies_carrier_lock_if_present?
         end
 
         def hub_id_matches?
@@ -245,6 +245,16 @@ module OfferCalculator
 
         def cargo_class_matches?
           cargo_classes.include?(charge.cargo_class)
+        end
+
+        def satisfies_carrier_lock_if_present?
+          return true if offer_attributes.carrier_lock.blank? && charge.carrier_lock.blank?
+
+          main_freight_carrier_matches_charge_carrier?
+        end
+
+        def main_freight_carrier_matches_charge_carrier?
+          charge.carrier_id == carrier_id
         end
       end
     end

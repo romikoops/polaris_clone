@@ -29,15 +29,15 @@ module Legacy
 
     context "with a mix of duplicate and nil data" do
       let(:duplicate) do
-        FactoryBot.create(:legacy_tenant_vehicle,
+        FactoryBot.build(:legacy_tenant_vehicle,
           organization_id: tenant_vehicle.organization_id,
           mode_of_transport: nil,
           carrier_id: carrier.id,
           name: tenant_vehicle.name)
       end
 
-      it "Creates a valid tenant vehicle" do
-        expect(duplicate).to be_valid
+      it "the TenantVehicle is not valid without a mode of transport" do
+        expect(duplicate).not_to be_valid
       end
     end
 

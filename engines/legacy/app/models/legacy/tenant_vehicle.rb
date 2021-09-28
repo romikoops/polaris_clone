@@ -3,6 +3,7 @@
 module Legacy
   class TenantVehicle < ApplicationRecord
     self.table_name = "tenant_vehicles"
+    TENANT_VEHICLE_MODES_OF_TRANSPORT = (Legacy::Itinerary::MODES_OF_TRANSPORT + ["truck_carriage"]).freeze
 
     acts_as_paranoid
 
@@ -13,6 +14,7 @@ module Legacy
     has_many :transit_times, class_name: "Legacy::TransitTime", dependent: :destroy
 
     validates_uniqueness_of :name, scope: [:organization_id, :carrier_id, :mode_of_transport]
+    validates :mode_of_transport, inclusion: { in: TENANT_VEHICLE_MODES_OF_TRANSPORT }
 
     def full_name
       carrier_id ? "#{carrier&.name} - #{name}" : name

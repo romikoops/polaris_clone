@@ -27,7 +27,7 @@ module OfferCalculator
         end
 
         def tenant_vehicle
-          Legacy::TenantVehicle.find(tenant_vehicle_id)
+          @tenant_vehicle ||= Legacy::TenantVehicle.find(tenant_vehicle_id)
         end
       end
     end
