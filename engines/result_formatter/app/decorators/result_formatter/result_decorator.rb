@@ -173,11 +173,11 @@ module ResultFormatter
     end
 
     def notes
-      @notes = Notes::Service.new(
-        itinerary: itinerary,
-        tenant_vehicle: legacy_service,
-        remarks: false
-      ).fetch.entries
+      @notes ||= notes_service(remarks: false)
+    end
+
+    def remarks
+      @remarks ||= notes_service(remarks: true)
     end
 
     def formatted_pre_carriage_service
@@ -364,5 +364,13 @@ module ResultFormatter
     end
 
     delegate :logo, to: :routing_carrier
+
+    def notes_service(remarks:)
+      Notes::Service.new(
+        itinerary: itinerary,
+        tenant_vehicle: legacy_service,
+        remarks: remarks
+      ).fetch
+    end
   end
 end

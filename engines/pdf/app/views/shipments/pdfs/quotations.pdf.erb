@@ -152,12 +152,11 @@
           <% end %>
         </table>
       </div>
-      <div class="note-remarks-row">
-        <% query.note_remarks.each do |note_remark| %>
-          <p class="note-remark-text"><%= note_remark %></p>
-          <br>
-        <% end %>
-      </div>
+       <% if result.remarks.present? %>
+        <div class="note-remarks-row">
+          <%= render template: "pdf/partials/notes", locals: { notes: result.remarks } %>
+        </div>
+      <% end %>
       <% if query.scope_notes.present? %>
         <div class="tenant-notes-row">
           <% query.scope_notes.each do |result_note| %>
@@ -171,19 +170,7 @@
     <% if result.notes.present? %>
       <div class="remarks">
         <h4>Notes: </h4>
-        <ul> <% result.notes.each do |note| %>
-          <li class="note-header"> <%= note.header %></li>
-          <li class="note-body">
-            <% if note.contains_html %>
-              <p class="hyphens">
-                <%= simple_format(note.body)  %>
-              </p>
-            <% else %>
-              <%== note.body %>
-            <% end %>
-          </li>
-          <% end %>
-        </ul>
+        <%= render template: "pdf/partials/notes", locals: { notes: result.notes } %>
       </div>
     <% end %>
 

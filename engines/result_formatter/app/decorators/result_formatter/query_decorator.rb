@@ -77,14 +77,6 @@ module ResultFormatter
       )
     end
 
-    def note_remarks
-      @note_remarks ||= results.reduce(Legacy::Note.none) do |notes, result|
-        notes.or(Notes::Service.new(itinerary: result.itinerary,
-                                    tenant_vehicle: result.legacy_service,
-                                    remarks: true).fetch)
-      end.uniq.pluck(:body)
-    end
-
     def total_weight
       @total_weight ||= cargo_units.inject(Measured::Weight.new(0, "kg")) do |memo, unit|
         memo + unit.total_weight
