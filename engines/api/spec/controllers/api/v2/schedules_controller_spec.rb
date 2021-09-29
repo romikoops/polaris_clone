@@ -21,6 +21,7 @@ module Api
       schedule_attributes = { id: "96b0a57c-d9ae-453f-b56f-3b154eb10cda",
                               vessel_no: "1234",
                               voyage_code: "0000",
+                              mode_of_transport: "ocean",
                               estimated_arrival_time: DateTime.now,
                               estimated_departure_time: 10.days.from_now,
                               closing_date: 7.days.from_now }

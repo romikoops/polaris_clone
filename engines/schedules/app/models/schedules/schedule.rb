@@ -7,6 +7,13 @@ module Schedules
     validates :origin, presence: true
     validates :destination, presence: true
     validates :destination_arrival, presence: true
+
+    enum mode_of_transport: {
+      ocean: "ocean",
+      air: "air",
+      rail: "rail",
+      truck: "truck"
+    }
   end
 end
 
@@ -19,6 +26,7 @@ end
 #  closing_date        :datetime         not null
 #  destination         :string           not null
 #  destination_arrival :datetime         not null
+#  mode_of_transport   :enum             not null
 #  origin              :string           not null
 #  origin_departure    :datetime         not null
 #  service             :string           default("")

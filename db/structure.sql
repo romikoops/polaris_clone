@@ -255,6 +255,18 @@ CREATE TYPE public.journey_status AS ENUM (
 
 
 --
+-- Name: schedules_mode_of_transport; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.schedules_mode_of_transport AS ENUM (
+    'ocean',
+    'air',
+    'rail',
+    'truck'
+);
+
+
+--
 -- Name: shipment_request_status; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -3801,6 +3813,7 @@ CREATE TABLE public.schedules_schedules (
     closing_date timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    mode_of_transport public.schedules_mode_of_transport NOT NULL,
     CONSTRAINT arrival_after_departure CHECK ((destination_arrival > origin_departure)),
     CONSTRAINT departure_after_or_equal_to_closing_date CHECK ((origin_departure >= closing_date)),
     CONSTRAINT schedules_schedules_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
@@ -12539,6 +12552,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210920145722'),
 ('20210922115034'),
 ('20210923083433'),
-('20210924113302');
+('20210924113302'),
+('20210929072457');
 
 

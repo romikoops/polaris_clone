@@ -15,5 +15,6 @@ FactoryBot.define do
     carrier { "msc" }
     service { "standard" }
     created_at { DateTime.now.change(usec: 0) }
+    mode_of_transport { "ocean" }
   end
 end

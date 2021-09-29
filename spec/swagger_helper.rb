@@ -1404,25 +1404,29 @@ RSpec.configure do |config|
                 description: "ID",
                 type: "string"
               },
-              estimated_departure_time: {
+              estimatedDepartureTime: {
                 description: "Estimated departure date",
                 type: "datetime"
               },
-              estimated_arrival_time: {
+              estimatedArrivalTime: {
                 description: "Estimation of arrival time",
                 type: "datetime"
               },
-              voyage_code: {
+              voyageCode: {
                 description: "voyage code",
                 type: "string"
               },
-              vessel_no: {
+              vesselNo: {
                 description: "vessel number",
                 type: "string"
               },
-              closing_date: {
+              closingDate: {
                 description: "schedule closing date",
                 type: "datetime"
+              },
+              modeOfTransport: {
+                description: "The mode of transport of the schedule",
+                type: "string"
               }
             }
           },
