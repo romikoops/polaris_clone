@@ -607,7 +607,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fa8a68bd5e8@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fb4adfd7618@/Users/vahdetpervan/projects/itsmycargo/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1057,6 +1057,7 @@ end
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
 #       v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index
 #            v2_organization_result_schedules GET    /v2/organizations/:organization_id/results/:result_id/schedules(.:format)                api/v2/schedules#index
+#    v2_organization_result_shipment_requests POST   /v2/organizations/:organization_id/results/:result_id/shipment_requests(.:format)        api/v2/shipment_requests#create
 #                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
 #                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
 #                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
@@ -1074,7 +1075,6 @@ end
 #                     v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
 #                                             PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
 #                                             PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
-#           v2_organization_shipment_requests POST   /v2/organizations/:organization_id/shipment_requests(.:format)                           api/v2/shipment_requests#create
 #            v2_organization_shipment_request GET    /v2/organizations/:organization_id/shipment_requests/:id(.:format)                       api/v2/shipment_requests#show
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #

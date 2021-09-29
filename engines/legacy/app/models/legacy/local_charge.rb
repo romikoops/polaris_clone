@@ -6,6 +6,8 @@ module Legacy
 
     self.table_name = "local_charges"
 
+    acts_as_paranoid
+
     has_paper_trail
 
     belongs_to :hub, class_name: "Legacy::Hub"
@@ -79,6 +81,7 @@ end
 #
 #  id                 :bigint           not null, primary key
 #  dangerous          :boolean          default(FALSE)
+#  deleted_at         :datetime
 #  direction          :string
 #  effective_date     :datetime
 #  expiration_date    :datetime

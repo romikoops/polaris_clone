@@ -9,6 +9,7 @@ end
 #
 #  id                 :bigint           not null, primary key
 #  dangerous          :boolean          default(FALSE)
+#  deleted_at         :datetime
 #  direction          :string
 #  effective_date     :datetime
 #  expiration_date    :datetime

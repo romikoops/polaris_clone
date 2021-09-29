@@ -2582,7 +2582,8 @@ CREATE TABLE public.local_charges (
     metadata jsonb DEFAULT '{}'::jsonb,
     validity daterange,
     organization_id uuid,
-    user_id uuid
+    user_id uuid,
+    deleted_at timestamp without time zone
 );
 
 
@@ -12553,6 +12554,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210922115034'),
 ('20210923083433'),
 ('20210924113302'),
+('20210928194056'),
 ('20210929072457');
 
 
