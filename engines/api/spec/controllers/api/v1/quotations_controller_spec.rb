@@ -265,14 +265,15 @@ module Api
     describe "GET #show" do
       include_context "journey_pdf_setup"
       context "when async error has occurred " do
-        before { FactoryBot.create(:journey_error, query: query, code: 3002) }
+        before do
+          result.destroy
+          FactoryBot.create(:journey_error, query: query, code: 3002)
+        end
 
         it "renders the errors" do
           get :show, params: { organization_id: organization.id, id: query.id }
 
-          aggregate_failures do
-            expect(response_error).to eq "OfferCalculator::Errors::LoadMeterageExceeded"
-          end
+          expect(response_error).to eq "OfferCalculator::Errors::LoadMeterageExceeded"
         end
       end
 
@@ -312,6 +313,15 @@ module Api
 
       context "when cargo is lcl" do
         let(:cargo_trait) { :lcl }
+
+        it "returns the cargo items" do
+          get :show, params: { organization_id: organization.id, id: query.id }
+          expect(response_data.dig("attributes", "cargoItems", "data", 0, "id")).to eq(query.cargo_units.first.id)
+        end
+      end
+
+      context "when no results are completed yet" do
+        before { result.destroy }
 
         it "returns the cargo items" do
           get :show, params: { organization_id: organization.id, id: query.id }

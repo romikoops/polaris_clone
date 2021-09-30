@@ -217,7 +217,7 @@ module Api
       end
 
       def check_for_errors
-        return if query.result_errors.empty? && query.results.present?
+        return if query.result_errors.empty? || query.results.present?
 
         raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code)
       end
