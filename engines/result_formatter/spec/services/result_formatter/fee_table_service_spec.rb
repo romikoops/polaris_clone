@@ -2,6 +2,8 @@
 
 require "rails_helper"
 RSpec.shared_examples "FeeTableService results" do
+  before { line_item_set.reload }
+
   it "returns rows for each level of charge table", :aggregate_failures do
     expect(results.pluck(:description)).to eq(expected_descriptions)
     expect(results.pluck(:lineItemId).compact).to match_array(line_item_set.line_items.ids)
@@ -262,6 +264,47 @@ module ResultFormatter
                                         created_at: result.created_at - 30.seconds)
           second_line_item.save
           line_item_set.reload
+        end
+
+        include_examples "FeeTableService results"
+      end
+
+      context "with primary code, consolidation and single currency" do
+        let(:second_line_item) do
+          FactoryBot.build(:journey_line_item,
+            line_item_set: line_item_set,
+            route_section: freight_section,
+            fee_code: "baf",
+            description: "Bunker Adjustment Fee")
+        end
+        let(:custom_scope) do
+          {
+            consolidation: { cargo: { backend: true } },
+            primary_freight_code: "BAF",
+            default_currency: "USD",
+            fee_detail: "name"
+          }
+        end
+        let(:cargo_class) { "lcl" }
+        let(:results) { klass.perform }
+        let(:expected_descriptions) do
+          [nil,
+            "Trucking pre",
+            pre_carriage_line_items_with_cargo.first.description,
+            "Export",
+            origin_transfer_line_items_with_cargo.first.description,
+            "Cargo",
+            second_line_item.description,
+            freight_line_items_with_cargo.first.description,
+            "Import",
+            destination_transfer_line_items_with_cargo.first.description,
+            "Trucking on",
+            on_carriage_line_items_with_cargo.first.description]
+        end
+
+        before do
+          freight_section.line_items << second_line_item
+          freight_section.save
         end
 
         include_examples "FeeTableService results"

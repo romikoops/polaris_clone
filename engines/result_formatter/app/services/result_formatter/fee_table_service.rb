@@ -103,7 +103,7 @@ module ResultFormatter
       end
 
       def currency_children
-        RouteSectionCurrencySorter.new(parent: row, line_items: route_section.line_items, scope: scope, type: type).rows
+        RouteSectionCurrencySorter.new(parent: row, line_items: route_section_line_items.to_a, scope: scope, type: type).rows
       end
 
       def cargo_children
