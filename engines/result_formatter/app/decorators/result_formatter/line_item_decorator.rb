@@ -58,7 +58,7 @@ module ResultFormatter
     end
 
     def show_rate_and_factor?
-      !percentage_fee? && !included && !optional && rate_basis != "PER_SHIPMENT" && breakdown.present?
+      !percentage_fee? && !included && !optional && rate_basis != "PER_SHIPMENT" && charged_rate.present?
     end
 
     def charged_rate
@@ -128,7 +128,7 @@ module ResultFormatter
     end
 
     def breakdown_rate_data
-      return {} if breakdown.blank?
+      return {} if breakdown.blank? || breakdown.data.empty?
 
       @breakdown_rate_data ||= if breakdown.data.key?("rate_basis")
         breakdown.data

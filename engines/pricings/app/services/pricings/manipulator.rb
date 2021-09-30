@@ -529,7 +529,7 @@ module Pricings
             fee_code: adjusted_key,
             margin_value: margin.value,
             margin_or_detail: margin,
-            result: {}
+            result: { rate_basis: rate_basis_for_flat_margins(fee_code: adjusted_key) }
           )
           hash[adjusted_key] += margin.value
         end
@@ -537,15 +537,27 @@ module Pricings
       end
     end
 
+    def rate_basis_for_flat_margins(fee_code:)
+      case type.to_s
+      when /freight/
+        @result[:result].dig("data", fee_code, "rate_basis")
+      when /port/
+        @result[:result].dig("fees", fee_code.upcase, "rate_basis")
+      else
+        @result[:result].dig("fees", fee_code, "rate_basis") ||
+          @result[:result].dig("rates", 0, 1, 0, "rate")
+      end
+    end
+
     def handle_shipment_total_margins(total_margins:, key:, result:)
       total_margins.uniq.each do |total_margin|
         divided_margin_value = total_margin.value / (fee_keys.count * cargo_count)
-
+        adjusted_key = key.include?("trucking") ? trucking_charge_category.code : key
         update_meta_for_margin(
-          fee_code: key.include?("trucking") ? trucking_charge_category.code : key,
+          fee_code: adjusted_key,
           margin_value: divided_margin_value,
           margin_or_detail: total_margin,
-          result: {}
+          result: { rate_basis: rate_basis_for_flat_margins(fee_code: adjusted_key) }
         )
         result[key] += divided_margin_value
       end

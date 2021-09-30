@@ -111,14 +111,12 @@ RSpec.describe Pricings::Manipulator do
           pricing: pricing, organization: organization, applicable: user, operator: "+", value: 100)
       end
 
-      it "returns the manipulated freight pricing attached to the user (single total margin)" do
-        aggregate_failures do
-          expect(target_result.result["id"]).to eq(pricing.id)
-          expect(target_result.result["data"].keys).to eq(["bas"])
-          expect(target_result.result.dig("data", "bas", "rate")).to eq(25)
-          expect(target_result.result.dig("data", "bas", "rate_basis")).to eq("PER_WM")
-          expect(manipulated_results.map(&:flat_margins)).to eq([{"bas" => 100}])
-        end
+      it "returns the manipulated freight pricing attached to the user (single total margin)", :aggregate_failures do
+        expect(target_result.result["id"]).to eq(pricing.id)
+        expect(target_result.result.dig("data", "bas", "rate")).to eq(25)
+        expect(target_result.result.dig("data", "bas", "rate_basis")).to eq("PER_WM")
+        expect(target_result.breakdowns.flat_map(&:data)).to include({ rate_basis: "PER_WM" })
+        expect(manipulated_results.map(&:flat_margins)).to eq([{ "bas" => 100 }])
       end
     end
 

@@ -185,6 +185,28 @@ RSpec.describe ResultFormatter::LineItemDecorator do
         expect(decorated_line_item.rate_factor).to be_nil
       end
     end
+
+    context "with a data less Breakdown" do
+      let(:breakdown_rate_data) do
+        {}
+      end
+
+      it "return the value" do
+        expect(decorated_line_item.rate_factor).to be_nil
+      end
+    end
+
+    context "with flat margins structure" do
+      let(:breakdown_rate_data) do
+        {
+          "rate_basis" => "PER_WM"
+        }
+      end
+
+      it "return the value" do
+        expect(decorated_line_item.rate_factor).to be_nil
+      end
+    end
   end
 
   describe "#rate" do
@@ -254,6 +276,28 @@ RSpec.describe ResultFormatter::LineItemDecorator do
 
     context "without a Breakdown" do
       let(:breakdown) { nil }
+
+      it "return the value" do
+        expect(decorated_line_item.rate).to be_nil
+      end
+    end
+
+    context "with a data less Breakdown" do
+      let(:breakdown_rate_data) do
+        {}
+      end
+
+      it "return the value" do
+        expect(decorated_line_item.rate).to be_nil
+      end
+    end
+
+    context "with flat margins structure" do
+      let(:breakdown_rate_data) do
+        {
+          "rate_basis" => "PER_WM"
+        }
+      end
 
       it "return the value" do
         expect(decorated_line_item.rate).to be_nil

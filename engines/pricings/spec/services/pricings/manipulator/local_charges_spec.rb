@@ -57,6 +57,7 @@ RSpec.describe Pricings::Manipulator do
   let(:target_shipment) { lcl_shipment }
   let(:hub) { itinerary.hubs.first }
   let(:manipulated_results) { klass.perform }
+  let(:target_result) { manipulated_results.first }
 
   before do
     FactoryBot.create(:thc_charge, organization: organization)
@@ -445,18 +446,14 @@ RSpec.describe Pricings::Manipulator do
         FactoryBot.create(:export_margin,
           origin_hub: hub, organization: organization, applicable: user, value: 10, operator: "+")
       end
-
       let!(:results) { klass.perform }
 
-      it "returns the manipulated local_charge attached to the user for addition margin" do
-        aggregate_failures do
-          expect(results.first.result["id"]).to eq(local_charge.id)
-          expect(results.first.result["fees"].keys).to eq(["solas"])
-          expect(results.first.result.dig("fees", "solas", "value")).to eq(17.5)
-          expect(results.first.flat_margins).to eq("solas" => 0.1e2)
-          expect(results.first.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
-          expect(results.map(&:flat_margins)).to match_array([{"solas" => 0.1e2}])
-        end
+      it "returns the manipulated local_charge attached to the user for addition margin", :aggregate_failures do
+        expect(target_result.result.dig("fees", "solas", "value")).to eq(17.5)
+        expect(target_result.flat_margins).to eq("solas" => 1.0e1)
+        expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
+        expect(manipulated_results.map(&:flat_margins)).to match_array([{ "solas" => 1.0e1 }])
+        expect(target_result.breakdowns.flat_map(&:data)).to include({ rate_basis: "PER_SHIPMENT" })
       end
     end
 

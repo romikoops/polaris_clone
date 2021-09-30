@@ -114,6 +114,7 @@ RSpec.describe Pricings::Manipulator do
         expect(manipulated_results.map { |pricing| pricing.result.dig("fees", "puf", "value") }).to match_array([250.0, 275.0, 250.0, 250.0])
         expect(manipulated_results.map { |pricing| pricing.result.dig("fees", "puf", "rate_basis") }.uniq).to eq(["PER_SHIPMENT"])
         expect(manipulated_results.map { |pricing| pricing.result.dig("rates", "kg", 0, "rate", "value") }).to eq([237.5, 261.25, 237.5, 237.5])
+        expect(manipulated_results.flat_map(&:breakdowns).flat_map(&:data)).to include({ rate_basis: "PER_SHIPMENT" })
       end
     end
 
