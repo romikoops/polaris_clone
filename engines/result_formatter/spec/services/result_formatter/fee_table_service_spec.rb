@@ -61,7 +61,30 @@ module ResultFormatter
       end
 
       context "with container load type" do
+        let(:expected_values) do
+          [{ amount: 150, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { included: false, excluded: false, amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { included: false, excluded: false, amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { included: false, excluded: false, amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { included: false, excluded: false, amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { amount: 30.0, currency: "USD" },
+            { included: false, excluded: false, amount: 30.0, currency: "USD" }]
+        end
+
         include_examples "FeeTableService results"
+
+        it "puts the distinct totals for each section and the grand total" do
+          expect(results.pluck(:value)).to match_array(expected_values)
+        end
       end
 
       context "with cargo_item load type" do

@@ -85,8 +85,8 @@ module ResultFormatter
       def row
         @row ||= Row.new(data: {
           description: charge_category.name,
-          value: MoneyFormatter.new(value: fee_value, type: type).format,
-          originalValue: MoneyFormatter.new(value: original_fee_value, type: type).format,
+          value: MoneyFormatter.new(value: fee_value(original: false), type: type).format,
+          originalValue: MoneyFormatter.new(value: fee_value(original: true), type: type).format,
           tenderId: route_section.result_id,
           order: route_section.order,
           section: charge_category.code,
@@ -113,7 +113,7 @@ module ResultFormatter
       end
 
       def grouped_line_items
-        route_section.line_items.where(line_item_set: current_line_item_set)
+        route_section_line_items
           .group_by { |line_item| line_item.cargo_units.ids }
           .sort_by { |cargo_unit_ids, _items_by_cargo| -cargo_unit_ids.length }
           .map(&:last)
@@ -127,12 +127,8 @@ module ResultFormatter
         @current_line_item_set ||= Journey::LineItemSet.where(result: route_section.result_id).order(created_at: :desc).first
       end
 
-      def fee_value
-        LineItemsTotal.new(line_items: current_line_item_set.line_items, original: false).value
-      end
-
-      def original_fee_value
-        LineItemsTotal.new(line_items: current_line_item_set.line_items, original: true).value
+      def fee_value(original:)
+        LineItemsTotal.new(line_items: route_section_line_items, original: original).value
       end
 
       def consolidated_cargo?
@@ -141,6 +137,10 @@ module ResultFormatter
 
       def lcl_cargo_units?
         route_section.result.query.cargo_units.exists?(cargo_class: %w[lcl aggregated_lcl])
+      end
+
+      def route_section_line_items
+        @route_section_line_items ||= current_line_item_set.line_items.where(route_section: route_section)
       end
     end
 
@@ -170,7 +170,7 @@ module ResultFormatter
           parentId: parent[:id],
           tenderId: parent[:tenderId],
           section: parent[:section],
-          level: parent[:level] + 1,
+          level: 2,
           chargeCategoryId: ""
         }).row
       end
@@ -307,7 +307,7 @@ module ResultFormatter
           lineItemId: nil,
           tenderId: parent[:tenderId],
           section: parent[:section],
-          level: parent[:level] + 1
+          level: 3
         }).row
       end
 
@@ -368,7 +368,7 @@ module ResultFormatter
           lineItemId: line_item.id,
           tenderId: parent[:tenderId],
           section: parent[:section],
-          level: parent[:level] + 1,
+          level: 4,
           code: line_item.fee_code,
           rateFactor: line_item.rate_factor,
           rate: line_item.rate

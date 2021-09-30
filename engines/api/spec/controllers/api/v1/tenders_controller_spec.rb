@@ -19,6 +19,7 @@ module Api
     let!(:line_item) do
       FactoryBot.create(:journey_line_item,
         line_item_set: line_item_set,
+        route_section: result.route_sections.first,
         units: 3,
         total: Money.new(9000, "EUR"),
         unit_price: Money.new(3000, "EUR"),
