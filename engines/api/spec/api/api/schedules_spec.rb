@@ -9,6 +9,7 @@ RSpec.describe "Schedules", type: :request, swagger: true do
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:result) { FactoryBot.create(:journey_result) }
+  let(:schedule) { FactoryBot.create(:schedules_schedule) }
   let(:tender) do
     FactoryBot.create(:quotations_tender, itinerary: itinerary, tenant_vehicle: tenant_vehicle, load_type: "cargo_item")
   end
@@ -136,6 +137,39 @@ RSpec.describe "Schedules", type: :request, swagger: true do
                properties: {
                  data: {
                    type: :array,
+                   items: { "$ref" => "#/components/schemas/schedule" }
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/results/{result_id}/schedules/{id}" do
+    get "Fetch schedule the given schedule id" do
+      tags "Schedule"
+      description "Fetch all valid schedules for result"
+      operationId "getSchedule"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :result_id, in: :path, type: :string, description: "The result ID for which the schedules are to be fetched"
+      parameter name: :id, in: :path, type: :string, description: "The existing schedule"
+
+      let(:result_id) { result.id }
+      let(:organization_id) { organization.id }
+      let(:id) { schedule.id }
+
+      response "200", "successful operation" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
                    items: { "$ref" => "#/components/schemas/schedule" }
                  }
                },

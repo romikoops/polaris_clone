@@ -1057,6 +1057,7 @@ end
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
 #       v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index
 #            v2_organization_result_schedules GET    /v2/organizations/:organization_id/results/:result_id/schedules(.:format)                api/v2/schedules#index
+#             v2_organization_result_schedule GET    /v2/organizations/:organization_id/results/:result_id/schedules/:id(.:format)            api/v2/schedules#show
 #    v2_organization_result_shipment_requests POST   /v2/organizations/:organization_id/results/:result_id/shipment_requests(.:format)        api/v2/shipment_requests#create
 #                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
 #                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email

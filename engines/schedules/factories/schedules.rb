@@ -11,7 +11,7 @@ FactoryBot.define do
     destination { "shanghai airport" }
     origin_departure { Time.zone.tomorrow }
     destination_arrival { Time.zone.today + 3.weeks }
-    closing_date { Time.zone.tomorrow + 3.weeks }
+    closing_date { Time.zone.tomorrow }
     carrier { "msc" }
     service { "standard" }
     created_at { DateTime.now.change(usec: 0) }

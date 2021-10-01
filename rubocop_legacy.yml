@@ -8,6 +8,7 @@ RSpec/MultipleMemoizedHelpers:
   Exclude:
   - 'engines/api/spec/api/api/*_spec.rb'
   - 'engines/api/spec/controllers/api/v2/queries_controller_spec.rb'
+  - 'engines/api/spec/controllers/api/v2/schedules_controller_spec.rb'
   - 'engines/api/spec/controllers/api/v1/clients_controller_spec.rb'
   - 'engines/api/spec/controllers/api/v1/equipments_controller_spec.rb'
   - 'engines/api/spec/controllers/api/v1/quotations_controller_spec.rb'

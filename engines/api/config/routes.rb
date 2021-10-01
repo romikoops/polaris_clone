@@ -76,7 +76,7 @@ Api::Engine.routes.draw do
       resources :results, only: [:show] do
         resources :charges, only: [:index]
         resources :route_sections, only: [:index]
-        resources :schedules, only: [:index]
+        resources :schedules, only: %i[index show]
         resources :shipment_requests, only: %i[create]
       end
       resources :offers, only: [:create] do
