@@ -31,7 +31,7 @@ module ExcelDataServices
       end
 
       def schema_types
-        ["Pricings"]
+        %w[Pricings Schedules]
       end
 
       def result_state

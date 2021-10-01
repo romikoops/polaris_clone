@@ -23,7 +23,9 @@ module ExcelDataServices
 
         def final_frame(target:)
           full_frame = Rover::DataFrame.new(
-            send("#{target}_joins").each_with_object(blank_frame) do |join, target_frame|
+            send("#{target}_joins")
+            .select { |join| frame.include?(join.keys.first) }
+            .each_with_object(blank_frame) do |join, target_frame|
               target_frame.concat(frame[!frame[join.first.first].missing].left_join(send("#{target}_hub_frame"), on: join.merge("mode_of_transport" => "mode_of_transport")))
             end,
             types: frame_types

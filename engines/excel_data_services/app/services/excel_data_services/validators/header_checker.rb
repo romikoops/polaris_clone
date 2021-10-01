@@ -291,7 +291,7 @@ module ExcelDataServices
           constants << name unless name.starts_with?("optional")
         end
 
-        names -= %w[pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges] if v2_enabled?
+        names -= %w[pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges schedules] if v2_enabled?
         names
       end
 
