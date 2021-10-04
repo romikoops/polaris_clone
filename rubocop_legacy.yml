@@ -23,6 +23,7 @@ RSpec/MultipleMemoizedHelpers:
   - 'engines/idp/spec/requests/idp/saml_controller_spec.rb'
   - 'engines/idp/spec/services/idp/saml_data_builder_spec.rb'
   - 'engines/journey/spec/shared/*.rb'
+  - 'engines/notifications/spec/models/notifications/subscription_spec.rb'
   - 'engines/notifications/spec/services/notifications/offer_subject_line_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/queries/full_attributes_from_itinerary_ids_spec.rb'
   - 'engines/offer_calculator/spec/services/offer_calculator/service/cargo_creator_spec.rb'

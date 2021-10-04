@@ -1,8 +1,15 @@
 # frozen_string_literal: true
+
 module Notifications
   class Subscription < ApplicationRecord
+    extend Notifications::FilterMethodDefiner
+    include Filterable
     belongs_to :user, optional: true, class_name: "Users::User"
     belongs_to :organization, class_name: "Organizations::Organization"
+
+    FILTERS = %w[groups origins destinations mode_of_transports].freeze
+    define_setters(*FILTERS)
+    define_getters(*FILTERS)
   end
 end
 

@@ -2865,7 +2865,7 @@ ALTER SEQUENCE public.notes_id_seq OWNED BY public.notes.id;
 CREATE TABLE public.notifications_subscriptions (
     id bigint NOT NULL,
     event_type character varying,
-    filter json DEFAULT '"{}"'::json,
+    filter json DEFAULT '{}'::json,
     user_id uuid,
     organization_id uuid,
     email character varying,
@@ -3800,7 +3800,7 @@ CREATE TABLE public.routing_terminals (
 --
 
 CREATE TABLE public.schedules_schedules (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     organization_id uuid,
     voyage_code character varying DEFAULT ''::character varying,
     vessel_name character varying DEFAULT ''::character varying,
@@ -12553,6 +12553,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210920145722'),
 ('20210922115034'),
 ('20210923083433'),
+('20210923131847'),
 ('20210924113302'),
 ('20210928194056'),
 ('20210929072457');
