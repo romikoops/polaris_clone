@@ -88,7 +88,7 @@ module Api
       end
 
       def remarks
-        Notes::Service.new(itinerary: itinerary, tenant_vehicle: legacy_service, remarks: true)
+        Notes::Service.new(itinerary: itinerary, tenant_vehicle: legacy_service, pricing_id: freight_pricing.id, remarks: true)
           .fetch
           .to_a
           .pluck(:body)

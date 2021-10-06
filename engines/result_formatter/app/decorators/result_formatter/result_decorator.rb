@@ -369,7 +369,8 @@ module ResultFormatter
       Notes::Service.new(
         itinerary: itinerary,
         tenant_vehicle: legacy_service,
-        remarks: remarks
+        remarks: remarks,
+        pricing_id: freight_pricing.id
       ).fetch
     end
   end

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Notes::Service do
   describe ".fetch" do
-    let(:result_notes) { described_class.new(itinerary: itinerary, tenant_vehicle: tenant_vehicle).fetch }
+    let(:result_notes) { described_class.new(itinerary: itinerary, tenant_vehicle: tenant_vehicle, pricing_id: pricing.id).fetch }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
     let(:itinerary) { FactoryBot.create(:legacy_itinerary, organization: organization) }
@@ -13,6 +13,13 @@ RSpec.describe Notes::Service do
         itinerary: itinerary,
         tenant_vehicle: tenant_vehicle,
         organization: organization)
+    end
+
+    it "only returns the legacy notes, belonging to a pricing, where the body of each note is distinct", :aggregate_failures do
+      first_note = FactoryBot.create(:legacy_note, organization: organization, body: "Example body number 1", pricings_pricing_id: pricing.id, remarks: false, target: itinerary.origin_hub)
+      second_note = FactoryBot.create(:legacy_note, organization: organization, body: "Example body number 2", pricings_pricing_id: pricing.id, remarks: false, target: itinerary.origin_hub)
+      expect(result_notes.first).to eq(first_note)
+      expect(result_notes.last).to eq(second_note)
     end
 
     context "when notes have duplicate bodies" do

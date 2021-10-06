@@ -15,6 +15,7 @@ module Api
           meta: legacy_meta,
           notes: Notes::Service.new(itinerary: itinerary,
                                     tenant_vehicle: legacy_service,
+                                    pricing_id: freight_pricing.id,
                                     remarks: false).fetch
         }
       end

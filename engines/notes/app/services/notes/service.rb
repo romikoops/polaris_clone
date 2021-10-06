@@ -2,18 +2,19 @@
 
 module Notes
   class Service
-    attr_reader :tenant_vehicle, :remarks, :organization, :itinerary
+    attr_reader :tenant_vehicle, :remarks, :pricing_id, :organization, :itinerary
 
-    def initialize(itinerary:, tenant_vehicle:, remarks: false)
+    def initialize(itinerary:, tenant_vehicle:, pricing_id:, remarks: false)
       @tenant_vehicle = tenant_vehicle
       @remarks = remarks
+      @pricing_id = pricing_id
       @organization = itinerary.organization
       @itinerary = itinerary
     end
 
     def fetch
       note_association.where(target: hubs | nexii | countries | [itinerary])
-        .or(note_association.where(pricings_pricing_id: pricing_ids))
+        .or(note_association.where(pricings_pricing_id: pricing_id))
         .or(note_association.where(target: nil, pricings_pricing_id: nil))
         .order(:body)
         .select("DISTINCT ON (body) body, *")
@@ -33,10 +34,6 @@ module Notes
 
     def countries
       @countries ||= ::Legacy::Country.where(id: nexii.select(:country_id))
-    end
-
-    def pricing_ids
-      Pricings::Pricing.where(itinerary: itinerary, tenant_vehicle: tenant_vehicle)
     end
   end
 end
