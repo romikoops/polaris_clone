@@ -126,6 +126,46 @@ RSpec.describe ResultFormatter::LineItemDecorator do
     end
   end
 
+  describe "#rate_basis" do
+    it "returns an empty hash, when the pricing breakdown is blank" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(nil)
+      expect(decorated_line_item.rate_basis).to be_nil
+    end
+
+    it "returns an empty hash, when the pricing breakdown's data is emtpy" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(FactoryBot.build(:pricings_breakdown, data: {}))
+      expect(decorated_line_item.rate_basis).to be_nil
+    end
+
+    it "returns the pricing breakdown's data, when the pricing breakdown's data contains the 'rate_basis' key" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(
+        FactoryBot.build(:pricings_breakdown, data: { "rate_basis" => "PER_SHIPMENT" })
+      )
+      expect(decorated_line_item.rate_basis).to eq("PER_SHIPMENT")
+    end
+
+    it "returns an empty hash, when the pricing breakdown's 'rate_origin' type is 'Trucking::Trucking', but the data entry for rate could not be found" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(
+        FactoryBot.build(:pricings_breakdown, data: { "kg" => [] }, rate_origin: { "type" => "Trucking::Trucking" })
+      )
+      expect(decorated_line_item.rate_basis).to be_nil
+    end
+
+    it "returns an empty hash, when the pricing breakdown's 'rate_origin' type is not 'Trucking::Trucking'" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(FactoryBot.build(:pricings_breakdown,
+        data: { "kg" => [{ "rate" => { "base" => 1.0, "value" => 50.0, "currency" => "EUR" }, "max_kg" => "300.0", "min_kg" => "200.0", "min_value" => 0.0 }] },
+        rate_origin: { "type" => "Pricings::Pricing" }))
+      expect(decorated_line_item.rate_basis).to be_nil
+    end
+
+    it "returns an empty hash, when the pricing breakdown's 'rate_origin' type is 'Trucking::Trucking'" do
+      allow(decorated_line_item).to receive(:breakdown).and_return(FactoryBot.build(:pricings_breakdown,
+        data: { "kg" => [{ "rate" => { "base" => 1.0, "value" => 50.0, "currency" => "EUR", "rate_basis" => "PER_SHIPMENT" }, "max_kg" => "300.0", "min_kg" => "200.0", "min_value" => 0.0 }] },
+        rate_origin: { "type" => "Trucking::Trucking" }))
+      expect(decorated_line_item.rate_basis).to eq("PER_SHIPMENT")
+    end
+  end
+
   describe "#rate_factor" do
     before { allow(decorated_line_item).to receive(:breakdown).and_return(breakdown) }
 

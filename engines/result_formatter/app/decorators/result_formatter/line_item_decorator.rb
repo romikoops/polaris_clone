@@ -133,7 +133,9 @@ module ResultFormatter
       @breakdown_rate_data ||= if breakdown.data.key?("rate_basis")
         breakdown.data
       elsif breakdown.rate_origin["type"] == "Trucking::Trucking"
-        breakdown.data.entries.dig(0, 1, 0, "rate")
+        breakdown.data.entries.dig(0, 1, 0, "rate") || {}
+      else
+        {}
       end
     end
 
