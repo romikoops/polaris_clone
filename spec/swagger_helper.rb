@@ -1427,6 +1427,10 @@ RSpec.configure do |config|
               modeOfTransport: {
                 description: "The mode of transport of the schedule",
                 type: "string"
+              },
+              transitTime: {
+                description: "The time in days that will take the goods to reach from origin to destination.",
+                type: "integer"
               }
             }
           },
