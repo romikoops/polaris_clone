@@ -12,7 +12,7 @@ module Notifications
         Subscription.where(
           event_type: "Journey::OfferCreated",
           organization_id: event.data.fetch(:organization_id)
-        ).filtered(FilterBuilder.new(offer: offer).to_hash).each do |subscription|
+        ).find_each do |subscription|
           AdminMailer.with(
             organization: query.organization,
             offer: offer,
