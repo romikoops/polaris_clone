@@ -72,5 +72,11 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         expect(stats).to eq(expected_stats)
       end
     end
+
+    context "when creating Legacy and Routing Carrier's in tandem" do
+      it "ensures there is a Routing::Carrier for every Legacy::Carrier" do
+        expect(Routing::Carrier.all.pluck(:code)).to eq(Legacy::Carrier.all.pluck(:code))
+      end
+    end
   end
 end

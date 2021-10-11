@@ -49,7 +49,10 @@ module OfferCalculator
             legacy_carrier = tenant_vehicle.carrier
             carrier_code = legacy_carrier ? legacy_carrier.code : request.organization.slug
 
-            ::Routing::Carrier.find_by(code: carrier_code).name
+            routing_carrier = ::Routing::Carrier.find_by(code: carrier_code)
+            raise OfferCalculator::Errors::OfferBuilder if routing_carrier.nil?
+
+            routing_carrier.name
           end
 
           def route_point(location:)

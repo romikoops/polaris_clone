@@ -42,9 +42,10 @@ module ExcelDataServices
         def carrier
           return nil if carrier_string.blank?
 
-          Legacy::Carrier.find_or_initialize_by(code: carrier_string.downcase).tap do |new_carrier|
-            new_carrier.name = carrier_string if new_carrier.name.blank?
-            new_carrier.save
+          code = carrier_string.downcase
+          ActiveRecord::Base.transaction do
+            Routing::Carrier.create_with(name: carrier_string).find_or_create_by!(code: code)
+            Legacy::Carrier.create_with(name: carrier_string).find_or_create_by!(code: code)
           end
         end
 

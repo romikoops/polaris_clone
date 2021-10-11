@@ -21,12 +21,21 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Freight do
     before do
       allow(offer).to receive(:itinerary).and_return(itinerary)
       allow(offer).to receive(:tenant_vehicle).and_return(tenant_vehicle)
-      FactoryBot.create(:routing_carrier, code: tenant_vehicle.carrier.code)
       allow(service).to receive(:geo_id_from_hub).and_return("XXX")
     end
 
-    it "returns a valid RouteSection", :aggregate_failures do
-      expect(service.route_section.transshipment).to eq(itinerary.transshipment)
+    context "when Routing::Carrier exists" do
+      before { FactoryBot.create(:routing_carrier, code: tenant_vehicle.carrier.code) }
+
+      it "returns the RouteSection with the correct transshipment" do
+        expect(service.route_section.transshipment).to eq(itinerary.transshipment)
+      end
+    end
+
+    context "when the Routing Carrier doesnt exist" do
+      it "raises an OfferBuilder error" do
+        expect { service.route_section }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+      end
     end
   end
 end

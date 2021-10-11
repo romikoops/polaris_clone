@@ -3800,7 +3800,7 @@ CREATE TABLE public.routing_terminals (
 --
 
 CREATE TABLE public.schedules_schedules (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     organization_id uuid,
     voyage_code character varying DEFAULT ''::character varying,
     vessel_name character varying DEFAULT ''::character varying,
