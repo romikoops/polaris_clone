@@ -10,7 +10,7 @@ module Api
       end
 
       def completed
-        results.present?
+        completed?
       end
 
       def origin_route_point

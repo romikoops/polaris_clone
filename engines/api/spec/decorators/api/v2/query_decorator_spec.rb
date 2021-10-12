@@ -24,4 +24,24 @@ RSpec.describe Api::V2::QueryDecorator do
       expect(decorated_query.offer_id).to eq(offer.id)
     end
   end
+
+  describe "#completed" do
+    let(:query) { FactoryBot.create(:journey_query, organization: organization, status: status) }
+
+    context "when the status is 'completed'" do
+      let(:status) { "completed" }
+
+      it "returns true" do
+        expect(decorated_query.completed).to eq(true)
+      end
+    end
+
+    context "when the status is 'running'" do
+      let(:status) { "running" }
+
+      it "returns false" do
+        expect(decorated_query.completed).to eq(false)
+      end
+    end
+  end
 end

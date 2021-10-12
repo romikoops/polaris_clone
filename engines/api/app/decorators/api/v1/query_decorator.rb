@@ -38,7 +38,7 @@ module Api
       end
 
       def completed
-        results.present?
+        completed?
       end
 
       def load_type
