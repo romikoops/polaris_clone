@@ -104,6 +104,7 @@ module ExcelDataServices
             group_id: find_group_id(row: row),
             wm_rate: row.wm_ratio,
             vm_rate: row.vm_ratio,
+            notes: update_notes_params(notes),
             effective_date: Date.parse(row.effective_date.to_s).beginning_of_day,
             expiration_date: Date.parse(row.expiration_date.to_s).end_of_day.change(usec: 0) }
 
@@ -111,12 +112,13 @@ module ExcelDataServices
         old_pricings = itinerary.rates.where(pricing_params.except(:effective_date,
           :wm_rate,
           :vm_rate,
+          :notes,
           :expiration_date,
           :internal))
 
         overlap_handler = ExcelDataServices::Inserters::DateOverlapHandler.new(old_pricings, new_pricing)
         pricings_with_actions = overlap_handler.perform
-        pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, notes, row[:row_nr])
+        pricings_for_new_pricing_details = act_on_overlapping_pricings(pricings_with_actions, row[:row_nr])
 
         new_pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)
 
@@ -133,7 +135,7 @@ module ExcelDataServices
         end
       end
 
-      def act_on_overlapping_pricings(pricings_with_actions, notes, row_nr)
+      def act_on_overlapping_pricings(pricings_with_actions, row_nr)
         new_pricings = []
         pricings_with_actions[:destroy]&.each do |pricing|
           pricing_details = pricing.fees
@@ -148,22 +150,19 @@ module ExcelDataServices
         return if pricings_with_actions[:save].blank?
 
         pricings_with_actions[:save].sort_by { |pricing| pricing.created_at || Time.zone.now }.each do |pricing|
-          new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
           add_stats(pricing, row_nr)
+          new_pricings << pricing if pricing.new_record? && !pricing.transient_marked_as_old
           pricing.save
-
-          update_notes_params(notes, pricing.id)
-          Legacy::Note.import!(notes)
         end
 
         new_pricings
       end
 
-      def update_notes_params(notes, pricing_id)
-        notes.each do |note|
+      def update_notes_params(notes)
+        notes.map do |note|
           note[:organization_id] = organization.id
-          note[:pricings_pricing_id] = pricing_id
           note[:remarks] = true
+          Legacy::Note.new(note)
         end
       end
 

@@ -4,6 +4,8 @@ module Legacy
   class Note < ApplicationRecord
     self.table_name = "notes"
 
+    acts_as_paranoid
+
     belongs_to :target, polymorphic: true, optional: true
     belongs_to :pricings_pricing, optional: true
     belongs_to :itinerary, optional: true, class_name: "Legacy::Itinerary"
@@ -26,6 +28,7 @@ end
 #  id                  :bigint           not null, primary key
 #  body                :string
 #  contains_html       :boolean
+#  deleted_at          :datetime
 #  header              :string
 #  level               :string
 #  remarks             :boolean          default(FALSE), not null
@@ -44,6 +47,7 @@ end
 #
 # Indexes
 #
+#  index_notes_on_deleted_at                 (deleted_at)
 #  index_notes_on_organization_id            (organization_id)
 #  index_notes_on_pricings_pricing_id        (pricings_pricing_id)
 #  index_notes_on_remarks                    (remarks)

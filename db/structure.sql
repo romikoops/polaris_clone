@@ -2835,7 +2835,8 @@ CREATE TABLE public.notes (
     contains_html boolean,
     transshipment boolean DEFAULT false NOT NULL,
     remarks boolean DEFAULT false NOT NULL,
-    organization_id uuid
+    organization_id uuid,
+    deleted_at timestamp without time zone
 );
 
 
@@ -8428,6 +8429,13 @@ CREATE INDEX index_nexuses_on_tenant_id ON public.nexuses USING btree (tenant_id
 
 
 --
+-- Name: index_notes_on_deleted_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_notes_on_deleted_at ON public.notes USING btree (deleted_at);
+
+
+--
 -- Name: index_notes_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12556,6 +12564,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210923131847'),
 ('20210924113302'),
 ('20210928194056'),
-('20210929072457');
+('20210929072457'),
+('20211004191639');
 
 

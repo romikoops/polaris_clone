@@ -38,6 +38,14 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         expect(stats).to eq(expected_stats)
         expect(Legacy::Note.where.not(pricings_pricing_id: nil).count).to eq(2)
       end
+
+      it "verifies that the old pricing contains 4 notes, and that the new pricing, contains only 2 notes", :aggregate_failures do
+        take_a_pricing_and_attach_four_notes_having_two_duplicates
+        stats
+        pricings = Pricings::Pricing.all.order(:created_at)
+        expect(pricings.first.notes.count).to eq(4)
+        expect(pricings.last.notes.count).to eq(2)
+      end
     end
 
     context "with group name" do
@@ -78,5 +86,13 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
         expect(Routing::Carrier.all.pluck(:code)).to eq(Legacy::Carrier.all.pluck(:code))
       end
     end
+  end
+
+  def take_a_pricing_and_attach_four_notes_having_two_duplicates
+    pricing = FactoryBot.create(:lcl_pricing, organization: organization, tenant_vehicle: tenant_vehicle, itinerary: itinerary, effective_date: Date.parse("Thu, 15 Jan 2018"), expiration_date: Date.parse("Fri, 15 Jun 2019"))
+    FactoryBot.create(:legacy_note, organization: organization, header: "Remarks", body: "Old Remark", pricings_pricing_id: pricing.id, created_at: 2.hours.ago, updated_at: 1.hour.ago)
+    FactoryBot.create(:legacy_note, organization: organization, header: "Remarks", body: "Latest Remark", pricings_pricing_id: pricing.id, created_at: 2.hours.ago, updated_at: Time.now.utc)
+    FactoryBot.create(:legacy_note, organization: organization, header: "Electronic Cargo Tracking Note/Waiver (Ectn/Besc)", body: "Old cargo note", pricings_pricing_id: pricing.id, created_at: 2.hours.ago, updated_at: 1.hour.ago)
+    FactoryBot.create(:legacy_note, organization: organization, header: "Electronic Cargo Tracking Note/Waiver (Ectn/Besc)", body: "Latest cargo note", pricings_pricing_id: pricing.id, created_at: 2.hours.ago, updated_at: Time.now.utc)
   end
 end
