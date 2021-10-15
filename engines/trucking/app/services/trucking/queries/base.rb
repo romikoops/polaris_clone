@@ -137,8 +137,6 @@ module Trucking
           .where(group_condition)
       end
 
-
-
       def truck_type_condition
         truck_type.present? ? {truck_type: truck_type} : {}
       end
@@ -178,12 +176,9 @@ module Trucking
       def sanitized_postal_code(args:)
         postal_code = args[:zipcode]&.tr(" ", "") || args[:address].try(:get_zip_code)
 
-        case country.code
-        when "NL"
-          postal_code[0..-3]
-        else
-          postal_code
-        end
+        return postal_code unless postal_code.present? && country.code == "NL"
+
+        postal_code[0..-3]
       end
 
       def tenant_hubs
