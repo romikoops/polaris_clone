@@ -97,6 +97,7 @@ module OfferCalculator
 
       def handle_fee(component:, fee:)
         return handle_x_fees(component: component, fee: fee) if fee.rate_basis.include?("_X_")
+        return component.value * fee.measures.send(component.modifier).value if component.base.zero?
 
         component.value * (fee.measures.send(component.modifier).value / component.base).ceil * component.base
       end

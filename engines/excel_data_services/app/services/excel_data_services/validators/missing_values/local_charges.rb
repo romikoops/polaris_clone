@@ -16,6 +16,7 @@ module ExcelDataServices
             fee_hsh = fee_hsh.with_indifferent_access
             check_fee_comps_except_rate_basis(row.nr, fee_hsh)
             check_rate_basis(row.nr, fee_hsh)
+            check_base_existence_for_x_fees(row: row.nr, fee: fee_hsh)
           end
         end
 
@@ -83,6 +84,19 @@ module ExcelDataServices
             end
 
           result.present?
+        end
+
+        def check_base_existence_for_x_fees(row:, fee:)
+          rate_basis = fee[:rate_basis]
+          return unless rate_basis.include?("_X_") && fee[:base].nil?
+
+          add_to_errors(
+            type: :error,
+            row_nr: row,
+            sheet_name: sheet_name,
+            reason: "When the rate basis includes \"_X_\", there must be a value provided in the BASE column",
+            exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::MissingValueForRateBasis
+          )
         end
       end
     end

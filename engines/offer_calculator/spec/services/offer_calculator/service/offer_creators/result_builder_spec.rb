@@ -22,8 +22,16 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultBuilder do
       expect(result.query.id).to eq result.query_id
     end
 
-    context "when an error occurs" do
+    context "when a RecordInvalid error occurs" do
       before { allow(OfferCalculator::Service::OfferCreators::LineItemBuilder).to receive(:line_items).and_raise(ActiveRecord::RecordInvalid) }
+
+      it "raises an OfferCalculator::Errors::OfferBuilder error" do
+        expect { result }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+      end
+    end
+
+    context "when a RangeError error occurs" do
+      before { allow(OfferCalculator::Service::OfferCreators::LineItemBuilder).to receive(:line_items).and_raise(ActiveModel::RangeError) }
 
       it "raises an OfferCalculator::Errors::OfferBuilder error" do
         expect { result }.to raise_error(OfferCalculator::Errors::OfferBuilder)

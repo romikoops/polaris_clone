@@ -4,25 +4,13 @@ module OfferCalculator
   module Service
     module RateBuilders
       class FeeComponent
-        DEFAULT_BASE = 1e-6
-
         attr_reader :value, :modifier, :base, :percentage
 
-        def initialize(value:, modifier:, percentage: nil, base: DEFAULT_BASE)
+        def initialize(value:, modifier:, percentage: nil, base: nil)
           @value = value
           @modifier = modifier
           @percentage = percentage
-          @base = sanitized_base(input: base)
-        end
-
-        private
-
-        def sanitized_base(input:)
-          if input.nil? || input.to_d.zero?
-            DEFAULT_BASE
-          else
-            input.to_d
-          end
+          @base = base.to_d
         end
       end
     end

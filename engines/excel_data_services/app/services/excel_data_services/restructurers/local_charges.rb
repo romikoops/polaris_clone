@@ -184,6 +184,7 @@ module ExcelDataServices
           key: charge_data[:fee_code],
           min: charge_data[:minimum],
           max: charge_data[:maximum],
+          base: charge_data[:base],
           name: charge_data[:fee],
           rate_basis: charge_data[:rate_basis].upcase }
       end

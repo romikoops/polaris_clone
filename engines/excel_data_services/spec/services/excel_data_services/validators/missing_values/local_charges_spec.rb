@@ -66,6 +66,11 @@ RSpec.describe ExcelDataServices::Validators::MissingValues::LocalCharges do
             reason: "Missing value for PER_X_KG_FLAT.",
             row_nr: "2",
             sheet_name: "Sheet1",
+            type: :error },
+          { exception_class: ExcelDataServices::Validators::ValidationErrors::MissingValues::MissingValueForRateBasis,
+            reason: "When the rate basis includes \"_X_\", there must be a value provided in the BASE column",
+            row_nr: "2",
+            sheet_name: "Sheet1",
             type: :error }
         ]
       )

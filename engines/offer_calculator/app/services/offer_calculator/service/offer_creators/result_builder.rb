@@ -27,7 +27,7 @@ module OfferCalculator
               Metadatum.metadatum(offer: offer, result: new_result)
             end
           end
-        rescue ActiveRecord::RecordInvalid
+        rescue ActiveRecord::RecordInvalid, ActiveModel::RangeError
           raise OfferCalculator::Errors::OfferBuilder
         end
 
