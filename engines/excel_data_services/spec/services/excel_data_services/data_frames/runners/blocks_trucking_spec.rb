@@ -62,6 +62,19 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       end
     end
 
+    context "without fees" do
+      let(:xlsx) { Roo::Spreadsheet.open(file_fixture("excel/example_trucking_no_fees.xlsx").to_s) }
+      let!(:result) do
+        described_class.run(file: trucking_file, arguments: arguments)
+      end
+
+      it "returns successfully", :aggregate_failures do
+        expect(result.dig("truckings", "created")).to eq(2)
+        expect(truckings.count).to eq(2)
+        expect(truckings.map(&:fees).uniq).to eq([{}])
+      end
+    end
+
     context "with existing truckings" do
       before do
         FactoryBot.create(:trucking_trucking,

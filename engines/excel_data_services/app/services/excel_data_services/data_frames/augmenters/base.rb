@@ -63,7 +63,7 @@ module ExcelDataServices
 
         def correct_service_and_carrier_keys
           frame["carrier"] = frame.delete("courier") if frame.include?("courier")
-          frame["carrier_code"] = frame["carrier"].map { |value| value&.downcase }
+          frame["carrier_code"] = frame["carrier"].map { |value| value&.downcase } if frame.include?("carrier")
           frame["service"] = frame.delete("service_level") if frame.include?("service_level")
         end
       end

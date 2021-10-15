@@ -36,7 +36,7 @@ module ExcelDataServices
           private
 
           def data
-            return {} if cell_data.empty?
+            return valid_empty_frame if cell_data.empty?
 
             super
           end
@@ -47,6 +47,12 @@ module ExcelDataServices
 
           def label
             "fee"
+          end
+
+          def valid_empty_frame
+            ExcelDataServices::DataFrames::DataProviders::Trucking::Fees.column_types
+              .keys
+              .each_with_object({}) { |key, result| result[key] = [] }
           end
         end
       end

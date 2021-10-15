@@ -98,5 +98,16 @@ RSpec.describe ExcelDataServices::DataFrames::DataProviders::Trucking::Fees do
         expect(result.frame.to_a).to eq(expected_result)
       end
     end
+
+    context "without fees" do
+      let(:xlsx) { Roo::Spreadsheet.open(file_fixture("excel/example_trucking_no_fees.xlsx").to_s) }
+
+      it "returns an empty frame with all expected keys", :aggregate_failures do
+        expect(result.frame).to be_empty
+        expect(result.frame.keys).to match_array(
+          described_class.column_types.keys + %w[organization_id sheet_name]
+        )
+      end
+    end
   end
 end
