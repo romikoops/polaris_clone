@@ -8,13 +8,6 @@ module Api
       end
 
       def create
-        if shipment_request_params.empty?
-          return render(
-            json: { error: creation_error_message },
-            status: :unprocessable_entity
-          )
-        end
-
         render json: Api::V2::ShipmentRequestSerializer.new(shipment_request_creation_service.perform), status: :created
       end
 
@@ -49,8 +42,8 @@ module Api
       end
 
       def commodity_info_params
-        params.permit(commodityInfos: %i[description hsCode imoClass])[:commodityInfos]
-          .map { |commodity_info_param| commodity_info_param.to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym } }
+        param_array = params.permit(commodityInfos: %i[description hsCode imoClass])[:commodityInfos] || []
+        param_array.map { |commodity_info_param| commodity_info_param.to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym } }
       end
 
       def result

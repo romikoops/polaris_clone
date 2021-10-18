@@ -34,15 +34,19 @@ module Api
         result: result,
         client_id: query.client_id,
         company_id: query.company_id,
-        contacts_attributes: shipment_request_params[:contacts_attributes].map do |params|
-          # rubocop:disable Naming/VariableNumber
-          params[:address_line_1] = params.delete(:address_line1)
-          params[:address_line_2] = params.delete(:address_line2)
-          params[:address_line_3] = params.delete(:address_line3)
-          # rubocop:enable Naming/VariableNumber
-          params
-        end
+        contacts_attributes: contacts_attributes
       )
+    end
+
+    def contacts_attributes
+      (shipment_request_params[:contacts_attributes] || []).map do |params|
+        # rubocop:disable Naming/VariableNumber
+        params[:address_line_1] = params.delete(:address_line1)
+        params[:address_line_2] = params.delete(:address_line2)
+        params[:address_line_3] = params.delete(:address_line3)
+        # rubocop:enable Naming/VariableNumber
+        params
+      end
     end
   end
 end

@@ -2163,7 +2163,7 @@ CREATE TABLE public.journey_shipment_requests (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     result_id uuid,
     client_id uuid,
-    preferred_voyage character varying NOT NULL,
+    preferred_voyage character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     company_id uuid,
@@ -2172,8 +2172,7 @@ CREATE TABLE public.journey_shipment_requests (
     commercial_value_cents integer,
     commercial_value_currency character varying,
     notes text,
-    status public.shipment_request_status,
-    CONSTRAINT journey_shipment_requests_preferred_voyage_presence CHECK (((preferred_voyage IS NOT NULL) AND ((preferred_voyage)::text !~ '^\s*$'::text)))
+    status public.shipment_request_status
 );
 
 
@@ -12567,6 +12566,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210929072457'),
 ('20210930071334'),
 ('20210930072000'),
-('20211004191639');
+('20211004191639'),
+('20211018095100');
 
 

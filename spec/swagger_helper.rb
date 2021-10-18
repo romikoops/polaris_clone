@@ -187,27 +187,33 @@ RSpec.configure do |config|
               },
               with_insurance: {
                 description: "Any insurance on the cargo",
-                type: "boolean"
+                type: "boolean",
+                nullable: true
               },
               with_customs_handling: {
                 description: "Any customs handling service needed",
-                type: "boolean"
+                type: "boolean",
+                nullable: true
               },
               status: {
                 description: "Status of the shipment request",
-                type: "string"
+                type: "string",
+                nullable: true
               },
               preferred_voyage: {
                 description: "Preferred voyage",
-                type: "string"
+                type: "string",
+                nullable: true
               },
               notes: {
                 description: "Notes about the shipment request",
-                type: "string"
+                type: "string",
+                nullable: true
               },
               commercial_value: {
                 description: "Commercial value with integer and currency",
-                type: "object"
+                type: "object",
+                nullable: true
               },
               contacts_attributes: {
                 description: "Array of contact attributes as objects",
@@ -223,18 +229,22 @@ RSpec.configure do |config|
             properties: {
               withInsurance: {
                 type: :boolean,
+                nullable: true,
                 description: "Any insurance on the cargo"
               },
               withCustomsHandling: {
                 type: :boolean,
+                nullable: true,
                 description: "Any customs handling service needed"
               },
               preferredVoyage: {
                 type: "string",
+                nullable: true,
                 description: "Preferred voyage"
               },
               notes: {
                 type: :string,
+                nullable: true,
                 description: "notes about the shipment request"
               },
               commercialValueCents: {

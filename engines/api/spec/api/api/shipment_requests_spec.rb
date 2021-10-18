@@ -127,13 +127,6 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
         run_test!
       end
-
-      response "422", "unprocessable entity" do
-        let(:shipment_request) { { foo: "bar" } }
-        let(:commodity_infos) { {} }
-
-        run_test!
-      end
     end
   end
 end

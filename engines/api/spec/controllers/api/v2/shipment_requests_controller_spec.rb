@@ -108,23 +108,29 @@ module Api
 
       it_behaves_like "a successful Create"
 
-      it "returns a 422 response, when none of the shipment request params are not present" do
-        post :create, params: { organization_id: organization.id, result_id: result.id, shipmentRequest: { foo: "bar" } }, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-
-      it "returns a suitable message, when none of the shipment request params are present" do
-        post :create, params: { organization_id: organization.id, result_id: result.id, shipmentRequest: { foo: "bar" } }, as: :json
-        expect(response_error).to eq(
-          "Please provide params of withInsurance, withCustomsHandling, "\
-          "status, preferredVoyage, notes, commercialValueCents, commercialValueCurrency, contactsAttributes"
-        )
-      end
-
       context "without commodity infos" do
         let(:commodity_infos) { [] }
 
         it_behaves_like "a successful Create"
+      end
+
+      context "without any params" do
+        let(:empty_valid_params) do
+          {
+            organization_id: organization.id, result_id: result.id,
+            shipmentRequest: {
+              withInsurance: nil,
+              withCustomsHandling: nil, preferredVoyage: nil, notes: nil, commercialValueCents: nil, commercialValueCurrency: nil,
+              contactsAttributes: []
+            },
+            commodityInfos: []
+          }
+        end
+
+        it "returns a 201 response" do
+          post :create, params: empty_valid_params, as: :json
+          expect(response).to have_http_status(:created)
+        end
       end
     end
     # rubocop:enable Naming/VariableNumber

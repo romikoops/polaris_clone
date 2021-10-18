@@ -9,8 +9,6 @@ module Journey
     has_many :contacts
     has_one :shipment
 
-    validates :preferred_voyage, presence: true
-
     accepts_nested_attributes_for :contacts
 
     enum status: {
@@ -30,7 +28,7 @@ end
 #  commercial_value_cents    :integer
 #  commercial_value_currency :string
 #  notes                     :text
-#  preferred_voyage          :string           not null
+#  preferred_voyage          :string
 #  status                    :enum
 #  with_customs_handling     :boolean          default(FALSE)
 #  with_insurance            :boolean          default(FALSE)
