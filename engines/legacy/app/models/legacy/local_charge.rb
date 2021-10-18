@@ -4,6 +4,8 @@ module Legacy
   class LocalCharge < ApplicationRecord
     include PgSearch::Model
 
+    UUID_V5_NAMESPACE = "9a295592-e5a9-427a-ad64-df244730b9dc"
+
     self.table_name = "local_charges"
 
     acts_as_paranoid
@@ -50,8 +52,14 @@ module Legacy
                                        tsearch: { prefix: true }
                                      }
 
-    before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
+    before_validation -> { generate_upsert_id }, on: %i[create update]
     before_validation :set_validity
+
+    def generate_upsert_id
+      return if [hub_id, tenant_vehicle_id, load_type, mode_of_transport, group_id, direction, organization_id].any?(&:blank?)
+
+      self.uuid = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [hub_id.to_s, counterpart_hub_id.to_s, tenant_vehicle_id.to_s, load_type.to_s, mode_of_transport.to_s, group_id.to_s, direction.to_s, organization_id.to_s].join)
+    end
 
     def hub_name
       hub&.name
@@ -115,7 +123,7 @@ end
 #  index_local_charges_on_tenant_id          (tenant_id)
 #  index_local_charges_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_local_charges_on_user_id            (user_id)
-#  index_local_charges_on_uuid               (uuid) UNIQUE
+#  index_local_charges_on_uuid               (uuid)
 #  index_local_charges_on_validity           (validity) USING gist
 #
 # Foreign Keys

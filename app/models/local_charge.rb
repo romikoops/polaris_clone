@@ -43,7 +43,7 @@ end
 #  index_local_charges_on_tenant_id          (tenant_id)
 #  index_local_charges_on_tenant_vehicle_id  (tenant_vehicle_id)
 #  index_local_charges_on_user_id            (user_id)
-#  index_local_charges_on_uuid               (uuid) UNIQUE
+#  index_local_charges_on_uuid               (uuid)
 #  index_local_charges_on_validity           (validity) USING gist
 #
 # Foreign Keys

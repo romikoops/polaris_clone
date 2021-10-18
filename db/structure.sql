@@ -8271,7 +8271,7 @@ CREATE INDEX index_local_charges_on_user_id ON public.local_charges USING btree 
 -- Name: index_local_charges_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_local_charges_on_uuid ON public.local_charges USING btree (uuid);
+CREATE INDEX index_local_charges_on_uuid ON public.local_charges USING btree (uuid);
 
 
 --
@@ -12565,6 +12565,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210924113302'),
 ('20210928194056'),
 ('20210929072457'),
+('20210930071334'),
+('20210930072000'),
 ('20211004191639');
 
 
