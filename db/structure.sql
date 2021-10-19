@@ -1907,9 +1907,7 @@ CREATE TABLE public.journey_contacts (
     country_code character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT journey_contacts_email_presence CHECK (((email IS NOT NULL) AND ((email)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_contacts_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text))),
-    CONSTRAINT journey_contacts_phone_presence CHECK (((phone IS NOT NULL) AND ((phone)::text !~ '^\s*$'::text)))
+    CONSTRAINT journey_contacts_email_presence CHECK (((email IS NOT NULL) AND ((email)::text !~ '^\s*$'::text)))
 );
 
 
@@ -12576,6 +12574,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210930072000'),
 ('20211004191639'),
 ('20211015122348'),
-('20211018095100');
+('20211018095100'),
+('20211019082716');
 
 

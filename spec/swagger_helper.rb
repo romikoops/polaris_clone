@@ -118,26 +118,32 @@ RSpec.configure do |config|
             properties: {
               address_line_1: {
                 description: "Address line 1",
+                nullable: true,
                 type: "string"
               },
               address_line_2: {
                 description: "address line 2",
+                nullable: true,
                 type: "string"
               },
               address_line_3: {
                 description: "address line 3",
+                nullable: true,
                 type: "string"
               },
               city: {
                 description: "City",
+                nullable: true,
                 type: "string"
               },
               company_name: {
                 description: "Company name",
+                nullable: true,
                 type: "string"
               },
               country_code: {
                 description: "Country code",
+                nullable: true,
                 type: "string"
               },
               email: {
@@ -146,29 +152,36 @@ RSpec.configure do |config|
               },
               function: {
                 description: "Function",
+                nullable: true,
                 type: "string"
               },
               geocoded_address: {
                 description: "Geocoded address",
+                nullable: true,
                 type: "string"
               },
               name: {
                 description: "Name",
+                nullable: true,
                 type: "string"
               },
               phone: {
                 description: "Phone",
+                nullable: true,
                 type: "string"
               },
               point: {
                 description: "Point",
+                nullable: true,
                 type: "string"
               },
               postal_code: {
                 description: "Postal code",
+                nullable: true,
                 type: "string"
               }
-            }
+            },
+            required: %w[email]
           },
           shipment_request: {
             type: "object",
