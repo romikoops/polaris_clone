@@ -6241,6 +6241,14 @@ ALTER TABLE ONLY public.local_charges
 
 
 --
+-- Name: local_charges local_charges_uuid; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.local_charges
+    ADD CONSTRAINT local_charges_uuid EXCLUDE USING gist (uuid WITH =, validity WITH &&) WHERE ((deleted_at IS NULL));
+
+
+--
 -- Name: locations_locations locations_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12567,6 +12575,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210930071334'),
 ('20210930072000'),
 ('20211004191639'),
+('20211015122348'),
 ('20211018095100');
 
 

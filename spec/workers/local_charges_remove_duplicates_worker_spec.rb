@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe LocalChargesRemoveDuplicatesWorker, type: :worker do
+RSpec.describe LocalChargesRemoveDuplicatesWorker, type: :worker, skip: "Deprecated due to a new constraint on LocalCharge (local_charges_uuid index)" do
   describe "#perform" do
     context "when there is a duplicate" do
       let!(:local_charge) { create_local_charge }
@@ -19,13 +19,12 @@ RSpec.describe LocalChargesRemoveDuplicatesWorker, type: :worker do
     context "when the previous local charge's validity, covers the current local charge" do
       let!(:duplicated_local_charge) { create_local_charge }
       let!(:local_charge) do
-        local_charge = duplicated_local_charge.dup.tap do |lc|
+        duplicated_local_charge.dup.tap do |lc|
           lc.effective_date = duplicated_local_charge.effective_date + 1.week
           lc.expiration_date = duplicated_local_charge.expiration_date - 1.week
           lc.created_at = duplicated_local_charge.created_at + 5.seconds
+          lc.save!
         end
-        local_charge.save!
-        local_charge
       end
 
       it "updates the local charge's expiration date" do

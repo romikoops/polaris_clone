@@ -79,13 +79,6 @@ RSpec.describe Validator::Itinerary do
           itinerary: itinerary,
           effective_date: 20.days.ago.beginning_of_minute,
           expiration_date: 5.days.ago.beginning_of_minute)
-        FactoryBot.create(:legacy_local_charge,
-          organization: organization,
-          direction: "export",
-          tenant_vehicle_id: default_tenant_vehicle.id,
-          hub: origin_hub,
-          effective_date: DateTime.now.beginning_of_minute,
-          expiration_date: 10.days.from_now.beginning_of_minute)
       end
 
       it "returns the expected result for one tenant vehicle chain with invalid Local Charges and no Trips",

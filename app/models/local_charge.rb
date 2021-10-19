@@ -45,6 +45,7 @@ end
 #  index_local_charges_on_user_id            (user_id)
 #  index_local_charges_on_uuid               (uuid)
 #  index_local_charges_on_validity           (validity) USING gist
+#  local_charges_uuid                        (uuid,validity) WHERE (deleted_at IS NULL) USING gist
 #
 # Foreign Keys
 #
