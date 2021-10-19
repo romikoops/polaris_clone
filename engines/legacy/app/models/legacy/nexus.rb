@@ -9,7 +9,7 @@ module Legacy
     has_many :hubs, class_name: "Legacy::Hub", dependent: :destroy
     belongs_to :country, class_name: "Legacy::Country"
 
-    pg_search_scope :name_search, against: %i[name], using: {
+    pg_search_scope :name_search, against: %i[name locode], using: {
       tsearch: { prefix: true }
     }
 

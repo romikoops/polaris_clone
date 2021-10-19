@@ -1194,6 +1194,10 @@ RSpec.configure do |config|
                     description: "Name",
                     type: "string"
                   },
+                  locode: {
+                    description: "UN/LOCODE",
+                    type: "string"
+                  },
                   latitude: {
                     description: "Latitude",
                     type: "number"
@@ -1219,6 +1223,7 @@ RSpec.configure do |config|
                   name
                   latitude
                   longitude
+                  locode
                   modesOfTransport
                   countryName
                 ]

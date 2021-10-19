@@ -78,7 +78,6 @@ module Api
       def itineraries_nexuses(target_index:)
         nexuses = Legacy::Nexus.joins(:hubs)
           .where(hubs: itineraries_hubs(target_index: target_index))
-
         nexuses = nexuses.name_search(query) if query.present?
         nexuses.reorder("").distinct
       end

@@ -39,6 +39,12 @@ module Api
         expect(response_data[0]["attributes"]["name"]).to eq(origin_nexus.name)
       end
 
+      it "Renders a json of origins when query matches origin locode" do
+        get :origins, params: { organization_id: organization.id, q: origin_nexus.locode[0..3], load_type: load_type, client_id: client.id }
+
+        expect(response_data[0]["attributes"]["locode"]).to eq(origin_nexus.locode)
+      end
+
       it "Renders an array of all origins when location params are empty" do
         get :origins, params: { organization_id: organization.id }
         expect(response_data[0]["attributes"]["name"]).to eq(origin_nexus.name)
@@ -67,6 +73,14 @@ module Api
         }
 
         expect(response_data[0]["attributes"]["name"]).to eq(destination_nexus.name)
+      end
+
+      it "Renders a json of destinations when query matches destination locode" do
+        get :destinations, params: {
+          organization_id: organization.id, q: destination_nexus.locode[0..3], load_type: load_type, client_id: client.id
+        }
+
+        expect(response_data[0]["attributes"]["locode"]).to eq(destination_nexus.locode)
       end
 
       it "Renders an array of all destinations when location params are empty" do
