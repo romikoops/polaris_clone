@@ -9,7 +9,7 @@
       "url": "https://support.itsmycargo.com",
       "email": "support@itsmycargo.com"
     },
-    "version": "2021-10-19"
+    "version": "2021-10-25"
   },
   "tags": [
     {
@@ -5973,7 +5973,7 @@
                               "quotationId": "5a64e4ec-7261-46ad-9fd7-f179522ccfbd",
                               "transshipment": null,
                               "estimated": false,
-                              "validUntil": "2022-04-19T23:59:59.999Z",
+                              "validUntil": "2022-04-25T23:59:59.999Z",
                               "pickupTruckType": "",
                               "deliveryTruckType": "",
                               "pickupCarrier": null,
@@ -6194,7 +6194,7 @@
                       "paymentTerms": "Some quotation payment terms",
                       "companyName": "company81",
                       "parentId": null,
-                      "selectedDate": "2021-10-20T00:00:00.000Z",
+                      "selectedDate": "2021-10-26T00:00:00.000Z",
                       "user": {
                         "data": {
                           "id": "6b1cd77c-f53a-40a3-8c5f-468ea4acf766",
@@ -6235,7 +6235,7 @@
                       },
                       "origin": {
                         "data": {
-                          "id": "0",
+                          "id": "2719",
                           "type": "address",
                           "attributes": {
                             "longitude": 11.854048,
@@ -6661,8 +6661,8 @@
                       "serviceLevel": "standard",
                       "validUntil": "2021-11-16T12:10:09.304Z",
                       "transitTime": 1,
-                      "cargoReadyDate": "2021-10-20T00:00:00.000Z",
-                      "cargoDeliveryDate": "2021-11-09T00:00:00.000Z",
+                      "cargoReadyDate": "2021-10-26T00:00:00.000Z",
+                      "cargoDeliveryDate": "2021-11-15T00:00:00.000Z",
                       "origin": "Hamburg",
                       "destination": "Hamburg",
                       "transshipment": null,
@@ -6846,9 +6846,9 @@
                       "id": "155",
                       "type": "trip",
                       "attributes": {
-                        "closing": "2021-10-20",
-                        "start": "2021-10-24",
-                        "end": "2021-11-23",
+                        "closing": "2021-10-26",
+                        "start": "2021-10-30",
+                        "end": "2021-11-29",
                         "service": "slowly",
                         "carrier": "Hapag Lloyd",
                         "vessel": null,
@@ -6860,9 +6860,9 @@
                       "id": "156",
                       "type": "trip",
                       "attributes": {
-                        "closing": "2021-10-25",
-                        "start": "2021-10-29",
-                        "end": "2021-11-28",
+                        "closing": "2021-10-31",
+                        "start": "2021-11-04",
+                        "end": "2021-12-04",
                         "service": "slowly",
                         "carrier": "Hapag Lloyd",
                         "vessel": null,
@@ -7149,9 +7149,9 @@
                       "voyageCode": "12345",
                       "origin": "20457, hamburg",
                       "destination": "shanghai airport",
-                      "destinationArrival": "2021-11-09T00:00:00.000Z",
-                      "originDeparture": "2021-10-20T00:00:00.000Z",
-                      "closingDate": "2021-10-20T00:00:00.000Z",
+                      "destinationArrival": "2021-11-15T00:00:00.000Z",
+                      "originDeparture": "2021-10-26T00:00:00.000Z",
+                      "closingDate": "2021-10-26T00:00:00.000Z",
                       "carrier": "msc",
                       "service": "standard",
                       "modeOfTransport": "ocean",

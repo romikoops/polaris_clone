@@ -26,5 +26,47 @@ module Notifications
         end
       end
     end
+
+    context "when subscription with empty filter as empty hash is created" do
+      let(:empty_subscriptions) do
+        FactoryBot.create(:notifications_subscriptions, filter: {})
+      end
+
+      it "returns filter to be an empty hash" do
+        expect(empty_subscriptions.filter).to eq({})
+      end
+    end
+
+    context "when subscription with empty filter is created" do
+      let(:empty_subscriptions) do
+        FactoryBot.create(:notifications_subscriptions,
+          filter: {
+            origins: "",
+            destinations: "",
+            mode_of_transports: "",
+            groups: ""
+          })
+      end
+
+      it "returns filter to be an empty hash" do
+        expect(empty_subscriptions.filter).to eq({})
+      end
+    end
+
+    context "when subscription with a filter is created" do
+      let(:subscription_with_filter) do
+        FactoryBot.create(:notifications_subscriptions,
+          filter: {
+            origins: "DEHAM",
+            destinations: "",
+            mode_of_transports: "",
+            groups: ""
+          })
+      end
+
+      it "returns filter to have the origin" do
+        expect(subscription_with_filter.filter).to eq({ "origins" => "DEHAM" })
+      end
+    end
   end
 end

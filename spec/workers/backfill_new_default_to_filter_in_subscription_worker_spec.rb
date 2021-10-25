@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-RSpec.describe BackfillNewDefaultToFilterInSubscriptionWorker, type: :worker do
+RSpec.describe BackfillNewDefaultToFilterInSubscriptionWorker, skip: true, type: :worker do
   let!(:notifiation_subscription) { FactoryBot.create(:notifications_subscriptions, filter: "{}") }
 
   describe "#perform" do

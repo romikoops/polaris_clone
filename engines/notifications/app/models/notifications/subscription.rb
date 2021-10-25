@@ -2,8 +2,8 @@
 
 module Notifications
   class Subscription < ApplicationRecord
+    before_validation -> { filter.delete_if { |_key, value| value.blank? } }, on: %i[create update]
     extend Notifications::FilterMethodDefiner
-    include Filterable
     belongs_to :user, optional: true, class_name: "Users::User"
     belongs_to :organization, class_name: "Organizations::Organization"
 
