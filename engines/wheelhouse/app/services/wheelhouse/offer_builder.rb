@@ -22,7 +22,7 @@ module Wheelhouse
     def existing_offer
       @existing_offer ||= begin
         if results.present?
-          query = "
+          sql_query = "
             SELECT *
             FROM journey_offers
             WHERE id = (
@@ -39,22 +39,22 @@ module Wheelhouse
           binds = {
             line_item_set_ids: line_item_sets.map(&:id),
             result_count: results.count,
-            query_id: results.first.query.id
+            query_id: results.first.query_id
           }
 
-          Journey::Offer.find_by_sql([query, binds]).first
+          Journey::Offer.find_by_sql([sql_query, binds]).first
         end
       end
     end
 
     def new_offer
-      @new_offer ||= Journey::Offer.create(query: results.first.query, line_item_sets: line_item_sets).tap do
+      @new_offer ||= Journey::Offer.create!(query: results.map(&:query).first, line_item_sets: line_item_sets).tap do
         @offer_created = true
       end
     end
 
     def line_item_sets
-      @line_item_sets ||= results.map { |result| result.line_item_sets.order(created_at: :desc).first }
+      @line_item_sets ||= results.map { |result| result.line_item_sets.order(created_at: :desc).first }.compact
     end
 
     def generate_pdf?

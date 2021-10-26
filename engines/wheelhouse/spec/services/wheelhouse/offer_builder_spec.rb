@@ -10,9 +10,9 @@ RSpec.describe Wheelhouse::OfferBuilder do
   let(:scope) { {} }
   let(:offer_service) { described_class.new(results: [result]) }
   let(:offer) { offer_service.offer }
-  let(:mailer_job) { double(deliver_later: true) }
-  let(:pdf_spy) { spy("Pdf::Quotation::Client", file: true) }
-  let(:event_spy) { spy("EventStore", publish: true) }
+  let(:mailer_job) { instance_double(deliver_later: true) }
+  let(:pdf_spy) { instance_double("Pdf::Quotation::Client", file: true) }
+  let(:event_spy) { instance_double("EventStore", publish: true) }
 
   before do
     allow(Pdf::Quotation::Client).to receive(:new).and_return(pdf_spy)
@@ -39,6 +39,12 @@ RSpec.describe Wheelhouse::OfferBuilder do
     it "returns the existing offer", :aggregate_failures do
       expect(offer).to eq(existing_offer)
       expect(offer_service).not_to have_received(:publish_event)
+    end
+  end
+
+  context "when no results are provided" do
+    it "raises an Argument Error " do
+      expect { described_class.new(results: []).offer }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

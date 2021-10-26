@@ -35,7 +35,8 @@ RSpec.describe Shipments::BookingProcessController do
     let(:quotes) do
       [
         {
-          meta: { tender_id: result.id }
+          meta: { tender_id: result.id },
+          quote: { "total" => "100" }
         }.with_indifferent_access
       ]
     end
@@ -50,6 +51,12 @@ RSpec.describe Shipments::BookingProcessController do
     describe ".save_and_send_quotes" do
       it "successfully calls the mailer and return the quote Document" do
         post :send_quotes, params: { organization_id: organization.id, shipment_id: result.id, quotes: quotes }
+      end
+
+      it "fails when quotes are missing" do
+        expect do
+          post :send_quotes, params: { organization_id: organization.id, shipment_id: result.id, quotes: [] }
+        end.to raise_error(ActionController::ParameterMissing)
       end
     end
 

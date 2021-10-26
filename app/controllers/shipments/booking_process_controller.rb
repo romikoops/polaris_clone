@@ -89,6 +89,7 @@ module Shipments
     end
 
     def save_and_send_params
+      params.require(:quotes)
       params.permit(quote_param_schema)
     end
 
@@ -96,10 +97,8 @@ module Shipments
       {
         quotes:
         [
-          quote: {},
-          schedules: [:id, :mode_of_transport, :total_price, :eta, :etd, :closing_date, :vehicle_name,
-            :carrier_name, :trip_id, { origin_hub: {}, destination_hub: {} }],
-          meta: {}
+          :quote,
+          { meta: [:tender_id] }
         ]
       }
     end

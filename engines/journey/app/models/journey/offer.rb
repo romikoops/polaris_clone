@@ -8,6 +8,8 @@ module Journey
     belongs_to :query, inverse_of: :offers
     has_one_attached :file
 
+    validates_presence_of :offer_line_item_sets
+
     def attachment
       file&.download
     end

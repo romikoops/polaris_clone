@@ -40,7 +40,7 @@ module Api
       end
 
       def offer_id
-        Wheelhouse::OfferBuilder.new(results: results).existing_offer&.id # so the pdf can be downloaded easily
+        Wheelhouse::OfferBuilder.new(results: results).existing_offer&.id if results.present? # so the pdf can be downloaded easily
       end
 
       def client
