@@ -12,8 +12,8 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com", organization: organization) }
-    let(:profile) { client.profile }
+    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com", profile: client_profile, organization: organization) }
+    let(:client_profile) { FactoryBot.build(:users_client_profile) }
 
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
@@ -25,26 +25,34 @@ module Api
 
     describe "Get #show" do
       let(:request_object) { get :show, params: { organization_id: organization.id }, as: :json }
-      let(:expected_data) do
-        {
-          "email" => client.email,
-          "firstName" => profile.first_name,
-          "lastName" => profile.last_name,
-          "phone" => profile.phone
-        }
-      end
+
+      before { perform_request }
 
       context "when successful" do
         it "returns 200" do
-          perform_request
-
           expect(response.status).to eq 200
         end
 
         it "returns the profile" do
-          perform_request
+          expect(response_data["attributes"]).to eq({
+            "email" => client.email, "firstName" => client_profile.first_name,
+            "lastName" => client_profile.last_name, "phone" => client_profile.phone
+          })
+        end
+      end
 
-          expect(response_data["attributes"]).to eq expected_data
+      context "when profile is deleted" do
+        let(:client_profile) { FactoryBot.build(:users_client_profile, deleted_at: Time.zone.now) }
+
+        it "returns 200" do
+          expect(response.status).to eq 200
+        end
+
+        it "returns the profile" do
+          expect(response_data["attributes"]).to eq({
+            "email" => nil, "firstName" => "",
+            "lastName" => "", "phone" => nil
+          })
         end
       end
     end
@@ -56,7 +64,7 @@ module Api
             "email" => "updated@itsmycargo.com",
             "firstName" => "new first name",
             "lastName" => "new last name",
-            "phone" => profile.phone
+            "phone" => client_profile.phone
           }
         end
 

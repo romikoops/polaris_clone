@@ -63,7 +63,7 @@ module Api
     end
 
     def organization_user
-      current_user&.becomes(::Users::Client)
+      current_user&.becomes(Api::Client)
     end
 
     def user_organization

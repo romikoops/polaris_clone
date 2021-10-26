@@ -22,7 +22,7 @@ module Api
       private
 
       def profile
-        @profile ||= current_user.profile
+        @profile ||= organization_user.profile
       end
 
       def profile_params
