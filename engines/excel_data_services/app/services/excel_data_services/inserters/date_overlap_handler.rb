@@ -65,8 +65,6 @@ module ExcelDataServices
         when "Pricings::Pricing"
           after_new_obj.fees << old_obj.fees.map(&:dup)
           after_new_obj.transient_marked_as_old = true
-        when "Legacy::LocalCharge", "LocalCharge"
-          after_new_obj.uuid = SecureRandom.uuid
         end
 
         after_new_obj
@@ -74,7 +72,7 @@ module ExcelDataServices
 
       def merge_objs_with_actions!(full, partial)
         # Merges the unique sets of value arrays
-        full.merge!(partial) { |_key, old_arr, new_arr| old_arr | new_arr }
+        full.merge!(partial) { |_key, old_arr, new_arr| (old_arr | new_arr).sort_by { |record| record.persisted? ? 0 : 1 } }
       end
     end
   end

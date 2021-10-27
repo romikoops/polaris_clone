@@ -89,6 +89,24 @@ RSpec.describe ExcelDataServices::Inserters::LocalCharges do
         dangerous: nil,
         effective_date: Date.parse("Thu, 24 Jan 2019"),
         expiration_date: Date.parse("Fri, 24 Jan 2020"),
+      )
+      FactoryBot.create(
+        :legacy_local_charge,
+        mode_of_transport: "ocean",
+        load_type: "lcl",
+        hub: hubs.first,
+        organization: organization,
+        tenant_vehicle: tenant_vehicles.first,
+        counterpart_hub_id: nil,
+        direction: "export",
+        fees: {
+          "DOC" => { "key" => "DOC", "max" => nil, "min" => nil, "base" => nil,
+                     "name" => "Documentation", "value" => 20, "currency" => "EUR",
+                     "rate_basis" => "PER_BILL" }
+        },
+        dangerous: nil,
+        effective_date: Date.parse("1 Jan 2019"),
+        expiration_date: Date.parse("23 Jan 2019"),
         user_id: nil
       )
     end

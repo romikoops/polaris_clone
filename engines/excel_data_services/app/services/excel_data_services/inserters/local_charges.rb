@@ -92,7 +92,6 @@ module ExcelDataServices
           local_charge_params.except(:fees, :effective_date, :expiration_date, :internal, :metadata)
         )
         new_local_charge = ::Legacy::LocalCharge.new(local_charge_params)
-
         local_charges_with_actions =
           ExcelDataServices::Inserters::DateOverlapHandler.new(old_local_charges, new_local_charge).perform
 
