@@ -37,7 +37,8 @@ module Api
           pricing_rate_data: OfferCalculator::Service::OfferCreators::RateOverview.overview(result: self),
           remarkNotes: remarks,
           transshipmentVia: transshipment,
-          tender_id: id
+          tender_id: id,
+          charge_trip_id: id
         }.merge(chargeable_weights)
       end
 
