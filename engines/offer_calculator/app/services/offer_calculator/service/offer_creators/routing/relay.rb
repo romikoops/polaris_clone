@@ -22,6 +22,10 @@ module OfferCalculator
           def mode_of_transport
             "relay"
           end
+
+          def transit_time
+            0
+          end
         end
       end
     end

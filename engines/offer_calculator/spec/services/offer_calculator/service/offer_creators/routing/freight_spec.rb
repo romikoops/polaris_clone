@@ -30,6 +30,18 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Freight do
       it "returns the RouteSection with the correct transshipment" do
         expect(service.route_section.transshipment).to eq(itinerary.transshipment)
       end
+
+      it "sets the transit_time as zero, when no Legacy::TransitTime exists" do
+        expect(service.route_section.transit_time).to be_zero
+      end
+
+      context "with Legacy::TransitTime" do
+        let!(:transit_time) { FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle: tenant_vehicle) }
+
+        it "sets the transit_time when Legacy::TransitTime exists" do
+          expect(service.route_section.transit_time).to eq(transit_time.duration)
+        end
+      end
     end
 
     context "when the Routing Carrier doesnt exist" do

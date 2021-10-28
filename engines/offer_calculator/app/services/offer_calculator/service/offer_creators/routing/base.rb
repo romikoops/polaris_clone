@@ -84,10 +84,6 @@ module OfferCalculator
             @order ||= offer.section_keys.index(section)
           end
 
-          def transit_time
-            0
-          end
-
           def geo_id_from_hub(hub:)
             Carta::Client.suggest(query: hub.nexus.locode).id
           rescue Carta::Client::ServiceUnavailable

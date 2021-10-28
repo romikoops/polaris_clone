@@ -26,6 +26,10 @@ module OfferCalculator
           def outbound?
             section.include?("pre")
           end
+
+          def transit_time
+            0
+          end
         end
       end
     end

@@ -31,7 +31,7 @@ end
 #  mode_of_transport :enum
 #  order             :integer          not null
 #  service           :string           not null
-#  transit_time      :integer          not null
+#  transit_time      :integer          default(0)
 #  transshipment     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

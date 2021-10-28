@@ -101,6 +101,20 @@ RSpec.describe ResultFormatter::ResultDecorator do
     end
   end
 
+  describe "#transit_time" do
+    it "returns sum of all transit times stored on the RouteSections" do
+      expect(klass.transit_time).to eq(5)
+    end
+
+    context "when a route section has no transit time" do
+      before { pre_carriage_section.update(transit_time: 0) }
+
+      it "returns sum of all present transit times stored on the RouteSections" do
+        expect(klass.transit_time).to eq(4)
+      end
+    end
+  end
+
   describe ".customs?" do
     it "returns true if customs fees are present" do
       expect(klass).not_to be_customs
