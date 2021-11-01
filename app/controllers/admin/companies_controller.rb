@@ -41,19 +41,13 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   def company
-    @company ||= ::Companies::Company.find_by(id: params[:id])
+    @company ||= ::Companies::Company.find(params[:id])
   end
 
   def destroy
     company_to_destroy = company
-    if company_to_destroy
-      ActiveRecord::Base.transaction do
-        Companies::Membership.where(company: company_to_destroy).destroy_all
-        Groups::Membership.where(member: company_to_destroy).destroy_all
-        company_to_destroy.destroy
-      end
-      resp = company_to_destroy.destroyed? || company_to_destroy.deleted_at
-    end
+    company_service.destroy if company_to_destroy
+    resp = company_to_destroy.destroyed? || company_to_destroy.deleted_at
     response_handler(success: resp)
   end
 
@@ -68,6 +62,10 @@ class Admin::CompaniesController < Admin::AdminBaseController
   end
 
   private
+
+  def company_service
+    @company_service ||= ::Companies::CompanyServices.new(company: company)
+  end
 
   def company_membership_service
     @company_membership_service ||= ::UserServices::CompanyMembership.new(company: company)
