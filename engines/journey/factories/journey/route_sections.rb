@@ -9,7 +9,7 @@ FactoryBot.define do
     mode_of_transport { :ocean }
     service { "standard" }
     sequence(:order) { |n| n }
-    transit_time { 1 }
+    transit_time { nil }
     transshipment { nil }
   end
 end

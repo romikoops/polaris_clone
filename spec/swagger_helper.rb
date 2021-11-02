@@ -1495,7 +1495,8 @@ RSpec.configure do |config|
               transitTime: {
                 description: "The time in days that this part of the journey will take.",
                 type: "integer",
-                format: "int32"
+                format: "int32",
+                nullable: true
               },
               origin: {
                 type: "object",

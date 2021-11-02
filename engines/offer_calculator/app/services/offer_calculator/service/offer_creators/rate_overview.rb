@@ -21,7 +21,7 @@ module OfferCalculator
 
         attr_reader :result
 
-        delegate :itinerary, :legacy_service, :transit_time, :load_type, :issued_at, :query, to: :result
+        delegate :itinerary, :legacy_service, :load_type, :issued_at, :query, to: :result
 
         def pricings
           @pricings ||= Pricings::Pricing.where(
@@ -48,7 +48,7 @@ module OfferCalculator
             id: SecureRandom.uuid,
             mode_of_transport: itinerary.mode_of_transport,
             transshipment: itinerary.transshipment,
-            eta: issued_at + transit_time.days,
+            eta: issued_at + BUFFER.days,
             etd: issued_at + 1.day,
             closing_date: issued_at,
             origin_hub_id: itinerary.origin_hub_id,

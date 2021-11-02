@@ -42,10 +42,6 @@ module Api
         }.merge(chargeable_weights)
       end
 
-      def transit_time
-        route_sections.sum(&:transit_time)
-      end
-
       def metadatum
         @metadatum ||= Pricings::Metadatum.find_by(result_id: id)
       end
