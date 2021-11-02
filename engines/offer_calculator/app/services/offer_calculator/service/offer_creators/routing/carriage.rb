@@ -28,7 +28,7 @@ module OfferCalculator
           end
 
           def transit_time
-            0
+            nil
           end
         end
       end

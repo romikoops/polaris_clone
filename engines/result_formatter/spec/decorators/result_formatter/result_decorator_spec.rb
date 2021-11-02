@@ -106,11 +106,11 @@ RSpec.describe ResultFormatter::ResultDecorator do
       expect(klass.transit_time).to eq(5)
     end
 
-    context "when a route section has no transit time" do
-      before { pre_carriage_section.update(transit_time: 0) }
+    context "when the main route section has no transit time" do
+      before { freight_section.update(transit_time: nil) }
 
-      it "returns sum of all present transit times stored on the RouteSections" do
-        expect(klass.transit_time).to eq(4)
+      it "returns nil" do
+        expect(klass.transit_time).to be_nil
       end
     end
   end

@@ -28,10 +28,6 @@ module OfferCalculator
           end
 
           def transit_time
-            transit_time_duration || 0
-          end
-
-          def transit_time_duration
             Legacy::TransitTime.where(itinerary: itinerary, tenant_vehicle: tenant_vehicle)
               .limit(1)
               .pluck(:duration)

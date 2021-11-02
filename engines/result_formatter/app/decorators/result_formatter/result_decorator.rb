@@ -101,7 +101,7 @@ module ResultFormatter
     end
 
     def transit_time
-      @transit_time ||= route_sections.sum(&:transit_time)
+      @transit_time ||= route_sections.sum { |route_section| route_section.transit_time || 0 } if main_freight_section.transit_time.present?
     end
 
     def cargo_items

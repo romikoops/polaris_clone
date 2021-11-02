@@ -31,8 +31,8 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Freight do
         expect(service.route_section.transshipment).to eq(itinerary.transshipment)
       end
 
-      it "sets the transit_time as zero, when no Legacy::TransitTime exists" do
-        expect(service.route_section.transit_time).to be_zero
+      it "sets the transit_time as nil, when no Legacy::TransitTime exists" do
+        expect(service.route_section.transit_time).to be_nil
       end
 
       context "with Legacy::TransitTime" do

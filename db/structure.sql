@@ -2146,7 +2146,7 @@ CREATE TABLE public.journey_route_sections (
     mode_of_transport public.journey_mode_of_transport,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    transit_time integer DEFAULT 0,
+    transit_time integer,
     transshipment character varying,
     CONSTRAINT journey_route_sections_carrier_presence CHECK (((carrier IS NOT NULL) AND ((carrier)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_route_sections_service_presence CHECK (((service IS NOT NULL) AND ((service)::text !~ '^\s*$'::text)))
@@ -12576,6 +12576,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211015122348'),
 ('20211018095100'),
 ('20211019082716'),
-('20211027083408');
+('20211027083408'),
+('20211028140008');
 
 
