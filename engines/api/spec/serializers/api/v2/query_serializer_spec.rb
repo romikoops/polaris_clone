@@ -26,7 +26,8 @@ module Api
         originId: pickup_point.geo_id,
         destinationId: delivery_point.geo_id,
         parentId: nil,
-        companyId: query.company_id
+        companyId: query.company_id,
+        cargoReadyDate: query.cargo_ready_date
       }
     end
 

@@ -70,6 +70,11 @@ RSpec.describe "Queries", type: :request, swagger: true do
       parameter name: :query, in: :body, schema: {
         type: :object,
         properties: {
+          parentId: {
+            type: :string,
+            description: "The ID of the original Query that the current Query is based off.",
+            nullable: true
+          },
           originId: {
             type: :string,
             description: "The Carta ID of the origin point"
@@ -81,6 +86,11 @@ RSpec.describe "Queries", type: :request, swagger: true do
           loadType: {
             type: :string,
             description: "The load type of the query"
+          },
+          cargoReadyDate: {
+            type: :string,
+            description: "The date the cargo is expected to be ready for collection/drop off. This date will be used to find what rates are valid for the journey.",
+            nullable: true
           },
           items: {
             type: :array,

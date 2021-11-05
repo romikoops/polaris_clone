@@ -25,7 +25,7 @@ module Wheelhouse
 
     def query_request_params
       {
-        selected_day: Time.zone.today.to_s,
+        selected_day: params[:cargo_ready_date] || Time.zone.today.to_s,
         cargo_items_attributes: cargo_items_attributes,
         containers_attributes: container_attributes,
         load_type: params[:load_type],

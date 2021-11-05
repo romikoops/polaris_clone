@@ -122,6 +122,7 @@ module Api
           :parentId,
           :aggregated,
           :billable,
+          :cargoReadyDate,
           items: [
             :cargoClass,
             :stackable,

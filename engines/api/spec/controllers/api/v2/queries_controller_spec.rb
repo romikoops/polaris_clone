@@ -19,30 +19,17 @@ module Api
 
     describe "POST #create" do
       include_context "complete_route_with_trucking"
+
       let(:cargo_classes) { ["fcl_20"] }
-      let(:token_header) { "Bearer #{access_token.token}" }
-      let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
-      let(:items) { [] }
       let(:load_type) { "container" }
       let(:parent_id) { nil }
-      let(:aggregated) { false }
       let(:origin) do
         FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
       end
       let(:destination) do
         FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode)
       end
-      let(:params) do
-        {
-          aggregated: aggregated,
-          items: items,
-          loadType: load_type,
-          parentId: parent_id,
-          originId: origin.id,
-          destinationId: destination.id,
-          organization_id: organization.id
-        }
-      end
+      let(:items) { [] }
 
       before do
         { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
@@ -54,6 +41,16 @@ module Api
         allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
           destination_hub.nexus
         )
+        FactoryBot.create(:legacy_cargo_item_type)
+        post :create, params: {
+          items: items,
+          loadType: load_type,
+          cargoReadyDate: Time.zone.tomorrow,
+          parentId: parent_id,
+          originId: origin.id,
+          destinationId: destination.id,
+          organization_id: organization.id
+        }, as: :json
       end
 
       context "when lcl" do
@@ -76,9 +73,8 @@ module Api
         let(:load_type) { "cargo_item" }
 
         it "successfuly triggers the job and returns the query", :aggregate_failures do
-          post :create, params: params, as: :json
-
           expect(response_data["id"]).to be_present
+          expect(DateTime.parse(response_data.dig("attributes", "cargoReadyDate"))).to eq(Time.zone.tomorrow)
         end
       end
 
@@ -96,7 +92,6 @@ module Api
         let(:load_type) { "container" }
 
         it "successfuly triggers the job and returns the query" do
-          post :create, params: params, as: :json
           expect(response_data["id"]).to be_present
         end
       end
@@ -107,7 +102,6 @@ module Api
         end
 
         it "successfuly triggers the job and returns the query" do
-          post :create, params: params, as: :json
           expect(response_data["id"]).to be_present
         end
       end
@@ -118,7 +112,6 @@ module Api
         end
 
         it "successfuly triggers the job and returns the query" do
-          post :create, params: params, as: :json
           expect(response_data["attributes"]["parentId"]).to be_present
         end
       end
