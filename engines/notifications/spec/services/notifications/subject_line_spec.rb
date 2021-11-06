@@ -2,12 +2,12 @@
 
 require "rails_helper"
 
-RSpec.describe Notifications::OfferSubjectLine do
+RSpec.describe Notifications::SubjectLine do
   include_context "journey_complete_request"
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:offer) { FactoryBot.create(:journey_offer, query: query, line_item_sets: result.line_item_sets) }
   let(:scope) { Organizations::DEFAULT_SCOPE.with_indifferent_access }
-  let(:subject_line_service) { described_class.new(offer: offer, scope: scope) }
+  let(:subject_line_service) { described_class.new(results: offer.results, scope: scope, noun: "Quotation") }
   let(:subject_line) { subject_line_service.subject_line }
   let(:context) { subject_line_service.context }
   let(:origin_city) { "Hamburg" }
@@ -124,6 +124,7 @@ RSpec.describe Notifications::OfferSubjectLine do
     end
 
     context "with default settings (LCL)" do
+      let(:journey_load_type) { "lcl" }
       let(:expected) do
         expected_base.merge(
           "total_weight" => 1000.0,
@@ -166,6 +167,7 @@ RSpec.describe Notifications::OfferSubjectLine do
     end
 
     context "with on and pre carriage" do
+      let(:journey_load_type) { "lcl" }
       let(:route_sections) do
         [
           pre_carriage_section,

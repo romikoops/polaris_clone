@@ -7,6 +7,10 @@ en:
     admin_mailer:
       user_created:
         subject: "[ItsMyCargo] New User Registered"
+      shipment_request_created:
+        true: "Yes"
+        false: "No"
+        none: "None"
     user_mailer:
       activation_needed_email:
         subject: "[%{company}] Confirm Your Account"
@@ -20,3 +24,5 @@ en:
     request_mailer:
       request_created:
         dimensions_key: (LxWxH)
+
+

@@ -1,21 +1,33 @@
 # frozen_string_literal: true
 
 module Notifications
-  class OfferSubjectLine
-    attr_reader :offer, :scope
+  class SubjectLine
+    attr_reader :results, :scope, :noun
 
     CHARACTER_COUNT = 90
 
     include ActionView::Helpers::TextHelper
 
-    def initialize(offer:, scope:)
-      @offer = offer
+    def initialize(results:, scope:, noun:)
+      @results = results
       @scope = scope
+      @noun = noun
     end
 
-    delegate :query, :results, :line_item_sets, to: :offer
+    def query
+      @query ||= Journey::Query.find(results.pluck(:query_id).first)
+    end
+
+    def line_item_sets
+      @line_item_sets ||= Journey::LineItemSet
+        .where(result: results)
+        .order(:result_id, created_at: :desc)
+        .group_by(&:result_id)
+        .values
+        .map(&:first)
+    end
+
     delegate :origin, :destination, :origin_coordinates, :destination_coordinates, :cargo_units, :client, to: :query
-    delegate :profile, to: :client
 
     def subject_line
       liquid_string = liquid.render(context)
@@ -41,7 +53,7 @@ module Notifications
         load_type: load_type,
         references: truncate("Refs: #{imc_references.join(', ')}", length: 23, separator: " "),
         routing: routing,
-        noun: "Quotation"
+        noun: noun
       }.deep_stringify_keys
     end
 
@@ -119,7 +131,7 @@ module Notifications
     end
 
     def load_type
-      cargo_units.exists?(cargo_class: %w[aggregated_lcl lcl]) ? "LCL" : "FCL"
+      query.load_type.upcase
     end
 
     def pickup_address
@@ -155,9 +167,13 @@ module Notifications
     end
 
     def main_route_sections
-      @main_route_sections ||= route_sections.select do |route_section|
-        route_section.mode_of_transport != "carriage" && route_section.to.geo_id != route_section.from.geo_id
+      @main_route_sections ||= route_sections.reject do |route_section|
+        %w[carriage relay].include?(route_section.mode_of_transport)
       end
+    end
+
+    def profile
+      @profile ||= client ? client.profile : Users::ClientProfile.new
     end
   end
 end

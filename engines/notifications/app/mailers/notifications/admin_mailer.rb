@@ -23,9 +23,20 @@ module Notifications
       @query = @offer.query
       @user = @query.client || Users::Client.new
       @profile = @user.profile
-      @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result) }
+      @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result, context: { scope: current_scope(user: @user) }) }
       attachments[@offer.file.filename.to_s] = @offer.attachment if @offer.file.attached?
-      mail to: params[:recipient], subject: subject_line
+
+      mail to: params[:recipient], subject: subject_line(results: @offer.results, noun: "Quotation")
+    end
+
+    def shipment_request_created
+      @shipment_request = params[:shipment_request]
+      @user = @shipment_request.client
+      @query = @shipment_request.result.query
+      @profile = @user.profile
+      @result = Notifications::ResultDecorator.new(@shipment_request.result, context: { scope: current_scope(user: @user) })
+
+      mail to: params[:recipient], subject: subject_line(results: [@shipment_request.result], noun: "Booking")
     end
 
     protected
@@ -34,9 +45,9 @@ module Notifications
       "ItsMyCargo ApS"
     end
 
-    def subject_line
-      text = Notifications::OfferSubjectLine.new(
-        offer: @offer, scope: current_scope(user: @user)
+    def subject_line(results:, noun:)
+      text = Notifications::SubjectLine.new(
+        results: results, scope: current_scope(user: @user), noun: noun
       ).subject_line
 
       "#{subject_prefix}#{text}"

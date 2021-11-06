@@ -220,15 +220,15 @@ module ResultFormatter
     end
 
     def lcl_units
-      @lcl_units ||= cargo_units.where(cargo_class: "lcl")
+      @lcl_units ||= query.object.cargo_units.where(cargo_class: "lcl")
     end
 
     def fcl_units
-      @fcl_units ||= cargo_units.reject(&:cargo_item?)
+      @fcl_units ||= query.object.cargo_units.reject(&:cargo_item?)
     end
 
     def aggr_units
-      @aggr_units ||= cargo_units.where(cargo_class: "aggregated_lcl")
+      @aggr_units ||= query.object.cargo_units.where(cargo_class: "aggregated_lcl")
     end
 
     def exchange_rates

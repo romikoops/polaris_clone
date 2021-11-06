@@ -13,6 +13,7 @@ module Api
     def perform
       Journey::ShipmentRequest.create!(shipment_request_attributes).tap do |shipment_request|
         create_commodity_infos_through(shipment_request: shipment_request)
+        publish_event_for(shipment_request: shipment_request)
       end
     end
 
@@ -34,7 +35,9 @@ module Api
         result: result,
         client_id: query.client_id,
         company_id: query.company_id,
-        contacts_attributes: contacts_attributes
+        contacts_attributes: contacts_attributes,
+        with_insurance: shipment_request_params[:with_insurance].present?,
+        with_customs_handling: shipment_request_params[:with_customs_handling].present?
       )
     end
 
@@ -47,6 +50,15 @@ module Api
         # rubocop:enable Naming/VariableNumber
         params
       end
+    end
+
+    def publish_event_for(shipment_request:)
+      Rails.configuration.event_store.publish(
+        Journey::ShipmentRequestCreated.new(data: {
+          shipment_request: shipment_request.to_global_id, organization_id: Organizations.current_id
+        }),
+        stream_name: "Organization$#{Organizations.current_id}"
+      )
     end
   end
 end

@@ -1,0 +1,61 @@
+Hi,
+
+A new shipment request has been requested through your online shop!
+
+Ref: <%= @result.imc_reference %>
+Created at: <%= @shipment_request.created_at.strftime('%Y%d%m') %>
+Client: <%= @profile.full_name || I18n.t("notifications.admin_mailer.shipment_request_created.none") %>
+Email: <%= @user.email %>
+
+
+Shipment Request details:
+
+From: <%= @result.main_freight_section.from.locode %>
+To: <%= @result.main_freight_section.to.locode %>
+Commercial value: <%= @shipment_request.commercial_value&.format(rounded_infinite_precision: true, symbol: "#{@shipment_request.commercial_value_currency} ") || I18n.t("notifications.admin_mailer.shipment_request_created.none") %>
+Preferred Voyage: <%= @shipment_request.preferred_voyage || I18n.t("notifications.admin_mailer.shipment_request_created.none") %>
+With customs handling: <%= I18n.t("notifications.admin_mailer.shipment_request_created.#{@shipment_request.with_customs_handling}") %>
+With insurance: <%= I18n.t("notifications.admin_mailer.shipment_request_created.#{@shipment_request.with_insurance}") %>
+Notes: <%= @shipment_request.notes || I18n.t("notifications.admin_mailer.shipment_request_created.none") %>
+
+
+Cargo unit details:
+
+<% @result.query.cargo_units.each do |cargo_unit| %>
+  Quantity: <%= cargo_unit.quantity %>
+  Cargo Class: <%= cargo_unit.cargo_class %>
+  <% if cargo_unit.cargo_item? %>
+    Dimensions: <%= cargo_unit.dimensions_format %>
+    Colli Type: <%= cargo_unit.cargo_item_type_description %>
+  <% end %>
+<% end %>
+
+
+Transportation details:
+
+Routing: <%= @result.routing %>
+Mode Of Transport: <%= @result.main_freight_section.mode_of_transport.humanize %>
+Transshipment: <%= @result.main_freight_section.transshipment || I18n.t("notifications.admin_mailer.shipment_request_created.none") %>
+
+
+Costs:
+
+Fees:
+<% @result.fees.each do |fee| %>
+  <% next unless [1,4].include?(fee[:level]) %>
+  <% if fee[:level] == 4 %>
+    <%= fee[:description] %>: <%= [fee.dig(:value, :amount), fee.dig(:value, :currency)].join(' ') %>
+  <% else %>
+  <%= fee[:description] %>: <%= [fee.dig(:value, :amount), fee.dig(:value, :currency)].join(' ') %>
+  <% end %>
+<% end %>
+Total cost: <%= @result.total %>
+
+
+Regards,
+
+The IMC Team
+
+© 2021 ItsMyCargo ApS. All rights reserved.
+
+ItsMyCargo ApS

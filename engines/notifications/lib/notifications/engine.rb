@@ -44,6 +44,7 @@ module Notifications
 
         # Offer created notifications
         Rails.configuration.event_store.subscribe(OfferCreated::AdminNotifierJob, to: [Journey::OfferCreated])
+        Rails.configuration.event_store.subscribe(ShipmentRequestCreatedJob, to: [Journey::ShipmentRequestCreated])
         Rails.configuration.event_store.subscribe(RequestCreatedJob, to: [Journey::RequestCreated])
       end
     end

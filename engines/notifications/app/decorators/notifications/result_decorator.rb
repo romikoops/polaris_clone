@@ -6,7 +6,7 @@ module Notifications
     delegate :currency, to: :query
 
     def total
-      super.format(rounded_infinite_precision: true)
+      super.format(rounded_infinite_precision: true, symbol: "#{currency} ")
     end
 
     def routing

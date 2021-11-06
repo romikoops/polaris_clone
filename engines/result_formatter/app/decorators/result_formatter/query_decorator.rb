@@ -6,6 +6,7 @@ module ResultFormatter
 
     decorates_association :client, with: ClientDecorator
     decorates_association :results, with: ResultDecorator
+    decorates_association :cargo_units, with: CargoDecorator
 
     def pickup_address
       Legacy::Address.new(

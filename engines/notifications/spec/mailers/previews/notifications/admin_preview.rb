@@ -21,6 +21,17 @@ module Notifications
       ).offer_created
     end
 
+    def shipment_request_created
+      shipment_request = Journey::ShipmentRequest.last
+      query = shipment_request.result.query
+      Organizations.current_id = query.organization_id
+      AdminMailer.with(
+        organization: query.organization,
+        shipment_request: shipment_request,
+        recipient: query.client.email
+      ).shipment_request_created
+    end
+
     private
 
     def organization

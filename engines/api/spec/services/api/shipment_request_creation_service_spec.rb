@@ -3,6 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Api::ShipmentRequestCreationService do
+  include ActiveJob::TestHelper
   # rubocop:disable Naming/VariableNumber
   before do
     Organizations.current_id = organization.id
@@ -40,6 +41,17 @@ RSpec.describe Api::ShipmentRequestCreationService do
       expect { perform }.to change { Journey::CommodityInfo.count }.from(0).to(2)
     end
 
+    it "asserts that the Notifications::ShipmentRequestCreatedJob has been enqueued" do
+      assert_enqueued_with(job: Notifications::ShipmentRequestCreatedJob) do
+        perform
+      end
+    end
+
+    it "returns persists nil as false for with_insurance", :aggregate_failures do
+      expect(perform_with_nil_shipment_request_params_present.with_insurance).to eq(false)
+      expect(perform_with_nil_shipment_request_params_present.with_customs_handling).to eq(false)
+    end
+
     def perform
       Api::ShipmentRequestCreationService.new(
         result: result,
@@ -48,9 +60,17 @@ RSpec.describe Api::ShipmentRequestCreationService do
       ).perform
     end
 
-    def shipment_request_params
+    def perform_with_nil_shipment_request_params_present
+      Api::ShipmentRequestCreationService.new(
+        result: result,
+        shipment_request_params: shipment_request_params(with_insurance: nil, with_customs_handling: nil),
+        commodity_info_params: commodity_info_params
+      ).perform
+    end
+
+    def shipment_request_params(with_insurance: false, with_customs_handling: false)
       {
-        with_insurance: false, with_customs_handling: false,
+        with_insurance: with_insurance, with_customs_handling: with_customs_handling,
         preferred_voyage: "1234", notes: "some notes", commercial_value_cents: 10,
         commercial_value_currency: :eur, contacts_attributes: contacts_attributes
       }

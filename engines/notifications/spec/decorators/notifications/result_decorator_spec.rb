@@ -24,13 +24,8 @@ RSpec.describe Notifications::ResultDecorator do
   end
 
   describe ".total" do
-    let(:expected_string) do
-      result.line_item_sets.first.line_items.inject(Money.new(0, "EUR")) { |sum, item| sum + Money.new(item.total_cents * item.exchange_rate, "EUR") }
-        .format(rounded_infinite_precision: true)
-    end
-
     it "returns the origin and destination names joined together" do
-      expect(decorated_query.total).to eq(expected_string)
+      expect(decorated_query.total).to eq("EUR 36.00")
     end
   end
 end

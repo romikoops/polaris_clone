@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Notifications::FilterBuilder do
-  subject(:filter_builder) { described_class.new(offer: offer).to_hash }
+  subject(:filter_builder) { described_class.new(results: offer.results).to_hash }
 
   let(:offer) { FactoryBot.create(:journey_offer, query: query, line_item_sets: result.line_item_sets) }
   let(:result) { FactoryBot.create(:journey_result) }

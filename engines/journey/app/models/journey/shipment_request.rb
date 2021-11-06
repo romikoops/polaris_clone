@@ -9,6 +9,8 @@ module Journey
     has_many :contacts
     has_one :shipment
 
+    monetize :commercial_value_cents, allow_nil: true
+
     accepts_nested_attributes_for :contacts
 
     enum status: {

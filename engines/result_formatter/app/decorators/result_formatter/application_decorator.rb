@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ResultFormatter
   class ApplicationDecorator < Draper::Decorator
     def scope

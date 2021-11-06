@@ -28,7 +28,7 @@ module Notifications
       private
 
       def offer_filter_hash
-        @offer_filter_hash ||= FilterBuilder.new(offer: offer).to_hash
+        @offer_filter_hash ||= FilterBuilder.new(results: offer.results).to_hash
       end
 
       def email_subscribed?(subscription:)

@@ -7,6 +7,10 @@ de:
     admin_mailer:
       user_created:
         subject: "[ItsMyCargo] Neuer Benutzer"
+      shipment_request_created:
+        true: "Ja"
+        false: "Nein"
+        none: "Keine"
     user_mailer:
       activation_needed_email:
         subject: "[%{company}] Bestätigen Sie Ihr Konto"
