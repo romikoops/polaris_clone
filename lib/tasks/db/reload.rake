@@ -25,7 +25,7 @@ if Rails.env.development?
 
     desc "Restore full database (restore from template)"
     task restore: :environment do
-      Rake::Task["db:reload:full"].invoke
+      Rake::Task["db:restore:full"].invoke
     end
 
     namespace :restore do
