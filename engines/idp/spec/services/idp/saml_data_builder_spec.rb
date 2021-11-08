@@ -178,6 +178,57 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
         it_behaves_like "Company creation from SAML"
       end
 
+      context "when company is not present and company name in blank" do
+        let(:company) do
+          Companies::Company.find_by(name: saml_attributes[:companyID], organization: organization)
+        end
+        let(:attributes) do
+          {
+            "firstName" => ["Test"], "lastName" => ["User"], "companyID" => [external_id], "companyName" => [""]
+          }.merge(address_params)
+        end
+
+        before do
+          saml_data_builder.perform
+        end
+
+        it "creates company name with external id" do
+          expect(company.name).to eq(saml_attributes[:companyID])
+        end
+
+        it "updates the company address" do
+          expect(company.address.attributes).to include(address_attributes)
+        end
+
+        it "attaches the user to the target company" do
+          expect(company_membership).to be_present
+        end
+      end
+
+      context "when company is not present and company name and external id is blank" do
+        let!(:default_company) { FactoryBot.create(:companies_company, name: "default", organization: organization) }
+        let(:default_company_membership) do
+          Companies::Membership.find_by(client: created_user, company: default_company)
+        end
+        let(:attributes) do
+          {
+            "firstName" => ["Test"], "lastName" => ["User"], "companyID" => [""], "companyName" => [""]
+          }.merge(address_params)
+        end
+
+        before do
+          saml_data_builder.perform
+        end
+
+        it "company is not created" do
+          expect(company).to be nil
+        end
+
+        it "attaches the user to the default company" do
+          expect(default_company_membership).to be_present
+        end
+      end
+
       context "when company is not present" do
         let(:attributes) do
           {

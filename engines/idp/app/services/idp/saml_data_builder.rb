@@ -112,11 +112,21 @@ module IDP
     end
 
     def company
-      Companies::Company.create_with(name: company_attributes[:name])
+      company_name = company_attributes[:name].presence || company_attributes[:external_id].presence
+      return default_company unless company_name
+
+      Companies::Company.create_with(name: company_name)
         .find_or_create_by(external_id: company_attributes[:external_id], organization: organization).tap do |comp|
         comp.address = address
         comp.save!
       end
+    end
+
+    def default_company
+      @default_company ||= Companies::Company.find_by(
+        name: "default",
+        organization: organization
+      )
     end
   end
 end
