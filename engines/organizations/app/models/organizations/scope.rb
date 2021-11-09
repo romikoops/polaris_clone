@@ -9,24 +9,24 @@ module Organizations
     validates :target, presence: true
     validates_uniqueness_of :target_id, scope: :target_type
 
-    define_setters(*Organizations::DEFAULT_SCOPE.keys)
+    define_setters_and_getters
 
     def method_missing(meth, *args, &blk)
-      if content.has_key?(meth.to_s)
-        content.fetch(meth.to_s)
-      elsif Organizations::DEFAULT_SCOPE.has_key?(meth.to_s)
-        Organizations::DEFAULT_SCOPE.fetch(meth.to_s)
+      method_name = meth.to_s
+      if content.key?(method_name)
+        content.fetch(method_name)
+      elsif Organizations::DEFAULT_SCOPE.key?(method_name)
+        Organizations::DEFAULT_SCOPE.fetch(method_name)
       else
         super
       end
     end
 
     def respond_to_missing?(meth, *)
-      content.has_key?(meth.to_s) || Organizations::DEFAULT_SCOPE.has_key?(meth.to_s) || super
+      content.key?(meth.to_s) || Organizations::DEFAULT_SCOPE.key?(meth.to_s) || super
     end
   end
 end
-
 
 # == Schema Information
 #

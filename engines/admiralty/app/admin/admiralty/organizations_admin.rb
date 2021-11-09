@@ -117,6 +117,20 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           end
         end
 
+        divider
+
+        static_field :consolidations do
+          organization.scope.consolidations.each_slice(4) do |slice|
+            row do
+              slice.each do |key|
+                col(sm: 3) { check_box key, { label: Organizations::Scope.key_name(extended_key: key) } }
+              end
+            end
+          end
+        end
+
+        divider
+
         row do
           col(sm: 3) { number_field :session_length }
           col(sm: 3) { number_field :search_buffer }
