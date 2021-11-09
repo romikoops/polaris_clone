@@ -8,6 +8,7 @@ extensions = [
     "myst_parser",
     "sphinxcontrib.confluencebuilder",
     "sphinxcontrib.plantuml",
+    "sphinx.ext.autosectionlabel"
 ]
 
 # UML

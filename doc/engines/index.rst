@@ -129,3 +129,4 @@ Dependencies
    api/index.rst
    companies/index.rst
    journey/index.rst
+   excel_data_services/index.rst
