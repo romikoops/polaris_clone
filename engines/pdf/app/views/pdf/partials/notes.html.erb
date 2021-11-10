@@ -2,13 +2,9 @@
   <% notes.each do |note| %>
     <li class="note-header"> <%= note.header %></li>
     <li class="note-body">
-      <% if note.contains_html %>
-        <p class="hyphens">
-          <%= simple_format(note.body)  %>
-        </p>
-      <% else %>
-        <%= note.body %>
-      <% end %>
+      <p class="hyphens">
+        <%== simple_format(note.body) %>
+      </p>
     </li>
   <% end %>
 </ul>
