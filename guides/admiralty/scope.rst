@@ -59,3 +59,67 @@ When this value is set to `true` the system will compute sum of all the weights,
 Value type: `boolean`
 Default value: `false`
 
+
+
+Voyage Info
+#############
+This section allows Ops to enable/disable the display of certain pieces of information on the result cards and pdf.
+
+
+Carrier
+*************
+
+When this value is set to `true` the system will display the Carrier name on results.
+Value type: `boolean`
+Default value: `true`
+
+Service Level
+*************
+
+When this value is set to `true` the system will display the TenantVehicle (Service) name on results.
+Value type: `boolean`
+Default value: `true`
+
+Transshipment Via
+*****************
+
+When this value is set to `true` the system will display the transshipment information if present.
+Value type: `boolean`
+Default value: `true`
+
+Transit Time
+*************
+
+When this value is set to `true` the system will display the transit time of the journey, if present.
+Value type: `boolean`
+Default value: `false`
+
+Pre Carriage Carrier
+********************
+
+When this value is set to `true` the system will display the Carrier name of the Pre Carriage service.
+Value type: `boolean`
+Default value: `false`
+
+Pre Carriage Service
+********************
+
+When this value is set to `true` the system will display the TenantVehicle name of the Pre Carriage service.
+Value type: `boolean`
+Default value: `false`
+
+On Carriage Carrier
+*******************
+
+When this value is set to `true` the system will display the Carrier name of the On Carriage service.
+Value type: `boolean`
+Default value: `false`
+
+On Carriage Service
+*******************
+
+When this value is set to `true` the system will display the TenantVehicle name of the On Carriage service.
+Value type: `boolean`
+Default value: `false`
+
+

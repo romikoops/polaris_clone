@@ -54,6 +54,7 @@ RSpec.describe Api::V1::LegacyResultDecorator do
         ocean_chargeable_weight
         transshipmentVia
         charge_trip_id
+        transit_time
       ]
     end
 

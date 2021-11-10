@@ -38,7 +38,8 @@ module Api
           remarkNotes: remarks,
           transshipmentVia: transshipment,
           tender_id: id,
-          charge_trip_id: id
+          charge_trip_id: id,
+          transit_time: transit_time
         }.merge(chargeable_weights)
       end
 

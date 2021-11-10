@@ -109,8 +109,20 @@ RSpec.describe ResultFormatter::ResultDecorator do
     context "when the main route section has transit time" do
       before { freight_section.update(transit_time: 5) }
 
+      let(:scope_content) { { "voyage_info" => { "transit_time" => true } } }
+
       it "returns sum of all transit times stored on the RouteSections where missing transit times are assumed to be 0" do
         expect(klass.transit_time).to eq(5)
+      end
+    end
+
+    context "when the main route section has transit time but scope has voyage_info.transit_time disabled" do
+      before { freight_section.update(transit_time: 5) }
+
+      let(:scope_content) { { "voyage_info" => { "transit_time" => false } } }
+
+      it "returns nil" do
+        expect(klass.transit_time).to be_nil
       end
     end
   end

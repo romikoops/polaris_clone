@@ -131,6 +131,7 @@ voyage_info:
   vessel: true
   service_level: true
   transshipmentVia: true
+  transit_time: false
   pre_carriage_carrier: false
   pre_carriage_service: false
   on_carriage_carrier: false
