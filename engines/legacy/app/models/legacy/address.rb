@@ -36,9 +36,10 @@ module Legacy
     end
 
     def full_address
-      part_one = [street, street_number].delete_if(&:blank?).join(" ")
-      part_two = [zip_code, city, country.name].delete_if(&:blank?).join(", ")
-      [part_one, part_two].delete_if(&:blank?).join(", ")
+      [
+        [street, street_number].select(&:present?).join(" "),
+        [zip_code, city, country&.name].select(&:present?).join(", ")
+      ].select(&:present?).join(", ")
     end
 
     def get_zip_code

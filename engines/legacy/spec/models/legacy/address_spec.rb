@@ -38,9 +38,24 @@ module Legacy
       Geocoder::Lookup::Test.add_stub("Gothenburg, Sweden", ["coordinates" => [57.7072326, 11.9670171]])
     end
 
-    describe ".full_address" do
-      it "successfully" do
-        expect(address.full_address).to eq "43813, Gothenburg, Sweden"
+    describe "#full_address" do
+      before do
+        Geocoder::Lookup::Test.add_stub([56.0, 12.1], [
+          "country_code" => nil,
+          "postal_code" => "11222",
+          "city" => "Gothenburg",
+          "address_components" => ["short_name" => "Helsingborg"]])
+      end
+
+      let(:address) { FactoryBot.create(:legacy_address, :gothenburg, street: "A wonderful street", street_number: "10") }
+      let(:address_with_no_country) { FactoryBot.create(:legacy_address, latitude: 56.0, longitude: 12.1, country_id: nil) }
+
+      it "returns the full address with street, street_number, postcode, city and country" do
+        expect(address.full_address).to eq "A wonderful street 10, 43813, Gothenburg, Sweden"
+      end
+
+      it "does not contain the country name in the full address, when the address has no country attached" do
+        expect(address_with_no_country.full_address).to eq "11222, Gothenburg"
       end
     end
 
