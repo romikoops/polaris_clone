@@ -4,7 +4,6 @@ require "rails_helper"
 
 module Api
   RSpec.describe V2::ShipmentRequestsController, type: :controller do
-    # rubocop:disable Naming/VariableNumber
     routes { Engine.routes }
 
     before do
@@ -48,14 +47,7 @@ module Api
     end
 
     describe "POST #create" do
-      let(:company) { FactoryBot.create(:companies_company, organization: organization) }
-      let(:result) do
-        FactoryBot.create(:journey_result,
-          query: FactoryBot.build(:journey_query,
-            client: users_client,
-            company: company,
-            organization: organization))
-      end
+      include_context "journey_pdf_setup"
       let(:commodity_infos) do
         [
           { description: "Description 1", hsCode: "1504.90.60.00", imoClass: "1" },
@@ -84,14 +76,18 @@ module Api
       let(:successful_response_data) do
         {
           "attributes" => {
-            "clientId" => users_client.id, "commercialValue" => { "currency" => "EUR", "value" => 10 },
-            "companyId" => company.id, "notes" => "Some notes", "preferredVoyage" => "1234", "resultId" => result.id,
+            "clientId" => client.id, "commercialValue" => { "currency" => "EUR", "value" => 10 },
+            "companyId" => query.company_id, "notes" => "Some notes", "preferredVoyage" => "1234", "resultId" => result.id,
             "status" => "requested", "withCustomsHandling" => false, "withInsurance" => false
           },
           "id" => kind_of(String),
           "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [] } },
           "type" => "shipmentRequest"
         }
+      end
+
+      before do
+        FactoryBot.create(:companies_membership, client: client, company: query.company)
       end
 
       shared_examples_for "a successful Create" do
@@ -133,6 +129,5 @@ module Api
         end
       end
     end
-    # rubocop:enable Naming/VariableNumber
   end
 end

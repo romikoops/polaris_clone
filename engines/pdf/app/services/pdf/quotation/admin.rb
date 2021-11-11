@@ -4,7 +4,12 @@ require "active_storage"
 module Pdf
   module Quotation
     class Admin < Pdf::Service
-      attr_reader :quotation
+      attr_reader :quotation, :offer
+
+      def initialize(offer:)
+        @offer = offer
+        super(query: offer.query)
+      end
 
       private
 

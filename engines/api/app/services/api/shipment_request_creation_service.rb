@@ -13,6 +13,7 @@ module Api
     def perform
       Journey::ShipmentRequest.create!(shipment_request_attributes).tap do |shipment_request|
         create_commodity_infos_through(shipment_request: shipment_request)
+        Pdf::Shipment::Request.new(shipment_request: shipment_request).file
         publish_event_for(shipment_request: shipment_request)
       end
     end

@@ -22,7 +22,6 @@ module Notifications
     end
 
     def shipment_request_created
-      shipment_request = Journey::ShipmentRequest.last
       query = shipment_request.result.query
       Organizations.current_id = query.organization_id
       AdminMailer.with(
@@ -33,6 +32,10 @@ module Notifications
     end
 
     private
+
+    def shipment_request
+      @shipment_request ||= Journey::ShipmentRequest.first || FactoryBot.create(:journey_shipment_request, client: user, created_at: Time.zone.now)
+    end
 
     def organization
       FactoryBot.build(:organizations_organization)

@@ -266,7 +266,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       end
 
       it "return the value" do
-        expect(decorated_line_item.rate).to eq("USD10.00 / wm")
+        expect(decorated_line_item.rate).to eq("USD 10.00 / wm")
       end
     end
 
@@ -279,7 +279,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       end
 
       it "return the value" do
-        expect(decorated_line_item.rate).to eq("USD10.00 / container")
+        expect(decorated_line_item.rate).to eq("USD 10.00 / container")
       end
     end
 
@@ -310,7 +310,7 @@ RSpec.describe ResultFormatter::LineItemDecorator do
       let(:rate_type) { "Trucking::Trucking" }
 
       it "return the value" do
-        expect(decorated_line_item.rate).to eq("USD1.00 / kg")
+        expect(decorated_line_item.rate).to eq("USD 1.00 / kg")
       end
     end
 

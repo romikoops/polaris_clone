@@ -39,7 +39,7 @@ module ResultFormatter
     def rate
       @rate ||= if charged_rate.present?
         [
-          percentage_fee? ? format("%g", charged_rate) : Money.new(charged_rate, total_currency).format(symbol: total_currency, rounded_infinite_precision: true),
+          percentage_fee? ? format("%g", charged_rate) : Money.new(charged_rate, total_currency).format(symbol: "#{total_currency} ", rounded_infinite_precision: true),
           rate_factor_adornment
         ].join(percentage_fee? ? "" : " / ")
       end

@@ -19,6 +19,7 @@ module ResultFormatter
     let(:scope) { Organizations::DEFAULT_SCOPE.deep_dup.merge(custom_scope).with_indifferent_access }
     let(:type) { :table }
     let(:cargo_class) { "fcl_20" }
+    let(:journey_load_type) { cargo_class.include?("lcl") ? "lcl" : "fcl" }
     let(:cargo_unit_params) do
       [
         {

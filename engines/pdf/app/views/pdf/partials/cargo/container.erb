@@ -1,0 +1,14 @@
+<table>
+  <tr>
+    <th class="left">Quantity</th>
+    <th class="center">Cargo Class</th>
+    <th class="center">Gross Weight</th>
+  </tr>
+  <% cargo_units.each do |cargo_unit| %>
+    <tr>
+      <td class="left"><%= cargo_unit.quantity %></td>
+      <td class="center"><%= cargo_unit.cargo_class.humanize.upcase %></td>
+      <td class="center"><%= cargo_unit.total_weight_string %></td>
+    </tr>
+  <% end %>
+</table>

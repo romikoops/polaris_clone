@@ -334,7 +334,7 @@ module ResultFormatter
     end
 
     def route_sections_in_order
-      route_sections.sort_by(&:order)
+      route_sections.sort_by(&:order).map { |route_section| RouteSectionDecorator.new(route_section, context: { scope: scope }) }
     end
 
     def scope

@@ -7,6 +7,7 @@ RSpec.describe Api::ShipmentRequestCreationService do
   # rubocop:disable Naming/VariableNumber
   before do
     Organizations.current_id = organization.id
+    allow(Pdf::Shipment::Request).to receive(:new).and_return(instance_double("Pdf::Shipment::Request", file: true))
   end
 
   let(:result) do

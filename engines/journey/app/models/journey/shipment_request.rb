@@ -8,6 +8,7 @@ module Journey
     has_many :documents
     has_many :contacts
     has_one :shipment
+    has_one_attached :file
 
     monetize :commercial_value_cents, allow_nil: true
 
@@ -19,6 +20,10 @@ module Journey
       rejected: "rejected",
       completed: "completed"
     }
+
+    def file_binary
+      file&.download
+    end
   end
 end
 

@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <th colspan="2">Description</th>
+    <th>HSCode</th>
+    <th>IMO Class</th>
+  </tr>
+  <% commodity_infos.each do |commodity_info| %>
+    <tr>
+      <td colspan="2">
+        <%= commodity_info.description %>
+      </td>
+      <td >
+        <%= commodity_info.hs_code || '-' %>
+      </td>
+      <td >
+        <%= commodity_info.imo_class || '-' %>
+      </td>
+    </tr>
+  <% end %>
+</table>

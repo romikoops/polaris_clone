@@ -11,6 +11,7 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
   before do
     Organizations.current_id = organization_id
+    allow(Pdf::Shipment::Request).to receive(:new).and_return(instance_double("Pdf::Shipment::Request", file: true))
   end
 
   path "/v2/organizations/{organization_id}/shipment_requests/{shipment_request_id}" do
@@ -59,6 +60,7 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
           company: company,
           organization_id: organization_id)).id
     end
+
     post "Create a shipment request" do
       tags "ShipmentRequests"
       description "Create a shipment request"

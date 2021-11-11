@@ -1,0 +1,60 @@
+<div class="notes-and-remarks">
+  <% if result.remarks.present? || result.query.remarks.present? %>
+    <h4>Remarks: </h4>
+    <div class="note-remarks-row">
+      <% if result.remarks.present? %>
+        <%= render template: "pdf/partials/notes", locals: { notes: result.remarks } %>
+      <% end %>
+      <table>
+        <% result.query.remarks.each do |note| %>
+          <tr class="note-body">
+            <p class="hyphens">
+              <%= note.body  %>
+            </p>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+
+  <% if result.query.scope_notes.present? %>
+    <div class="remarks">
+      <h4>Conditions: </h4>
+      <table>
+        <% result.query.scope_notes.each do |result_note| %>
+          <tr class="note-body">
+            <p class="hyphens">
+              <%= result_note %>
+            </p>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+
+  <% end %>
+  </div>
+
+  <% if result.notes.present? %>
+    <div class="remarks">
+      <h4>Notes: </h4>
+      <%= render template: "pdf/partials/notes", locals: { notes: result.notes } %>
+    </div>
+  <% end %>
+
+  <%= result.query.render_payment_terms %>
+
+  <% if result.query.content['disclaimer'].present? %>
+    <div class="remarks">
+      <h4>Disclaimer: </h4>
+      <table>
+        <% result.query.content['disclaimer'].each do |section| %>
+          <tr class="note-header">
+            <p>
+              <%= section['text'].html_safe %>
+            </p>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+</div>

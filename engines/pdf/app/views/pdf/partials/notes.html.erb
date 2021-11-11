@@ -1,10 +1,12 @@
-<ul>
+
+<table>
   <% notes.each do |note| %>
-    <li class="note-header"> <%= note.header %></li>
-    <li class="note-body">
-      <p class="hyphens">
-        <%== simple_format(note.body) %>
-      </p>
-    </li>
-  <% end %>
-</ul>
+  <tr class="note-header"> <%= note.header %></tr>
+  <tr class="note-body">
+    <p class="hyphens">
+        <%== simple_format(note.body)  %>
+    </p>
+  </tr>
+<% end %>
+
+</table>

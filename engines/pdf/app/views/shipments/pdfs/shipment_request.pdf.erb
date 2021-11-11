@@ -1,0 +1,211 @@
+<div class="shipment_request">
+  <div class="container">
+    <div class="pdf-header">
+      <div class="logo">
+        <img src="data:image/png;base64,<%=logo%>" alt="" class="header-logo">
+      </div>
+      <div class="date">
+        <h4><%= shipment_request.created_at.strftime('%d %b %Y') %></h4>
+      </div>
+      <div class="reference">
+        <h4>REF: <%= shipment_request.result.imc_reference %></h4>
+      </div>
+    </div>
+
+    <table class="section">
+      <tr>
+        <td width=40%>
+          <div class="left-section">
+            <div class="client-info">
+              <div class="header">
+                <h3>Client</h3>
+              </div>
+              <table>
+                  <tr>
+                    <td>Name:</td>
+                    <td class="content"><%= shipment_request.client.full_name %></td>
+                  </tr>
+                  <tr>
+                    <td>Email:</td>
+                    <td class="content">
+                      <%= shipment_request.client.email %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Company:</td>
+                    <td class="content"><%= shipment_request.client.company_name %></td>
+                  </tr>
+                  <tr>
+                    <td>Phone:</td>
+                    <td><%= shipment_request.client.phone %></td>
+                  </tr>
+              </table>
+            </div>
+            <div class="request-info">
+              <div class="header">
+                <h3>Request Information</h3>
+              </div>
+              <table>
+                  <tr>
+                    <td colspan="2">Requires customs handling</td>
+                    <td class="request-value">
+                      <div >
+                        <%= I18n.t("notifications.admin_mailer.shipment_request_created.#{shipment_request.with_customs_handling}") %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Requires insurance</td>
+                    <td class="request-value">
+                      <div>
+                        <%= I18n.t("notifications.admin_mailer.shipment_request_created.#{shipment_request.with_insurance}") %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Preferred Voyage</td>
+                    <td class="request-value"><%= shipment_request.preferred_voyage.presence || I18n.t("notifications.admin_mailer.shipment_request_created.none")  %></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Commercial Value</td>
+                    <td class="request-value"><%= shipment_request.commercial_value ? shipment_request.commercial_value_format : I18n.t("notifications.admin_mailer.shipment_request_created.none") %></td>
+                  </tr>
+              </table>
+            </div>
+
+            <div class="result-info">
+              <div class="header">
+                <h3>Routing</h3>
+              </div>
+              <% shipment_request.result.route_sections_in_order.each do |route_section|%>
+                <% next if route_section.mode_of_transport == "relay" %>
+                <table>
+                  <tr><td><h4 class="subsection"><%= route_section.section_string %></h4></td></tr>
+                  <tr><td><bold>Carrier:</bold> <%= route_section.carrier %></td></tr>
+                  <tr><td><bold>Service:</bold> <%= route_section.service %></td></tr>
+                  <tr><td><bold>From:</bold> <%= route_section.from.description %></td></tr>
+                  <tr><td><bold>To:</bold> <%= route_section.to.description %></td></tr>
+                  <tr><td><bold>Mode of transport:</bold> <%= route_section.mode_of_transport.humanize %></td></tr>
+                  <% if route_section.transit_time %>
+                    <tr><td><bold>Transit Time (Est<sup>*</sup>):</bold> <%= route_section.transit_time %></td></tr>
+                  <% end %>
+                </table>
+              <% end %>
+            </div>
+            <% if shipment_request.notes.present? %>
+              <div class="section">
+                <div class="request-info">
+                  <div class="header">
+                    <h3>Client Notes</h3>
+                  </div>
+                  <p>
+                    <%= shipment_request.notes %>
+                  </p>
+                </div>
+              </div>
+            <% end %>
+
+            <% if shipment_request.contacts.present? %>
+              <div class="request-info">
+                <div class="header">
+                  <h3>Contacts</h3>
+                </div>
+                <table>
+                  <% shipment_request.contacts.each do |contact| %>
+                    <tr>
+                      <td>
+                        <address>
+                            <%= contact.name %> </br>
+                            <%= contact.email %> </br>
+                            <%= contact.phone %> </br>
+                        </address>
+                      </td>
+                    </tr>
+                  <% end %>
+                </table>
+              </div>
+            <% end %>
+          </div>
+        </td>
+        <td>
+          <div class="right-section">
+            <div class="overview">
+              <table>
+                <tr>
+                  <td>
+                    <div class="overview-row">
+                      <h1>
+                        <%= shipment_request.result.origin_hub.hub_code %>
+                      </h1>
+                      <i class="fa fa-chevron-right"> </i>
+                      <h1>
+                        <%= shipment_request.result.destination_hub.hub_code %>
+                      </h1>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="overview-total">
+                      <h1>
+                        <%= shipment_request.total_format %>
+                      </h1>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="fee-info">
+              <div class="header">
+                <h3>Fee Breakdown</h3>
+              </div>
+              <table>
+                  <% shipment_request.result.fees.each do |fee| %>
+                    <% next unless [1,4].include?(fee[:level]) %>
+                    <tr class="fee-row">
+                      <% if fee[:level] == 4 %>
+                        <td class="left"><%= fee[:description] %></td>
+                        <td class="right">
+                            <%= [fee.dig(:value, :currency), fee.dig(:value, :amount)].join(' ') %>
+                        </td>
+                      <% else %>
+                        <td class="left subheader">
+                          <h4 class="subsection">
+                            <%= fee[:description] %>
+                          </h4>
+                        </td>
+                        <td class="right subheader">
+                          <h4 class="subsection">
+                            <%= [fee.dig(:value, :currency), fee.dig(:value, :amount)].join(' ') %>
+                          </h4>
+                        </td>
+                      <% end %>
+                    </tr>
+                    <tr class="rate-details">
+                      <td colspan="2" class="right">
+                        <%= [fee[:rateFactor], fee[:rate]].compact.join(" @ ") %>
+                      </td>
+                    </tr>
+                  <% end %>
+              </table>
+            </div>
+
+            <div class="cargo-info">
+              <div class="header">
+                <h3>Cargo</h3>
+              </div>
+              <%= render template: "pdf/partials/cargo/#{shipment_request.result.query.load_type}", locals: { cargo_units: shipment_request.cargo_units } %>
+              <% if shipment_request.commodity_infos.present? %>
+                <div class="sub-header">
+                  <h3>Commodity Info</h3>
+                </div>
+                <%= render template: "pdf/partials/cargo/commodity_info_table", locals: { commodity_infos: shipment_request.commodity_infos } %>
+              <% end %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <%= render template: "pdf/partials/_notes_and_remarks", locals: { result: shipment_request.result } %>
+  </div>
+</div>

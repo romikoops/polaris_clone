@@ -15,5 +15,6 @@ FactoryBot.define do
     commercial_value_currency { "eur" }
     documents { [association(:journey_document, shipment_request: instance, query_id: result.query.id)] }
     contacts { [association(:journey_contact, shipment_request: instance)] }
+    file { Rack::Test::UploadedFile.new(File.expand_path("../fixtures/example_pdf.pdf", __dir__), "application/pdf") }
   end
 end

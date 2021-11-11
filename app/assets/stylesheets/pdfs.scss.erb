@@ -882,3 +882,193 @@ br{
     }
   }
 }
+
+.shipment_request {
+  padding: 25px;
+  margin: 0;
+  .container {
+    width: 100%;
+    .pdf-header {
+      display: -webkit-box;
+      align-items: center;
+      justify-content: start;
+      width: 100%;
+      position: relative;
+      .logo {
+        display: -webkit-box;
+        align-items: center;
+        width: fit-content;
+        img {
+          width: auto;
+          height: 80px;
+        }
+      }
+      .date {
+        justify-content: end;
+        display: -webkit-box;
+        position: absolute;
+        right: 0;
+        h4 {
+          text-align: end;
+        }
+      }
+      .reference {
+        justify-content: end;
+        display: -webkit-box;
+        position: absolute;
+        right: 0;
+        top: 50px;
+        h4 {
+          text-align: end;
+        }
+      }
+    }
+    .section {
+      width: 100%;
+      position: relative;
+      .header {
+        width: 100%;
+        h3 {
+          width: 100%;
+        }
+      }
+      .left-section {
+        width: 100%;
+        position: relative;
+        align-items: start;
+        .client-info {
+          table {
+            table-layout: fixed;
+            td {
+              word-wrap:break-word
+            }
+          }
+          .content {
+            width: 100%;
+            max-width: 300px;
+          }
+        }
+        .result-info {
+          align-items: center;
+          justify-content: start;
+          width: 100%;
+          .subsection {
+            margin-left: 0px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+          }
+        }
+        .request-info {
+          align-items: center;
+          justify-content: start;
+          width: 100%;
+          table {
+            width: 90%;
+          }
+          .request-value {
+            div {
+              width: 100%;
+              position: relative;
+              i {
+                position: absolute;
+                right: 2px;
+                margin: -2px;
+              }
+            }
+            text-align: end;
+          }
+        }
+      }
+      .right-section {
+        width: 100%;
+        align-items: end;
+        flex-direction: column;
+        justify-content: flex-start;
+        display: flex;
+         .fee-info {
+          align-items: center;
+          flex-grow: 5;
+          font-size: 12px;
+          margin-bottom: 25px;
+          width: 100%;
+          table {
+            width: 100%;
+            table-layout: fixed;
+            td {
+              word-wrap:break-word
+            }
+          }
+          .subheader {
+            padding-top: 5px;
+            font-weight: 600;
+            color: transparentize($color: #000000, $amount: 0.25);
+            .subsection {
+              margin: 0;
+              padding: 0;
+            }
+          }
+          .rate-details {
+            font-size: 8px;
+            height: 12px;
+            padding-bottom: 5px;
+            color: transparentize($color: #000000, $amount: 0.35)
+          }
+        }
+        .cargo-info {
+          width: 100%;
+          table {
+            width: 90%;
+          }
+          .sub-header {
+            opacity: 0.75;
+            margin: 5px;
+          }
+        }
+        .overview {
+          flex-shrink: 0;
+          width: 100%;
+          position: relative;
+          align-self: flex-start;
+          table {
+            width: 100%;
+          }
+          .overview-total {
+            width: 100%;
+            text-align: end;
+          }
+          .overview-row {
+            width: 100%;
+            text-align: end;
+            h1 {
+              display:inline-block;
+              text-align: center;
+              font-size: 36px;
+              padding: 5px;
+            }
+            i {
+              display:inline-block;
+              font-size: 36px;
+              text-align: center;
+              vertical-align: center;
+            }
+          }
+        }
+      }
+    }
+    table {
+      td {
+        padding: 2px !important;
+        font-size: 14px;
+      }
+    }
+    .left {
+      text-align: start;
+    }
+    .right {
+      text-align: end;
+    }
+    .center {
+      text-align: center;
+    }
+  }
+}

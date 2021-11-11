@@ -21,7 +21,7 @@ module Notifications
     def offer_created
       @offer = params[:offer]
       @query = @offer.query
-      @user = @query.client || Users::Client.new
+      @user = @query.client || Users::Client.new(profile:  Users::ClientProfile.new)
       @profile = @user.profile
       @results = @offer.results.map { |result| Notifications::ResultDecorator.new(result, context: { scope: current_scope(user: @user) }) }
       attachments[@offer.file.filename.to_s] = @offer.attachment if @offer.file.attached?
@@ -35,7 +35,7 @@ module Notifications
       @query = @shipment_request.result.query
       @profile = @user.profile
       @result = Notifications::ResultDecorator.new(@shipment_request.result, context: { scope: current_scope(user: @user) })
-
+      attachments[@shipment_request.file.filename.to_s] = @shipment_request.file_binary if @shipment_request.file.attached?
       mail to: params[:recipient], subject: subject_line(results: [@shipment_request.result], noun: "Booking")
     end
 

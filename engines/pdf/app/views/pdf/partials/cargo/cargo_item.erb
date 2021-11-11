@@ -1,0 +1,16 @@
+<table>
+  <tr>
+    <th class="left">Cargo Class</th>
+    <th class="center">Colli Type</th>
+    <th colspan="2" class="center">Dimensions</th>
+    <th class="right">Total Weight</th>
+  </tr>
+  <% cargo_units.each do |cargo_unit| %>
+    <tr>
+      <td class="left"><%= cargo_unit.cargo_class.humanize.upcase %></td>
+      <td class="center"><%= cargo_unit.cargo_item_type_description %></td>
+      <td colspan="2" class="center"><%= cargo_unit.quantity %> x <%= cargo_unit.dimensions_format %></td>
+      <td class="right"><%= cargo_unit.total_weight_string %></td>
+    </tr>
+  <% end %>
+</table>

@@ -30,6 +30,10 @@ module ResultFormatter
       total_volume.value.round(3)
     end
 
+    def total_weight_string
+      total_weight.format("%.1<value>f #{weight_unit}")
+    end
+
     def weight_unit
       scope.dig("values", "weight", "unit")
     end

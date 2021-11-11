@@ -4,7 +4,7 @@ module ResultFormatter
   class ClientDecorator < ApplicationDecorator
     decorates "Users::Client"
     delegate_all
-    delegate :first_name, :last_name, :phone, to: :profile
+    delegate :first_name, :last_name, :phone, :full_name, to: :profile
     delegate :id, :name, to: :company, prefix: true
     delegate :payment_terms, to: :company
 

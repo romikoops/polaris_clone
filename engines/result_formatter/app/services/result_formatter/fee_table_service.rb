@@ -136,7 +136,7 @@ module ResultFormatter
       end
 
       def lcl_cargo_units?
-        route_section.result.query.cargo_units.exists?(cargo_class: %w[lcl aggregated_lcl])
+        route_section.result.query.lcl?
       end
 
       def route_section_line_items

@@ -4,7 +4,12 @@ require "active_storage"
 module Pdf
   module Quotation
     class Client < Pdf::Service
-      attr_reader :quotation
+      attr_reader :quotation, :offer
+
+      def initialize(offer:)
+        @offer = offer
+        super(query: offer.query)
+      end
 
       private
 
@@ -22,10 +27,6 @@ module Pdf
 
       def file_text
         @file_text ||= "offer_#{offer.id}"
-      end
-
-      def file_target
-        {target: quotation}
       end
     end
   end
