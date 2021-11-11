@@ -69,6 +69,15 @@ RSpec.describe ExcelDataServices::Inserters::Pricing do
       end
     end
 
+    context "with notes only in second row" do
+      let(:input_data) { FactoryBot.build(:excel_data_restructured, :notes_in_second_row_one_fee_col_and_ranges) }
+
+      it "creates notes attached to the pricing", :aggregate_failures do
+        expect(stats).to eq(expected_stats.merge("pricings/fees": { number_created: 2, number_deleted: 0, number_updated: 0 }))
+        expect(Legacy::Note.find_by(header: "Gothenburg - Shanghai", body: "Testing")).to be_present
+      end
+    end
+
     context "with terminals" do
       let(:input_data) { FactoryBot.build(:excel_data_restructured_pricing_with_terminal) }
       let(:origin_hub) { FactoryBot.create(:gothenburg_hub, terminal: "1-A", organization: organization) }

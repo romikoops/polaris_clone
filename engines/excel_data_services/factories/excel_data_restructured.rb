@@ -3557,6 +3557,68 @@ FactoryBot.define do
       end
     end
 
+    trait :notes_in_second_row_one_fee_col_and_ranges do
+      data do
+        [[
+          { sheet_name: "Sheet1",
+            restructurer_name: "pricing_one_fee_col_and_ranges",
+            effective_date: Date.parse("Thu, 15 Mar 2018"),
+            expiration_date: Date.parse("Fri, 15 Nov 2019"),
+            origin: "Gothenburg",
+            country_origin: "Sweden",
+            destination: "Shanghai",
+            country_destination: "China",
+            mot: "ocean",
+            carrier: nil,
+            service_level: "standard",
+            load_type: "lcl",
+            rate_basis: "PER_WM",
+            fee_code: "BAS",
+            fee_name: "Bas",
+            currency: "USD",
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 2,
+            internal: false,
+            group_name: "Test",
+            origin_name: "Gothenburg",
+            destination_name: "Shanghai",
+            notes: [] },
+          { sheet_name: "Sheet1",
+            restructurer_name: "pricing_one_fee_col_and_ranges",
+            effective_date: Date.parse("Thu, 15 Mar 2018"),
+            expiration_date: Date.parse("Fri, 15 Nov 2019"),
+            origin: "Gothenburg",
+            country_origin: "Sweden",
+            destination: "Shanghai",
+            country_destination: "China",
+            mot: "ocean",
+            carrier: nil,
+            service_level: "standard",
+            load_type: "lcl",
+            rate_basis: "PER_WM",
+            fee_code: "BAF",
+            fee_name: "Baf",
+            currency: "USD",
+            fee_min: 17,
+            fee: 17,
+            transit_time: 24,
+            transshipment: nil,
+            row_nr: 3,
+            internal: false,
+            group_name: "Test",
+            origin_name: "Gothenburg",
+            destination_name: "Shanghai",
+            notes:  [{
+              header: "Gothenburg - Shanghai",
+              body: "Testing"
+            }] }
+            ]]
+      end
+    end
+
     factory :missing_values_hubs_row_data, traits: %i[restructured_hubs_missing_values]
     factory :excel_data_restructured_correct_pricings_one_fee_col_and_ranges,
       traits: %i[correct_pricings_one_fee_col_and_ranges]

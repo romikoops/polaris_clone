@@ -5,9 +5,11 @@ module ExcelDataServices
     class Pricing < ExcelDataServices::Inserters::Base
       def perform
         data.each do |group_of_row_data|
-          row = ExcelDataServices::Rows::Base.get(klass_identifier).new(
-            row_data: group_of_row_data.first, organization: organization
-          )
+          row_class = ExcelDataServices::Rows::Base.get(klass_identifier)
+          rows = group_of_row_data.map do |row_data|
+            row_class.new(row_data: row_data, organization: organization)
+          end
+          row = rows.first
 
           origin_hub = find_hub_by_name_or_locode_with_info(
             name: row.origin,
@@ -36,8 +38,7 @@ module ExcelDataServices
           tenant_vehicle = find_or_create_tenant_vehicle(row)
           find_or_create_transit_time(row: row, itinerary: itinerary, tenant_vehicle: tenant_vehicle)
           itinerary.generate_map_data
-          notes = row.notes&.uniq || []
-
+          notes = rows.flat_map { |pricing_row| pricing_row.notes || [] }.uniq
           create_pricing_with_pricing_details(
             group_of_row_data,
             row,
