@@ -9,10 +9,6 @@ RSpec.describe BackfillHubTypeWithValidMotWorker, type: :worker do
   let!(:hub_with_valid_hub_type) { FactoryBot.create(:hub, organization: organization) }
   let!(:hub_with_invalid_hub_type_and_duplicate) { FactoryBot.create(:hub, hub_type: "road", nexus_id: hub_with_valid_hub_type.nexus_id, organization: organization) }
 
-  before do
-    ::Organizations.current_id = organization.id
-  end
-
   describe "#perform" do
     context "when backfill is successful" do
       before do
