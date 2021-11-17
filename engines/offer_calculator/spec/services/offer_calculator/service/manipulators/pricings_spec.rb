@@ -69,12 +69,8 @@ RSpec.describe OfferCalculator::Service::Manipulators::Pricings do
         ]
       end
 
-      it "returns the one pricing" do
-        aggregate_failures do
-          expect(results.first).to be_a(Pricings::ManipulatorResult)
-          expect(results.count).to eq(2)
-          expect(results.map(&:id)).to eq([pricing_1, pricing_2].map(&:id))
-        end
+      it "returns the both pricings" do
+        expect(results.map(&:id)).to match_array([pricing_1, pricing_2].map(&:id))
       end
     end
 

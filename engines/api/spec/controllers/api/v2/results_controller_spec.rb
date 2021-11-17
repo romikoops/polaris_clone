@@ -42,6 +42,19 @@ module Api
           expect(response_data["id"]).to eq(result.id)
         end
       end
+
+      context "with voyage_info.transit_time set to true" do
+        before do
+          organization.scope.update(content: { voyage_info: { transit_time: true } })
+        end
+
+        let(:result) { FactoryBot.create(:journey_result, sections: 0, route_sections: [FactoryBot.build(:journey_route_section, mode_of_transport: "ocean", transit_time: 12)]) }
+
+        it "returns the transit time in the response" do
+          get :show, params: params, as: :json
+          expect(response_data.dig("attributes", "transitTime")).to eq(12)
+        end
+      end
     end
   end
 end

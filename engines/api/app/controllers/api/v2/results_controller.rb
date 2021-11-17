@@ -9,7 +9,7 @@ module Api
 
       def show
         render json: Api::V2::ResultSerializer.new(
-          Api::V2::ResultDecorator.new(result)
+          Api::V2::ResultDecorator.new(result, context: { scope: current_scope })
         )
       end
 
