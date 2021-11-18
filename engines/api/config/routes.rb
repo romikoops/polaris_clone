@@ -87,6 +87,7 @@ Api::Engine.routes.draw do
       resources :uploads, only: [:create, :show]
       resource :theme, only: [:show]
       resource :scope, only: [:show]
+      resource :colli_types, only: [:show]
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
       resources :companies, only: %i[show update]

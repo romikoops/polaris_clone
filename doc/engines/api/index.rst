@@ -15,3 +15,7 @@ frontend apps can use, to access data for:**
 
 Schedules are queried from the information available from the journey models using the attributes:
 organization_id, origin, destination, closing_date, carrier, service, and mode_of_transport.
+
+**Colli Types Request endpoints**
+
+- GET - Retrieves a list of colli types queried by the organization.
