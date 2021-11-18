@@ -177,6 +177,18 @@ CREATE TYPE public.excel_data_services_uploads_status AS ENUM (
 
 
 --
+-- Name: hub_type_mode_of_transport; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.hub_type_mode_of_transport AS ENUM (
+    'ocean',
+    'air',
+    'rail',
+    'truck'
+);
+
+
+--
 -- Name: journey_colli_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1591,7 +1603,7 @@ CREATE TABLE public.hubs (
     tenant_id integer,
     address_id integer,
     name character varying,
-    hub_type character varying,
+    hub_type public.hub_type_mode_of_transport,
     latitude double precision,
     longitude double precision,
     hub_status character varying DEFAULT 'active'::character varying,
@@ -12577,6 +12589,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211018095100'),
 ('20211019082716'),
 ('20211027083408'),
-('20211028140008');
+('20211028140008'),
+('20211116173501');
 
 

@@ -6,6 +6,10 @@ RSpec.describe Hub, type: :model do
   it "builds  a valid hub" do
     expect(FactoryBot.build(:hub)).to be_valid
   end
+
+  it "raises exception with invalid hub_type" do
+    expect { FactoryBot.create(:hub, hub_type: "trucking") }.to raise_error(ActiveRecord::StatementInvalid)
+  end
 end
 
 # == Schema Information

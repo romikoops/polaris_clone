@@ -117,7 +117,7 @@ end
 #  free_out            :boolean          default(FALSE)
 #  hub_code            :string
 #  hub_status          :string           default("active")
-#  hub_type            :string
+#  hub_type            :enum
 #  latitude            :float
 #  longitude           :float
 #  name                :string
