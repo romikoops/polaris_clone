@@ -80,8 +80,8 @@ class ShipmentsController < ApplicationController
 
       {
         shipment: decorated_result.legacy_address_json,
-        cargoItems: cargo_items,
-        containers: containers,
+        cargoItems: cargo_items.map(&:legacy_format),
+        containers: containers.map(&:legacy_format),
         aggregatedCargo: aggregated_cargo,
         contacts: [],
         documents: [],
@@ -147,11 +147,9 @@ class ShipmentsController < ApplicationController
   end
 
   def cargo_item_types
-    cargo_units.each_with_object({}) do |cargo_unit, types|
-      cargo_unit.commodity_infos.each do |commodity|
-        hs_codes << commodity.hs_code
-        types[commodity.id] = commodity
-      end
+    cargo_items.each_with_object({}) do |cargo_unit, types|
+      cargo_item_type = Legacy::CargoItemType.find(cargo_unit.cargo_item_type_id)
+      types[cargo_item_type.id] ||= cargo_item_type.as_json.slice("description", "category", "id")
     end
   end
 
@@ -169,13 +167,13 @@ class ShipmentsController < ApplicationController
   def cargo_items
     @cargo_items ||=
       cargo_units.where(cargo_class: "lcl").map do |cargo_item|
-        Api::V1::LegacyCargoUnitDecorator.decorate(cargo_item).legacy_format
+        Api::V1::LegacyCargoUnitDecorator.decorate(cargo_item)
       end
   end
 
   def containers
     @containers ||= cargo_units.where.not(cargo_class: "lcl").map do |container|
-      Api::V1::LegacyCargoUnitDecorator.decorate(container).legacy_format
+      Api::V1::LegacyCargoUnitDecorator.decorate(container)
     end
   end
 

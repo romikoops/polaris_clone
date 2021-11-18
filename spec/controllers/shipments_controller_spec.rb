@@ -67,18 +67,38 @@ RSpec.describe ShipmentsController do
       ].each do |code|
         FactoryBot.create(:legacy_charge_categories, code: code, name: code.humanize, organization: organization)
       end
+      FactoryBot.create(:legacy_tenant_cargo_item_type, organization: organization, cargo_item_type: pallet)
     end
-
+    let!(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
     let(:line_item) { result.line_item_sets.first.line_items.first }
     let(:target_exchange_rate) { line_item.exchange_rate }
     let(:decimals) { [line_item.total_cents.to_s.length, 6].max }
 
-    it "returns requested result" do
+    it "returns requested result", :aggregate_failures do
       get :show, params: { id: result.id, organization_id: organization.id }
 
       expect(json_response.dig("data", "exchange_rates")).to include(
         "base" => "EUR", "usd" => (1 / target_exchange_rate).round(decimals).to_s
       )
+      expect(response_data.dig("cargoItemTypes", pallet.id.to_s, "description")).to eq(pallet.description)
+    end
+
+    context "when fcl_20" do
+      let(:cargo_unit_params) do
+        [
+          {
+            cargo_class: "fcl_20",
+            quantity: 1,
+            weight_value: 1000
+          }
+        ]
+      end
+
+      it "returns requested result", :aggregate_failures do
+        get :show, params: { id: result.id, organization_id: organization.id }
+
+        expect(response_data["containers"]).to be_present
+      end
     end
 
     it "returns 404 when a shipment id is provided" do
