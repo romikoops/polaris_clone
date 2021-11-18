@@ -7,14 +7,14 @@ RSpec.describe BackfillOfferLineItemSetsWorker, type: :worker, skip: "Validation
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:query) { FactoryBot.create(:journey_query, organization: organization) }
     let(:result) { FactoryBot.create(:journey_result, query: query) }
-    let(:edited_result) {
+    let(:edited_result) do
       FactoryBot.create(:journey_result,
         query: query,
         line_item_sets: [
           target_original_line_item_set,
           target_edited_line_item_set
         ])
-    }
+    end
     let(:offer) { FactoryBot.create(:journey_offer, query: query, line_item_sets: []) }
     let(:target_line_item_set) { result.line_item_sets.first }
     let(:target_original_line_item_set) { FactoryBot.build(:journey_line_item_set, created_at: 10.minutes.ago) }

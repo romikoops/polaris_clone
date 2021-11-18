@@ -18,14 +18,6 @@ module ExcelDataServices
         def frame_types
           { "nexus_id" => :object, "locode" => :object }
         end
-
-        def error_reason(row:)
-          "The nexus '#{row['name']} (#{row['locode']})' cannot be found."
-        end
-
-        def required_key
-          "nexus_id"
-        end
       end
     end
   end

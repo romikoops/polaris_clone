@@ -25,10 +25,10 @@ RSpec.describe ExcelDataServices::V2::Files::Tables::Column do
 
   describe "#perform" do
     let(:column_results) do
-      [{ "service" => "standard", "row" => 1, "sheet_name" => "Sheet1" },
-        { "service" => "standard", "row" => 2, "sheet_name" => "Sheet1" },
+      [{ "service" => "standard", "row" => 2, "sheet_name" => "Sheet1" },
         { "service" => "standard", "row" => 3, "sheet_name" => "Sheet1" },
-        { "service" => "standard", "row" => 4, "sheet_name" => "Sheet1" }]
+        { "service" => "standard", "row" => 4, "sheet_name" => "Sheet1" },
+        { "service" => "standard", "row" => 5, "sheet_name" => "Sheet1" }]
     end
 
     context "when column header is 'service'" do
@@ -47,6 +47,42 @@ RSpec.describe ExcelDataServices::V2::Files::Tables::Column do
 
       it "returns a DataFrame of extracted values for the column in question" do
         expect(result_frame).to eq(Rover::DataFrame.new(column_results))
+      end
+    end
+
+    context "when column header is 'destination_locode' and required data is missing" do
+      let(:xlsx) { Roo::Spreadsheet.open(file_fixture("excel/example_saco_pricings_errors.xlsx").to_s) }
+      let(:header) { "destination_locode" }
+      let(:options) do
+        {
+          sanitizer: "text",
+          validator: "string",
+          required: true,
+          type: :object
+        }
+      end
+      let(:required_data_missing_error) { "Required data is missing in column: destination_locode. Please fill in the missing data and try again." }
+
+      it "returns a DataFrame of extracted values for the column in question" do
+        expect(service.errors.map(&:reason)).to include(required_data_missing_error)
+      end
+    end
+
+    context "when column is configured to be unique and data is duplicated" do
+      let(:xlsx) { Roo::Spreadsheet.open(file_fixture("excel/example_saco_pricings_errors.xlsx").to_s) }
+      let(:header) { "destination_locode" }
+      let(:options) do
+        {
+          sanitizer: "text",
+          validator: "string",
+          unique: true,
+          type: :object
+        }
+      end
+      let(:duplicate_data_error) { "Duplicates exists in column: #{header}. Please remove all duplicate data and try again." }
+
+      it "returns a DataFrame of extracted values for the column in question" do
+        expect(service.errors.map(&:reason)).to include(duplicate_data_error)
       end
     end
   end

@@ -15,14 +15,6 @@ module ExcelDataServices
         def frame_types
           { "carrier_id" => :object, "carrier" => :object }
         end
-
-        def error_reason(row:)
-          "The carrier '#{row['carrier']}' cannot be found."
-        end
-
-        def required_key
-          "carrier_id"
-        end
       end
     end
   end

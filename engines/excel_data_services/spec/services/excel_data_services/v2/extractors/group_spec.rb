@@ -8,7 +8,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::Group do
   let(:extracted_table) { result.frame }
   let(:group) { FactoryBot.create(:groups_group, organization: organization) }
 
-  describe "#state" do
+  describe ".state" do
     context "when found" do
       let(:rows) do
         [
@@ -49,13 +49,8 @@ RSpec.describe ExcelDataServices::V2::Extractors::Group do
         }]
       end
 
-      let(:error_messages) do
-        ["The Group '#{rows.first['group_name']}' cannot be found."]
-      end
-
-      it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
-        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      it "does not find the record or add a group_id" do
+        expect(extracted_table["group_id"].to_a).to eq([nil])
       end
     end
   end

@@ -17,18 +17,17 @@ module ExcelDataServices
           tenant_vehicle_id
           organization_id
         ].freeze
-        GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id].freeze
+        GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id effective_date expiration_date].freeze
         NAMESPACE_UUID = UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
         UUID_KEYS = %w[itinerary_id tenant_vehicle_id cargo_class group_id organization_id].freeze
 
         def insertable_data
-          frame[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
+          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
             loop_frame = row_frame(row: row)
             row.slice(
               "cargo_class",
               "effective_date",
               "expiration_date",
-              "vm_rate",
               "wm_rate",
               "group_id",
               "itinerary_id",
@@ -37,6 +36,7 @@ module ExcelDataServices
               "transshipment"
             )
               .merge(
+                "vm_rate" => row["vm_rate"].present? ? row["vm_rate"].to_f / 1000.0 : 1.0,
                 "fees" => RowFees.new(frame: loop_frame, state: state).fees,
                 "notes" => RowNotes.new(frame: loop_frame).notes,
                 "internal" => row["internal"].present?,
@@ -47,8 +47,12 @@ module ExcelDataServices
           end
         end
 
+        def target_attribute
+          "pricing_id"
+        end
+
         def row_frame(row:)
-          frame[GROUPING_KEYS.map { |key| (frame[key] == row[key]) }.reduce(&:&)]
+          rows_for_insertion[GROUPING_KEYS.map { |key| (rows_for_insertion[key] == row[key]) }.reduce(&:&)]
         end
 
         class RowFees
@@ -73,14 +77,14 @@ module ExcelDataServices
               frame["max"] = frame.delete("range_max")
               frame
             end
-            filtered[%w[min max rate]].to_a
+            filtered[%w[min max rate]].to_a.uniq
           end
 
           def fee_from_grouping_rows(grouped_rows:)
             group_row = grouped_rows.to_a.first
             group_row.slice("organization_id", "base", "min", "charge_category_id", "rate_basis_id", "rate")
               .merge(
-                "currency_name" => group_row["currency_name"],
+                "currency_name" => group_row["currency"],
                 "range" => range_from_grouping_rows(grouped_rows: grouped_rows),
                 "metadata" => metadata(row_grouping: grouped_rows)
               )
@@ -93,7 +97,7 @@ module ExcelDataServices
           def metadata(row_grouping:)
             first_of_group = row_grouping.to_a.first
             first_of_group.slice("sheet_name").tap do |combined_metadata|
-              combined_metadata["row_number"] = row_grouping["row"].to_a.join(",")
+              combined_metadata["row_number"] = row_grouping["row"].to_a.uniq.join(",")
               combined_metadata["file_name"] = state.file_name
               combined_metadata["document_id"] = state.file.id
             end

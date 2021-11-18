@@ -21,7 +21,7 @@ module ExcelDataServices
         def perform
           @state.frame = data
           @state.errors |= errors
-          execute_actions(actions: row_validations)
+          execute_actions(actions: (row_validations + operations))
           nested_pipeline(connected_actions: dependency_actions)
           state
         end
@@ -75,7 +75,7 @@ module ExcelDataServices
         end
 
         def valid?
-          all_sheets_meet_requirements? && required_columns_present? && errors.empty?
+          all_sheets_meet_requirements? && required_columns_present?
         end
 
         def errors

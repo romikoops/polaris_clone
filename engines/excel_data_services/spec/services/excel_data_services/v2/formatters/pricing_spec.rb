@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
         [{ "cargo_class" => "lcl",
            "effective_date" => start_date,
            "expiration_date" => end_date,
-           "vm_rate" => 1.0,
+           "vm_rate" => 0.001,
            "wm_rate" => 1.0,
            "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
            "itinerary_id" => 3,
@@ -29,7 +29,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
                "charge_category_id" => 7640,
                "rate_basis_id" => nil,
                "rate" => 210.0,
-               "currency_name" => nil,
+               "currency_name" => "USD",
                "range" => [],
                "metadata" =>
                 { "row_number" => "1",
@@ -40,7 +40,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
                 "charge_category_id" => 5,
                 "rate_basis_id" => nil,
                 "rate" => 40.0,
-                "currency_name" => nil,
+                "currency_name" => "USD",
                 "range" => [],
                 "metadata" =>
                 { "row_number" => "2",
@@ -72,6 +72,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
            "service_level" => "standard",
            "cargo_class" => "lcl",
            "internal" => nil,
+           "currency" => "USD",
            "transshipment" => nil,
            "fee_name" => "Ocean Freight",
            "fee_code" => "bas",
@@ -94,7 +95,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
            "wm_rate" => 1.0,
            "vm_rate" => 1.0,
            "charge_category_id" => 7640,
-           "remarks" => nil },
+           "remarks" => nil,
+           "pricing_id" => nil },
           { "row" => 2,
             "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
             "service" => "standard",
@@ -121,6 +123,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "range_min" => nil,
             "range_max" => nil,
             "base" => nil,
+            "currency" => "USD",
             "origin_terminal" => nil,
             "destination_terminal" => nil,
             "rate_basis_id" => nil,
@@ -135,7 +138,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "vm_rate" => 1.0,
             "tenant_vehicle_id" => 4,
             "charge_category_id" => 5,
-            "remarks" => nil }]
+            "remarks" => nil,
+            "pricing_id" => nil }]
       end
 
       it "returns the formatted data" do
@@ -161,6 +165,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "country_destination" => "China",
             "mode_of_transport" => "ocean",
             "carrier" => "MSC",
+            "currency" => "USD",
             "service_level" => "standard",
             "cargo_class" => "lcl",
             "internal" => nil,
@@ -186,7 +191,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "vm_rate" => 1.0,
             "tenant_vehicle_id" => 4,
             "charge_category_id" => 6,
-            "remarks" => nil },
+            "remarks" => nil,
+            "pricing_id" => nil },
           { "row" => 4,
             "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
             "service" => "standard",
@@ -200,6 +206,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "destination_locode" => "CNSHA",
             "destination" => "Shanghai",
             "carrier" => "MSC",
+            "currency" => "USD",
             "service_level" => "standard",
             "cargo_class" => "lcl",
             "internal" => nil,
@@ -225,7 +232,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
             "itinerary_id" => 3,
             "tenant_vehicle_id" => 4,
             "charge_category_id" => 7,
-            "remarks" => nil }
+            "remarks" => nil,
+            "pricing_id" => nil }
         ]
       end
 
@@ -233,7 +241,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
         [{ "cargo_class" => "lcl",
            "effective_date" => start_date,
            "expiration_date" => end_date,
-           "vm_rate" => 1.0,
+           "vm_rate" => 0.001,
            "wm_rate" => 1.0,
            "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
            "itinerary_id" => 3,
@@ -246,7 +254,7 @@ RSpec.describe ExcelDataServices::V2::Formatters::Pricing do
               "charge_category_id" => 6,
               "rate_basis_id" => nil,
               "rate" => 210.0,
-              "currency_name" => nil,
+              "currency_name" => "USD",
               "range" => [{ "min" => 0.0, "max" => 100.0, "rate" => 210.0 }, { "min" => 100.0, "max" => 500.0, "rate" => 210.0 }],
               "metadata" =>
               { "row_number" => "3,4",

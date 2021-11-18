@@ -10,6 +10,8 @@ require "roo-xls"
 require "rover-df"
 require "write_xlsx"
 
+require_relative "../roo/excelx_money.rb"
+
 module ExcelDataServices
   class Engine < ::Rails::Engine
     isolate_namespace ExcelDataServices

@@ -14,7 +14,7 @@ module ExcelDataServices
           end
 
           def columns(sheet:)
-            DynamicColumnSheet.new(
+            DynamicSheetColumns.new(
               sheet: sheet,
               including: including,
               excluding: excluding,
@@ -26,7 +26,7 @@ module ExcelDataServices
 
           attr_reader :including, :excluding, :header_row
 
-          class DynamicColumnSheet
+          class DynamicSheetColumns
             attr_reader :sheet, :including, :excluding, :header_row
 
             def initialize(sheet:, including:, excluding:, header_row: 1)
@@ -38,12 +38,11 @@ module ExcelDataServices
 
             def columns
               target_headers.map do |header|
-                ExcelDataServices::V2::Files::Tables::Column.new(
+                DynamicSheetColumn.new(
                   xlsx: xlsx,
                   sheet_name: sheet_name,
-                  header: header.downcase,
-                  options: { dynamic: true }
-                )
+                  header: header
+                ).column
               end
             end
 
@@ -54,7 +53,7 @@ module ExcelDataServices
             end
 
             def header_values
-              xlsx.sheet(sheet_name).row(header_row).map(&:downcase)
+              xlsx.sheet(sheet_name).row(header_row).compact.map(&:downcase)
             end
 
             def target_headers
@@ -62,6 +61,56 @@ module ExcelDataServices
               return excluded if including.blank?
 
               excluded & including
+            end
+          end
+
+          class DynamicSheetColumn
+            attr_reader :sheet_name, :xlsx, :header
+
+            def initialize(sheet_name:, xlsx:, header:)
+              @sheet_name = sheet_name
+              @xlsx = xlsx
+              @header = header.downcase
+            end
+
+            def column
+              ExcelDataServices::V2::Files::Tables::Column.new(
+                xlsx: xlsx,
+                sheet_name: sheet_name,
+                header: "Dynamic:#{header.strip}",
+                options: options
+              )
+            end
+
+            def options
+              {
+                dynamic: true,
+                alternative_keys: [header.downcase],
+                sanitizer: sanitizer,
+                validator: validator
+              }
+            end
+
+            def sanitizer
+              case header
+              when /curr_month|next_month/
+                "upcase"
+              when /curr_fee|next_fee/
+                "money"
+              else
+                "text"
+              end
+            end
+
+            def validator
+              case header
+              when /curr_month|next_month/
+                "optional_month"
+              when /curr_fee|next_fee/
+                "optional_numeric_or_money"
+              else
+                "any"
+              end
             end
           end
         end

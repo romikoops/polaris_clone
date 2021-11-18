@@ -20,11 +20,15 @@ module ExcelDataServices
         ].freeze
 
         def insertable_data
-          frame["origin"] = frame.delete("origin_locode")
-          frame["destination"] = frame.delete("destination_locode")
-          frame[ATTRIBUTE_KEYS].to_a
+          rows_for_insertion["origin"] = rows_for_insertion.delete("origin_locode")
+          rows_for_insertion["destination"] = rows_for_insertion.delete("destination_locode")
+          rows_for_insertion[ATTRIBUTE_KEYS].to_a
+        end
+
+        def target_attribute
+          nil
         end
       end
     end
   end
-  end
+end

@@ -17,7 +17,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::TenantVehicle do
           "carrier_id" => 1,
           "mode_of_transport" => "ocean",
           "organization_id" => organization.id,
-          "row" => 2
+          "row" => 2,
+          "tenant_vehicle_id" => nil
         }
       end
       let(:expected_data) do

@@ -16,14 +16,6 @@ module ExcelDataServices
         def frame_types
           { "country_id" => :object, "code" => :object, "country_name" => :object }
         end
-
-        def error_reason(row:)
-          "The country '#{row.values_at('country', 'country_code').compact.join(' ')}' cannot be found."
-        end
-
-        def required_key
-          "country_id"
-        end
       end
     end
   end

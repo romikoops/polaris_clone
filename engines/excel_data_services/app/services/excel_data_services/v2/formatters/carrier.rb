@@ -8,11 +8,15 @@ module ExcelDataServices
         ATTRIBUTE_KEYS = %w[carrier].freeze
 
         def insertable_data
-          sliced_frame = frame[ATTRIBUTE_KEYS]
+          sliced_frame = rows_for_insertion[ATTRIBUTE_KEYS]
           sliced_frame["name"] = sliced_frame["carrier"]
           sliced_frame["code"] = sliced_frame["carrier"].map(&:downcase)
           sliced_frame.delete("carrier")
           sliced_frame.to_a.uniq
+        end
+
+        def target_attribute
+          "carrier_id"
         end
       end
     end

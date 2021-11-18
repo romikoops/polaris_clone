@@ -9,7 +9,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::Country do
   let(:extracted_table) { result.frame }
   let(:country) { FactoryBot.create(:legacy_country) }
 
-  describe "#state" do
+  describe ".state" do
     context "when found" do
       let(:row) do
         {
@@ -31,13 +31,8 @@ RSpec.describe ExcelDataServices::V2::Extractors::Country do
         }
       end
 
-      let(:error_messages) do
-        ["The country '#{row.values_at('country', 'country_code').compact.join(' ')}' cannot be found."]
-      end
-
-      it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
-        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      it "does not find the record or add a country_id" do
+        expect(extracted_table["country_id"].to_a).to eq([nil])
       end
     end
   end

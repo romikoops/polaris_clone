@@ -177,16 +177,17 @@ prerequisite "ChargeCategory"
 
 add_dynamic_columns excluding: %w[REMARKS WM_RATIO VM_RATIO TRANSIT_TIME]
 
-add_extractor "Carrier"
-add_extractor "TenantVehicle"
-add_extractor "RouteHubs"
-add_extractor "Itinerary"
-add_extractor "ChargeCategory"
-add_extractor "Group"
-add_extractor "RateBasis"
+add_validator "Carrier"
+add_validator "TenantVehicle"
+add_validator "RouteHubs"
+add_validator "Itinerary"
+add_validator "ChargeCategory"
+add_validator "Group"
+add_validator "RateBasis"
 
 add_operation "DynamicFees"
 
+add_extractor "Pricing"
 add_formatter "Pricing"
 
 conflict Pricings::Pricing, %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id]

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-required "1:1", "A:?", %w[MOT CARRIER SERVICE_LEVEL]
-
 column "service",
   sanitizer: "text",
   validator: "string",
@@ -24,7 +22,8 @@ column "mode_of_transport",
 
 prerequisite "Carrier"
 
-add_extractor "Carrier"
+add_validator "Carrier"
+add_extractor "TenantVehicle"
 add_formatter "TenantVehicle"
 
 model_importer Legacy::TenantVehicle

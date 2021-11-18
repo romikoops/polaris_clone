@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-required "1:1", "A:?", %w[MOT ORIGIN_LOCODE DESTINATION_LOCODE]
-
 column "origin_locode",
   sanitizer: "text",
   validator: "optional_locode",
@@ -54,7 +52,8 @@ column "transshipment",
   required: false,
   type: :object
 
-add_extractor "RouteHubs"
+add_validator "RouteHubs"
+add_extractor "Itinerary"
 add_formatter "Itinerary"
 
 model_importer Legacy::Itinerary

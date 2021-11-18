@@ -7,7 +7,7 @@ module ExcelDataServices
         class Column
           # A Column class is defined in the config file. It results in one column of the data frame and allows you to configure
           # santizers, fallback values, validators, required content and more
-          attr_reader :header, :sanitizer, :validator, :required, :alternative_keys, :xlsx, :type, :sheet_name, :fallback, :unique, :dynamic
+          attr_reader :header, :sanitizer, :validator, :required, :alternative_keys, :xlsx, :type, :sheet_name, :fallback, :dynamic
 
           def initialize(xlsx:, header:, sheet_name:, options: {})
             @xlsx = xlsx
@@ -17,7 +17,7 @@ module ExcelDataServices
             @sanitizer = options[:sanitizer] || "text"
             @validator = options[:validator] || "string"
             @required = options[:required]
-            @unique = options[:unique]
+            @unique = options[:unique].present?
             @alternative_keys = options[:alternative_keys] || []
             @fallback = options[:fallback]
             @type = options[:type] || :object
@@ -28,7 +28,7 @@ module ExcelDataServices
             @cells ||= sheet_values.map.with_index do |value, index|
               ExcelDataServices::V2::Files::Tables::CellParser.new(
                 column: self,
-                row: index + 1,
+                row: index + 2,
                 input: value
               )
             end
@@ -58,11 +58,15 @@ module ExcelDataServices
           end
 
           def valid?
-            errors.compact.empty? && (required.blank? || (required.present? && cells.none?(&:blank?))) && unique_constraint_satisfied?
+            sheet_column.present? || fallback.present?
           end
 
           def errors
-            @errors ||= cells.map(&:error).compact
+            @errors ||= [
+              cells.map(&:error),
+              uniqueness_constraint_error,
+              required_data_missing_error
+            ].flatten.compact
           end
 
           def sheet_values
@@ -90,8 +94,10 @@ module ExcelDataServices
             ([header] | alternative_keys).include?(value.to_s.downcase)
           end
 
+          private
+
           def unique_constraint_satisfied?
-            return true unless @unique
+            return true unless unique?
 
             sheet_values.uniq.length == sheet_values.length
           end
@@ -106,6 +112,37 @@ module ExcelDataServices
 
           def nil_column
             [nil] * rows.count
+          end
+
+          def uniqueness_constraint_error
+            return if unique_constraint_satisfied?
+
+            ExcelDataServices::V2::Files::Error.new(
+              type: :type_error,
+              row_nr: "",
+              col_nr: sheet_column,
+              sheet_name: sheet_name,
+              reason: "Duplicates exists in column: #{header}. Please remove all duplicate data and try again.",
+              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks::DuplicateDataFound
+            )
+          end
+
+          def required_data_missing_error
+            blank_cells = cells.select(&:blank?)
+            return if required.blank? || (required.present? && blank_cells.empty?)
+
+            ExcelDataServices::V2::Files::Error.new(
+              type: :type_error,
+              row_nr: blank_cells.map(&:row).join(", "),
+              col_nr: sheet_column,
+              sheet_name: sheet_name,
+              reason: "Required data is missing in column: #{header}. Please fill in the missing data and try again.",
+              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks::RequiredDataMissing
+            )
+          end
+
+          def unique?
+            @unique
           end
         end
       end

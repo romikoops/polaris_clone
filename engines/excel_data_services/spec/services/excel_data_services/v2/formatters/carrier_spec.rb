@@ -8,13 +8,14 @@ RSpec.describe ExcelDataServices::V2::Formatters::Carrier do
   let(:result) { described_class.state(state: state_arguments) }
   let(:insertable_data) { result.insertable_data }
 
-  describe "#state" do
+  describe ".state" do
     context "when found" do
       let(:row) do
         {
           "carrier" => "MSC",
           "organization_id" => organization.id,
-          "row" => 2
+          "row" => 2,
+          "carrier_id" => nil
         }
       end
       let(:expected_data) do

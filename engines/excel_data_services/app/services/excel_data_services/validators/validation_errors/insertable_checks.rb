@@ -6,6 +6,12 @@ module ExcelDataServices
       class InsertableChecks < ExcelDataServices::Validators::ValidationErrors::Base
         class HubsNotFound < InsertableChecks
         end
+
+        class DuplicateDataFound < InsertableChecks
+        end
+
+        class RequiredDataMissing < InsertableChecks
+        end
       end
     end
   end

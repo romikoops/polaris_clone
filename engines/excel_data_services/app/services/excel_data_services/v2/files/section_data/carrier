@@ -16,5 +16,6 @@ column "carrier_code",
 
 prerequisite "RoutingCarrier"
 
+add_extractor "Carrier"
 add_formatter "Carrier"
 model_importer Legacy::Carrier

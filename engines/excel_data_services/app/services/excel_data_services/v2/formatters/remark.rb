@@ -7,9 +7,9 @@ module ExcelDataServices
         ATTRIBUTE_KEYS = %w[origin_name destination_name pricing_id organization_id remarks].freeze
 
         def insertable_data
-          return [] unless frame.include?("remarks")
+          return [] unless rows_for_insertion.include?("remarks")
 
-          frame[!frame["remarks"].missing][ATTRIBUTE_KEYS].to_a.uniq.map do |row|
+          rows_for_insertion[!rows_for_insertion["remarks"].missing][ATTRIBUTE_KEYS].to_a.uniq.map do |row|
             {
               "header" => [row.delete("origin_name"), row.delete("destination_name")].join(" - "),
               "body" => row["remarks"],
@@ -17,6 +17,10 @@ module ExcelDataServices
               "organization_id" => row["organization_id"]
             }
           end
+        end
+
+        def target_attribute
+          "note_id"
         end
       end
     end

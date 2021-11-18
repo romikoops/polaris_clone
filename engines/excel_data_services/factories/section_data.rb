@@ -17,7 +17,7 @@ FactoryBot.define do
       data do
         [{
           "carrier_code" => "msc",
-          "row" => 1,
+          "row" => 2,
           "sheet_name" => "Sheet1",
           "service" => "standard",
           "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -51,12 +51,12 @@ FactoryBot.define do
           "base" => nil,
           "remarks" => nil,
           "organization_id" => organization.id,
-          "ofr" => nil,
-          "lss" => nil
+          "Dynamic:ofr" => nil,
+          "Dynamic:lss" => nil
         },
           {
             "carrier_code" => "msc",
-            "row" => 2,
+            "row" => 3,
             "sheet_name" => "Sheet1",
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -90,12 +90,12 @@ FactoryBot.define do
             "base" => nil,
             "fee_min" => 40.0,
             "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil
           },
           {
             "carrier_code" => "msc",
-            "row" => 3,
+            "row" => 4,
             "sheet_name" => "Sheet1",
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -129,12 +129,12 @@ FactoryBot.define do
             "base" => nil,
             "remarks" => nil,
             "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil
           },
           {
             "carrier_code" => "msc",
-            "row" => 4,
+            "row" => 5,
             "sheet_name" => "Sheet1",
             "service" => "standard",
             "group_id" => "1b536235-4bd4-49a7-874e-489ce9e2d251",
@@ -168,12 +168,12 @@ FactoryBot.define do
             "base" => nil,
             "remarks" => nil,
             "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil
           },
           {
             "carrier_code" => "msc",
-            "row" => 1,
+            "row" => 2,
             "sheet_name" => "Sheet2",
             "service" => "standard",
             "group_id" => nil,
@@ -207,12 +207,12 @@ FactoryBot.define do
             "base" => nil,
             "remarks" => nil,
             "organization_id" => organization.id,
-            "ofr" => "4330.0",
-            "lss" => "200.0"
+            "Dynamic:ofr" => "4330.0",
+            "Dynamic:lss" => "200.0"
           },
           {
             "carrier_code" => "msc",
-            "row" => 2,
+            "row" => 3,
             "sheet_name" => "Sheet2",
             "service" => "standard",
             "group_id" => nil,
@@ -246,12 +246,12 @@ FactoryBot.define do
             "base" => nil,
             "remarks" => nil,
             "organization_id" => organization.id,
-            "ofr" => "4660.0",
-            "lss" => "250.0"
+            "Dynamic:ofr" => "4660.0",
+            "Dynamic:lss" => "250.0"
           },
           {
             "carrier_code" => "msc",
-            "row" => 3,
+            "row" => 4,
             "sheet_name" => "Sheet2",
             "service" => "standard",
             "group_id" => nil,
@@ -285,8 +285,8 @@ FactoryBot.define do
             "base" => nil,
             "remarks" => nil,
             "organization_id" => organization.id,
-            "ofr" => "5330.0",
-            "lss" => "300.0"
+            "Dynamic:ofr" => "5330.0",
+            "Dynamic:lss" => "300.0"
           }]
       end
     end
@@ -294,54 +294,54 @@ FactoryBot.define do
     trait :charge_categories do
       data do
         [{ "fee_name" => "Ocean Freight",
-           "row" => 1,
+           "row" => 2,
            "sheet_name" => "Sheet1",
            "fee_code" => "bas",
            "organization_id" => organization.id,
-           "ofr" => nil,
-           "lss" => nil },
+           "Dynamic:ofr" => nil,
+           "Dynamic:lss" => nil },
           { "fee_name" => "Peak Season",
-            "row" => 2,
+            "row" => 3,
             "sheet_name" => "Sheet1",
             "fee_code" => "pss",
             "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil },
-          { "fee_name" => "Bunker Adjustment Fee",
-            "row" => 3,
-            "sheet_name" => "Sheet1",
-            "fee_code" => "baf",
-            "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil },
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil },
           { "fee_name" => "Bunker Adjustment Fee",
             "row" => 4,
             "sheet_name" => "Sheet1",
             "fee_code" => "baf",
             "organization_id" => organization.id,
-            "ofr" => nil,
-            "lss" => nil },
-          { "fee_name" => nil,
-            "row" => 1,
-            "sheet_name" => "Sheet2",
-            "fee_code" => nil,
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil },
+          { "fee_name" => "Bunker Adjustment Fee",
+            "row" => 5,
+            "sheet_name" => "Sheet1",
+            "fee_code" => "baf",
             "organization_id" => organization.id,
-            "ofr" => "4330.0",
-            "lss" => "200.0" },
+            "Dynamic:ofr" => nil,
+            "Dynamic:lss" => nil },
           { "fee_name" => nil,
             "row" => 2,
             "sheet_name" => "Sheet2",
             "fee_code" => nil,
             "organization_id" => organization.id,
-            "ofr" => "4660.0",
-            "lss" => "250.0" },
+            "Dynamic:ofr" => "4330.0",
+            "Dynamic:lss" => "200.0" },
           { "fee_name" => nil,
             "row" => 3,
             "sheet_name" => "Sheet2",
             "fee_code" => nil,
             "organization_id" => organization.id,
-            "ofr" => "5330.0",
-            "lss" => "300.0" }]
+            "Dynamic:ofr" => "4660.0",
+            "Dynamic:lss" => "250.0" },
+          { "fee_name" => nil,
+            "row" => 4,
+            "sheet_name" => "Sheet2",
+            "fee_code" => nil,
+            "organization_id" => organization.id,
+            "Dynamic:ofr" => "5330.0",
+            "Dynamic:lss" => "300.0" }]
       end
     end
 
@@ -350,15 +350,6 @@ FactoryBot.define do
         [
           {
             "carrier_code" => "msc",
-            "row" => 1,
-            "sheet_name" => "Sheet1",
-            "service" => "standard",
-            "carrier" => "MSC",
-            "mode_of_transport" => "ocean",
-            "organization_id" => organization.id
-          },
-          {
-            "carrier_code" => "msc",
             "row" => 2,
             "sheet_name" => "Sheet1",
             "service" => "standard",
@@ -386,8 +377,8 @@ FactoryBot.define do
           },
           {
             "carrier_code" => "msc",
-            "row" => 1,
-            "sheet_name" => "Sheet2",
+            "row" => 5,
+            "sheet_name" => "Sheet1",
             "service" => "standard",
             "carrier" => "MSC",
             "mode_of_transport" => "ocean",
@@ -405,6 +396,15 @@ FactoryBot.define do
           {
             "carrier_code" => "msc",
             "row" => 3,
+            "sheet_name" => "Sheet2",
+            "service" => "standard",
+            "carrier" => "MSC",
+            "mode_of_transport" => "ocean",
+            "organization_id" => organization.id
+          },
+          {
+            "carrier_code" => "msc",
+            "row" => 4,
             "sheet_name" => "Sheet2",
             "service" => "standard",
             "carrier" => "MSC",
@@ -419,11 +419,6 @@ FactoryBot.define do
       data do
         [
           { "carrier" => "MSC",
-            "row" => 1,
-            "sheet_name" => "Sheet1",
-            "carrier_code" => "msc",
-            "organization_id" => organization.id },
-          { "carrier" => "MSC",
             "row" => 2,
             "sheet_name" => "Sheet1",
             "carrier_code" => "msc",
@@ -439,8 +434,8 @@ FactoryBot.define do
             "carrier_code" => "msc",
             "organization_id" => organization.id },
           { "carrier" => "MSC",
-            "row" => 1,
-            "sheet_name" => "Sheet2",
+            "row" => 5,
+            "sheet_name" => "Sheet1",
             "carrier_code" => "msc",
             "organization_id" => organization.id },
           { "carrier" => "MSC",
@@ -452,6 +447,11 @@ FactoryBot.define do
             "row" => 3,
             "sheet_name" => "Sheet2",
             "carrier_code" => "msc",
+            "organization_id" => organization.id },
+          { "carrier" => "MSC",
+            "row" => 4,
+            "sheet_name" => "Sheet2",
+            "carrier_code" => "msc",
             "organization_id" => organization.id }
         ]
       end
@@ -460,7 +460,7 @@ FactoryBot.define do
     trait :itineraries do
       data do
         [{ "origin_locode" => "SEGOT",
-           "row" => 1,
+           "row" => 2,
            "sheet_name" => "Sheet1",
            "origin_terminal" => nil,
            "origin" => nil,
@@ -473,25 +473,12 @@ FactoryBot.define do
            "transshipment" => "ZACPT",
            "organization_id" => organization.id },
           { "origin_locode" => nil,
-            "row" => 2,
-            "sheet_name" => "Sheet1",
-            "origin_terminal" => nil,
-            "origin" => "Gothenburg",
-            "country_origin" => "Sweden",
-            "destination_locode" => nil,
-            "destination_terminal" => nil,
-            "destination" => "Shanghai",
-            "country_destination" => "China",
-            "mode_of_transport" => "ocean",
-            "transshipment" => nil,
-            "organization_id" => organization.id },
-          { "origin_locode" => "SEGOT",
             "row" => 3,
             "sheet_name" => "Sheet1",
             "origin_terminal" => nil,
             "origin" => "Gothenburg",
             "country_origin" => "Sweden",
-            "destination_locode" => "CNSHA",
+            "destination_locode" => nil,
             "destination_terminal" => nil,
             "destination" => "Shanghai",
             "country_destination" => "China",
@@ -512,7 +499,20 @@ FactoryBot.define do
             "transshipment" => nil,
             "organization_id" => organization.id },
           { "origin_locode" => "SEGOT",
-            "row" => 1,
+            "row" => 5,
+            "sheet_name" => "Sheet1",
+            "origin_terminal" => nil,
+            "origin" => "Gothenburg",
+            "country_origin" => "Sweden",
+            "destination_locode" => "CNSHA",
+            "destination_terminal" => nil,
+            "destination" => "Shanghai",
+            "country_destination" => "China",
+            "mode_of_transport" => "ocean",
+            "transshipment" => nil,
+            "organization_id" => organization.id },
+          { "origin_locode" => "SEGOT",
+            "row" => 2,
             "sheet_name" => "Sheet2",
             "origin_terminal" => nil,
             "origin" => nil,
@@ -525,7 +525,7 @@ FactoryBot.define do
             "transshipment" => "ZACPT",
             "organization_id" => organization.id },
           { "origin_locode" => nil,
-            "row" => 2,
+            "row" => 3,
             "sheet_name" => "Sheet2",
             "origin_terminal" => nil,
             "origin" => "Gothenburg",
@@ -538,7 +538,7 @@ FactoryBot.define do
             "transshipment" => nil,
             "organization_id" => organization.id },
           { "origin_locode" => "SEGOT",
-            "row" => 3,
+            "row" => 4,
             "sheet_name" => "Sheet2",
             "origin_terminal" => nil,
             "origin" => "Gothenburg",
@@ -556,7 +556,7 @@ FactoryBot.define do
     trait :hubs do
       data do
         [
-          { "row" => 1,
+          { "row" => 2,
             "organization_id" => organization.id,
             "name" => "Sydney",
             "locode" => "AUSYD",
@@ -575,7 +575,7 @@ FactoryBot.define do
             "on_carriage" => false,
             "alternative_names" => false,
             "sheet_name" => "Hubs" },
-          { "row" => 2,
+          { "row" => 3,
             "organization_id" => organization.id,
             "name" => "Hamburg",
             "locode" => "DEHAM",
@@ -602,7 +602,7 @@ FactoryBot.define do
       data do
         [
           {
-            "row" => 1,
+            "row" => 2,
             "organization_id" => organization.id,
             "name" => "Sydney",
             "locode" => "AUSYD",
@@ -612,7 +612,7 @@ FactoryBot.define do
             "sheet_name" => "Hubs"
           },
           {
-            "row" => 2,
+            "row" => 3,
             "organization_id" => organization.id,
             "name" => "Hamburg",
             "locode" => "DEHAM",

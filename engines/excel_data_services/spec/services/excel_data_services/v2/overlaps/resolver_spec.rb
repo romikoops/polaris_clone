@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
   let(:rows) do
     [
       pricing.slice(*conflict_keys)
-        .merge("effective_date" => start_date, "expiration_date" => end_date)
+        .merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1)
     ]
   end
   let(:conflict_keys) { %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id] }
@@ -116,15 +116,33 @@ RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
         let(:rows) do
           [
             pricing.slice(*conflict_keys)
-              .merge("effective_date" => start_date, "expiration_date" => end_date),
+              .merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1),
             pricing.slice(*conflict_keys)
-              .merge("effective_date" => end_date - 5.days, "expiration_date" => end_date + 30.days)
+              .merge("effective_date" => end_date - 5.days, "expiration_date" => end_date + 30.days, "row" => 2)
           ]
         end
 
         it "detects the overlap and updates the existing pricing validity", :aggregate_failures do
           expect(results.errors).to be_present
         end
+      end
+    end
+
+    context "when a conflict exists in the sheet" do
+      let(:start_date) { Date.parse("2021/02/01") }
+      let(:end_date) { Date.parse("2021/03/31") }
+      let(:rows) do
+        [
+          pricing.slice(*conflict_keys)
+            .merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1),
+          pricing.slice(*conflict_keys)
+            .merge("effective_date" => end_date - 5.days, "expiration_date" => end_date + 30.days, "row" => 2)
+        ]
+      end
+
+      it "detects the overlap and addsa an error to the state", :aggregate_failures do
+        expect(results.errors.map(&:reason)).to match_array(["The rows listed have conflicting validity dates. Please correct before reuploading."])
+        expect(results.errors.map(&:row_nr)).to match_array(["1, 2"])
       end
     end
   end

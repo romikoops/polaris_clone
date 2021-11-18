@@ -22,7 +22,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Itinerary do
          "origin_hub_id" => 2,
          "origin_name" => "Gothenburg",
          "destination_hub_id" => 3,
-         "destination_name" => "Shanghai" },
+         "destination_name" => "Shanghai",
+         "itinerary_id" => nil },
         { "row" => 2,
           "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
           "origin_locode" => nil,
@@ -38,7 +39,8 @@ RSpec.describe ExcelDataServices::V2::Formatters::Itinerary do
           "origin_hub_id" => 6,
           "origin_name" => "Hamburg",
           "destination_hub_id" => 3,
-          "destination_name" => "Shanghai" }]
+          "destination_name" => "Shanghai",
+          "itinerary_id" => nil }]
     end
     let(:expected_data) do
       [{ "origin_hub_id" => 2,

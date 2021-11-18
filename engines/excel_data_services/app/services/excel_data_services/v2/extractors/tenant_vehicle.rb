@@ -29,14 +29,6 @@ module ExcelDataServices
         def frame_types
           { "tenant_vehicle_id" => :object, "carrier_id" => :object }
         end
-
-        def error_reason(row:)
-          "The service '#{row['service']} (#{row['carrier']})' cannot be found."
-        end
-
-        def required_key
-          "tenant_vehicle_id"
-        end
       end
     end
   end

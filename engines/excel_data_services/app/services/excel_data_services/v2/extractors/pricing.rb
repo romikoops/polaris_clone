@@ -32,16 +32,15 @@ module ExcelDataServices
         end
 
         def frame_types
-          { "pricing_id" => :object, "locode" => :object }
-        end
-
-        def error_reason(row:)
-          route_string = [row.values_at("origin", "origin_locode").join(", "), row.values_at("destination", "destination_locode").join(", ")].join(" - ")
-          "The pricings '#{route_string} for #{row['cargo_class']}' cannot be found."
-        end
-
-        def required_key
-          "pricing_id"
+          {
+            "pricing_id" => :object,
+            "itinerary_id" => :object,
+            "cargo_class" => :object,
+            "group_id" => :object,
+            "tenant_vehicle_id" => :object,
+            "effective_date" => :object,
+            "expiration_date" => :object
+          }
         end
 
         def max_and_min_dates

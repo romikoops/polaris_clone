@@ -24,7 +24,7 @@ RSpec.describe ExcelDataServices::V2::Files::Section do
   describe "#data" do
     let(:expected_results) do
       [{ "vessel_name" => "Cap Sud",
-         "row" => 1,
+         "row" => 2,
          "sheet_name" => "Sheet1",
          "origin_locode" => "DEHAM",
          "destination_locode" => "CNSHA",
@@ -39,7 +39,7 @@ RSpec.describe ExcelDataServices::V2::Files::Section do
          "voyage_code" => "DDFF44-E",
          "organization_id" => organization.id },
         { "vessel_name" => "Cap Nord",
-          "row" => 2,
+          "row" => 3,
           "sheet_name" => "Sheet1",
           "origin_locode" => "DEHAM",
           "destination_locode" => "CNSHA",

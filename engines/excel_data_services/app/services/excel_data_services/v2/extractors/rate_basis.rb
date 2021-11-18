@@ -15,14 +15,6 @@ module ExcelDataServices
         def frame_types
           { "rate_basis_id" => :object, "external_code" => :object }
         end
-
-        def error_reason(row:)
-          "The Rate Basis '#{row['rate_basis']}' is not recognized."
-        end
-
-        def required_key
-          "rate_basis_id"
-        end
       end
     end
   end

@@ -5,9 +5,9 @@ module ExcelDataServices
     module Files
       class SheetParser
         # This class holds the abstracted logc for the parsing and execution of config files.
-        SPLIT_PATTERN = /^(add_operation)|(add_extractor)|(add_formatter)|(model_importer)|(conflict)|(target_model)/.freeze
+        SPLIT_PATTERN = /^(add_validator)|(add_formatter)|(add_extractor)|(model_importer)|(conflict)|(target_model)/.freeze
         attr_reader :section, :state, :type, :columns, :requirements, :prerequisites, :dynamic_columns,
-          :importers, :row_validations, :pipelines
+          :importers, :row_validations, :pipelines, :operations
 
         delegate :xlsx, :organization, to: :state
 
@@ -19,6 +19,7 @@ module ExcelDataServices
           @requirements = []
           @prerequisites = []
           @pipelines = []
+          @operations = []
           @dynamic_columns = []
           @row_validations = []
           parse_config
@@ -68,6 +69,11 @@ module ExcelDataServices
           @pipelines << section
         end
 
+        def add_operation(class_name)
+          operation_class = "ExcelDataServices::V2::Operations::#{class_name}".constantize
+          @operations << operation_class unless @operations.include?(operation_class)
+        end
+
         def row_validation(keys, comparator)
           @row_validations << ExcelDataServices::V2::Files::RowValidation.new(keys: keys, comparator: comparator)
         end
@@ -83,16 +89,16 @@ module ExcelDataServices
         end
 
         class ConnectedActions
-          attr_reader :section, :state, :model, :operations, :importer, :conflicts, :extractors, :formatters
+          attr_reader :section, :state, :model, :importer, :conflicts, :validators, :formatters, :extractors
 
           delegate :xlsx, :organization, to: :state
 
           def initialize(section:, state:)
             @section = section
             @state = state
-            @operations = []
-            @extractors = []
+            @validators = []
             @formatters = []
+            @extractors = []
             @dynamic_columns = []
             @importer = nil
             @conflicts = []
@@ -102,7 +108,7 @@ module ExcelDataServices
           end
 
           def actions
-            (operations + extractors + conflicts + formatters)
+            (validators + conflicts + extractors + formatters)
           end
 
           private
@@ -113,16 +119,16 @@ module ExcelDataServices
             instance_eval(relevant_lines)
           end
 
-          def add_operation(class_name)
-            @operations << "ExcelDataServices::V2::Operations::#{class_name}".constantize
-          end
-
-          def add_extractor(class_name)
-            @extractors << "ExcelDataServices::V2::Extractors::#{class_name}".constantize
+          def add_validator(class_name)
+            @validators << "ExcelDataServices::V2::Validators::#{class_name}".constantize
           end
 
           def add_formatter(class_name)
             @formatters << "ExcelDataServices::V2::Formatters::#{class_name}".constantize
+          end
+
+          def add_extractor(class_name)
+            @extractors << "ExcelDataServices::V2::Extractors::#{class_name}".constantize
           end
 
           def model_importer(model, options = {})

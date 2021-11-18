@@ -115,7 +115,7 @@ RSpec.describe ExcelDataServices::V2::Files::SheetType do
     end
   end
 
-  describe "#state" do
+  describe ".state" do
     let(:arguments) { { group_id: SecureRandom.uuid } }
     let(:state) { service.state }
 

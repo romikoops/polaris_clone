@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "./lib/roo/excelx_money"
 
 RSpec.describe ExcelDataServices::Schemas::Files::Trucking do
   let(:organization) { FactoryBot.create(:organizations_organization) }

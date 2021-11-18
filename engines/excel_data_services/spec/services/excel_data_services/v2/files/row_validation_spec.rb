@@ -13,7 +13,7 @@ RSpec.describe ExcelDataServices::V2::Files::RowValidation do
     Organizations.current_id = organization.id
   end
 
-  describe "#state" do
+  describe ".state" do
     shared_examples_for "a passing validation" do
       it "appends no errors to the state" do
         expect(result.errors).to be_empty

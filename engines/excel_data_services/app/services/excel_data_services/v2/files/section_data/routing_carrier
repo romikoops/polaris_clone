@@ -9,6 +9,7 @@ column "carrier",
   validator: "string",
   required: true
 
-add_formatter "Carrier"
+add_extractor "RoutingCarrier"
+add_formatter "RoutingCarrier"
 
 model_importer Routing::Carrier

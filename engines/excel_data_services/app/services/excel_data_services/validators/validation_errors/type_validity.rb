@@ -111,6 +111,9 @@ module ExcelDataServices
 
         class UuidType < TypeValidity
         end
+
+        class OptionalMonthType < TypeValidity
+        end
       end
     end
   end

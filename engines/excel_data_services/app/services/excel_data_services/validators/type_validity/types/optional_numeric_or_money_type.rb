@@ -9,6 +9,8 @@ module ExcelDataServices
             case value
             when NilClass, Integer, Float, Money
               true
+            when String
+              %w[incl n/a].include?(value.downcase.strip)
             else
               false
             end

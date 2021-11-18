@@ -4,42 +4,71 @@ module ExcelDataServices
   module V2
     module Extractors
       class RouteHubs < ExcelDataServices::V2::Extractors::Base
-        # All Sections that involve Itineraries willl need origin_hub_id and destination_hub_id. This class extracts those values based off data from the sheet and appends error messages if it is not found
+        # All Sections that involve Itineraries will need origin_hub_id and destination_hub_id. This class extracts those values based off data from the sheet and appends error messages if it is not found
+        ROUTING_ROW_KEYS = %w[row sheet_name origin_locode origin origin_terminal country_origin destination_locode destination destination_terminal country_destination mode_of_transport].freeze
 
         def frame_data
-          Rover::DataFrame.new(frame[["row"]]) # Ensure we have columns to join on
-            .left_join(final_origin_frame, on: { "row" => "row" }) # Join in all origin results that got an id
-            .left_join(final_destination_frame, on: { "row" => "row" }) # Join in all destination results that got an id
-            .to_a.uniq
+          base_frame # Ensure we have columns to join on
+            .left_join(final_origin_frame, on: join_arguments) # Join in all origin results that got an id
+            .left_join(final_destination_frame, on: join_arguments) # Join in all destination results that got an id
         end
 
         def final_origin_frame
-          @final_origin_frame ||= final_frame(target: "origin")
+          @final_origin_frame ||= final_frame(
+            target_frame: origin_hub_frame,
+            joins: origin_joins,
+            required_key: "origin_hub_id",
+            keys: %w[origin_hub_id origin_name]
+          )
         end
 
         def final_destination_frame
-          @final_destination_frame ||= final_frame(target: "destination")
+          @final_destination_frame ||= final_frame(
+            target_frame: destination_hub_frame,
+            joins: destination_joins,
+            required_key: "destination_hub_id",
+            keys: %w[destination_hub_id destination_name]
+          )
         end
 
-        def final_frame(target:)
-          full_frame = Rover::DataFrame.new(
-            send("#{target}_joins")
-            .select { |join| frame.include?(join.keys.first) }
-            .each_with_object(blank_frame) do |join, target_frame|
-              target_frame.concat(frame[!frame[join.first.first].missing].left_join(send("#{target}_hub_frame"), on: join.merge("mode_of_transport" => "mode_of_transport")))
-            end,
-            types: frame_types
-          )[["row", "#{target}_hub_id", "#{target}_name"]]
-
-          full_frame[!full_frame["#{target}_hub_id"].missing]
+        def final_frame(target_frame:, joins:, required_key:, keys:)
+          full_frame = joins.each_with_object(blank_frame) do |join, inner_frame|
+            inner_frame.concat(
+              routing_frame.inner_join(
+                target_frame,
+                on: join.merge("mode_of_transport" => "mode_of_transport")
+              )[%w[row sheet_name] + keys]
+            )
+          end
+          Rover::DataFrame.new("sheet_name" => [], "row" => [], required_key => []).concat(
+            Rover::DataFrame.new(full_frame[!full_frame[required_key].missing].to_a.uniq, types: frame_types)
+          )
         end
 
         def hub_frame_data
-          Legacy::Hub.where(organization_id: Organizations.current_id).joins(nexus: :country).select("hubs.id as hub_id, hubs.name, terminal, hub_code, countries.name as country, hub_type as mode_of_transport")
+          @hub_frame_data ||= Legacy::Hub.where(organization_id: Organizations.current_id)
+            .joins(nexus: :country)
+            .select("
+              hubs.id as origin_hub_id,
+              hubs.name as origin_name,
+              terminal as origin_terminal,
+              hub_code as origin_locode,
+              countries.name as country_origin,
+              hubs.id as destination_hub_id,
+              hubs.name as destination_name,
+              terminal as destination_terminal,
+              hub_code as destination_locode,
+              countries.name as country_destination,
+              hub_type as mode_of_transport
+            ")
+        end
+
+        def routing_frame
+          @routing_frame ||= frame[ROUTING_ROW_KEYS & frame.keys]
         end
 
         def join_arguments
-          { "row" => "row" }
+          { "row" => "row", "sheet_name" => "sheet_name" }
         end
 
         def frame_types
@@ -47,82 +76,39 @@ module ExcelDataServices
         end
 
         def origin_joins
-          [
+          @origin_joins ||= filter_joins(joins: [
             { "origin_locode" => "origin_locode" },
             { "origin" => "origin_name", "origin_terminal" => "origin_terminal", "country_origin" => "country_origin" }
-          ]
+          ])
         end
 
         def destination_joins
-          [
+          @destination_joins ||= filter_joins(joins: [
             { "destination_locode" => "destination_locode" },
             { "destination" => "destination_name", "destination_terminal" => "destination_terminal", "country_destination" => "country_destination" }
-          ]
+          ])
+        end
+
+        def filter_joins(joins:)
+          # rubocop:disable Rails/NegateInclude include is a Rover method, not standard rails include
+          joins.map { |join| join.delete_if { |key, _val| !frame.include?(key) } }.reject(&:empty?)
+          # rubocop:enable Rails/NegateInclude
         end
 
         def hub_frame
           @hub_frame ||= Rover::DataFrame.new(hub_frame_data, types: state.frame.types.merge(frame_types))
         end
 
+        def base_frame
+          @base_frame ||= Rover::DataFrame.new(frame[%w[row sheet_name]].to_a.uniq)
+        end
+
         def origin_hub_frame
-          @origin_hub_frame ||= RouteHubFrame.new(frame: hub_frame.dup, target: "origin").perform
+          @origin_hub_frame ||= hub_frame[%w[origin_hub_id origin_name origin_terminal origin_locode country_origin mode_of_transport]]
         end
 
         def destination_hub_frame
-          @destination_hub_frame ||= RouteHubFrame.new(frame: hub_frame.dup, target: "destination").perform
-        end
-
-        def required_keys
-          %w[origin_hub_id destination_hub_id]
-        end
-
-        def missing_hub_details(row:, key:)
-          prefix = key.include?("origin") ? "origin" : "destination"
-
-          row.values_at(prefix, "#{prefix}_locode", "country_#{prefix}").compact.join(", ")
-        end
-
-        def error_reason(row:, required_key:)
-          "The hub '#{missing_hub_details(row: row, key: required_key)}' cannot be found. Please check that the information is entered correctly"
-        end
-
-        def append_errors_to_state
-          required_keys.each { |required_key| append_required_key_errors(required_key: required_key) }
-        end
-
-        def append_required_key_errors(required_key:)
-          extracted[extracted[required_key].missing].to_a.each do |error_row|
-            append_error(row: error_row, required_key: required_key)
-          end
-        end
-
-        def append_error(row:, required_key:)
-          @state.errors << ExcelDataServices::DataFrames::Validators::Error.new(
-            type: :warning,
-            row_nr: row["row"],
-            sheet_name: row["sheet_name"],
-            reason: error_reason(row: row, required_key: required_key),
-            exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
-          )
-        end
-
-        class RouteHubFrame
-          # This class need to have the hubs sheet in both origin and destination formats in order to work. The inner class converts the frame keys to the necessary ones
-          def initialize(frame:, target:)
-            @frame = frame
-            @target = target
-          end
-
-          attr_reader :frame, :target
-
-          def perform
-            frame["#{target}_locode"] = frame.delete("hub_code")
-            frame["#{target}_name"] = frame.delete("name")
-            frame["#{target}_terminal"] = frame.delete("terminal")
-            frame["#{target}_hub_id"] = frame.delete("hub_id")
-            frame["country_#{target}"] = frame.delete("country")
-            frame
-          end
+          @destination_hub_frame ||= hub_frame[%w[destination_hub_id destination_name destination_terminal destination_locode country_destination mode_of_transport]]
         end
       end
     end

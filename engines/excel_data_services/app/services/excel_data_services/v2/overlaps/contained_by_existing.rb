@@ -78,7 +78,7 @@ module ExcelDataServices
         end
 
         def conflicting_validity
-          @conflicting_validity ||= model.find_by(attributes_excluding_dates).validity
+          @conflicting_validity ||= model.where("validity && daterange(?::date, ?::date)", arguments[:effective_date], arguments[:expiration_date]).find_by(attributes_excluding_dates).validity
         end
       end
     end

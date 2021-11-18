@@ -122,12 +122,12 @@ column "remarks",
 
 prerequisite "Pricings"
 
-add_extractor "TenantVehicle"
-add_extractor "RouteHubs"
-add_extractor "Itinerary"
-add_extractor "Group"
+add_validator "TenantVehicle"
+add_validator "RouteHubs"
+add_validator "Itinerary"
+add_validator "Group"
 
-add_extractor "Pricing"
+add_validator "Pricing"
 add_formatter "Remark"
 
 model_importer Legacy::Note

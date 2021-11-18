@@ -81,9 +81,9 @@ column "voyage_code",
 row_validation %w[origin_departure destination_arrival], (proc { |a, b| a < b })
 row_validation %w[closing_date origin_departure], (proc { |a, b| a <= b })
 
-add_extractor "Carrier"
-add_extractor "TenantVehicle"
-add_extractor "RouteHubs"
+add_validator "Carrier"
+add_validator "TenantVehicle"
+add_validator "RouteHubs"
 
 add_formatter "Schedule"
 

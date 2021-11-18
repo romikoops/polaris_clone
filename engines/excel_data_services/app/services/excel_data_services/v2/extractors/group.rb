@@ -38,20 +38,8 @@ module ExcelDataServices
             .select("id as group_id, name AS group_name")
         end
 
-        def join_arguments
-          [{ "group_name" => "group_name" }, { "group_id" => "group_id" }]
-        end
-
         def frame_types
           { "group_id" => :object, "group_name" => :object }
-        end
-
-        def error_reason(row:)
-          "The Group '#{row['group_name']}' cannot be found."
-        end
-
-        def required_key
-          "group_id"
         end
 
         def default_group_id

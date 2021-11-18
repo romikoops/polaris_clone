@@ -27,7 +27,7 @@ module ExcelDataServices
           end
 
           def errors
-            @errors ||= sheet_columns.flat_map(&:errors)
+            @errors ||= validated_columns.flat_map(&:errors) + dynamically_generated_columns.flat_map(&:errors)
           end
 
           def headers
@@ -57,7 +57,7 @@ module ExcelDataServices
           end
 
           def frame_columns
-            sheet_columns + dynamically_generated_columns
+            @frame_columns ||= columns.select { |col| col.sheet_name == sheet_name } + dynamically_generated_columns
           end
 
           def initial_column_frame

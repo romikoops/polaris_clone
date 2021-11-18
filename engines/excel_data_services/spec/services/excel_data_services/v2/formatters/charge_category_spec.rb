@@ -11,13 +11,15 @@ RSpec.describe ExcelDataServices::V2::Formatters::ChargeCategory do
         "fee_code" => "bas",
         "fee_name" => "Basic Freight",
         "row_nr" => 2,
-        "organization_id" => organization.id
+        "organization_id" => organization.id,
+        "charge_category_id" => nil
       },
         {
           "fee_code" => "pff",
           "fee_name" => "Pickup Fee",
           "row_nr" => 3,
-          "organization_id" => organization.id
+          "organization_id" => organization.id,
+          "charge_category_id" => nil
         }]
     end
     let(:expected_data) do

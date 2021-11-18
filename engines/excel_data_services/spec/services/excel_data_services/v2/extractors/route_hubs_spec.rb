@@ -19,7 +19,7 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
       mode_of_transport: "ocean")
   end
 
-  describe "#state" do
+  describe ".state" do
     shared_examples_for "finding the Origin/Destination hub ids" do
       it "returns the frame with the origin_hub_id && destination_hub_id", :aggregate_failures do
         expect(extracted_table["origin_hub_id"].to_a).to eq([origin_hub.id])
@@ -39,11 +39,49 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
           "origin_terminal" => nil,
           "destination_terminal" => nil,
           "mode_of_transport" => "ocean",
-          "row" => 2
+          "row" => 2,
+          "sheet_name" => "Sheet1"
         }
       end
 
       it_behaves_like "finding the Origin/Destination hub ids"
+    end
+
+    context "with multiple sheets and multiple hubs" do
+      let(:other_origin_hub) { FactoryBot.create(:legacy_hub, organization: organization) }
+      let(:rows) do
+        [{
+          "origin_locode" => origin_hub.hub_code,
+          "origin" => nil,
+          "country_origin" => nil,
+          "destination_locode" => destination_hub.hub_code,
+          "destination" => nil,
+          "country_destination" => nil,
+          "origin_terminal" => nil,
+          "destination_terminal" => nil,
+          "mode_of_transport" => "ocean",
+          "row" => 2,
+          "sheet_name" => "Sheet1"
+        },
+          {
+            "origin_locode" => other_origin_hub.hub_code,
+            "origin" => nil,
+            "country_origin" => nil,
+            "destination_locode" => destination_hub.hub_code,
+            "destination" => nil,
+            "country_destination" => nil,
+            "origin_terminal" => nil,
+            "destination_terminal" => nil,
+            "mode_of_transport" => "ocean",
+            "row" => 2,
+            "sheet_name" => "Sheet2"
+          }]
+      end
+
+      it "returns two distinct pairs of origin_hub_id && destination_hub_id", :aggregate_failures do
+        expect(extracted_table["origin_hub_id"].to_a).to match_array([origin_hub.id, other_origin_hub.id])
+        expect(extracted_table["destination_hub_id"].to_a).to eq([destination_hub.id] * 2)
+      end
     end
 
     context "when found via names" do
@@ -58,7 +96,8 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
           "origin_terminal" => nil,
           "destination_terminal" => nil,
           "mode_of_transport" => "ocean",
-          "row" => 2
+          "row" => 2,
+          "sheet_name" => "Sheet1"
         }
       end
 
@@ -77,7 +116,8 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
           "origin_terminal" => nil,
           "destination_terminal" => destination_hub.terminal,
           "mode_of_transport" => "ocean",
-          "row" => 2
+          "row" => 2,
+          "sheet_name" => "Sheet1"
         }
       end
       let(:destination_hub) { FactoryBot.create(:legacy_hub, :shanghai, hub_type: mot, terminal: "T1", organization: organization) }
@@ -99,20 +139,14 @@ RSpec.describe ExcelDataServices::V2::Extractors::RouteHubs do
           "origin_terminal" => nil,
           "destination_terminal" => nil,
           "mode_of_transport" => "air",
-          "row" => 2
+          "row" => 2,
+          "sheet_name" => "Sheet1"
         }
       end
 
-      let(:error_messages) do
-        [
-          "The hub '#{origin_hub.hub_code}' cannot be found. Please check that the information is entered correctly",
-          "The hub '#{destination_hub.hub_code}' cannot be found. Please check that the information is entered correctly"
-        ]
-      end
-
-      it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
-        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      it "fails to find the records and the columns remain empty", :aggregate_failures do
+        expect(extracted_table["origin_hub_id"].to_a).to eq([nil])
+        expect(extracted_table["destination_hub_id"].to_a).to eq([nil])
       end
     end
   end

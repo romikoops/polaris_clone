@@ -47,7 +47,7 @@ module ExcelDataServices
         end
 
         def date
-          proc { |value| Date.parse(value) }
+          proc { |value| ::DateTime.parse(value).to_date }
         end
 
         def integer
@@ -64,6 +64,10 @@ module ExcelDataServices
 
         def decimal_from_string
           proc { |value| value[/\A-?(?:\d+(?:\.\d*)?|\.\d+)/] }
+        end
+
+        def spaces
+          proc { |value| value.delete(" ") }
         end
 
         def optional_integer_from_string

@@ -50,10 +50,9 @@ module ExcelDataServices
         end
 
         def internal_conflict_exists(sub_frame:)
-          validities = sub_frame[DATE_KEYS].to_a.uniq.map { |row| Range.new(*row.values_at(*DATE_KEYS)) }
-          return false if validities.length == 1
-
-          validities.combination(2).any? { |validity_a, validity_b| validity_a.overlaps?(validity_b) }
+          sub_frame[DATE_KEYS].to_a.uniq.combination(2).any? do |row_a, row_b|
+            Range.new(*row_a.values_at(*DATE_KEYS)).overlaps?(Range.new(*row_b.values_at(*DATE_KEYS)))
+          end
         end
 
         def row_frame(row:)
@@ -61,7 +60,7 @@ module ExcelDataServices
         end
 
         def add_internal_conflict_error(rows:)
-          row_list = rows.pluck("row").to_a.join(", ")
+          row_list = rows.pluck("row").to_a.uniq.join(", ")
           @state.errors << ExcelDataServices::V2::Error.new(
             type: :error,
             row_nr: row_list,

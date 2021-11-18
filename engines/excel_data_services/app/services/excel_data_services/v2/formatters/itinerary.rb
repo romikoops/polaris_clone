@@ -9,7 +9,11 @@ module ExcelDataServices
         UUID_KEYS = %w[origin_hub_id destination_hub_id organization_id transshipment mode_of_transport].freeze
 
         def insertable_data
-          frame[ATTRIBUTE_KEYS].to_a.uniq.map { |row| ItineraryRow.new(row: row, upsert_id: upsert_id(row: row)).data }
+          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map { |row| ItineraryRow.new(row: row, upsert_id: upsert_id(row: row)).data }
+        end
+
+        def target_attribute
+          "itinerary_id"
         end
 
         class ItineraryRow

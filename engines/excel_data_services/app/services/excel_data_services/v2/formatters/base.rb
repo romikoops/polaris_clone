@@ -27,6 +27,10 @@ module ExcelDataServices
             row.values_at(*self.class::UUID_KEYS).map(&:to_s).join
           ).to_s
         end
+
+        def rows_for_insertion
+          @rows_for_insertion ||= target_attribute ? frame[frame[target_attribute].missing] : frame
+        end
       end
     end
   end

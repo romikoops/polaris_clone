@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "./lib/roo/excelx_money"
-
 module ExcelDataServices
   module V2
     class Spreadsheet

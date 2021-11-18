@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "./lib/roo/excelx_money"
-
 module ExcelDataServices
   module Loaders
     class LegacyUploader < ExcelDataServices::Loaders::Base
