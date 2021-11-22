@@ -60,7 +60,7 @@ RSpec.describe ExcelDataServices::V2::Files::SheetType do
     let!(:origin_hub) { FactoryBot.create(:legacy_hub, :gothenburg, organization: organization) }
     let!(:destination_hub) { FactoryBot.create(:legacy_hub, :shanghai, organization: organization) }
     let(:result_state) { service.perform }
-    let(:lcl_fee) { Pricings::Fee.find_by(charge_category: pss_charge_category, pricing: lcl_pricing, organization: organization) }
+    let(:lcl_fee) { Pricings::Fee.find_by(charge_category: imo_charge_category, pricing: lcl_pricing, organization: organization) }
     let(:lcl_range_fee) { Pricings::Fee.find_by(charge_category: baf_charge_category, pricing: lcl_pricing, organization: organization) }
     let(:fcl_40_fee) { Pricings::Fee.find_by(charge_category: ofr_charge_category, pricing: fcl_40_pricing, organization: organization) }
     let(:fcl_40_hq_fee) { Pricings::Fee.find_by(charge_category: ofr_charge_category, pricing: fcl_40_hq_pricing, organization: organization) }
@@ -68,7 +68,7 @@ RSpec.describe ExcelDataServices::V2::Files::SheetType do
     let(:transhipment_fcl_20_ofr_fee) { Pricings::Fee.find_by(charge_category: ofr_charge_category, pricing: transhipment_fcl_20_pricing, organization: organization) }
     let(:transhipment_fcl_20_lss_fee) { Pricings::Fee.find_by(charge_category: lss_charge_category, pricing: transhipment_fcl_20_pricing, organization: organization) }
     let(:bas_charge_category) { Legacy::ChargeCategory.find_by(name: "Ocean Freight", code: "bas", organization: organization) }
-    let(:pss_charge_category) { Legacy::ChargeCategory.find_by(name: "Peak Season", code: "pss", organization: organization) }
+    let(:imo_charge_category) { Legacy::ChargeCategory.find_by(name: "IMO 2020", code: "imo 2020", organization: organization) }
     let(:baf_charge_category) { Legacy::ChargeCategory.find_by(name: "Bunker Adjustment Fee", code: "baf", organization: organization) }
     let(:ofr_charge_category) { Legacy::ChargeCategory.find_by(name: "OFR", code: "ofr", organization: organization) }
     let(:lss_charge_category) { Legacy::ChargeCategory.find_by(name: "LSS", code: "lss", organization: organization) }

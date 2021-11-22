@@ -34,11 +34,9 @@ module Roo
         currency_descr = extract_currency(cell)
         extracted_value = extract_value(cell_value)
 
-        return cell_value unless currency_descr
+        return cell_value unless currency_descr && Money::Currency.table[currency_descr.downcase.to_sym].present?
 
         parse_to_money(currency_descr, extracted_value)
-      rescue Money::Currency::UnknownCurrency
-        cell_value
       end
 
       def extract_currency(cell)
