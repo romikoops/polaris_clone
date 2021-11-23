@@ -158,7 +158,7 @@ module OfferCalculator
         def charges_exists_and_should_be_included?(direction:, carriage:)
           hub = Legacy::Hub.find(direction == "export" ? origin_hub_id : destination_hub_id)
           (hub.mandatory_charge.send("#{direction}_charges") || request.carriage?(carriage: carriage)) &&
-            present_charge_sections.include?(direction)
+           charges.any? { |charge| charge.section == direction && charge.tenant_vehicle_id == tenant_vehicle_id }
         end
 
         def present_charge_sections

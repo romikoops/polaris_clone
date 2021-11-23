@@ -109,5 +109,33 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
         expect(offers.first.section_keys).to eq(%w[trucking_pre export cargo import trucking_on])
       end
     end
+
+    context "when local_charges_required_with_trucking is false, mandatory charge is true and charge doesnt exists for this service, but for another" do
+      before do
+        allow(request).to receive(:carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
+        organization.scope.update(content: { local_charges_required_with_trucking: false })
+      end
+
+      let!(:local_charges) do
+        cargo_classes.map do |cc|
+          FactoryBot.create(:legacy_local_charge,
+            direction: "export",
+            hub: origin_hub,
+            load_type: cc,
+            organization: organization)
+        end
+      end
+      let(:mandatory_charge) { FactoryBot.create(:legacy_mandatory_charge, export_charges: true) }
+      let(:charge_inputs) { (pricings | local_charges | truckings) }
+      let(:origin_hub) { FactoryBot.create(:hamburg_hub, organization: organization, mandatory_charge: mandatory_charge) }
+      let(:destination_hub) { FactoryBot.create(:shanghai_hub, organization: organization, mandatory_charge: mandatory_charge) }
+      let(:itinerary) { FactoryBot.create(:legacy_itinerary, origin_hub: origin_hub, destination_hub: destination_hub, organization: organization) }
+
+      it "returns an offer even though no import charges are found" do
+        expect(offers.first.section_keys).to eq(%w[trucking_pre cargo trucking_on])
+      end
+    end
   end
 end
