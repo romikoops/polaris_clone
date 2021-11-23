@@ -96,5 +96,18 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
         expect(offers.first.section_keys).to eq(%w[trucking_pre cargo trucking_on])
       end
     end
+
+    context "when local_charges_required_with_trucking is false but all charges are present" do
+      before do
+        allow(request).to receive(:carriage?).and_return(true)
+        allow(request).to receive(:pre_carriage?).and_return(true)
+        allow(request).to receive(:on_carriage?).and_return(true)
+        organization.scope.update(content: { local_charges_required_with_trucking: false })
+      end
+
+      it "returns an offer even though no import charges are found" do
+        expect(offers.first.section_keys).to eq(%w[trucking_pre export cargo import trucking_on])
+      end
+    end
   end
 end

@@ -148,16 +148,16 @@ module OfferCalculator
 
         def local_charge_required?(direction:)
           carriage = direction == "export" ? "pre" : "on"
-          charges_enforced_by_carriage?(carriage: carriage) || charges_exists_and_should_be_included?(direction: direction)
+          charges_enforced_by_carriage?(carriage: carriage) || charges_exists_and_should_be_included?(direction: direction, carriage: carriage)
         end
 
         def charges_enforced_by_carriage?(carriage:)
           request.carriage?(carriage: carriage) && local_charges_required_with_trucking?
         end
 
-        def charges_exists_and_should_be_included?(direction:)
+        def charges_exists_and_should_be_included?(direction:, carriage:)
           hub = Legacy::Hub.find(direction == "export" ? origin_hub_id : destination_hub_id)
-          hub.mandatory_charge.send("#{direction}_charges") &&
+          (hub.mandatory_charge.send("#{direction}_charges") || request.carriage?(carriage: carriage)) &&
             present_charge_sections.include?(direction)
         end
 
