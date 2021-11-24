@@ -66,6 +66,10 @@ module OfferCalculator
           ]
         end
 
+        def aggregated?
+          cargo_unit.cargo_class == 'aggregated_lcl'
+        end
+
         alias_method :wm, :weight_measure
         alias_method :kg, :chargeable_weight
         alias_method :ton, :chargeable_weight_in_tons

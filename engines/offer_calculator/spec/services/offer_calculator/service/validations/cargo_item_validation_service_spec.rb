@@ -76,6 +76,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
     end
 
+    context "when aggregated_lcl unit exceeds the individual limit, but not the aggregate" do
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          :aggregate_lcl,
+          weight_value: 15000)]
+      end
+
+      before { FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization) }
+
+      it "passes validation" do
+        expect(result).to be_empty
+      end
+    end
+
     context "when the object is complete and valid except for trucking" do
       let(:cargo_units) do
         [FactoryBot.build(:journey_cargo_unit,

@@ -5,11 +5,10 @@ module OfferCalculator
     module Validations
       class CargoItemValidationService < OfferCalculator::Service::Validations::CargoValidationService
         def perform
-          cargo_units.each do |cargo_unit|
+          cargo_units.reject(&:aggregated?).each do |cargo_unit|
             validate_cargo(cargo_unit: cargo_unit)
             handle_error_expansion(cargo_unit: cargo_unit)
           end
-
           validate_aggregate
           expand_aggregate
           errors
