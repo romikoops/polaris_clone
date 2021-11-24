@@ -4,16 +4,18 @@ module Users
   class User < Base
     self.inheritance_column = nil
 
-    has_one :profile, inverse_of: :user, foreign_key: :user_id, required: true, dependent: :destroy
+    has_one :profile, inverse_of: :user, required: true, dependent: :destroy
     accepts_nested_attributes_for :profile
 
-    has_one :settings, inverse_of: :user, foreign_key: :user_id, required: true, dependent: :destroy
+    has_one :settings, inverse_of: :user, required: true, dependent: :destroy
     accepts_nested_attributes_for :settings
 
     has_many :memberships, dependent: :destroy, inverse_of: :user
     accepts_nested_attributes_for :memberships
 
-    validates :email, presence: true, uniqueness: true, format: {with: URI::MailTo::EMAIL_REGEXP}
+    has_many :organizations, through: :memberships
+
+    validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
     acts_as_paranoid
   end

@@ -3,6 +3,7 @@
 module Organizations
   class Organization < ApplicationRecord
     has_many :domains, dependent: :destroy, inverse_of: :organization
+    has_many :saml_metadata, dependent: :destroy, inverse_of: :organization
 
     has_one :theme, dependent: :destroy, inverse_of: :organization
     accepts_nested_attributes_for :theme
@@ -10,7 +11,7 @@ module Organizations
     has_one :scope, as: :target, class_name: "Organizations::Scope", inverse_of: :target
     accepts_nested_attributes_for :scope
 
-    validates :slug, presence: true, uniqueness: true, format: {with: /[a-z-]{1,63}/}
+    validates :slug, presence: true, uniqueness: true, format: { with: /[a-z-]{1,63}/ }
 
     has_paper_trail
 

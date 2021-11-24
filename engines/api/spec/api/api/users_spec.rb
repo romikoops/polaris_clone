@@ -78,4 +78,41 @@ RSpec.describe "Users", type: :request, swagger: true do
       end
     end
   end
+
+  path "/v2/users/validate" do
+    get "Validate user for the specified email" do
+      tags "Login"
+      description "Verify user for the email"
+      operationId "verify_user"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :email, in: :query, type: :string, description: "email of the users_user"
+
+      let(:email) { user.email }
+
+      response "200", "successful operation" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   properties: {
+                     first_name: {
+                       description: "first name of the user with the specified email",
+                       type: "string"
+                     },
+                     auth_methods: {
+                       description: "supported auth methods for the user which depends on the organization.",
+                       type: "array"
+                     }
+                   }
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+    end
+  end
 end

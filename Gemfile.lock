@@ -1037,6 +1037,8 @@ GEM
     raabro (1.4.0)
     racc (1.5.2)
     rack (2.2.3)
+    rack-attack (6.5.0)
+      rack (>= 1.0, < 3)
     rack-cors (1.0.5)
       rack (>= 1.6.0)
     rack-protection (2.0.8.1)
@@ -1428,6 +1430,7 @@ DEPENDENCIES
   puma (< 6)
   puma-cloudwatch
   quotations!
+  rack-attack
   rack-cors
   rails-erd
   rails-i18n
