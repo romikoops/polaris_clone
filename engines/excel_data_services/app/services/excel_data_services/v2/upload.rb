@@ -31,7 +31,7 @@ module ExcelDataServices
       end
 
       def schema_types
-        %w[SacoPricings Pricings Schedules]
+        %w[SacoPricings Pricings Schedules Hubs]
       end
 
       def result_state

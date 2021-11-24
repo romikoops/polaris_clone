@@ -57,6 +57,8 @@ module Legacy
 
     before_validation :set_point
 
+    accepts_nested_attributes_for :address
+
     MOT_HUB_NAME = {
       "ocean" => "Port",
       "air" => "Airport",

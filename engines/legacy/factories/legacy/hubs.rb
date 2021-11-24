@@ -13,7 +13,7 @@ FactoryBot.define do
     free_out { false }
     association :organization, factory: :organizations_organization
     association :address, factory: :legacy_address
-    association :mandatory_charge, factory: :legacy_mandatory_charge
+    mandatory_charge { factory_mandatory_charge }
 
     nexus do
       factory_nexus_from_locode(

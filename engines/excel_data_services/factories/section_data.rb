@@ -555,36 +555,35 @@ FactoryBot.define do
 
     trait :hubs do
       data do
-        [
-          { "row" => 2,
-            "organization_id" => organization.id,
-            "name" => "Sydney",
-            "locode" => "AUSYD",
-            "hub_status" => "active",
-            "hub_type" => "ocean",
-            "terminal" => "North Harbour",
-            "terminal_code" => "SYDNHH",
-            "latitude" => -3.385e1,
-            "longitude" => 1.512e2,
-            "country" => "Australia",
-            "full_address" => "Unnamed Road, New South Wales, Australia",
-            "free_out" => false,
-            "import_charges" => false,
-            "export_charges" => false,
-            "pre_carriage" => false,
-            "on_carriage" => false,
-            "alternative_names" => false,
-            "sheet_name" => "Hubs" },
-          { "row" => 3,
-            "organization_id" => organization.id,
-            "name" => "Hamburg",
+        [{ "name" => "Sydney",
+           "row" => 2,
+           "sheet_name" => "Hubs",
+           "locode" => "AUSYD",
+           "hub_status" => "active",
+           "hub_type" => "ocean",
+           "terminal" => "North Harbour",
+           "terminal_code" => "SYDNHH",
+           "latitude" => -33.85,
+           "longitude" => 151.2,
+           "country" => "Australia",
+           "full_address" => "Unnamed Road, New South Wales, Australia",
+           "free_out" => false,
+           "import_charges" => false,
+           "export_charges" => false,
+           "pre_carriage" => false,
+           "on_carriage" => false,
+           "alternative_names" => nil,
+           "organization_id" => organization.id },
+          { "name" => "Hamburg",
+            "row" => 3,
+            "sheet_name" => "Hubs",
             "locode" => "DEHAM",
             "hub_status" => "active",
             "hub_type" => "ocean",
             "terminal" => nil,
             "terminal_code" => nil,
-            "latitude" => 5.3531121e1,
-            "longitude" => 1.0020287e1,
+            "latitude" => 53.531121,
+            "longitude" => 10.020287,
             "country" => "Germany",
             "full_address" => "Flughafenstr. 1-3, 22335 Hamburg, Germany",
             "free_out" => false,
@@ -592,36 +591,29 @@ FactoryBot.define do
             "export_charges" => false,
             "pre_carriage" => false,
             "on_carriage" => false,
-            "alternative_names" => false,
-            "sheet_name" => "Hubs" }
-        ]
+            "alternative_names" => nil,
+            "organization_id" => organization.id }]
       end
     end
 
     trait :nexuses do
       data do
-        [
-          {
-            "row" => 2,
-            "organization_id" => organization.id,
-            "name" => "Sydney",
-            "locode" => "AUSYD",
-            "latitude" => -3.385e1,
-            "country" => "Australia",
-            "longitude" => 1.512e2,
-            "sheet_name" => "Hubs"
-          },
-          {
+        [{ "name" => "Sydney",
+           "row" => 2,
+           "sheet_name" => "Hubs",
+           "locode" => "AUSYD",
+           "latitude" => -33.85,
+           "longitude" => 151.2,
+           "country" => "Australia",
+           "organization_id" => organization.id },
+          { "name" => "Hamburg",
             "row" => 3,
-            "organization_id" => organization.id,
-            "name" => "Hamburg",
+            "sheet_name" => "Hubs",
             "locode" => "DEHAM",
-            "latitude" => 5.3531121e1,
+            "latitude" => 53.531121,
+            "longitude" => 10.020287,
             "country" => "Germany",
-            "longitude" => 1.0020287e1,
-            "sheet_name" => "Hubs"
-          }
-        ]
+            "organization_id" => organization.id }]
       end
     end
   end

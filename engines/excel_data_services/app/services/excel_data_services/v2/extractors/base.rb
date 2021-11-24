@@ -22,7 +22,7 @@ module ExcelDataServices
         end
 
         def extracted
-          @extracted ||= frame.left_join(extracted_frame, on: join_arguments)
+          @extracted ||= blank_frame.concat(frame).left_join(extracted_frame, on: join_arguments)
         end
 
         def extracted_frame

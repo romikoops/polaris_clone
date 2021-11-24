@@ -30,7 +30,7 @@ RSpec.describe ExcelDataServices::DataFrames::Combinators::Truckings::Rates do
       "bracket_minimum" => 25,
       "currency" => "EUR",
       "load_meterage_ratio" => 1500,
-      "load_meterage_hard_limit" => nil,
+      "load_meterage_hard_limit" => false,
       "load_meterage_stackable_limit" => 5,
       "load_meterage_non_stackable_limit" => 2.5,
       "load_meterage_stackable_type" => "area",

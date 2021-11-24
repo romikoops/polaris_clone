@@ -12,7 +12,7 @@ module ExcelDataServices
           def initialize(xlsx:, header:, sheet_name:, options: {})
             @xlsx = xlsx
             @options = options
-            @header = header
+            @header = header.strip
             @sheet_name = sheet_name
             @sanitizer = options[:sanitizer] || "text"
             @validator = options[:validator] || "string"
@@ -58,7 +58,7 @@ module ExcelDataServices
           end
 
           def valid?
-            sheet_column.present? || fallback.present?
+            sheet_column.present? || fallback == false || fallback.present?
           end
 
           def errors

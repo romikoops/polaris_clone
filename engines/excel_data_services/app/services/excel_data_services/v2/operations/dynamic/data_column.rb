@@ -66,7 +66,7 @@ module ExcelDataServices
             raw_category.include?("curr_")
           end
 
-          attr_reader :header, :frame, :default_fee_code
+          attr_reader :header, :frame
 
           private
 
