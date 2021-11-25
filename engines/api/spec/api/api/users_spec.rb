@@ -97,20 +97,37 @@ RSpec.describe "Users", type: :request, swagger: true do
         schema type: :object,
                properties: {
                  data: {
+                   type: :object,
                    properties: {
-                     first_name: {
-                       description: "first name of the user with the specified email",
-                       type: "string"
+                     id: {
+                       type: :string
                      },
-                     auth_methods: {
-                       description: "supported auth methods for the user which depends on the organization.",
-                       type: "array"
+                     type: {
+                       type: :string
+                     },
+                     attributes: {
+                       type: :object,
+                       properties: {
+                         firstName: {
+                           description: "User's first name, usually given name.",
+                           type: :string
+                         },
+                         authMethods: {
+                           description: "auth methods for users",
+                           type: :array
+                         },
+                         samlIntegrations: {
+                           description: %(information required to support SAML workflow from frontend such button and redirection url),
+                           type: :array
+                         }
+                       },
+                       required: %w[firstName authMethods samlIntegrations]
                      }
-                   }
+                   },
+                   required: %w[id type attributes]
                  }
                },
                required: ["data"]
-
         run_test!
       end
     end
