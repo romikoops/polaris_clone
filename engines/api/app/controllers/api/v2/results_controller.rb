@@ -5,7 +5,8 @@ require_dependency "api/api_controller"
 module Api
   module V2
     class ResultsController < ApiController
-      skip_before_action :doorkeeper_authorize!, only: %i[show index]
+      before_action :doorkeeper_authorize!, only: %i[show index], unless: :guest_user?
+      before_action :authorize_access!, only: %i[show index]
 
       def show
         render json: Api::V2::ResultSerializer.new(
@@ -24,7 +25,15 @@ module Api
       end
 
       def query
-        @query ||= Journey::Query.find(params[:result_set_id] || params[:query_id])
+        @query ||= params[:query_id] ? Journey::Query.find(params[:query_id]) : result.query
+      end
+
+      def guest_user?
+        current_user.nil?
+      end
+
+      def authorize_access!
+        head :unauthorized unless current_organization == query.organization && current_user == query.client
       end
     end
   end
