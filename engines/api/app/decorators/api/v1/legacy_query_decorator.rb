@@ -36,7 +36,10 @@ module Api
       end
 
       def legacy_cargo_units
-        Api::V1::LegacyCargoUnitDecorator.decorate_collection(cargo_units, context: { scope: scope }).map(&:legacy_format)
+        Api::V1::LegacyCargoUnitDecorator.decorate_collection(
+          cargo_units.where.not(cargo_class: "aggregated_lcl"),
+          context: { scope: scope }
+        ).map(&:legacy_format)
       end
 
       def legacy_aggregated_cargo

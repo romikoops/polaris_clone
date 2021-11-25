@@ -52,33 +52,26 @@ RSpec.describe Api::V1::LegacyCargoUnitDecorator do
         ))
       end
     end
-
-    context "when Aggregated LCL" do
-      let(:cargo_unit) { FactoryBot.build(:journey_cargo_unit, :aggregate_lcl, query: query) }
-      let(:agg_values) do
-        {
-          id: cargo_unit.id,
-          quantity: cargo_unit.quantity,
-          payload_in_kg: cargo_unit.weight_value,
-          cargo_item_type: {
-            description: "Aggregated LCL"
-          },
-          width: nil,
-          height: nil,
-          length: nil,
-          cargo_class: "lcl"
-        }
-      end
-
-      it "returns Agg LCL format when the units are aggregated" do
-        expect(legacy_format).to eq(agg_values)
-      end
-    end
   end
 
   describe ".cargo_item_type_id" do
     it "returns the Legacy::CargoItemType from the colli type enum" do
       expect(decorated_cargo_unit.cargo_item_type_id).to eq(legacy_cargo_item_type.id)
+    end
+  end
+
+  describe "#aggregate_format" do
+    let(:cargo_unit) { FactoryBot.build(:journey_cargo_unit, :aggregate_lcl, query: query) }
+    let(:agg_values) do
+      {
+        id: cargo_unit.id,
+        weight: cargo_unit.weight_value,
+        volume: cargo_unit.volume_value
+      }
+    end
+
+    it "returns Agg LCL format when the units are aggregated" do
+      expect(decorated_cargo_unit.aggregate_format).to eq(agg_values)
     end
   end
 end

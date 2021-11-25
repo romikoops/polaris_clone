@@ -27,8 +27,9 @@ module Api
 
       def aggregate_format
         {
+          id: id,
           weight: payload_in_kg,
-          volume: volume
+          volume: volume.value
         }
       end
 
