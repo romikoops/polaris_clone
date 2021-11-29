@@ -98,7 +98,7 @@ RSpec.describe ExcelDataServices::V2::Files::Section do
 
     context "with incorrect hub" do
       let(:origin_hub) { FactoryBot.create(:legacy_hub, :gothenburg, organization: organization) }
-      let(:error_reason) { "The hub 'DEHAM' cannot be found. Please check that the information is entered correctly" }
+      let(:error_reason) { "The origin hub 'DEHAM' cannot be found. Please check that the information is entered correctly" }
 
       it_behaves_like "schedule creation fails"
     end

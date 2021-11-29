@@ -31,6 +31,10 @@ module ExcelDataServices
         def rows_for_insertion
           @rows_for_insertion ||= target_attribute ? frame[frame[target_attribute].missing] : frame
         end
+
+        def filtered_frame(input_frame:, arguments:)
+          ExcelDataServices::V2::Helpers::FrameFilter.new(input_frame: input_frame, arguments: arguments).frame
+        end
       end
     end
   end

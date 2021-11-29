@@ -19,7 +19,6 @@ RSpec.describe ExcelDataServices::V2::Extractors::Address do
         "country_code" => country.code,
         "postal_code" => address.zip_code
       ])
-
     end
 
     let(:row) do

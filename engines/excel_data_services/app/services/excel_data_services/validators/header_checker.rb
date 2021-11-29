@@ -228,6 +228,9 @@ module ExcelDataServices
         }.freeze
       end
 
+      V2_ENABLED_UPLOADERS = %w[
+        pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges schedules saco_shipping local_charges hubs
+      ]
       attr_reader :restructurer_name, :errors
 
       # rubocop:disable Lint/MissingSuper
@@ -293,7 +296,7 @@ module ExcelDataServices
           constants << name unless name.starts_with?("optional")
         end
 
-        names -= %w[pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges schedules hubs saco_shipping] if v2_enabled?
+        names -= V2_ENABLED_UPLOADERS if v2_enabled?
         names
       end
 

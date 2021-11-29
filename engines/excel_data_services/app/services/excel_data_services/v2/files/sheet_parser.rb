@@ -84,18 +84,23 @@ module ExcelDataServices
 
         def dependency_actions
           @dependency_actions ||= sorted_dependencies.reverse.map do |dependency_section|
-            ConnectedActions.new(state: state, section: dependency_section)
+            ConnectedActions.new(state: state, section: dependency_section, scope: scope)
           end
         end
 
+        def scope
+          @scope ||= state.organization.scope
+        end
+
         class ConnectedActions
-          attr_reader :section, :state, :model, :importer, :conflicts, :validators, :formatters, :extractors
+          attr_reader :section, :state, :model, :importer, :conflicts, :validators, :formatters, :extractors, :scope
 
           delegate :xlsx, :organization, to: :state
 
-          def initialize(section:, state:)
+          def initialize(section:, state:, scope:)
             @section = section
             @state = state
+            @scope = scope
             @validators = []
             @formatters = []
             @extractors = []

@@ -52,7 +52,7 @@ module ExcelDataServices
         end
 
         def row_frame(row:)
-          rows_for_insertion[GROUPING_KEYS.map { |key| (rows_for_insertion[key] == row[key]) }.reduce(&:&)]
+          filtered_frame(input_frame: rows_for_insertion, arguments: row.slice(*GROUPING_KEYS))
         end
 
         class RowFees

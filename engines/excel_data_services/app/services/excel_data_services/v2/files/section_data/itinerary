@@ -10,15 +10,17 @@ column "origin_terminal",
   validator: "optional_string",
   required: false,
   type: :object
-column "origin",
+column "origin_hub",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
+  alternative_keys: ["origin"],
   type: :object
-column "country_origin",
+column "origin_country",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
+  alternative_keys: ["country_origin"],
   type: :object
 column "destination_locode",
   sanitizer: "text",
@@ -30,14 +32,16 @@ column "destination_terminal",
   validator: "optional_string",
   required: false,
   type: :object
-column "destination",
+column "destination_hub",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
+  alternative_keys: ["destination"],
   type: :object
-column "country_destination",
+column "destination_country",
   sanitizer: "text",
   validator: "optional_string",
+  alternative_keys: ["country_destination"],
   required: false,
   type: :object
 column "mode_of_transport",
@@ -52,7 +56,8 @@ column "transshipment",
   required: false,
   type: :object
 
-add_validator "RouteHubs"
+add_validator "OriginHub"
+add_validator "DestinationHub"
 add_extractor "Itinerary"
 add_formatter "Itinerary"
 

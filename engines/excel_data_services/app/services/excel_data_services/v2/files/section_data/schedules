@@ -83,7 +83,8 @@ row_validation %w[closing_date origin_departure], (proc { |a, b| a <= b })
 
 add_validator "Carrier"
 add_validator "TenantVehicle"
-add_validator "RouteHubs"
+add_validator "OriginHub"
+add_validator "DestinationHub"
 
 add_formatter "Schedule"
 

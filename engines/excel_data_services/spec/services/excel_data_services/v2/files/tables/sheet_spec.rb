@@ -58,12 +58,12 @@ RSpec.describe ExcelDataServices::V2::Files::Tables::Sheet do
       let(:section_keys) do
         %w[origin_locode
           origin_terminal
-          origin
-          country_origin
+          origin_hub
+          origin_country
           destination_locode
           destination_terminal
-          destination
-          country_destination
+          destination_hub
+          destination_country
           mode_of_transport
           transshipment]
       end
@@ -81,11 +81,11 @@ RSpec.describe ExcelDataServices::V2::Files::Tables::Sheet do
           effective_date
           expiration_date
           origin_locode
-          origin
-          country_origin
+          origin_hub
+          origin_country
           destination_locode
-          destination
-          country_destination
+          destination_hub
+          destination_country
           mode_of_transport
           carrier
           carrier_code

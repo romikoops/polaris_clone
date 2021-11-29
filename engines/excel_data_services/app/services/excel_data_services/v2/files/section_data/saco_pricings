@@ -22,15 +22,17 @@ column "expiration_date",
   validator: "date",
   required: false,
   type: :object
-column "origin",
+column "origin_hub",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
+  alternative_keys: ["origin"],
   type: :object
-column "country_origin",
+column "origin_country",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
+  alternative_keys: ["country_origin"],
   type: :object
 column "origin_locode",
   sanitizer: "locode",
@@ -42,18 +44,18 @@ column "destination_locode",
   validator: "optional_locode",
   required: true,
   type: :object
-column "destination",
+column "destination_hub",
   sanitizer: "text",
   validator: "optional_string",
-  required: true,
-  type: :object,
-  alternative_keys: ["destination_hub"]
-column "country_destination",
+  required: false,
+  alternative_keys: ["destination"],
+  type: :object
+column "destination_country",
   sanitizer: "text",
   validator: "optional_string",
-  required: true,
-  type: :object,
-  alternative_keys: ["destination_country"]
+  alternative_keys: ["country_destination"],
+  required: false,
+  type: :object
 column "mode_of_transport",
   sanitizer: "downcase",
   validator: "string",
@@ -169,7 +171,6 @@ column "remarks",
   type: :object,
   fallback: nil
 
-row_validation %w[effective_date expiration_date], (proc { |a, b| a < b })
 
 prerequisite "TenantVehicle"
 prerequisite "Itinerary"
@@ -177,6 +178,7 @@ prerequisite "ChargeCategory"
 
 add_dynamic_columns excluding: %w[REMARKS INTERNAL DESTINATION_COUNTRY DESTINATION_LOCODE DESTINATION_HUB TERMINAL TRANSSHIPMENT_VIA CARRIER ORIGIN_LOCODE EFFECTIVE_DATE EXPIRATION_DATE]
 
+add_validator "SequentialDates"
 add_validator "PrimaryFeeCode"
 add_validator "Carrier"
 add_validator "TenantVehicle"

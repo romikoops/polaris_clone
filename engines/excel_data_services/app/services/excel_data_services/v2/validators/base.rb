@@ -17,7 +17,7 @@ module ExcelDataServices
         end
 
         def perform
-          @state = extracted
+          extract_state
           append_errors_to_state
           state
         end
@@ -26,6 +26,10 @@ module ExcelDataServices
           frame[frame[required_key].missing].to_a.each do |error_row|
             append_error(row: error_row)
           end
+        end
+
+        def extract_state
+          @state = extracted
         end
 
         def append_error(row:)

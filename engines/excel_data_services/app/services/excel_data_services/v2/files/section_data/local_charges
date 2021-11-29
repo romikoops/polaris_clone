@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-required "1:1", "A:?", %w[MOT CARRIER SERVICE_LEVEL TRANSSHIPMENT]
+required "1:1", "A:?", %w[DIRECTION CURRENCY RATE_BASIS MINIMUM MAXIMUM BASE TON CBM KG RANGE_MIN RANGE_MAX]
 
 column "service",
   sanitizer: "text",
@@ -29,38 +29,34 @@ column "expiration_date",
   validator: "date",
   required: false,
   type: :object
-column "origin_locode",
+column "locode",
   sanitizer: "text",
   validator: "optional_locode",
   required: false,
   type: :object
-column "origin_hub",
+column "hub",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
-  alternative_keys: ["origin"],
   type: :object
-column "origin_country",
+column "country",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
-  alternative_keys: ["country_origin"],
   type: :object
-column "destination_locode",
+column "counterpart_locode",
   sanitizer: "text",
   validator: "optional_locode",
   required: false,
   type: :object
-column "destination_hub",
+column "counterpart_hub",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
-  alternative_keys: ["destination"],
   type: :object
-column "destination_country",
+column "counterpart_country",
   sanitizer: "text",
   validator: "optional_string",
-  alternative_keys: ["country_destination"],
   required: false,
   type: :object
 column "mode_of_transport",
@@ -75,6 +71,11 @@ column "carrier",
   required: false,
   type: :object,
   fallback: organization.slug
+column "direction",
+  sanitizer: "downcase",
+  validator: "direction",
+  required: true,
+  type: :object
 column "service_level",
   sanitizer: "text",
   validator: "string",
@@ -86,65 +87,48 @@ column "cargo_class",
   required: true,
   alternative_keys: ["load_type"],
   type: :object
-column "internal",
-  sanitizer: "boolean",
-  validator: "optional_boolean",
-  required: false,
+column "load_type",
+  sanitizer: "downcase",
+  validator: "cargo_class",
+  required: true,
   type: :object
-column "transshipment",
+column "terminal",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
   type: :object
-column "wm_rate",
-  sanitizer: "decimal",
-  validator: "optional_numeric",
-  required: false,
-  alternative_keys: ["wm_ratio"],
-  type: :object
-column "vm_rate",
-  sanitizer: "decimal",
-  validator: "optional_numeric",
-  required: false,
-  alternative_keys: ["vm_ratio"],
-  type: :object
-column "origin_terminal",
+column "counterpart_terminal",
   sanitizer: "text",
   validator: "optional_string",
   required: false,
   type: :object
-column "destination_terminal",
-  sanitizer: "text",
-  validator: "optional_string",
-  required: false,
-  type: :object
-column "fee_min",
+column "min",
   sanitizer: "decimal",
   validator: "optional_numeric",
   required: false,
-  alternative_keys: ["min"],
+  alternative_keys: ["minimum"],
+  type: :object
+column "max",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  alternative_keys: ["minimum"],
   type: :object
 column "fee_name",
   sanitizer: "text",
   validator: "string",
   required: false,
+  alternative_keys: ["fee"],
   type: :object
 column "fee_code",
   sanitizer: "downcase",
   validator: "string",
   required: false,
-  alternative_keys: ["code"],
   type: :object
 column "currency",
   sanitizer: "upcase",
   validator: "currency",
   required: true,
-  type: :object
-column "rate",
-  sanitizer: "decimal",
-  validator: "numeric",
-  required: false,
-  alternative_keys: ["fee"],
   type: :object
 column "rate_basis",
   sanitizer: "text",
@@ -166,36 +150,82 @@ column "base",
   validator: "optional_numeric",
   required: false,
   type: :object
-column "remarks",
-  sanitizer: "text",
-  validator: "optional_string",
+column "ton",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
   required: false,
-  type: :object,
-  fallback: nil
-
-row_validation %w[effective_date expiration_date], (proc { |a, b| a < b })
+  type: :object
+column "cbm",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "kg",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "item",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "shipment",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "bill",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "container",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "wm",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "percentage",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+column "dangerous",
+  sanitizer: "boolean",
+  validator: "optional_boolean",
+  default: false,
+  required: false,
+  type: :object
+column "internal",
+  sanitizer: "boolean",
+  validator: "optional_boolean",
+  default: false,
+  required: false,
+  type: :object
 
 prerequisite "TenantVehicle"
-prerequisite "Itinerary"
 prerequisite "ChargeCategory"
 
-add_dynamic_columns excluding: %w[REMARKS WM_RATIO VM_RATIO TRANSIT_TIME]
+add_validator "SequentialDates"
+add_validator "LocalChargeFees"
 
+add_validator "RateBasis"
 add_validator "Carrier"
 add_validator "TenantVehicle"
-add_validator "OriginHub"
-add_validator "DestinationHub"
-add_validator "Itinerary"
 add_validator "ChargeCategory"
 add_validator "Group"
-add_validator "RateBasis"
+add_validator "Hub"
+add_validator "CounterpartHub"
 
-add_operation "DynamicFees"
+add_operation "CounterpartHubExpander" if scope.expand_non_counterpart_local_charges
 
-add_extractor "Pricing"
-add_formatter "Pricing"
+add_formatter "LocalCharge"
+conflict Legacy::LocalCharge, %w[hub_id counterpart_hub_id tenant_vehicle_id load_type mode_of_transport group_id direction organization_id]
 
-conflict Pricings::Pricing, %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id]
-
-model_importer Pricings::Pricing, { recursive: true }
-target_model Pricings::Pricing
+model_importer Legacy::LocalCharge
+target_model Legacy::LocalCharge

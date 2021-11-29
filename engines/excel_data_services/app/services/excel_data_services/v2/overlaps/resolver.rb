@@ -6,6 +6,7 @@ module ExcelDataServices
       class Resolver
         # The Resolver class will take the conflict keys andd extract the permutations from the data frame.
         # It will then find all conflicts that exists for each pair and execute the Overlaps handler for that conflict type
+        include Sidekiq::Status::Worker
 
         DATE_KEYS = %w[effective_date expiration_date].freeze
         delegate :frame, to: :state
@@ -56,7 +57,7 @@ module ExcelDataServices
         end
 
         def row_frame(row:)
-          frame[row.keys.map { |key| (frame[key] == row[key]) }.reduce(&:&)]
+          ExcelDataServices::V2::Helpers::FrameFilter.new(input_frame: frame, arguments: row).frame
         end
 
         def add_internal_conflict_error(rows:)
