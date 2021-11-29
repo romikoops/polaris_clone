@@ -2,7 +2,10 @@
 
 module Api
   module V2
-    class UsersController < ApplicationController
+    class UsersController < ApiController
+      skip_before_action :doorkeeper_authorize!
+      skip_before_action :ensure_organization!
+
       def validate
         if user.blank?
           return render(

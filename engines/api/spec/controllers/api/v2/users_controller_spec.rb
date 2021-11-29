@@ -8,7 +8,6 @@ module Api
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
-    let(:email) { "shopadmin@itsmycargo.com" }
 
     describe "#validate" do
       before { FactoryBot.create(:users_membership, organization: organization, user: user) }
@@ -32,7 +31,8 @@ module Api
 
       context "when email is not passed as query param" do
         it "returns bad request" do
-          expect { get :validate, params: {}, as: :json }.to raise_error(ActionController::ParameterMissing)
+          get :validate, params: {}, as: :json
+          expect(response).to have_http_status(:bad_request)
         end
       end
 

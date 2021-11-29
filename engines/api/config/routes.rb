@@ -93,7 +93,9 @@ Api::Engine.routes.draw do
       resources :companies, only: %i[show update]
       resources :shipment_requests, only: %i[show]
     end
-
-    get "users/validate", to: "users#validate"
+    resources :users do
+      get "validate", on: :collection
+    end
+    resources :passwords, only: %i[update]
   end
 end

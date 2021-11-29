@@ -1290,6 +1290,7 @@ GEM
       sprockets (>= 3.0.0)
     strong_migrations (0.7.3)
       activerecord (>= 5)
+    strong_password (0.0.10)
     suo (0.3.4)
       dalli
       msgpack
@@ -1477,6 +1478,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sprockets (~> 3.7.2)
   sprockets-rails
+  strong_password (~> 0.0.9)
   table_print
   tenant_routing!
   tender_calculator!
