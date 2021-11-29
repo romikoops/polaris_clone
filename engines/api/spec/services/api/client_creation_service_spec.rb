@@ -51,6 +51,14 @@ RSpec.describe Api::ClientCreationService do
       Organizations.current_id = organization.id
     end
 
+    shared_examples_for "restoring an existing client" do
+      it "restores the user and updates the profile and settings with the provided info", :aggregate_failures do
+        expect(client).to eq(existing_client)
+        expect(client.profile.slice(profile_attributes.keys)).to eq(profile_attributes.stringify_keys)
+        expect(client.settings.slice(settings_attributes.keys)).to eq(settings_attributes.stringify_keys)
+      end
+    end
+
     it "creates the user properly", :aggregate_failures do
       expect(client).to be_valid
       expect(client.email).to eq(test_email)
@@ -101,12 +109,18 @@ RSpec.describe Api::ClientCreationService do
         existing_client.destroy
       end
 
-      it "restores the user" do
-        aggregate_failures do
-          expect(client).to eq(existing_client)
-          expect(client.profile.id).to be_present
-          expect(client.settings.id).to be_present
+      it_behaves_like "restoring an existing client"
+
+      context "when the email provided has mixed case" do
+        let(:client_attributes) do
+          {
+            email: test_email.humanize,
+            password: "123456789",
+            organization_id: organization.id
+          }
         end
+
+        it_behaves_like "restoring an existing client"
       end
     end
   end
