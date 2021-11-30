@@ -6,34 +6,34 @@ module ExcelDataServices
       private
 
       def load_and_prepare_data
-        hubs = Legacy::Hub.where(organization: organization)
-
-        {"Hubs" => prepare_hub_data(hubs: hubs)}
+        { "Hubs" => prepared_hub_data }
       end
 
-      def prepare_hub_data(hubs:)
-        hubs.map do |hub|
-          nexus = hub.nexus
-          address = hub.address
-          mandatory_charge = hub.mandatory_charge
-
-          {
-            status: hub.hub_status,
-            type: hub.hub_type,
-            name: nexus.name,
-            locode: nexus.locode,
-            latitude: hub.latitude,
-            longitude: hub.longitude,
-            country: address.country&.name,
-            full_address: address.geocoded_address,
-            free_out: hub.free_out.to_s,
-            import_charges: mandatory_charge&.import_charges.to_s,
-            export_charges: mandatory_charge&.export_charges.to_s,
-            pre_carriage: mandatory_charge&.pre_carriage.to_s,
-            on_carriage: mandatory_charge&.on_carriage.to_s,
-            alternative_names: ""
-          }
-        end
+      def prepared_hub_data
+        Rover::DataFrame.new(
+          Legacy::Hub.where(organization: organization)
+          .joins(nexus: :country)
+          .joins(:mandatory_charge)
+          .left_joins(:address)
+          .select("
+            hubs.hub_status as status,
+            hubs.hub_type as type,
+            hubs.name as name,
+            nexuses.locode as locode,
+            hubs.terminal as terminal,
+            hubs.terminal_code as terminal_code,
+            hubs.latitude as latitude,
+            hubs.longitude as longitude,
+            countries.name as country,
+            addresses.geocoded_address as full_address,
+            hubs.free_out::text as free_out,
+            mandatory_charges.import_charges::text as import_charges,
+            mandatory_charges.export_charges::text as export_charges,
+            mandatory_charges.pre_carriage::text as pre_carriage,
+            mandatory_charges.on_carriage::text as on_carriage,
+            '' as alternative_names
+          ")
+        ).to_a.map(&:symbolize_keys!)
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
