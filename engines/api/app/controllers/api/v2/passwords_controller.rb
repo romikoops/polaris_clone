@@ -5,6 +5,22 @@ module Api
     class PasswordsController < ApiController
       skip_before_action :doorkeeper_authorize!
       skip_before_action :ensure_organization!
+      before_action :validate_referrer!, only: [:create]
+
+      def create
+        user = Users::User.find_by(email: params[:email])
+        render json: { error_code: "user_not_available", success: false }, status: :unauthorized and return if user.blank?
+
+        render json: { error_code: "sso_user_not_supported", success: false }, status: :unauthorized and return if user.crypted_password.nil?
+
+        user.generate_reset_password_token!
+        Notifications::UserMailer.with(
+          domain: referrer_host,
+          user: user
+        ).reset_password_email.deliver_later
+
+        render json: { success: true }
+      end
 
       # This action fires when the user has sent the reset password form.
       def update

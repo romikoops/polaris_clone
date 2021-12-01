@@ -3,8 +3,8 @@
 module Notifications
   class UserMailer < ApplicationMailer
     before_action do
-      attachments.inline["logo.png"] = logo_for_attaching
       @user = params[:user]
+      attachments.inline["logo.png"] = logo_for_attaching
       @profile = @user.profile
       @support_url = "mailto:#{encoded_email_address}"
     end
@@ -39,6 +39,7 @@ module Notifications
       end
       ERB::Util.url_encode(email_address).gsub("%40", "@")
     end
+    helper_method :encoded_email_address
 
     def company_name
       @company_name ||= if admin?
@@ -50,6 +51,10 @@ module Notifications
 
     def admin?
       @user.is_a?(Users::User)
+    end
+
+    def domain
+      @domain ||= params[:domain].presence || super
     end
   end
 end

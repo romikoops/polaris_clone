@@ -89,5 +89,92 @@ module Api
         end
       end
     end
+
+    describe "#validate_referrer!" do
+      controller do
+        skip_before_action :doorkeeper_authorize!
+        skip_before_action :ensure_organization!
+        before_action :validate_referrer!, only: [:create]
+        def create
+          render json: { success: true }
+        end
+      end
+      context "when referer is a valid organization domain" do
+        before do
+          request.headers["Referer"] = "http://#{domain.domain}"
+        end
+
+        it "returns a 200 OK response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "when referer is not organization domain, but a valid imc domain" do
+        before do
+          request.headers["Referer"] = "http://bridge.itsmycargo.com"
+        end
+
+        it "returns a 200 OK response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "when referer is not organization domain, but a valid wildcard imc domain" do
+        before do
+          request.headers["Referer"] = "http://siren-sir-1337.itsmycargo.dev"
+        end
+
+        it "returns a 200 OK response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context "when referer is not organization domain, nor a valid imc domain" do
+        before do
+          request.headers["Referer"] = "http://foobar.example"
+        end
+
+        it "returns a 401 unauthorized response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when referer does not have a subdomain" do
+        before do
+          request.headers["Referer"] = "http://itsmycargo.com"
+        end
+
+        it "returns a 401 unauthorized response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when referer has multiple TLDs" do
+        before do
+          request.headers["Referer"] = "http://bridge.itsmycargo.com.dev"
+        end
+
+        it "returns a 401 unauthorized response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when referer has a unsupported subdomain" do
+        before do
+          request.headers["Referer"] = "http://different.itsmycargo.com"
+        end
+
+        it "returns a 401 unauthorized response" do
+          post :create, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
   end
 end

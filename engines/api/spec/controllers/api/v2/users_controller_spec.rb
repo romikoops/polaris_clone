@@ -5,13 +5,10 @@ require "rails_helper"
 module Api
   RSpec.describe V2::UsersController, type: :controller do
     routes { Engine.routes }
-
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
 
     describe "#validate" do
-      before { FactoryBot.create(:users_membership, organization: organization, user: user) }
-
       context "when user with the specified email is exists" do
         it "returns a 200 OK response" do
           get :validate, params: { email: user.email }, as: :json

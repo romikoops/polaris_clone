@@ -8,6 +8,12 @@ module Api
     include ErrorHandler
     include Pagination
 
+    SUPPORTED_IMC_APPS = %w[bridge dipper siren].freeze
+
+    SUPPORTED_TLD = %w[com dev shop].freeze
+
+    VALID_IMC_DOMAIN = /(?=.*(#{SUPPORTED_IMC_APPS.join("|")}))(?=.*(.itsmycargo)(.(#{SUPPORTED_TLD.join("|")})+\z))/.freeze
+
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 
     skip_before_action :verify_authenticity_token
@@ -97,6 +103,13 @@ module Api
 
     def referrer_host
       @referrer_host ||= URI(request.referrer.to_s).host
+    end
+
+    def validate_referrer!
+      return true if (organization_domain.present? && organization_domain.domain) ||
+        (VALID_IMC_DOMAIN.match(request.referrer.to_s.downcase) && referrer_host.present?)
+
+      render json: { error_code: "invalid_or_empty_referer", success: false }, status: :unauthorized and return
     end
 
     def organization_slug

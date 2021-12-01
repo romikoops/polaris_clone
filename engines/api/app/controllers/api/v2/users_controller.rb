@@ -12,7 +12,7 @@ module Api
             json: { error: "User with email #{email} is not registered in our system" },
             status: :not_found
           )
-          end
+        end
         render json: Api::V2::UserSerializer.new(user_decorator)
       end
 

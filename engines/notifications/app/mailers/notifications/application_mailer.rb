@@ -8,10 +8,13 @@ module Notifications
     IMC_COMPANY_NAME = "ItsMyCargo"
 
     def shop_url(path = "")
-      domain = current_organization.domains.find(&:default).domain
       URI.join("https://#{domain}", path)
     end
     helper_method :shop_url
+
+    def domain
+      @domain ||= current_organization.domains.find(&:default).domain
+    end
 
     def company_name
       current_organization.theme.name

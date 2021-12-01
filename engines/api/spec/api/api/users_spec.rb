@@ -81,7 +81,7 @@ RSpec.describe "Users", type: :request, swagger: true do
 
   path "/v2/users/validate" do
     get "Validate user for the specified email" do
-      tags "Login"
+      tags "Users"
       description "Verify user for the email"
       operationId "verify_user"
 

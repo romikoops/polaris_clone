@@ -8,7 +8,7 @@ RSpec.describe "Passwords", type: :request, swagger: true do
     user.reload.reset_password_token
   end
 
-  let(:user) { FactoryBot.create(:users_user) }
+  let(:user) { FactoryBot.create(:users_user, password: "OldPassword1") }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
@@ -51,6 +51,53 @@ RSpec.describe "Passwords", type: :request, swagger: true do
                  error_code: {
                    type: :string,
                    description: "describes password errors which is either `password_mismatch` or `weak_password`"
+                 }
+               }
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/passwords/" do
+    post "Request reset password email for an user" do
+      tags "Reset Password"
+      description "Request reset password email specified user email"
+      operationId "reset_password"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :request_password_reset_body, in: :body, schema: {
+        type: :object,
+        properties: {
+          email: { type: :string, description: "email id of the user for resetting password" }
+        }
+      }
+
+      parameter name: :Referer, in: :header, type: :string, description: "HTTP Referrer from which the host/domain information will be extracted"
+
+      response "200", "successful operation" do
+        let(:request_password_reset_body) { { email: user.email } }
+        let(:Referer) { "http://siren-sir-1337.itsmycargo.dev" }
+
+        schema type: :object,
+               properties: {
+                 success: {
+                   type: :boolean
+                 }
+               }
+        run_test!
+      end
+
+      response "401", "Unauthorized" do
+        let(:request_password_reset_body) { { email: "missing@itsmycargo.com" } }
+        let(:Referer) { "" }
+        schema type: :object,
+               properties: {
+                 error_code: {
+                   type: :string,
+                   description: "describes unauthorized error reason with error codes `user_not_available`, `sso_user_not_supported`, invalid_or_empty_referer"
                  }
                }
         run_test!
