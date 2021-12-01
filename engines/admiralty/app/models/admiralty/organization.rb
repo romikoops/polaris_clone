@@ -11,7 +11,7 @@ module Admiralty
     has_many :tenant_cargo_item_types, class_name: "Legacy::TenantCargoItemType"
     accepts_nested_attributes_for :tenant_cargo_item_types
 
-    after_create :create_margins
+    after_create :create_margins, :create_shop_defaults
 
     def create_margins
       margins << ["rail", "ocean", "air", "truck", "local_charge", "trucking", nil].product(
@@ -28,6 +28,28 @@ module Admiralty
           margin_type: margin_type
         )
       end
+    end
+
+    def create_shop_defaults
+      # Create default group
+      create_default_group
+
+      # Create user membership for shop admin
+      create_shop_admin_user_membership
+    end
+
+    private
+
+    def create_shop_admin_user_membership
+      Users::Membership.create!(
+        user: Users::User.find_by(email: "shopadmin@itsmycargo.com"),
+        organization: self,
+        role: "admin"
+      )
+    end
+
+    def create_default_group
+      Groups::Group.create!(name: "default", organization: self)
     end
   end
 end

@@ -14,6 +14,7 @@ module Admiralty
 
     config.generators do |generator|
       generator.orm false
+      generator.fixture_replacement :factory_bot, dir: "spec/factories"
       generator.test_framework :rspec
       generator.assets false
       generator.helper false
@@ -32,5 +33,7 @@ module Admiralty
     initializer "admiralty.assets" do |app|
       app.config.assets.precompile += %w[logo.png]
     end
+
+    config.factory_bot.definition_file_paths += [File.expand_path("../../factories", __dir__)] if defined?(FactoryBotRails)
   end
 end
