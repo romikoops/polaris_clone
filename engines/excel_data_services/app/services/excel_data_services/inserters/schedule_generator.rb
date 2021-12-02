@@ -39,11 +39,9 @@ module ExcelDataServices
 
       def generate_from_itinerary(itinerary:, row:)
         tenant_vehicle_ids = relevant_tenant_vehicle_ids(itinerary, row)
-        stops_in_order = itinerary.stops.order(:index)
         finish_date = Time.zone.today + STANDARD_PERIOD
         tenant_vehicle_ids.each do |tv_id|
           trip_results = itinerary.generate_weekly_schedules(
-            stops_in_order: stops_in_order,
             steps_in_order: [row.transit_time],
             start_date: DateTime.now,
             end_date: finish_date,

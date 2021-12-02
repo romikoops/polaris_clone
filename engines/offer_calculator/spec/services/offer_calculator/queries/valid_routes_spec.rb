@@ -7,10 +7,10 @@ RSpec.describe OfferCalculator::Queries::ValidRoutes do
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:itinerary2) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
-  let(:origin_hub1) { itinerary.hubs.find_by(name: "Gothenburg") }
-  let(:destination_hub1) { itinerary.hubs.find_by(name: "Shanghai") }
-  let(:origin_hub2) { itinerary2.hubs.find_by(name: "Shanghai") }
-  let(:destination_hub2) { itinerary2.hubs.find_by(name: "Gothenburg") }
+  let(:origin_hub1) { itinerary.origin_hub }
+  let(:destination_hub1) { itinerary.destination_hub }
+  let(:origin_hub2) { itinerary2.origin_hub }
+  let(:destination_hub2) { itinerary2.destination_hub }
   let(:request) { FactoryBot.create(:offer_calculator_request, organization: organization, client: user, creator: user) }
   let(:current_etd) { 2.days.from_now }
   let(:tenant_vehicle1) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization, name: "1") }

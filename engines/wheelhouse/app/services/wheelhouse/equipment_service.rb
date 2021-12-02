@@ -34,16 +34,16 @@ module Wheelhouse
         SELECT DISTINCT
           pricings_pricings.cargo_class
         FROM pricings_pricings
+        JOIN itineraries
+          ON pricings_pricings.itinerary_id = itineraries.id
         #{origin_condition}
         #{destination_condition}
-        JOIN itineraries
-          ON itineraries.organization_id = :organization_id
         JOIN groups_groups
           ON groups_groups.id = pricings_pricings.group_id
-        #{itinerary_condition}
         WHERE pricings_pricings.itinerary_id = itineraries.id
         AND pricings_pricings.load_type = 'container'
         AND pricings_pricings.group_id IN (:group_ids)
+        AND pricings_pricings.organization_id = :organization_id
         #{group_condition}
       SQL
     end
@@ -61,8 +61,7 @@ module Wheelhouse
        JOIN hubs as origin_hubs
          ON origin_hubs.nexus_id IN (:origin_nexus_ids)
          AND origin_hubs.organization_id = :organization_id
-       JOIN stops AS origin_stops
-         ON origin_stops.hub_id = origin_hubs.id
+         AND origin_hubs.id = itineraries.origin_hub_id
       SQL
     end
 
@@ -73,18 +72,8 @@ module Wheelhouse
         JOIN hubs as destination_hubs
           ON destination_hubs.nexus_id IN (:destination_nexus_ids)
           AND destination_hubs.organization_id = :organization_id
-        JOIN stops AS destination_stops
-          ON destination_stops.hub_id = destination_hubs.id
+          AND destination_hubs.id = itineraries.destination_hub_id
       SQL
-    end
-
-    def itinerary_condition
-      return unless origin_nexus_ids.present? || destination_nexus_ids.present?
-
-      condition = ""
-      condition += "AND itineraries.id = origin_stops.itinerary_id" if origin_nexus_ids.present?
-      condition += " AND itineraries.id = destination_stops.itinerary_id" if destination_nexus_ids.present?
-      condition
     end
 
     def nexus_ids(location:, target:)

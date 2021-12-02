@@ -51,21 +51,11 @@ module OfferCalculator
           SELECT DISTINCT
             itineraries.id                             AS itinerary_id,
             itineraries.mode_of_transport              AS mode_of_transport,
-            origin_stops.id                            AS origin_stop_id,
-            destination_stops.id                       AS destination_stop_id,
+            itineraries.origin_hub_id                 AS origin_hub_id,
+            itineraries.destination_hub_id            AS destination_hub_id,
             tenant_vehicles.id                         AS tenant_vehicle_id,
             tenant_vehicles.carrier_id                 AS carrier_id
           FROM itineraries
-          JOIN hubs as origin_hubs
-            ON origin_hubs.id IN (:origin_hub_ids)
-          JOIN hubs as destination_hubs
-            ON destination_hubs.id IN (:destination_hub_ids)
-          JOIN stops AS origin_stops
-            ON origin_stops.hub_id = origin_hubs.id
-            AND origin_stops.itinerary_id = itineraries.id
-          JOIN stops AS destination_stops
-            ON destination_stops.hub_id = destination_hubs.id
-            AND destination_stops.itinerary_id = itineraries.id
           JOIN pricings_pricings
             ON itineraries.id = pricings_pricings.itinerary_id
           JOIN tenant_vehicles AS tenant_vehicles
@@ -77,8 +67,9 @@ module OfferCalculator
           #{trip_restriction}
           WHERE itineraries.organization_id  = :organization_id
           AND pricings_pricings.group_id IN (:group_ids)
-          AND origin_stops.index < destination_stops.index
           AND pricings_pricings.cargo_class IN (:cargo_classes)
+          AND itineraries.origin_hub_id IN (:origin_hub_ids)
+          AND itineraries.destination_hub_id IN (:destination_hub_ids)
           AND pricings_pricings.internal = false
           AND pricings_pricings.validity && daterange(:start::date, :end::date)
         SQL
@@ -98,7 +89,7 @@ module OfferCalculator
         return unless @request.pre_carriage? && local_charges_required_with_trucking?
 
         "JOIN local_charges AS origin_local_charges
-          ON origin_local_charges.hub_id = origin_hubs.id
+          ON origin_local_charges.hub_id = itineraries.origin_hub_id
           AND origin_local_charges.mode_of_transport = itineraries.mode_of_transport
           AND origin_local_charges.direction = 'export'
           AND origin_local_charges.load_type in (:cargo_classes)
@@ -110,7 +101,7 @@ module OfferCalculator
         return unless @request.on_carriage? && local_charges_required_with_trucking?
 
         "JOIN local_charges AS destination_local_charges
-          ON destination_local_charges.hub_id = destination_hubs.id
+          ON destination_local_charges.hub_id = itineraries.destination_hub_id
           AND destination_local_charges.mode_of_transport = itineraries.mode_of_transport
           AND destination_local_charges.direction = 'import'
           AND destination_local_charges.load_type in (:cargo_classes)

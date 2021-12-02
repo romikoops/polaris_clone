@@ -47,16 +47,14 @@ RSpec.describe ExcelDataServices::V2::Formatters::Itinerary do
          "transshipment" => nil,
          "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
          "name" => "Gothenburg - Shanghai",
-         "upsert_id" => "e412aa83-1fc6-5477-8442-18e26c834fb3",
-         "stops" => [{ hub_id: 2, index: 0 }, { hub_id: 3, index: 1 }] },
+         "upsert_id" => "e412aa83-1fc6-5477-8442-18e26c834fb3" },
         { "origin_hub_id" => 6,
           "destination_hub_id" => 3,
           "mode_of_transport" => "ocean",
           "transshipment" => nil,
           "organization_id" => "b7af2e0e-8e49-435a-9ce8-eadfa3db60b9",
           "name" => "Hamburg - Shanghai",
-          "upsert_id" => "d932ac60-6147-5d27-8c3a-4822f5b33019",
-          "stops" => [{ hub_id: 6, index: 0 }, { hub_id: 3, index: 1 }] }]
+          "upsert_id" => "d932ac60-6147-5d27-8c3a-4822f5b33019" }]
     end
 
     let(:service) { described_class.state(state: state_arguments) }

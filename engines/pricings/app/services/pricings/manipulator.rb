@@ -590,8 +590,8 @@ module Pricings
       @schedules = args[:schedules]&.sort_by!(&:etd)
       find_dates(args: args)
       find_freight_pricing_and_margins(args: args)
-      @origin_hub_id = itinerary.ordered_hub_ids.first
-      @destination_hub_id = itinerary.ordered_hub_ids.last
+      @origin_hub_id = itinerary.origin_hub_id
+      @destination_hub_id = itinerary.destination_hub_id
     end
 
     def build_from_freight_pricing(pricing:)

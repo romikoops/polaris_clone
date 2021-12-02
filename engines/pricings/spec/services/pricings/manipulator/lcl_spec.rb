@@ -68,7 +68,7 @@ RSpec.describe Pricings::Manipulator do
     FactoryBot.create(:legacy_local_charge, hub: hub, tenant_vehicle: tenant_vehicle, organization: organization)
   }
   let(:target_shipment) { lcl_shipment }
-  let(:hub) { itinerary.hubs.first }
+  let(:hub) { itinerary.origin_hub }
   let(:manipulated_results) { klass.perform }
   let(:target_result) { manipulated_results.first }
 
@@ -522,7 +522,7 @@ RSpec.describe Pricings::Manipulator do
       before do
         FactoryBot.create(:freight_margin,
           organization: organization,
-          origin_hub: pricing.itinerary.hubs.first,
+          origin_hub: hub,
           cargo_class: pricing.cargo_class,
           applicable: organization)
       end

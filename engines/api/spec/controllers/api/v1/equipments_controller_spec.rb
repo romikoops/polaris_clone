@@ -31,9 +31,9 @@ module Api
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:itinerary) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }
     let!(:fcl_40_hq_itinerary) { FactoryBot.create(:shanghai_hamburg_itinerary, organization: organization) }
-    let(:gothenburg) { itinerary.hubs.find_by(name: "Gothenburg") }
-    let(:shanghai) { itinerary.hubs.find_by(name: "Shanghai") }
-    let(:hamburg) { fcl_40_hq_itinerary.hubs.find_by(name: "Hamburg") }
+    let(:gothenburg) { itinerary.destination_hub }
+    let(:shanghai) { itinerary.origin_hub }
+    let(:hamburg) { fcl_40_hq_itinerary.destination_hub }
     let(:origin_location) do
       FactoryBot.create(:locations_location,
         bounds: FactoryBot.build(:legacy_bounds, lat: shanghai.latitude, lng: shanghai.longitude, delta: 0.4),

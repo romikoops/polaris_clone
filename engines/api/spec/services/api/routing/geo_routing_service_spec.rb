@@ -5,19 +5,18 @@ require "rails_helper"
 RSpec.describe Api::Routing::GeoRoutingService, type: :service do
   include_context "complete_route_with_trucking"
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:cargo_classes) { ["lcl"] }
   let(:load_type) { "cargo_item" }
   let(:query) { nil }
-  let(:target_user) { nil }
+  let(:user) { nil }
   let(:result) do
     described_class.nexuses(
       organization: organization,
-      coordinates: {lat: lat, lng: lng},
+      coordinates: coordinates,
       query: query,
       load_type: "cargo_item",
       target: target,
-      user: target_user
+      user: user
     )
   end
 
@@ -28,45 +27,40 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
 
   describe ".nexuses" do
     context "when targeting the origin with destination lat lng" do
-      let(:expected_results) do
-        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }.uniq
-      end
-      let(:lat) { delivery_address.latitude }
-      let(:lng) { delivery_address.longitude }
+      let(:coordinates) { { lat: delivery_address.latitude, lng: delivery_address.longitude } }
       let(:target) { :origin_destination }
 
       it "Renders a json of origins for given a destination lat lng" do
-        expect(result.pluck(:name)).to match_array(expected_results)
+        expect(result.pluck(:name)).to match_array(
+          Legacy::Itinerary.where(organization: organization).map { |itin| itin.origin_hub.nexus.name }.uniq
+        )
       end
     end
 
     context "when targeting the origin with destination lat lng and groups" do
-      let(:expected_results) do
-        Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }.uniq
-      end
-      let(:lat) { delivery_address.latitude }
-      let(:lng) { delivery_address.longitude }
+      let(:coordinates) { { lat: delivery_address.latitude, lng: delivery_address.longitude } }
       let(:target) { :origin_destination }
-      let(:target_user) { user }
-      let(:group) {
-        FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
-          FactoryBot.create(:groups_membership, member: user, group: tapped_group)
-        end
-      }
+      let(:user) { FactoryBot.create(:users_client, organization: organization) }
 
       before do
-        FactoryBot.create(:trucking_trucking, organization: organization, hub: origin_hub,
-                                              location: pickup_trucking_location, group: group)
+        FactoryBot.create(:trucking_trucking,
+          organization: organization,
+          hub: origin_hub,
+          location: pickup_trucking_location,
+          group: FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
+            FactoryBot.create(:groups_membership, member: user, group: tapped_group)
+          end)
       end
 
       it "Renders a json of origins for given a destination lat lng" do
-        expect(result.pluck(:name)).to match_array(expected_results)
+        expect(result.pluck(:name)).to match_array(
+          Legacy::Itinerary.where(organization: organization).map { |itin| itin.origin_hub.nexus.name }.uniq
+        )
       end
     end
 
     context "when targeting the origin with destination lat lng and query" do
-      let(:lat) { delivery_address.latitude }
-      let(:lng) { delivery_address.longitude }
+      let(:coordinates) { { lat: delivery_address.latitude, lng: delivery_address.longitude } }
       let(:query) { origin_hub.nexus.name.first(5) }
       let(:target) { :origin_destination }
 
@@ -80,8 +74,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
         FactoryBot.create(:legacy_hub, name: origin_hub.name, hub_type: "air", nexus: origin_hub.nexus)
       end
 
-      let(:lat) { delivery_address.latitude }
-      let(:lng) { delivery_address.longitude }
+      let(:coordinates) { { lat: delivery_address.latitude, lng: delivery_address.longitude } }
       let(:query) { origin_hub.nexus.name.first(5) }
       let(:target) { :origin_destination }
 
@@ -91,8 +84,7 @@ RSpec.describe Api::Routing::GeoRoutingService, type: :service do
     end
 
     context "when targeting the destination with origin lat lng" do
-      let(:lat) { pickup_address.latitude }
-      let(:lng) { pickup_address.longitude }
+      let(:coordinates) { { lat: pickup_address.latitude, lng: pickup_address.longitude } }
       let(:target) { :destination_origin }
 
       it "Renders a json of destinations for given a origin lat lng" do

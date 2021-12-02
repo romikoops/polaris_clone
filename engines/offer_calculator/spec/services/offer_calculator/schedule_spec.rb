@@ -13,8 +13,8 @@ RSpec.describe OfferCalculator::Schedule do
     [
       OfferCalculator::Route.new(
         itinerary_id: itinerary.id,
-        origin_stop_id: itinerary.origin_stops.first.id,
-        destination_stop_id: itinerary.destination_stops.first.id,
+        origin_hub_id: itinerary.origin_hub_id,
+        destination_hub_id: itinerary.destination_hub_id,
         tenant_vehicle_id: trip.tenant_vehicle_id,
         carrier_id: trip.tenant_vehicle&.carrier_id
       )

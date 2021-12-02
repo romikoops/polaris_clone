@@ -122,7 +122,7 @@ RSpec.describe Admin::ItinerariesController, type: :controller do
       get :stops, params: { organization_id: organization.id, id: itineraries.first.id }
 
       expect(response_data.length).to eq(2)
-      expect(response_data.pluck("id")).to eq(itineraries.first.stops.ids)
+      expect(response_data.pluck("hub_id")).to eq([itineraries.first.origin_hub_id, itineraries.first.destination_hub_id])
     end
   end
 end

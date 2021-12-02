@@ -19,6 +19,13 @@ module Api
         }
       end
 
+      def stops
+        [
+          Legacy::Stop.new(hub_id: origin_hub_id, index: 0, itinerary: object),
+          Legacy::Stop.new(hub_id: destination_hub_id, index: 1, itinerary: object)
+        ]
+      end
+
       private
 
       def last_expiry

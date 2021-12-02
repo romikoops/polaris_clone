@@ -22,8 +22,8 @@ RSpec.describe OfferCalculator::Service::ScheduleFinder do
     [
       OfferCalculator::Route.new(
         itinerary_id: itinerary.id,
-        origin_stop_id: itinerary.stops.first.id,
-        destination_stop_id: itinerary.stops.last.id,
+        origin_hub_id: itinerary.origin_hub_id,
+        destination_hub_id: itinerary.destination_hub_id,
         tenant_vehicle_id: tenant_vehicle.id,
         mode_of_transport: "ocean"
       )

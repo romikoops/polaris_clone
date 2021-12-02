@@ -367,18 +367,6 @@ class Itinerary < Legacy::Itinerary
     {itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs}
   end
 
-  def self.update_hubs
-    its = Itinerary.all
-    its.each do |it|
-      hub_arr = []
-      it.stops.order(:index).each do |s|
-        hub_arr << {hub_id: s.hub_id, index: s.index}
-      end
-      it.hubs = hub_arr
-      it.save!
-    end
-  end
-
   def as_options_json(options = {})
     new_options = options.reverse_merge(
       include: {

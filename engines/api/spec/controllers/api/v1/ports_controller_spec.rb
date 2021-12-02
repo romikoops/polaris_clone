@@ -11,23 +11,20 @@ module Api
     describe "GET #ports" do
       let(:itinerary_1) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
       let(:itinerary_2) { FactoryBot.create(:shanghai_hamburg_itinerary, organization: organization) }
-      let(:first_hub) { itinerary_1.stops.first.hub }
-      let(:last_hub) { itinerary_1.stops.last.hub }
+      let(:first_hub) { itinerary_1.origin_hub }
+      let(:last_hub) { itinerary_1.destination_hub }
 
       let(:second_organization) { FactoryBot.create(:organizations_organization) }
       let(:itinerary_second_organization) do
         FactoryBot.create(:shanghai_felixstowe_itinerary, organization: second_organization)
       end
 
-      it "returns a list of origin locations belonging to the organization" do
-        query = first_hub[:name]
+      it "returns a list of origin locations belonging to the organization", :aggregate_failures do
+        query = last_hub[:name]
         get :index, params: { organization_id: organization.id, location_type: "origin", query: query }
-        data = JSON.parse(response.body)["data"]
-        aggregate_failures do
-          expect(response).to be_successful
-          expect(data.first["attributes"]["name"]).to eq(query)
-          expect(data.length).to eq(1)
-        end
+        expect(response).to be_successful
+        expect(response_data.first["attributes"]["name"]).to eq(query)
+        expect(response_data.length).to eq(1)
       end
 
       it "returns filter related locations to origin" do

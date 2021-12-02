@@ -13,33 +13,10 @@ FactoryBot.define do
       association :legacy_hub, organization: instance.organization
     end
 
-    after(:build) do |itinerary|
-      next if itinerary.stops.length >= 2
-
-      index = 0
-      [itinerary.origin_hub, itinerary.destination_hub].each do |hub|
-        itinerary.stops << build(:legacy_stop,
-          itinerary: itinerary,
-          index: index,
-          hub: hub)
-        index += 1
-      end
-    end
 
     trait :with_trip do
       after(:create) do |itinerary|
-        trip = create(:legacy_trip, itinerary: itinerary)
-        itinerary.trips << trip
-        trip.layovers << create(:legacy_layover,
-          stop_index: 0,
-          trip: trip,
-          stop: itinerary.origin_stops.first,
-          itinerary: itinerary)
-        trip.layovers << create(:legacy_layover,
-          stop_index: 1,
-          trip: trip,
-          stop: itinerary.destination_stops.last,
-          itinerary: itinerary)
+        create(:legacy_trip, itinerary: itinerary)
       end
     end
 

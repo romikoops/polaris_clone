@@ -245,7 +245,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def hub_route_map(hub)
-    hub.stops.map(&:itinerary).map do |itinerary|
+    Legacy::Itinerary.where(origin_hub: hub).or(Legacy::Itinerary.where(destination_hub: hub)).map do |itinerary|
       itinerary.as_options_json(methods: :routes)
     end
   end

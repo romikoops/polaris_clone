@@ -31,7 +31,7 @@ RSpec.describe Pricings::Manipulator do
   let(:baf_charge_category) { FactoryBot.create(:baf_charge, organization: organization) }
   let(:dates) { { start_date: schedules.first.etd, end_date: schedules.last.etd } }
   let(:target_shipment) { lcl_shipment }
-  let(:hub) { itinerary.hubs.first }
+  let(:hub) { itinerary.origin_hub }
   let(:manipulated_results) { klass.perform }
 
   before do

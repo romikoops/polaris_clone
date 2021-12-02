@@ -17,8 +17,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
   let(:route) do
     OfferCalculator::Route.new(
       itinerary_id: itinerary.id,
-      origin_stop_id: itinerary.stops.first.id,
-      destination_stop_id: itinerary.stops.last.id,
+      origin_hub_id: itinerary.origin_hub_id,
+      destination_hub_id: itinerary.destination_hub_id,
       tenant_vehicle_id: tenant_vehicle.id,
       carrier_id: carrier.id,
       mode_of_transport: "ocean"
@@ -186,8 +186,8 @@ RSpec.describe OfferCalculator::Service::RouteFilter do
           route,
           OfferCalculator::Route.new(
             itinerary_id: other_itinerary.id,
-            origin_stop_id: other_itinerary.stops.first.id,
-            destination_stop_id: other_itinerary.stops.last.id,
+            origin_hub_id: other_itinerary.origin_hub_id,
+            destination_hub_id: other_itinerary.destination_hub_id,
             tenant_vehicle_id: other_tenant_vehicle.id,
             carrier_id: carrier.id,
             mode_of_transport: "ocean"

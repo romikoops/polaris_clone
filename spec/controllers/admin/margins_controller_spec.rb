@@ -114,8 +114,8 @@ RSpec.describe Admin::MarginsController, type: :controller do
   describe "POST #test" do
     let(:args) do
       {
-        "selectedOriginHub" => itinerary.hubs.first.id.to_s,
-        "selectedDestinationHub" => itinerary.hubs.last.id.to_s,
+        "selectedOriginHub" => itinerary.origin_hub_id.to_s,
+        "selectedDestinationHub" => itinerary.destination_hub_id.to_s,
         "selectedCargoClass" => "lcl",
         "organization_id" => organization.id
       }

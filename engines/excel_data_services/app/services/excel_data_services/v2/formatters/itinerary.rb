@@ -9,35 +9,15 @@ module ExcelDataServices
         UUID_KEYS = %w[origin_hub_id destination_hub_id organization_id transshipment mode_of_transport].freeze
 
         def insertable_data
-          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map { |row| ItineraryRow.new(row: row, upsert_id: upsert_id(row: row)).data }
+          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
+            row["name"] = [row.delete("origin_hub"), row.delete("destination_hub")].join(" - ")
+            row["upsert_id"] = upsert_id(row: row)
+            row
+          end
         end
 
         def target_attribute
           "itinerary_id"
-        end
-
-        class ItineraryRow
-          def initialize(row:, upsert_id:)
-            @row = row
-            @upsert_id = upsert_id
-          end
-
-          def data
-            row["name"] = [row.delete("origin_hub"), row.delete("destination_hub")].join(" - ")
-            row["upsert_id"] = upsert_id
-            row["stops"] = stops_from_row
-            row
-          end
-
-          private
-
-          attr_reader :row, :upsert_id
-
-          def stops_from_row
-            %w[origin destination].map.with_index do |target, index|
-              { hub_id: row["#{target}_hub_id"], index: index }
-            end
-          end
         end
       end
     end

@@ -13,8 +13,8 @@ RSpec.describe Validator::Itinerary do
       FactoryBot.create(:legacy_tenant_vehicle, organization: organization,
                                                 name: "Default", carrier: carrier_1)
     }
-    let(:origin_hub) { itinerary.hubs.first }
-    let(:destination_hub) { itinerary.hubs.last }
+    let(:origin_hub) { itinerary.origin_hub }
+    let(:destination_hub) { itinerary.destination_hub }
 
     let!(:pricing_1) do
       FactoryBot.create(:lcl_pricing,

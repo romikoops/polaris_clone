@@ -47,7 +47,7 @@ RSpec.describe Pricings::MarginCreator do
       expiration_date: "2020-06-05T10:00:00.000Z"
     }
   end
-  let(:hub) { itinerary_1.stops.first.hub }
+  let(:hub) { itinerary_1.origin_hub }
   let(:new_margins) { described_class.new(args).perform }
 
   describe ".perform" do
@@ -127,7 +127,7 @@ RSpec.describe Pricings::MarginCreator do
     end
 
     context "with freight margin multiple hubs and cargo classes" do
-      let(:hub_ids) { itinerary_1.stops.pluck(:hub_id) }
+      let(:hub_ids) { [itinerary_1.origin_hub_id, itinerary_1.destination_hub_id] }
       let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
       let(:directions) { ["export"] }
 

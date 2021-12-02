@@ -76,17 +76,12 @@ class Admin::SchedulesController < Admin::AdminBaseController
     Itinerary.where(organization_id: current_organization.id)
   end
 
-  def stops
-    @stops ||= itinerary.stops.order(:index)
-  end
-
   def vehicle
     @vehicle ||= TenantVehicle.find_by(id: params[:vehicleTypeId]).id
   end
 
   def itin_weekly_schedules
     itinerary.generate_weekly_schedules(
-      stops_in_order: stops,
       steps_in_order: params[:steps],
       start_date: params[:startDate],
       end_date: params[:endDate],

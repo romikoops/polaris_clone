@@ -5,7 +5,7 @@ module OfferCalculator
     module Finders
       class Pricings < OfferCalculator::Service::Finders::Base
         def perform
-          organization_pricings.where(id: selected_pricing_ids.compact)
+          organization_pricings.where(id: selected_pricing_ids.compact).distinct
         end
 
         private
@@ -36,11 +36,11 @@ module OfferCalculator
         end
 
         def itineraries
-          @itineraries ||= ::Legacy::Itinerary.where(id: schedules.map(&:itinerary_id))
+          @itineraries ||= ::Legacy::Itinerary.where(id: schedules.map(&:itinerary_id)).distinct
         end
 
         def tenant_vehicles
-          @tenant_vehicles ||= ::Legacy::TenantVehicle.where(id: schedules.map(&:tenant_vehicle_id))
+          @tenant_vehicles ||= ::Legacy::TenantVehicle.where(id: schedules.map(&:tenant_vehicle_id)).distinct
         end
 
         def pricings_association

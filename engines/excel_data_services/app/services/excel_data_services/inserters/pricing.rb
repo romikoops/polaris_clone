@@ -29,9 +29,6 @@ module ExcelDataServices
 
           itinerary = find_or_initialize_itinerary(origin_hub, destination_hub, row)
 
-          stops = find_or_initialize_stops([origin_hub, destination_hub], itinerary)
-          itinerary.stops << stops - itinerary.stops
-
           add_stats(itinerary, row[:row_nr])
           next unless itinerary.save
 
@@ -62,15 +59,6 @@ module ExcelDataServices
           transshipment: row.transshipment
         ).tap do |itinerary|
           itinerary.update(name: "#{origin_hub.nexus.name} - #{destination_hub.nexus.name}") if itinerary.name.blank?
-        end
-      end
-
-      def find_or_initialize_stops(hubs, itinerary)
-        hubs.map.with_index do |hub, i|
-          stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
-          stop ||= ::Legacy::Stop.new(hub_id: hub.id, index: i)
-
-          stop
         end
       end
 

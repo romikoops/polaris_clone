@@ -11,16 +11,7 @@ module Api
       skip_before_action :doorkeeper_authorize!, only: :index, raise: false
 
       def index
-        hub_ids = Legacy::Stop.select(:hub_id)
-          .where(itinerary_id: ports_itineraries,
-                 index: stop_index_if_location_selected)
-
-        hubs = Legacy::Hub.where(id: hub_ids)
-          .order(:name)
-
-        hubs = hubs.name_search(ports_params[:query]) unless ports_params[:query].empty?
-
-        render json: PortSerializer.new(hubs)
+        render json: PortSerializer.new(hub_results)
       end
 
       private
@@ -32,26 +23,36 @@ module Api
         params.permit(*required_params, :location_id, :query)
       end
 
-      def default_stop_index
-        ports_params[:location_type] == "origin" ? ORIGIN_INDEX : DESTINATION_INDEX
+      def hub_results
+        return hubs_for_location_type if ports_params[:query].blank?
+
+        hubs_for_location_type.name_search(ports_params[:query])
       end
 
-      def stop_index_if_location_selected
-        return default_stop_index unless ports_params[:location_id]
-
-        ports_params[:location_type] == "origin" ? DESTINATION_INDEX : ORIGIN_INDEX
+      def hubs_for_location_type
+        @hubs_for_location_type ||= if ports_params[:location_type] == "origin"
+          hubs.where(id: itineraries_for_type.select(:destination_hub_id))
+        else
+          hubs.where(id: itineraries_for_type.select(:origin_hub_id))
+        end
       end
 
-      def ports_itineraries
-        itineraries = Legacy::Itinerary.joins(:stops)
-          .where(organization_id: current_organization.id,
-                 mode_of_transport: "ocean",
-                 stops: {index: default_stop_index})
+      def itineraries_for_type
+        @itineraries_for_type ||= if ports_params[:location_id].present? && ports_params[:location_type] == "origin"
+          itineraries.where(origin_hub_id: ports_params[:location_id])
+        elsif ports_params[:location_id].present? && ports_params[:location_type] == "destination"
+          itineraries.where(destination_hub_id: ports_params[:location_id])
+        else
+          itineraries
+        end
+      end
 
-        hub_id = ports_params[:location_id]
-        itineraries = itineraries.where(stops: {hub_id: hub_id}) if hub_id.present?
+      def hubs
+        @hubs ||= Legacy::Hub.where(organization: current_organization).order(:name)
+      end
 
-        itineraries
+      def itineraries
+        @itineraries ||= Legacy::Itinerary.where(organization: current_organization)
       end
     end
   end

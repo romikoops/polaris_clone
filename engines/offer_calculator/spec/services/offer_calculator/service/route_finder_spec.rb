@@ -41,8 +41,8 @@ RSpec.describe OfferCalculator::Service::RouteFinder do
       it "return the route detail hashes" do
         aggregate_failures do
           expect(results.length).to eq(1)
-          expect(results.first.origin_stop_id).to eq(itinerary.stops.first.id)
-          expect(results.first.destination_stop_id).to eq(itinerary.stops.last.id)
+          expect(results.first.origin_hub_id).to eq(itinerary.origin_hub_id)
+          expect(results.first.destination_hub_id).to eq(itinerary.destination_hub_id)
         end
       end
     end

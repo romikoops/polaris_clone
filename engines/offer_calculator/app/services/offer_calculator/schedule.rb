@@ -56,7 +56,7 @@ module OfferCalculator
 
     def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type, date_type)
       grouped_data_from_routes = OfferCalculator::Route.group_data_by_attribute(routes)
-      date_attr = date_type == "closing_date" ? "closing_date" : "etd"
+      date_attr = date_type == "closing_date" ? "closing_date" : "start_date"
       raw_query = "
         SELECT DISTINCT
           origin_hubs.id                AS origin_hub_id,
@@ -66,9 +66,9 @@ module OfferCalculator
           itineraries.mode_of_transport AS mode_of_transport,
           itineraries.transshipment     AS transshipment,
           itineraries.id                AS itinerary_id,
-          destination_layovers.eta      AS eta,
-          origin_layovers.etd           AS etd,
-          origin_layovers.closing_date  AS closing_date,
+          trips.end_date                AS eta,
+          trips.start_date              AS etd,
+          trips.closing_date            AS closing_date,
           tenant_vehicles.name          AS vehicle_name,
           carriers.name                 AS carrier_name,
           trips.id                      AS trip_id,
@@ -78,25 +78,19 @@ module OfferCalculator
           tenant_vehicles.carrier_lock  AS carrier_lock,
           tenant_vehicles.carrier_id    AS carrier_id
         FROM itineraries
-        JOIN stops    AS origin_stops         ON itineraries.id       = origin_stops.itinerary_id
-        JOIN stops    AS destination_stops    ON itineraries.id       = destination_stops.itinerary_id
-        JOIN layovers AS origin_layovers      ON origin_stops.id      = origin_layovers.stop_id
-        JOIN layovers AS destination_layovers ON destination_stops.id = destination_layovers.stop_id
-        JOIN trips    AS trips                ON trips.id             = origin_layovers.trip_id
-        JOIN hubs     AS origin_hubs          ON origin_hubs.id       = origin_stops.hub_id
-        JOIN hubs     AS destination_hubs     ON destination_hubs.id  = destination_stops.hub_id
-        JOIN tenant_vehicles AS tenant_vehicles
-          ON trips.tenant_vehicle_id = tenant_vehicles.id
+        JOIN trips    AS trips                ON trips.itinerary_id   = itineraries.id
+        JOIN hubs     AS origin_hubs          ON origin_hubs.id       = itineraries.origin_hub_id
+        JOIN hubs     AS destination_hubs     ON destination_hubs.id  = itineraries.destination_hub_id
+        JOIN tenant_vehicles AS tenant_vehicles ON trips.tenant_vehicle_id = tenant_vehicles.id
         LEFT OUTER JOIN carriers AS carriers ON tenant_vehicles.carrier_id = carriers.id
         WHERE itineraries.id       IN (:itinerary_ids)
-        AND   origin_stops.id      IN (:origin_stop_ids)
-        AND   destination_stops.id IN (:destination_stop_ids)
+        AND   origin_hubs.id      IN (:origin_hub_ids)
+        AND   destination_hubs.id IN (:destination_hub_ids)
         AND   tenant_vehicles.id IN (:tenant_vehicle_ids)
-        AND   origin_layovers.trip_id = destination_layovers.trip_id
-        AND   origin_layovers.#{date_attr} < :end_date
-        AND   origin_layovers.#{date_attr} > :start_date
+        AND   trips.#{date_attr} < :end_date
+        AND   trips.#{date_attr} > :start_date
         AND   trips.load_type = :load_type
-        ORDER BY origin_layovers.etd
+        ORDER BY trips.start_date
       "
 
       sanitized_query = ActiveRecord::Base.sanitize_sql_array(
@@ -104,8 +98,8 @@ module OfferCalculator
           raw_query,
           {
             itinerary_ids: grouped_data_from_routes[:itinerary_ids],
-            origin_stop_ids: grouped_data_from_routes[:origin_stop_ids],
-            destination_stop_ids: grouped_data_from_routes[:destination_stop_ids],
+            origin_hub_ids: grouped_data_from_routes[:origin_hub_ids],
+            destination_hub_ids: grouped_data_from_routes[:destination_hub_ids],
             tenant_vehicle_ids: grouped_data_from_routes[:tenant_vehicle_ids],
             carrier_ids: grouped_data_from_routes[:carrier_ids],
             end_date: current_etd_in_search + delay_in_days.days,

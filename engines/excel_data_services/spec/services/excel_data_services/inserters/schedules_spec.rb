@@ -68,16 +68,6 @@ RSpec.describe ExcelDataServices::Inserters::Schedules do
           expect(itinerary.trips.pluck(:end_date).compact).to be_present
         end
       end
-
-      it "creates the layovers with all date values" do
-        layovers = Legacy::Layover.where(trip_id: itinerary.trips.ids)
-        aggregate_failures do
-          expect(layovers.pluck(:closing_date).compact).to be_present
-          expect(layovers.pluck(:etd).compact).to be_present
-          expect(layovers.pluck(:eta).compact).to be_present
-          expect(layovers.pluck(:stop_index).compact).to be_present
-        end
-      end
     end
   end
 end

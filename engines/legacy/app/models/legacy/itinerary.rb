@@ -23,7 +23,6 @@ module Legacy
     has_many :notes, dependent: :destroy
     has_many :margins, dependent: :destroy, class_name: "Pricings::Margin"
     has_many :rates, class_name: "Pricings::Pricing", dependent: :destroy
-    has_many :hubs, through: :stops
     belongs_to :origin_hub, class_name: "Legacy::Hub"
     belongs_to :destination_hub, class_name: "Legacy::Hub"
     has_many :map_data, class_name: "Legacy::MapDatum", dependent: :destroy
@@ -55,14 +54,16 @@ module Legacy
 
     before_validation :generate_upsert_id
 
-    validate :must_have_stops
-
     accepts_nested_attributes_for :stops
 
     def generate_upsert_id
       return if [origin_hub_id, destination_hub_id, organization_id, mode_of_transport].any?(&:blank?)
 
       self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
+    end
+
+    def hubs
+      Legacy::Hub.where(id: [origin_hub_id, destination_hub_id])
     end
 
     def generate_schedules_from_sheet(stops:,
@@ -150,7 +151,7 @@ module Legacy
       end
     end
 
-    def generate_weekly_schedules(stops_in_order:,
+    def generate_weekly_schedules(
       steps_in_order:,
       start_date:,
       end_date:,
@@ -188,31 +189,6 @@ module Legacy
           end
 
           results[:trips] << trip
-
-          stops_in_order.each do |stop|
-            if stop.index.zero?
-              stop_data << {
-                eta: nil,
-                etd: journey_start,
-                stop_index: stop.index,
-                itinerary_id: stop.itinerary_id,
-                stop_id: stop.id,
-                closing_date: closing_date,
-                trip_id: trip.id
-              }
-            else
-              journey_start += steps_in_order[stop.index - 1].days
-              stop_data << {
-                eta: journey_start,
-                etd: journey_start + 1.day,
-                stop_index: stop.index,
-                itinerary_id: stop.itinerary_id,
-                stop_id: stop.id,
-                trip_id: trip.id,
-                closing_date: nil
-              }
-            end
-          end
         end
 
         tmp_date += 1.day
@@ -283,28 +259,12 @@ module Legacy
       stops.where(hub: destination_hub)
     end
 
-    def first_nexus
-      first_stop.hub.nexus
-    end
-
-    def last_nexus
-      last_stop.hub.nexus
-    end
-
     def nexus_ids_for_target(target)
       try("#{target}_nexus_ids".to_sym)
     end
 
     def hub_ids_for_target(target)
       try("#{target}_hub_ids".to_sym)
-    end
-
-    def origin_nexus_ids
-      origin_stops.joins(:hub).pluck("hubs.nexus_id")
-    end
-
-    def destination_nexus_ids
-      destination_stops.joins(:hub).pluck("hubs.nexus_id")
     end
 
     def origin_hub_ids
@@ -332,41 +292,15 @@ module Legacy
     end
 
     def routes
-      stops.order(:index).to_a.combination(2).map do |stop_array|
-        if !stop_array[0].hub || !stop_array[1].hub
-          stop_array[0].itinerary.destroy
-          next
-        end
-        {
-          origin: stop_array[0].hub.lng_lat_array,
-          destination: stop_array[1].hub.lng_lat_array,
-          line: {
-            type: "LineString",
-            id: "#{id}-#{stop_array[0].index}",
-            coordinates: [stop_array[0].hub.lng_lat_array, stop_array[1].hub.lng_lat_array]
-          }
+      [{
+        origin: origin_hub.lng_lat_array,
+        destination: destination_hub.lng_lat_array,
+        line: {
+          type: "LineString",
+          id: "#{id}-1",
+          coordinates: [origin_hub.lng_lat_array, destination_hub.lng_lat_array]
         }
-      end
-    end
-
-    def detailed_hash(stop_array, options = {})
-      origin = stop_array[0]
-      destination = stop_array[1]
-      return_h = attributes
-      return_h[:origin_nexus] = origin.hub.nexus.name if options[:nexus_names]
-      return_h[:destination_nexus] = destination.hub.nexus.name if options[:nexus_names]
-      return_h[:origin_nexus_id] = origin.hub.nexus.id if options[:nexus_ids]
-      return_h[:destination_nexus_id] = destination.hub.nexus.id if options[:nexus_ids]
-      return_h[:origin_hub_id] = origin.hub.id if options[:hub_ids]
-      return_h[:destination_hub_id] = destination.hub.id if options[:hub_ids]
-      return_h[:origin_hub_name] = origin.hub.name if options[:hub_names]
-      return_h[:destination_hub_name] = destination.hub.name if options[:hub_names]
-      return_h[:origin_stop_id] = origin.id if options[:stop_ids]
-      return_h[:destination_stop_id] = destination.id if options[:stop_ids]
-      return_h[:modes_of_transport] = modes_of_transport if options[:modes_of_transport]
-      return_h[:next_departure] = next_departure if options[:next_departure]
-      return_h[:dedicated] = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
-      return_h
+      }]
     end
 
     def ordered_hub_ids
@@ -422,17 +356,6 @@ module Legacy
       itineraries = shipment.organization.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
       { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
-    end
-
-    def self.update_hubs
-      its = Itinerary.all
-      its.each do |it|
-        hub_arr = it.stops.order(:index).map do |s|
-          { hub_id: s.hub_id, index: s.index }
-        end
-        it.hubs = hub_arr
-        it.save!
-      end
     end
 
     def as_options_json(options = {})

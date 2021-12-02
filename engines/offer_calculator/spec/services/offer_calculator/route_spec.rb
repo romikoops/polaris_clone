@@ -53,8 +53,8 @@ RSpec.describe OfferCalculator::Route do
     let(:args) do
       {
         query: {
-          origin_hub_ids: Legacy::Stop.where(index: 0).map(&:hub_id),
-          destination_hub_ids: Legacy::Stop.where(index: 1).map(&:hub_id)
+          origin_hub_ids: [itinerary, itinerary_2].pluck(:origin_hub_id),
+          destination_hub_ids: [itinerary, itinerary_2].pluck(:destination_hub_id)
         },
         request: request,
         date_range: date_range,
@@ -71,8 +71,8 @@ RSpec.describe OfferCalculator::Route do
           [
             {"tenant_vehicle_id" => tenant_vehicle.id, "itinerary_id" => itinerary.id,
              "mode_of_transport" => "ocean",
-             "origin_stop_id" => itinerary.stops.first.id,
-             "destination_stop_id" => itinerary.stops.last.id,
+             "origin_hub_id" => itinerary.origin_hub_id,
+             "destination_hub_id" => itinerary.destination_hub_id,
              "carrier_id" => tenant_vehicle.carrier_id}
           ]
         )
@@ -91,13 +91,13 @@ RSpec.describe OfferCalculator::Route do
 
         expect(results).to match_array([
           {"tenant_vehicle_id" => tenant_vehicle.id, "itinerary_id" => itinerary.id,
-           "mode_of_transport" => "ocean", "origin_stop_id" => itinerary.stops.first.id,
-           "destination_stop_id" => itinerary.stops.last.id,
+           "mode_of_transport" => "ocean", "origin_hub_id" => itinerary.origin_hub_id,
+           "destination_hub_id" => itinerary.destination_hub_id,
            "carrier_id" => tenant_vehicle.carrier_id},
           {"tenant_vehicle_id" => other_tenant_vehicle.id,
            "itinerary_id" => itinerary.id, "mode_of_transport" => "ocean",
-           "origin_stop_id" => itinerary.stops.first.id,
-           "destination_stop_id" => itinerary.stops.last.id, "carrier_id" => carrier.id}
+           "origin_hub_id" => itinerary.origin_hub_id,
+           "destination_hub_id" => itinerary.destination_hub_id, "carrier_id" => carrier.id}
         ])
       end
     end
@@ -108,8 +108,8 @@ RSpec.describe OfferCalculator::Route do
       [itinerary, itinerary_2].map do |it|
         described_class.new(
           itinerary_id: it.id,
-          origin_stop_id: it.stops.first.id,
-          destination_stop_id: it.stops.last.id,
+          origin_hub_id: it.origin_hub_id,
+          destination_hub_id: it.destination_hub_id,
           tenant_vehicle_id: tenant_vehicle.id
         )
       end
@@ -119,8 +119,8 @@ RSpec.describe OfferCalculator::Route do
       results = described_class.group_data_by_attribute(routes)
       aggregate_failures do
         expect(results[:itinerary_ids]).to match_array([itinerary, itinerary_2].map(&:id))
-        expect(results[:origin_stop_ids]).to match_array([itinerary, itinerary_2].map { |it| it.first_stop.id })
-        expect(results[:destination_stop_ids]).to match_array([itinerary, itinerary_2].map { |it| it.last_stop.id })
+        expect(results[:origin_hub_ids]).to match_array([itinerary, itinerary_2].map { |it| it.origin_hub_id })
+        expect(results[:destination_hub_ids]).to match_array([itinerary, itinerary_2].map { |it| it.destination_hub_id })
       end
     end
   end

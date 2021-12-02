@@ -28,8 +28,6 @@ module OfferCalculator
             MAX(itineraries.name)              AS itinerary_name,
             MAX(itineraries.transshipment)     AS itinerary_transshipment,
             MAX(itineraries.mode_of_transport) AS mode_of_transport,
-            MAX(origin_stops.id)               AS origin_stop_id,
-            MAX(destination_stops.id)          AS destination_stop_id,
             MAX(origin_hubs.id)                AS origin_hub_id,
             MAX(destination_hubs.id)           AS destination_hub_id,
             MAX(origin_hubs.name)              AS origin_hub_name,
@@ -67,14 +65,10 @@ module OfferCalculator
           FROM itineraries
           JOIN pricings_pricings
             ON itineraries.id = pricings_pricings.itinerary_id
-          JOIN stops AS origin_stops
-            ON itineraries.id = origin_stops.itinerary_id
-          JOIN stops AS destination_stops
-            ON itineraries.id = destination_stops.itinerary_id
           JOIN hubs AS origin_hubs
-            ON origin_hubs.id = origin_stops.hub_id
+            ON origin_hubs.id = itineraries.origin_hub_id
           JOIN hubs AS destination_hubs
-            ON destination_hubs.id = destination_stops.hub_id
+            ON destination_hubs.id = itineraries.destination_hub_id
           JOIN addresses AS origin_hubs_addresses
             ON origin_hubs.address_id = origin_hubs_addresses.id
           JOIN addresses AS destination_hubs_addresses
@@ -100,11 +94,10 @@ module OfferCalculator
             ON destination_trucking_hub_availabilities.type_availability_id =
                destination_trucking_type_availabilities.id
           WHERE itineraries.id IN (:itinerary_ids)
-          AND   origin_stops.index < destination_stops.index
           AND   pricings_pricings.load_type = :load_type
           AND   pricings_pricings.deleted_at IS NULL
           AND   pricings_pricings.expiration_date > now()
-          GROUP BY origin_stops.id, destination_stops.id
+          GROUP BY origin_hubs.id, destination_hubs.id
         SQL
       end
     end

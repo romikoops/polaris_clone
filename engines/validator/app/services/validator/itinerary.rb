@@ -7,8 +7,8 @@ module Validator
 
     def initialize(itinerary:, user:)
       @itinerary = itinerary
-      @origin_hub = itinerary.hubs.first
-      @destination_hub = itinerary.hubs.last
+      @origin_hub = itinerary.origin_hub
+      @destination_hub = itinerary.destination_hub
       @organization = ::Organizations::Organization.find(itinerary.organization_id)
       @scope = ::OrganizationManager::ScopeService.new(target: user, organization: organization).fetch
       @date_range = (Time.zone.today..Time.zone.today + 30.days)

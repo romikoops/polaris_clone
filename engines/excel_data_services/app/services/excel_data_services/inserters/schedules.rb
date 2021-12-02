@@ -37,8 +37,7 @@ module ExcelDataServices
           closing_date: params[:closing_date],
           end_date: params[:eta],
           itinerary: itinerary,
-          tenant_vehicle_id: find_tenant_vehicle_id(params),
-          layovers: generate_layovers(itinerary, params)
+          tenant_vehicle_id: find_tenant_vehicle_id(params)
         )
       end
 
@@ -51,20 +50,6 @@ module ExcelDataServices
           carrier: carrier,
           mode_of_transport: params[:mode_of_transport]
         ).id
-      end
-
-      def generate_layovers(itinerary, params)
-        itinerary.stops.map do |stop|
-          stop_index_zero = stop.index.zero?
-          Legacy::Layover.new(
-            stop_id: stop.id,
-            stop_index: stop.index,
-            closing_date: params[:closing_date],
-            itinerary_id: stop.itinerary_id,
-            eta: stop_index_zero ? nil : params[:eta],
-            etd: stop_index_zero ? params[:etd] : nil
-          )
-        end
       end
     end
   end

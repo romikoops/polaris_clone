@@ -45,35 +45,32 @@ RSpec.describe Admin::PricingsController, type: :controller do
           "itinerary_name" => "Gothenburg - Shanghai",
           "mode_of_transport" => "ocean" }
       ]
-
-      stops = itinerary.stops
-      first_stop = stops.first
-      second_stop = stops.second
       stops_table_jsons = [
-        { "id" => first_stop.id,
-          "hub_id" => first_stop.hub_id,
+        { "id" => nil,
+          "hub_id" => itinerary.origin_hub_id,
           "index" => 0,
           "itinerary_id" => itinerary.id,
-          "hub" => { "id" => first_stop.hub_id, "name" => "Gothenburg", "nexus" => {
-            "id" => first_stop.hub.nexus.id, "name" => "Gothenburg"
+          "hub" => { "id" => itinerary.origin_hub_id, "name" => "Gothenburg", "nexus" => {
+            "id" => itinerary.origin_hub.nexus.id, "name" => "Gothenburg"
           }, "address" => {
             "geocoded_address" => "438 80 Landvetter, Sweden", "latitude" => 57.694253, "longitude" => 11.854048
           } } },
-        { "id" => second_stop.id,
-          "hub_id" => second_stop.hub_id,
+        { "id" => nil,
+          "hub_id" => itinerary.destination_hub_id,
           "index" => 1,
           "itinerary_id" => itinerary.id,
-          "hub" => { "id" => second_stop.hub_id, "name" => "Gothenburg", "nexus" => {
-            "id" => second_stop.hub.nexus.id, "name" => "Gothenburg"
+          "hub" => { "id" => itinerary.destination_hub_id, "name" => "Gothenburg", "nexus" => {
+            "id" => itinerary.destination_hub.nexus.id, "name" => "Gothenburg"
           }, "address" => {
             "geocoded_address" => "438 80 Landvetter, Sweden",
             "latitude" => 57.694253, "longitude" => 11.854048
           } } }
       ]
 
-      JSON.parse({ pricings: pricings_table_jsons,
-                   itinerary: itinerary,
-                   stops: stops_table_jsons }.to_json)
+      JSON.parse({
+        pricings: pricings_table_jsons,
+        itinerary: itinerary,
+        stops: stops_table_jsons}.to_json)
     end
 
     it "returns the correct data for the route" do

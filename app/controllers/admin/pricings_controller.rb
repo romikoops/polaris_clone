@@ -59,7 +59,7 @@ module Admin
       response_handler(
         pricings: itinerary.rates.where("expiration_date > ?", DateTime.now).map(&:for_table_json),
         itinerary: itinerary.as_json.except(:sandbox_id),
-        stops: Stop.where(itinerary_id: itinerary.id).map { |stop| stop_index_json(stop: stop) }
+        stops: decorated_itinerary.stops.map { |stop| stop_index_json(stop: stop) }
       )
     end
 
@@ -123,6 +123,10 @@ module Admin
     end
 
     private
+
+    def decorated_itinerary
+      @decorated_itinerary ||= Api::V1::ItineraryDecorator.new(Legacy::Itinerary.find(params[:id]))
+    end
 
     def generic_cargo_class_from_load_type(load_type)
       case load_type

@@ -29,7 +29,7 @@ module Api
 
         get :origins, params: { organization_id: organization.id, id: destination_hub.nexus_id, load_type: load_type, client_id: client.id }
 
-        origins = Legacy::Itinerary.where(organization: organization).map { |itin| itin.first_nexus.name }
+        origins = Legacy::Itinerary.where(organization: organization).map { |itin| itin.origin_hub.nexus.name }
         expect(response_data.map { |origin| origin.dig("attributes", "name") }).to match_array(origins)
       end
 

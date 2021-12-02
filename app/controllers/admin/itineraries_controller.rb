@@ -26,11 +26,19 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def stops
-    response_handler(itinerary_stops.map { |stop| stop_index_json(stop: stop) })
+    response_handler(decorated_itinerary.stops.map { |stop| stop_index_json(stop: stop) })
+  end
+
+  def decorated_itinerary
+    @decorated_itinerary ||= Api::V1::ItineraryDecorator.new(itinerary)
   end
 
   def edit_notes
     response_handler(itinerary_with_notes)
+  end
+
+  def itinerary
+    @itinerary ||= Legacy::Itinerary.find(params[:id])
   end
 
   def show
@@ -110,10 +118,6 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     itineraries.map(&:as_options_json)
   end
 
-  def params_stops
-    params["itinerary"]["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
-  end
-
   def app_error(message)
     ApplicationError.new(
       http_code: 400,
@@ -124,13 +128,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def formated_itinerary
     itinerary = Itinerary.find_or_initialize_by(itinerary_params)
-    itinerary.stops = params_stops
     itinerary
-  end
-
-  def itinerary_stops
-    itinerary = Itinerary.find_by(id: params[:id])
-    itinerary.stops.order(:index)
   end
 
   def itinerary_with_notes

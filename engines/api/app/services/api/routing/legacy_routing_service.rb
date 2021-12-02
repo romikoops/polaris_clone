@@ -27,13 +27,11 @@ module Api
       attr_reader :organization, :hierarchy, :user, :scope, :load_type
 
       def itinerary_ids
-        return dedicated_itineraries.ids if scope[:display_itineraries_with_rates]
-
-        itineraries.ids
+        (scope[:display_itineraries_with_rates] ? dedicated_itineraries : itineraries).distinct.ids
       end
 
       def dedicated_itineraries
-        margin_itineraries.or(dedicated_pricing_itineraries)
+        margin_itineraries.or(dedicated_pricing_itineraries).distinct
       end
 
       def margins
@@ -41,8 +39,7 @@ module Api
       end
 
       def margin_itineraries
-        itineraries
-          .where(id: margins.select(:itinerary_id))
+        itineraries.where(id: margins.select(:itinerary_id))
       end
 
       def pricings
