@@ -12,7 +12,7 @@ module Api
 
     SUPPORTED_TLD = %w[com dev shop].freeze
 
-    VALID_IMC_DOMAIN = %r{(?=.*(#{SUPPORTED_IMC_APPS.join("|")}))(?=.*(.itsmycargo)(.(#{SUPPORTED_TLD.join("|")})(/[a-zA-Z0-9-_]*)*\z))}.freeze
+    VALID_IMC_DOMAIN = /(?=.*(#{SUPPORTED_IMC_APPS.join("|")}))(?=.*(.itsmycargo)(.(#{SUPPORTED_TLD.join("|")})\z))/.freeze
 
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 
@@ -107,7 +107,7 @@ module Api
 
     def validate_referrer!
       return true if (organization_domain.present? && organization_domain.domain) ||
-        (VALID_IMC_DOMAIN.match(request.referrer.to_s.downcase) && referrer_host.present?)
+        (referrer_host.present? && VALID_IMC_DOMAIN.match(referrer_host.downcase))
 
       render json: { error_code: "invalid_or_empty_referer", success: false }, status: :unauthorized and return
     end

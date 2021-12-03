@@ -157,15 +157,6 @@ module Api
         it_behaves_like "a valid referrer"
       end
 
-      context "when referer has an unsupported character (`$` or `&`) in full url" do
-        before do
-          request.headers["Referer"] = "https://siren.itsmycargo.shop/en-US/quotations/quote/ab54db86$9008&4560-9601-bf30fe6bef86/results"
-          post :create, as: :json
-        end
-
-        it_behaves_like "an invalid referrer"
-      end
-
       context "when referer is not organization domain, nor a valid imc domain" do
         before do
           request.headers["Referer"] = "http://foobar.example"
