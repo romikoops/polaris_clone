@@ -12,7 +12,7 @@ module Api
 
     SUPPORTED_TLD = %w[com dev shop].freeze
 
-    VALID_IMC_DOMAIN = /(?=.*(#{SUPPORTED_IMC_APPS.join("|")}))(?=.*(.itsmycargo)(.(#{SUPPORTED_TLD.join("|")})+\z))/.freeze
+    VALID_IMC_DOMAIN = %r{(?=.*(#{SUPPORTED_IMC_APPS.join("|")}))(?=.*(.itsmycargo)(.(#{SUPPORTED_TLD.join("|")})(/[a-zA-Z0-9-_]*)*\z))}.freeze
 
     rescue_from ActiveRecord::RecordNotFound, ActionController::ParameterMissing, with: :error_handler
 

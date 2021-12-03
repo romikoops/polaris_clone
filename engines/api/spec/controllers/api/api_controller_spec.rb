@@ -99,81 +99,107 @@ module Api
           render json: { success: true }
         end
       end
+
+      shared_examples_for "a valid referrer" do
+        it "returns a 200 OK response" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      shared_examples_for "an invalid referrer" do
+        it "returns a 401 unauthorized response" do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
       context "when referer is a valid organization domain" do
         before do
           request.headers["Referer"] = "http://#{domain.domain}"
+          post :create, as: :json
         end
 
-        it "returns a 200 OK response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:ok)
-        end
+        it_behaves_like "a valid referrer"
       end
 
       context "when referer is not organization domain, but a valid imc domain" do
         before do
           request.headers["Referer"] = "http://bridge.itsmycargo.com"
+          post :create, as: :json
         end
 
-        it "returns a 200 OK response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:ok)
-        end
+        it_behaves_like "a valid referrer"
       end
 
       context "when referer is not organization domain, but a valid wildcard imc domain" do
         before do
           request.headers["Referer"] = "http://siren-sir-1337.itsmycargo.dev"
+          post :create, as: :json
         end
 
-        it "returns a 200 OK response" do
+        it_behaves_like "a valid referrer"
+      end
+
+      context "when referer has a trailing slash" do
+        before do
+          request.headers["Referer"] = "http://siren-sir-1337.itsmycargo.dev/"
           post :create, as: :json
-          expect(response).to have_http_status(:ok)
         end
+
+        it_behaves_like "a valid referrer"
+      end
+
+      context "when referer is a full url" do
+        before do
+          request.headers["Referer"] = "https://siren.itsmycargo.shop/en-US/quotations/quote/ab54db86-9008-4560-9601-bf30fe6bef86/results"
+          post :create, as: :json
+        end
+
+        it_behaves_like "a valid referrer"
+      end
+
+      context "when referer has an unsupported character (`$` or `&`) in full url" do
+        before do
+          request.headers["Referer"] = "https://siren.itsmycargo.shop/en-US/quotations/quote/ab54db86$9008&4560-9601-bf30fe6bef86/results"
+          post :create, as: :json
+        end
+
+        it_behaves_like "an invalid referrer"
       end
 
       context "when referer is not organization domain, nor a valid imc domain" do
         before do
           request.headers["Referer"] = "http://foobar.example"
+          post :create, as: :json
         end
 
-        it "returns a 401 unauthorized response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:unauthorized)
-        end
+        it_behaves_like "an invalid referrer"
       end
 
       context "when referer does not have a subdomain" do
         before do
           request.headers["Referer"] = "http://itsmycargo.com"
+          post :create, as: :json
         end
 
-        it "returns a 401 unauthorized response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:unauthorized)
-        end
+        it_behaves_like "an invalid referrer"
       end
 
       context "when referer has multiple TLDs" do
         before do
           request.headers["Referer"] = "http://bridge.itsmycargo.com.dev"
+          post :create, as: :json
         end
 
-        it "returns a 401 unauthorized response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:unauthorized)
-        end
+        it_behaves_like "an invalid referrer"
       end
 
-      context "when referer has a unsupported subdomain" do
+      context "when referer has an unsupported subdomain" do
         before do
           request.headers["Referer"] = "http://different.itsmycargo.com"
+          post :create, as: :json
         end
 
-        it "returns a 401 unauthorized response" do
-          post :create, as: :json
-          expect(response).to have_http_status(:unauthorized)
-        end
+        it_behaves_like "an invalid referrer"
       end
     end
   end
