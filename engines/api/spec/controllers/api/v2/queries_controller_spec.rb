@@ -130,6 +130,38 @@ module Api
       end
     end
 
+    describe "PATCH #update" do
+      let(:params) { { id: query.id, organization_id: organization.id } }
+
+      context "when query has no client" do
+        let(:query) { FactoryBot.create(:journey_query, organization: organization, client_id: nil, creator: nil) }
+
+        it "successfuly returns the query object", :aggregate_failures do
+          patch :update, params: params, as: :json
+          expect(response_data["id"]).to be_present
+          expect(response_data.dig("attributes", "client", "data", "id")).to eq(user.id)
+        end
+      end
+
+      context "when query has a client" do
+        let(:query) { FactoryBot.create(:journey_query, organization: organization) }
+
+        it "returns unauthorised" do
+          patch :update, params: params, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when query has no client, but wrong organization" do
+        let(:query) { FactoryBot.create(:journey_query) }
+
+        it "returns unauthorised" do
+          patch :update, params: params, as: :json
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
     describe "GET #result_set" do
       include_context "journey_pdf_setup"
       let(:params) { { query_id: query.id, organization_id: organization.id } }

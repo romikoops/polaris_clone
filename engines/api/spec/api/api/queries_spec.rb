@@ -274,5 +274,30 @@ RSpec.describe "Queries", type: :request, swagger: true do
         run_test!
       end
     end
+
+    patch "Update Query" do
+      tags "Query"
+      description "Update Query"
+      operationId "updateQuery"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :id, in: :path, type: :string, description: "The Query ID"
+
+      response "200", "successful operation" do
+        let(:id) { FactoryBot.create(:journey_query, client_id: nil, creator: nil, organization: organization).id }
+
+        run_test!
+      end
+
+      response "401", "Unauthorized as Query has a client already" do
+        let(:id) { FactoryBot.create(:journey_query, organization: organization).id }
+
+        run_test!
+      end
+    end
   end
 end

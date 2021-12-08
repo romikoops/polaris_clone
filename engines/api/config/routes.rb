@@ -63,7 +63,7 @@ Api::Engine.routes.draw do
 
   namespace :v2 do
     resources :organizations, only: :index do
-      resources :queries, only: %i[create show index] do
+      resources :queries, only: %i[create show index update] do
         get "result_set"
         resources :requests, only: [:create]
         resources :cargo_units, only: %i[index show]

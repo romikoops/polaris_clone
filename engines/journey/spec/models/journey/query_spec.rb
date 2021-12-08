@@ -76,5 +76,63 @@ module Journey
         end
       end
     end
+
+    describe "#update" do
+      context "when the query has no client or creator" do
+        let(:query) { FactoryBot.create(:journey_query, client: nil, creator: nil) }
+        let(:client) { FactoryBot.create(:users_client, organization: query.organization) }
+
+        before do
+          query.update(client: client, creator: client)
+          query.reload
+        end
+
+        it "updates the creator and client", :aggregate_failures do
+          expect(query.client_id).to eq(client.id)
+          expect(query.creator_id).to eq(client.id)
+        end
+      end
+
+      context "when the query has a client and creator" do
+        let(:query) { FactoryBot.create(:journey_query, client: client, creator: client) }
+        let(:client) { FactoryBot.create(:users_client) }
+        let(:other_client) { FactoryBot.create(:users_client) }
+
+        it "raises an error", :aggregate_failures do
+          expect { query.update!(client: other_client, creator: other_client) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(query.errors.messages[:client_id]).to include("Client id can only be added, not edited")
+        end
+      end
+
+      context "when the query has no client but a  creator" do
+        let(:query) { FactoryBot.create(:journey_query, client: nil, creator: client) }
+        let(:client) { FactoryBot.create(:users_client) }
+        let(:other_client) { FactoryBot.create(:users_client) }
+
+        it "raises an error", :aggregate_failures do
+          expect { query.update!(client: other_client, creator: other_client) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(query.errors.messages[:base]).to include("Client and Creator must be added together")
+        end
+      end
+
+      context "when the the update only tries to change the client" do
+        let(:query) { FactoryBot.create(:journey_query, client: nil, creator: nil) }
+        let(:client) { FactoryBot.create(:users_client, organization: query.organization) }
+
+        it "raises an error", :aggregate_failures do
+          expect { query.update!(client: client) }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(query.errors.messages[:base]).to include("Client and Creator must be added together")
+        end
+      end
+
+      context "when the the update tries to change anything else" do
+        let(:query) { FactoryBot.create(:journey_query) }
+
+        it "raises an error", :aggregate_failures do
+          expect { query.update!(origin: "test") }.to raise_error(ActiveRecord::RecordInvalid)
+          expect(query.errors.messages[:base]).to include("Only status, client and creator can be updated")
+        end
+      end
+    end
   end
 end

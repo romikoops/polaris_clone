@@ -113,7 +113,7 @@ RSpec.describe ShipmentsController do
   describe "Patch #update_user" do
     context "with shipment" do
       let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-      let(:query) { FactoryBot.create(:journey_query, client_id: nil) }
+      let(:query) { FactoryBot.create(:journey_query, client_id: nil, creator: nil) }
 
       before do
         patch :update_user, params: { organization_id: organization.id, id: query.id }

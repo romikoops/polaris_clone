@@ -27,6 +27,8 @@ module Journey
     validates :delivery_date, date: { after: :cargo_ready_date }
     validates :cargo_ready_date, date: { after_or_equal_to: proc { |obj| obj.created_at || Time.zone.now } }
 
+    validate :updateable_attributes, on: :update
+
     enum status: {
       queued: "queued",
       running: "running",
@@ -43,6 +45,16 @@ module Journey
       current = self
       current = current.parent while current.parent.present?
       current
+    end
+
+    def updateable_attributes
+      errors.add(:client_id, "Client id can only be added, not edited") if client_id_changed? && client_id_change_to_be_saved.first.present?
+      errors.add(:creator_id, "Creator id can only be added, not edited") if creator_id_changed? && creator_id_change_to_be_saved.first.present?
+      errors.add(:base, "Client and Creator must be added together") if client_id_change_to_be_saved != creator_id_change_to_be_saved
+
+      return if (changes_to_save.keys - %w[creator_id creator_type client_id status]).empty?
+
+      errors.add(:base, "Only status, client and creator can be updated")
     end
   end
 end

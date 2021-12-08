@@ -69,7 +69,7 @@ class ShipmentsController < ApplicationController
   end
 
   def update_user
-    Journey::Query.find(update_user_params[:id]).update(client: organization_user)
+    Journey::Query.find(update_user_params[:id]).update(client: organization_user, creator: organization_user)
   end
 
   def show
