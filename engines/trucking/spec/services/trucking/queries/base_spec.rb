@@ -7,10 +7,10 @@ RSpec.describe Trucking::Queries::Base do
   let(:hub) { FactoryBot.create(:hamburg_hub, :hamburg, organization: organization) }
   let(:location) do
     FactoryBot.create(:locations_location,
-      bounds: FactoryBot.build(:legacy_bounds, lat: hub.latitude, lng: hub.longitude, delta: 0.4),
+      bounds: FactoryBot.build(:legacy_bounds, lat: address.latitude, lng: address.longitude, delta: 0.4),
       country_code: "de")
   end
-  let(:trucking_location) { FactoryBot.create(:trucking_location, query: :location, location: location, country_code: "DE") }
+  let(:trucking_location) { FactoryBot.create(:trucking_location, query: :location, location: location, country: hub.country) }
   let(:address) { FactoryBot.create(:hamburg_address) }
   let(:stub_url) do
     [
@@ -23,13 +23,12 @@ RSpec.describe Trucking::Queries::Base do
   end
 
   before do
-    stub_request(:get, stub_url)
-      .to_return(status: 200)
+    stub_request(:get, stub_url).to_return(status: 200)
     FactoryBot.create(:lcl_pre_carriage_availability, hub: hub, query_type: :distance)
     FactoryBot.create(:trucking_trucking, organization_id: organization.id, hub: hub, location: trucking_location)
   end
 
-  describe ".distance_hubs" do
+  describe "#distance_hubs" do
     let(:result) do
       described_class.new(
         organization_id: organization.id,
@@ -43,6 +42,33 @@ RSpec.describe Trucking::Queries::Base do
 
     it "with proper args returns an array of hub ids with distance" do
       expect(result).to eq([{ hub_id: hub.id, distance: 0 }])
+    end
+  end
+
+  describe "#non_distance_trucking_location_ids" do
+    let(:result) do
+      described_class.new(
+        organization_id: organization.id,
+        carriage: "pre",
+        address: address,
+        order_by: "group_id",
+        hub_ids: [hub.id],
+        load_type: "cargo_item"
+      ).non_distance_trucking_location_ids
+    end
+
+    it "returns an empty array when only distance trucking type exists" do
+      expect(result).to eq([])
+    end
+
+    context "when a location type exists" do
+      before do
+        FactoryBot.create(:trucking_hub_availability, hub: hub, type_availability: FactoryBot.build(:cargo_item_pre_carriage, country: hub.country, query_method: :location))
+      end
+
+      it "returns an array with the trucking location id in it" do
+        expect(result).to eq([trucking_location.id])
+      end
     end
   end
 

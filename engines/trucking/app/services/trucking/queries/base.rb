@@ -59,7 +59,7 @@ module Trucking
         @distance_hubs ||= tenant_hubs.where(id: distance_hub_ids)
           .where(
             "ST_DWithin(:point, ST_SetSRID(point, 4326), :radius, true)",
-            {point: point.to_s, radius: distance_radius_limit}
+            { point: point.to_s, radius: distance_radius_limit }
           )
       end
 
@@ -82,35 +82,36 @@ module Trucking
           .distinct
       end
 
-      def non_distance_trucking_locations
+      def non_distance_trucking_location_ids
         return [] if non_distance_query_types.empty?
 
         base_query_type = non_distance_query_types.first
         base_query = send("#{base_query_type}_based_locations")
 
-        non_distance_query_types.drop(1).inject(base_query) do |query, query_type|
-          query.or(send("#{query_type}_based_locations"))
-        end
+        non_distance_query_types
+          .drop(1)
+          .inject(base_query) { |query, query_type| query.or(send("#{query_type}_based_locations")) }
+          .ids
       end
 
       def distances_with_hubs
-        @distances_with_hubs ||= distance_hubs.map { |hub|
-          {hub_id: hub.id, distance: calc_distance(hub: hub)}
-        }
+        @distances_with_hubs ||= distance_hubs.map do |hub|
+          { hub_id: hub.id, distance: calc_distance(hub: hub) }
+        end
       end
 
       def distance_hubs_arguments
-        distances_with_hubs.each_with_object([]) { |hub_and_distance, memo|
+        distances_with_hubs.each_with_object([]) do |hub_and_distance, memo|
           distance_location = distance_based_locations.find_by(data: hub_and_distance[:distance].to_i)
 
           memo << "(#{hub_and_distance[:hub_id]}, '#{distance_location.id}')" if distance_location.present?
-        }
+        end
       end
 
       def truckings_for_query
         Rails.cache.fetch(cache_key, expires_in: 12.hours) do
           append_distance_truckings(
-            query: validated_truckings.where(location: non_distance_trucking_locations)
+            query: validated_truckings.where(location_id: non_distance_trucking_location_ids)
           )
         end
       end
@@ -120,7 +121,7 @@ module Trucking
 
         query.or(
           validated_truckings.where(
-            "(hub_id, trucking_truckings.location_id) IN (#{distance_hubs_arguments.join(", ")})"
+            "(hub_id, trucking_truckings.location_id) IN (#{distance_hubs_arguments.join(', ')})"
           )
         )
       end
@@ -138,35 +139,31 @@ module Trucking
       end
 
       def truck_type_condition
-        truck_type.present? ? {truck_type: truck_type} : {}
+        truck_type.present? ? { truck_type: truck_type } : {}
       end
 
       def group_condition
-        {group_id: groups.pluck(:id)}
+        { group_id: groups.pluck(:id) }
       end
 
       def cargo_class_condition
-        cargo_classes.present? ? {cargo_class: cargo_classes} : {}
+        cargo_classes.present? ? { cargo_class: cargo_classes } : {}
       end
 
       def load_type_condition
-        load_type.present? ? {load_type: load_type} : {}
+        load_type.present? ? { load_type: load_type } : {}
       end
 
       def carriage_condition
-        carriage.present? ? {carriage: carriage} : {}
+        carriage.present? ? { carriage: carriage } : {}
       end
 
       def hubs_condition
-        hub_ids.present? ? {organization_id: organization_id, id: hub_ids} : {organization_id: organization_id}
-      end
-
-      def trucking_location_where_statement
-        {trucking_locations: {distance: distances}}
+        hub_ids.present? ? { organization_id: organization_id, id: hub_ids } : { organization_id: organization_id }
       end
 
       def latitude_longitude
-        {latitude: point.y, longitude: point.x}
+        { latitude: point.y, longitude: point.x }
       end
 
       def point
