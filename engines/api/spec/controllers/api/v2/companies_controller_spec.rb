@@ -11,10 +11,16 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
     let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1") }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
+
+    shared_examples_for "unauthorized for non users user" do
+      it "returns unauthorized response" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
 
     describe "GET #show" do
       it "returns a 200 OK response" do
@@ -33,6 +39,43 @@ module Api
       it "returns a 404 response, when the requested company does not exist" do
         get :show, params: { organization_id: organization.id, id: "non-existent-id" }, as: :json
         expect(response_json).to include({ "status" => "not_found", "code" => 404 })
+      end
+
+      context "when current user is not users user" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+
+        before { get :show, params: { organization_id: organization.id, id: companies_company.id }, as: :json }
+
+        it_behaves_like "unauthorized for non users user"
+      end
+    end
+
+    describe "GET #index" do
+      before { FactoryBot.create_list(:companies_company, 5, organization: organization) }
+
+      let(:params) { { organization_id: organization.id } }
+
+      context "without pagination params" do
+        before { get :index, params: params }
+
+        it "returns all the companies for the organisation and ids matching the companies ids" do
+          expect(response_data.pluck("id")).to match_array(Companies::Company.all.ids)
+        end
+      end
+
+      context "with pagination params" do
+        it "asserts that a total of two companies were returned" do
+          get :index, params: { organization_id: organization.id, perPage: 2 }
+          expect(response_data.length).to eq(2)
+        end
+      end
+
+      context "when current user is not users user" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+
+        before { get :index, params: params }
+
+        it_behaves_like "unauthorized for non users user"
       end
     end
 
@@ -58,6 +101,14 @@ module Api
       it "returns a suitable message, when none of the company params are present" do
         put :update, params: { organization_id: organization.id, id: companies_company.id, company: { foo: "bar" } }, as: :json
         expect(response_error).to eq("Please provide at least one param of email, name, paymentTerms, phone, or vatNumber")
+      end
+
+      context "when current user is not users user" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+
+        before { put :update, params: request_params, as: :json }
+
+        it_behaves_like "unauthorized for non users user"
       end
 
       def request_params

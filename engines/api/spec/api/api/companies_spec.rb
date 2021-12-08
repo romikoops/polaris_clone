@@ -5,8 +5,7 @@ require "swagger_helper"
 RSpec.describe "Companies", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:clients) { FactoryBot.create_list(:users_client, 5, organization: organization) }
+  let(:user) { FactoryBot.create(:users_user, organization_id: organization_id) }
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
@@ -16,8 +15,6 @@ RSpec.describe "Companies", type: :request, swagger: true do
   before do
     Organizations.current_id = organization_id
     FactoryBot.create(:companies_company, organization: organization, name: "default")
-    stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
-      .to_return(status: 200)
   end
 
   path "/v1/organizations/{organization_id}/companies/{company_id}" do
@@ -169,6 +166,48 @@ RSpec.describe "Companies", type: :request, swagger: true do
       response "422", "Unprocessable Entity" do
         let(:query) { { company: { foo: "bar" } } }
 
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/companies" do
+    get "Fetch companies" do
+      tags "Companies"
+      description "Fetches list of companies"
+      operationId "getCompanies"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :perPage, in: :query, type: :integer, description: "number of companies per page"
+      parameter name: :page, in: :query, type: :integer, description: "current page number"
+
+      let(:perPage) { 2 }
+      let(:page) { 1 }
+
+      response "200", "successful operation" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       attributes: { "$ref" => "#/components/schemas/company" }
+                     }
+                   }
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+
+      response "401", "Unauthorized" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
         run_test!
       end
     end

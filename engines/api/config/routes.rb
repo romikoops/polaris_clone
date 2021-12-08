@@ -90,7 +90,7 @@ Api::Engine.routes.draw do
       resource :colli_types, only: [:show]
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
-      resources :companies, only: %i[show update]
+      resources :companies, only: %i[index show update]
       resources :shipment_requests, only: %i[show]
     end
     resources :users do
