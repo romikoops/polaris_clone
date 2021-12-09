@@ -98,7 +98,7 @@ RSpec.configure do |config|
                   description: "name of the company",
                   type: "string"
                 },
-                payment_terms: {
+                paymentTerms: {
                   description: "payment terms set out by the company",
                   type: "string"
                 },
@@ -108,6 +108,22 @@ RSpec.configure do |config|
                 },
                 vatNumber: {
                   description: "VAT number of the company",
+                  type: "string"
+                },
+                contactPersonName: {
+                  description: "The name of the contact person/employee from the company",
+                  type: "string"
+                },
+                contactPhone: {
+                  description: "The phone number of the contact person from the company",
+                  type: "string"
+                },
+                contactEmail: {
+                  description: "The email of the contact person from the company",
+                  type: "string"
+                },
+                registrationNumber: {
+                  description: "he registration number set by company",
                   type: "string"
                 }
               }

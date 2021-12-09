@@ -598,6 +598,7 @@ end
 
 # == Route Map
 #
+# Couldn't find the MJML 4. binary.. have you run $ npm install mjml?
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
@@ -606,7 +607,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fc3e932d598@/Users/wbeamish/imc/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ff2a0d42c00@/Users/ajith/Development/IMC/imc-react-api/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1051,6 +1052,8 @@ end
 #                     v2_organization_queries GET    /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#index
 #                                             POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
 #                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
+#                                             PATCH  /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
+#                                             PUT    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
 #          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
 #                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
 #              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
@@ -1067,16 +1070,29 @@ end
 #                      v2_organization_upload GET    /v2/organizations/:organization_id/uploads/:id(.:format)                                 api/v2/uploads#show
 #                       v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show
 #                       v2_organization_scope GET    /v2/organizations/:organization_id/scope(.:format)                                       api/v2/scopes#show
+#                 v2_organization_colli_types GET    /v2/organizations/:organization_id/colli_types(.:format)                                 api/v2/colli_types#show
 #                     v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show
 #                                             PATCH  /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                                             PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                    v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
 #                     v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
+#                   v2_organization_companies GET    /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#index
+#                                             POST   /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#create
 #                     v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
 #                                             PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
 #                                             PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
 #            v2_organization_shipment_request GET    /v2/organizations/:organization_id/shipment_requests/:id(.:format)                       api/v2/shipment_requests#show
 #                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
+#                           validate_v2_users GET    /v2/users/validate(.:format)                                                             api/v2/users#validate
+#                                    v2_users GET    /v2/users(.:format)                                                                      api/v2/users#index
+#                                             POST   /v2/users(.:format)                                                                      api/v2/users#create
+#                                     v2_user GET    /v2/users/:id(.:format)                                                                  api/v2/users#show
+#                                             PATCH  /v2/users/:id(.:format)                                                                  api/v2/users#update
+#                                             PUT    /v2/users/:id(.:format)                                                                  api/v2/users#update
+#                                             DELETE /v2/users/:id(.:format)                                                                  api/v2/users#destroy
+#                                v2_passwords POST   /v2/passwords(.:format)                                                                  api/v2/passwords#create
+#                                 v2_password PATCH  /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
+#                                             PUT    /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
 #
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index

@@ -39,7 +39,7 @@ RSpec.describe "Companies", type: :request, swagger: true do
               name: { type: :string, description: "The name of the company" },
               paymentTerms: { type: :string, description: "The payment terms, set out by the company" },
               phone: { type: :string, description: "The phone number of the company" },
-              vatNumber: { type: :number, description: "The VAT number of the company" }
+              vatNumber: { type: :string, description: "The VAT number of the company" }
             }
           }
         }
@@ -133,7 +133,7 @@ RSpec.describe "Companies", type: :request, swagger: true do
               name: { type: :string, description: "The name of the company" },
               paymentTerms: { type: :string, description: "The payment terms, set out by the company" },
               phone: { type: :string, description: "The phone number of the company" },
-              vatNumber: { type: :number, description: "The VAT number of the company" }
+              vatNumber: { type: :string, description: "The VAT number of the company" }
             }
           }
         }
@@ -203,6 +203,71 @@ RSpec.describe "Companies", type: :request, swagger: true do
                },
                required: ["data"]
 
+        run_test!
+      end
+
+      response "401", "Unauthorized" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
+        run_test!
+      end
+    end
+
+    post "Create new company" do
+      tags "Companies"
+      description "Create new company"
+      operationId "createCompany"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_params, in: :body, schema: {
+        type: :object,
+        properties: {
+          email: { type: :string, description: "The email address of the company" },
+          name: { type: :string, description: "The name of the company" },
+          paymentTerms: { type: :string, description: "The payment terms, set out by the company", nullable: true },
+          phone: { type: :string, description: "The phone number of the company", nullable: true },
+          vatNumber: { type: :string, description: "The VAT number of the company", nullable: true  },
+          contactPersonName: { type: :string, description: "The name of the contact person/employee from the company", nullable: true },
+          contactPhone: { type: :string, description: "The phone number of the contact person from the company", nullable: true },
+          contactEmail: { type: :string, description: "The email of the contact person from the company", nullable: true },
+          registrationNumber: { type: :string, description: "The registration number set by company", nullable: true }
+        }
+      }
+
+      let(:company_params) do
+        {
+          name: "test-company",
+          email: "company@test-company.com",
+          phone: "1234567890",
+          paymentTerms: "some payment terms example",
+          vatNumber: "vat12",
+          contactPersonName: "John Doe",
+          contactPhone: "9876543210",
+          contactEmail: "contact@test-company.com",
+          registrationNumber: "reg987"
+        }
+      end
+
+      response "201", "company creation success" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :object,
+                   properties: {
+                     attributes: { "$ref" => "#/components/schemas/company" }
+                   }
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+
+      response "422", "Unprocessable Entity" do
+        let!(:companies_company) { FactoryBot.create(:companies_company, organization_id: organization_id, name: company_params[:name], email: company_params[:email]) }
         run_test!
       end
 

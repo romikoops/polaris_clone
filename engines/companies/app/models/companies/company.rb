@@ -14,6 +14,10 @@ module Companies
     has_many :clients, class_name: "Users::Client", through: :memberships
 
     validates :external_id, uniqueness: { scope: %i[name organization_id] }, allow_nil: true
+    validates :name, presence: true, allow_blank: false
+
+    validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true
+    validates :contact_email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true
 
     pg_search_scope :name_search, against: %i[name], using: {
       tsearch: { prefix: true }
@@ -50,19 +54,23 @@ end
 #
 # Table name: companies_companies
 #
-#  id                 :uuid             not null, primary key
-#  deleted_at         :datetime
-#  email              :string
-#  name               :string
-#  payment_terms      :text
-#  phone              :string
-#  vat_number         :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  address_id         :integer
-#  external_id        :string
-#  organization_id    :uuid
-#  tenants_company_id :uuid
+#  id                  :uuid             not null, primary key
+#  contact_email       :string
+#  contact_person_name :string
+#  contact_phone       :string
+#  deleted_at          :datetime
+#  email               :string
+#  name                :string
+#  payment_terms       :text
+#  phone               :string
+#  registration_number :string
+#  vat_number          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  address_id          :integer
+#  external_id         :string
+#  organization_id     :uuid
+#  tenants_company_id  :uuid
 #
 # Indexes
 #

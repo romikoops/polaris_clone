@@ -19,5 +19,17 @@ module Companies
     it "sets the payment_terms field to the current value provided" do
       expect(FactoryBot.create(:companies_company, payment_terms: "foo_bar", organization: organization).payment_terms).to eq("foo_bar")
     end
+
+    it "is not valid without name" do
+      expect { FactoryBot.create(:companies_company, name: nil, organization: organization) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "is not valid with invalid email format" do
+      expect { FactoryBot.create(:companies_company, email: "invalid_email", organization: organization) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "is not valid with invalid contact email format" do
+      expect { FactoryBot.create(:companies_company, contact_email: "invalid_email", organization: organization) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 end

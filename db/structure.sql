@@ -1248,7 +1248,11 @@ CREATE TABLE public.companies_companies (
     updated_at timestamp without time zone NOT NULL,
     tenants_company_id uuid,
     external_id character varying,
-    payment_terms text
+    payment_terms text,
+    contact_person_name character varying,
+    contact_email character varying,
+    contact_phone character varying,
+    registration_number character varying
 );
 
 
@@ -12590,6 +12594,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211019082716'),
 ('20211027083408'),
 ('20211028140008'),
-('20211116173501');
+('20211116173501'),
+('20211206181843');
 
 

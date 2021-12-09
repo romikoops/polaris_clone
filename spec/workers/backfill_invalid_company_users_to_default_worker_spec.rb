@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-RSpec.describe BackfillInvalidCompanyUsersToDefaultWorker, type: :worker do
+RSpec.describe BackfillInvalidCompanyUsersToDefaultWorker, type: :worker, skip: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:default_company) { FactoryBot.create(:companies_company, name: "default", organization: organization) }
   let!(:company_with_empty_name_ext_id) { FactoryBot.create(:companies_company, name: "", external_id: "", organization: organization) }

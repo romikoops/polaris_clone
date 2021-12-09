@@ -9,6 +9,12 @@ module Api
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
 
+    shared_examples_for "unauthorized for non users user" do
+      it "returns unauthorized response" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
     describe "#authorize_users_user" do
       before do
         request.headers["Authorization"] = token_header
@@ -35,9 +41,7 @@ module Api
 
         before { get :index, as: :json }
 
-        it "returns unauthorized response" do
-          expect(response).to have_http_status(:unauthorized)
-        end
+        it_behaves_like "unauthorized for non users user"
       end
     end
   end
