@@ -5,11 +5,13 @@ require "swagger_helper"
 RSpec.describe "Ports", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
   let!(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
 
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
+
+  before { FactoryBot.create(:users_membership, organization: organization, user: user) }
 
   path "/v1/organizations/{organization_id}/ports" do
     get "Fetch list of ports" do

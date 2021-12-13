@@ -3,9 +3,10 @@
 module Api
   module V1
     class SchedulesController < ApiController
+      include UsersUserAccess
       def show
         decorated_trips = Api::V1::TripDecorator.decorate_collection(
-          trips, context: {tender_id: schedule_params[:id]}
+          trips, context: { tender_id: schedule_params[:id] }
         )
         render json: TripSerializer.new(decorated_trips, params: {})
       end
@@ -13,7 +14,7 @@ module Api
       def enabled
         scope = OrganizationManager::ScopeService.new(organization: current_organization).fetch
         schedules_enabled = !(scope["closed_quotation_tool"] || scope["open_quotation_tool"])
-        render json: {data: {enabled: schedules_enabled}}
+        render json: { data: { enabled: schedules_enabled } }
       end
 
       private

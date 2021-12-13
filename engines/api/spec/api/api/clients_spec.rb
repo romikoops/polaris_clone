@@ -5,7 +5,8 @@ require "swagger_helper"
 RSpec.describe "Clients", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization: organization) }
+  let(:user) { FactoryBot.create(:users_user) }
+  let(:users_client) { FactoryBot.create(:users_client, organization: organization) }
   let(:clients) { FactoryBot.create_list(:users_client, 5, organization: organization) }
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:company) { FactoryBot.create(:companies_company, name: "default", organization: organization) }
@@ -14,9 +15,10 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
   before do
     Organizations.current_id = organization_id
-    FactoryBot.create(:companies_membership, client: user, company: company)
-    clients.each do |clients|
-      FactoryBot.create(:companies_membership, client: clients, company: company)
+    FactoryBot.create(:users_membership, organization: organization, user: user)
+    FactoryBot.create(:companies_membership, client: users_client, company: company)
+    clients.each do |client_x|
+      FactoryBot.create(:companies_membership, client: client_x, company: company)
     end
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
       .to_return(status: 200)
@@ -121,7 +123,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :id, in: :path, type: :string, description: "Client ID"
 
-      let(:id) { clients.sample.id }
+      let(:id) { users_client.id }
 
       response "200", "successful operation" do
         schema type: :object,
@@ -161,7 +163,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       parameter name: :id, in: :path, type: :string, description: "Client ID"
 
       response "204", "successful operation" do
-        let(:id) { clients.sample.id }
+        let(:id) { users_client.id }
 
         run_test!
       end
@@ -187,7 +189,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :id, in: :path, type: :string, description: "Client ID"
 
-      let(:id) { clients.sample.id }
+      let(:id) { users_client.id }
 
       response "200", "successful operation" do
         schema type: :object,
@@ -240,7 +242,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
         required: %w[client]
       }
 
-      let(:id) { clients.sample.id }
+      let(:id) { users_client.id }
 
       response "204", "successful operation", skip: "flaky" do
         let(:client) do

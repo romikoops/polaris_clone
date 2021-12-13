@@ -11,11 +11,13 @@ module Api
       { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
         FactoryBot.create(:treasury_exchange_rate, from: currency, to: "EUR", rate: rate)
       end
-      FactoryBot.create(:companies_membership, client: user)
+      FactoryBot.create(:companies_membership, client: client)
+      FactoryBot.create(:users_membership, organization: organization, user: user)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:api_client, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:users_user) }
+    let(:client) { FactoryBot.create(:api_client, organization_id: organization.id) }
     let(:source) { FactoryBot.create(:application, name: "bridge") }
     let(:access_token) do
       FactoryBot.create(:access_token,
@@ -53,7 +55,7 @@ module Api
           quote: {
             selected_date: 5.minutes.from_now,
             organization_id: organization.id,
-            user_id: user.id,
+            user_id: client.id,
             load_type: load_type,
             origin: { nexus_id: origin_hub.nexus_id },
             destination: { nexus_id: destination_hub.nexus_id }
@@ -376,14 +378,14 @@ module Api
           FactoryBot.create(:journey_query,
             organization: organization,
             cargo_ready_date: DateTime.now + 1.day,
-            client: user)
+            client: client)
         end
 
         let(:newer_query) do
           FactoryBot.create(:journey_query,
             organization: organization,
             cargo_ready_date: DateTime.now + 2.days,
-            client: user)
+            client: client)
         end
 
         before do

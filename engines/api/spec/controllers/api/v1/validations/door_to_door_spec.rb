@@ -8,9 +8,9 @@ module Api
     include_context "complete_route_with_trucking"
     let(:app) { FactoryBot.create(:application) }
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:users_user, organization_id: organization.id) }
-    let(:organizations_user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: organizations_user.id, scopes: "public") }
+    let(:user) { FactoryBot.create(:users_user) }
+    let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:load_type) { "cargo_item" }
     let(:cargo_classes) { ["lcl"] }
@@ -21,7 +21,7 @@ module Api
         organization_id: organization.id,
         quote: {
           organization_id: organization.id,
-          user_id: organizations_user.id,
+          user_id: client.id,
           load_type: load_type,
           origin: origin,
           destination: destination
@@ -64,6 +64,8 @@ module Api
     let(:origin) { { latitude: pickup_address.latitude, longitude: pickup_address.longitude } }
     let(:destination) { { latitude: delivery_address.latitude, longitude: delivery_address.longitude } }
     let(:cargo_item_id) { SecureRandom.uuid }
+
+    before { FactoryBot.create(:users_membership, organization: organization, user: user) }
 
     shared_examples_for "Expected errors are returned" do
       it "returns an array of expected errors" do

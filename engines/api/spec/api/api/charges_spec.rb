@@ -7,12 +7,12 @@ RSpec.describe "Charges", type: :request, swagger: true do
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-
+  let(:user) { FactoryBot.create(:users_user) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     Treasury::ExchangeRate.create(from: "USD",
                                   to: "EUR", rate: 1.3,
                                   created_at: result.created_at - 30.seconds)

@@ -5,6 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class TruckingCounterpartsController < ApiController
+      include UsersUserAccess
       def index
         render json: counterpart
       end

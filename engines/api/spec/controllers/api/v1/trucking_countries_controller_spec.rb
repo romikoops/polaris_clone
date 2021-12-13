@@ -8,11 +8,12 @@ module Api
     include_context "complete_route_with_trucking"
 
     before do
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       request.headers["Authorization"] = token_header
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:user) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:user) { FactoryBot.create(:users_user) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:country) { origin_hub.country }

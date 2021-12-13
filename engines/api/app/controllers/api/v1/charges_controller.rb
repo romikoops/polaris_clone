@@ -5,9 +5,10 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class ChargesController < ApiController
+      include UsersUserAccess
       def show
-        decorated_result = ResultDecorator.decorate(result, context: {scope: current_scope})
-        render json: DetailedResultSerializer.new(decorated_result, params: {scope: current_scope})
+        decorated_result = ResultDecorator.decorate(result, context: { scope: current_scope })
+        render json: DetailedResultSerializer.new(decorated_result, params: { scope: current_scope })
       end
 
       private

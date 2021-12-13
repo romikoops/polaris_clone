@@ -8,11 +8,13 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       FactoryBot.create(:legacy_charge_categories, code: "cargo", organization: organization)
     end
 
-    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:query) { FactoryBot.build(:journey_query, organization: organization, client: user) }
+    let(:user) { FactoryBot.create(:users_user) }
+    let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:query) { FactoryBot.build(:journey_query, organization: organization, client: client) }
     let(:result) { FactoryBot.build(:journey_result, query: query, line_item_set_count: 0) }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:line_item_set) { FactoryBot.build(:journey_line_item_set, result: result, line_item_count: 0) }

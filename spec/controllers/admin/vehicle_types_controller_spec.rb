@@ -8,6 +8,7 @@ RSpec.describe Admin::VehicleTypesController, type: :controller do
 
   before do
     append_token_header
+    FactoryBot.create(:users_membership, organization: organization, user: user)
   end
 
   describe "GET #index" do

@@ -4,11 +4,12 @@ require "rails_helper"
 
 RSpec.describe Admin::OrganizationsController, type: :controller do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
   let(:json_response) { JSON.parse(response.body) }
 
   before do
     ::Organizations.current_id = organization.id
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     append_token_header
   end
 

@@ -3,6 +3,7 @@
 module Api
   module V1
     class EquipmentsController < ApiController
+      include UsersUserAccess
       def index
         equipment_classes = Wheelhouse::EquipmentService.new(
           user: current_user,
@@ -12,7 +13,7 @@ module Api
           dedicated_pricings_only: current_scope.fetch(:dedicated_pricings_only)
         ).perform
 
-        render json: {data: equipment_classes}
+        render json: { data: equipment_classes }
       end
 
       private

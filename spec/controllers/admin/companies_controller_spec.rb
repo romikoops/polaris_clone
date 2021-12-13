@@ -4,11 +4,13 @@ require "rails_helper"
 
 RSpec.describe Admin::CompaniesController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) do
+  let(:user) { FactoryBot.create(:users_user) }
+  let!(:client) do
     FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
   end
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     ::Organizations.current_id = organization.id
     FactoryBot.create(:groups_group, :default, organization: organization)
     append_token_header
@@ -38,10 +40,10 @@ RSpec.describe Admin::CompaniesController, type: :controller do
     end
 
     context "with addedMembers" do
-      before { FactoryBot.create(:companies_membership, client: user) }
+      before { FactoryBot.create(:companies_membership, client: client) }
 
       it "creates a new Company" do
-        post :create, params: params.merge(addedMembers: [user.id])
+        post :create, params: params.merge(addedMembers: [client.id])
         aggregate_failures do
           expect(result).to be_present
           expect(result.name).to eq(params[:name])
@@ -243,37 +245,37 @@ RSpec.describe Admin::CompaniesController, type: :controller do
   end
 
   describe "POST #edit_employees" do
-    let!(:user_a) do
+    let!(:client_a) do
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     end
-    let!(:user_b) do
+    let!(:client_b) do
       FactoryBot.create(:users_client, organization: organization).tap do |employee|
         FactoryBot.create(:companies_membership, company: company, client: employee)
       end
     end
-    let!(:user_c) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:client_c) { FactoryBot.create(:users_client, organization: organization) }
     let!(:company) { FactoryBot.create(:companies_company, organization: organization) }
-    let(:params) { { organization_id: organization.id, id: company.id, addedMembers: [user_a, user_c].map(&:as_json) } }
+    let(:params) { { organization_id: organization.id, id: company.id, addedMembers: [client_a, client_c].map(&:as_json) } }
 
     context "when removing one and adding another Membership" do
       it "updates the employees for the Company", :aggregate_failures do
         post :edit_employees, params: params
-        expect(Companies::Membership.find_by(company: company, client: user_a)).to be_present
-        expect(Companies::Membership.find_by(company: company, client: user_b)).not_to be_present
-        expect(Companies::Membership.find_by(company: company, client: user_c)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_c)).to be_present
       end
     end
 
     context "when a soft deleted Membership exists" do
-      before { FactoryBot.create(:companies_membership, company: company, client: user_c).tap(&:destroy) }
+      before { FactoryBot.create(:companies_membership, company: company, client: client_c).tap(&:destroy) }
 
       it "updates the employees for the Company, restoring the soft deleted Membership", :aggregate_failures do
         post :edit_employees, params: params
-        expect(Companies::Membership.find_by(company: company, client: user_a)).to be_present
-        expect(Companies::Membership.find_by(company: company, client: user_b)).not_to be_present
-        expect(Companies::Membership.find_by(company: company, client: user_c)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_a)).to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_b)).not_to be_present
+        expect(Companies::Membership.find_by(company: company, client: client_c)).to be_present
       end
     end
   end

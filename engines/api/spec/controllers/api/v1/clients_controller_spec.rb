@@ -20,6 +20,7 @@ module Api
     let(:perform_request) { subject }
 
     before do
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       FactoryBot.create(:groups_group, :default, organization: organization)
       FactoryBot.create(:companies_company, organization: organization, name: "default")
       ::Organizations.current_id = organization.id
@@ -87,13 +88,13 @@ module Api
     end
 
     describe "PATCH #update" do
-      let(:user) { FactoryBot.create(:users_client, organization: organization) }
-      let(:profile) { user.profile }
+      let(:client) { FactoryBot.create(:users_client, organization: organization) }
+      let(:profile) { client.profile }
 
       context "when request is successful" do
         let(:request_object) do
           patch :update, params: { organization_id: organization.id,
-                                   id: user.id,
+                                   id: client.id,
                                    email: "bassam@itsmycargo.com",
                                    first_name: "Bassam", last_name: "Aziz",
                                    company_name: "ItsMyCargo",
@@ -119,7 +120,7 @@ module Api
       context "when update email request is invalid" do
         let(:request_object) do
           patch :update, params: { organization_id: organization,
-                                   id: user.id,
+                                   id: client.id,
                                    email: nil,
                                    first_name: "Bassam", last_name: "Aziz",
                                    company_name: "ItsMyCargo",

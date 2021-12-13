@@ -6,7 +6,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   include_context "journey_complete_request"
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:user) { client }
+  let(:user) { FactoryBot.create(:users_user) }
   let(:json_response) { JSON.parse(response.body) }
   let(:route_sections) { [freight_section] }
   let(:line_items) { freight_line_items_with_cargo }
@@ -22,6 +22,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
       organization: organization)
     Organizations.current_id = organization.id
     breakdown
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     append_token_header
   end
 
@@ -38,7 +39,7 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
 
     context "when a user has been deleted" do
       before do
-        user.destroy
+        client.destroy
       end
 
       it "returns an http status of success" do
@@ -117,10 +118,10 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
   end
 
   describe "GET #search_shipments" do
-    it "returns the matching shipments for the guest user" do
-      get :search_shipments, params: { target: "requested", query: user.profile.first_name, organization_id: organization.id }
+    it "returns the matching shipments for the client" do
+      get :search_shipments, params: { target: "requested", query: client.profile.first_name, organization_id: organization.id }
 
-      expected_client_name = "#{user.profile.first_name} #{user.profile.last_name}"
+      expected_client_name = "#{client.profile.first_name} #{client.profile.last_name}"
       expect(json.dig(:data, :shipments).first[:client_name]).to eq(expected_client_name)
     end
 
@@ -133,10 +134,10 @@ RSpec.describe Admin::ShipmentsController, type: :controller do
       end
     end
 
-    context "when searching via user's company name/Agency" do
-      it "returns matching shipments with users matching the company name in query" do
+    context "when searching via client's company name/Agency" do
+      it "returns matching shipments with clients matching the company name in query" do
         get :search_shipments, params: {
-          target: "requested", query: user.profile.company_name, organization_id: organization.id
+          target: "requested", query: client.profile.company_name, organization_id: organization.id
         }
         expect(json.dig(:data, :shipments).first[:id]).to eq(result.id)
       end

@@ -4,8 +4,8 @@ require "swagger_helper"
 
 RSpec.describe "ColliTypes", type: :request, swagger: true do
   let(:organization_id) { FactoryBot.create(:organizations_organization).id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:client) { FactoryBot.create(:users_client, organization_id: organization_id) }
+  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: client.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
   let(:legacy_cargo_item_type_pallet) { FactoryBot.create(:legacy_cargo_item_type, category: "Pallet") }
 

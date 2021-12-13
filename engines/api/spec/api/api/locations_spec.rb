@@ -5,7 +5,7 @@ require "swagger_helper"
 RSpec.describe "Locations", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
@@ -14,6 +14,8 @@ RSpec.describe "Locations", type: :request, swagger: true do
 
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
+
+  before { FactoryBot.create(:users_membership, organization: organization, user: user) }
 
   path "/v1/organizations/{organization_id}/locations/origins" do
     get "Fetch available origins" do

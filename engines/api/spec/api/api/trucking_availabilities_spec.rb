@@ -5,7 +5,8 @@ require "swagger_helper"
 RSpec.describe "TruckingAvailabilities", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
+  let(:users_client) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:origin_location) do
@@ -21,6 +22,7 @@ RSpec.describe "TruckingAvailabilities", type: :request, swagger: true do
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     FactoryBot.create(
       :trucking_trucking, organization: organization, hub: origin_hub, location: origin_trucking_location
     )
@@ -57,7 +59,7 @@ RSpec.describe "TruckingAvailabilities", type: :request, swagger: true do
       let(:lat) { origin_hub.latitude }
       let(:lng) { origin_hub.longitude }
       let(:load_type) { "cargo_item" }
-      let(:client) { user.id }
+      let(:client) { users_client.id }
       let(:organization_id) { organization.id }
       let(:target) { "origin" }
 

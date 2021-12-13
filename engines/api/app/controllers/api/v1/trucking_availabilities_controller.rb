@@ -5,6 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class TruckingAvailabilitiesController < ApiController
+      include UsersUserAccess
       def index
         render json: availability
       end

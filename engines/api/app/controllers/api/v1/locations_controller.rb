@@ -5,6 +5,7 @@ require_dependency "api/application_controller"
 module Api
   module V1
     class LocationsController < ApiController
+      include UsersUserAccess
       def origins
         origin_nexuses = nexuses(target: :origin_destination)
         decorated_nexuses = NexusDecorator.decorate_collection(origin_nexuses)

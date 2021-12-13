@@ -8,6 +8,7 @@ RSpec.describe Admin::ClientsController do
   let(:user) { FactoryBot.create(:users_user) }
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     FactoryBot.create(:groups_group, :default, organization: organization)
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
       .to_return(status: 200, body: "", headers: {})
@@ -155,33 +156,33 @@ RSpec.describe Admin::ClientsController do
   end
 
   describe "DELETE #destroy" do
-    let(:user) { FactoryBot.create(:users_client, organization: organization) }
+    let(:client) { FactoryBot.create(:users_client, organization: organization) }
     let(:group) { FactoryBot.create(:groups_group, organization: organization) }
     let(:company) { FactoryBot.create(:companies_company, organization: organization) }
 
     before do
-      FactoryBot.create(:groups_membership, group: group, member: user)
-      FactoryBot.create(:companies_membership, company: company, client: user)
+      FactoryBot.create(:groups_membership, group: group, member: client)
+      FactoryBot.create(:companies_membership, company: company, client: client)
     end
 
     it "returns an http status of success" do
-      delete :destroy, params: { organization_id: organization, id: user.id }
+      delete :destroy, params: { organization_id: organization, id: client.id }
       expect(response).to have_http_status(:success)
     end
 
-    it "deletes the users group membership" do
-      delete :destroy, params: { organization_id: organization, id: user.id }
-      expect(Groups::Membership.exists?(member: user)).to be false
+    it "deletes the clients group membership" do
+      delete :destroy, params: { organization_id: organization, id: client.id }
+      expect(Groups::Membership.exists?(member: client)).to be false
     end
 
-    it "deletes the users company memberships" do
-      delete :destroy, params: { organization_id: organization, id: user.id }
-      expect(Companies::Membership.where(client: user)).not_to exist
+    it "deletes the clients company memberships" do
+      delete :destroy, params: { organization_id: organization, id: client.id }
+      expect(Companies::Membership.where(client: client)).not_to exist
     end
 
-    it "deletes the user" do
-      delete :destroy, params: { organization_id: organization, id: user.id }
-      expect(Users::Client.find_by(id: user.id)).to be(nil)
+    it "deletes the client" do
+      delete :destroy, params: { organization_id: organization, id: client.id }
+      expect(Users::Client.find_by(id: client.id)).to be(nil)
     end
   end
 end

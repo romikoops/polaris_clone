@@ -3,6 +3,7 @@
 module Api
   module V1
     class CargoItemTypesController < ApiController
+      include UsersUserAccess
       def index
         cargo_item_types = Api::CargoItemTypeService.new(organization: current_organization).perform
 

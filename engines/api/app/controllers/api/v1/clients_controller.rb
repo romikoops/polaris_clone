@@ -3,6 +3,7 @@
 module Api
   module V1
     class ClientsController < ApiController
+      include UsersUserAccess
       def index
         render json: ClientSerializer.new(decorated_clients)
       end

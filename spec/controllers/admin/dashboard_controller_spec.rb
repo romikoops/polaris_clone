@@ -8,6 +8,7 @@ RSpec.describe Admin::DashboardController, type: :controller do
 
   describe "GET #index" do
     before do
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       FactoryBot.create(:legacy_hub, organization: organization)
       append_token_header
     end

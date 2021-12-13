@@ -5,10 +5,11 @@ require_dependency "api/application_controller"
 module Api
   module V1
     class TendersController < ApiController
+      include UsersUserAccess
       def update
         updated_result = result_updater.perform
-        decorated_result = ResultDecorator.decorate(updated_result, context: {scope: current_scope})
-        render json: DetailedResultSerializer.new(decorated_result, params: {scope: current_scope})
+        decorated_result = ResultDecorator.decorate(updated_result, context: { scope: current_scope })
+        render json: DetailedResultSerializer.new(decorated_result, params: { scope: current_scope })
       end
 
       private

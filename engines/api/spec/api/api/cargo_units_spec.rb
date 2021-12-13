@@ -4,9 +4,9 @@ require "swagger_helper"
 
 RSpec.describe "CargoUnits", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
-  let(:query) { FactoryBot.build(:journey_query, organization: organization, client: user, cargo_units: []) }
+  let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public") }
+  let(:query) { FactoryBot.build(:journey_query, organization: organization, client: client, cargo_units: []) }
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   path "/v2/organizations/{organization_id}/queries/{query_id}/cargo_units" do

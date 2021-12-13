@@ -5,7 +5,8 @@ require "swagger_helper"
 RSpec.describe "Companies", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_user, organization_id: organization_id) }
+  let(:user) { FactoryBot.create(:users_user).tap { |users_user| FactoryBot.create(:users_membership, organization: organization, user: users_user) } }
+  let(:clients) { FactoryBot.create_list(:users_client, 5, organization: organization) }
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
@@ -207,7 +208,11 @@ RSpec.describe "Companies", type: :request, swagger: true do
       end
 
       response "401", "Unauthorized" do
-        let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
+        let(:access_token) do
+          FactoryBot.create(:access_token,
+            resource_owner_id: FactoryBot.create(:users_client, organization_id: organization_id).id,
+            scopes: "public")
+        end
         run_test!
       end
     end

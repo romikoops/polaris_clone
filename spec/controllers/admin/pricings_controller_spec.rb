@@ -12,6 +12,7 @@ RSpec.describe Admin::PricingsController, type: :controller do
   let(:json_response) { JSON.parse(response.body) }
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     append_token_header
   end
 

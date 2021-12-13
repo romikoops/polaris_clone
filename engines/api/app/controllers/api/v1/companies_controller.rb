@@ -3,6 +3,7 @@
 module Api
   module V1
     class CompaniesController < ApiController
+      include UsersUserAccess
       def update
         if company_params.empty?
           return render(

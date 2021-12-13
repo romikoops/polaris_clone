@@ -3,11 +3,11 @@
 require "swagger_helper"
 
 RSpec.describe "Errors", type: :request, swagger: true do
-  let(:user) { FactoryBot.create(:users_user) }
+  let(:client) { FactoryBot.create(:users_client, organization: organization) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: "public") }
+  let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: client.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-  let(:query) { FactoryBot.create(:journey_query) }
+  let(:query) { FactoryBot.create(:journey_query, client: client, organization: organization) }
 
   path "/v2/organizations/{organization_id}/queries/{query_id}/errors" do
     get "Fetch Errors for the Result Set" do

@@ -5,6 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class TruckingCountriesController < ApiController
+      include UsersUserAccess
       def index
         countries = Api::Routing::Trucking::CountriesService.new(
           organization: current_organization,

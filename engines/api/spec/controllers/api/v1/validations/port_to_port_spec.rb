@@ -6,8 +6,8 @@ module Api
   RSpec.describe V1::ValidationsController, type: :controller do
     routes { Engine.routes }
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:organizations_user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:user) { FactoryBot.create(:users_user) }
+    let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
     let(:origin_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
     let(:destination_nexus) { FactoryBot.create(:legacy_nexus, organization: organization) }
     let(:origin_hub) { itinerary.origin_hub }
@@ -15,14 +15,14 @@ module Api
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "slowly") }
     let(:tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "quickly") }
     let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: organizations_user.id) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:shipping_info) { { trucking_info: { pre_carriage: :pre } } }
     let(:cargo_item_id) { SecureRandom.uuid }
     let(:load_type) { "cargo_item" }
     let(:group) do
       FactoryBot.create(:groups_group, organization: organization).tap do |tapped_group|
-        FactoryBot.create(:groups_membership, group: tapped_group, member: user)
+        FactoryBot.create(:groups_membership, group: tapped_group, member: client)
       end
     end
     let(:params) do
@@ -30,7 +30,7 @@ module Api
         organization_id: organization.id,
         quote: {
           organization_id: organization.id,
-          user_id: user.id,
+          user_id: client.id,
           load_type: load_type,
           origin: origin,
           destination: destination
@@ -74,6 +74,7 @@ module Api
     let(:destination) { { nexus_id: destination_hub.nexus_id } }
 
     before do
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       ::Organizations.current_id = user.organization_id
     end
 

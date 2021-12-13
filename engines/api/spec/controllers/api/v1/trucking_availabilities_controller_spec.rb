@@ -17,6 +17,7 @@ module Api
     let(:wrong_lng) { 60.50 }
 
     before do
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       request.headers["Authorization"] = token_header
       Geocoder::Lookup::Test.add_stub([wrong_lat, wrong_lng], [
         "address_components" => [{"types" => ["premise"]}],

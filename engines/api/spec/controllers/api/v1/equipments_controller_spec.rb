@@ -8,6 +8,7 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fcl_40_pricing, organization: organization, itinerary: itinerary)
       FactoryBot.create(:fcl_40_hq_pricing, organization: organization, itinerary: fcl_40_hq_itinerary)
@@ -26,7 +27,7 @@ module Api
 
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
-    let(:user) { FactoryBot.create(:users_client, email: "test@example.com", organization: organization) }
+    let(:user) { FactoryBot.create(:users_user) }
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let!(:itinerary) { FactoryBot.create(:shanghai_gothenburg_itinerary, organization: organization) }

@@ -4,17 +4,19 @@ require "rails_helper"
 
 RSpec.describe Admin::GroupsController, type: :controller do
   let!(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:user) do
+  let(:user) { FactoryBot.create(:users_user) }
+  let!(:client) do
     FactoryBot.create(:users_client, organization: organization, email: "user@itsmycargo.com")
   end
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group) do
     FactoryBot.create(:groups_group, organization: organization, name: "Test").tap do |grp|
-      FactoryBot.create(:groups_membership, group: grp, member: user)
+      FactoryBot.create(:groups_membership, group: grp, member: client)
     end
   end
 
   before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     ::Organizations.current_id = organization.id
     append_token_header
   end
@@ -47,20 +49,20 @@ RSpec.describe Admin::GroupsController, type: :controller do
       end
     end
 
-    context "when search target is a user" do
-      let(:user2) { FactoryBot.create(:users_client, organization: organization) }
-      let(:user_group) { FactoryBot.create(:groups_group, organization: organization, name: "Test Group 2") }
+    context "when search target is a client" do
+      let(:client2) { FactoryBot.create(:users_client, organization: organization) }
+      let(:client_group) { FactoryBot.create(:groups_group, organization: organization, name: "Test Group 2") }
 
       before do
-        FactoryBot.create(:groups_membership, member: user2, group: user_group)
+        FactoryBot.create(:groups_membership, member: client2, group: client_group)
       end
 
-      it "returns the users groups" do
+      it "returns the clients groups" do
         get :index, params: { organization_id: organization.id,
                               target_type: "user",
-                              target_id: user2.id }
+                              target_id: client2.id }
 
-        expect(response_data.dig("groupData", 0, "id")).to eq(user_group.id)
+        expect(response_data.dig("groupData", 0, "id")).to eq(client_group.id)
       end
     end
   end
@@ -69,7 +71,7 @@ RSpec.describe Admin::GroupsController, type: :controller do
     let(:create_params) do
       { "addedMembers" =>
         { "clients" =>
-          [user.as_json],
+          [client.as_json],
           "groups" => [],
           "companies" => [] },
         "name" => "Test",
@@ -80,30 +82,30 @@ RSpec.describe Admin::GroupsController, type: :controller do
     it "returns http success", :aggregate_failures do
       post :create, params: create_params
       expect(response_data["name"]).to eq "Test"
-      expect(::Groups::Group.find(response_data["id"]).members.map { |c| c["id"] }).to eq [user.id]
+      expect(::Groups::Group.find(response_data["id"]).members.map { |c| c["id"] }).to eq [client.id]
     end
   end
 
   describe "POST #edit_members" do
-    let!(:user_a) { FactoryBot.create(:users_client, organization: organization) }
-    let!(:user_b) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:client_a) { FactoryBot.create(:users_client, organization: organization) }
+    let!(:client_b) { FactoryBot.create(:users_client, organization: organization) }
     let(:company_a) { FactoryBot.create(:companies_company, organization: organization) }
     let(:company_b) { FactoryBot.create(:companies_company, organization: organization) }
 
     let(:edit_params) do
       { "addedMembers" =>
         { "clients" =>
-          [user_a.as_json],
+          [client_a.as_json],
           "groups" => [],
           "companies" => [company_a.as_json] },
         "name" => "Test",
         "organization_id" => organization.id,
         "id" => group.id }
     end
-    let(:expected) { [user_a.id, company_a.id] }
+    let(:expected) { [client_a.id, company_a.id] }
 
     before do
-      FactoryBot.create(:groups_membership, group: group, member: user_b)
+      FactoryBot.create(:groups_membership, group: group, member: client_b)
       FactoryBot.create(:groups_membership, group: group, member: company_b)
     end
 

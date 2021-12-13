@@ -5,6 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class DashboardController < ApiController
+      include UsersUserAccess
       def show
         render json:
         {

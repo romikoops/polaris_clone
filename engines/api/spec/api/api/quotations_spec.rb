@@ -12,7 +12,7 @@ RSpec.describe "Quotations", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:source) { FactoryBot.create(:application) }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user) }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
 
@@ -21,7 +21,7 @@ RSpec.describe "Quotations", type: :request, swagger: true do
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
     ::Organizations.current_id = organization.id
-    organization.scope.update(content: { base_pricing: true })
+    FactoryBot.create(:users_membership, organization: organization, user: user)
   end
 
   path "/v1/organizations/{organization_id}/quotations" do

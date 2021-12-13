@@ -11,6 +11,7 @@ RSpec.describe Admin::HubsController, type: :controller do
 
   before do
     FactoryBot.create(:groups_group, :default, organization: organization)
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     allow(controller).to receive(:doorkeeper_authorize!).and_return(true)
     allow(controller).to receive(:current_organization).at_least(:once).and_return(organization)
     allow(controller).to receive(:current_user).at_least(:once).and_return(user)

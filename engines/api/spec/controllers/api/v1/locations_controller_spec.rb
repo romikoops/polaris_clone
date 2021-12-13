@@ -9,6 +9,7 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
+      FactoryBot.create(:users_membership, organization: organization, user: user)
       ::Organizations.current_id = organization.id
     end
 

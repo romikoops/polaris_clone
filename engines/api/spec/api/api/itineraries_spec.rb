@@ -5,11 +5,14 @@ require "swagger_helper"
 RSpec.describe "Itineraries", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
-  let!(:itinerary) { FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization) }
-
+  let(:user) { FactoryBot.create(:users_user) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
+
+  before do
+    FactoryBot.create(:users_membership, organization: organization, user: user)
+    FactoryBot.create(:hamburg_shanghai_itinerary, organization: organization)
+  end
 
   path "/v1/organizations/{organization_id}/itineraries" do
     get "Fetch list of itineraries belonging to an organization" do

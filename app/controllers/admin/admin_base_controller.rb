@@ -2,6 +2,8 @@
 
 module Admin
   class AdminBaseController < ApplicationController
+    include Api::UsersUserAccess
+
     protected
 
     def open_file(file)

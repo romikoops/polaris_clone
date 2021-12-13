@@ -15,6 +15,8 @@ module Api
     let(:token_header) { "Bearer #{access_token.token}" }
     let(:params) { { load_type: "cargo_item", organization_id: organization.id } }
 
+    before { FactoryBot.create(:users_membership, organization: organization, user: user) }
+
     describe "GET #index" do
       context "when origin and destination have no trucking" do
         before do

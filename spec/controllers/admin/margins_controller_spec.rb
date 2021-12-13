@@ -34,6 +34,7 @@ RSpec.describe Admin::MarginsController, type: :controller do
   before do
     ::Organizations.current_id = organization.id
     token_header = "Bearer #{access_token.token}"
+    FactoryBot.create(:users_membership, organization: organization, user: user)
     request.headers["Authorization"] = token_header
     FactoryBot.create(:groups_group, :default, organization: organization)
     %w[ocean air rail truck trucking local_charge].map do |mot|

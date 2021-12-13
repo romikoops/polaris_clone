@@ -23,7 +23,7 @@ module Api
       private
 
       def normalize_modes_of_transport!(modes_of_transport)
-        keys_mapping = {"container" => "fcl", "cargo_item" => "lcl"}
+        keys_mapping = { "container" => "fcl", "cargo_item" => "lcl" }
 
         modes_of_transport.each_value do |value|
           value.deep_transform_keys! { |k| keys_mapping[k] }

@@ -5,6 +5,7 @@ require_dependency "api/api_controller"
 module Api
   module V1
     class QuotationsController < ApiController
+      include UsersUserAccess
       SORTING_ATTRIBUTES = %w[selected_date load_type last_name origin destination].freeze
 
       def index

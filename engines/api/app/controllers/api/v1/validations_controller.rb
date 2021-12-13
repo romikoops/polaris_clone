@@ -3,6 +3,7 @@
 module Api
   module V1
     class ValidationsController < ApiController
+      include UsersUserAccess
       def create
         validator = Wheelhouse::ValidationService.new(
           request: offer_request
