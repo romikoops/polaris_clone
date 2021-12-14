@@ -99,7 +99,7 @@ module ExcelDataServices
           def unique_constraint_satisfied?
             return true unless unique?
 
-            sheet_values.uniq.length == sheet_values.length
+            sheet_values.uniq.compact.length == sheet_values.compact.length
           end
 
           def fall_back_row

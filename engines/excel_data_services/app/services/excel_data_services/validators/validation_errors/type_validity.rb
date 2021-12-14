@@ -114,6 +114,9 @@ module ExcelDataServices
 
         class OptionalMonthType < TypeValidity
         end
+
+        class EmailType < TypeValidity
+        end
       end
     end
   end
