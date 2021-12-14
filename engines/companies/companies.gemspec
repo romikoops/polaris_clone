@@ -1,5 +1,7 @@
+# rubocop:disable Gemspec/RequiredRubyVersion
 # frozen_string_literal: true
 
+# rubocop:enable Gemspec/RequiredRubyVersion
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |spec|
   spec.name = "companies"
@@ -18,9 +20,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "paranoia"
   spec.add_dependency "pg_search"
 
-  spec.add_dependency "organizations"
   spec.add_dependency "legacy"
-
+  spec.add_dependency "organizations"
   spec.add_dependency "users"
 
   spec.add_development_dependency "groups"

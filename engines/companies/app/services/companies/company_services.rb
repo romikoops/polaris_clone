@@ -5,6 +5,7 @@ module Companies
     attr_reader :company
 
     InvalidCompany = Class.new(StandardError)
+    HasOngoingShipments = Class.new(StandardError)
 
     def initialize(company:)
       @company = company
@@ -12,6 +13,7 @@ module Companies
 
     def destroy
       raise InvalidCompany if company.blank?
+      raise HasOngoingShipments if shipments_in_progress?
 
       ActiveRecord::Base.transaction do
         user_clients = company_memberships.map(&:client)
@@ -38,6 +40,13 @@ module Companies
       clients.each do |client|
         Companies::Membership.create!(client: client, company: default_company)
       end
+    end
+
+    def shipments_in_progress?
+      Journey::ShipmentRequest.where(
+        company: company,
+        status: %i[requested in_progress]
+      ).present?
     end
   end
 end

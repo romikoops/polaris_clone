@@ -44,6 +44,10 @@ module Api
         render json: Api::V2::CompanySerializer.new(company)
       end
 
+      def destroy
+        render json: { "success": true } if company_service.destroy
+      end
+
       private
 
       def company_params
@@ -87,6 +91,10 @@ module Api
 
       def current_page
         params[:page]&.to_i || 1
+      end
+
+      def company_service
+        @company_service ||= ::Companies::CompanyServices.new(company: company)
       end
     end
   end

@@ -12,10 +12,12 @@ RSpec.describe "Companies", type: :request, swagger: true do
   let(:Authorization) { "Bearer #{access_token.token}" }
   let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1") }
   let(:company_id) { companies_company.id }
+  let(:shipment_request_status) { "requested" }
 
   before do
     Organizations.current_id = organization_id
     FactoryBot.create(:companies_company, organization: organization, name: "default")
+    FactoryBot.create(:journey_shipment_request, company_id: companies_company.id, status: shipment_request_status)
   end
 
   path "/v1/organizations/{organization_id}/companies/{company_id}" do
@@ -167,6 +169,30 @@ RSpec.describe "Companies", type: :request, swagger: true do
       response "422", "Unprocessable Entity" do
         let(:query) { { company: { foo: "bar" } } }
 
+        run_test!
+      end
+    end
+
+    delete "Delete a company" do
+      tags "Companies"
+      description "Delete a specific company"
+      operationId "deleteCompany"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_id, in: :path, type: :string, description: "The current company id"
+
+      response "200", "successful operation" do
+        let(:shipment_request_status) { "completed" }
+
+        run_test!
+      end
+
+      response "401", "Unauthorized" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
         run_test!
       end
     end

@@ -12,6 +12,8 @@ module Companies
     let(:company_membership) { FactoryBot.create(:companies_membership, company: company, client: user_client) }
     let(:group_membership) { FactoryBot.create(:groups_membership, group: group, member: company) }
     let(:default_company) { FactoryBot.create(:companies_company, name: "default", organization: organization) }
+    let(:shipment_request) { FactoryBot.create(:journey_shipment_request, company_id: company.id, status: shipment_request_status) }
+    let(:shipment_request_status) { "completed" }
     let(:group) do
       FactoryBot.create(:groups_group, organization: organization, name: "Test").tap do |grp|
         FactoryBot.create(:groups_membership, group: grp, member: user_client)
@@ -62,13 +64,24 @@ module Companies
         company_membership
         group_membership
         default_company
+        shipment_request
       end
 
       it "raises exception when company is not present" do
         expect { described_class.new(company: nil).destroy }.to raise_error(Companies::CompanyServices::InvalidCompany)
       end
 
-      context "when destroy is called on company service with valid company" do
+      context "when destroy is called on company service with valid company and journey shipment request status is `completed`" do
+        before { company_service.destroy }
+
+        it_behaves_like "companies membership destroyed"
+        it_behaves_like "clients assigned to default company"
+        it_behaves_like "groups membership destroyed"
+      end
+
+      context "when destroy is called on company service with valid company and journey shipment request status is `rejected`" do
+        let(:shipment_request_status) { "rejected" }
+
         before { company_service.destroy }
 
         it_behaves_like "companies membership destroyed"
@@ -95,6 +108,22 @@ module Companies
 
         it "clients are not assigned subscription to default company" do
           expect(Companies::Membership.where(client_id: user_client.id, company_id: company.id)).to be_present
+        end
+      end
+
+      context "when journey shipment request and status is `requested`" do
+        let(:shipment_request_status) { "requested" }
+
+        it "raises exception `HasOngoingShipments`" do
+          expect { described_class.new(company: company).destroy }.to raise_error(Companies::CompanyServices::HasOngoingShipments)
+        end
+      end
+
+      context "when journey shipment request and status is `in_progress`" do
+        let(:shipment_request_status) { "in_progress" }
+
+        it "raises exception `HasOngoingShipments`" do
+          expect { described_class.new(company: company).destroy }.to raise_error(Companies::CompanyServices::HasOngoingShipments)
         end
       end
     end

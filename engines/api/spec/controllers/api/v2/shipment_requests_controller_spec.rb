@@ -145,7 +145,7 @@ module Api
         context "when no sorting applied" do
           it "returns the shipment requests", :aggregate_failures do
             get :index, params: params, as: :json
-            expect(response_data.pluck("id")).to eq([shipment_request_a_id, shipment_request_b_id])
+            expect(response_data.pluck("id")).to match_array([shipment_request_a_id, shipment_request_b_id])
           end
         end
 

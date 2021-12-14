@@ -59,7 +59,7 @@ module Api
         before { get :index, params: params }
 
         it "returns all the companies for the organisation and ids matching the companies ids" do
-          expect(response_data.pluck("id")).to match_array(Companies::Company.all.ids)
+          expect(response_data.pluck("id")).to match_array(Companies::Company.where(organization: organization).ids)
         end
       end
 
@@ -187,6 +187,53 @@ module Api
         let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
 
         before { post :create, params: { organization_id: organization.id, company: create_params } }
+
+        it_behaves_like "unauthorized for non users user"
+      end
+    end
+
+    describe "DELETE #destroy" do
+      let(:company) { FactoryBot.create(:companies_company, organization: organization) }
+      let(:params) { { organization_id: organization.id, id: company.id } }
+
+      context "when company has shipment requests with status `completed`" do
+        before { FactoryBot.create(:journey_shipment_request, company_id: company.id, status: "completed") }
+
+        it "returns 200 OK" do
+          delete :destroy, params: params
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context "when company is not found" do
+        let(:params) { { organization_id: organization.id, id: "random_id" } }
+
+        it "returns 404  Not found" do
+          delete :destroy, params: params
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when company has shipment requests status as `requested`" do
+        before { FactoryBot.create(:journey_shipment_request, company_id: company.id, status: "requested") }
+
+        it "raises `HasOngoingShipments` exception" do
+          expect { delete :destroy, params: params }.to raise_error(Companies::CompanyServices::HasOngoingShipments)
+        end
+      end
+
+      context "when company has shipment requests status as `in_progress`" do
+        before { FactoryBot.create(:journey_shipment_request, company_id: company.id, status: "in_progress") }
+
+        it "raises `HasOngoingShipments` exception" do
+          expect { delete :destroy, params: params }.to raise_error(Companies::CompanyServices::HasOngoingShipments)
+        end
+      end
+
+      context "when current user is not users user" do
+        let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+
+        before { delete :destroy, params: params }
 
         it_behaves_like "unauthorized for non users user"
       end

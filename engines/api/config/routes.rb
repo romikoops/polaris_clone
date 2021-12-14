@@ -91,7 +91,7 @@ Api::Engine.routes.draw do
       resource :colli_types, only: [:show]
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
-      resources :companies, only: %i[index create show update]
+      resources :companies, only: %i[index create show update destroy]
     end
     resources :users do
       get "validate", on: :collection
