@@ -11,7 +11,63 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
   before do
     Organizations.current_id = organization_id
+    FactoryBot.create(:journey_shipment_request, client: user, result: FactoryBot.create(:journey_result, query: FactoryBot.build(:journey_query, client: user, organization_id: organization_id)))
     allow(Pdf::Shipment::Request).to receive(:new).and_return(instance_double("Pdf::Shipment::Request", file: true))
+  end
+
+  path "/v2/organizations/{organization_id}/shipment_requests" do
+    get "Fetch all shipment requests for a client" do
+      tags "ShipmentRequests"
+      description "Fetch all shipment requests"
+      operationId "getShipmentRequests"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :sortBy,
+                in: :query,
+                type: :string,
+                description: "The attribute by which to sort the Shipment Requests",
+                enum: %w[
+                  created_at
+                ]
+      parameter name: :direction,
+                in: :query,
+                type: :string,
+                description: "The defining whether the sorting is ascending or descending",
+                enum: %w[
+                  asc
+                  desc
+                ]
+      parameter name: :page,
+                in: :query,
+                type: :string,
+                description: "The page of Shipment Requests requested"
+      parameter name: :perPage,
+                in: :query,
+                type: :string,
+                description: "The number of Shipment Requests requested per page"
+
+      let(:sortBy) { "created_at" }
+      let(:direction) { "asc" }
+      let(:page) { 1 }
+      let(:perPage) { 10 }
+
+      response "200", "successful operation" do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :array,
+                   items: { "$ref" => "#/components/schemas/shipment_request_index" }
+                 }
+               },
+               required: ["data"]
+
+        run_test!
+      end
+    end
   end
 
   path "/v2/organizations/{organization_id}/shipment_requests/{shipment_request_id}" do

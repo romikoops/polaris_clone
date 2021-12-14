@@ -3,6 +3,14 @@
 module Api
   module V2
     class ShipmentRequestsController < ApiController
+      def index
+        render json: Api::V2::ShipmentRequestIndexSerializer.new(
+          Api::V2::ShipmentRequestDecorator.decorate_collection(
+            filtered_shipment_requests.paginate(pagination_params)
+          )
+        )
+      end
+
       def show
         render json: Api::V2::ShipmentRequestSerializer.new(shipment_request)
       end
@@ -23,6 +31,19 @@ module Api
 
       def shipment_request
         @shipment_request ||= Journey::ShipmentRequest.find(params[:id])
+      end
+
+      def filtered_shipment_requests
+        @filterrific = initialize_filterrific(
+          shipment_requests,
+          filterrific_params
+        ) || return
+
+        shipment_requests.filterrific_find(@filterrific)
+      end
+
+      def shipment_requests
+        @shipment_requests ||= Api::ShipmentRequest.where(client: current_user)
       end
 
       def creation_error_message
@@ -48,6 +69,23 @@ module Api
 
       def result
         @result ||= Journey::Result.find(params[:result_id])
+      end
+
+      def index_params
+        params.permit(:sortBy, :direction, :page, :perPage)
+      end
+
+      def filterrific_params
+        {
+          sorted_by: index_params[:sortBy] && index_params.values_at(:sortBy, :direction).compact.join("_")
+        }
+      end
+
+      def pagination_params
+        {
+          page: [index_params[:page], 1].map(&:to_i).max,
+          per_page: index_params[:perPage]
+        }
       end
     end
   end

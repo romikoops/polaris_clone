@@ -79,6 +79,7 @@ Api::Engine.routes.draw do
         resources :schedules, only: %i[index show]
         resources :shipment_requests, only: %i[create]
       end
+      resources :shipment_requests, only: %i[index show]
       resources :offers, only: [:create] do
         get "email"
         get "pdf"
@@ -91,7 +92,6 @@ Api::Engine.routes.draw do
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
       resources :companies, only: %i[index create show update]
-      resources :shipment_requests, only: %i[show]
     end
     resources :users do
       get "validate", on: :collection

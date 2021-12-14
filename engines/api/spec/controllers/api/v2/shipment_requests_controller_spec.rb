@@ -7,6 +7,7 @@ module Api
     routes { Engine.routes }
 
     before do
+      FactoryBot.create(:companies_membership, client: users_client, company: FactoryBot.build(:companies_company, organization: organization))
       request.headers["Authorization"] = "Bearer #{access_token.token}"
     end
 
@@ -72,7 +73,7 @@ module Api
           commodityInfos: commodity_infos
         }
       end
-
+      let(:client) { users_client }
       let(:successful_response_data) do
         {
           "attributes" => {
@@ -84,10 +85,6 @@ module Api
           "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [] } },
           "type" => "shipmentRequest"
         }
-      end
-
-      before do
-        FactoryBot.create(:companies_membership, client: client, company: query.company)
       end
 
       shared_examples_for "a successful Create" do
@@ -126,6 +123,54 @@ module Api
         it "returns a 201 response" do
           post :create, params: empty_valid_params, as: :json
           expect(response).to have_http_status(:created)
+        end
+      end
+    end
+
+    describe "GET #index" do
+      let(:params) { { organization_id: organization.id } }
+
+      context "when sorting " do
+        let!(:shipment_request_a_id) do
+          FactoryBot.create(:journey_shipment_request,
+            created_at: 2.hours.ago,
+            client: users_client).id
+        end
+        let!(:shipment_request_b_id) do
+          FactoryBot.create(:journey_shipment_request,
+            created_at: 5.hours.ago,
+            client: users_client).id
+        end
+
+        context "when no sorting applied" do
+          it "returns the shipment requests", :aggregate_failures do
+            get :index, params: params, as: :json
+            expect(response_data.pluck("id")).to eq([shipment_request_a_id, shipment_request_b_id])
+          end
+        end
+
+        context "when sorting by created_at" do
+          it "returns the Shipment Requests sorted by created_at desc", :aggregate_failures do
+            get :index, params: params.merge(sortBy: "created_at", direction: "desc"), as: :json
+            expect(response_data.pluck("id")).to eq([shipment_request_a_id, shipment_request_b_id])
+          end
+
+          it "returns the Shipment Requests sorted by created_at asc", :aggregate_failures do
+            get :index, params: params.merge(sortBy: "created_at", direction: "asc"), as: :json
+            expect(response_data.pluck("id")).to eq([shipment_request_b_id, shipment_request_a_id])
+          end
+        end
+
+        context "when paginating" do
+          it "returns one Shipment Request per page (Page 1)", :aggregate_failures do
+            get :index, params: params.merge(sortBy: "created_at", direction: "desc", page: 1, perPage: 1), as: :json
+            expect(response_data.pluck("id")).to eq([shipment_request_a_id])
+          end
+
+          it "returns one Query per page (Page 2)", :aggregate_failures do
+            get :index, params: params.merge(sortBy: "created_at", direction: "desc", page: 2, perPage: 1), as: :json
+            expect(response_data.pluck("id")).to eq([shipment_request_b_id])
+          end
         end
       end
     end

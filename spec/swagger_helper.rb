@@ -199,6 +199,74 @@ RSpec.configure do |config|
             },
             required: %w[email]
           },
+          shipment_request_index: {
+            type: "object",
+            properties: {
+              result_id: {
+                description: "Result ID",
+                type: "string"
+              },
+              company_id: {
+                description: "Company ID",
+                type: "string"
+              },
+              client_id: {
+                description: "Client ID",
+                type: "string"
+              },
+              with_insurance: {
+                description: "Any insurance on the cargo",
+                type: "boolean",
+                nullable: true
+              },
+              with_customs_handling: {
+                description: "Any customs handling service needed",
+                type: "boolean",
+                nullable: true
+              },
+              status: {
+                description: "Status of the shipment request",
+                type: "string",
+                nullable: true
+              },
+              preferred_voyage: {
+                description: "Preferred voyage",
+                type: "string",
+                nullable: true
+              },
+              notes: {
+                description: "Notes about the shipment request",
+                type: "string",
+                nullable: true
+              },
+              originHub: {
+                description: "Name of the Hub the shipment departs from",
+                type: "string"
+              },
+              destinationHub: {
+                description: "Name of the Hub the shipment arrives at.",
+                type: "string"
+              },
+              originPickup: {
+                description: "Address where the cargo will be collected if Pre-Carriage is requested",
+                type: "string",
+                nullable: true
+              },
+              destinationDropoff: {
+                description: "Address where the cargo will be dropped off if On-Carriage is requested",
+                type: "string",
+                nullable: true
+              },
+              requestedAt: {
+                description: "Date the ShipmentRequest was made",
+                type: "string"
+              },
+              reference: {
+                description: "The internal reference number from the LineItemSet used to generate the ShipmentRequest",
+                type: "string"
+              }
+            }
+          },
           shipment_request: {
             type: "object",
             properties: {
