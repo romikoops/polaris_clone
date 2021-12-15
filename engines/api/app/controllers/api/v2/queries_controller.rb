@@ -17,6 +17,8 @@ module Api
       end
 
       def create
+        return head :unprocessable_entity if query_params[:items].blank?
+
         new_query = wheelhouse_query_service.perform
         decorated = Api::V2::QueryDecorator.decorate(new_query)
         render json: Api::V2::QuerySerializer.new(decorated), status: :created

@@ -9,19 +9,16 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      FactoryBot.create(:companies_membership, client: user)
+      FactoryBot.create(:companies_membership, client: client)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
-    let(:user) { FactoryBot.create(:api_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: FactoryBot.create(:application, name: "siren")) }
+    let(:client) { FactoryBot.create(:api_client, organization_id: organization.id) }
+    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public", application: FactoryBot.create(:application, name: "siren")) }
     let(:token_header) { "Bearer #{access_token.token}" }
 
     describe "POST #create" do
       include_context "complete_route_with_trucking"
-
-      let(:cargo_classes) { ["fcl_20"] }
-      let(:load_type) { "container" }
       let(:parent_id) { nil }
       let(:origin) do
         FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
@@ -29,7 +26,23 @@ module Api
       let(:destination) do
         FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode)
       end
-      let(:items) { [] }
+      let(:items) do
+        [
+          {
+            cargoClass: "lcl",
+            stackable: true,
+            colliType: "pallet",
+            quantity: 1,
+            length: 120,
+            width: 100,
+            height: 120,
+            weight: 1200,
+            commodities: []
+          }
+        ]
+      end
+      let(:cargo_classes) { ["lcl"] }
+      let(:load_type) { "cargo_item" }
 
       before do
         { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
@@ -54,24 +67,6 @@ module Api
       end
 
       context "when lcl" do
-        let(:items) do
-          [
-            {
-              cargoClass: "lcl",
-              stackable: true,
-              colliType: "pallet",
-              quantity: 1,
-              length: 120,
-              width: 100,
-              height: 120,
-              weight: 1200,
-              commodities: []
-            }
-          ]
-        end
-        let(:cargo_classes) { ["lcl"] }
-        let(:load_type) { "cargo_item" }
-
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           expect(response_data["id"]).to be_present
           expect(DateTime.parse(response_data.dig("attributes", "cargoReadyDate"))).to eq(Time.zone.tomorrow)
@@ -115,6 +110,14 @@ module Api
           expect(response_data["attributes"]["parentId"]).to be_present
         end
       end
+
+      context "when items are empty" do
+        let(:items) { [] }
+
+        it "returns invalid params" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
     end
 
     describe "GET #show" do
@@ -139,7 +142,7 @@ module Api
         it "successfuly returns the query object", :aggregate_failures do
           patch :update, params: params, as: :json
           expect(response_data["id"]).to be_present
-          expect(response_data.dig("attributes", "client", "data", "id")).to eq(user.id)
+          expect(response_data.dig("attributes", "client", "data", "id")).to eq(client.id)
         end
       end
 
@@ -183,7 +186,7 @@ module Api
             organization: organization,
             cargo_ready_date: 3.days.from_now,
             created_at: 2.hours.ago,
-            client: user,
+            client: client,
             results: [FactoryBot.build(:journey_result)])
         end
         let!(:query_b) do
@@ -193,7 +196,7 @@ module Api
             organization: organization,
             cargo_ready_date: 2.days.from_now,
             created_at: 5.hours.ago,
-            client: user,
+            client: client,
             billable: false,
             results: [FactoryBot.build(:journey_result)])
         end
@@ -267,10 +270,10 @@ module Api
       end
 
       context "when searching" do
-        let!(:query) { FactoryBot.create(:api_query, result_count: 1, client: user, organization: organization) }
+        let!(:query) { FactoryBot.create(:api_query, result_count: 1, client: client, organization: organization) }
 
         before do
-          FactoryBot.create_list(:api_query, 2, result_count: 1, organization: organization, client: user)
+          FactoryBot.create_list(:api_query, 2, result_count: 1, organization: organization, client: client)
           Organizations.current_id = organization.id
           get :index, params: params.merge(searchBy: search_by, searchQuery: search_query), as: :json
         end
@@ -306,7 +309,7 @@ module Api
         end
 
         context "when searching by origin" do
-          let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", client: user, result_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, origin: "Cape Town", client: client, result_count: 1, organization: organization) }
           let(:search_query) { query.origin }
           let(:search_by) { "origin" }
 
@@ -314,7 +317,7 @@ module Api
         end
 
         context "when searching by destination" do
-          let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", client: user, result_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, destination: "Cape Town", client: client, result_count: 1, organization: organization) }
           let(:search_query) { query.destination }
           let(:search_by) { "destination" }
 
@@ -338,7 +341,7 @@ module Api
         end
 
         context "when searching by load_type with a valid search_query" do
-          let!(:query) { FactoryBot.create(:api_query, load_type: "fcl", client: user, result_count: 1, organization: organization) }
+          let!(:query) { FactoryBot.create(:api_query, load_type: "fcl", client: client, result_count: 1, organization: organization) }
           let(:search_query) { query.load_type }
           let(:search_by) { "load_type" }
 

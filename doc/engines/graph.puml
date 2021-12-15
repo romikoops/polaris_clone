@@ -68,8 +68,8 @@ legacy *--> companies
 legacy *--> organization_manager
 legacy *--> quotations
 users *--> organizations
-companies --> organizations
 companies *--> legacy
+companies --> organizations
 companies --> users
 companies *--> groups
 organization_manager *--> companies

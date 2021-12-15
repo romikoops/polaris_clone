@@ -95,7 +95,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
           items: {
             type: :array,
             items: {
-              oneOf: [
+              anyOf: [
                 { "$ref" => "#/components/schemas/item_lcl" },
                 { "$ref" => "#/components/schemas/item_aggregated_lcl" },
                 { "$ref" => "#/components/schemas/item_fcl" }
@@ -169,6 +169,19 @@ RSpec.describe "Queries", type: :request, swagger: true do
             volume: nil,
             weight: 1200,
             commodities: [{ imo_class: nil, description: "No Dangerous Goods", hs_code: "" }]
+          }
+        end
+
+        run_test!
+      end
+
+      response "422", "invalid request (missing items)" do
+        let(:query) do
+          {
+            originId: origin.id,
+            destinationId: destination.id,
+            loadType: load_type,
+            items: []
           }
         end
 

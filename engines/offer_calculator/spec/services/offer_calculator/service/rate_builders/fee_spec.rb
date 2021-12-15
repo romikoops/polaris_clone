@@ -6,7 +6,6 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
   let(:min_value) { Money.new(1000, "USD") }
   let(:max_value) { Money.new(1e9, "USD") }
   let(:rate_basis) { "PER_WM" }
-  let(:target) { nil }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:charge_category) { pricing.fees.first.charge_category }
   let(:margin) do
@@ -21,7 +20,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
       original: pricing,
       result: pricing.as_json,
       margins: [margin],
-      flat_margins: {charge_category.code => 50})
+      flat_margins: { charge_category.code => 50 })
   end
   let(:cargo_unit) do
     FactoryBot.create(:journey_cargo_unit,
@@ -34,28 +33,24 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
       stackable: true)
   end
   let(:scope) { {} }
-  let(:engine) do
-    FactoryBot.create(:measurements_engine_unit,
-      scope: scope,
-      manipulated_result: manipulated_result,
-      cargo_unit: cargo_unit)
-  end
   let(:measures) do
     OfferCalculator::Service::Measurements::Cargo.new(
-      engine: engine,
       scope: {},
-      object: manipulated_result
+      object: manipulated_result,
+      engine: FactoryBot.create(:measurements_engine_unit,
+        scope: scope,
+        manipulated_result: manipulated_result,
+        cargo_unit: cargo_unit)
     )
   end
   let(:inputs) do
-    Struct.new("FeeInputs", :charge_category, :rate_basis, :min_value, :max_value, :measures, :targets)
-    Struct::FeeInputs.new(
-      charge_category,
-      rate_basis,
-      min_value,
-      max_value,
-      measures,
-      measures.cargo_units
+    OfferCalculator::Service::RateBuilders::FeeInputs.new(
+      charge_category: charge_category,
+      rate_basis: rate_basis,
+      min_value: min_value,
+      max_value: max_value,
+      measures: measures,
+      targets: measures.cargo_units
     )
   end
 
