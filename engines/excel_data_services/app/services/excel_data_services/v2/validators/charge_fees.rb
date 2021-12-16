@@ -3,7 +3,7 @@
 module ExcelDataServices
   module V2
     module Validators
-      class LocalChargeFees < ExcelDataServices::V2::Validators::Base
+      class ChargeFees < ExcelDataServices::V2::Validators::Base
         def extract_state
           @state
         end
@@ -58,7 +58,11 @@ module ExcelDataServices
           end
 
           def row_value_keys
-            @row_value_keys ||= rate_basis.split("_").reject { |part| part.in?(%w[PER X RANGE FLAT]) }.map(&:downcase)
+            @row_value_keys ||= row.keys & (rate_basis_value_keys | %w[rate value])
+          end
+
+          def rate_basis_value_keys
+            @rate_basis_value_keys ||= rate_basis.split("_").reject { |part| part.in?(%w[PER X RANGE FLAT]) }.map(&:downcase)
           end
 
           def error(message:)

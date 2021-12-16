@@ -212,7 +212,7 @@ prerequisite "TenantVehicle"
 prerequisite "ChargeCategory"
 
 add_validator "SequentialDates"
-add_validator "LocalChargeFees"
+add_validator "ChargeFees"
 
 add_validator "RateBasis"
 add_validator "Carrier"

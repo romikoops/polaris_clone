@@ -10,6 +10,9 @@ module ExcelDataServices
         class MissingValueForRateBasis < MissingValues
         end
 
+        class MissingValueForRange < MissingValues
+        end
+
         class MissingValuesForHub < MissingValues
         end
 

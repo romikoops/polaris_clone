@@ -19,8 +19,7 @@ module ExcelDataServices
         restructured_data = parse_dates(rows_data: restructured_data)
         restructured_data.reject! { |row_data| row_data[:fee].blank? }
         restructured_data.each do |row_data|
-          row_data.reverse_merge!(sheet_name: sheet_name,
-                                  restructurer_name: restructurer_name)
+          row_data.reverse_merge!(sheet_name: sheet_name, restructurer_name: restructurer_name)
           row_data[:internal] ||= false
           row_data[:notes] = extract_notes(row_data) if row_data[:remarks]
         end
@@ -36,7 +35,7 @@ module ExcelDataServices
 
             extract_range_values(row_data)
           end
-          ranges_values = ranges_values.compact
+          ranges_values = ranges_values.compact if ranges_values.all?(&:nil?)
 
           if ranges_values.present?
             result_row_data.except!(:fee) # already inside range hash, called 'rate'.

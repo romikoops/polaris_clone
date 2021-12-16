@@ -173,14 +173,14 @@ column "remarks",
   type: :object,
   fallback: nil
 
-row_validation %w[effective_date expiration_date], (proc { |a, b| a < b })
-
 prerequisite "TenantVehicle"
 prerequisite "Itinerary"
 prerequisite "ChargeCategory"
 
 add_dynamic_columns excluding: %w[REMARKS WM_RATIO VM_RATIO TRANSIT_TIME]
 
+add_validator "SequentialDates"
+add_validator "ChargeFees"
 add_validator "Carrier"
 add_validator "TenantVehicle"
 add_validator "OriginHub"

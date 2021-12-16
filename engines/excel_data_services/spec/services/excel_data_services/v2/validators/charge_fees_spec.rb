@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExcelDataServices::V2::Validators::LocalChargeFees do
+RSpec.describe ExcelDataServices::V2::Validators::ChargeFees do
   include_context "for excel_data_services setup"
 
   let(:result) { described_class.state(state: state_arguments) }
@@ -105,6 +105,21 @@ RSpec.describe ExcelDataServices::V2::Validators::LocalChargeFees do
 
       it "returns the state with the missing base error message" do
         expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when the value is stored under rate" do
+      let(:row) do
+        {
+          "rate_basis" => "PER_KG",
+          "rate" => 16,
+          "row" => 2,
+          "sheet_name" => "Sheet1"
+        }
+      end
+
+      it "returns the state with no errors" do
+        expect(result.errors).to be_empty
       end
     end
   end
