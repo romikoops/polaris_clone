@@ -11,7 +11,8 @@ module ExcelDataServices
         end
 
         def check_range_values(row:)
-          return if row.rate_basis.include?("_RANGE") && row.range.present? && row.range.all?(&:present?)
+          return if row.rate_basis.exclude?("_RANGE")
+          return if row.range.present? && row.range.all?(&:present?)
 
           add_to_errors(
             type: :error,
