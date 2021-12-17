@@ -37,14 +37,6 @@ module Api
           currency: result.total.currency.iso_code
         }
       end
-
-      attribute :cargo_ready_date do |result|
-        result.query.cargo_ready_date
-      end
-
-      attribute :cargo_delivery_date do |result|
-        result.query.delivery_date
-      end
     end
   end
 end

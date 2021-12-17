@@ -72,4 +72,25 @@ RSpec.describe Api::V2::ResultDecorator do
       end
     end
   end
+
+  describe "#cargo_delivery_date" do
+    it "returns nil when the route section transit time is blank" do
+      expect(decorated_result.cargo_delivery_date).to be_nil
+    end
+
+    context "when the main route section has transit time" do
+      let(:main_freight_section) do
+        FactoryBot.build(:journey_route_section,
+          order: 3,
+          mode_of_transport: "ocean",
+          transshipment: transshipment,
+          transit_time: 5,
+          carrier: routing_carrier.name)
+      end
+
+      it "returns sum of all transit times stored on the RouteSections where missing transit times are assumed to be 0" do
+        expect(decorated_result.cargo_delivery_date).to eq(query.cargo_ready_date + 5.days)
+      end
+    end
+  end
 end

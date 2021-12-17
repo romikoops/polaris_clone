@@ -101,9 +101,7 @@ module ResultFormatter
     end
 
     def transit_time
-      @transit_time ||= if main_freight_section.transit_time.present? && scope.dig("voyage_info", "transit_time").present?
-        route_sections.sum { |route_section| route_section.transit_time || 0 }
-      end
+      @transit_time ||= route_section_transit_time if scope.dig("voyage_info", "transit_time").present?
     end
 
     def cargo_items
@@ -374,6 +372,12 @@ module ResultFormatter
         remarks: remarks,
         pricing_id: freight_pricing.id
       ).fetch
+    end
+
+    private
+
+    def route_section_transit_time
+      route_sections.sum { |route_section| route_section.transit_time || 0 } if main_freight_section.transit_time.present?
     end
   end
 end
