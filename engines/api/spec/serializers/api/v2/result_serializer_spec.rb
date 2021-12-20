@@ -32,5 +32,16 @@ module Api
     it "validates queryId is present in the serialized attributes" do
       expect(target[:queryId]).to be_present
     end
+
+    context "when the result decorator's total returns nil" do
+      it "returns nil values for a money representation" do
+        allow(decorated_result).to receive(:total).and_return(nil)
+        expect(target[:total]).to eq({ value: nil, currency: nil })
+      end
+    end
+
+    it "returns a money representation when the total is present" do
+      expect(target[:total]).to eq({ value: 36.00, currency: "EUR" })
+    end
   end
 end

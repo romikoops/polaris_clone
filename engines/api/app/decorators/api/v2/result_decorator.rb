@@ -22,6 +22,12 @@ module Api
         route_sections.where.not(mode_of_transport: "relay").count - transshipment_count
       end
 
+      def total
+        return if query.client_id.nil? && query.creator_id.nil?
+
+        super
+      end
+
       def cargo_delivery_date
         return if route_section_transit_time.blank?
 

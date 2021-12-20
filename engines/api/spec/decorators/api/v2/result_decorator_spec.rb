@@ -29,6 +29,20 @@ RSpec.describe Api::V2::ResultDecorator do
     Organizations.current_id = organization.id
   end
 
+  describe "#total" do
+    context "when the query has no client id and creator id attached to it" do
+      let(:query) { FactoryBot.create(:journey_query, organization: organization, creator_id: nil, client_id: nil) }
+
+      it "returns nil" do
+        expect(decorated_result.total).to be_nil
+      end
+    end
+
+    it "returns when results with the parent method when the result's query has a client attached to it" do
+      expect(decorated_result.total).to eq(Money.from_amount(108, "EUR"))
+    end
+  end
+
   describe ".carrier_logo" do
     context "with logo attached" do
       it "returns the url for accessing the logo of the freight carrier" do

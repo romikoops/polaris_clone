@@ -25,6 +25,20 @@ RSpec.describe ResultFormatter::ResultDecorator do
     allow(klass).to receive(:on_carriage_section).and_return(on_carriage_section)
   end
 
+  describe "#total" do
+    it "returns the total of all line items, when the line item's total cents is multiplied by the item's exchange rate" do
+      expect(klass.total).to eq(Money.from_amount(180, "EUR"))
+    end
+
+    context "when the line item's currency is equal to the query's currency" do
+      let(:query) { FactoryBot.create(:journey_query, organization: organization, currency: "USD") }
+
+      it "returns the total for one line item" do
+        expect(klass.total).to eq(Money.from_amount(150, "USD"))
+      end
+    end
+  end
+
   describe ".carriage_service_string" do
     let(:operator_string) { klass.carriage_service_string(carriage: "pre") }
 

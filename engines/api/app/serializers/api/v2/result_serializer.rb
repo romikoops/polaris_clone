@@ -32,10 +32,12 @@ module Api
       attribute :valid_until, &:expiration_date
 
       attribute :total do |result|
-        {
-          value: result.total.amount,
-          currency: result.total.currency.iso_code
-        }
+        total = result.total
+        if total.present?
+          value = total.amount
+          currency = total.currency.iso_code
+        end
+        %i[value currency].zip([value, currency]).to_h
       end
     end
   end
