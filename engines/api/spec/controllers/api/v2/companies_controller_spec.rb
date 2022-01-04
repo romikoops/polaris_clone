@@ -51,22 +51,76 @@ module Api
     end
 
     describe "GET #index" do
-      before { FactoryBot.create_list(:companies_company, 5, organization: organization) }
-
       let(:params) { { organization_id: organization.id } }
+      let!(:company_a) { FactoryBot.create(:companies_company, name: "abc cargo", country: factory_country_from_code(code: "cn"), organization: organization) }
+      let!(:company_c) { FactoryBot.create(:companies_company, name: "core cargo", country: factory_country_from_code(code: "uk"), organization: organization) }
+      let!(:company_d) { FactoryBot.create(:companies_company, name: "delta cargo", organization: organization) }
 
-      context "without pagination params" do
+      it "returns all the companies for the organisation and ids matching the companies ids" do
+        get :index, params: params
+        expect(response_data.pluck("id")).to match_array(Companies::Company.where(organization: organization).ids)
+      end
+
+      it "with pagination params, asserts that a total of two companies were returned" do
+        get :index, params: { organization_id: organization.id, perPage: 2 }
+        expect(response_data.length).to eq(2)
+      end
+
+      context "with invalid searchBy" do
+        let(:params) { { organization_id: organization.id, searchBy: "origin", searchQuery: "Germany" } }
+
         before { get :index, params: params }
 
-        it "returns all the companies for the organisation and ids matching the companies ids" do
-          expect(response_data.pluck("id")).to match_array(Companies::Company.where(organization: organization).ids)
+        it "returns unprocessable entity" do
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
 
-      context "with pagination params" do
-        it "asserts that a total of two companies were returned" do
-          get :index, params: { organization_id: organization.id, perPage: 2 }
-          expect(response_data.length).to eq(2)
+      context "when searchBy is specified but searchQuery is missing" do
+        let(:params) { { organization_id: organization.id, searchBy: "name" } }
+
+        before { get :index, params: params }
+
+        it "returns unprocessable entity" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context "when beforeDate is not specified but afterDate is present" do
+        let(:params) { { organization_id: organization.id, afterDate: 3.days.ago.to_s } }
+
+        before do
+          FactoryBot.create(:journey_query, company: company_d, created_at: 1.week.ago, updated_at: 1.week.ago, organization: organization)
+          FactoryBot.create(:journey_query, company: company_a, created_at: 2.days.ago, updated_at: 2.days.ago, organization: organization)
+          FactoryBot.create(:journey_query, company: company_c, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday, organization: organization)
+          get :index, params: params
+        end
+
+        it "returns 200 Success" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "returns all companies within the last 3 days" do
+          expect(response_data.pluck("id")).to match_array([company_a.id, company_c.id])
+        end
+      end
+
+      context "when beforeDate is specified but afterDate is not present" do
+        let(:params) { { organization_id: organization.id, beforeDate: 3.days.ago.to_s } }
+
+        before do
+          FactoryBot.create(:journey_query, company: company_d, created_at: 1.week.ago, updated_at: 1.week.ago, organization: organization)
+          FactoryBot.create(:journey_query, company: company_a, created_at: 2.days.ago, updated_at: 2.days.ago, organization: organization)
+          FactoryBot.create(:journey_query, company: company_c, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday, organization: organization)
+          get :index, params: params
+        end
+
+        it "returns 200 Success" do
+          expect(response).to have_http_status(:success)
+        end
+
+        it "returns all companies from epoch time until 3 days ago" do
+          expect(response_data.pluck("id")).to match_array([company_d.id])
         end
       end
 

@@ -10,7 +10,7 @@ RSpec.describe "Companies", type: :request, swagger: true do
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1") }
+  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1", country: factory_country_from_code(code: "cn")) }
   let(:company_id) { companies_company.id }
   let(:shipment_request_status) { "requested" }
 
@@ -211,9 +211,44 @@ RSpec.describe "Companies", type: :request, swagger: true do
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :perPage, in: :query, type: :integer, description: "number of companies per page"
       parameter name: :page, in: :query, type: :integer, description: "current page number"
+      parameter name: :sortBy,
+                in: :query,
+                type: :string,
+                description: "The attribute by which to sort the Companies",
+                enum: %w[name country activity]
+      parameter name: :direction,
+                in: :query,
+                type: :string,
+                description: "The defining whether the sorting is ascending or descending",
+                enum: %w[asc desc]
+      parameter name: :searchBy,
+                in: :query,
+                type: :string,
+                description: "The attribute of the Company and its related models to search through",
+                enum: %w[name_search country_search activity_search]
+      parameter name: :searchQuery,
+                in: :query,
+                type: :string,
+                description: "The value we want to use in our search"
+
+      parameter name: :beforeDate,
+                in: :query,
+                type: :string,
+                description: "To filter companies which updated queries before a specific date in `YYYY-mm-dd` format default being today"
+
+      parameter name: :afterDate,
+                in: :query,
+                type: :string,
+                description: "To filter companies which updated queries after a specific date in `YYYY-mm-dd` format"
 
       let(:perPage) { 2 }
       let(:page) { 1 }
+      let(:sortBy) { "name" }
+      let(:direction) { "desc" }
+      let(:searchBy) { "country" }
+      let(:searchQuery) { companies_company.country.name }
+      let(:beforeDate) { Time.zone.today.to_s }
+      let(:afterDate) { 2.weeks.ago.to_s }
 
       response "200", "successful operation" do
         schema type: :object,
@@ -239,6 +274,89 @@ RSpec.describe "Companies", type: :request, swagger: true do
             resource_owner_id: FactoryBot.create(:users_client, organization_id: organization_id).id,
             scopes: "public")
         end
+        run_test!
+      end
+
+      response "422", "Unprocessable Entity" do
+        let(:searchQuery) { nil }
+        schema type: :object,
+               properties: {
+                 errors: {
+                   type: :object,
+                   properties: {
+                     search_by: {
+                       type: :array,
+                       items: {
+                         type: :object,
+                         properties: {
+                           error_code: {
+                             type: :string,
+                             description: "describes 422 errors with self explanatory error code `SEARCH_QUERY_MISSING`"
+                           },
+                           error_message: {
+                             type: :string,
+                             description: "describes the reason for the error"
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+        run_test!
+
+        let(:searchBy) { "price" }
+        schema type: :object,
+               properties: {
+                 errors: {
+                   type: :object,
+                   properties: {
+                     search_by: {
+                       type: :array,
+                       items: {
+                         type: :object,
+                         properties: {
+                           error_code: {
+                             type: :string,
+                             description: "describes 422 errors with self explanatory error code `INVALID_SEARCH_BY_OPTION`"
+                           },
+                           error_message: {
+                             type: :string,
+                             description: "describes the reason for the error with the options to be used for search by"
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+        run_test!
+
+        let(:beforeDate) { "12/12/1975" }
+        schema type: :object,
+               properties: {
+                 errors: {
+                   type: :object,
+                   properties: {
+                     date: {
+                       type: :array,
+                       items: {
+                         type: :object,
+                         properties: {
+                           error_code: {
+                             type: :string,
+                             description: "describes 422 errors with self explanatory error code `INVALID_DATE`"
+                           },
+                           error_message: {
+                             type: :string,
+                             description: "describes the reason for the error with the options to be used for search by"
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
         run_test!
       end
     end
