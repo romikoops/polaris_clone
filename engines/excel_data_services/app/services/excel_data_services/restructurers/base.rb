@@ -12,6 +12,7 @@ module ExcelDataServices
         effective_date
         expiration_date
         group_id
+        group_name
         internal
         load_type
         mot

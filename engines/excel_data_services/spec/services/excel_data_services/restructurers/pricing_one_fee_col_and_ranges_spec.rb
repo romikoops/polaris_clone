@@ -55,4 +55,15 @@ RSpec.describe ExcelDataServices::Restructurers::PricingOneFeeColAndRanges do
       expect(result["Pricing"]).to match_array(output_data["Pricing"])
     end
   end
+
+  describe ".restructure with only group_name" do
+    let(:input_data) do
+      FactoryBot.build(:excel_data_parsed, :only_group_names_pricings_one_fee_col_and_ranges, :pricing_one_fee_col_and_ranges).first
+    end
+    let(:result) { described_class.restructure(options) }
+
+    it "restructures the data correctly" do
+      expect(result["Pricing"].length).to eq(1)
+    end
+  end
 end

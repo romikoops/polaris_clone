@@ -299,6 +299,61 @@ FactoryBot.define do
       end
     end
 
+    trait :only_group_names_pricings_one_fee_col_and_ranges do
+      all_sheets_data do
+        [{ sheet_name: "Sheet1",
+           rows_data:
+            [
+              { effective_date: Date.parse("Thu, 15 Mar 2018"),
+                expiration_date: Date.parse("Fri, 15 Nov 2019"),
+                group_name: "Test",
+                origin: "Gothenburg",
+                country_origin: "Sweden",
+                destination: "Shanghai",
+                country_destination: "China",
+                mot: "ocean",
+                carrier: nil,
+                service_level: "standard",
+                load_type: "lcl",
+                rate_basis: "PER_wm",
+                range_min: nil,
+                range_max: nil,
+                fee_code: "bas",
+                fee_name: "Bas",
+                currency: "USD",
+                fee_min: 17,
+                fee: 17,
+                wm_ratio: 800,
+                transit_time: 24,
+                transshipment: "ZACPT",
+                row_nr: 2 },
+              { effective_date: Date.parse("Thu, 15 Mar 2018"),
+                expiration_date: Date.parse("Fri, 15 Nov 2019"),
+                group_name: "Test",
+                origin: "Gothenburg",
+                country_origin: "Sweden",
+                destination: "Shanghai",
+                country_destination: "China",
+                mot: "ocean",
+                carrier: nil,
+                service_level: "standard",
+                load_type: "lcl",
+                rate_basis: "PER_wm",
+                range_min: nil,
+                range_max: nil,
+                fee_code: "baf",
+                fee_name: "Baf",
+                currency: "USD",
+                fee_min: 10,
+                fee: 10,
+                wm_ratio: 1000,
+                transit_time: 24,
+                transshipment: "ZACPT",
+                row_nr: 3 }
+            ] }]
+      end
+    end
+
     trait :correct_pricings_dynamic_fee_cols_no_ranges do
       all_sheets_data do
         [{ sheet_name: "Sheet1",
