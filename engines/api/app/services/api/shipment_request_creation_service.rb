@@ -11,10 +11,14 @@ module Api
     end
 
     def perform
-      Journey::ShipmentRequest.create!(shipment_request_attributes).tap do |shipment_request|
-        create_commodity_infos_through(shipment_request: shipment_request)
-        Pdf::Shipment::Request.new(shipment_request: shipment_request).file
-        publish_event_for(shipment_request: shipment_request)
+      ActiveRecord::Base.transaction do
+        Journey::ShipmentRequest.new(shipment_request_attributes).tap do |shipment_request|
+          return shipment_request unless shipment_request.save
+
+          create_commodity_infos_through(shipment_request: shipment_request)
+          Pdf::Shipment::Request.new(shipment_request: shipment_request).file
+          publish_event_for(shipment_request: shipment_request)
+        end
       end
     end
 
@@ -37,8 +41,9 @@ module Api
         client_id: query.client_id,
         company_id: query.company_id,
         contacts_attributes: contacts_attributes,
-        with_insurance: shipment_request_params[:with_insurance].present?,
-        with_customs_handling: shipment_request_params[:with_customs_handling].present?
+        with_insurance: boolean_from_param(value: shipment_request_params[:with_insurance]),
+        with_customs_handling: boolean_from_param(value: shipment_request_params[:with_customs_handling]),
+        documents: documents
       )
     end
 
@@ -60,6 +65,20 @@ module Api
         }),
         stream_name: "Organization$#{Organizations.current_id}"
       )
+    end
+
+    def documents
+      return [] if shipment_request_params[:documents].blank?
+
+      shipment_request_params[:documents].map do |file|
+        Journey::Document.new(query: query, file: file)
+      end
+    end
+
+    def boolean_from_param(value:)
+      return false if value.nil?
+
+      ActiveModel::Type::Boolean.new.cast(value)
     end
   end
 end

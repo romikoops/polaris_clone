@@ -12,7 +12,7 @@ module Journey
 
     monetize :commercial_value_cents, allow_nil: true
 
-    accepts_nested_attributes_for :contacts
+    accepts_nested_attributes_for :contacts, :documents
 
     enum status: {
       requested: "requested",

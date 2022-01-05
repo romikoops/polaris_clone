@@ -62,33 +62,35 @@ module Api
           name: "John Smith", phone: "+49123456", point: "On point", postalCode: "PC12"
         }
       end
-      let(:valid_params) do
+      let(:params) do
         {
           organization_id: organization.id, result_id: result.id,
           shipmentRequest: {
+            documents: documents,
             withInsurance: false,
-            withCustomsHandling: false, preferredVoyage: "1234", notes: "Some notes", commercialValueCents: 10, commercialValueCurrency: "EUR",
+            withCustomsHandling: true, preferredVoyage: "1234", notes: "Some notes", commercialValueCents: 10, commercialValueCurrency: "EUR",
             contactsAttributes: [contact_attributes]
           },
           commodityInfos: commodity_infos
         }
       end
+      let(:documents) { [fixture_file_upload("spec/fixtures/files/dummy.xlsx")] }
       let(:client) { users_client }
       let(:successful_response_data) do
         {
           "attributes" => {
             "clientId" => client.id, "commercialValue" => { "currency" => "EUR", "value" => 10 },
             "companyId" => query.company_id, "notes" => "Some notes", "preferredVoyage" => "1234", "resultId" => result.id,
-            "status" => "requested", "withCustomsHandling" => false, "withInsurance" => false
+            "status" => "requested", "withCustomsHandling" => true, "withInsurance" => false
           },
           "id" => kind_of(String),
-          "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [] } },
+          "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [{ "id" => kind_of(String), "type" => "document" }] } },
           "type" => "shipmentRequest"
         }
       end
 
       shared_examples_for "a successful Create" do
-        before { post :create, params: valid_params, as: :json }
+        before { post :create, params: params }
 
         it "returns a 201 response" do
           expect(response).to have_http_status(:created)
@@ -123,6 +125,15 @@ module Api
         it "returns a 201 response" do
           post :create, params: empty_valid_params, as: :json
           expect(response).to have_http_status(:created)
+        end
+      end
+
+      context "with the wrong file type" do
+        let(:documents) { [fixture_file_upload("spec/fixtures/files/dummy.json")] }
+
+        it "returns a 422 response" do
+          post :create, params: params, as: :json
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
     end

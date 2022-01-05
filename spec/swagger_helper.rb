@@ -358,6 +358,13 @@ RSpec.configure do |config|
                 type: :array,
                 description: "Contact info for client",
                 items: { "$ref" => "#/components/schemas/contact" }
+              },
+              documents: {
+                type: :array,
+                description: "Multipart form upload of files to be attached to the shipment request",
+                items: {
+                  type: :binary
+                }
               }
             },
             required: %w[

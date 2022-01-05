@@ -16,7 +16,12 @@ module Api
       end
 
       def create
-        render json: Api::V2::ShipmentRequestSerializer.new(shipment_request_creation_service.perform), status: :created
+        new_shipment_request = shipment_request_creation_service.perform
+        if new_shipment_request.valid?
+          render json: Api::V2::ShipmentRequestSerializer.new(new_shipment_request), status: :created
+        else
+          render json: { errors: new_shipment_request.errors }, status: :unprocessable_entity
+        end
       end
 
       private
@@ -53,8 +58,9 @@ module Api
 
       def shipment_request_params
         params.require(:shipmentRequest).permit(
-          :withInsurance, :withCustomsHandling, :preferredVoyage, :notes,
-          :commercialValueCents, :commercialValueCurrency, contactsAttributes: %i[
+          :withInsurance, :withCustomsHandling, :preferredVoyage,
+          :notes, :commercialValueCents, :commercialValueCurrency,
+          documents: [], contactsAttributes: %i[
             addressLine1 addressLine2 addressLine3 city
             companyName countryCode email function geocodedAddress
             name phone point postalCode
