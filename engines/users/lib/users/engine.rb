@@ -2,7 +2,7 @@
 
 require "shared/runtime"
 
-require "acts_as_paranoid"
+require "paranoia"
 require "pg_search"
 require "sorcery"
 
