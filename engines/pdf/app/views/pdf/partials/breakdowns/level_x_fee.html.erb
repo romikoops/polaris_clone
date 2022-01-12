@@ -14,6 +14,8 @@
   </td>
 
   <td class="table-value">
-    <p><%= [fee.dig(:value, :amount), fee.dig(:value, :currency)].join(' ') %></p>
+    <% if !(scope[:hide_sub_totals] && fee[:level] < 3) %>
+      <p><%= [fee.dig(:value, :amount), fee.dig(:value, :currency)].join(' ') %></p>
+    <% end %>
   </td>
 </tr>
