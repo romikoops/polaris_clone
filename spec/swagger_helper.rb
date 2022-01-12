@@ -129,6 +129,49 @@ RSpec.configure do |config|
               }
             }
           },
+          request_for_quotation: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier for request_for_quotation",
+                type: "string"
+              },
+              type: {
+                description: "Generic type of the request_for_quotation",
+                type: "string"
+              },
+              attributes: {
+                id: {
+                  description: "Unique identifier for request_for_quotation",
+                  type: "string"
+                },
+                email: {
+                  description: "Email of the client requesting for quotation.",
+                  type: "string"
+                },
+                fullName: {
+                  description: "Full Name of the client requesting for quotation.",
+                  type: "string"
+                },
+                phone: {
+                  description: "Phone number of the client requesting for quotation.",
+                  type: "string"
+                },
+                companyName: {
+                  description: "Company name of the client. For a guest user, company name is empty",
+                  type: "string"
+                },
+                organizationId: {
+                  description: "Organization ID",
+                  type: "string"
+                },
+                queryId: {
+                  description: "Query ID",
+                  type: "string"
+                }
+              }
+            }
+          },
           contact: {
             type: "object",
             properties: {

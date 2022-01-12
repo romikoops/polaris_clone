@@ -29,15 +29,13 @@ module Notifications
       DataMigrate.config.data_migrations_path << File.expand_path("../../db/data/", __dir__)
     end
 
-    if defined?(FactoryBotRails)
-      config.factory_bot.definition_file_paths << File.expand_path("../../factories", __dir__)
-    end
+    config.factory_bot.definition_file_paths << File.expand_path("../../factories", __dir__) if defined?(FactoryBotRails)
 
     initializer :assets do |app|
       app.config.assets.precompile += %w[notifications/logo-blue.png]
     end
 
-    initializer :event do |app|
+    initializer :event do |_app|
       config.to_prepare do
         Rails.configuration.event_store.subscribe(AdminUserCreatedJob, to: [Users::UserCreated])
         Rails.configuration.event_store.subscribe(UserCreatedJob, to: [Users::UserCreated])
@@ -45,7 +43,7 @@ module Notifications
         # Offer created notifications
         Rails.configuration.event_store.subscribe(OfferCreated::AdminNotifierJob, to: [Journey::OfferCreated])
         Rails.configuration.event_store.subscribe(ShipmentRequestCreatedJob, to: [Journey::ShipmentRequestCreated])
-        Rails.configuration.event_store.subscribe(RequestCreatedJob, to: [Journey::RequestCreated])
+        Rails.configuration.event_store.subscribe(RequestForQuotationJob, to: [Journey::RequestForQuotationEvent])
       end
     end
   end

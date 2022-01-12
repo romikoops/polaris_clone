@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 module Notifications
@@ -6,14 +7,13 @@ module Notifications
     describe "request_created" do
       let(:organization) { FactoryBot.create(:organizations_organization) }
       let(:query) { FactoryBot.build(:journey_query, organization: organization) }
-      let(:note) { "This is a test note" }
-      let(:mode_of_transport) { "ocean" }
-      let(:subject_line) { "ItsMyCargo RFQ: #{mode_of_transport.upcase} / #{query.load_type.to_s.upcase} / #{query.origin} -> #{query.destination} / #{query.client.email}" }
+      let(:request_for_quotation) { FactoryBot.build(:request_for_quotation, organization: organization) }
+      let(:subject_line) { "ItsMyCargo RFQ: #{query.load_type.to_s.upcase} / #{query.origin} -> #{query.destination} / #{request_for_quotation.email}" }
       let(:mail) do
-        RequestMailer.with(
+        described_class.with(
           organization: organization,
           query: query,
-          mode_of_transport: mode_of_transport,
+          request_for_quotation: request_for_quotation,
           recipient: "to@example.org"
         ).request_created
       end
@@ -22,7 +22,7 @@ module Notifications
         aggregate_failures do
           expect(mail.subject).to eq(subject_line)
           expect(mail.to).to eq(["to@example.org"])
-          expect(mail.from).to eq([query.client.email])
+          expect(mail.from).to eq([request_for_quotation.email])
         end
       end
 

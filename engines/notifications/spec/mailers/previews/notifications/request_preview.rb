@@ -7,8 +7,7 @@ module Notifications
       RequestMailer.with(
         organization: organization,
         query: query,
-        note: "This is a test note",
-        mode_of_transport: "ocean"
+        request_for_quotation: request_for_quotation,
       ).request_created
     end
 
@@ -20,6 +19,10 @@ module Notifications
 
     def query
       FactoryBot.build(:journey_query, organization: organization)
+    end
+
+    def request_for_quotation
+      FactoryBot.build(:request_for_quotation, organization: organization, query: query)
     end
   end
 end

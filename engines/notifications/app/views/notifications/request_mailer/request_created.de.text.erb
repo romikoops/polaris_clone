@@ -3,10 +3,10 @@ Hallo,
 Ein Kunde Ihres Web Shops hat eine Quotierung angefragt!
 
 Kunde:
-  Name: <%= @client.profile.full_name %> 
-  Email: <%= @client.email %>
-  Telefon: <%= @client.profile.phone %>
-  Firma: <%= @client.profile.company_name %>
+  Name: <%= @request_for_quotation.full_name %>
+  Email: <%= @request_for_quotation.email %>
+  Telefon: <%= @request_for_quotation.phone %>
+  Firma: <%= @request_for_quotation.company_name %>
 
 Routing:
   Herkunft: <%= @query.origin %>
@@ -30,9 +30,9 @@ Fracht:
   <% end %>
 <% end %>
 
-<% if @note.present? -%>
+<% if @request_for_quotation.note.present? -%>
 Bemerkungen:
-  <%= @note %>
+  <%= @request_for_quotation.note %>
 <% end %>
 
 Mit freundlichen Grüßen,

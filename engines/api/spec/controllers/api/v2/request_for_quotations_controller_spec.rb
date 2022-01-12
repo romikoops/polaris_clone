@@ -3,7 +3,7 @@
 require "rails_helper"
 
 module Api
-  RSpec.describe V2::RequestsController, type: :controller do
+  RSpec.describe V2::RequestForQuotationsController, type: :controller do
     routes { Engine.routes }
     ActiveJob::Base.queue_adapter = :test
 
@@ -20,11 +20,22 @@ module Api
 
     describe "POST #create" do
       let(:query) { FactoryBot.create(:journey_query, organization: organization) }
-      let(:params) { { query_id: query.id, organization_id: organization.id, modeOfTransport: "ocean" } }
+      let(:params) { { query_id: query.id, organization_id: organization.id, fullName: "John Doe", phone: "+49-67686960", email: "john.doe@company.com" } }
 
-      it "successfully creates the event", :aggregate_failures do
+      it "returns created after creating `Journey::RequestForQuotation` and `Journey::RequestForQuotationEvent` event" do
         post :create, params: params, as: :json
-        expect(response.status).to eq(200)
+        expect(response).to have_http_status(:created)
+      end
+
+      context "when a user has a membership with the company" do
+        let(:company) { FactoryBot.create(:companies_company) }
+
+        before { FactoryBot.create(:companies_membership, client: query.client, company: company) }
+
+        it "returns created after creating `Journey::RequestForQuotation` and `Journey::RequestForQuotationEvent` event" do
+          post :create, params: params, as: :json
+          expect(response).to have_http_status(:created)
+        end
       end
     end
   end

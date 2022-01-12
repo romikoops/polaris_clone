@@ -2094,6 +2094,24 @@ CREATE TABLE public.journey_queries (
 
 
 --
+-- Name: journey_request_for_quotations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_request_for_quotations (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    full_name character varying NOT NULL,
+    phone character varying NOT NULL,
+    email character varying NOT NULL,
+    company_name character varying,
+    note text,
+    organization_id uuid,
+    query_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: journey_result_sets; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5999,6 +6017,14 @@ ALTER TABLE ONLY public.journey_queries
 
 
 --
+-- Name: journey_request_for_quotations journey_request_for_quotations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_request_for_quotations
+    ADD CONSTRAINT journey_request_for_quotations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: journey_result_sets journey_result_sets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7922,6 +7948,20 @@ CREATE INDEX index_journey_queries_on_organization_id ON public.journey_queries 
 --
 
 CREATE INDEX index_journey_queries_on_parent_id ON public.journey_queries USING btree (parent_id);
+
+
+--
+-- Name: index_journey_request_for_quotations_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_request_for_quotations_on_organization_id ON public.journey_request_for_quotations USING btree (organization_id);
+
+
+--
+-- Name: index_journey_request_for_quotations_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_request_for_quotations_on_query_id ON public.journey_request_for_quotations USING btree (query_id);
 
 
 --
@@ -11277,6 +11317,14 @@ ALTER TABLE ONLY public.legacy_contents
 
 
 --
+-- Name: journey_request_for_quotations fk_rails_8496eac84e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_request_for_quotations
+    ADD CONSTRAINT fk_rails_8496eac84e FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: users_memberships fk_rails_84f4e71154; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11450,6 +11498,14 @@ ALTER TABLE ONLY public.journey_line_items
 
 ALTER TABLE ONLY public.map_data
     ADD CONSTRAINT fk_rails_9d184ecaed FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: journey_request_for_quotations fk_rails_a052d353ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_request_for_quotations
+    ADD CONSTRAINT fk_rails_a052d353ae FOREIGN KEY (query_id) REFERENCES public.journey_queries(id);
 
 
 --
@@ -12595,6 +12651,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211027083408'),
 ('20211028140008'),
 ('20211116173501'),
-('20211206181843');
+('20211206181843'),
+('20220104111105');
 
 

@@ -3,15 +3,13 @@ Hi,
 A client on your web shop has requested a quotation!
 
 Client:
-  Name: <%= @client.profile.full_name %> 
-  Email: <%= @client.email %>
-  Phone: <%= @client.profile.phone %>
-  Company: <%= @client.profile.company_name %> 
+  Name: <%= @request_for_quotation.full_name %>
+  Email: <%= @request_for_quotation.email %>
+  Phone: <%= @request_for_quotation.phone %>
 
 Routing:
   Origin: <%= @query.origin %>
   Destination: <%= @query.destination %>
-  Mode of Transport: <%= @mode_of_transport %>
 
 Cargo:
 <% @cargo_units.each do |cargo| -%>
@@ -30,9 +28,9 @@ Cargo:
   <% end %>
 <% end %>
 
-<% if @note.present? -%>
+<% if @request_for_quotation.note.present? -%>
 Extra Notes:
-  <%= @note %>
+  <%= @request_for_quotation.note %>
 <% end %>
 
 Regards,
