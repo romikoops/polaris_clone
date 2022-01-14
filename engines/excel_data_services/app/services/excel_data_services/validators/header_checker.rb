@@ -167,7 +167,6 @@ module ExcelDataServices
           email: :required,
           phone: :required,
           vat_number: :required,
-          external_id: :required,
           address: :required,
           payment_terms: :optional
         }.freeze

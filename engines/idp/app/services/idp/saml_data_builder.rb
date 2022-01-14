@@ -46,7 +46,10 @@ module IDP
       return if company.nil?
 
       Companies::Membership.where(client: user).where.not(company: company).destroy_all
-      Companies::Membership.find_or_create_by!(client: user, company: company)
+      Companies::Membership.find_or_initialize_by(client: user, company: company).tap do |membership|
+        membership.branch_id = company_attributes[:external_id]
+        membership.save!
+      end
     end
 
     def set_user

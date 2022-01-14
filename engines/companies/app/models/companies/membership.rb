@@ -23,6 +23,7 @@ end
 #  member_type :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  branch_id   :string
 #  client_id   :uuid
 #  company_id  :uuid
 #  member_id   :uuid
@@ -32,7 +33,6 @@ end
 #  companies_memberships_client_id                           (client_id) UNIQUE WHERE (deleted_at IS NULL)
 #  index_companies_memberships_on_company_id                 (company_id)
 #  index_companies_memberships_on_deleted_at                 (deleted_at)
-#  index_companies_memberships_on_member_id_and_company_id   (member_id,company_id) UNIQUE
 #  index_companies_memberships_on_member_type_and_member_id  (member_type,member_id)
 #
 # Foreign Keys

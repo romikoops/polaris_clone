@@ -1268,7 +1268,8 @@ CREATE TABLE public.companies_memberships (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     deleted_at timestamp without time zone,
-    client_id uuid
+    client_id uuid,
+    branch_id character varying
 );
 
 
@@ -2098,7 +2099,7 @@ CREATE TABLE public.journey_queries (
 --
 
 CREATE TABLE public.journey_request_for_quotations (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     full_name character varying NOT NULL,
     phone character varying NOT NULL,
     email character varying NOT NULL,
@@ -7482,13 +7483,6 @@ CREATE INDEX index_companies_memberships_on_deleted_at ON public.companies_membe
 
 
 --
--- Name: index_companies_memberships_on_member_id_and_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_companies_memberships_on_member_id_and_company_id ON public.companies_memberships USING btree (member_id, company_id);
-
-
---
 -- Name: index_companies_memberships_on_member_type_and_member_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12652,6 +12646,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211028140008'),
 ('20211116173501'),
 ('20211206181843'),
-('20220104111105');
+('20220103104649'),
+('20220104111105'),
+('20220106120237');
 
 

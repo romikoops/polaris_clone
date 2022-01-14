@@ -16,8 +16,7 @@ module ExcelDataServices
       def update_or_create_company(params)
         company = ::Companies::Company.find_or_initialize_by(
           organization_id: @organization.id,
-          name: params[:name],
-          email: params[:email]
+          name: params[:name]
         )
         add_stats(company, params[:row_nr])
 

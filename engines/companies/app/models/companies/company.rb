@@ -13,8 +13,7 @@ module Companies
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
     has_many :clients, class_name: "Users::Client", through: :memberships
 
-    validates :external_id, uniqueness: { scope: %i[name organization_id] }, allow_nil: true
-    validates :name, presence: true, allow_blank: false
+    validates :name, uniqueness: { scope: %i[name organization_id] }, presence: true, allow_blank: false
 
     validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true
     validates :contact_email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true

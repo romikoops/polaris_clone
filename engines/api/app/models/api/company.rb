@@ -54,3 +54,37 @@ module Api
     }
   end
 end
+
+# == Schema Information
+#
+# Table name: companies_companies
+#
+#  id                  :uuid             not null, primary key
+#  contact_email       :string
+#  contact_person_name :string
+#  contact_phone       :string
+#  deleted_at          :datetime
+#  email               :string
+#  name                :string
+#  payment_terms       :text
+#  phone               :string
+#  registration_number :string
+#  vat_number          :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  address_id          :integer
+#  external_id         :string
+#  organization_id     :uuid
+#  tenants_company_id  :uuid
+#
+# Indexes
+#
+#  index_companies_companies_on_address_id          (address_id)
+#  index_companies_companies_on_organization_id     (organization_id)
+#  index_companies_companies_on_tenants_company_id  (tenants_company_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (address_id => addresses.id)
+#  fk_rails_...  (organization_id => organizations_organizations.id)
+#

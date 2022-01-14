@@ -1,7 +1,7 @@
 Companies
 =========
 
-Company is an entitiy that makes quotations. Clients (Shippers and Agents)
+Company is an entity that makes quotations. Clients (Shippers and Agents)
 belongs always to one company, and other users will be in the future be able to
 see all quotations and bookings made within the same company.
 
@@ -21,10 +21,6 @@ The Excel sheet must have following columns:
 
 :VAT_NUMBER:
   **(required)** Tax Identification number (usually VAT in Europe) of the company
-
-:EXTERNAL_ID:
-  **(required)** Used for mapping companies to external system. USually filled
-  out by API Integration.
 
 :ADDRESS:
   **(required)** Main address of the company.
