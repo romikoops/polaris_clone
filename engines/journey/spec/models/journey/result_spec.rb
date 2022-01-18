@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 module Journey
@@ -168,8 +169,8 @@ module Journey
         let(:sort_key) { "nonsense" }
         let(:direction_key) { "desc" }
 
-        it "returns default direction" do
-          expect(sorted_results).to eq([asc_result, desc_result])
+        it "returns all results without defined order" do
+          expect(sorted_results).to match_array(described_class.all.to_a)
         end
       end
 
