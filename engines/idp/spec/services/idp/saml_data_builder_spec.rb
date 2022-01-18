@@ -157,7 +157,6 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       context "when company is present" do
         before do
           FactoryBot.create(:companies_company,
-            external_id: external_id,
             name: saml_attributes[:companyName],
             organization: organization)
           saml_data_builder.perform
@@ -169,7 +168,6 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       context "when company is present with nil id" do
         before do
           FactoryBot.create(:companies_company,
-            external_id: nil,
             name: "new_company",
             organization: organization)
           saml_data_builder.perform
@@ -254,3 +252,6 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
     end
   end
 end
+
+
+
