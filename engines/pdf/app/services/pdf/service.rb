@@ -19,7 +19,7 @@ module Pdf
     end
 
     def decorated_company
-      ResultFormatter::CompanyDecorator.decorate(decorated_query.company)
+      ResultFormatter::CompanyDecorator.decorate(decorated_query.company, context: {client: query.client})
     end
 
     def decorated_results

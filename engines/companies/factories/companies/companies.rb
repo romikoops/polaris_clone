@@ -6,7 +6,6 @@ FactoryBot.define do
     sequence(:name) { |n| "company#{n}" }
     sequence(:payment_terms) { "Some quotation payment terms" }
     sequence(:vat_number) { |n| "DE-VATNUMBER#{n}" }
-    sequence(:external_id) { |n| "DE-External#{n}" }
 
     trait :with_member do
       transient do

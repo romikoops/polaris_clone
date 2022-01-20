@@ -133,7 +133,7 @@ RSpec.describe IDP::SamlController, type: :request do
       let(:external_id) { "companyid" }
       let!(:country) { FactoryBot.create(:legacy_country, code: "sweet_country") }
       let(:company_membership) do
-        Companies::Membership.find_by(client: created_user, company: company)
+        Companies::Membership.find_by(client: created_user, company: company, branch_id: external_id)
       end
       let(:company) do
         Companies::Company.find_by(name: saml_attributes[:companyName], organization: organization)
@@ -161,7 +161,6 @@ RSpec.describe IDP::SamlController, type: :request do
 
         before do
           FactoryBot.create(:companies_company,
-            external_id: external_id,
             name: saml_attributes[:companyName],
             organization: organization)
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
@@ -185,7 +184,7 @@ RSpec.describe IDP::SamlController, type: :request do
       end
 
       context "when company is not present" do
-        let(:attributes) { base_attributes.merge("companyName" => ["new_company"]).merge(address_params) }
+        let(:attributes) { base_attributes.merge("companyID" => [external_id], "companyName" => ["new_company"]).merge(address_params) }
 
         before do
           post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }

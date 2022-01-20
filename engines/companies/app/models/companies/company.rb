@@ -53,23 +53,23 @@ end
 #
 # Table name: companies_companies
 #
-#  id                  :uuid             not null, primary key
-#  contact_email       :string
-#  contact_person_name :string
-#  contact_phone       :string
-#  deleted_at          :datetime
-#  email               :string
-#  name                :string
-#  payment_terms       :text
-#  phone               :string
-#  registration_number :string
-#  vat_number          :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  address_id          :integer
-#  external_id         :string
-#  organization_id     :uuid
-#  tenants_company_id  :uuid
+#  id                   :uuid             not null, primary key
+#  contact_email        :string
+#  contact_person_name  :string
+#  contact_phone        :string
+#  deleted_at           :datetime
+#  email                :string
+#  external_id_20220118 :string
+#  name                 :string
+#  payment_terms        :text
+#  phone                :string
+#  registration_number  :string
+#  vat_number           :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  address_id           :integer
+#  organization_id      :uuid
+#  tenants_company_id   :uuid
 #
 # Indexes
 #

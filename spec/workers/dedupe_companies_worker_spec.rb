@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-RSpec.describe DedupeCompaniesWorker, type: :worker do
+RSpec.describe DedupeCompaniesWorker, type: :worker, skip: "Already run" do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:invalid_email_company) { FactoryBot.build(:companies_company, email: "x").tap { |invalid_company| invalid_company.save(validate: false) } }
   let(:original_company) { FactoryBot.create(:companies_company, organization: organization) }

@@ -12,7 +12,6 @@ RSpec.describe ExcelDataServices::Inserters::Companies do
       email: "test@company.com",
       phone: "1234567879",
       vat_number: "987654321",
-      external_id: "abcde",
       address_id: address.id,
       payment_terms: "Show me the money!"
     }]
@@ -36,7 +35,6 @@ RSpec.describe ExcelDataServices::Inserters::Companies do
           email: "test@company.com",
           phone: "1234567879",
           vat_number: "987654321",
-          external_id: "abcde",
           address_id: address.id,
           payment_terms: nil
         }]

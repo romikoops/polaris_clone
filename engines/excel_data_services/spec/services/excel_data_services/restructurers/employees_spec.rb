@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExcelDataServices::Restructurers::Companies do
+RSpec.describe ExcelDataServices::Restructurers::Employees do
   describe ".perform" do
     let(:data) do
       { sheet_name: "Sheet1",

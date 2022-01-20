@@ -23,6 +23,7 @@ module IDP
       @data = token.merge(userId: user.id, organizationId: organization_id)
       self
     rescue ActiveRecord::RecordInvalid => e
+      Sentry.capture_exception(e)
       @errors = e.record.errors.full_messages
       self
     end

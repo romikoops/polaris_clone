@@ -9,7 +9,6 @@ module ExcelDataServices
           'email': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
           'phone': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
           'vat_number': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
-          'external_id': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType,
           'address': ExcelDataServices::Validators::TypeValidity::Types::OptionalStringType
         }.freeze
       end
