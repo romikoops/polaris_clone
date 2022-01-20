@@ -38,7 +38,18 @@ FactoryBot.define do
 
     email_links { {} }
 
+    websites { {} }
+
     email_logo { Rack::Test::UploadedFile.new(File.expand_path("../fixtures/logo-blue.png", __dir__), "image/png") }
+
+    trait :with_landing_pages do
+      before(:create) do |theme|
+        test_img = Rack::Test::UploadedFile.new(File.expand_path("../fixtures/logo-blue.png", __dir__), "image/png")
+        %w[background landing_page_hero landing_page_one landing_page_two landing_page_three].each do |attribute|
+          theme.send("#{attribute}=", test_img)
+        end
+      end
+    end
   end
 end
 

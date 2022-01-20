@@ -11,6 +11,12 @@ module Organizations
     has_one_attached :white_logo
     has_one_attached :wide_logo
     has_one_attached :booking_process_image
+    has_one_attached :landing_page_hero
+    has_one_attached :landing_page_one
+    has_one_attached :landing_page_two
+    has_one_attached :landing_page_three
+
+    enum landing_page_variant: {default: "default", quotation_plugin: "quotation_plugin", light: "light"}
   end
 end
 
@@ -24,6 +30,7 @@ end
 #  bright_secondary_color :string
 #  email_links            :jsonb
 #  emails                 :jsonb
+#  landing_page_variant   :enum             default("default")
 #  name                   :string
 #  phones                 :jsonb
 #  primary_color          :string

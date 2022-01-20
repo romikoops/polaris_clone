@@ -24,6 +24,10 @@ Trestle.resource(:themes, model: Organizations::Theme) do
       white_logo
       wide_logo
       booking_process_image
+      landing_page_hero
+      landing_page_one
+      landing_page_two
+      landing_page_three
     ].each do |attachment|
       row do
         col(sm: 4) { file_field attachment }

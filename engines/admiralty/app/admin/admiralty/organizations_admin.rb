@@ -73,12 +73,18 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           white_logo
           wide_logo
           booking_process_image
+          landing_page_hero
+          landing_page_one
+          landing_page_two
+          landing_page_three
         ].each do |attachment|
           row do
             col(sm: 4) { file_field attachment }
             col(sm: 8) { organization.theme.send(attachment).attached? ? image_tag(Rails.application.routes.url_helpers.rails_blob_url(organization.theme.send(attachment)), width: "100px") : "No Content" }
           end
         end
+
+        col(sm: 2) { select(:landing_page_variant, Organizations::Theme.landing_page_variants.keys.map { |landing_page_variant| [landing_page_variant.humanize, landing_page_variant] }) }
       end
     end
 

@@ -291,6 +291,17 @@ CREATE TYPE public.shipment_request_status AS ENUM (
 
 
 --
+-- Name: theme_landing_page_variant_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.theme_landing_page_variant_type AS ENUM (
+    'default',
+    'quotation_plugin',
+    'light'
+);
+
+
+--
 -- Name: get_latin_name(text, text, text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -2099,7 +2110,7 @@ CREATE TABLE public.journey_queries (
 --
 
 CREATE TABLE public.journey_request_for_quotations (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     full_name character varying NOT NULL,
     phone character varying NOT NULL,
     email character varying NOT NULL,
@@ -3071,7 +3082,8 @@ CREATE TABLE public.organizations_themes (
     email_links jsonb DEFAULT '{}'::jsonb,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    websites jsonb DEFAULT '{}'::jsonb
+    websites jsonb DEFAULT '{}'::jsonb,
+    landing_page_variant public.theme_landing_page_variant_type DEFAULT 'default'::public.theme_landing_page_variant_type
 );
 
 
@@ -12649,6 +12661,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220103104649'),
 ('20220104111105'),
 ('20220106120237'),
+('20220111070737'),
+('20220113065837'),
+('20220113072542'),
 ('20220119071628');
 
 

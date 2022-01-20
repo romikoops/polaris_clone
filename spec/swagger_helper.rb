@@ -420,6 +420,126 @@ RSpec.configure do |config|
               contactsAttributes
             ]
           },
+          theme: {
+            type: "object",
+            properties: {
+              organization_id: {
+                description: "Organization ID",
+                type: "string"
+              },
+              name: {
+                description: "Name of the organization",
+                type: "string"
+              },
+              background: {
+                description: "Link to uploaded background image",
+                type: "string",
+                nullable: true
+              },
+              small_logo: {
+                description: "Small size logo of the organization",
+                type: "string",
+                nullable: true
+              },
+              white_logo: {
+                large_logo: "Logo with white background",
+                type: "string",
+                nullable: true
+              },
+              wide_logo: {
+                description: "Wide logo of the organization",
+                type: "string",
+                nullable: true
+              },
+              landing_page_variant: {
+                description: "Custom theme landing page variants with options such as `default` `quotation_plugin` and `light`",
+                type: "string",
+                enum: ["default", "quotation_plugin", "light"],
+                nullable: true
+              },
+              landing_page_hero: {
+                description: "Main landing page similar to background",
+                type: "string",
+                nullable: true
+              },
+              landing_page_one: {
+                description: "First landing page image",
+                type: "string",
+                nullable: true
+              },
+              landing_page_two: {
+                description: "Second landing page image",
+                type: "string",
+                nullable: true
+              },
+              landing_page_three: {
+                description: "Third landing page image",
+                type: "string",
+                nullable: true
+              },
+              emails: {
+                description: "List of emails",
+                type: "object",
+                items: {
+                  sales: {
+                    description: "sales email",
+                    type: "object",
+                    items:{
+                      general: {
+                        description: "general sales email",
+                        type: "object",
+                      }
+                    }
+                  },
+                  support: {
+                    description: "support email",
+                    type: "object",
+                    items:{
+                      general: {
+                        description: "general support email",
+                        type: "object",
+                      }
+                    }
+                  }
+                }
+              },
+              websites:{
+                description: "websites of the organzation",
+                type: "object",
+                nullable: true
+              },
+              phones: {
+                description: "phone numbers of the organization",
+                type: "object",
+                nullable: true,
+                items:{
+                  main: {
+                    description: "organizations main phone number",
+                    type: "string"
+                  },
+                  support: {
+                    description: "organizations support phone number",
+                    type: "string"
+                  }
+                }
+              },
+              addresses: {
+                description: "phone numbers of the organization",
+                type: "object",
+                nullable: true,
+                items:{
+                  main: {
+                    description: "organizations main address",
+                    type: "string"
+                  },
+                  components: {
+                    description: "organization address components",
+                    type: "array"
+                  }
+                }
+              },
+            }
+          },
           cargo_item_type: {
             type: "object",
             properties: {
