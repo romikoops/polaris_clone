@@ -56,7 +56,7 @@ module IDP
     def set_user
       Users::Client.find_or_initialize_by(
         organization: organization,
-        email: saml_response.email || saml_response.name_id
+        email: user_email
       ).tap do |saml_user|
         update_or_create_profile(saml_user: saml_user)
         update_or_create_settings(saml_user: saml_user)
@@ -130,6 +130,11 @@ module IDP
         name: "default",
         organization: organization
       )
+    end
+
+    def user_email
+      email_text = (saml_response.email || saml_response.name_id)
+      email_text.downcase if email_text
     end
   end
 end

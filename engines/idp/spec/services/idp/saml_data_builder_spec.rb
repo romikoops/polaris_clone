@@ -86,6 +86,19 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
       end
     end
 
+    context "when email sent in SAML is not lowercased and the user exists" do
+      let!(:existing_user) { FactoryBot.create(:users_client, email: email, organization: organization) }
+
+      before do
+        allow(one_login).to receive(:name_id).and_return(email.upcase)
+        saml_data_builder.perform
+      end
+
+      it "attaches the user to a group", :aggregate_failures do
+        expect(saml_data_builder.user).to eq(existing_user)
+      end
+    end
+
     context "with successful login and group param and existing present" do
       let!(:group) { FactoryBot.create(:groups_group, name: "Test Group", organization: organization) }
       let!(:second_group) { FactoryBot.create(:groups_group, name: "Test Group 2", organization: organization) }
