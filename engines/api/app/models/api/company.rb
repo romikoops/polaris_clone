@@ -66,7 +66,7 @@ end
 #  deleted_at           :datetime
 #  email                :string
 #  external_id_20220118 :string
-#  name                 :string
+#  name                 :citext           not null
 #  payment_terms        :text
 #  phone                :string
 #  registration_number  :string
@@ -79,9 +79,10 @@ end
 #
 # Indexes
 #
-#  index_companies_companies_on_address_id          (address_id)
-#  index_companies_companies_on_organization_id     (organization_id)
-#  index_companies_companies_on_tenants_company_id  (tenants_company_id)
+#  index_companies_companies_on_address_id                (address_id)
+#  index_companies_companies_on_organization_id           (organization_id)
+#  index_companies_companies_on_organization_id_and_name  (organization_id, lower((name)::text)) UNIQUE WHERE (deleted_at IS NULL)
+#  index_companies_companies_on_tenants_company_id        (tenants_company_id)
 #
 # Foreign Keys
 #

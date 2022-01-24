@@ -178,6 +178,18 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
         it_behaves_like "Company creation from SAML"
       end
 
+      context "when company name is lowercased" do
+        before do
+          FactoryBot.create(:companies_company,
+            name: saml_attributes[:companyName].downcase,
+            organization: organization)
+        end
+
+        it "does not create an additional company regardless of case sensitivity" do
+          expect { saml_data_builder.perform }.not_to change(Companies::Company, :count)
+        end
+      end
+
       context "when company is present with nil id" do
         before do
           FactoryBot.create(:companies_company,
@@ -265,6 +277,3 @@ RSpec.describe IDP::SamlDataBuilder, type: :request do
     end
   end
 end
-
-
-

@@ -6,6 +6,7 @@ module Companies
     include PgSearch::Model
 
     before_save :set_payment_terms_to_nil, if: -> { payment_terms.blank? }
+    before_validation :downcase_email, if: -> { email.present? }
 
     belongs_to :address, class_name: "Legacy::Address", optional: true
     belongs_to :organization, class_name: "Organizations::Organization"
@@ -13,7 +14,7 @@ module Companies
     has_many :memberships, class_name: "Companies::Membership", dependent: :destroy
     has_many :clients, class_name: "Users::Client", through: :memberships
 
-    validates :name, uniqueness: { scope: %i[name organization_id] }, presence: true, allow_blank: false
+    validates :name, uniqueness: { scope: :organization_id, case_sensitive: false }, presence: true, allow_blank: false
 
     validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true
     validates :contact_email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "invalid email format" }, allow_nil: true
@@ -46,6 +47,10 @@ module Companies
     def set_payment_terms_to_nil
       self.payment_terms = nil
     end
+
+    def downcase_email
+      email.downcase!
+    end
   end
 end
 
@@ -60,7 +65,7 @@ end
 #  deleted_at           :datetime
 #  email                :string
 #  external_id_20220118 :string
-#  name                 :string
+#  name                 :citext           not null
 #  payment_terms        :text
 #  phone                :string
 #  registration_number  :string
@@ -73,9 +78,10 @@ end
 #
 # Indexes
 #
-#  index_companies_companies_on_address_id          (address_id)
-#  index_companies_companies_on_organization_id     (organization_id)
-#  index_companies_companies_on_tenants_company_id  (tenants_company_id)
+#  index_companies_companies_on_address_id                (address_id)
+#  index_companies_companies_on_organization_id           (organization_id)
+#  index_companies_companies_on_organization_id_and_name  (organization_id, lower((name)::text)) UNIQUE WHERE (deleted_at IS NULL)
+#  index_companies_companies_on_tenants_company_id        (tenants_company_id)
 #
 # Foreign Keys
 #

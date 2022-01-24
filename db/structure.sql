@@ -52,6 +52,20 @@ COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiS
 
 
 --
+-- Name: citext; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION citext; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION citext IS 'data type for case-insensitive character strings';
+
+
+--
 -- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -1250,7 +1264,7 @@ CREATE TABLE public.companies_companies (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     email character varying,
     phone character varying,
-    name character varying,
+    name public.citext NOT NULL,
     vat_number character varying,
     address_id integer,
     organization_id uuid,
@@ -2110,7 +2124,7 @@ CREATE TABLE public.journey_queries (
 --
 
 CREATE TABLE public.journey_request_for_quotations (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     full_name character varying NOT NULL,
     phone character varying NOT NULL,
     email character varying NOT NULL,
@@ -7474,6 +7488,13 @@ CREATE INDEX index_companies_companies_on_organization_id ON public.companies_co
 
 
 --
+-- Name: index_companies_companies_on_organization_id_and_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_companies_companies_on_organization_id_and_name ON public.companies_companies USING btree (organization_id, lower((name)::text)) WHERE (deleted_at IS NULL);
+
+
+--
 -- Name: index_companies_companies_on_tenants_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12664,6 +12685,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220111070737'),
 ('20220113065837'),
 ('20220113072542'),
-('20220119071628');
+('20220118102740'),
+('20220118103740'),
+('20220119071628'),
+('20220120141728');
 
 
