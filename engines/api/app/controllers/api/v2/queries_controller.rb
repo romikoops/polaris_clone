@@ -36,7 +36,7 @@ module Api
         query_is_editable = query.client_id.nil? && query.creator_id.nil?
         return head :unauthorized unless query_is_editable && (query.organization == current_organization)
 
-        query.update(client: current_user, creator: current_user)
+        query.update(client: organization_user, company: organization_user.company, creator: organization_user)
         render json: Api::V2::QuerySerializer.new(
           Api::V2::QueryDecorator.new(query)
         )

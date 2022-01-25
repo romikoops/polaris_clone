@@ -130,7 +130,7 @@ module Journey
 
         it "raises an error", :aggregate_failures do
           expect { query.update!(origin: "test") }.to raise_error(ActiveRecord::RecordInvalid)
-          expect(query.errors.messages[:base]).to include("Only status, client and creator can be updated")
+          expect(query.errors.messages[:base]).to include("Only status, client, company and creator can be updated")
         end
       end
     end

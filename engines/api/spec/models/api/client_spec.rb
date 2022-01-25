@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Api::Client, type: :model do
-  let(:user) { FactoryBot.build(:api_client) }
+  let(:user) { FactoryBot.build(:api_client, organization: organization) }
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
 
@@ -35,6 +35,16 @@ RSpec.describe Api::Client, type: :model do
       it "returns clients based on email in descending order" do
         expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
       end
+    end
+  end
+
+  describe "#company" do
+    before { FactoryBot.create(:companies_membership, company: company, client: user) }
+
+    let(:company) { FactoryBot.create(:companies_company, organization: organization) }
+
+    it "returns the company through the Membership" do
+      expect(user.company).to eq(company)
     end
   end
 end

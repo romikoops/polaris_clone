@@ -31,16 +31,8 @@ module Api
         @query ||= Journey::Query.find(params[:query_id])
       end
 
-      def client
-        @client ||= query.client
-      end
-
       def company_name
-        @company_name ||= begin
-          company = Companies::Company.joins(:memberships).find_by(companies_memberships: { client_id: client.id }) if client.present?
-
-          company.name if company.present?
-        end
+        @company_name ||= query.company.name if query.company.present?
       end
 
       def create_params

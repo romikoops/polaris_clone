@@ -50,11 +50,12 @@ module Journey
     def updateable_attributes
       errors.add(:client_id, "Client id can only be added, not edited") if client_id_changed? && client_id_change_to_be_saved.first.present?
       errors.add(:creator_id, "Creator id can only be added, not edited") if creator_id_changed? && creator_id_change_to_be_saved.first.present?
+      errors.add(:company_id, "Company id can only be added, not edited") if company_id_changed? && company_id_change_to_be_saved.first.present?
       errors.add(:base, "Client and Creator must be added together") if client_id_change_to_be_saved != creator_id_change_to_be_saved
 
-      return if (changes_to_save.keys - %w[creator_id creator_type client_id status]).empty?
+      return if (changes_to_save.keys - %w[creator_id creator_type client_id company_id status]).empty?
 
-      errors.add(:base, "Only status, client and creator can be updated")
+      errors.add(:base, "Only status, client, company and creator can be updated")
     end
   end
 end

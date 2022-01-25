@@ -9,11 +9,12 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      FactoryBot.create(:companies_membership, client: user)
+      FactoryBot.create(:companies_membership, client: user, company: company)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+    let(:company) { FactoryBot.create(:companies_company, organization: organization) }
     let(:source) { FactoryBot.create(:application, name: "siren") }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public", application: source) }
     let(:token_header) { "Bearer #{access_token.token}" }
@@ -28,8 +29,6 @@ module Api
       end
 
       context "when a user has a membership with the company" do
-        let(:company) { FactoryBot.create(:companies_company) }
-
         before { FactoryBot.create(:companies_membership, client: query.client, company: company) }
 
         it "returns created after creating `Journey::RequestForQuotation` and `Journey::RequestForQuotationEvent` event" do

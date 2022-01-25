@@ -5,6 +5,10 @@ module Api
     self.inheritance_column = nil
 
     PROFILE_ATTRIBUTES = %w[first_name last_name phone].freeze
+
+    has_one :membership, class_name: "Companies::Membership"
+    has_one :company, through: :membership, class_name: "Companies::Company"
+
     filterrific(
       default_filter_params: { sorted_by: "email_asc" },
       available_filters: [

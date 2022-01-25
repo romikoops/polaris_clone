@@ -9,13 +9,14 @@ module Api
 
     before do
       request.headers["Authorization"] = token_header
-      FactoryBot.create(:companies_membership, client: client)
+      FactoryBot.create(:companies_membership, client: client, company: company)
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization, :with_max_dimensions) }
     let(:client) { FactoryBot.create(:api_client, organization_id: organization.id) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public", application: FactoryBot.create(:application, name: "siren")) }
     let(:token_header) { "Bearer #{access_token.token}" }
+    let(:company) { FactoryBot.create(:companies_company, organization: organization) }
 
     describe "POST #create" do
       include_context "complete_route_with_trucking"
@@ -143,6 +144,7 @@ module Api
           patch :update, params: params, as: :json
           expect(response_data["id"]).to be_present
           expect(response_data.dig("attributes", "client", "data", "id")).to eq(client.id)
+          expect(response_data.dig("attributes", "companyId")).to eq(company.id)
         end
       end
 
