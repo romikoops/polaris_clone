@@ -44,9 +44,7 @@ module ExcelDataServices
 
       scope.set_tags(organization: document.organization.slug)
       scope.set_user(id: user.id, email: user.email)
-
-      scope.set_context(:doc_type, document.doc_type)
-      scope.set_context(:file, document.text)
+      scope.set_context("excel uploader", { doc_type: document.doc_type, file: document.text })
     end
 
     def update_status!(upload:, status:)

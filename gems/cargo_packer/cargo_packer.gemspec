@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{lib}/**/*"]
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activesupport", "~> 5.2.2"
+  spec.add_dependency "activesupport", "~> 5.2.6"
   spec.add_dependency "rake", "~> 13.0"
 
   spec.add_development_dependency "bundler"

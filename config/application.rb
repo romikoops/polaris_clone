@@ -59,12 +59,14 @@ module Polaris
         coerce_date_times: true,
         ignore_error: !Rails.env.development?,
         parse_response_by_content_type: false,
+        query_hash_key: "rack.request.query_hash",
         error_handler: error_handler
       config.middleware.use Committee::Middleware::ResponseValidation,
         schema_path: "doc/api/swagger.json",
         coerce_date_times: true,
         ignore_error: !Rails.env.development?,
         parse_response_by_content_type: false,
+        query_hash_key: "rack.request.query_hash",
         error_handler: error_handler
     end
 

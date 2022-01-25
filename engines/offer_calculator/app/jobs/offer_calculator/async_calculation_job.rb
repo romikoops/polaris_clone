@@ -29,9 +29,11 @@ module OfferCalculator
       )
       scope.set_user(id: query.creator_id, email: query.creator&.email)
 
-      scope.set_context(:destination, query.destination)
-      scope.set_context(:load_type, query.load_type)
-      scope.set_context(:origin, query.origin)
+      scope.set_context("offer_calculation", {
+        destination: query.destination,
+        load_type: query.load_type,
+        origin: query.origin
+      })
     end
   end
 end

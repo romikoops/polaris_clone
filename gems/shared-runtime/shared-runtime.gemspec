@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{lib}/**/*"]
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activerecord-postgis-adapter", "~> 5.2.2"
+  spec.add_dependency "activerecord-postgis-adapter"
   spec.add_dependency "activerecord-safer_migrations", "~> 3.0"
   spec.add_dependency "activestorage-cascade", "~> 0.1.1"
   spec.add_dependency "audited", "~> 4.9"

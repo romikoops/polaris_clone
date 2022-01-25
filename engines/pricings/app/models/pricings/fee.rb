@@ -13,7 +13,7 @@ module Pricings
     belongs_to :hw_rate_basis, class_name: "::Pricings::RateBasis", optional: true
     belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
 
-    before_validation :generate_upsert_id
+    before_create :generate_upsert_id
 
     validates_uniqueness_of :upsert_id
     acts_as_paranoid
