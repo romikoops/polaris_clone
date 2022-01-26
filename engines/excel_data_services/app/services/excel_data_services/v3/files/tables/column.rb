@@ -27,9 +27,10 @@ module ExcelDataServices
           def cells
             @cells ||= sheet_values.map.with_index do |value, index|
               ExcelDataServices::V3::Files::Tables::CellParser.new(
-                column: self,
+                container: self,
                 row: index + 2,
-                input: value
+                input: value,
+                column: sheet_column
               )
             end
           end

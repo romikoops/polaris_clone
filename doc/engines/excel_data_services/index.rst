@@ -43,6 +43,7 @@ Most importantly it keeps track of the async job and its status as well as the a
 
     cell_parser/index.rst
     column/index.rst
+    matrix/index.rst
     conflicts/index.rst
     dynamic_columns/index.rst
     dynamic_fees/index.rst

@@ -12,6 +12,9 @@ module ExcelDataServices
 
         class RequiredDataMissing < InsertableChecks
         end
+
+        class BooleanValueMissing < InsertableChecks
+        end
       end
     end
   end

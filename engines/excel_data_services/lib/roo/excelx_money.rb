@@ -27,7 +27,27 @@ module Roo
       self.class.finalize_tempdirs(object_id)
       raise
     end
+
+
+    def cell(row, col, sheet = nil)
+      key = normalize(row, col)
+      raw_cell = sheet_for(sheet).cells[key]
+      ValueFromCell.new(cell: raw_cell).perform if raw_cell
+    end
+
+
+    def matrix(coordinates, sheet = nil)
+      coordinates.map do |row, col_number|
+        key = normalize(row, col_number)
+        matrix_cell = sheet_for(sheet).cells[key]
+
+        next if matrix_cell&.value.blank?
+
+        ValueFromCell.new(cell: matrix_cell).perform
+      end
+    end
   end
 end
 
 require_relative "sheet_money"
+require_relative "value_from_cell"

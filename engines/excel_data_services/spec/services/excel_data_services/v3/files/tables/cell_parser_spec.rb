@@ -15,7 +15,7 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::CellParser do
       options: options
     )
   end
-  let(:cell) { described_class.new(column: column, input: input, row: "1") }
+  let(:cell) { described_class.new(container: column, input: input, row: "1", column: "A") }
 
   before do
     Organizations.current_id = organization.id

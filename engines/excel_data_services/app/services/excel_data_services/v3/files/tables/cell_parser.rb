@@ -7,21 +7,20 @@ module ExcelDataServices
         class CellParser
           # A cell represents each piece of data in a Column (analagous to the cell on the sheet) but with the Sanitization and TypeValidation done here so the data put into the frame is correct from the beginning.
 
-          attr_reader :column, :input, :row
+          attr_reader :container, :input, :row, :column
 
           delegate :blank?, to: :input
-          delegate :header, :sheet_name, :fallback, :sheet_column, to: :column
+          delegate :header, :sheet_name, :fallback, to: :container
 
-          def initialize(column:, input:, row:)
-            @column = column
+          def initialize(container:, input:, row:, column:)
+            @container = container
             @input = input
             @row = row
+            @column = column
           end
 
           def value
-            @value ||= if matches_any_header?
-              input
-            elsif sanitized_value.nil?
+            @value ||= if sanitized_value.nil?
               fallback
             else
               sanitized_value
@@ -32,6 +31,10 @@ module ExcelDataServices
             @error ||= validator_error unless valid?
           end
 
+          def location
+            "(Sheet: #{sheet_name}) row: #{row}, column: #{column}"
+          end
+
           private
 
           def sanitized_value
@@ -39,11 +42,7 @@ module ExcelDataServices
           end
 
           def sanitizer_klass
-            "ExcelDataServices::V3::Sanitizers::#{column.sanitizer.camelize}".constantize
-          end
-
-          def matches_any_header?
-            column.matches_any_header?(value: input)
+            "ExcelDataServices::V3::Sanitizers::#{container.sanitizer.camelize}".constantize
           end
 
           def valid?
@@ -54,7 +53,7 @@ module ExcelDataServices
             ExcelDataServices::V3::Files::Error.new(
               type: :type_error,
               row_nr: row,
-              col_nr: sheet_column,
+              col_nr: column,
               sheet_name: sheet_name,
               reason: "The value: #{value} of the key: #{header} is not a valid #{validator_type}.",
               exception_class: exception_from_type
@@ -62,7 +61,7 @@ module ExcelDataServices
           end
 
           def validator_type
-            column.validator.camelize || "Any"
+            container.validator.camelize || "Any"
           end
 
           def exception_from_type
