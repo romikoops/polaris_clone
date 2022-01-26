@@ -210,6 +210,7 @@ module ExcelDataServices
       def date_from_month(month:, effective_date:, expiration_date:)
         date = Date.parse("#{month} #{expiration_date.year}")
         date = Date.parse("#{month} #{effective_date.year}") if date > expiration_date
+        date = effective_date if date < effective_date && date <= expiration_date
         date if date >= effective_date && date <= expiration_date
       end
 
@@ -228,7 +229,6 @@ module ExcelDataServices
         return unmodified_effective_period unless col_name.match?(/(curr|next)_fee/)
 
         effective_month = determine_effective_month(col_name: col_name, row_data: row_data)
-
         return unmodified_effective_period unless effective_month
 
         actual_effective_period(
