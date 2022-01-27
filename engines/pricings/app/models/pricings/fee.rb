@@ -13,9 +13,8 @@ module Pricings
     belongs_to :hw_rate_basis, class_name: "::Pricings::RateBasis", optional: true
     belongs_to :charge_category, class_name: "Legacy::ChargeCategory"
 
-    before_create :generate_upsert_id
+    before_validation :generate_upsert_id
 
-    validates_uniqueness_of :upsert_id
     acts_as_paranoid
 
     def to_fee_hash
@@ -50,7 +49,7 @@ module Pricings
     end
 
     def generate_upsert_id
-      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [pricing_id, charge_category_id, organization_id].map(&:to_s).join)
+      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [pricing_id, charge_category_id, organization_id].map(&:to_s).join) if pricing_id.present?
     end
   end
 end

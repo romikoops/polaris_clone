@@ -208,10 +208,18 @@ module ExcelDataServices
       end
 
       def date_from_month(month:, effective_date:, expiration_date:)
-        date = Date.parse("#{month} #{expiration_date.year}")
-        date = Date.parse("#{month} #{effective_date.year}") if date > expiration_date
-        date = effective_date if date < effective_date && date <= expiration_date
-        date if date >= effective_date && date <= expiration_date
+        validity = Range.new(effective_date, expiration_date)
+        target_month = [effective_date.year, expiration_date.year]
+          .uniq
+          .map { |year| month_as_range_for(month: month, year: year) }
+          .find { |month_as_range| validity.overlaps?(month_as_range) }
+
+        target_month&.first
+      end
+
+      def month_as_range_for(month:, year:)
+        month_as_date = Date.parse("#{month} #{year}")
+        Range.new(month_as_date, month_as_date.end_of_month)
       end
 
       def month_german_to_english(month)
