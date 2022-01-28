@@ -73,8 +73,9 @@ module ExcelDataServices
 
           def range_from_grouping_rows(grouped_rows:)
             filtered = grouped_rows[(!grouped_rows["range_min"].missing) & (!grouped_rows["range_max"].missing)].yield_self do |frame|
-              frame["min"] = frame.delete("range_min")
-              frame["max"] = frame.delete("range_max")
+              frame["min"] = frame.delete("range_min").to(:float)
+              frame["max"] = frame.delete("range_max").to(:float)
+              frame["rate"] = frame["rate"].to(:float)
               frame
             end
             filtered[%w[min max rate]].to_a.uniq

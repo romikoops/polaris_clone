@@ -2,7 +2,7 @@
 
 module Rover
   class Vector
-    def cast_data(data, type: nil)
+    def cast_data(data, type: :object) # Assign :object if no type specified. Casting is the source of most issues.
       numo_type = numo_type(type) if type
 
       data = data.to_numo if data.is_a?(Vector)

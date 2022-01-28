@@ -198,13 +198,13 @@ column "percentage",
 column "dangerous",
   sanitizer: "boolean",
   validator: "optional_boolean",
-  default: false,
+  fallback:false,
   required: false,
   type: :object
 column "internal",
   sanitizer: "boolean",
   validator: "optional_boolean",
-  default: false,
+  fallback:false,
   required: false,
   type: :object
 

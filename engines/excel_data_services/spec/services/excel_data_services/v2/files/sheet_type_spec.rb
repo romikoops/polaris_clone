@@ -89,7 +89,7 @@ RSpec.describe ExcelDataServices::V2::Files::SheetType do
 
     it "returns inserts the lcl fees ", :aggregate_failures do
       expect(lcl_fee.rate).to eq(40)
-      expect(lcl_range_fee.range).to match_array([{ "max" => "100.0", "min" => "0.0", "rate" => 210.0 }, { "max" => "500.0", "min" => "100.0", "rate" => 110.0 }])
+      expect(lcl_range_fee.range).to match_array([{ "max" => 100.0, "min" => 0.0, "rate" => 210.0 }, { "max" => 500.0, "min" => 100.0, "rate" => 110.0 }])
       expect(transhipment_lcl_fee.rate).to eq(210)
     end
 
