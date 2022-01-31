@@ -81,15 +81,15 @@ module ExcelDataServices
         end
 
         def dynamic_keys
-          @dynamic_keys ||= frame.keys.select { |column_header| column_header.starts_with?("Dynamic") }
+          @dynamic_keys ||= frame.keys.select { |column_header| column_header.starts_with?("Dynamic") && !column_header.match?(/(_row|_column)$/) }
         end
 
         def existing_columns
-          frame.keys - dynamic_keys - %w[effective_date expiration_date]
+          @existing_columns ||= frame.keys - dynamic_keys - %w[effective_date expiration_date]
         end
 
         def final_columns
-          (existing_columns + fee_frame.keys + %w[effective_date expiration_date]).uniq
+          @final_columns ||= (existing_columns + fee_frame.keys + %w[effective_date expiration_date]).uniq
         end
 
         def empty_frame
