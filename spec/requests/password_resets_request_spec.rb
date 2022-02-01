@@ -7,6 +7,7 @@ RSpec.describe "PasswordResets", type: :request do
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
   let(:admin_mailer_dummy) { instance_double("Notifications::UserMailer") }
   let(:client_mailer_dummy) { instance_double("Notifications::ClientMailer") }
+  let(:referrer_host) { "http://#{organization.domains.first.domain}" }
 
   before do
     stub_request(:get, "https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700")
@@ -16,13 +17,13 @@ RSpec.describe "PasswordResets", type: :request do
   describe "POST /create" do
     shared_examples_for "initiating the password reset process" do
       it "returns http success" do
-        post organization_password_resets_path(organization_id: organization.id), params: { email: user.email }
+        post organization_password_resets_path(organization_id: organization.id), params: { email: user.email }, headers: { "HTTP_REFERER" => referrer_host }
 
         expect(response).to have_http_status(:success)
       end
 
       it "returns not found" do
-        post organization_password_resets_path(organization_id: organization.id), params: { email: nil }
+        post organization_password_resets_path(organization_id: organization.id), params: { email: nil }, headers: { "HTTP_REFERER" => referrer_host }
 
         expect(response).to have_http_status(:not_found)
       end
@@ -36,6 +37,17 @@ RSpec.describe "PasswordResets", type: :request do
 
     context "when user is a Users::Client" do
       it_behaves_like "initiating the password reset process"
+    end
+
+    context "when organization domain does not match the current domain" do
+      let(:different_organization) { FactoryBot.create(:organizations_organization) }
+      let(:different_referrer_host) { "http://#{different_organization.domains.first.domain}" }
+
+      it "returns `unauthorized`" do
+        post organization_password_resets_path(organization_id: organization.id), params: { email: user.email }, headers: { "HTTP_REFERER" => different_referrer_host }
+
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 
