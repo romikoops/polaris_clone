@@ -31,6 +31,21 @@ module Admin
       response_handler({ has_errors: false, async: true })
     end
 
+    def handle_download(category_identifier:, file_name:, options: {})
+      ExcelDataServices::DownloaderJob.perform_later(
+        organization: current_organization,
+        category_identifier: category_identifier,
+        file_name: file_name,
+        user: current_user,
+        options: options
+      )
+
+      response_handler(
+        key: category_identifier,
+        success_message: "#{category_identifier} sheet will be e-mailed to #{current_user.email}"
+      )
+    end
+
     def stop_index_json(stop:)
       stop.as_json(
         include: {

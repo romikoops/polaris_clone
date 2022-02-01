@@ -1,0 +1,34 @@
+<tr>
+  <td class="content-cell" style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px; padding: 45px;">
+    <div class="f-fallback">
+      <h1 style="margin-top: 0; color: #333333; font-size: 22px; font-weight: bold; text-align: left;" align="left">Hi <%= @user.profile.full_name %></h1>
+      <table class="purchase" width="100%" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%; -premailer-width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; margin: 0; padding: 35px 0;">
+
+        <% if @has_errors %>
+           <% @result[:errors].each do |error| %>
+            <tr>
+              <td style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <h3 style="margin-top: 0; color: #333333; font-size: 14px; font-weight: bold; text-align: left;"> <%= error[:reason] %> </h3>
+              </td>
+            </tr>
+           <% end %>
+        <% else %>
+           <% unless @can_attach %>
+            <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">You can download <b><%= @category_identifier.humanize %></b> sheet by clicking <%= link_to "here", @url %></p>
+            <tr>
+              <td style="word-break: break-word; font-family: &quot;Nunito Sans&quot;, Helvetica, Arial, sans-serif; font-size: 16px;">
+                <i>Note: Sheet is too large to be attached to this email, it can only be downloaded by clicking the link above.</i>
+              </td>
+            </tr>
+            <% else %>
+              <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">
+              You can find the requested <b><%= @category_identifier.humanize %></b> sheet attached to this email.
+              However you can also download the sheet by clicking <%= link_to "here", @url %></p>
+            <% end %>
+        <% end %>
+      </table>
+      <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">Regards,
+        <br />The ItsMyCargo Team</p>
+    </div>
+  </td>
+</tr>

@@ -71,7 +71,8 @@ RSpec.describe Admin::PricingsController, type: :controller do
       JSON.parse({
         pricings: pricings_table_jsons,
         itinerary: itinerary,
-        stops: stops_table_jsons}.to_json)
+        stops: stops_table_jsons
+      }.to_json)
     end
 
     it "returns the correct data for the route" do
@@ -163,6 +164,13 @@ RSpec.describe Admin::PricingsController, type: :controller do
       FactoryBot.create(:tenant_vehicle, organization: organization)
     end
 
+    let(:expected_response) do
+      {
+        "key" => "pricings",
+        "success_message" => "pricings sheet will be e-mailed to #{user.email}"
+      }
+    end
+
     context "when calculating cargo_item" do
       before do
         FactoryBot.create(:lcl_pricing)
@@ -171,26 +179,10 @@ RSpec.describe Admin::PricingsController, type: :controller do
         }
       end
 
-      it "returns error with messages when an error is raised" do
+      it "returns the expected response data" do
         aggregate_failures do
           expect(response).to have_http_status(:success)
-          expect(json_response.dig("data", "url")).to include("demo__pricings_ocean_lcl.xlsx")
-        end
-      end
-    end
-
-    context "when a container" do
-      before do
-        FactoryBot.create(:fcl_20_pricing)
-        get :download, params: {
-          organization_id: organization.id, options: { mot: "ocean", load_type: "container", group_id: nil }
-        }
-      end
-
-      it "returns error with messages when an error is raised" do
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(json_response.dig("data", "url")).to include("demo__pricings_ocean_fcl.xlsx")
+          expect(response_data).to include(expected_response)
         end
       end
     end

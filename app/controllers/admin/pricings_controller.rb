@@ -103,23 +103,11 @@ module Admin
       cargo_class = generic_cargo_class_from_load_type(load_type)
       file_name = "#{current_organization.slug}__#{category_identifier}_#{mot}_#{cargo_class}"
 
-      document = ExcelDataServices::Loaders::Downloader.new(
-        organization: current_organization,
-        category_identifier: category_identifier,
-        file_name: file_name,
-        user: organization_user,
-        options: {
-          mode_of_transport: mot,
-          load_type: load_type,
-          group_id: download_params[:group_id]
-        }
-      ).perform
-
-      # TODO: When timing out, file will not be downloaded!!!
-      response_handler(
-        key: category_identifier,
-        url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
-      )
+      handle_download(category_identifier: category_identifier, file_name: file_name, options: {
+        mode_of_transport: mot,
+        load_type: load_type,
+        group_id: download_params[:group_id]
+      })
     end
 
     private

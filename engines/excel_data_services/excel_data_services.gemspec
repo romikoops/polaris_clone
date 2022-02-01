@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "groups"
   spec.add_dependency "legacy"
   spec.add_dependency "locations"
+  spec.add_dependency "notifications"
   spec.add_dependency "pricings"
   spec.add_dependency "routing"
   spec.add_dependency "organizations"

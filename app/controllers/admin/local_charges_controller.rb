@@ -82,21 +82,10 @@ class Admin::LocalChargesController < Admin::AdminBaseController
     mot = download_params[:mot]
     file_name = "#{current_organization.slug}__#{category_identifier}_#{mot}"
 
-    document = ExcelDataServices::Loaders::Downloader.new(
-      organization: current_organization,
-      category_identifier: category_identifier,
-      file_name: file_name,
-      options: {
-        mode_of_transport: mot,
-        group_id: upload_params[:group_id]
-      }
-    ).perform
-
-    # TODO: When timing out, file will not be downloaded!!!
-    response_handler(
-      key: category_identifier,
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
-    )
+    handle_download(category_identifier: category_identifier, file_name: file_name, options: {
+      mode_of_transport: mot,
+      group_id: download_params[:group_id]
+    })
   end
 
   private

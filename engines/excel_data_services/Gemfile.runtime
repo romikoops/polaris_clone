@@ -3,6 +3,9 @@ gem "shared-runtime", path: "../../gems/shared-runtime"
 gem "companies", path: "../companies"
 eval_gemfile "../companies/Gemfile.runtime"
 
+gem "excel_data_services", path: "../excel_data_services"
+eval_gemfile "../excel_data_services/Gemfile.runtime"
+
 gem "groups", path: "../groups"
 eval_gemfile "../groups/Gemfile.runtime"
 
@@ -11,6 +14,9 @@ eval_gemfile "../legacy/Gemfile.runtime"
 
 gem "locations", path: "../locations"
 eval_gemfile "../locations/Gemfile.runtime"
+
+gem "notifications", path: "../notifications"
+eval_gemfile "../notifications/Gemfile.runtime"
 
 gem "pricings", path: "../pricings"
 eval_gemfile "../pricings/Gemfile.runtime"

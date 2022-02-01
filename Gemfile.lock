@@ -132,6 +132,7 @@ PATH
       legacy
       locations
       mimemagic
+      notifications
       organization_manager
       organizations
       pricings

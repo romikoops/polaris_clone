@@ -149,6 +149,13 @@ RSpec.describe Admin::HubsController, type: :controller do
 
   describe "GET #download" do
     context "when it succesfully downloads" do
+      let(:expected_response) do
+        {
+          "key" => "hubs",
+          "success_message" => "hubs sheet will be e-mailed to #{user.email}"
+        }
+      end
+
       before do
         FactoryBot.create(:gothenburg_hub,
           free_out: false, organization: organization,
@@ -156,10 +163,13 @@ RSpec.describe Admin::HubsController, type: :controller do
           nexus: FactoryBot.create(:gothenburg_nexus))
       end
 
-      it "returns the hub file url" do
+      it "returns the expected response data" do
         get :download, params: { organization_id: organization.id }
 
-        expect(response_data["url"]).to include(organization.slug)
+        aggregate_failures do
+          expect(response).to have_http_status(:success)
+          expect(response_data).to include(expected_response)
+        end
       end
     end
   end

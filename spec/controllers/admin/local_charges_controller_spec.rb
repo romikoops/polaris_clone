@@ -83,7 +83,6 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
     context "when the counterpart_hub search is specified" do
       let(:params) { { counterpart_hub_name: local_charge_a.counterpart_hub.name[0..4] } }
 
-
       it_behaves_like "index searching"
     end
 
@@ -214,6 +213,13 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
       FactoryBot.create(:tenant_vehicle, organization: organization)
     end
 
+    let(:expected_response) do
+      {
+        "key" => "local_charges",
+        "success_message" => "local_charges sheet will be e-mailed to #{user.email}"
+      }
+    end
+
     before do
       FactoryBot.create(
         :legacy_local_charge,
@@ -237,12 +243,11 @@ RSpec.describe Admin::LocalChargesController, type: :controller do
       )
     end
 
-    it "returns error with messages when an error is raised" do
+    it "returns the expected response data" do
       get :download, params: { organization_id: organization.id, options: { mot: nil, group_id: nil } }
-      json_response = JSON.parse(response.body)
       aggregate_failures do
         expect(response).to have_http_status(:success)
-        expect(json_response.dig("data", "url")).to include("demo__local_charges_.xlsx")
+        expect(response_data).to include(expected_response)
       end
     end
   end

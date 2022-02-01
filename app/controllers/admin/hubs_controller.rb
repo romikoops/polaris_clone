@@ -111,18 +111,9 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def download
     category_identifier = "hubs"
-    file_name = "#{current_organization.slug}__#{category_identifier}_#{Time.zone.today.strftime("%d/%m/%Y")}"
+    file_name = "#{current_organization.slug}__#{category_identifier}_#{Time.zone.today.strftime('%d/%m/%Y')}"
 
-    document = ExcelDataServices::Loaders::Downloader.new(
-      organization: current_organization,
-      category_identifier: category_identifier,
-      file_name: file_name
-    ).perform
-
-    response_handler(
-      key: category_identifier,
-      url: Rails.application.routes.url_helpers.rails_blob_url(document.file, disposition: "attachment")
-    )
+    handle_download(category_identifier: category_identifier, file_name: file_name)
   end
 
   private
