@@ -3,8 +3,9 @@
 # rubocop:disable RSpec/ContextWording
 RSpec.shared_context "for excel_data_services setup" do
   # rubocop:enable RSpec/ContextWording
-  let(:frame) { Rover::DataFrame.new(rows) }
+  let(:frame) { Rover::DataFrame.new(rows, types: types) }
   let(:row) { {} }
+  let(:types) { {} }
   let(:rows) { [row] }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }

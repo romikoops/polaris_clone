@@ -15,8 +15,7 @@ RSpec.describe ExcelDataServices::V2::Overlaps::Resolver do
   let(:validity) { Range.new(Date.parse("2021/01/01"), Date.parse("2021/05/01"), exclude_end: true) }
   let(:rows) do
     [
-      pricing.slice(*conflict_keys)
-        .merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1)
+      pricing.slice(*conflict_keys).merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1)
     ]
   end
   let(:conflict_keys) { %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id] }

@@ -45,7 +45,7 @@ module ExcelDataServices
 
         def append_internal_conflict_rows
           frame[keys].to_a.uniq.each do |indentifying_attributes|
-            sub_frame = row_frame(row: indentifying_attributes)
+            sub_frame = frame.filter(indentifying_attributes)
             add_internal_conflict_error(rows: sub_frame.to_a) if internal_conflict_exists(sub_frame: sub_frame)
           end
         end
@@ -54,10 +54,6 @@ module ExcelDataServices
           sub_frame[DATE_KEYS].to_a.uniq.combination(2).any? do |row_a, row_b|
             Range.new(*row_a.values_at(*DATE_KEYS)).overlaps?(Range.new(*row_b.values_at(*DATE_KEYS)))
           end
-        end
-
-        def row_frame(row:)
-          ExcelDataServices::V3::Helpers::FrameFilter.new(input_frame: frame, arguments: row).frame
         end
 
         def add_internal_conflict_error(rows:)

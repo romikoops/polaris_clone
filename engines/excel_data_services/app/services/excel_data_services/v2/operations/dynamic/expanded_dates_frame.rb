@@ -46,6 +46,7 @@ module ExcelDataServices
           def date_pairs
             row_frame[%w[effective_date expiration_date]].to_a.flat_map(&:values)
               .compact.uniq.sort
+              .select { |date| main_validity.cover?(date) }
               .each_cons(2)
           end
 
@@ -55,6 +56,10 @@ module ExcelDataServices
 
           def expiration_dates
             @expiration_dates ||= row_frame["expiration_date"].to_a.uniq
+          end
+
+          def main_validity
+            @main_validity ||= Range.new(*row.values_at("effective_date", "expiration_date"))
           end
         end
       end

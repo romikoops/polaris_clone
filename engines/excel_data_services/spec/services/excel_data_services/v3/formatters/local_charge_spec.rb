@@ -5,6 +5,8 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
   include_context "V3 setup"
 
+  let(:service) { described_class.state(state: state_arguments) }
+
   describe "#insertable_data" do
     let(:rows) do
       [{ "counterpart_terminal" => nil,
@@ -47,7 +49,7 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
          "range_min" => nil,
          "range_max" => nil,
          "base" => nil,
-         "ton" => 0.4e1,
+         "ton" => 4.0,
          "cbm" => nil,
          "kg" => nil,
          "item" => nil,
@@ -56,20 +58,22 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
          "container" => nil,
          "wm" => nil,
          "percentage" => nil,
-         "dangerous" => nil,
-         "internal" => nil,
+         "dangerous" => false,
+         "internal" => false,
          "organization_id" => "5a72a4d8-b836-441b-bb8a-0bf590db7db9" }]
     end
     let(:expected_data) do
       [{ "effective_date" => Date.parse("Sat, 01 May 2021"),
          "expiration_date" => Date.parse("Fri, 31 Dec 2021"),
          "hub_id" => 3554,
+         "direction" => "export",
+         "mode_of_transport" => "ocean",
          "counterpart_hub_id" => nil,
          "group_id" => "33729e95-ca5e-44b4-b387-d45499afb9ed",
          "tenant_vehicle_id" => 1012,
          "organization_id" => "5a72a4d8-b836-441b-bb8a-0bf590db7db9",
-         "dangerous" => nil,
-         "internal" => nil,
+         "dangerous" => false,
+         "internal" => false,
          "metadata" =>
          { "sheet_name" => "Local Charges",
            "row_number" => "2",
@@ -81,6 +85,7 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
              "base" => nil,
              "min" => nil,
              "max" => nil,
+             "ton" => 0.4e1,
              "charge_category_id" => 944,
              "rate_basis_id" => "74e8dcfc-a47c-462a-aefe-108f696a24c0",
              "currency" => "EUR",
@@ -92,10 +97,17 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
                "document_id" => file.id } } },
          "load_type" => "lcl",
          "validity" => "[2021-05-01, 2021-12-31)",
-         "uuid" => "fd3b22f4-3fd7-584b-b5c7-255b754d3956" }]
+         "uuid" => "9bbe7239-c9f6-55be-9287-6ef47a4d7b0c" }]
     end
 
-    let(:service) { described_class.state(state: state_arguments) }
+
+  let(:types) do
+    {
+      "counterpart_hub_id" => :object,
+      "dangerous" => :object,
+      "internal" => :object
+    }
+  end
 
     it "returns the formatted data" do
       expect(service.insertable_data).to match_array(expected_data)

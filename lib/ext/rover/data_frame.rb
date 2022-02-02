@@ -38,7 +38,7 @@ module Rover
       keys = (self.keys + other.keys).uniq
       keys.each do |k|
         vectors[k] = []
-        types[k] = join_type(self.types[k], other.types[k])
+        types[k] = :object # Overwriting this to avoid autoasssigned types coming up for ints and bools
       end
 
       each_row do |r|
@@ -67,8 +67,8 @@ module Rover
       self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)]
     end
 
-    def group_by(column)
-      self[[column]].to_a.uniq.map {|args| filter(args) }
+    def group_by(columns)
+      self[columns].to_a.uniq.map {|args| filter(args) }
     end
   end
 end

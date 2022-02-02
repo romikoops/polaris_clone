@@ -17,7 +17,7 @@ module ExcelDataServices
       end
 
       def perform
-        stats.group_by(&:type).inject({ errors: errors }) do |result, (type, stats)|
+        stats.group_by(&:type).inject({ errors: errors[0..100] }) do |result, (type, stats)|
           result.merge(type.to_sym => { created: stats.sum(&:created), failed: stats.sum(&:failed) })
         end
       end

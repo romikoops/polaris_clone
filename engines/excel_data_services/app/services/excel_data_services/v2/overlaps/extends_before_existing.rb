@@ -20,7 +20,7 @@ module ExcelDataServices
 
         def set_clause
           <<~SQL
-            validity = daterange(:new_start_date, upper(validity))#{legacy_keys? ? ', effective_date = :end_date, expiration_date = upper(validity)' : ''}
+            validity = daterange(:new_start_date, upper(validity))#{legacy_keys? ? ', effective_date = :new_start_date, expiration_date = upper(validity)' : ''}
           SQL
         end
 

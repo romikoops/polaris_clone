@@ -54,6 +54,10 @@ module Legacy
 
     before_validation -> { generate_upsert_id }, on: %i[create update]
     before_validation :set_validity
+    validates :mode_of_transport, inclusion: { in: Legacy::Itinerary::MODES_OF_TRANSPORT }, presence: true
+    validates :direction, inclusion: { in: %w[import export] }, presence: true
+    validates :load_type, presence: true
+    validates :validity, presence: true
 
     def generate_upsert_id
       return if [hub_id, tenant_vehicle_id, load_type, mode_of_transport, group_id, direction, organization_id].any?(&:blank?)

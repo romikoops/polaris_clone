@@ -6,7 +6,6 @@ module ExcelDataServices
       class Resolver
         # The Resolver class will take the conflict keys andd extract the permutations from the data frame.
         # It will then find all conflicts that exists for each pair and execute the Overlaps handler for that conflict type
-        include Sidekiq::Status::Worker
 
         DATE_KEYS = %w[effective_date expiration_date].freeze
         delegate :frame, to: :state
@@ -22,12 +21,10 @@ module ExcelDataServices
         end
 
         def perform
-          append_internal_conflict_rows
+          append_internal_errors_to_state
           return state if state.errors.present?
 
-          frame[conflict_keys].to_a.uniq.each do |conflict_targets|
-            handle_overlap(arguments: conflict_targets)
-          end
+          conflict_rows.each { |conflict_targets| handle_overlap(arguments: conflict_targets) }
           state
         end
 
@@ -43,9 +40,19 @@ module ExcelDataServices
           end
         end
 
-        def append_internal_conflict_rows
-          frame[keys].to_a.uniq.each do |indentifying_attributes|
-            sub_frame = row_frame(row: indentifying_attributes)
+        def conflict_rows
+          @conflict_rows ||= conflict_groups.map do |sub_frame|
+            min_effective_date, max_expiration_date = effective_dates_for(sub_frame: sub_frame)
+            row = sub_frame[keys].to_a.first
+            row.merge(
+              "effective_date" => min_effective_date,
+              "expiration_date" => max_expiration_date
+            )
+          end
+        end
+
+        def append_internal_errors_to_state
+          conflict_groups.each do |sub_frame|
             add_internal_conflict_error(rows: sub_frame.to_a) if internal_conflict_exists(sub_frame: sub_frame)
           end
         end
@@ -73,6 +80,14 @@ module ExcelDataServices
 
         def conflict_keys
           model.column_names.include?(DATE_KEYS.first) ? keys + DATE_KEYS : keys
+        end
+
+        def conflict_groups
+          @conflict_groups ||= frame.group_by(keys)
+        end
+
+        def effective_dates_for(sub_frame:)
+          [sub_frame["effective_date"].to_a.min, sub_frame["expiration_date"].to_a.max]
         end
       end
     end

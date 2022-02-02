@@ -198,13 +198,13 @@ column "percentage",
 column "dangerous",
   sanitizer: "boolean",
   validator: "optional_boolean",
-  fallback:false,
+  fallback: false,
   required: false,
   type: :object
 column "internal",
   sanitizer: "boolean",
   validator: "optional_boolean",
-  fallback:false,
+  fallback: false,
   required: false,
   type: :object
 
@@ -222,10 +222,11 @@ add_validator "Group"
 add_validator "Hub"
 add_validator "CounterpartHub"
 
+add_operation "ExpandedDates"
 add_operation "CounterpartHubExpander" if scope.expand_non_counterpart_local_charges
 
 add_formatter "LocalCharge"
 conflict Legacy::LocalCharge, %w[hub_id counterpart_hub_id tenant_vehicle_id load_type mode_of_transport group_id direction organization_id]
 
-model_importer Legacy::LocalCharge
+model_importer Legacy::LocalCharge, { on_duplicate_key_ignore: false }
 target_model Legacy::LocalCharge

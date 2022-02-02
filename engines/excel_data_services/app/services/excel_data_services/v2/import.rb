@@ -23,7 +23,7 @@ module ExcelDataServices
         import_result
         stats
       rescue ActiveRecord::StatementInvalid => e
-        Sentry.capture(e)
+        Sentry.capture_exception(e)
         ExcelDataServices::V2::Stats.new(
           type: type,
           created: 0,

@@ -23,7 +23,7 @@ module ExcelDataServices
 
         def insertable_data
           rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
-            loop_frame = row_frame(row: row)
+            loop_frame = frame.filter(row)
             row.slice(
               "cargo_class",
               "effective_date",
@@ -49,10 +49,6 @@ module ExcelDataServices
 
         def target_attribute
           "pricing_id"
-        end
-
-        def row_frame(row:)
-          filtered_frame(input_frame: rows_for_insertion, arguments: row.slice(*GROUPING_KEYS))
         end
 
         class RowFees

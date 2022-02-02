@@ -99,17 +99,5 @@ RSpec.describe OfferCalculator::Service::Manipulators::LocalCharges do
         expect(results.first.breakdowns.second.source).to eq(margin)
       end
     end
-
-    context "with invalid direction" do
-      before do
-        FactoryBot.create(:legacy_local_charge,
-          direction: "blue", hub: itinerary.origin_hub, organization: organization,
-          tenant_vehicle: tenant_vehicle, group_id: group.id)
-      end
-
-      it "raises InvalidDirection error" do
-        expect { results }.to raise_error(OfferCalculator::Errors::InvalidDirection)
-      end
-    end
   end
 end

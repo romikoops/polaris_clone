@@ -84,5 +84,27 @@ RSpec.describe ExcelDataServices::V2::Files::Section do
         expect(hamburg.local_charges.find_by(counterpart_hub: felixstowe).fees.keys).to match_array(base_local_charge.fees.keys + ["ISP"])
       end
     end
+
+    context "when local charges have varied dates" do
+      before do
+        result_state
+      end
+
+      let(:xlsx) { File.open(file_fixture("excel/example_local_charges_varied_dates.xlsx")) }
+      let(:expected_validities) do
+        [
+          Range.new(Date.parse("2021/05/01"), Date.parse("2021/09/01"), exclude_end: true),
+          Range.new(Date.parse("2021/09/01"), Date.parse("2022/01/01"), exclude_end: true),
+          Range.new(Date.parse("2022/01/01"), Date.parse("2023/01/01"), exclude_end: true)
+        ]
+      end
+
+      it "splits the fees into spearate local charges based on the dates", :aggregate_failures do
+        expect(hamburg.local_charges.pluck(:validity)).to match_array(expected_validities)
+        expect(hamburg.local_charges.map { |lc| lc.fees.keys }).to match_array(
+          [%w[AA BB CC DD EE FF], %w[AA BB CC DD EE FF], ["FF"]]
+        )
+      end
+    end
   end
 end

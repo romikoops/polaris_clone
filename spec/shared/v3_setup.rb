@@ -3,7 +3,8 @@
 # rubocop:disable RSpec/ContextWording
 RSpec.shared_context "V3 setup" do
   # rubocop:enable RSpec/ContextWording
-  let(:frame) { Rover::DataFrame.new(rows) }
+  let(:frame) { Rover::DataFrame.new(rows, types: types) }
+  let(:types) { {} }
   let(:row) { {} }
   let(:rows) { [row] }
   let(:organization) { FactoryBot.create(:organizations_organization) }

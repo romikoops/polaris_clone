@@ -18,45 +18,91 @@ module ExcelDataServices
           organization_id
           dangerous
         ].freeze
-        NAMESPACE_UUID = UUIDTools::UUID.parse(Legacy::LocalCharge::UUID_V5_NAMESPACE)
-        UUID_KEYS = %w[hub_id counterpart_hub_id tenant_vehicle_id load_type mode_of_transport group_id direction organization_id].freeze
 
         def insertable_data
-          frame[GROUPING_KEYS].to_a.uniq.map do |row|
-            loop_frame = filtered_frame(input_frame: frame, arguments: row)
-            first_row = loop_frame.to_a.first
-            first_row.slice(
+          frame[GROUPING_KEYS].to_a.uniq.map { |grouping| FormattedLocalCharge.new(frame: frame.filter(grouping), state: state).perform }
+        end
+
+        class FormattedLocalCharge
+          NAMESPACE_UUID = UUIDTools::UUID.parse(Legacy::LocalCharge::UUID_V5_NAMESPACE)
+          UUID_KEYS = %w[hub_id counterpart_hub_id tenant_vehicle_id cargo_class mode_of_transport group_id direction organization_id].freeze
+          def initialize(frame:, state:)
+            @frame = frame
+            @state = state
+          end
+
+          def perform
+            local_charge_attrs.merge(data_from_frame)
+          end
+
+          private
+
+          attr_reader :frame, :state
+
+          def local_charge_attrs
+            row.slice(
               "effective_date",
               "expiration_date",
               "hub_id",
               "counterpart_hub_id",
               "group_id",
               "tenant_vehicle_id",
+              "mode_of_transport",
               "organization_id",
+              "direction",
               "dangerous",
               "internal",
               "cbm_ratio"
             )
-              .merge(
-                "metadata" => metadata(row_grouping: loop_frame),
-                "fees" => RowFeesHash.new(frame: loop_frame, state: state).fees,
-                "load_type" => row["cargo_class"],
-                "validity" => "[#{row['effective_date'].to_date}, #{row['expiration_date'].to_date})",
-                "uuid" => upsert_id(row: row)
-              )
+          end
+
+          def row
+            @row ||= frame.to_a.first
+          end
+
+          def data_from_frame
+            {
+              "metadata" => metadata,
+              "fees" => FeesHash.new(frame: frame, state: state).perform,
+              "load_type" => row["cargo_class"],
+              "validity" => "[#{row['effective_date'].to_date}, #{row['expiration_date'].to_date})",
+              "uuid" => uuid
+            }
+          end
+
+          def metadata
+            row.slice("sheet_name").tap do |combined_metadata|
+              combined_metadata["row_number"] = frame["row"].to_a.join(",")
+              combined_metadata["file_name"] = state.file_name
+              combined_metadata["document_id"] = state.file.id
+            end
+          end
+
+          def uuid
+            UUIDTools::UUID.sha1_create(NAMESPACE_UUID, row.values_at(*UUID_KEYS).map(&:to_s).join).to_s
           end
         end
 
-        def metadata(row_grouping:)
-          first_of_group = row_grouping.to_a.first
-          first_of_group.slice("sheet_name").tap do |combined_metadata|
-            combined_metadata["row_number"] = row_grouping["row"].to_a.join(",")
-            combined_metadata["file_name"] = state.file_name
-            combined_metadata["document_id"] = state.file.id
+        class FeesHash
+          attr_reader :frame, :state
+
+          def initialize(frame:, state:)
+            @frame = frame
+            @state = state
+          end
+
+          def perform
+            fee_codes.each_with_object({}) do |fee_code, fee_result|
+              fee_result[fee_code.upcase] = FeeHash.new(frame: frame.filter("fee_code" => fee_code), state: state).perform
+            end
+          end
+
+          def fee_codes
+            frame["fee_code"].to_a.uniq
           end
         end
 
-        class RowFeesHash
+        class FeeHash
           attr_reader :frame, :state
 
           FEE_KEYS = %w[
@@ -76,18 +122,20 @@ module ExcelDataServices
             @state = state
           end
 
-          def fees
-            fee_codes.each_with_object({}) do |fee_code, fee_result|
-              fee_result[fee_code.upcase] = fee_from_grouping_rows(grouped_rows: rows_from_grouping(fee_code: fee_code))
-            end
+          def perform
+            row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "currency", "rate", active_fee_key)
+              .merge(
+                "range" => range_from_grouping_rows,
+                "metadata" => metadata
+              )
           end
 
-          def rows_from_grouping(fee_code:)
-            frame[frame["fee_code"] == fee_code]
+          def row
+            @row ||= frame.to_a.first
           end
 
-          def range_from_grouping_rows(grouped_rows:, active_fee_key:)
-            filtered = grouped_rows[(!grouped_rows["range_min"].missing) & (!grouped_rows["range_max"].missing)].yield_self do |frame|
+          def range_from_grouping_rows
+            filtered = frame[(!frame["range_min"].missing) & (!frame["range_max"].missing)].yield_self do |frame|
               frame["min"] = frame.delete("range_min")
               frame["max"] = frame.delete("range_max")
               frame
@@ -95,24 +143,13 @@ module ExcelDataServices
             filtered[["min", "max", active_fee_key]].to_a
           end
 
-          def fee_from_grouping_rows(grouped_rows:)
-            group_row = grouped_rows.to_a.first
-            active_fee_key = FEE_KEYS.find { |key| group_row[key].present? }
-            group_row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "currency", "rate")
-              .merge(
-                "range" => range_from_grouping_rows(grouped_rows: grouped_rows, active_fee_key: active_fee_key),
-                "metadata" => metadata(row_grouping: grouped_rows)
-              )
+          def active_fee_key
+            @active_fee_key ||= FEE_KEYS.find { |key| row[key].present? }
           end
 
-          def fee_codes
-            frame["fee_code"].to_a.uniq
-          end
-
-          def metadata(row_grouping:)
-            first_of_group = row_grouping.to_a.first
-            first_of_group.slice("sheet_name").tap do |combined_metadata|
-              combined_metadata["row_number"] = row_grouping["row"].to_a.uniq.join(",")
+          def metadata
+            row.slice("sheet_name").tap do |combined_metadata|
+              combined_metadata["row_number"] = frame["row"].to_a.uniq.join(",")
               combined_metadata["file_name"] = state.file_name
               combined_metadata["document_id"] = state.file.id
             end

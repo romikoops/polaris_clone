@@ -27,10 +27,9 @@ module ExcelDataServices
         def update_query(set_clause:, overlap_clause:)
           <<~SQL
             UPDATE #{table_name}
-            SET #{set_clause}
+            SET #{set_clause}, updated_at = now()
             WHERE #{attribute_query}
             AND #{overlap_clause}
-            AND validity && daterange(:start_date, :end_date)
             AND deleted_at IS NULL
           SQL
         end
@@ -52,7 +51,7 @@ module ExcelDataServices
         end
 
         def attribute_query
-          arguments.except(:effective_date, :expiration_date).keys.map { |key| "#{key} = :#{key}" }.join(" AND ")
+          ExcelDataServices::V2::Helpers::AttributeQueryFormatter.new(arguments: attributes_excluding_dates).perform
         end
 
         def attributes_excluding_dates

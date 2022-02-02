@@ -103,11 +103,11 @@ module ExcelDataServices
           end
 
           def counterpart_rows
-            @counterpart_rows ||= row_frame(input_frame: counterpart_frame, row: row)
+            @counterpart_rows ||= counterpart_frame.filter(row)
           end
 
           def expandable_rows
-            @expandable_rows ||= row_frame(input_frame: expandable_frame, row: row.except(*CounterpartHubExpander::COUNTERPART_KEYS))
+            @expandable_rows ||= expandable_frame.filter(row.except(*CounterpartHubExpander::COUNTERPART_KEYS))
               .left_join(counterpart_info_for_expansion, on: "sheet_name")
           end
 
@@ -117,10 +117,6 @@ module ExcelDataServices
 
           def counterpart_codes
             @counterpart_codes ||= counterpart_rows["fee_code"].to_a
-          end
-
-          def row_frame(input_frame:, row:)
-            ExcelDataServices::V3::Helpers::FrameFilter.new(input_frame: input_frame, arguments: row).frame
           end
         end
       end

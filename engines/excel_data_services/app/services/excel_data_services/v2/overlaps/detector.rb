@@ -33,7 +33,7 @@ module ExcelDataServices
         def raw_query
           <<~SQL
             SELECT
-            (validity @> daterange(:effective_date, :expiration_date, '[]') AND daterange(:effective_date, :expiration_date, '[]') != validity) as contained_by_existing,
+              (validity @> daterange(:effective_date, :expiration_date, '[]') AND daterange(:effective_date, :expiration_date, '[]') != validity) as contained_by_existing,
               (lower(validity) <= :effective_date::date AND upper(validity) < :expiration_date::date) as extends_past_existing,
               (lower(validity) > :effective_date::date AND upper(validity) >= :expiration_date::date) as extends_before_existing,
               (daterange(:effective_date, :expiration_date, '[]') @> validity  OR daterange(:effective_date, :expiration_date, '[]') = validity) as contained_by_new
@@ -45,7 +45,7 @@ module ExcelDataServices
         end
 
         def attributes_as_sql_where_clause
-          attributes.keys.map { |key| "#{key} = :#{key}" }.join(" AND ")
+          ExcelDataServices::V2::Helpers::AttributeQueryFormatter.new(arguments: attributes).perform
         end
 
         def attributes
