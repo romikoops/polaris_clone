@@ -27,6 +27,8 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
                 description: "The attribute by which to sort the Shipment Requests",
                 enum: %w[
                   created_at
+                  origin
+                  destination
                 ]
       parameter name: :direction,
                 in: :query,

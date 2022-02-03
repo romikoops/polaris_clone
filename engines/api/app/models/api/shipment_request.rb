@@ -14,9 +14,19 @@ module Api
       case sort_option.to_s
       when /^created_at/
         order(sanitize_sql_for_order("created_at #{direction}"))
+      when /^origin/
+        sort_by_location(location_name: "from").order(sanitize_sql_for_order("journey_route_points.name #{direction}"))
+      when /^destination/
+        sort_by_location(location_name: "to").order(sanitize_sql_for_order("journey_route_points.name #{direction}"))
       else
         raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
       end
+    }
+
+    scope :sort_by_location, lambda { |location_name:|
+      joins(result: :route_sections)
+        .joins("INNER JOIN journey_route_points ON journey_route_sections.#{location_name}_id = journey_route_points.id")
+        .where.not(journey_route_sections: { mode_of_transport: %w[carriage relay] })
     }
   end
 end
