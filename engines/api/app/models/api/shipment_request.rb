@@ -4,9 +4,28 @@ module Api
   class ShipmentRequest < ::Journey::ShipmentRequest
     self.inheritance_column = nil
 
+    AVAILABLE_FILTERS = %i[
+      sorted_by
+      origin_search
+      destination_search
+      status_search
+      reference_search
+    ].freeze
+
+    SUPPORTED_SEARCH_OPTIONS = %w[
+      origin
+      destination
+      status
+      reference
+    ].freeze
+
+    SUPPORTED_SORT_OPTIONS = %w[
+      created_at
+    ].freeze
+
     filterrific(
       default_filter_params: { sorted_by: "created_at_desc" },
-      available_filters: %i[sorted_by]
+      available_filters: AVAILABLE_FILTERS
     )
 
     scope :sorted_by, lambda { |sort_option|
@@ -21,6 +40,30 @@ module Api
       else
         raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
       end
+    }
+
+    scope :origin_search, lambda { |name|
+      joins(result: :route_sections)
+        .joins("INNER JOIN journey_route_points ON journey_route_sections.from_id = journey_route_points.id")
+        .where("journey_route_points.name ILIKE ?", "%#{name}%")
+        .where.not(journey_route_sections: { mode_of_transport: %w[carriage relay] })
+    }
+
+    scope :destination_search, lambda { |name|
+      joins(result: :route_sections)
+        .joins("INNER JOIN journey_route_points ON journey_route_sections.to_id = journey_route_points.id")
+        .where("journey_route_points.name ILIKE ?", "%#{name}%")
+        .where.not(journey_route_sections: { mode_of_transport: %w[carriage relay] })
+    }
+
+    scope :status_search, lambda { |status|
+      where(status: Api::ShipmentRequest.statuses[status])
+    }
+
+    scope :reference_search, lambda { |ref_num|
+      joins(:result)
+        .joins("INNER JOIN journey_line_item_sets ON journey_line_item_sets.result_id = journey_results.id")
+        .where("journey_line_item_sets.reference ILIKE ?", "%#{ref_num}%")
     }
 
     scope :sort_by_location, lambda { |location_name:|

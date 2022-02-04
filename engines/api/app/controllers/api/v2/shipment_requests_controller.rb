@@ -4,6 +4,8 @@ module Api
   module V2
     class ShipmentRequestsController < ApiController
       def index
+        render json: { errors: filter_params_validator.errors }, status: :unprocessable_entity and return unless filter_params_validator.valid?
+
         render json: Api::V2::ShipmentRequestIndexSerializer.new(
           Api::V2::ShipmentRequestDecorator.decorate_collection(
             filtered_shipment_requests.paginate(pagination_params)
@@ -41,7 +43,7 @@ module Api
       def filtered_shipment_requests
         @filterrific = initialize_filterrific(
           shipment_requests,
-          filterrific_params
+          filter_params_validator.to_h
         ) || return
 
         shipment_requests.filterrific_find(@filterrific)
@@ -78,7 +80,7 @@ module Api
       end
 
       def index_params
-        params.permit(:sortBy, :direction, :page, :perPage)
+        params.permit(:sortBy, :direction, :page, :perPage, :searchBy, :searchQuery)
       end
 
       def filterrific_params
@@ -92,6 +94,14 @@ module Api
           page: [index_params[:page], 1].map(&:to_i).max,
           per_page: index_params[:perPage]
         }
+      end
+
+      def filter_params_validator
+        @filter_params_validator ||= FilterParamValidator.new(
+          Api::ShipmentRequest::SUPPORTED_SEARCH_OPTIONS,
+          Api::ShipmentRequest::SUPPORTED_SORT_OPTIONS,
+          options: index_params.transform_keys(&:underscore).to_h
+        )
       end
     end
   end

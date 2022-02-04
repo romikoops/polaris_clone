@@ -28,6 +28,7 @@ RSpec.describe Api::ShipmentRequest, type: :model do
   let!(:shipment_request_b_id) do
     FactoryBot.create(:journey_shipment_request,
       result: result_shanghai_hamburg,
+      status: described_class.statuses["completed"],
       created_at: 5.hours.ago).id
   end
 
@@ -101,6 +102,41 @@ RSpec.describe Api::ShipmentRequest, type: :model do
 
       it "returns default direction" do
         expect { sorted_shipment_requests }.to raise_error(ArgumentError)
+      end
+    end
+  end
+
+  describe "when filtering" do
+    context "when filtering shipment requests by origin" do
+      let(:filter_origin_search) { described_class.origin_search("Hamburg") }
+
+      it "returns shipment requests with origin `Hamburg`" do
+        expect(filter_origin_search.ids).to eq([shipment_request_a_id])
+      end
+    end
+
+    context "when filtering shipment requests by destination" do
+      let(:filter_destination_search) { described_class.destination_search("Shanghai") }
+
+      it "returns shipment requests with destination `Shanghai`" do
+        expect(filter_destination_search.ids).to eq([shipment_request_a_id])
+      end
+    end
+
+    context "when filtering shipment requests by status" do
+      let(:filter_status_search) { described_class.status_search("completed") }
+
+      it "returns iltering shipment requests with status `completed`" do
+        expect(filter_status_search.ids).to eq([shipment_request_b_id])
+      end
+    end
+
+    context "when filtering shipment requests by reference" do
+      let(:reference) { result_shanghai_hamburg.line_item_sets.first.reference }
+      let(:filter_status_search) { described_class.reference_search(reference) }
+
+      it "returns iltering shipment requests with specified reference" do
+        expect(filter_status_search.ids).to eq([shipment_request_b_id])
       end
     end
   end

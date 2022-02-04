@@ -47,10 +47,23 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
                 type: :string,
                 description: "The number of Shipment Requests requested per page"
 
+      parameter name: :searchBy,
+                in: :query,
+                type: :string,
+                description: "The attribute of the shipment requests and its related models to search through",
+                enum: %w[origin_search destination_search status_search reference_search]
+
+      parameter name: :searchQuery,
+                in: :query,
+                type: :string,
+                description: "The value we want to use in our search"
+
       let(:sortBy) { "created_at" }
       let(:direction) { "asc" }
       let(:page) { 1 }
       let(:perPage) { 10 }
+      let(:searchBy) { "origin" }
+      let(:searchQuery) { "Hamburg" }
 
       response "200", "successful operation" do
         schema type: :object,
