@@ -16,6 +16,14 @@ module ExcelDataServices
         def required_key
           "pricing_id"
         end
+
+        def row_key
+          "origin_row"
+        end
+
+        def col_key
+          "origin_column"
+        end
       end
     end
   end

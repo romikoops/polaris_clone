@@ -11,10 +11,6 @@ module ExcelDataServices
         def error_reason(row:)
           "The charge '#{row['fee_code']} - #{row['fee_name']}' cannot be found."
         end
-
-        def required_key
-          "charge_category_id"
-        end
       end
     end
   end

@@ -11,10 +11,6 @@ module ExcelDataServices
         def error_reason(row:)
           "The route '#{row['origin']} - #{row['destination']}' cannot be found."
         end
-
-        def required_key
-          "itinerary_id"
-        end
       end
     end
   end

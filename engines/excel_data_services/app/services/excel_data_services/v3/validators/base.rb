@@ -23,7 +23,7 @@ module ExcelDataServices
         end
 
         def append_errors_to_state
-          frame[frame[required_key].missing].to_a.each do |error_row|
+          filtered_frame[filtered_frame[required_key].missing].to_a.each do |error_row|
             append_error(row: error_row)
           end
         end
@@ -35,11 +35,36 @@ module ExcelDataServices
         def append_error(row:)
           @state.errors << ExcelDataServices::V3::Error.new(
             type: :warning,
-            row_nr: row["row"],
+            row_nr: row[row_key],
+            col_nr: row[col_key],
             sheet_name: row["sheet_name"],
             reason: error_reason(row: row),
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
+        end
+
+        def required_key
+          "#{key_base}_id"
+        end
+
+        def col_key
+          "#{key_base}_column"
+        end
+
+        def row_key
+          "#{key_base}_row"
+        end
+
+        def error_reason(row:)
+          "The #{key_base.humanize} '#{row[key_base]}' cannot be found."
+        end
+
+        def key_base
+          self.class.name.demodulize.underscore.downcase
+        end
+
+        def filtered_frame
+          frame
         end
       end
     end

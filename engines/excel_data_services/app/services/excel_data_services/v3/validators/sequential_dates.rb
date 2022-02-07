@@ -17,6 +17,10 @@ module ExcelDataServices
         def error_reason(row:)
           "The expiration date ('#{row['expiration_date']}) lies before the effective date ('#{row['effective_date']})."
         end
+
+        def key_base
+          "expiration_date"
+        end
       end
     end
   end

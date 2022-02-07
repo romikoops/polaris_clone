@@ -63,7 +63,7 @@ RSpec.describe ExcelDataServices::V3::Validators::ChargeFees do
         }
       end
 
-      let(:error_messages) { ["Range configured rows require the values in RANGE_MIN and RANGE_MAX to be present"] }
+      let(:error_messages) { ["Range configured rows require the values in RANGE_MIN to be present"] }
 
       it "returns the state with the missing RANGE_MIN error message" do
         expect(result.errors.map(&:reason)).to match_array(error_messages)

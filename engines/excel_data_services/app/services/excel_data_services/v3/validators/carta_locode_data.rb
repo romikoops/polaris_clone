@@ -15,6 +15,10 @@ module ExcelDataServices
         def required_key
           "locode_found"
         end
+
+        def key_base
+          "locode"
+        end
       end
     end
   end

@@ -105,7 +105,7 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
 
     context "with incorrect carrier" do
       let(:carrier) { FactoryBot.create(:legacy_carrier, name: "MSC", code: "msc") }
-      let(:error_reason) { "The carrier 'Hamburg Sud' cannot be found." }
+      let(:error_reason) { "The Carrier 'Hamburg Sud' cannot be found." }
 
       it_behaves_like "schedule creation fails"
     end

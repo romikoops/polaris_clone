@@ -12,6 +12,10 @@ module ExcelDataServices
           ""
         end
 
+        def key_base
+          prefix_key(key: "hub")
+        end
+
         def required_key
           @required_key ||= prefix_key(key: "hub_id")
         end

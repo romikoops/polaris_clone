@@ -11,10 +11,6 @@ module ExcelDataServices
         def error_reason(row:)
           "The Rate Basis '#{row['rate_basis']}' is not recognized."
         end
-
-        def required_key
-          "rate_basis_id"
-        end
       end
     end
   end

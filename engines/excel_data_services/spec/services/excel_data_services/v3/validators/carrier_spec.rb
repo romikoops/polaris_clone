@@ -36,7 +36,7 @@ RSpec.describe ExcelDataServices::V3::Validators::Carrier do
       end
 
       let(:error_messages) do
-        ["The carrier '#{row['carrier']}' cannot be found."]
+        ["The Carrier '#{row['carrier']}' cannot be found."]
       end
 
       it "appends an error to the state", :aggregate_failures do

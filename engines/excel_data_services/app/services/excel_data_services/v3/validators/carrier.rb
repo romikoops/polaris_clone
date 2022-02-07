@@ -8,12 +8,8 @@ module ExcelDataServices
           @extracted ||= ExcelDataServices::V3::Extractors::Carrier.state(state: state)
         end
 
-        def error_reason(row:)
-          "The carrier '#{row['carrier']}' cannot be found."
-        end
-
-        def required_key
-          "carrier_id"
+        def key_base
+          "carrier"
         end
       end
     end

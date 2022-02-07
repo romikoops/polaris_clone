@@ -17,6 +17,14 @@ module ExcelDataServices
         def required_key
           "mandatory_charge_id"
         end
+
+        def row_key
+          "export_charges_row"
+        end
+
+        def col_key
+          "export_charges_column"
+        end
       end
     end
   end
