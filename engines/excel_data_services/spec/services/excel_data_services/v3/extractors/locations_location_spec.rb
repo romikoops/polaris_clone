@@ -11,7 +11,7 @@ RSpec.describe ExcelDataServices::V3::Extractors::LocationsLocation do
       "postal_code" => nil,
       "city" => nil,
       "locode" => nil,
-      "distance" => nil ,
+      "distance" => nil,
       "zone" => 1.0,
       "identifier" => identifier,
       "query_type" => ExcelDataServices::V3::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]
@@ -70,6 +70,7 @@ RSpec.describe ExcelDataServices::V3::Extractors::LocationsLocation do
       let(:row) { base_row.merge({ identifier => "Hamburg", "province" => "Hamburg", "country_code" => "DE" }) }
 
       before do
+        Locations::Name.reindex
         Geocoder::Lookup::Test.add_stub("Hamburg Hamburg DE", [
           "address_components" => [{ "types" => ["premise"] }],
           "address" => "Hamburg Hamburg DE",
@@ -84,6 +85,7 @@ RSpec.describe ExcelDataServices::V3::Extractors::LocationsLocation do
           }
         ])
       end
+
       it "returns the frame with the location_id" do
         expect(extracted_table["locations_location_id"].to_a).to include(location.id)
       end

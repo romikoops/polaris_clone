@@ -227,9 +227,6 @@ module ExcelDataServices
         }.freeze
       end
 
-      V2_ENABLED_UPLOADERS = %w[
-        pricing_one_fee_col_and_ranges pricing_dynamic_fee_cols_no_ranges schedules saco_shipping local_charges hubs
-      ]
       attr_reader :restructurer_name, :errors
 
       # rubocop:disable Lint/MissingSuper
@@ -290,13 +287,10 @@ module ExcelDataServices
       end
 
       def restructurer_names
-        names = self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) do |constant, constants|
+        self.class::StaticHeadersForRestructurers.constants(false).each_with_object([]) do |constant, constants|
           name = constant.to_s.downcase
           constants << name unless name.starts_with?("optional")
         end
-
-        names -= V2_ENABLED_UPLOADERS if v2_enabled?
-        names
       end
 
       def all_headers_for_restructurer(restructurer_name:)
@@ -317,10 +311,6 @@ module ExcelDataServices
 
       def stringify(headers)
         headers.join(", ").upcase
-      end
-
-      def v2_enabled?
-        OrganizationManager::ScopeService.new(target: nil, organization: Organizations::Organization.find(Organizations.current_id)).fetch(:upload_v2_enabled)
       end
     end
   end
