@@ -5,7 +5,8 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V2::Upload do
   include_context "for excel_data_services setup"
   let(:service) { described_class.new(file: file, arguments: arguments) }
-  let(:arguments) { {} }
+  let(:user) { FactoryBot.create(:users_client) }
+  let(:arguments) { { supported_uploaders: [] } }
 
   before do
     Organizations.current_id = organization.id
@@ -43,6 +44,20 @@ RSpec.describe ExcelDataServices::V2::Upload do
 
     it "triggers returns the stats object from the result_state" do
       expect(service.perform).to eq(email_result)
+    end
+  end
+
+  describe "#schema_types" do
+    it "returns supported V2 schema types" do
+      expect(service.schema_types).to match(%w[SacoPricings Pricings Schedules LocalCharges Hubs Clients])
+    end
+
+    context "with disabled uploaders option" do
+      let(:arguments) { { disabled_uploaders: %w[SacoPricings Pricings] } }
+
+      it "returns only enabled uploaders" do
+        expect(service.schema_types).to match(%w[Schedules LocalCharges Hubs Clients])
+      end
     end
   end
 end

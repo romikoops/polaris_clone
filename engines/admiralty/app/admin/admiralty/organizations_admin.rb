@@ -115,7 +115,7 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           feature_uploaders dedicated_pricings_only
           exclude_analytics address_fields default_total_dimensions
           append_hub_suffix expand_non_counterpart_local_charges
-          local_charges_required_with_trucking upload_v2_enabled].each_slice(4) do |slice|
+          local_charges_required_with_trucking].each_slice(4) do |slice|
           row do
             slice.each do |key|
               col(sm: 3) { check_box key }
@@ -127,6 +127,18 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
 
         static_field :consolidations do
           organization.scope.consolidations.each_slice(4) do |slice|
+            row do
+              slice.each do |key|
+                col(sm: 3) { check_box key, { label: Organizations::Scope.key_name(extended_key: key) } }
+              end
+            end
+          end
+        end
+
+        divider
+
+        static_field :v2_uploaders do
+          organization.scope.v2_uploaders.each_slice(4) do |slice|
             row do
               slice.each do |key|
                 col(sm: 3) { check_box key, { label: Organizations::Scope.key_name(extended_key: key) } }

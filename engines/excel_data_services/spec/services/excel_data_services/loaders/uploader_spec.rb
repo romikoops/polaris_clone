@@ -13,12 +13,6 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     end
   end
   let(:options) { {} }
-  let(:v2_uploader) do
-    ExcelDataServices::V2::Upload.new(
-      file: file,
-      arguments: options
-    )
-  end
   let(:uploader) do
     described_class.new(
       file: file,
@@ -54,13 +48,11 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
       end
     end
 
-    context "when V2 is enabled" do
-      context "when it is a Pricings Sheet" do
-        let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
-        let(:scope_content) { { upload_v2_enabled: true } }
+    context "when V2 is enabled for a Pricings Sheet" do
+      let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
+      let(:scope_content) { { v2_uploaders: { pricings: true } } }
 
-        it_behaves_like "triggering the V2 upload path"
-      end
+      it_behaves_like "triggering the V2 upload path"
     end
 
     context "when V2 is not enabled" do

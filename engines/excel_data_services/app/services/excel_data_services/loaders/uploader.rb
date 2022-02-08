@@ -9,7 +9,7 @@ module ExcelDataServices
       end
 
       def perform
-        return uploader_service.perform if v2_enabled? && uploader_service.valid?
+        return uploader_service.perform if uploader_service.valid?
 
         legacy_service_result
       end
@@ -21,7 +21,7 @@ module ExcelDataServices
       def uploader_service
         @uploader_service ||= ExcelDataServices::V2::Upload.new(
           file: file,
-          arguments: options
+          arguments: options.merge({ disabled_uploaders: v2_disabled_uploaders })
         )
       end
 
@@ -39,8 +39,11 @@ module ExcelDataServices
         @upload ||= ExcelDataServices::Upload.find_by(file: file)
       end
 
-      def v2_enabled?
-        OrganizationManager::ScopeService.new(target: upload.user, organization: file.organization).fetch(:upload_v2_enabled)
+      def v2_disabled_uploaders
+        OrganizationManager::ScopeService.new(
+          target: upload.user,
+          organization: file.organization
+        ).fetch(:v2_uploaders).select { |_, val| val == false }.keys.map(&:camelize)
       end
     end
   end

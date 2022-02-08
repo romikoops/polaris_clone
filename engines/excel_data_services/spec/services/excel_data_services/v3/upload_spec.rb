@@ -45,4 +45,18 @@ RSpec.describe ExcelDataServices::V3::Upload do
       expect(service.perform).to eq(email_result)
     end
   end
+
+  describe "#schema_types" do
+    it "returns supported V3 schema types" do
+      expect(service.schema_types).to match(%w[SacoPricings Pricings Schedules LocalCharges Hubs Clients])
+    end
+
+    context "with disabled uploaders option" do
+      let(:arguments) { { disabled_uploaders: %w[SacoPricings Pricings] } }
+
+      it "returns only enabled uploaders" do
+        expect(service.schema_types).to match(%w[Schedules LocalCharges Hubs Clients])
+      end
+    end
+  end
 end

@@ -211,3 +211,10 @@ hide_chargeable_weight_values: false
 atomic_insert: false
 upload_v2_enabled: false
 local_charges_required_with_trucking: true
+v2_uploaders:
+  pricings: false
+  saco_pricings: false
+  schedules: false
+  local_charges: false
+  hubs: false
+  clients: false
