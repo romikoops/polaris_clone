@@ -11,9 +11,9 @@ RSpec.describe ExcelDataServices::V3::Overlaps::ExtendsPastExisting do
 
   describe "#perform" do
     Timecop.freeze(DateTime.parse("2020/12/31")) do
-      before { described_class.new(model: model, arguments: arguments).perform }
 
       shared_examples_for "ExtendsPastExisting" do
+        before { described_class.new(model: model, arguments: arguments).perform }
         let(:target_validity) { Range.new(Date.parse("2021/01/01"), Date.parse("2021/02/01"), exclude_end: true) }
 
         it "detects the overlap and deletes the old models" do
@@ -70,6 +70,20 @@ RSpec.describe ExcelDataServices::V3::Overlaps::ExtendsPastExisting do
         end
 
         it_behaves_like "ExtendsPastExisting"
+
+        context "when the model is Pricings::Pricing and records exists before conflict" do
+          before do
+            FactoryBot.create(:pricings_pricing,
+                organization: organization,
+                group: default_group,
+                tenant_vehicle: tenant_vehicle,
+                effective_date: Date.parse("2020/12/01"),
+                expiration_date: Date.parse("2020/12/31").end_of_day,
+                validity: Range.new(Date.parse("2020/12/01"), Date.parse("2021/01/01"), exclude_end: true))
+          end
+
+          it_behaves_like "ExtendsPastExisting"
+        end
       end
     end
   end

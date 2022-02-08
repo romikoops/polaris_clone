@@ -70,6 +70,20 @@ RSpec.describe ExcelDataServices::V3::Overlaps::ExtendsBeforeExisting do
         end
 
         it_behaves_like "ExtendsBeforeExisting"
+
+        context "when the model is Pricings::Pricing and records exists after conflict" do
+          before do
+            FactoryBot.create(:pricings_pricing,
+                organization: organization,
+                group: default_group,
+                tenant_vehicle: tenant_vehicle,
+                effective_date: Date.parse("2021/04/01"),
+                expiration_date: Date.parse("2021/04/30").end_of_day,
+                validity: Range.new(Date.parse("2021/04/01"), Date.parse("2021/05/01"), exclude_end: true))
+          end
+
+          it_behaves_like "ExtendsBeforeExisting"
+        end
       end
     end
   end
