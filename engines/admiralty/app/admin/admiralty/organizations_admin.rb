@@ -167,6 +167,20 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           col(sm: 3) { number_field :validity_period }
         end
 
+        divider
+
+        static_field :links do
+          organization.scope.links.each_slice(4) do |slice|
+            row do
+              slice.each do |key|
+                col(sm: 3) { text_field key, { label: Organizations::Scope.key_name(extended_key: key) } }
+              end
+            end
+          end
+        end
+
+        divider
+
         row do
           col(sm: 12) do
             collection_select :blacklisted_emails, Users::Client.unscoped.where(organization_id: organization.id), :email, :email, {}, multiple: true
