@@ -1030,13 +1030,13 @@ RSpec.configure do |config|
               commodities: {
                 description: "Commodity codes of the contents",
                 type: "array",
-                items: { "$ref": "#/components/schemas/commodityInfo" }
+                items: { "$ref": "#/components/schemas/commodityInfo" },
+                nullable: true
               }
             },
             required: %w[
               volume
               weight
-              commodities
               cargoClass
             ]
           },

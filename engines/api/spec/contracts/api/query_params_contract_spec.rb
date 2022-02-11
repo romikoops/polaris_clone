@@ -62,6 +62,20 @@ RSpec.describe Api::QueryParamsContract do
       it_behaves_like "valid params"
     end
 
+    context "when aggregated_lcl" do
+      let(:items) do
+        [
+          {
+            cargoClass: "aggregated_lcl",
+            weight: 1200,
+            volume: 0.05
+          }
+        ]
+      end
+
+      it_behaves_like "valid params"
+    end
+
     context "when parent_id is part of params" do
       let(:parent_id) { SecureRandom.uuid }
 

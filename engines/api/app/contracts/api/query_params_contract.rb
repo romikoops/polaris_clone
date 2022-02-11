@@ -7,13 +7,13 @@ module Api
       optional(:stackable).value(:bool)
       optional(:dangerous).value(:bool)
       optional(:colliType).filled(:string)
-      required(:quantity).value(:integer, gt?: 0)
+      optional(:quantity).value(:integer, gt?: 0)
       optional(:width).maybe(:decimal, gt?: 0)
       optional(:height).maybe(:decimal, gt?: 0)
       optional(:length).maybe(:decimal, gt?: 0)
       optional(:volume).maybe(:decimal, gt?: 0)
       required(:weight).value(:decimal, gt?: 0)
-      required(:commodities).array(:hash) do
+      optional(:commodities).array(:hash) do
         required(:description).value(:string)
         required(:hsCode).maybe(:string)
         required(:imoClass).maybe(:string)
