@@ -117,6 +117,25 @@ module Api
 
         it "returns invalid params" do
           expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to eq({ "items" => ["must be present"] })
+        end
+      end
+
+      context "when item is missing cargo class" do
+        let(:items) do
+          [
+            {
+              cargoClass: nil,
+              quantity: 1,
+              weight: 1200,
+              commodities: []
+            }
+          ]
+        end
+
+        it "returns invalid params", :aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to eq({ "items" => { "0" => { "cargoClass" => ["must be filled"] } } })
         end
       end
     end

@@ -2,6 +2,7 @@
 
 require "active_model_serializers"
 require "draper"
+require "dry-validation"
 require "fast_jsonapi"
 require "google/iam/credentials/v1"
 require "kaminari"

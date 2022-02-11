@@ -17,7 +17,7 @@ module Api
       end
 
       def create
-        return head :unprocessable_entity if query_params[:items].blank?
+        render json: validated_query_params.errors.to_h, status: :unprocessable_entity and return if validated_query_params.errors.present?
 
         new_query = wheelhouse_query_service.perform
         decorated = Api::V2::QueryDecorator.decorate(new_query)
@@ -111,17 +111,13 @@ module Api
         Wheelhouse::QueryService.new(
           creator: current_user,
           client: current_user,
-          source: mock_doorkeeper_application,
+          source: doorkeeper_application,
           params: query_service_params
         )
       end
 
-      def mock_doorkeeper_application
-        Doorkeeper::Application.find_by(name: "siren")
-      end
-
       def query_service_params
-        query_params
+        validated_query_params
           .to_h
           .deep_transform_keys { |key| key.to_s.underscore.to_sym }
       end
@@ -149,6 +145,10 @@ module Api
             { commodities: %i[description hsCode imoClass] }
           ]
         )
+      end
+
+      def validated_query_params
+        @validated_query_params ||= Api::QueryParamsContract.new.call(query_params.to_h)
       end
 
       def request_params
