@@ -1065,10 +1065,6 @@ RSpec.configure do |config|
                   fcl_45_rf
                 ]
               },
-              stackable: {
-                description: "If cargo item is stackable or not: N/A for FCL",
-                type: "boolean"
-              },
               quantity: {
                 description: "Quantity",
                 type: "integer"
