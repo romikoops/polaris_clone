@@ -80,14 +80,17 @@
               <% shipment_request.result.route_sections_in_order.each do |route_section|%>
                 <% next if route_section.mode_of_transport == "relay" %>
                 <table>
-                  <tr><td><h4 class="subsection"><%= route_section.section_string %></h4></td></tr>
-                  <tr><td><bold>Carrier:</bold> <%= route_section.carrier %></td></tr>
-                  <tr><td><bold>Service:</bold> <%= route_section.service %></td></tr>
-                  <tr><td><bold>From:</bold> <%= route_section.from.description %></td></tr>
-                  <tr><td><bold>To:</bold> <%= route_section.to.description %></td></tr>
-                  <tr><td><bold>Mode of transport:</bold> <%= route_section.mode_of_transport.humanize %></td></tr>
+                  <tr><td colspan="2" ><h4 class="subsection"><%= route_section.section_string %></h4></td></tr>
+                  <tr><td>Carrier:</td><td class="right"><%= route_section.carrier %></td></tr>
+                  <tr><td>Service:</td><td class="right"> <%= route_section.service %></td></tr>
+                  <tr><td>From:</td><td class="right"> <%= route_section.from.description %></td></tr>
+                  <tr><td>To:</td><td class="right"> <%= route_section.to.description %></td></tr>
+                  <tr><td>Mode of transport:</td><td class="right"> <%= route_section.mode_of_transport.humanize %></td></tr>
+                  <% if route_section.transshipment %>
+                    <tr><td>Transshipment via:</td><td class="right"> <%= route_section.transshipment %></td></tr>
+                  <% end %>
                   <% if route_section.transit_time %>
-                    <tr><td><bold>Transit Time (Est<sup>*</sup>):</bold> <%= route_section.transit_time %></td></tr>
+                    <tr><td>Transit Time (Est<sup>*</sup>):</td><td class="right"> <%= route_section.transit_time %></td></tr>
                   <% end %>
                 </table>
               <% end %>
