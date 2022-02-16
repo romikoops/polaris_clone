@@ -81,8 +81,8 @@ column "cargo_class",
   required: false,
   type: :object
 column "internal",
-  sanitizer: "boolean",
-  validator: "optional_boolean",
+  sanitizer: "internal",
+  validator: "boolean",
   required: false,
   type: :object
 column "transshipment",

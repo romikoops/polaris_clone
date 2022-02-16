@@ -202,7 +202,7 @@ column "dangerous",
   required: false,
   type: :object
 column "internal",
-  sanitizer: "boolean",
+  sanitizer: "internal",
   validator: "optional_boolean",
   fallback:false,
   required: false,

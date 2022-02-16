@@ -26,6 +26,8 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
       let(:result_state) { service.perform }
       let(:lobito_antwerp) { Legacy::Itinerary.find_by(name: "BEANR - Lobito", transshipment: "AOLAD") }
       let(:cabinda_hamburg) { Legacy::Itinerary.find_by(name: "DEHAM - Cabinda", transshipment: "CGPNR") }
+      let(:lobito_hamburg) { Legacy::Itinerary.find_by(name: "DEHAM - Lobito") }
+      let(:msc_service) { Legacy::TenantVehicle.joins(:carrier).find_by(name: "standard", carriers: { code: "msc" }) }
       let(:expected_validities) do
         [
           Range.new(Date.parse("2021/09/01"), Date.parse("2021/10/01"), exclude_end: true),
@@ -58,6 +60,10 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
         expect(Pricings::Pricing.where(cargo_class: "fcl_40_hq").count).to eq(14)
         expect(Legacy::Itinerary.count).to eq(9)
         expect(Legacy::Carrier.count).to eq(3)
+      end
+
+      it "assigns the pricings from the internal row `internal: true`" do
+        expect(lobito_hamburg.rates.where(tenant_vehicle: msc_service).pluck(:internal).uniq).to eq([true])
       end
 
       it "excludes fees designated (NEXT_MONTH) outside of the defined validity period", :aggregate_failures do
