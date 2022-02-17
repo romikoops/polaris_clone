@@ -12,6 +12,7 @@ RSpec.describe OfferCalculator::Service::OfferCreators::ResultBuilder do
     before do
       Organizations.current_id = organization.id
       allow(Carta::Client).to receive(:suggest).and_return(FactoryBot.build(:carta_result))
+      allow(Carta::Client).to receive(:reverse_geocode).with(latitude: request.query.origin_coordinates.y, longitude: request.query.origin_coordinates.x).and_return(FactoryBot.build(:carta_result))
     end
 
     it "returns the correct number of results for the number of offers" do

@@ -12,8 +12,8 @@ module Trucking
       def initialize(args = {})
         argument_errors(args)
         @address = args[:address]
-        @latitude = args[:latitude] || args[:address].try(:latitude) || 0
-        @longitude = args[:longitude] || args[:address].try(:longitude) || 0
+        @latitude = args[:latitude] || args[:address].try(:latitude)
+        @longitude = args[:longitude] || args[:address].try(:longitude)
         @country_code = args[:country_code] || args[:address].try(:country).try(:code)
         @zipcode = sanitized_postal_code(args: args)
         @city_name = args[:city_name] || args[:address].try(:city)
@@ -109,6 +109,8 @@ module Trucking
       end
 
       def truckings_for_query
+        return ::Trucking::Trucking.none if [latitude, longitude, country_code].any?(&:nil?)
+
         Rails.cache.fetch(cache_key, expires_in: 12.hours) do
           append_distance_truckings(
             query: validated_truckings.where(location_id: non_distance_trucking_location_ids)

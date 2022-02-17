@@ -13,6 +13,7 @@ RSpec.shared_context "journey_query" do
   let(:cargo_units) { [] }
   let(:journey_load_type) { "lcl" }
   let(:currency) { "EUR" }
+  let(:query_status) { "completed" }
 
   let(:query) do
     FactoryBot.create(:journey_query,
@@ -26,6 +27,7 @@ RSpec.shared_context "journey_query" do
       load_type: journey_load_type,
       result_count: 0,
       currency: currency,
+      status: query_status,
       results: [])
   end
 end

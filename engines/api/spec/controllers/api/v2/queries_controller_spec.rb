@@ -187,12 +187,32 @@ module Api
     end
 
     describe "GET #result_set" do
-      include_context "journey_pdf_setup"
+      let(:query) { FactoryBot.create(:journey_query, organization: organization, status: "running") }
       let(:params) { { query_id: query.id, organization_id: organization.id } }
 
-      it "successfuly returns the latest query and its status", :aggregate_failures do
-        get :result_set, params: params, as: :json
-        expect(response_data["id"]).to be_present
+      context "when the Query is still running" do
+        it "returns the status 'running'", :aggregate_failures do
+          get :result_set, params: params, as: :json
+          expect(response_data.dig("attributes", "status")).to eq("running")
+        end
+      end
+
+      context "when the Query has failed" do
+        before { FactoryBot.create(:journey_query_calculation, query: query, status: "failed") }
+
+        it "returns the status 'failed'", :aggregate_failures do
+          get :result_set, params: params, as: :json
+          expect(response_data.dig("attributes", "status")).to eq("failed")
+        end
+      end
+
+      context "when the Query has completed" do
+        before { FactoryBot.create(:journey_query_calculation, query: query, status: "completed") }
+
+        it "returns the status 'completed'", :aggregate_failures do
+          get :result_set, params: params, as: :json
+          expect(response_data.dig("attributes", "status")).to eq("completed")
+        end
       end
     end
 

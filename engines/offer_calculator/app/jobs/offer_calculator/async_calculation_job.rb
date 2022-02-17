@@ -4,16 +4,17 @@ module OfferCalculator
   class AsyncCalculationJob < ApplicationJob
     queue_as :critical
 
-    def perform(query:, params:, shipment_id: nil, quotation_id: nil, user_id: nil, wheelhouse: nil, mailer: nil)
-      return if shipment_id.present?
+    def perform(query:, params:, pre_carriage: nil, on_carriage: nil)
+      return if [pre_carriage, on_carriage].all?(&:nil?)
 
       Organizations.current_id = query.organization_id
-
       set_sentry_context(query)
 
       OfferCalculator::Results.new(
         query: query,
-        params: params
+        params: params,
+        pre_carriage: pre_carriage,
+        on_carriage: on_carriage
       ).perform
     end
 

@@ -1984,7 +1984,8 @@ CREATE TABLE public.journey_errors (
     "limit" character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    query_id uuid
+    query_id uuid,
+    query_calculation_id uuid
 );
 
 
@@ -2116,6 +2117,21 @@ CREATE TABLE public.journey_queries (
     CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_origin_coordinates_presence CHECK (((origin_coordinates IS NOT NULL) AND ((origin_coordinates)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_origin_presence CHECK (((origin IS NOT NULL) AND ((origin)::text !~ '^\s*$'::text)))
+);
+
+
+--
+-- Name: journey_query_calculations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_query_calculations (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    query_id uuid,
+    status public.journey_status,
+    pre_carriage boolean NOT NULL,
+    on_carriage boolean NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -6044,6 +6060,14 @@ ALTER TABLE ONLY public.journey_queries
 
 
 --
+-- Name: journey_query_calculations journey_query_calculations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_query_calculations
+    ADD CONSTRAINT journey_query_calculations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: journey_request_for_quotations journey_request_for_quotations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7838,6 +7862,13 @@ CREATE INDEX index_journey_errors_on_cargo_unit_id ON public.journey_errors USIN
 
 
 --
+-- Name: index_journey_errors_on_query_calculation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_errors_on_query_calculation_id ON public.journey_errors USING btree (query_calculation_id);
+
+
+--
 -- Name: index_journey_errors_on_query_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7975,6 +8006,20 @@ CREATE INDEX index_journey_queries_on_organization_id ON public.journey_queries 
 --
 
 CREATE INDEX index_journey_queries_on_parent_id ON public.journey_queries USING btree (parent_id);
+
+
+--
+-- Name: index_journey_query_calculations_on_query_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_query_calculations_on_query_id ON public.journey_query_calculations USING btree (query_id);
+
+
+--
+-- Name: index_journey_query_calculations_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_query_calculations_on_status ON public.journey_query_calculations USING btree (status);
 
 
 --
@@ -11112,6 +11157,14 @@ ALTER TABLE ONLY public.itineraries
 
 
 --
+-- Name: journey_query_calculations fk_rails_5ccd2b935a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_query_calculations
+    ADD CONSTRAINT fk_rails_5ccd2b935a FOREIGN KEY (query_id) REFERENCES public.journey_queries(id) ON DELETE CASCADE;
+
+
+--
 -- Name: shipments fk_rails_5fb975ea14; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11389,6 +11442,14 @@ ALTER TABLE ONLY public.hubs
 
 ALTER TABLE ONLY public.shipments_shipment_requests
     ADD CONSTRAINT fk_rails_88d801b1b8 FOREIGN KEY (tender_id) REFERENCES public.quotations_tenders(id);
+
+
+--
+-- Name: journey_errors fk_rails_896e56a80e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_errors
+    ADD CONSTRAINT fk_rails_896e56a80e FOREIGN KEY (query_calculation_id) REFERENCES public.journey_query_calculations(id);
 
 
 --
@@ -12688,6 +12749,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220118102740'),
 ('20220118103740'),
 ('20220119071628'),
-('20220120141728');
+('20220120141728'),
+('20220209070931'),
+('20220209071249');
 
 

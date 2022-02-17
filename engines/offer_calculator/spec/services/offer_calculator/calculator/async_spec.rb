@@ -3,31 +3,10 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Calculator do
-  ActiveJob::Base.queue_adapter = :test
-
   let(:cargo_classes) { %w[fcl_20 fcl_40 fcl_40_hq] }
   let(:load_type) { "container" }
   let(:source) { FactoryBot.create(:application) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
-  let(:shipment) do
-    FactoryBot.create(:legacy_shipment,
-      load_type: "container",
-      destination_hub: nil,
-      origin_hub: nil,
-      desired_start_date: Time.zone.today + 4.days,
-      user: user,
-      trucking: {
-        pre_carriage: {
-          address_id: pickup_address.id,
-          truck_type: "chassis"
-        },
-        on_carriage: {
-          address_id: delivery_address.id,
-          truck_type: "chassis"
-        }
-      },
-      organization: organization)
-  end
   let(:container_attributes) do
     [
       {
@@ -53,7 +32,6 @@ RSpec.describe OfferCalculator::Calculator do
   let(:params) do
     {
       async: true,
-      id: shipment.id,
       direction: "export",
       selected_day: 4.days.from_now.beginning_of_day.to_s,
       cargo_items_attributes: [],
@@ -100,13 +78,18 @@ RSpec.describe OfferCalculator::Calculator do
   before do
     FactoryBot.create(:companies_membership, client: user)
     Organizations.current_id = organization.id
+    allow(service).to receive(:async_calculation_for_permutation)
   end
 
   describe ".perform" do
     let!(:result) { service.perform }
 
     context "with single trucking Availability" do
-      it "queues the job and returns the quotation" do
+      it "queues one job for each permutation and returns the quotation", :aggregate_failures do
+        expect(service).to have_received(:async_calculation_for_permutation).with(pre_carriage: true, on_carriage: true)
+        expect(service).to have_received(:async_calculation_for_permutation).with(pre_carriage: true, on_carriage: false)
+        expect(service).to have_received(:async_calculation_for_permutation).with(pre_carriage: false, on_carriage: true)
+        expect(service).to have_received(:async_calculation_for_permutation).with(pre_carriage: false, on_carriage: false)
         expect(result).to be_a(Journey::Query)
       end
     end

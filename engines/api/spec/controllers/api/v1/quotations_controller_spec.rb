@@ -266,16 +266,37 @@ module Api
 
     describe "GET #show" do
       include_context "journey_pdf_setup"
+      let!(:query_calculation) { FactoryBot.create(:journey_query_calculation, query: query, status: status) }
+      let(:query_status) { "running" }
+      let(:status) { "completed" }
+
       context "when async error has occurred " do
         before do
           result.destroy
-          FactoryBot.create(:journey_error, query: query, code: 3002)
+          FactoryBot.create(:journey_error,
+            query: query,
+            code: 3002,
+            query_calculation: query_calculation)
+          get :show, params: { organization_id: organization.id, id: query.id }
         end
 
-        it "renders the errors" do
-          get :show, params: { organization_id: organization.id, id: query.id }
+        let(:status) { "failed" }
 
+        it "renders the errors" do
           expect(response_error).to eq "OfferCalculator::Errors::LoadMeterageExceeded"
+        end
+
+        it "updates the query status to `failed` " do
+          expect(query.reload.status).to eq("failed")
+        end
+      end
+
+      context "when async is still running" do
+        let(:status) { "running" }
+
+        it "updates the query status to `running` " do
+          get :show, params: { organization_id: organization.id, id: query.id }
+          expect(query.reload.status).to eq("running")
         end
       end
 
@@ -305,6 +326,8 @@ module Api
       end
 
       context "when origin and destination are addresses" do
+        before { FactoryBot.create(:journey_query_calculation, query: query, status: "completed") }
+
         it "renders origin and destination as address objects", :aggregate_failures do
           get :show, params: { organization_id: organization.id, id: query.id }
 

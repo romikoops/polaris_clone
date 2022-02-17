@@ -7,6 +7,7 @@ RSpec.describe OfferCalculator::Service::Measurements::Request do
   let(:query) {
     FactoryBot.build(:journey_query,
       organization: organization,
+      cargo_count: 0,
       load_type: cargo_trait)
   }
   let(:request) { FactoryBot.create(:offer_calculator_request, query: query, cargo_trait: cargo_trait) }

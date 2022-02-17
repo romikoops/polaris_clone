@@ -4,25 +4,31 @@ module OfferCalculator
   class Results
     include Scientist
 
-    attr_reader :query, :wheelhouse, :params, :offer
+    attr_reader :query, :wheelhouse, :params, :offer, :on_carriage, :pre_carriage, :query_calculation
 
-    def initialize(query:, params:)
+    def initialize(query:, params:, pre_carriage:, on_carriage:)
       @query = query
       @params = params
+      @pre_carriage = pre_carriage
+      @on_carriage = on_carriage
+      @query_calculation = query_calculation_with_updated_status
     end
 
     def perform
-      results = []
-      offers.each do |offer|
-        results << OfferCalculator::Service::OfferCreators::ResultBuilder.result(
+      return if query_calculation.nil?
+
+      results = offers.map do |offer|
+        OfferCalculator::Service::OfferCreators::ResultBuilder.result(
           request: request, offer: offer
         )
       end
-      update_status(status: "completed")
-      results
+      update_status(status: "completed") if query.persisted?
+      results || []
     rescue OfferCalculator::Errors::Failure => e
-      persist_error(error: e)
-      update_status(status: "failed")
+      if query.persisted?
+        persist_error(error: e)
+        update_status(status: "failed")
+      end
       raise e unless async
     end
 
@@ -70,7 +76,9 @@ module OfferCalculator
     def request
       @request ||= OfferCalculator::Request.new(
         query: query,
-        params: params
+        params: params,
+        pre_carriage: pre_carriage,
+        on_carriage: on_carriage
       )
     end
 
@@ -135,11 +143,28 @@ module OfferCalculator
     end
 
     def persist_error(error:)
-      Journey::Error.create(code: error.code, property: error.message, query: query)
+      Journey::Error.create(code: error.code, property: error.message, query: query, query_calculation: query_calculation)
     end
 
     def update_status(status:)
-      query.update(status: status)
+      query_calculation.update(status: status)
+    end
+
+    def query_calculation_with_updated_status
+      return unless query.persisted? && query_calculation_for_carriage.present?
+
+      query_calculation_for_carriage.tap do |query_calc|
+        query_calc.update(status: "running")
+      end
+    end
+
+    def query_calculation_for_carriage
+      @query_calculation_for_carriage ||= Journey::QueryCalculation.find_by(
+        query: query,
+        status: "queued",
+        pre_carriage: pre_carriage,
+        on_carriage: on_carriage
+      )
     end
   end
 end

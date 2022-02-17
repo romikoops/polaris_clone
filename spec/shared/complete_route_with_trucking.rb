@@ -4,7 +4,7 @@ RSpec.shared_context "complete_route_with_trucking" do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
   let(:destination_hub) { itinerary.destination_hub }
-  let!(:organization) { FactoryBot.create(:organizations_organization) }
+  let!(:organization) { FactoryBot.create(:organizations_organization, theme: nil) }
   let(:pickup_address) { FactoryBot.create(:hamburg_address, country: origin_hub.address.country) }
   let(:delivery_address) { FactoryBot.create(:shanghai_address, country: destination_hub.address.country) }
   let(:carrier_lock) { false }
@@ -151,6 +151,22 @@ RSpec.shared_context "complete_route_with_trucking" do
       "country" => delivery_address.country.name,
       "country_code" => delivery_address.country.code,
       "postal_code" => delivery_address.zip_code
+    ])
+    Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
+      "address_components" => [{ "types" => ["premise"] }],
+      "address" => "",
+      "city" => origin_hub.name,
+      "country" => origin_hub.nexus.country.name,
+      "country_code" => origin_hub.nexus.country.code,
+      "postal_code" => ""
+    ])
+    Geocoder::Lookup::Test.add_stub([destination_hub.latitude, destination_hub.longitude], [
+      "address_components" => [{ "types" => ["premise"] }],
+      "address" => "",
+      "city" => destination_hub.name,
+      "country" => destination_hub.nexus.country.name,
+      "country_code" => destination_hub.nexus.country.code,
+      "postal_code" => ""
     ])
     FactoryBot.create(:routing_carrier, name: carrier.name, code: carrier.code)
   end

@@ -67,7 +67,19 @@ module OfferCalculator
         end
 
         def request
-          OfferCalculator::Request.new(query: query.object, params: {})
+          OfferCalculator::Request.new(query: query.object, params: {}, pre_carriage: pre_carriage?, on_carriage: on_carriage?)
+        end
+
+        def pre_carriage?
+          ordered_route_sections.first.mode_of_transport == "carriage"
+        end
+
+        def on_carriage?
+          ordered_route_sections.last.mode_of_transport == "carriage"
+        end
+
+        def ordered_route_sections
+          @ordered_route_sections ||= result.route_sections.order(:order)
         end
       end
     end

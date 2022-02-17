@@ -598,7 +598,6 @@ end
 
 # == Route Map
 #
-# Couldn't find the MJML 4. binary.. have you run $ npm install mjml?
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
@@ -607,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ff2a0d42c00@/Users/ajith/Development/IMC/imc-react-api/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007f97e3ec6620 /Users/wbeamish/imc/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -996,103 +995,105 @@ end
 #    oauth_signout DELETE /oauth/signout(.:format)    api_auth/auth#destroy
 #
 # Routes for Api::Engine:
-#                                    api_auth        /                                                                                        ApiAuth::Engine
-#                              v1_me_settings GET    /v1/me/settings(.:format)                                                                api/v1/settings#show
-#                                       v1_me GET    /v1/me(.:format)                                                                         api/v1/users#show
-#                                  v1_uploads POST   /v1/uploads(.:format)                                                                    api/v1/uploads#create
-#                             v1_organization GET    /v1/organization(.:format)                                                               api/v1/organizations#show
-#                       scope_v1_organization GET    /v1/organizations/:id/scope(.:format)                                                    api/v1/organizations#scope
-#                   countries_v1_organization GET    /v1/organizations/:id/countries(.:format)                                                api/v1/organizations#countries
-#                   v1_organization_dashboard GET    /v1/organizations/:organization_id/dashboard(.:format)                                   api/v1/dashboard#show
-#          v1_organization_quotation_download POST   /v1/organizations/:organization_id/quotations/:quotation_id/download(.:format)           api/v1/quotations#download
-#            v1_organization_quotation_charge GET    /v1/organizations/:organization_id/quotations/:quotation_id/charges/:id(.:format)        api/v1/charges#show
-#          v1_organization_quotation_schedule GET    /v1/organizations/:organization_id/quotations/:quotation_id/schedules/:id(.:format)      api/v1/schedules#show
-#                  v1_organization_quotations GET    /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#index
-#                                             POST   /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#create
-#                   v1_organization_quotation GET    /v1/organizations/:organization_id/quotations/:id(.:format)                              api/v1/quotations#show
-#                      v1_organization_tender PATCH  /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
-#                                             PUT    /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
-#            v1_organization_cargo_item_types GET    /v1/organizations/:organization_id/cargo_item_types(.:format)                            api/v1/cargo_item_types#index
-#     v1_organization_trucking_availabilities GET    /v1/organizations/:organization_id/trucking_availabilities(.:format)                     api/v1/trucking_availabilities#index
-#       v1_organization_trucking_counterparts GET    /v1/organizations/:organization_id/trucking_counterparts(.:format)                       api/v1/trucking_counterparts#index
-#       v1_organization_trucking_capabilities GET    /v1/organizations/:organization_id/trucking_capabilities(.:format)                       api/v1/trucking_capabilities#index
-#          v1_organization_trucking_countries GET    /v1/organizations/:organization_id/trucking_countries(.:format)                          api/v1/trucking_countries#index
-#                      v1_organization_groups GET    /v1/organizations/:organization_id/groups(.:format)                                      api/v1/organizations_groups#index
-#           origins_v1_organization_locations GET    /v1/organizations/:organization_id/locations/origins(.:format)                           api/v1/locations#origins
-#      destinations_v1_organization_locations GET    /v1/organizations/:organization_id/locations/destinations(.:format)                      api/v1/locations#destinations
-#                   v1_organization_locations GET    /v1/organizations/:organization_id/locations(.:format)                                   api/v1/locations#index
-#                                             POST   /v1/organizations/:organization_id/locations(.:format)                                   api/v1/locations#create
-#                    v1_organization_location GET    /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#show
-#                                             PATCH  /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#update
-#                                             PUT    /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#update
-#                                             DELETE /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#destroy
-#                  v1_organization_ahoy_index GET    /v1/organizations/:organization_id/ahoy(.:format)                                        api/v1/ahoy#index
-#       password_reset_v1_organization_client PATCH  /v1/organizations/:organization_id/clients/:id/password_reset(.:format)                  api/v1/clients#password_reset
-#                     v1_organization_clients GET    /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#index
-#                                             POST   /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#create
-#                      v1_organization_client GET    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#show
-#                                             PATCH  /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
-#                                             PUT    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
-#                                             DELETE /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#destroy
-#                  v1_organization_equipments GET    /v1/organizations/:organization_id/equipments(.:format)                                  api/v1/equipments#index
-#                  v1_organization_validation POST   /v1/organizations/:organization_id/validation(.:format)                                  api/v1/validations#create
-#                       v1_organization_ports GET    /v1/organizations/:organization_id/ports(.:format)                                       api/v1/ports#index
-# enabled_v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
-#         v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
-#                 v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
-#                     v1_organization_company PATCH  /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
-#                                             PUT    /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
-#                            v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
-#            v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
-#              v2_organization_query_requests POST   /v2/organizations/:organization_id/queries/:query_id/requests(.:format)                  api/v2/requests#create
-#           v2_organization_query_cargo_units GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units(.:format)               api/v2/cargo_units#index
-#            v2_organization_query_cargo_unit GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units/:id(.:format)           api/v2/cargo_units#show
-#               v2_organization_query_results GET    /v2/organizations/:organization_id/queries/:query_id/results(.:format)                   api/v2/results#index
-#                v2_organization_query_errors GET    /v2/organizations/:organization_id/queries/:query_id/errors(.:format)                    api/v2/errors#index
-#                     v2_organization_queries GET    /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#index
-#                                             POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
-#                       v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
-#                                             PATCH  /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
-#                                             PUT    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
-#          v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
-#                  v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
-#              v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
-#       v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index
-#            v2_organization_result_schedules GET    /v2/organizations/:organization_id/results/:result_id/schedules(.:format)                api/v2/schedules#index
-#             v2_organization_result_schedule GET    /v2/organizations/:organization_id/results/:result_id/schedules/:id(.:format)            api/v2/schedules#show
-#    v2_organization_result_shipment_requests POST   /v2/organizations/:organization_id/results/:result_id/shipment_requests(.:format)        api/v2/shipment_requests#create
-#                      v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
-#                 v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
-#                   v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
-#                  v2_organization_offer_xlsx GET    /v2/organizations/:organization_id/offers/:offer_id/xlsx(.:format)                       api/v2/offers#xlsx
-#                      v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
-#                     v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
-#                      v2_organization_upload GET    /v2/organizations/:organization_id/uploads/:id(.:format)                                 api/v2/uploads#show
-#                       v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show
-#                       v2_organization_scope GET    /v2/organizations/:organization_id/scope(.:format)                                       api/v2/scopes#show
-#                 v2_organization_colli_types GET    /v2/organizations/:organization_id/colli_types(.:format)                                 api/v2/colli_types#show
-#                     v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show
-#                                             PATCH  /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
-#                                             PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
-#                    v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
-#                     v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
-#                   v2_organization_companies GET    /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#index
-#                                             POST   /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#create
-#                     v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
-#                                             PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
-#                                             PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
-#            v2_organization_shipment_request GET    /v2/organizations/:organization_id/shipment_requests/:id(.:format)                       api/v2/shipment_requests#show
-#                            v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
-#                           validate_v2_users GET    /v2/users/validate(.:format)                                                             api/v2/users#validate
-#                                    v2_users GET    /v2/users(.:format)                                                                      api/v2/users#index
-#                                             POST   /v2/users(.:format)                                                                      api/v2/users#create
-#                                     v2_user GET    /v2/users/:id(.:format)                                                                  api/v2/users#show
-#                                             PATCH  /v2/users/:id(.:format)                                                                  api/v2/users#update
-#                                             PUT    /v2/users/:id(.:format)                                                                  api/v2/users#update
-#                                             DELETE /v2/users/:id(.:format)                                                                  api/v2/users#destroy
-#                                v2_passwords POST   /v2/passwords(.:format)                                                                  api/v2/passwords#create
-#                                 v2_password PATCH  /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
-#                                             PUT    /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
+#                                     api_auth        /                                                                                        ApiAuth::Engine
+#                               v1_me_settings GET    /v1/me/settings(.:format)                                                                api/v1/settings#show
+#                                        v1_me GET    /v1/me(.:format)                                                                         api/v1/users#show
+#                                   v1_uploads POST   /v1/uploads(.:format)                                                                    api/v1/uploads#create
+#                              v1_organization GET    /v1/organization(.:format)                                                               api/v1/organizations#show
+#                        scope_v1_organization GET    /v1/organizations/:id/scope(.:format)                                                    api/v1/organizations#scope
+#                    countries_v1_organization GET    /v1/organizations/:id/countries(.:format)                                                api/v1/organizations#countries
+#                    v1_organization_dashboard GET    /v1/organizations/:organization_id/dashboard(.:format)                                   api/v1/dashboard#show
+#           v1_organization_quotation_download POST   /v1/organizations/:organization_id/quotations/:quotation_id/download(.:format)           api/v1/quotations#download
+#             v1_organization_quotation_charge GET    /v1/organizations/:organization_id/quotations/:quotation_id/charges/:id(.:format)        api/v1/charges#show
+#           v1_organization_quotation_schedule GET    /v1/organizations/:organization_id/quotations/:quotation_id/schedules/:id(.:format)      api/v1/schedules#show
+#                   v1_organization_quotations GET    /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#index
+#                                              POST   /v1/organizations/:organization_id/quotations(.:format)                                  api/v1/quotations#create
+#                    v1_organization_quotation GET    /v1/organizations/:organization_id/quotations/:id(.:format)                              api/v1/quotations#show
+#                       v1_organization_tender PATCH  /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
+#                                              PUT    /v1/organizations/:organization_id/tenders/:id(.:format)                                 api/v1/tenders#update
+#             v1_organization_cargo_item_types GET    /v1/organizations/:organization_id/cargo_item_types(.:format)                            api/v1/cargo_item_types#index
+#      v1_organization_trucking_availabilities GET    /v1/organizations/:organization_id/trucking_availabilities(.:format)                     api/v1/trucking_availabilities#index
+#        v1_organization_trucking_counterparts GET    /v1/organizations/:organization_id/trucking_counterparts(.:format)                       api/v1/trucking_counterparts#index
+#        v1_organization_trucking_capabilities GET    /v1/organizations/:organization_id/trucking_capabilities(.:format)                       api/v1/trucking_capabilities#index
+#           v1_organization_trucking_countries GET    /v1/organizations/:organization_id/trucking_countries(.:format)                          api/v1/trucking_countries#index
+#                       v1_organization_groups GET    /v1/organizations/:organization_id/groups(.:format)                                      api/v1/organizations_groups#index
+#            origins_v1_organization_locations GET    /v1/organizations/:organization_id/locations/origins(.:format)                           api/v1/locations#origins
+#       destinations_v1_organization_locations GET    /v1/organizations/:organization_id/locations/destinations(.:format)                      api/v1/locations#destinations
+#                    v1_organization_locations GET    /v1/organizations/:organization_id/locations(.:format)                                   api/v1/locations#index
+#                                              POST   /v1/organizations/:organization_id/locations(.:format)                                   api/v1/locations#create
+#                     v1_organization_location GET    /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#show
+#                                              PATCH  /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#update
+#                                              PUT    /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#update
+#                                              DELETE /v1/organizations/:organization_id/locations/:id(.:format)                               api/v1/locations#destroy
+#                   v1_organization_ahoy_index GET    /v1/organizations/:organization_id/ahoy(.:format)                                        api/v1/ahoy#index
+#        password_reset_v1_organization_client PATCH  /v1/organizations/:organization_id/clients/:id/password_reset(.:format)                  api/v1/clients#password_reset
+#                      v1_organization_clients GET    /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#index
+#                                              POST   /v1/organizations/:organization_id/clients(.:format)                                     api/v1/clients#create
+#                       v1_organization_client GET    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#show
+#                                              PATCH  /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
+#                                              PUT    /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#update
+#                                              DELETE /v1/organizations/:organization_id/clients/:id(.:format)                                 api/v1/clients#destroy
+#                   v1_organization_equipments GET    /v1/organizations/:organization_id/equipments(.:format)                                  api/v1/equipments#index
+#                   v1_organization_validation POST   /v1/organizations/:organization_id/validation(.:format)                                  api/v1/validations#create
+#                        v1_organization_ports GET    /v1/organizations/:organization_id/ports(.:format)                                       api/v1/ports#index
+#  enabled_v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules/enabled(.:format) api/v1/schedules#enabled
+#          v1_organization_itinerary_schedules GET    /v1/organizations/:organization_id/itineraries/:itinerary_id/schedules(.:format)         api/v1/schedules#index
+#                  v1_organization_itineraries GET    /v1/organizations/:organization_id/itineraries(.:format)                                 api/v1/itineraries#index
+#                      v1_organization_company PATCH  /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
+#                                              PUT    /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
+#                             v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
+#             v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
+# v2_organization_query_request_for_quotations POST   /v2/organizations/:organization_id/queries/:query_id/request_for_quotations(.:format)    api/v2/request_for_quotations#create
+#            v2_organization_query_cargo_units GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units(.:format)               api/v2/cargo_units#index
+#             v2_organization_query_cargo_unit GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units/:id(.:format)           api/v2/cargo_units#show
+#                v2_organization_query_results GET    /v2/organizations/:organization_id/queries/:query_id/results(.:format)                   api/v2/results#index
+#                 v2_organization_query_errors GET    /v2/organizations/:organization_id/queries/:query_id/errors(.:format)                    api/v2/errors#index
+#                      v2_organization_queries GET    /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#index
+#                                              POST   /v2/organizations/:organization_id/queries(.:format)                                     api/v2/queries#create
+#                        v2_organization_query GET    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#show
+#                                              PATCH  /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
+#                                              PUT    /v2/organizations/:organization_id/queries/:id(.:format)                                 api/v2/queries#update
+#           v2_organization_result_set_results GET    /v2/organizations/:organization_id/result_sets/:result_set_id/results(.:format)          api/v2/results#index
+#                   v2_organization_result_set GET    /v2/organizations/:organization_id/result_sets/:id(.:format)                             api/v2/result_sets#show
+#               v2_organization_result_charges GET    /v2/organizations/:organization_id/results/:result_id/charges(.:format)                  api/v2/charges#index
+#        v2_organization_result_route_sections GET    /v2/organizations/:organization_id/results/:result_id/route_sections(.:format)           api/v2/route_sections#index
+#             v2_organization_result_schedules GET    /v2/organizations/:organization_id/results/:result_id/schedules(.:format)                api/v2/schedules#index
+#              v2_organization_result_schedule GET    /v2/organizations/:organization_id/results/:result_id/schedules/:id(.:format)            api/v2/schedules#show
+#     v2_organization_result_shipment_requests POST   /v2/organizations/:organization_id/results/:result_id/shipment_requests(.:format)        api/v2/shipment_requests#create
+#                       v2_organization_result GET    /v2/organizations/:organization_id/results/:id(.:format)                                 api/v2/results#show
+#            v2_organization_shipment_requests GET    /v2/organizations/:organization_id/shipment_requests(.:format)                           api/v2/shipment_requests#index
+#             v2_organization_shipment_request GET    /v2/organizations/:organization_id/shipment_requests/:id(.:format)                       api/v2/shipment_requests#show
+#                  v2_organization_offer_email GET    /v2/organizations/:organization_id/offers/:offer_id/email(.:format)                      api/v2/offers#email
+#                    v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
+#                   v2_organization_offer_xlsx GET    /v2/organizations/:organization_id/offers/:offer_id/xlsx(.:format)                       api/v2/offers#xlsx
+#                       v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
+#                      v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
+#                       v2_organization_upload GET    /v2/organizations/:organization_id/uploads/:id(.:format)                                 api/v2/uploads#show
+#                        v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show
+#                        v2_organization_scope GET    /v2/organizations/:organization_id/scope(.:format)                                       api/v2/scopes#show
+#                  v2_organization_colli_types GET    /v2/organizations/:organization_id/colli_types(.:format)                                 api/v2/colli_types#show
+#                      v2_organization_profile GET    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#show
+#                                              PATCH  /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
+#                                              PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
+#                     v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
+#                      v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
+#                    v2_organization_companies GET    /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#index
+#                                              POST   /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#create
+#                      v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
+#                                              PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
+#                                              PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
+#                                              DELETE /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#destroy
+#                             v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
+#                            validate_v2_users GET    /v2/users/validate(.:format)                                                             api/v2/users#validate
+#                                     v2_users GET    /v2/users(.:format)                                                                      api/v2/users#index
+#                                              POST   /v2/users(.:format)                                                                      api/v2/users#create
+#                                      v2_user GET    /v2/users/:id(.:format)                                                                  api/v2/users#show
+#                                              PATCH  /v2/users/:id(.:format)                                                                  api/v2/users#update
+#                                              PUT    /v2/users/:id(.:format)                                                                  api/v2/users#update
+#                                              DELETE /v2/users/:id(.:format)                                                                  api/v2/users#destroy
+#                                 v2_passwords POST   /v2/passwords(.:format)                                                                  api/v2/passwords#create
+#                                  v2_password PATCH  /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
+#                                              PUT    /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
 #
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index

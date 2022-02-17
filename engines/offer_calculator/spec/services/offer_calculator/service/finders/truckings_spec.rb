@@ -22,6 +22,8 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
       client: user,
       creator: user,
       params: params,
+      pre_carriage: true,
+      on_carriage: true,
       cargo_trait: :lcl)
   end
   let(:params) do
@@ -53,20 +55,20 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
   end
   let(:pickup_address) { FactoryBot.create(:gothenburg_address, country: origin_hub.country) }
   let(:delivery_address) { FactoryBot.create(:shanghai_address, country: destination_hub.country) }
-  let(:origin_trucking_location) {
+  let(:origin_trucking_location) do
     FactoryBot.create(:trucking_location, :with_location,
       location: origin_location, country: pickup_address.country)
-  }
-  let(:destination_trucking_location) {
+  end
+  let(:destination_trucking_location) do
     FactoryBot.create(:trucking_location, :with_location,
       location: destination_location, country: delivery_address.country)
-  }
+  end
   let(:schedules) { trips.map { |trip| OfferCalculator::Schedule.from_trip(trip) } }
-  let(:finder) {
+  let(:finder) do
     described_class.new(request: request, schedules: schedules)
-  }
+  end
   let(:results) { finder.perform }
-  let(:shipment_trucking) { {pre_carriage: {}, on_carriage: {}} }
+  let(:shipment_trucking) { { pre_carriage: {}, on_carriage: {} } }
 
   before do
     Organizations.current_id = organization.id
@@ -75,7 +77,7 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
     FactoryBot.create(:lcl_pre_carriage_availability, hub: origin_hub, query_type: :location)
     FactoryBot.create(:lcl_on_carriage_availability, hub: destination_hub, query_type: :location)
     Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-      "address_components" => [{"types" => ["premise"]}],
+      "address_components" => [{ "types" => ["premise"] }],
       "address" => pickup_address.geocoded_address,
       "city" => pickup_address.city,
       "country" => pickup_address.country.name,
@@ -83,7 +85,7 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
       "postal_code" => pickup_address.zip_code
     ])
     Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
-      "address_components" => [{"types" => ["premise"]}],
+      "address_components" => [{ "types" => ["premise"] }],
       "address" => delivery_address.geocoded_address,
       "city" => delivery_address.city,
       "country" => delivery_address.country.name,
@@ -110,11 +112,12 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
     end
 
     context "when only origin trucking required on one itinerary" do
-      let!(:trucking) {
+      let!(:trucking) do
         FactoryBot.create(:trucking_trucking,
           hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1,
           location: origin_trucking_location)
-      }
+      end
+
       before do
         allow(request).to receive(:pickup_address).and_return(pickup_address)
         allow(request).to receive(:pre_carriage?).and_return(true)
@@ -131,11 +134,11 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
     end
 
     context "when only origin trucking required on one itinerary (group) (using default truck types)" do
-      let!(:trucking) {
+      let!(:trucking) do
         FactoryBot.create(:trucking_trucking,
           hub: origin_hub, organization: organization, tenant_vehicle: tenant_vehicle_1,
           location: origin_trucking_location, group: group)
-      }
+      end
 
       before do
         FactoryBot.create(:trucking_trucking,
@@ -156,11 +159,11 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
     end
 
     context "when only origin trucking required on one itinerary (group) (using set truck types)" do
-      let!(:trucking) {
+      let!(:trucking) do
         FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization,
                                               tenant_vehicle: tenant_vehicle_1, location: origin_trucking_location,
                                               group: group)
-      }
+      end
 
       before do
         FactoryBot.create(:trucking_trucking,
@@ -181,15 +184,15 @@ RSpec.describe OfferCalculator::Service::Finders::Truckings do
     end
 
     context "with trucking required on both ends one itinerary" do
-      let!(:pre_carriage) {
+      let!(:pre_carriage) do
         FactoryBot.create(:trucking_trucking, hub: origin_hub, organization: organization,
                                               tenant_vehicle: tenant_vehicle_1, location: origin_trucking_location)
-      }
-      let!(:on_carriage) {
+      end
+      let!(:on_carriage) do
         FactoryBot.create(:trucking_trucking, hub: destination_hub, carriage: "on",
                                               organization: organization, tenant_vehicle: tenant_vehicle_1,
                                               location: destination_trucking_location)
-      }
+      end
 
       it "returns the both truckings trucking" do
         aggregate_failures do

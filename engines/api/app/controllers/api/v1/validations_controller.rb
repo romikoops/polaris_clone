@@ -28,7 +28,9 @@ module Api
         @offer_request ||= OfferCalculator::Request.new(
           query: query,
           params: query_params,
-          persist: false
+          persist: false,
+          pre_carriage: routing_params.dig("origin", "nexus_id").blank?,
+          on_carriage: routing_params.dig("destination", "nexus_id").blank?
         )
       end
 

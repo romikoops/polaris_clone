@@ -43,7 +43,7 @@ module Api
       end
 
       def result_set
-        render json: Api::V2::QueryStatusSerializer.new(query)
+        render json: Api::V2::QueryStatusSerializer.new(Api::V2::QueryDecorator.new(query_with_updated_status))
       end
 
       private
@@ -173,6 +173,20 @@ module Api
 
       def search_by
         index_params[:searchBy]
+      end
+
+      def query_with_updated_status
+        calculations = Journey::QueryCalculation.where(query: query)
+        return query if calculations.exists?(status: %w[running queued]) || calculations.empty?
+
+        new_status = if calculations.exists?(status: "completed")
+          "completed"
+        else
+          "failed"
+        end
+
+        query.update(status: new_status)
+        query
       end
     end
   end

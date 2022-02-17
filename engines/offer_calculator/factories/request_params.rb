@@ -12,11 +12,14 @@ FactoryBot.define do
     delivery_truck_type {}
     origin_hub {}
     destination_hub {}
+    origin {}
+    destination {}
     direction { "export" }
     selected_day { 4.days.from_now.beginning_of_day.to_s }
     aggregated_cargo_attributes { [] }
     cargo_item_type_id {}
     load_type { "container" }
+    async { false }
 
     trait :lcl do
       cargo_item_type_id { FactoryBot.create(:legacy_cargo_item_type).id }
@@ -81,6 +84,7 @@ FactoryBot.define do
           }
         },
         origin: {
+          id: origin&.id,
           latitude: pickup_address&.latitude,
           longitude: pickup_address&.longitude,
           nexus_name: origin_hub&.nexus&.name,
@@ -89,6 +93,7 @@ FactoryBot.define do
           full_address: pickup_address&.geocoded_address
         },
         destination: {
+          id: destination&.id,
           latitude: delivery_address&.latitude,
           longitude: delivery_address&.longitude,
           nexus_name: destination_hub&.nexus&.name,
@@ -98,7 +103,8 @@ FactoryBot.define do
         },
         incoterm: {},
         aggregated_cargo_attributes: aggregated_cargo_attributes,
-        load_type: load_type
+        load_type: load_type,
+        async: async
       }
     end
   end

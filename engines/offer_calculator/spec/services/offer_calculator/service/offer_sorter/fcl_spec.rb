@@ -10,7 +10,6 @@ RSpec.describe OfferCalculator::Service::OfferSorter do
   let(:load_type) { "container" }
   let(:cargo_trait) { :fcl }
   let(:request) { FactoryBot.build(:offer_calculator_request, cargo_trait: cargo_trait, organization: organization) }
-  let(:cargo_cargo) { FactoryBot.create(:cloned_cargo, quotation_id: quotation.id) }
   let(:tenant_vehicle2) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
   let(:pricing_group1) do
     cargo_classes.map do |cargo_class|

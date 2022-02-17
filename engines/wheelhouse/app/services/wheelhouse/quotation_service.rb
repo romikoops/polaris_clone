@@ -38,7 +38,7 @@ module Wheelhouse
 
     def offer_calculator
       @offer_calculator ||= OfferCalculator::Calculator.new(
-        params: shipping_params.merge(estimated: @estimated, async: async, parent_id: parent_id),
+        params: shipping_params.merge(estimated: @estimated, async: async, parent_id: parent_id).with_indifferent_access,
         client: user,
         creator: creator,
         source: source

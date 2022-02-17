@@ -32,8 +32,7 @@ module Api
       end
 
       def show
-        check_for_errors
-        decorated_query = QueryDecorator.decorate(query)
+        decorated_query = QueryDecorator.decorate(query_with_updated_status)
         render json: QuerySerializer.new(decorated_query, params: { scope: current_scope })
       rescue OfferCalculator::Errors::Failure => e
         render json: { error: e.message }, status: :unprocessable_entity
@@ -123,7 +122,9 @@ module Api
         @query_request ||= OfferCalculator::Request.new(
           query: request_query,
           params: validation_params,
-          persist: false
+          persist: false,
+          pre_carriage: quotation_params.dig("origin", "nexus_id").blank?,
+          on_carriage: quotation_params.dig("destination", "nexus_id").blank?
         )
       end
 
@@ -217,10 +218,20 @@ module Api
         params[:async]
       end
 
-      def check_for_errors
-        return if query.result_errors.empty? || query.results.present?
+      def query_with_updated_status
+        calculations = Journey::QueryCalculation.where(query: query)
+        return query if calculations.exists?(status: %w[running queued]) || calculations.empty?
 
-        raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code)
+        new_status = if calculations.exists?(status: "completed")
+          "completed"
+        else
+          "failed"
+        end
+        query.update(status: new_status)
+
+        raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code) if query.result_errors.present?
+
+        query
       end
 
       def validation_params
