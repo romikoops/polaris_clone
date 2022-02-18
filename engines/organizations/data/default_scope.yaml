@@ -218,3 +218,4 @@ v2_uploaders:
   local_charges: false
   hubs: false
   clients: false
+include_location_groups: false

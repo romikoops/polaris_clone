@@ -3264,6 +3264,20 @@ CREATE TABLE public.pricings_fees (
 
 
 --
+-- Name: pricings_location_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.pricings_location_groups (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    nexus_id bigint,
+    name public.citext NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: pricings_margins; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6532,6 +6546,14 @@ ALTER TABLE ONLY public.pricings_fees
 
 
 --
+-- Name: pricings_location_groups pricings_location_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pricings_location_groups
+    ADD CONSTRAINT pricings_location_groups_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: pricings_margins pricings_margins_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8702,6 +8724,13 @@ CREATE UNIQUE INDEX index_oauth_applications_on_uid ON public.oauth_applications
 
 
 --
+-- Name: index_organization_location_groups; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_organization_location_groups ON public.pricings_location_groups USING btree (nexus_id, name, organization_id);
+
+
+--
 -- Name: index_organizations_domains_on_domain; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8881,6 +8910,20 @@ CREATE INDEX index_pricings_fees_on_tenant_id ON public.pricings_fees USING btre
 --
 
 CREATE UNIQUE INDEX index_pricings_fees_on_upsert_id ON public.pricings_fees USING btree (upsert_id) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_pricings_location_groups_on_nexus_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pricings_location_groups_on_nexus_id ON public.pricings_location_groups USING btree (nexus_id);
+
+
+--
+-- Name: index_pricings_location_groups_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pricings_location_groups_on_organization_id ON public.pricings_location_groups USING btree (organization_id);
 
 
 --
@@ -10845,6 +10888,14 @@ ALTER TABLE ONLY public.pricings_metadata
 
 
 --
+-- Name: pricings_location_groups fk_rails_02d07892c7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pricings_location_groups
+    ADD CONSTRAINT fk_rails_02d07892c7 FOREIGN KEY (nexus_id) REFERENCES public.nexuses(id) ON DELETE CASCADE;
+
+
+--
 -- Name: shipments_shipment_requests fk_rails_03532ed857; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11554,6 +11605,14 @@ ALTER TABLE ONLY public.nexuses
 
 ALTER TABLE ONLY public.journey_offer_results
     ADD CONSTRAINT fk_rails_998f64d3aa FOREIGN KEY (result_id) REFERENCES public.journey_results(id) ON DELETE CASCADE;
+
+
+--
+-- Name: pricings_location_groups fk_rails_999d60fed3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pricings_location_groups
+    ADD CONSTRAINT fk_rails_999d60fed3 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id) ON DELETE CASCADE;
 
 
 --
@@ -12751,6 +12810,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220119071628'),
 ('20220120141728'),
 ('20220209070931'),
-('20220209071249');
+('20220209071249'),
+('20220216103614');
 
 

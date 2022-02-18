@@ -115,7 +115,7 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           feature_uploaders dedicated_pricings_only
           exclude_analytics address_fields default_total_dimensions
           append_hub_suffix expand_non_counterpart_local_charges
-          local_charges_required_with_trucking].each_slice(4) do |slice|
+          local_charges_required_with_trucking include_location_groups].each_slice(4) do |slice|
           row do
             slice.each do |key|
               col(sm: 3) { check_box key }
