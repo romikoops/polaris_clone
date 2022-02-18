@@ -50,7 +50,7 @@ module Api
 
       errors.add(:sort_by, error_code: "INVALID_SORT_BY_OPTION", error_message: "#{sort_by} is unsupported sort_by option, options available for sorting are : #{sort_options}") unless sort_options.include?(sort_by.downcase)
 
-      errors.add(:sort_by, error_code: "DIRECTION_MISSING", error_message: "direction needs to be specified with sort by") if direction.blank?
+      errors.add(:sort_by, error_code: "DIRECTION_MISSING", error_message: "direction needs to be specified with sort by") and return if direction.blank?
 
       errors.add(:sort_by, error_code: "INVALID_DIRECTION_OPTION", error_message: "#{direction} is unsupported direction option, options available for direction are : #{DIRECTION_OPTIONS}") unless DIRECTION_OPTIONS.include?(direction.downcase)
     end

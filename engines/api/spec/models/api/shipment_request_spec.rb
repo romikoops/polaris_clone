@@ -32,6 +32,14 @@ RSpec.describe Api::ShipmentRequest, type: :model do
       created_at: 5.hours.ago).id
   end
 
+  it "supports multiple sort options" do
+    expect(described_class::SUPPORTED_SORT_OPTIONS).to eq(%w[created_at origin destination])
+  end
+
+  it "supports multiple search options" do
+    expect(described_class::SUPPORTED_SEARCH_OPTIONS).to eq(%w[origin destination status reference])
+  end
+
   describe "#sorted_by" do
     let(:sort_by) { "#{sort_key}_#{direction_key}" }
     let(:sorted_shipment_requests) { described_class.sorted_by(sort_by) }

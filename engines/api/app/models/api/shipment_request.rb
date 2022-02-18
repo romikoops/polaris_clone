@@ -21,6 +21,8 @@ module Api
 
     SUPPORTED_SORT_OPTIONS = %w[
       created_at
+      origin
+      destination
     ].freeze
 
     filterrific(
