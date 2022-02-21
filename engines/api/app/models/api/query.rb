@@ -124,7 +124,9 @@ end
 #  client_id               :uuid
 #  company_id              :uuid
 #  creator_id              :uuid
+#  destination_geo_id      :string
 #  organization_id         :uuid
+#  origin_geo_id           :string
 #  parent_id               :uuid
 #  source_id               :uuid             not null
 #

@@ -27,6 +27,12 @@ RSpec.describe Shipments::BookingProcessController do
                                     to: "USD", rate: 1.3,
                                     created_at: tender.created_at - 30.seconds)
     end
+    allow(Carta::Client).to receive(:suggest).with(query: itinerary.origin_hub.nexus.locode).and_return(
+      FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: itinerary.origin_hub.nexus.locode)
+    )
+    allow(Carta::Client).to receive(:suggest).with(query: itinerary.destination_hub.nexus.locode).and_return(
+      FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: itinerary.destination_hub.nexus.locode)
+    )
   end
 
   context "when sending admin emails on quote download" do

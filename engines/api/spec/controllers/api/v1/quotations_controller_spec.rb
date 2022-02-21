@@ -89,6 +89,13 @@ module Api
         ]
       end
 
+      before do
+        allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
+        allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: origin_hub.latitude, longitude: origin_hub.longitude).and_return(origin)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: destination_hub.latitude, longitude: destination_hub.longitude).and_return(destination)
+      end
+
       context "with available tenders" do
         before do
           [tenant_vehicle, tenant_vehicle2].each do |t_vehicle|
@@ -102,8 +109,6 @@ module Api
           OfferCalculator::Schedule.from_trips(trips)
           FactoryBot.create(:freight_margin, default_for: "ocean", organization_id: organization.id,
                                              applicable: organization, value: 0)
-          allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-          allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
         end
 
         it "returns tenders ordered by amount by default", :aggregate_failures do

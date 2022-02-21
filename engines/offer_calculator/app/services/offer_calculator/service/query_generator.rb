@@ -32,6 +32,8 @@ module OfferCalculator
           organization: organization,
           billable: billable?,
           currency: currency,
+          origin_geo_id: origin_geo_id,
+          destination_geo_id: destination_geo_id,
           status: "running"
         ).tap do |new_query|
           new_query.save! if persist?
@@ -83,6 +85,14 @@ module OfferCalculator
 
       def destination
         @destination ||= nexus(target: :destination) || address(target: :destination)
+      end
+
+      def origin_geo_id
+        @origin_geo_id ||= params.dig(:origin, :id) || geo_id(target: origin)
+      end
+
+      def destination_geo_id
+        @destination_geo_id ||= params.dig(:destination, :id) || geo_id(target: destination)
       end
 
       def company
@@ -155,6 +165,22 @@ module OfferCalculator
 
       def scope
         @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
+      end
+
+      def geo_id(target:)
+        valid_geo = nil
+        case target
+        when Legacy::Nexus
+          valid_geo = Carta::Client.suggest(query: target.locode) if target.locode.present?
+        when Legacy::Address
+          valid_geo = Carta::Client.reverse_geocode(latitude: target.latitude, longitude: target.longitude) if target.latitude.present? && target.longitude.present?
+        end
+        valid_geo.id if valid_geo.present?
+
+        rescue Carta::Client::ServiceUnavailable
+          raise OfferCalculator::Errors::OfferBuilder
+        rescue Carta::Client::LocationNotFound
+          raise OfferCalculator::Errors::LocationNotFound
       end
     end
   end

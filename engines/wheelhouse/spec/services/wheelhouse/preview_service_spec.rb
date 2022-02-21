@@ -39,8 +39,6 @@ module Wheelhouse
       Organizations.current_id = organization.id
       FactoryBot.create(:companies_membership, company: company, client: user)
       FactoryBot.create(:groups_membership, group: group, member: user)
-      allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
-      allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
       allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_hub.nexus)
       allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
         destination_hub.nexus
@@ -133,6 +131,11 @@ module Wheelhouse
       let!(:trucking_on_margin) do
         FactoryBot.create(:trucking_on_margin,
           origin_hub: destination_hub, organization: organization, applicable: user)
+      end
+
+      before do
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_return(origin)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_return(destination)
       end
 
       it_behaves_like "a pricing with one margin"

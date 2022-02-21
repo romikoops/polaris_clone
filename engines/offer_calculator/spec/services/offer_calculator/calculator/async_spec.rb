@@ -72,6 +72,8 @@ RSpec.describe OfferCalculator::Calculator do
       source: source
     )
   end
+  let(:origin_response) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+  let(:destination_response) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
 
   include_context "complete_route_with_trucking"
 
@@ -79,6 +81,8 @@ RSpec.describe OfferCalculator::Calculator do
     FactoryBot.create(:companies_membership, client: user)
     Organizations.current_id = organization.id
     allow(service).to receive(:async_calculation_for_permutation)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
   end
 
   describe ".perform" do

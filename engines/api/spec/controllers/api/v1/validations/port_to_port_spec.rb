@@ -73,9 +73,14 @@ module Api
     let(:origin) { { nexus_id: origin_hub.nexus_id } }
     let(:destination) { { nexus_id: destination_hub.nexus_id } }
 
+    let(:origin_result) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+    let(:destination_result) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+
     before do
       FactoryBot.create(:users_membership, organization: organization, user: user)
       ::Organizations.current_id = user.organization_id
+      allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin_result)
+      allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(destination_result)
     end
 
     shared_examples_for "Expected errors are returned" do

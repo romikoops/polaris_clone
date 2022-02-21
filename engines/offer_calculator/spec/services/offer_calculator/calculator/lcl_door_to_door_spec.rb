@@ -54,6 +54,8 @@ RSpec.describe OfferCalculator::Calculator do
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
       FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode)
     )
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_return(origin_hub)
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_return(destination_hub)
   end
 
   describe ".perform" do

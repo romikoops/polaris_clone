@@ -74,6 +74,14 @@ module Api
     end
 
     describe "post #create" do
+      let(:origin_carta_result) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
+      let(:destination_carta_result) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
+
+      before do
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_return(origin_carta_result)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_return(destination_carta_result)
+      end
+
       context "when door to door complete request (no pricings)" do
         let(:shipping_info) { { cargo_items_attributes: cargo_items_attributes } }
         let(:expected_errors) do
@@ -192,6 +200,7 @@ module Api
                                                 carriage: "on", location: delivery_trucking_location)
           FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
           request.headers["Authorization"] = token_header
+
           post :create, params: params
         end
 

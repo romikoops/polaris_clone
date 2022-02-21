@@ -35,8 +35,10 @@ FactoryBot.define do
     source_id { SecureRandom.uuid }
     origin { "20457, Hamburg" }
     origin_coordinates { RGeo::Geos.factory(srid: 4326).point(origin_longitude, origin_latitude) }
+    origin_geo_id { "itsmycargo:locode:blb5dabfrwa6ozq" }
     destination { "Shanghai Airport" }
     destination_coordinates { RGeo::Geos.factory(srid: 4326).point(destination_longitude, destination_latitude) }
+    destination_geo_id { "itsmycargo:locode:74lee67oju4vvwy" }
     cargo_ready_date { Time.zone.tomorrow.change(usec: 0) }
     delivery_date { (Time.zone.today + 3.weeks).change(usec: 0) }
     customs { false }

@@ -9,13 +9,9 @@ module Api
 
       attribute :destination_name, &:destination
 
-      attribute :origin_id do |query|
-        query.origin_route_point&.geo_id
-      end
+      attribute :origin_id, &:origin_geo_id
 
-      attribute :destination_id do |query|
-        query.destination_route_point&.geo_id
-      end
+      attribute :destination_id, &:destination_geo_id
 
       attribute :issue_date, &:created_at
 

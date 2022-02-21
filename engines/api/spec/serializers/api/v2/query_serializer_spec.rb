@@ -23,8 +23,8 @@ module Api
         loadType: decorated_query.load_type,
         offerId: offer.id,
         issueDate: query.created_at,
-        originId: pickup_point.geo_id,
-        destinationId: delivery_point.geo_id,
+        originId: query.origin_geo_id,
+        destinationId: query.destination_geo_id,
         parentId: nil,
         companyId: query.company_id,
         cargoReadyDate: query.cargo_ready_date
@@ -37,6 +37,16 @@ module Api
 
     it "returns the correct user for the object passed" do
       expect(target[:client]).to be_a(Api::V2::ClientSerializer)
+    end
+
+    context "when origin and destination geo_id is not present" do
+      let(:query) { FactoryBot.create(:journey_query, origin_geo_id: nil, destination_geo_id: nil) }
+
+      it "returns the correct origin name for the object passed" do
+        expected_serialized_query[:originId] = nil
+        expected_serialized_query[:destinationId] = nil
+        expect(target.except(:client)).to eq(expected_serialized_query)
+      end
     end
   end
 end

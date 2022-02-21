@@ -2112,6 +2112,8 @@ CREATE TABLE public.journey_queries (
     parent_id uuid,
     status public.journey_status,
     currency character varying,
+    origin_geo_id character varying,
+    destination_geo_id character varying,
     CONSTRAINT delivery_after_cargo_ready_date CHECK ((delivery_date > cargo_ready_date)),
     CONSTRAINT journey_queries_destination_coordinates_presence CHECK (((destination_coordinates IS NOT NULL) AND ((destination_coordinates)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_queries_destination_presence CHECK (((destination IS NOT NULL) AND ((destination)::text !~ '^\s*$'::text))),
@@ -12809,6 +12811,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220118103740'),
 ('20220119071628'),
 ('20220120141728'),
+('20220203123435'),
 ('20220209070931'),
 ('20220209071249'),
 ('20220216103614');

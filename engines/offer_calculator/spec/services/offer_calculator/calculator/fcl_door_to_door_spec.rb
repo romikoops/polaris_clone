@@ -99,6 +99,8 @@ RSpec.describe OfferCalculator::Calculator do
     Organizations.current_id = organization.id
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_return(origin)
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_return(destination)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
   end
 
@@ -113,7 +115,7 @@ RSpec.describe OfferCalculator::Calculator do
 
     context "with offer creator errors with a blacklisted user" do
       before do
-        organization.scope.update(content: {blacklisted_emails: [creator.email]})
+        organization.scope.update(content: { blacklisted_emails: [creator.email] })
       end
 
       it "set the Query billable as false" do
@@ -121,6 +123,28 @@ RSpec.describe OfferCalculator::Calculator do
           expect(query.status).to eq("completed")
           expect(query.billable).to be(false)
         end
+      end
+    end
+
+    context "when carta service is unavailable" do
+      before do
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_raise(Carta::Client::ServiceUnavailable)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_raise(Carta::Client::ServiceUnavailable)
+      end
+
+      it "raises OfferBuilder exception" do
+        expect { results }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+      end
+    end
+
+    context "when carta service cannot find the location" do
+      before do
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_raise(Carta::Client::LocationNotFound)
+        allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_raise(Carta::Client::LocationNotFound)
+      end
+
+      it "raises OfferBuilder exception" do
+        expect { results }.to raise_error(OfferCalculator::Errors::LocationNotFound)
       end
     end
 
@@ -147,6 +171,7 @@ RSpec.describe OfferCalculator::Calculator do
         end
         FactoryBot.create(:routing_carrier, name: trucking_tenant_vehicle_2.carrier.name, code: trucking_tenant_vehicle_2.carrier.code)
       end
+
       let(:trucking_tenant_vehicle_2) { FactoryBot.create(:legacy_tenant_vehicle, name: "trucking_2") }
       let(:desired_tenant_vehicle_combos) do
         [

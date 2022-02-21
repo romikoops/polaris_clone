@@ -113,6 +113,8 @@ RSpec.describe Wheelhouse::QuotationService do
     end
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin_response)
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination_response)
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: pickup_address.latitude, longitude: pickup_address.longitude).and_return(origin_response)
+    allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_return(destination_response)
     FactoryBot.create(:legacy_tenant_cargo_item_type, cargo_item_type: pallet, organization: organization)
     FactoryBot.create(:lcl_pricing, itinerary: air_itinerary, organization: organization,
                                     tenant_vehicle: tenant_vehicle)

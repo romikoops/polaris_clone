@@ -18,8 +18,10 @@ RSpec.describe "Quotations", type: :request, swagger: true do
 
   before do
     allow(controller).to receive(:doorkeeper_application).and_return(FactoryBot.create(:application))
-    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
-    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
+    allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin)
+    allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(
+      destination
+    )
     ::Organizations.current_id = organization.id
     FactoryBot.create(:users_membership, organization: organization, user: user)
   end
