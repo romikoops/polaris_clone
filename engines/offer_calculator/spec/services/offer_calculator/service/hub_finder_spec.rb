@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::HubFinder do
-  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
+  let(:scope) { FactoryBot.build(:organizations_scope) }
   let(:request) { FactoryBot.build(:offer_calculator_request, client: user, params: request_params, organization: organization, pre_carriage: true) }
   let(:request_params) do
     FactoryBot.build(:journey_request_params,
@@ -31,6 +32,7 @@ RSpec.describe OfferCalculator::Service::HubFinder do
   end
   let(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let(:group_id) { default_group.id }
+  let(:results) { described_class.new(request: request).perform }
 
   before do
     ::Organizations.current_id = organization.id
@@ -42,8 +44,7 @@ RSpec.describe OfferCalculator::Service::HubFinder do
 
   describe ".perform" do
     context "with pickup and no delivery" do
-      it "returns the correct hub ids" do
-        results = described_class.new(request: request).perform
+      it "returns the correct hub ids", :aggregate_failures do
 
         expect(results[:origin]).to eq([origin_hub])
         expect(results[:destination]).to eq([destination_hub])
@@ -53,9 +54,33 @@ RSpec.describe OfferCalculator::Service::HubFinder do
     context "with pickup and no delivery and group only truckings" do
       let(:group_id) { group.id }
 
-      it "returns the correct hub ids" do
-        results = described_class.new(request: request).perform
+      it "returns the correct hub ids", :aggregate_failures do
+        expect(results[:origin]).to eq([origin_hub])
+        expect(results[:destination]).to eq([destination_hub])
+      end
+    end
 
+    context "with LocationGroups" do
+      before do
+        FactoryBot.create(:pricings_location_group, name: "test", nexus: destination_hub.nexus, organization: organization)
+        FactoryBot.create(:pricings_location_group, name: "test", nexus: related_hub.nexus, organization: organization)
+      end
+      let(:scope) { FactoryBot.build(:organizations_scope, content: {include_location_groups: true}) }
+      let(:related_hub) { FactoryBot.create(:legacy_hub, :hamburg, organization: organization) }
+
+      it "returns related hub with destination hub", :aggregate_failures do
+        expect(results[:origin]).to eq([origin_hub])
+        expect(results[:destination]).to eq([destination_hub, related_hub])
+      end
+    end
+
+    context "with LocationGroups but none that match the target Nexus" do
+      before do
+        FactoryBot.create(:pricings_location_group, name: "test", organization: organization)
+      end
+      let(:scope) { FactoryBot.build(:organizations_scope, content: {include_location_groups: true}) }
+
+      it "returns related hub with destination hub", :aggregate_failures do
         expect(results[:origin]).to eq([origin_hub])
         expect(results[:destination]).to eq([destination_hub])
       end
