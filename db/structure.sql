@@ -2304,78 +2304,6 @@ ALTER SEQUENCE public.layovers_id_seq OWNED BY public.layovers.id;
 
 
 --
--- Name: ledger_delta; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.ledger_delta (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    amount_cents bigint DEFAULT 0 NOT NULL,
-    amount_currency character varying NOT NULL,
-    fee_id uuid,
-    rate_basis integer DEFAULT 0 NOT NULL,
-    kg_range numrange,
-    stowage_range numrange,
-    km_range numrange,
-    cbm_range numrange,
-    wm_range numrange,
-    unit_range numrange,
-    min_amount_cents bigint DEFAULT 0 NOT NULL,
-    min_amount_currency character varying NOT NULL,
-    max_amount_cents bigint DEFAULT 0 NOT NULL,
-    max_amount_currency character varying NOT NULL,
-    wm_ratio numeric DEFAULT 1000,
-    operator integer DEFAULT 0 NOT NULL,
-    level integer DEFAULT 0 NOT NULL,
-    target_type character varying,
-    target_id uuid,
-    validity daterange,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: ledger_fees; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.ledger_fees (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    cargo_class bigint DEFAULT 0,
-    cargo_type bigint DEFAULT 0,
-    category integer DEFAULT 0,
-    code character varying,
-    rate_id uuid,
-    action integer DEFAULT 0,
-    base numeric DEFAULT 0.0000010,
-    "order" integer DEFAULT 0,
-    applicable integer DEFAULT 0,
-    load_meterage_limit numeric DEFAULT 0.0,
-    load_meterage_type integer DEFAULT 0,
-    load_meterage_logic integer DEFAULT 0,
-    load_meterage_ratio numeric DEFAULT 0,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: ledger_rates; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.ledger_rates (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    target_type character varying,
-    target_id uuid,
-    location_id uuid,
-    terminal_id uuid,
-    tenant_id uuid,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    organization_id uuid
-);
-
-
---
 -- Name: legacy_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6148,30 +6076,6 @@ ALTER TABLE ONLY public.layovers
 
 
 --
--- Name: ledger_delta ledger_delta_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.ledger_delta
-    ADD CONSTRAINT ledger_delta_pkey PRIMARY KEY (id);
-
-
---
--- Name: ledger_fees ledger_fees_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.ledger_fees
-    ADD CONSTRAINT ledger_fees_pkey PRIMARY KEY (id);
-
-
---
--- Name: ledger_rates ledger_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.ledger_rates
-    ADD CONSTRAINT ledger_rates_pkey PRIMARY KEY (id);
-
-
---
 -- Name: legacy_addresses legacy_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8156,118 +8060,6 @@ CREATE INDEX index_layovers_on_sandbox_id ON public.layovers USING btree (sandbo
 --
 
 CREATE INDEX index_layovers_on_stop_id ON public.layovers USING btree (stop_id);
-
-
---
--- Name: index_ledger_delta_on_cbm_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_cbm_range ON public.ledger_delta USING gist (cbm_range);
-
-
---
--- Name: index_ledger_delta_on_fee_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_fee_id ON public.ledger_delta USING btree (fee_id);
-
-
---
--- Name: index_ledger_delta_on_kg_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_kg_range ON public.ledger_delta USING gist (kg_range);
-
-
---
--- Name: index_ledger_delta_on_km_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_km_range ON public.ledger_delta USING gist (km_range);
-
-
---
--- Name: index_ledger_delta_on_stowage_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_stowage_range ON public.ledger_delta USING gist (stowage_range);
-
-
---
--- Name: index_ledger_delta_on_unit_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_unit_range ON public.ledger_delta USING gist (unit_range);
-
-
---
--- Name: index_ledger_delta_on_validity; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_validity ON public.ledger_delta USING gist (validity);
-
-
---
--- Name: index_ledger_delta_on_wm_range; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_delta_on_wm_range ON public.ledger_delta USING gist (wm_range);
-
-
---
--- Name: index_ledger_fees_on_cargo_class; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_fees_on_cargo_class ON public.ledger_fees USING btree (cargo_class);
-
-
---
--- Name: index_ledger_fees_on_cargo_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_fees_on_cargo_type ON public.ledger_fees USING btree (cargo_type);
-
-
---
--- Name: index_ledger_fees_on_category; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_fees_on_category ON public.ledger_fees USING btree (category);
-
-
---
--- Name: index_ledger_fees_on_rate_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_fees_on_rate_id ON public.ledger_fees USING btree (rate_id);
-
-
---
--- Name: index_ledger_rates_on_location_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_rates_on_location_id ON public.ledger_rates USING btree (location_id);
-
-
---
--- Name: index_ledger_rates_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_rates_on_organization_id ON public.ledger_rates USING btree (organization_id);
-
-
---
--- Name: index_ledger_rates_on_tenant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_rates_on_tenant_id ON public.ledger_rates USING btree (tenant_id);
-
-
---
--- Name: index_ledger_rates_on_terminal_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ledger_rates_on_terminal_id ON public.ledger_rates USING btree (terminal_id);
 
 
 --
@@ -10707,20 +10499,6 @@ CREATE UNIQUE INDEX itinerary_upsert ON public.itineraries USING btree (upsert_i
 
 
 --
--- Name: ledger_delta_target_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ledger_delta_target_index ON public.ledger_delta USING btree (target_type, target_id);
-
-
---
--- Name: ledger_rate_target_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX ledger_rate_target_index ON public.ledger_rates USING btree (target_type, target_id);
-
-
---
 -- Name: line_service_unique_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -11367,14 +11145,6 @@ ALTER TABLE ONLY public.shipments_invoices
 
 ALTER TABLE ONLY public.cargo_units
     ADD CONSTRAINT fk_rails_781259d9f8 FOREIGN KEY (cargo_id) REFERENCES public.cargo_cargos(id);
-
-
---
--- Name: ledger_rates fk_rails_79037cba6b; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.ledger_rates
-    ADD CONSTRAINT fk_rails_79037cba6b FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
 --
@@ -12814,6 +12584,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220203123435'),
 ('20220209070931'),
 ('20220209071249'),
-('20220216103614');
+('20220216103614'),
+('20220223104305');
 
 

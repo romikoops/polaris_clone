@@ -15,7 +15,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "shared-runtime"
 
   spec.add_dependency "federation"
-  spec.add_dependency "ledger"
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"
   spec.add_dependency "routing"

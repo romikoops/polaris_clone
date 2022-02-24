@@ -166,7 +166,6 @@ PATH
   specs:
     helmsman (1)
       federation
-      ledger
       organization_manager
       organizations
       routing
@@ -204,18 +203,6 @@ PATH
       measured-rails
       rein
       shared-runtime
-
-PATH
-  remote: engines/ledger
-  specs:
-    ledger (1)
-      cargo
-      money-rails
-      organizations
-      routing
-      shared-runtime
-      tenant_routing
-      uuidtools
 
 PATH
   remote: engines/legacy
@@ -1383,7 +1370,6 @@ DEPENDENCIES
   idp!
   integrations!
   journey!
-  ledger!
   lefthook
   legacy!
   letter_opener (~> 1.6)

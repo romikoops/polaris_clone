@@ -65,8 +65,7 @@ module Helmsman
       # Checks to see that a TenantConnection exists and that the RouteLineService has Rates
       return false if route_ids.empty?
 
-      tenant_connections.exists?(inbound_id: route_ids.first, outbound_id: route_ids.last) &&
-        Ledger::Rate.exists?(target_id: route_ids)
+      tenant_connections.exists?(inbound_id: route_ids.first, outbound_id: route_ids.last)
     end
 
     attr_reader :paths

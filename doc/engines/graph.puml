@@ -30,7 +30,6 @@ package "service" {
   class excel_data_services << (S,yellow) >>
   class federation << (S,yellow) >>
   class tenant_routing << (S,yellow) >>
-  class ledger << (S,yellow) >>
   class helmsman << (S,yellow) >>
   class integrations << (S,yellow) >>
   class rates << (S,yellow) >>
@@ -195,13 +194,7 @@ excel_data_services --> users
 federation --> organizations
 tenant_routing *--> routing
 tenant_routing --> organizations
-ledger *--> cargo
-ledger --> organizations
-ledger *--> routing
-ledger *--> tenant_routing
-ledger *--> legacy
 helmsman *--> federation
-helmsman *--> ledger
 helmsman *--> organization_manager
 helmsman --> organizations
 helmsman *--> routing

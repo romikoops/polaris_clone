@@ -158,17 +158,6 @@ RSpec.describe Helmsman::Validator do
         end
       end
 
-      let!(:rates) do
-        [
-          ocean_route_line_service,
-          air_route_line_service,
-          de_carriage_route_line_service,
-          cn_carriage_route_line_service
-        ].map do |rls|
-          FactoryBot.create(:lcl_rate, target: rls, organization: organization)
-        end
-      end
-
       let!(:valid_target_ids) do
         [
           [de_trucking_route.id, ocean_route.id, cn_trucking_route.id],
