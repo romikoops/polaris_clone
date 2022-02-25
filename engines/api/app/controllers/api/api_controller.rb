@@ -98,7 +98,7 @@ module Api
     def organization_domain
       @organization_domain ||= Organizations::Domain.find_by(domain: referrer_host) ||
         Organizations::Domain.find_by("? ILIKE domain", referrer_host) ||
-        (Organizations::Domain.find_by(domain: "demo.local") if Rails.env.development?)
+        (development_domains if Rails.env.development?)
     end
 
     def referrer_host
@@ -129,6 +129,11 @@ module Api
         .where(
           journey_queries: { organization_id: current_organization.id, status: "completed" }
         )
+    end
+
+    def development_domains
+      Organizations::Domain.find_by(domain: "#{organization_slug}.itsmycargo.shop") ||
+        Organizations::Domain.find_by(domain: "demo.local")
     end
   end
 end

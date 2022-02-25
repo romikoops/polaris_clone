@@ -3,17 +3,13 @@
 require "rails_helper"
 
 module Api
-  RSpec.describe V2::PasswordsController, type: :controller do
+  RSpec.describe V2::Admin::PasswordsController, type: :controller do
     routes { Engine.routes }
 
-    let(:organization) { FactoryBot.create(:organizations_organization) }
-    let(:user) { FactoryBot.create(:users_client, organization: organization, password: "OldPassword1") }
-
-    before { FactoryBot.create(:organizations_domain, organization: organization, domain: "test.itsmycargo.com", default: false) }
+    let(:user) { FactoryBot.create(:users_user, password: "OldPassword1") }
 
     describe "#update" do
       subject(:reset_password) do
-        request.headers["Referer"] = "http://test.itsmycargo.com"
         patch :update, params: {
           id: refresh_token,
           password: password,
@@ -73,22 +69,22 @@ module Api
     describe "#create" do
       context "when user with the specified email is exists" do
         it "returns a 200 OK response" do
-          request.headers["Referer"] = "http://test.itsmycargo.com"
+          request.headers["Referer"] = "http://siren.itsmycargo.shop"
           post :create, params: { email: user.email }, as: :json
           expect(response).to have_http_status(:ok)
         end
 
         it "triggers the mailer job" do
-          request.headers["Referer"] = "http://test.itsmycargo.com"
+          request.headers["Referer"] = "http://bridge.itsmycargo.com"
           expect { post :create, params: { email: user.email }, as: :json }.to have_enqueued_job
         end
       end
 
       context "when the user originates from SSO" do
-        let(:user) { FactoryBot.create(:users_client, organization: organization, password: nil) }
+        let(:user) { FactoryBot.create(:users_user) }
 
         it "fails with 401 unauthorized" do
-          request.headers["Referer"] = "http://test.itsmycargo.com"
+          request.headers["Referer"] = "http://bridge.itsmycargo.com"
           post :create, params: { email: user.email }, as: :json
           expect(response).to have_http_status(:unauthorized)
         end
@@ -96,32 +92,32 @@ module Api
 
       context "when the user is not found" do
         it "fails with 401 unauthorized" do
-          request.headers["Referer"] = "http://test.itsmycargo.com"
+          request.headers["Referer"] = "http://bridge.itsmycargo.com"
           post :create, params: { email: "notauser@itsmycargo.test" }, as: :json
           expect(response).to have_http_status(:unauthorized)
         end
       end
 
       context "when referer header is not passed as header" do
-        it "fails with 404 not found" do
+        it "fails with 401 unauthorized" do
           post :create, params: { email: user.email }, as: :json
-          expect(response).to have_http_status(:not_found)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
       context "when referer is not whitelisted" do
-        it "fails with 404 not found" do
+        it "fails with 401 unauthorized" do
           request.headers["Referer"] = "http://example.domain.com"
           post :create, params: { email: user.email }, as: :json
-          expect(response).to have_http_status(:not_found)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
       context "when referer is not in valid format" do
-        it "fails with 404 not found" do
-          request.headers["Referer"] = "test.itsmycargo.com"
+        it "fails with 401 unauthorized" do
+          request.headers["Referer"] = "bridge.itsmycargo.com"
           post :create, params: { email: user.email }, as: :json
-          expect(response).to have_http_status(:not_found)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
     end

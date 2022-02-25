@@ -60,13 +60,25 @@ module Api
               end
             end
 
+            context "when domain wasn't matched by referrer_host but contains a valid orgnaization_slug Rails environment is 'development'" do
+              let(:rails_env) { instance_double("Rails environment", "development?": true) }
+
+              before do
+                FactoryBot.create(:organizations_domain, domain: "test_14.itsmycargo.shop", organization: organization, default: false)
+                request.headers["HTTP_REFERER"] = "http://test_14.itsmycargo.test"
+                allow(Rails).to receive(:env).and_return(rails_env)
+              end
+
+              it_behaves_like "a detected organization"
+            end
+
             context "when domain wasn't matched by referrer_host and Rails environment is 'development'" do
               let(:rails_env) { instance_double("Rails environment", "development?": true) }
 
               before do
-                allow(Organizations::Domain).to receive(:find_by).twice
+                FactoryBot.create(:organizations_domain, domain: "demo.local", organization: organization, default: false)
+                request.headers["HTTP_REFERER"] = "http://itsmycargo.test"
                 allow(Rails).to receive(:env).and_return(rails_env)
-                allow(Organizations::Domain).to receive(:find_by).with(domain: "demo.local").and_return(domain)
               end
 
               it_behaves_like "a detected organization"

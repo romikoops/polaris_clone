@@ -62,6 +62,9 @@ Api::Engine.routes.draw do
   end
 
   namespace :v2 do
+    namespace :admin do
+      resources :passwords, only: %i[create update]
+    end
     resources :organizations, only: :index do
       resources :queries, only: %i[create show index update] do
         get "result_set"

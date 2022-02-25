@@ -4,18 +4,18 @@ module Api
   module V2
     class PasswordsController < ApiController
       skip_before_action :doorkeeper_authorize!
-      skip_before_action :ensure_organization!
       before_action :validate_referrer!, only: [:create]
 
       def create
-        user = Users::User.find_by(email: params[:email])
+        user = Users::Client.find_by(email: params[:email])
         render json: { error_code: "user_not_available", success: false }, status: :unauthorized and return if user.blank?
 
         render json: { error_code: "sso_user_not_supported", success: false }, status: :unauthorized and return if user.crypted_password.nil?
 
         user.generate_reset_password_token!
-        Notifications::UserMailer.with(
+        Notifications::ClientMailer.with(
           domain: referrer_host,
+          organization: current_organization,
           user: user
         ).reset_password_email.deliver_later
 
@@ -36,7 +36,7 @@ module Api
       private
 
       def user
-        @user ||= Users::User.load_from_reset_password_token(params[:id])
+        @user ||= Users::Client.load_from_reset_password_token(params[:id])
       end
 
       # Creates and returns an instance of StrongPassword Strength checker which restricts password to be atleast 6 chars long
