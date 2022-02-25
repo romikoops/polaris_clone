@@ -80,6 +80,10 @@ module ExcelDataServices
             end
           end
         end
+
+        def identifier
+          proc { |value| value.casecmp("zipcode").zero? ? "postal_code" : value.downcase }
+        end
       end
     end
   end

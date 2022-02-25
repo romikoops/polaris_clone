@@ -25,17 +25,18 @@ module ExcelDataServices
           attr_reader :month, :row
 
           def effective_date
-            [month_as_date.beginning_of_month, validity.first].max if month_is_valid?
+            [month_as_range.first, validity.first].max if month_is_valid?
           end
 
           def new_expiration_date
-            [month_as_date.end_of_month, validity.last].min if month_is_valid?
+            [month_as_range.last, validity.last].min if month_is_valid?
           end
 
-          def month_as_date
-            @month_as_date ||= [validity.first.year, validity.last.year]
-              .map { |year| Date.parse("#{month_abreviation} #{year}") }
-              .find { |month_as_date| validity.cover?(month_as_date) }
+          def month_as_range
+            @month_as_range ||= [validity.first.year, validity.last.year]
+              .uniq
+              .map { |year| month_as_range_for(year: year) }
+              .find { |month_as_range| validity.overlaps?(month_as_range) }
           end
 
           def month_abreviation
@@ -44,11 +45,16 @@ module ExcelDataServices
           end
 
           def month_is_valid?
-            !(month.blank? || month.casecmp("n/a").zero? || month_as_date.blank?)
+            !(month.blank? || month.casecmp("n/a").zero? || month_as_range.blank?)
           end
 
           def validity
             @validity ||= Range.new(row["effective_date"], row["expiration_date"])
+          end
+
+          def month_as_range_for(year:)
+            month_as_date = Date.parse("#{month_abreviation} #{year}")
+            Range.new(month_as_date, month_as_date.end_of_month)
           end
         end
       end

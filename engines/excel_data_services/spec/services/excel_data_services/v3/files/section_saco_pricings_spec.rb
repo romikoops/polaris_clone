@@ -97,7 +97,7 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
         let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
 
         it "collates the errors in the 'errors' object and exits" do
-          expect(result_state.errors.map(&:reason)).to include("Required data is missing in column: destination_locode. Please fill in the missing data and try again.")
+          expect(result_state.errors.map(&:reason)).to include("Required data is missing at: (Sheet: Sheet1) row: 3, column: G. Please fill in the missing data and try again.")
         end
       end
     end

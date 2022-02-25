@@ -16,7 +16,7 @@ RSpec.describe ExcelDataServices::V3::Operations::TruckingZones do
           "sheet_name" => "Sheet2",
           "identifier" => "postal_code",
           "postal_code" => nil,
-          "range" => "20030 - 20050",
+          "range" => "01060 - 01068",
           "country_code" => "DE",
           "zone" => nil,
           "distance" => nil,
@@ -27,7 +27,7 @@ RSpec.describe ExcelDataServices::V3::Operations::TruckingZones do
       end
 
       it "returns only the valid postal codes within that range" do
-        expect(extracted_table["postal_code"].to_a).to eq(["20038"])
+        expect(extracted_table["postal_code"].to_a).to eq(["01067"])
       end
     end
 

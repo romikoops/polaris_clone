@@ -218,4 +218,5 @@ v2_uploaders:
   local_charges: false
   hubs: false
   clients: false
+  truckings: false
 include_location_groups: false

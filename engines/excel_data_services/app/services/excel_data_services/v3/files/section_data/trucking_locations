@@ -1,0 +1,72 @@
+
+matrix "identifier",
+  rows: "1",
+  columns: "B",
+  sanitizer: "identifier",
+  validator: "identifier",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+
+column "zone",
+  sanitizer: "text",
+  validator: "zone",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+column "postal_code",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: true,
+  alternative_keys: ["zipcode"],
+  type: :object,
+  sheet_name: "Zones"
+column "locode",
+  sanitizer: "text",
+  validator: "optional_locode",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+column "distance",
+  sanitizer: "integer",
+  validator: "optional_numeric",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+column "city",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+column "province",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+column "range",
+  sanitizer: "text",
+  validator: "zone_range",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+column "country_code",
+  sanitizer: "upcase",
+  validator: "country_code",
+  required: true,
+  type: :object,
+  sheet_name: "Zones"
+
+add_framer "TruckingRates"
+
+add_operation "TruckingZones"
+
+add_validator "QueryType"
+add_validator "LocationsLocation"
+add_validator "Country"
+
+add_formatter "TruckingLocation"
+
+model_importer Trucking::Location
+target_model Trucking::Location

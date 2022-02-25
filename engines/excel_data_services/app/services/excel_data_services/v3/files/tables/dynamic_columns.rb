@@ -37,11 +37,11 @@ module ExcelDataServices
             end
 
             def columns
-              target_headers.map do |header|
+              target_headers.map do |column_index|
                 DynamicSheetColumn.new(
                   xlsx: xlsx,
                   sheet_name: sheet_name,
-                  header: header
+                  column_index: column_index
                 ).column
               end
             end
@@ -49,46 +49,72 @@ module ExcelDataServices
             delegate :xlsx, :sheet_name, to: :sheet
 
             def headers
-              header_values.reject { |value| sheet.columns.any? { |col| col.matches_any_header?(value: value) } }
+              1.upto(roo_sheet.last_column).to_a - defined_columns
             end
 
             def header_values
-              xlsx.sheet(sheet_name).row(header_row).compact.map(&:downcase)
+              @header_values ||= roo_sheet.row(header_row).map(&:downcase)
             end
 
             def target_headers
-              excluded = (headers - excluding.map(&:downcase))
+              excluded = (headers - excluded_columns)
               return excluded if including.blank?
 
-              excluded & including
+              excluded & included_columns
+            end
+
+            def roo_sheet
+              @roo_sheet ||= xlsx.sheet(sheet_name)
+            end
+
+            def excluded_columns
+              @excluded_columns ||= excluding.map(&:downcase)
+                .map { |excluded_header| header_values.index(excluded_header) }
+                .compact
+                .map { |excluded_header_index| excluded_header_index + 1 }
+            end
+
+            def included_columns
+              @included_columns ||= including.map(&:downcase)
+                .map { |included_header| header_values.index(included_header) }
+                .map { |excluded_index| excluded_index + 1 }
+                .reject(&:zero?)
+            end
+
+            def defined_columns
+              @defined_columns ||= sheet.sheet_columns.map(&:sheet_column)
             end
           end
 
           class DynamicSheetColumn
-            attr_reader :sheet_name, :xlsx, :header
+            attr_reader :sheet_name, :xlsx, :column_index
 
-            def initialize(sheet_name:, xlsx:, header:)
+            def initialize(sheet_name:, xlsx:, column_index:)
               @sheet_name = sheet_name
               @xlsx = xlsx
-              @header = header.downcase
+              @column_index = column_index
             end
 
             def column
               ExcelDataServices::V3::Files::Tables::Column.new(
                 xlsx: xlsx,
                 sheet_name: sheet_name,
-                header: "Dynamic:#{header.strip}",
+                header: "Dynamic:#{header.downcase.strip}",
                 options: options
               )
             end
 
             def options
-              {
+              ExcelDataServices::V3::Files::Tables::Options.new(options: {
                 dynamic: true,
                 alternative_keys: [header.downcase],
                 sanitizer: sanitizer,
                 validator: validator
-              }
+              })
+            end
+
+            def header
+              (xlsx.sheet(sheet_name).cell(1, column_index) || column_index).to_s.strip
             end
 
             def sanitizer

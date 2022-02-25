@@ -122,28 +122,12 @@ module ExcelDataServices
             options.unique
           end
 
-          def parse_coordinate_string(input:, type:)
-            if input.is_a?(String) && input.include?("?")
-              input = input.gsub("?", type == :row ? sheet.last_row.to_s : sheet.last_column_as_letter)
-            end
-            sequence = if input.is_a?(Array)
-              input
-            elsif input.is_a?(String) && input.length == 1
-              [input]
-            elsif input.is_a?(String) && input.include?(":")
-              start_point, end_point = input.split(":")
-
-              start_point.upto(end_point).to_a
-            else
-              raise ArgumentError
-            end
-            return sequence unless type == :row
-
-            sequence.map(&:to_i)
-          end
-
           def coordinate_values
             @coordinate_values ||= sheet.matrix(coordinate_pairs)
+          end
+
+          def parse_coordinate_string(input: rows, type: :row)
+            ExcelDataServices::V3::Files::Coordinates::Parser.new(sheet: sheet, coordinates: input, axis: type).perform
           end
         end
       end

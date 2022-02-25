@@ -13,7 +13,11 @@ module ExcelDataServices
         end
 
         def rate_versions
-          @rate_versions ||= frame[frame["rate_type"] == "trucking_rate"][VERSION_KEYS].to_a.uniq
+          @rate_versions ||= frame[frame["rate_type"] == "trucking_rate"][valid_filter_keys].to_a.uniq
+        end
+
+        def valid_filter_keys
+          VERSION_KEYS & frame.keys
         end
 
         class TruckingFromFrame

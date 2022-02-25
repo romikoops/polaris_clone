@@ -19,9 +19,9 @@ module ExcelDataServices
         end
 
         def perform
-          @state.frame = data
+          @state.frame = framed_data
           @state.errors |= errors
-          execute_actions(actions: (row_validations + operations))
+          execute_actions(actions: (row_validations + operations + data_validations))
           nested_pipeline(connected_actions: dependency_actions)
           state
         end
@@ -60,8 +60,12 @@ module ExcelDataServices
           end
         end
 
-        def data
-          @data ||= sheet_objects.inject(Rover::DataFrame.new) do |result, sheet_object|
+        def framed_data
+          @framed_data ||= framer.new(frame: matrix_data).perform
+        end
+
+        def matrix_data
+          @matrix_data ||= sheet_objects.inject(Rover::DataFrame.new) do |result, sheet_object|
             result.concat(sheet_object.perform)
           end
         end
@@ -111,7 +115,7 @@ module ExcelDataServices
         end
 
         delegate :columns, :requirements, :prerequisites, :operations, :dynamic_columns, :model,
-          :row_validations, :sorted_dependencies, :dependency_actions, to: :sheet_parser
+          :row_validations, :sorted_dependencies, :dependency_actions, :matrixes, :framer, :data_validations, to: :sheet_parser
 
         private
 

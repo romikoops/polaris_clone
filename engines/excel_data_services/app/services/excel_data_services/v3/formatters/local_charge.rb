@@ -24,7 +24,7 @@ module ExcelDataServices
         end
 
         class FormattedLocalCharge
-          NAMESPACE_UUID = UUIDTools::UUID.parse(Legacy::LocalCharge::UUID_V5_NAMESPACE)
+          NAMESPACE_UUID = ::UUIDTools::UUID.parse(Legacy::LocalCharge::UUID_V5_NAMESPACE)
           UUID_KEYS = %w[hub_id counterpart_hub_id tenant_vehicle_id cargo_class mode_of_transport group_id direction organization_id].freeze
           def initialize(frame:, state:)
             @frame = frame
@@ -79,7 +79,7 @@ module ExcelDataServices
           end
 
           def uuid
-            UUIDTools::UUID.sha1_create(NAMESPACE_UUID, row.values_at(*UUID_KEYS).map(&:to_s).join).to_s
+            ::UUIDTools::UUID.sha1_create(NAMESPACE_UUID, row.values_at(*UUID_KEYS).map(&:to_s).join).to_s
           end
         end
 

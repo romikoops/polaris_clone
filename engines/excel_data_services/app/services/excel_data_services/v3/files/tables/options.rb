@@ -47,6 +47,14 @@ module ExcelDataServices
             @header_row ||= options[:header_row]
           end
 
+          def column_length
+            @column_length ||= options[:column_length]
+          end
+
+          def column_index
+            @column_index ||= options[:column_index]
+          end
+
           def errors
             %i[dynamic unique required].each_with_object([]) do |key, errs|
               next if [true, false, nil].include?(options[key])

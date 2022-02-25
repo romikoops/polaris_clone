@@ -37,7 +37,7 @@ module ExcelDataServices
 
           def sanitized_range_rows
             rows = frame[frame["country_code"] == country_code]
-            rows[!rows["range"].missing]["range"].to_a
+            rows[!rows["range"].missing]["range"].to_a.uniq
           end
 
           def postal_zone_range

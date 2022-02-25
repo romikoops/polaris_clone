@@ -8,7 +8,7 @@ module ExcelDataServices
           {
             ::Float => ->(obj) { decimal.call(obj).positive? },
             ::Integer => ->(obj) { integer.call(obj).positive? },
-            ::String => ->(obj) { strip.call(obj).match?(/t|T/) },
+            ::String => ->(obj) { strip.call(obj).match?(/t|T|x|X/) },
             ::NilClass => ->(_obj) { false },
             ::TrueClass => ->(_obj) { true },
             ::FalseClass => ->(_obj) { false }

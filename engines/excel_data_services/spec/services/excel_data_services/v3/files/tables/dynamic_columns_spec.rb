@@ -41,5 +41,15 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::DynamicColumns do
 
       it_behaves_like "#columns"
     end
+
+    context "when defining the columns to be included" do
+      let(:expected_headers) { %w[Dynamic:ofr] }
+      let(:excluding) { %w[REMARKS VM_RATIO WM_RATIO TRANSIT_TIME] }
+      let(:including) { ["OFR"] }
+      let(:header_row) { 1 }
+      let(:sheet_name) { "Sheet2" }
+
+      it_behaves_like "#columns"
+    end
   end
 end

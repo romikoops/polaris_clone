@@ -19,7 +19,7 @@ RSpec.describe ExcelDataServices::V3::Upload do
     end
 
     context "when the sheet type is not recognised" do
-      let(:xlsx) { File.open(file_fixture("excel/example_trucking.xlsx")) }
+      let(:xlsx) { File.open(file_fixture("dummy.xlsx")) }
 
       it "returns false when the sheet is a trucking sheet" do
         expect(service.valid?).to eq(false)
@@ -48,14 +48,14 @@ RSpec.describe ExcelDataServices::V3::Upload do
 
   describe "#schema_types" do
     it "returns supported V3 schema types" do
-      expect(service.schema_types).to match(%w[SacoPricings Pricings Schedules LocalCharges Hubs Clients])
+      expect(service.schema_types).to match(%w[SacoPricings Pricings Schedules LocalCharges Hubs Clients Truckings])
     end
 
     context "with disabled uploaders option" do
       let(:arguments) { { disabled_uploaders: %w[SacoPricings Pricings] } }
 
       it "returns only enabled uploaders" do
-        expect(service.schema_types).to match(%w[Schedules LocalCharges Hubs Clients])
+        expect(service.schema_types).to match(%w[Schedules LocalCharges Hubs Clients Truckings])
       end
     end
   end

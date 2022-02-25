@@ -13,7 +13,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
   end
 
   let!(:trucking_locations) do
-    ("20037".upto("20039").to_a | ["20457"]).map do |postal_code|
+    ("01060".upto("01068").to_a | ["20457"]).map do |postal_code|
       FactoryBot.create(:trucking_location,
         :zipcode,
         data: postal_code,
@@ -92,7 +92,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
       let!(:result) do
         described_class.run(file: trucking_file, arguments: arguments)
       end
-      let(:location) { trucking_locations.find { |tl| tl.data == "20038" } }
+      let(:location) { trucking_locations.find { |tl| tl.data == "01067" } }
       let(:old_validity) { Range.new(Date.parse("2020/06/01"), Date.parse("2022/12/31"), exclude_end: true) }
       let(:sheet_validity) { Range.new(Date.parse("2020/09/01"), Date.parse("2021/12/31"), exclude_end: true) }
       let(:new_past_validity) { Range.new(Date.parse("2020/06/01"), Date.parse("2020/09/01"), exclude_end: true) }
@@ -116,7 +116,7 @@ RSpec.describe ExcelDataServices::DataFrames::Runners::Blocks do
 
         it "returns the error", :aggregate_failures do
           expect(error.exception_class).to eq(ExcelDataServices::Validators::ValidationErrors::InsertableChecks)
-          expect(error.reason).to eq("The location '20038, 20037 - 20039' cannot be found.")
+          expect(error.reason).to eq("The location '01067, 01060 - 01068' cannot be found.")
           expect(error.type).to eq(:warning)
         end
       end

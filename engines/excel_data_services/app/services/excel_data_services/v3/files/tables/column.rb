@@ -7,55 +7,31 @@ module ExcelDataServices
         class Column
           # A Column class is defined in the config file. It results in one column of the data frame and allows you to configure
           # santizers, fallback values, validators, required content and more
-          attr_reader :header, :sanitizer, :validator, :required, :alternative_keys, :xlsx, :type, :sheet_name, :fallback, :dynamic
+          attr_reader :header, :xlsx, :type, :sheet_name, :options
+
+          ALPHA_INDEX = ("A".."ZZ").each.with_index(1).to_h.freeze
 
           def initialize(xlsx:, header:, sheet_name:, options: {})
             @xlsx = xlsx
             @options = options
             @header = header.strip
             @sheet_name = sheet_name
-            @sanitizer = options[:sanitizer] || "text"
-            @validator = options[:validator] || "string"
-            @required = options[:required]
-            @unique = options[:unique].present?
-            @alternative_keys = options[:alternative_keys] || []
-            @fallback = options[:fallback]
-            @type = options[:type] || :object
-            @dynamic = options[:dynamic].present?
-          end
-
-          def cells
-            @cells ||= sheet_values.map.with_index do |value, index|
-              ExcelDataServices::V3::Files::Tables::CellParser.new(
-                container: self,
-                row: index + 2,
-                input: value,
-                column: sheet_column
-              )
-            end
           end
 
           def frame
-            @frame ||= Rover::DataFrame.new(
-              {
-                header => values.presence || nil_column,
-                "row" => rows,
-                "sheet_name" => [sheet_name] * rows.count
-              },
-              types: { header => type }
-            )
+            @frame ||= matrix.frame
+          end
+
+          def matrix
+            @matrix ||= Matrix.new(xlsx: xlsx, header: header, rows: rows, columns: ALPHA_INDEX.key(sheet_column), sheet_name: sheet_name, options: options)
           end
 
           def frame_type
             { header => type }
           end
 
-          def values
-            @values ||= cells.map(&:value)
-          end
-
           def rows
-            @rows ||= cells.map(&:row)
+            @rows ||= [(header_row + 1), last_row].map(&:to_s).join(":")
           end
 
           def valid?
@@ -63,15 +39,7 @@ module ExcelDataServices
           end
 
           def errors
-            @errors ||= [
-              cells.map(&:error),
-              uniqueness_constraint_error,
-              required_data_missing_error
-            ].flatten.compact
-          end
-
-          def sheet_values
-            @sheet_values ||= sheet_column ? sheet.column(sheet_column).drop(1) : fall_back_row
+            @errors ||= matrix.errors
           end
 
           def header_row
@@ -83,7 +51,9 @@ module ExcelDataServices
           end
 
           def sheet_column
-            @sheet_column ||= begin
+            @sheet_column ||= if column_index
+              column_index
+            else
               col = sheet.row(header_row).index { |cell_value| matches_any_header?(value: cell_value) }
               col ? col + 1 : col
             end
@@ -97,53 +67,16 @@ module ExcelDataServices
 
           private
 
-          def unique_constraint_satisfied?
-            return true unless unique?
-
-            sheet_values.uniq.compact.length == sheet_values.compact.length
-          end
-
-          def fall_back_row
-            [fallback] * (sheet.last_row - 1)
-          end
+          delegate :fallback, :dynamic, :column_index, :column_length, :alternative_keys, :required, :sanitizer, :validator, to: :options
 
           def sheet
             xlsx.sheet(sheet_name)
           end
 
-          def nil_column
-            [nil] * rows.count
-          end
+          def last_row
+            return sheet.last_row if column_length.nil?
 
-          def uniqueness_constraint_error
-            return if unique_constraint_satisfied?
-
-            ExcelDataServices::V3::Files::Error.new(
-              type: :type_error,
-              row_nr: "",
-              col_nr: sheet_column,
-              sheet_name: sheet_name,
-              reason: "Duplicates exists in column: #{header}. Please remove all duplicate data and try again.",
-              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks::DuplicateDataFound
-            )
-          end
-
-          def required_data_missing_error
-            blank_cells = cells.select(&:blank?)
-            return if required.blank? || (required.present? && blank_cells.empty?)
-
-            ExcelDataServices::V3::Files::Error.new(
-              type: :type_error,
-              row_nr: blank_cells.map(&:row).join(", "),
-              col_nr: sheet_column,
-              sheet_name: sheet_name,
-              reason: "Required data is missing in column: #{header}. Please fill in the missing data and try again.",
-              exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks::RequiredDataMissing
-            )
-          end
-
-          def unique?
-            @unique
+            header_row + column_length
           end
         end
       end

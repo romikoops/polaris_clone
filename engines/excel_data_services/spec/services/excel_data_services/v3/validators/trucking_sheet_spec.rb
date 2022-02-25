@@ -10,7 +10,7 @@ RSpec.describe ExcelDataServices::V3::Validators::TruckingSheet do
   let(:rows) do
     test_groupings.map do |test_grouping|
       {
-        "zone_row" => 6,
+        "row" => 6,
         "zone" => "1.0",
         "postal_code" => "20457",
         "country_code" => "DE",
@@ -32,6 +32,10 @@ RSpec.describe ExcelDataServices::V3::Validators::TruckingSheet do
       }.merge(test_grouping)
     end
   end
+
+  before { Timecop.freeze(Date.parse("2020/01/01")) }
+
+  after { Timecop.return }
 
   describe ".state" do
     context "when there is a gap in the weight brackets" do
@@ -71,13 +75,41 @@ RSpec.describe ExcelDataServices::V3::Validators::TruckingSheet do
       let(:test_groupings) do
         [
           { "zone" => "1.0", "postal_code" => "20457" },
-          { "zone" => "2.0", "postal_code" => "20457", "zone_row" => 7 }
+          { "zone" => "2.0", "postal_code" => "20457", "row" => 7 }
         ]
       end
 
       let(:error_messages) { ["Places cannot exist in multiple zones. 20457 is defined in mulitple zones (1.0, 2.0). Please remove all but one."] }
 
       it "returns the state with the missing RANGE_MIN error message" do
+        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when the range is invalid" do
+      let(:test_groupings) do
+        [
+          { "range" => "9999 - 1111" }
+        ]
+      end
+
+      let(:error_messages) { ["Invalid Range: Ranges are defined from lower bound to upper bound."] }
+
+      it "returns the state with the invalid range error message" do
+        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when the expiration_date is in the past" do
+      let(:test_groupings) do
+        [
+          { "expiration_date" => Date.parse("Tue, 01 Sep 2019") }
+        ]
+      end
+
+      let(:error_messages) { ["Already expired rates are not permitted."] }
+
+      it "returns the state with the invalid range error message" do
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end

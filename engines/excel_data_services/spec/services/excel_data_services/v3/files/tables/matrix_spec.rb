@@ -60,7 +60,7 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::Matrix do
 
     context "when required data is missing" do
       let(:columns) { "Z" }
-      let(:rows) { ["2", "3"] }
+      let(:rows) { "2:3" }
       let(:required_data_missing_error) { "Required data is missing at: (Sheet: Sheet1) row: 2, column: Z. Please fill in the missing data and try again." }
 
       it "returns errors specifying the missing data's location" do

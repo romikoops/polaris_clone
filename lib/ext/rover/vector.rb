@@ -28,6 +28,8 @@ module Rover
         data = data.to_a
         data = if type
           numo_type.cast(data)
+        elsif data.present? && data.all? { |v| v.is_a?(NilClass) }
+          Numo::RObject.cast(data)
         elsif data.present? && data.all? { |v| v.is_a?(Integer) }
           Numo::Int64.cast(data)
         elsif data.present? && data.all? { |v| v.is_a?(Numeric) }
@@ -51,6 +53,28 @@ module Rover
         value.positive?
       else
         value
+      end
+    end
+
+    {
+      "==" => "eq",
+      "!=" => "ne",
+      ">" => "gt",
+      ">=" => "ge",
+      "<" => "lt",
+      "<=" => "le"
+    }.each do |op, meth|
+      define_method(op) do |other|
+        other = other.to_numo if other.is_a?(Vector)
+        v =
+          if other.is_a?(Numo::RObject)
+            @data.to_a.zip(other).map { |v, ov| v == ov }
+          elsif other.is_a?(Numeric) || other.is_a?(Numo::NArray)
+            @data.send(meth, other)
+          else
+            @data.to_a.map { |v| v.send(op, other) }
+          end
+          Vector.new(Numo::Bit.cast(v))
       end
     end
   end

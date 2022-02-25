@@ -59,7 +59,7 @@ module ExcelDataServices
             cargo_classless_fees
               .left_join(cargo_class_frame, on: { "organization_id" => "organization_id" })
               .left_join(cargo_classed_fees, on: { "cargo_class" => "cargo_class" })
-          end
+            end
         end
 
         def serviced

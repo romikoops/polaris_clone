@@ -24,7 +24,7 @@ module ExcelDataServices
         end
 
         def filtered_zone_columns
-          @filtered_zone_columns ||= (ZONE_COLUMNS | frame.keys).select { |header| !frame[header].missing && frame[header].any?(&:present?) }
+          @filtered_zone_columns ||= (ZONE_COLUMNS & frame.keys).select { |header| !frame[header].missing && frame[header].any?(&:present?) }
         end
 
         def identifier
@@ -44,7 +44,7 @@ module ExcelDataServices
         end
 
         def country_codes
-          zone_range_frame["country_code"].uniq.to_a
+          @country_codes ||= zone_range_frame["country_code"].uniq.to_a
         end
       end
     end

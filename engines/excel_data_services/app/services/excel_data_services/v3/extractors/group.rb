@@ -5,28 +5,35 @@ module ExcelDataServices
     module Extractors
       class Group < ExcelDataServices::V3::Extractors::Base
         def extracted
-          @extracted ||= default_group_frame
-            .concat(group_name_frame) # Join in all that have Group Name
-            .concat(group_id_frame) # Join in all that have Group ID
+          @extracted ||= [default_group_frame, group_name_frame, group_id_frame].compact
+            .inject(Rover::DataFrame.new) do |result, group_frame|
+              result.concat(group_frame)
+            end
         end
 
         def group_name_frame
+          return if rows_identified_by_name_only.blank?
+
           @group_name_frame ||= Rover::DataFrame.new(
-            frame[(!frame["group_name"].missing) & (frame["group_id"].missing)].left_join(extracted_frame, on: { "group_name" => "group_name" }),
+            rows_identified_by_name_only.left_join(extracted_frame, on: { "group_name" => "group_name" }),
             types: frame_types
           )
         end
 
         def group_id_frame
+          return if rows_identified_by_id.blank?
+
           @group_id_frame ||= Rover::DataFrame.new(
-            frame[!frame["group_id"].missing].left_join(extracted_frame, on: { "group_id" => "group_id" }),
+            rows_identified_by_id.left_join(extracted_frame, on: { "group_id" => "group_id" }),
             types: frame_types
           )
         end
 
         def default_group_frame
+          return if rows_for_default_group.blank?
+
           @default_group_frame ||= Rover::DataFrame.new(
-            frame[(frame["group_name"].missing) & (frame["group_id"].missing)],
+            rows_for_default_group,
             types: frame_types
           ).tap do |tapped_frame|
             tapped_frame["group_id"] = default_group_id
@@ -44,6 +51,26 @@ module ExcelDataServices
 
         def default_group_id
           Groups::Group.find_by(organization_id: Organizations.current_id, name: "default").id
+        end
+
+        def rows_identified_by_id
+          @rows_identified_by_id ||= frame[!frame["group_id"].missing] if frame.include?("group_id")
+        end
+
+        def rows_identified_by_name_only
+          @rows_identified_by_name_only ||= (rows_without_group_id[!rows_without_group_id["group_name"].missing] if frame_contains_group_name? && rows_without_group_id.present?)
+        end
+
+        def rows_for_default_group
+          @rows_for_default_group ||= (rows_without_group_id[rows_without_group_id["group_name"].missing] if frame_contains_group_name? && rows_without_group_id.present?)
+        end
+
+        def rows_without_group_id
+          @rows_without_group_id ||= frame[frame["group_id"].missing]
+        end
+
+        def frame_contains_group_name?
+          @frame_contains_group_name ||= frame.include?("group_name")
         end
       end
     end

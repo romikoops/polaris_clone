@@ -19,7 +19,7 @@ module ExcelDataServices
       attr_reader :file, :options
 
       def uploader_service
-        @uploader_service ||= ExcelDataServices::V2::Upload.new(
+        @uploader_service ||= ExcelDataServices::V3::Upload.new(
           file: file,
           arguments: options.merge({ disabled_uploaders: v2_disabled_uploaders })
         )

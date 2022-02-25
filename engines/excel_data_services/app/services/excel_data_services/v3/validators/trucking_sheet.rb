@@ -9,9 +9,11 @@ module ExcelDataServices
         end
 
         def append_errors_to_state
+          invalid_zone_range_errors
           brackets_missing_errors
           bracket_gaps_errors
           duplicate_zone_errors
+          expired_rates_errors
         end
 
         def brackets_missing_errors
@@ -32,12 +34,28 @@ module ExcelDataServices
         end
 
         def duplicate_zone_errors
-          frame[!frame["zone_row"].missing][["zone", identifier, "zone_row"]].to_a.uniq
+          frame[!frame["row"].missing][["zone", identifier, "row"]].to_a.uniq
             .group_by { |row| row[identifier] }
             .reject { |_identifier_key, zones| zones.count == 1 }
             .each do |identifier_key, zone_rows|
               @state.errors << error(row: zone_rows.first, message: "Places cannot exist in multiple zones. #{identifier_key} is defined in mulitple zones (#{zone_rows.pluck('zone').join(', ')}). Please remove all but one.", attribute: identifier)
             end
+        end
+
+        def invalid_zone_range_errors
+          frame["range"].to_a.uniq.compact.each do |range|
+            next if range.match?(/[A-Z]{1,}/)
+
+            values = range.split("-").map(&:strip).map(&:to_i)
+            frame_row = frame[frame["range"] == range].first.to_a.first
+            @state.errors << error(row: frame_row, message: "Invalid Range: Ranges are defined from lower bound to upper bound.", attribute: "range") if values.first > values.last
+          end
+        end
+
+        def expired_rates_errors
+          rate_frame[%w[expiration_date sheet_name]].to_a.uniq.reject { |date_and_sheet| Time.zone.today < date_and_sheet["expiration_date"] }.each do |frame_row|
+            @state.errors << error(row: frame_row, message: "Already expired rates are not permitted.", attribute: "expiration_date")
+          end
         end
 
         def identifier

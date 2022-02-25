@@ -18,7 +18,7 @@ module ExcelDataServices
         end
 
         def perform
-          query_results.inject([]) do |memo, result|
+          query_results.uniq.inject([]) do |memo, result|
             memo | result.delete_if { |_key, value| value.blank? }.keys
           end
         end

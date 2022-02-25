@@ -5,7 +5,7 @@ module ExcelDataServices
     module Formatters
       class Itinerary < ExcelDataServices::V3::Formatters::Base
         ATTRIBUTE_KEYS = %w[origin_hub_id destination_hub_id mode_of_transport transshipment origin_hub destination_hub organization_id].freeze
-        NAMESPACE_UUID = UUIDTools::UUID.parse(Legacy::Itinerary::UUID_V5_NAMESPACE)
+        NAMESPACE_UUID = ::UUIDTools::UUID.parse(Legacy::Itinerary::UUID_V5_NAMESPACE)
         UUID_KEYS = %w[origin_hub_id destination_hub_id organization_id transshipment mode_of_transport].freeze
 
         def insertable_data

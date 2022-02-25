@@ -43,6 +43,9 @@ module ExcelDataServices
         class CargoClassType < TypeValidity
         end
 
+        class OptionalCargoClassType < TypeValidity
+        end
+
         class DistanceType < TypeValidity
         end
 
@@ -116,6 +119,9 @@ module ExcelDataServices
         end
 
         class EmailType < TypeValidity
+        end
+
+        class IdentifierType < TypeValidity
         end
       end
     end

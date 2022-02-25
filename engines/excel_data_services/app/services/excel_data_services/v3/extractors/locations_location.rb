@@ -7,10 +7,17 @@ module ExcelDataServices
         private
 
         def extracted
-          non_location_based_rows
-            .concat(extracted_locode_locations)
-            .concat(extracted_postal_code_locations)
-            .concat(extracted_city_locations)
+          @extracted ||= extracted_location_variants.inject(non_location_based_frame) do |result_frame, variant|
+            result_frame.concat(variant)
+          end
+        end
+
+        def extracted_location_variants
+          [
+            extracted_locode_locations,
+            extracted_postal_code_locations,
+            extracted_city_locations
+          ].compact
         end
 
         def frame_data
@@ -20,20 +27,21 @@ module ExcelDataServices
         end
 
         def extracted_locode_locations
-          @extracted_locode_locations ||= locode_rows.left_join(extracted_frame, on: { "locode" => "location_name" })
+          @extracted_locode_locations ||= locode_rows.left_join(extracted_frame, on: { "locode" => "location_name" }) if locode_rows.present?
         end
 
         def extracted_postal_code_locations
-          @extracted_postal_code_locations ||= postal_code_rows
-            .left_join(extracted_frame, on: { "postal_code" => "location_name", "country_code" => "country_code" })
+          @extracted_postal_code_locations ||= postal_code_rows.left_join(extracted_frame, on: { "postal_code" => "location_name", "country_code" => "country_code" }) if postal_code_rows.present?
         end
 
         def extracted_city_locations
-          @extracted_city_locations ||= Rover::DataFrame.new(
-            city_rows.to_a.map do |row|
-              row.merge("locations_location_id" => LocationIdFromRow.new(row: row, identifier: identifier).perform)
-            end
-          )
+          @extracted_city_locations ||= if city_rows.present?
+            Rover::DataFrame.new(
+              city_rows.to_a.map do |row|
+                row.merge("locations_location_id" => LocationIdFromRow.new(row: row, identifier: identifier).perform)
+              end
+            )
+          end
         end
 
         def frame_types
@@ -66,6 +74,18 @@ module ExcelDataServices
 
         def identifier
           @identifier ||= frame["identifier"].to_a.first
+        end
+
+        def non_location_based_frame
+          @non_location_based_frame ||= non_location_based_rows.left_join(non_location_based_id_frame, on: { "query_type" => "query_type" })
+        end
+
+        def non_location_based_id_frame
+          @non_location_based_id_frame ||= Rover::DataFrame.new(
+            QueryType::QUERY_TYPE_ENUM.except("location").values.map do |enum_value|
+              { "locations_location_id" => nil, "query_type" => enum_value }
+            end
+          )
         end
 
         class LocationIdFromRow

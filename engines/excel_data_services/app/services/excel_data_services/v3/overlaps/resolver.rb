@@ -68,7 +68,7 @@ module ExcelDataServices
         end
 
         def conflict_keys
-          model.column_names.include?(DATE_KEYS.first) ? keys + DATE_KEYS : keys
+          keys + DATE_KEYS
         end
       end
     end

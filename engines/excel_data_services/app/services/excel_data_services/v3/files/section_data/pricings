@@ -90,6 +90,7 @@ column "internal",
   sanitizer: "internal",
   validator: "boolean",
   required: false,
+  fallback: false,
   type: :object
 column "transshipment",
   sanitizer: "text",

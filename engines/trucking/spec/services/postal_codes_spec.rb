@@ -26,7 +26,7 @@ RSpec.describe Trucking::PostalCodes do
     let(:results) { described_class.all }
 
     it "returns the postal codes with country codes in an array", :aggregate_failures do
-      expect(results.length).to eq(31340)
+      expect(results.length).to eq(31192)
       expect(results.first.keys).to match_array(["postal_code", "country_code"])
     end
   end

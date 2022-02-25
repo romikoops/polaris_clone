@@ -4,10 +4,10 @@ module ExcelDataServices
   module V3
     module Files
       class SheetParser
-        # This class holds the abstracted logc for the parsing and execution of config files.
+        # This class holds the abstracted logic for the parsing and execution of config files.
         SPLIT_PATTERN = /^(add_validator)|(add_formatter)|(add_extractor)|(model_importer)|(conflict)|(target_model)/.freeze
         attr_reader :section, :state, :type, :columns, :requirements, :prerequisites, :dynamic_columns,
-          :importers, :row_validations, :pipelines, :operations
+          :importers, :row_validations, :data_validations, :pipelines, :operations, :matrixes, :framer
 
         delegate :xlsx, :organization, to: :state
 
@@ -16,12 +16,15 @@ module ExcelDataServices
           @state = state
           @type = type
           @columns = []
+          @matrixes = []
           @requirements = []
           @prerequisites = []
           @pipelines = []
           @operations = []
           @dynamic_columns = []
           @row_validations = []
+          @data_validations = []
+          @framer = ExcelDataServices::V3::Framers::Table
           parse_config
         end
 
@@ -43,9 +46,37 @@ module ExcelDataServices
         end
 
         def column(header, options = {})
-          existing_columns = @columns.select { |col| col.header == header }
-          new_columns = xlsx.sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Column.new(xlsx: xlsx, sheet_name: sheet_name, header: header, options: options) }
-          @columns = (@columns - existing_columns) + new_columns
+          @columns = expand_for_sheets(sheet_name: options[:sheet_name], exclude_sheets: options[:exclude_sheets]).inject(@columns) do |existing_columns, sheet_name|
+            new_column = ExcelDataServices::V3::Files::Tables::Column.new(
+              xlsx: xlsx,
+              sheet_name: sheet_name,
+              header: header,
+              options: ExcelDataServices::V3::Files::Tables::Options.new(options: options)
+            )
+            merge_item_into_collection(collection: existing_columns, item: new_column)
+          end
+        end
+
+        def matrix(header, options = {})
+          @matrixes = expand_for_sheets(sheet_name: options[:sheet_name], exclude_sheets: options[:exclude_sheets]).inject(@matrixes) do |existing_matrixes, sheet_name|
+            new_matrix = ExcelDataServices::V3::Files::Tables::Matrix.new(
+              xlsx: xlsx,
+              sheet_name: sheet_name,
+              header: header,
+              rows: options[:rows],
+              columns: options[:columns],
+              options: ExcelDataServices::V3::Files::Tables::Options.new(options: options)
+            )
+            merge_item_into_collection(collection: existing_matrixes, item: new_matrix)
+          end
+        end
+
+        def merge_item_into_collection(collection:, item:)
+          collection.reject { |col_item| col_item.header == item.header && col_item.sheet_name == item.sheet_name }.push(item)
+        end
+
+        def add_framer(klass)
+          @framer = "ExcelDataServices::V3::Framers::#{klass}".constantize
         end
 
         def add_dynamic_columns(including: [], excluding: [])
@@ -56,7 +87,7 @@ module ExcelDataServices
         end
 
         def required(rows, columns, content)
-          @requirements |= xlsx.sheets.map do |sheet_name|
+          @requirements = xlsx.sheets.map do |sheet_name|
             ExcelDataServices::V3::Files::Requirement.new(rows: rows, columns: columns, content: content, sheet_name: sheet_name, xlsx: xlsx)
           end
         end
@@ -72,6 +103,11 @@ module ExcelDataServices
         def add_operation(class_name)
           operation_class = "ExcelDataServices::V3::Operations::#{class_name}".constantize
           @operations << operation_class unless @operations.include?(operation_class)
+        end
+
+        def add_data_validator(class_name)
+          data_validation_class = "ExcelDataServices::V3::Validators::#{class_name}".constantize
+          @data_validations << data_validation_class unless @data_validations.include?(data_validation_class)
         end
 
         def row_validation(keys, comparator)
@@ -90,6 +126,13 @@ module ExcelDataServices
 
         def scope
           @scope ||= state.organization.scope
+        end
+
+        def expand_for_sheets(sheet_name:, exclude_sheets:)
+          all_sheets = xlsx.sheets
+          all_sheets = [sheet_name] & all_sheets if sheet_name.present?
+          all_sheets -= exclude_sheets if exclude_sheets.present?
+          all_sheets
         end
 
         class ConnectedActions

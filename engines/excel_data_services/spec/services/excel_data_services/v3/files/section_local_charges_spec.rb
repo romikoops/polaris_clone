@@ -25,10 +25,10 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
     end
   end
 
-  describe "#data" do
+  describe "#framed_data" do
     shared_examples_for "returns a DataFrame populated by the columns defined in the configs" do
       it "returns a DataFrame of extracted values" do
-        expect(service.data[0..2].to_a).to match_array(expected_results.to_a)
+        expect(service.framed_data[0..2].to_a).to match_array(expected_results.to_a)
       end
     end
 

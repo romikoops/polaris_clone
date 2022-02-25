@@ -21,11 +21,9 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
     end
   end
 
-  describe "#data" do
+  describe "#framed_data" do
     let(:expected_results) do
       [{ "vessel_name" => "Cap Sud",
-         "row" => 2,
-         "sheet_name" => "Sheet1",
          "origin_locode" => "DEHAM",
          "destination_locode" => "CNSHA",
          "origin_departure" => Date.parse("Wed, 05 Jan 2022"),
@@ -37,10 +35,10 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
          "mode_of_transport" => "ocean",
          "vessel_code" => "CPSD-11",
          "voyage_code" => "DDFF44-E",
-         "organization_id" => organization.id },
+         "sheet_name" => "Sheet1",
+         "organization_id" => organization.id,
+         "row" => 2 },
         { "vessel_name" => "Cap Nord",
-          "row" => 3,
-          "sheet_name" => "Sheet1",
           "origin_locode" => "DEHAM",
           "destination_locode" => "CNSHA",
           "origin_departure" => Date.parse("Sat, 05 Feb 2022"),
@@ -52,11 +50,13 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
           "mode_of_transport" => "ocean",
           "vessel_code" => "CPSD-12",
           "voyage_code" => "DFDFF_999",
-          "organization_id" => organization.id }]
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id,
+          "row" => 3 }]
     end
 
     it "returns a DataFrame of extracted values" do
-      expect(service.data).to eq(Rover::DataFrame.new(expected_results))
+      expect(service.framed_data).to eq(Rover::DataFrame.new(expected_results))
     end
   end
 

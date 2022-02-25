@@ -32,7 +32,8 @@ module ExcelDataServices
             file: file,
             section: type,
             overrides: Overrides.new(
-              group_id: arguments[:group_id]
+              group_id: arguments[:group_id],
+              hub_id: arguments[:hub_id]
             )
           )
         end

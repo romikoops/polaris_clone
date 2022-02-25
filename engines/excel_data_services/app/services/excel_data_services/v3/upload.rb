@@ -31,7 +31,7 @@ module ExcelDataServices
       end
 
       def schema_types
-        %w[SacoPricings Pricings Schedules LocalCharges Hubs Clients] - arguments.fetch(:disabled_uploaders, [])
+        %w[SacoPricings Pricings Schedules LocalCharges Hubs Clients Truckings] - arguments.fetch(:disabled_uploaders, [])
       end
 
       def result_state

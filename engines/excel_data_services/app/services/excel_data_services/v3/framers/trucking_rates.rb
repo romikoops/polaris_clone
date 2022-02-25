@@ -54,7 +54,7 @@ module ExcelDataServices
 
         def ranges_frame
           @ranges_frame ||= Rover::DataFrame.new(
-            present_rate_frame[present_rate_frame["header"] == "brackets"].to_a.flat_map do |range_row|
+            present_rate_frame[present_rate_frame["header"] == "bracket"].to_a.flat_map do |range_row|
               range_row = prefixed_column_mapper(mapped_object: range_row, header: "range")
               range_row["range_min"], range_row["range_max"] = range_row.delete("range").split("-").map(&:strip).map(&:to_d)
               range_row
@@ -92,7 +92,7 @@ module ExcelDataServices
 
         def modifiers
           @modifiers ||= Rover::DataFrame.new(
-            present_rate_frame[present_rate_frame["header"] == "modifiers"].tap do |modifier_inner_frame|
+            present_rate_frame[present_rate_frame["header"] == "modifier"].tap do |modifier_inner_frame|
               prefixed_column_mapper(mapped_object: modifier_inner_frame, header: "modifier")
             end
           )
@@ -115,6 +115,7 @@ module ExcelDataServices
               sheet_and_cargo_class["fee_code"] = "trucking_#{sheet_and_cargo_class.delete('cargo_class')}"
               sheet_and_cargo_class["fee_name"] = "Trucking rate"
               sheet_and_cargo_class["rate_type"] = "trucking_rate"
+              sheet_and_cargo_class["mode_of_transport"] = "truck_carriage"
               sheet_and_cargo_class
             end
           )
@@ -168,6 +169,7 @@ module ExcelDataServices
             load_meterage_hard_limit
             load_meterage_stackable_type
             load_meterage_non_stackable_type
+            mode_of_transport
           ].freeze
 
           def initialize(frame:, sheet_name:)

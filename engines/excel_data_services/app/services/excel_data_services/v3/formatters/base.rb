@@ -22,7 +22,7 @@ module ExcelDataServices
         end
 
         def upsert_id(row:)
-          UUIDTools::UUID.sha1_create(
+          ::UUIDTools::UUID.sha1_create(
             self.class::NAMESPACE_UUID,
             row.values_at(*self.class::UUID_KEYS).map(&:to_s).join
           ).to_s

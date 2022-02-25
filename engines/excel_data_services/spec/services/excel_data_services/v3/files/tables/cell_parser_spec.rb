@@ -8,11 +8,13 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::CellParser do
   let(:sheet_name) { "Sheet1" }
   let(:header) { "service" }
   let(:column) do
-    ExcelDataServices::V3::Files::Tables::Column.new(
+    ExcelDataServices::V3::Files::Tables::Matrix.new(
       xlsx: xlsx,
       header: header,
+      rows: "1",
+      columns: "A",
       sheet_name: sheet_name,
-      options: options
+      options: ExcelDataServices::V3::Files::Tables::Options.new(options: options)
     )
   end
   let(:cell) { described_class.new(container: column, input: input, row: "1", column: "A") }
@@ -56,6 +58,7 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::CellParser do
     context "with nil value and fallback" do
       let(:options) do
         {
+          sanitizer: "text",
           fallback: "a"
         }
       end
@@ -68,6 +71,7 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::CellParser do
     context "with invalid value" do
       let(:options) do
         {
+          sanitizer: "text",
           validator: "locode"
         }
       end

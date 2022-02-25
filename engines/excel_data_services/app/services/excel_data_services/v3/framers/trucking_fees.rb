@@ -15,7 +15,7 @@ module ExcelDataServices
         end
 
         def row_from_values(row_values:)
-          row_values.inject({ "rate_type" => "trucking_fee" }) do |memo, row|
+          row_values.inject({ "rate_type" => "trucking_fee", "mode_of_transport" => "truck_carriage" }) do |memo, row|
             cleaned_row = CleanedRowPerValue.new(row: row)
 
             next memo if cleaned_row.rate_cell? && cleaned_row.no_value?

@@ -42,6 +42,7 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingFees do
       Rover::DataFrame.new(
         [{
           "rate_type" => "trucking_fee",
+          "mode_of_transport" => "truck_carriage",
           "row" => 2,
           "column" => nil,
           "sheet_name" => "Fees",
@@ -63,8 +64,7 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingFees do
           "range_min" => nil,
           "range_max" => nil,
           "base" => nil,
-          "rate" => 3.0e1,
-          "mode_of_transport" => "truck_carriage"
+          "rate" => 3.0e1
         }]
       )
     end

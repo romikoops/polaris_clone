@@ -7,11 +7,11 @@ module ExcelDataServices
         QUERY_TYPE_ENUM = Trucking::Location.queries
 
         def extracted
-          @extracted ||= zipcode_rows.concat(location_rows).concat(distance_rows).concat(error_rows)
+          @extracted ||= postal_code_rows.concat(location_rows).concat(distance_rows).concat(error_rows)
         end
 
-        def zipcode_rows
-          @zipcode_rows ||= postal_based_rows
+        def postal_code_rows
+          @postal_code_rows ||= postal_based_rows
             .left_join(location_postal_countries, on: { "identifier" => "identifier", "country_code" => "country_code" })
             .left_join(string_postal_countries, on: { "identifier" => "identifier", "country_code" => "country_code" })
         end
