@@ -1465,6 +1465,7 @@ DEPENDENCIES
   trucking!
   user_services!
   users!
+  uuidtools
   validator!
   webmock
   wheelhouse!

@@ -1,7 +1,4 @@
 gem "shared-runtime", path: "../../gems/shared-runtime"
 
-gem "profiles", path: "../profiles"
-eval_gemfile "../profiles/Gemfile.runtime"
-
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"
