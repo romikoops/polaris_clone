@@ -103,7 +103,7 @@ module Pricings
     end
 
     def generate_upsert_id
-      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [itinerary_id,
+      self.upsert_id =::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [itinerary_id,
         tenant_vehicle_id,
         cargo_class,
         group_id,

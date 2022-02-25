@@ -59,7 +59,7 @@ module Legacy
     def generate_upsert_id
       return if [origin_hub_id, destination_hub_id, organization_id, mode_of_transport].any?(&:blank?)
 
-      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
+      self.upsert_id =::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [origin_hub_id.to_s, destination_hub_id.to_s, organization_id.to_s, transshipment.to_s, mode_of_transport.to_s].join)
     end
 
     def hubs

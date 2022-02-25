@@ -49,7 +49,7 @@ module Pricings
     end
 
     def generate_upsert_id
-      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [pricing_id, charge_category_id, organization_id].map(&:to_s).join) if pricing_id.present?
+      self.upsert_id =::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [pricing_id, charge_category_id, organization_id].map(&:to_s).join) if pricing_id.present?
     end
   end
 end

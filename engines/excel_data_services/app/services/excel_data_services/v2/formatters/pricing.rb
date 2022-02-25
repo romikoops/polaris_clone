@@ -18,7 +18,7 @@ module ExcelDataServices
           organization_id
         ].freeze
         GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id effective_date expiration_date].freeze
-        NAMESPACE_UUID = UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
+        NAMESPACE_UUID = ::UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
         UUID_KEYS = %w[itinerary_id tenant_vehicle_id cargo_class group_id organization_id].freeze
 
         def insertable_data

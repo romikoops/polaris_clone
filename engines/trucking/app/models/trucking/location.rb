@@ -21,7 +21,7 @@ module Trucking
     before_validation :generate_upsert_id
 
     def generate_upsert_id
-      self.upsert_id = UUIDTools::UUID.sha1_create(UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
+      self.upsert_id = ::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
     end
   end
 end
