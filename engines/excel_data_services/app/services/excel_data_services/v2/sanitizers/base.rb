@@ -4,6 +4,8 @@ module ExcelDataServices
   module V2
     module Sanitizers
       class Base
+        DIRECT_TRANSSHIPMENT_IDENTIFIERS = %w[direct direkt].freeze
+
         def initialize(value:)
           @value = value
         end
@@ -68,6 +70,10 @@ module ExcelDataServices
 
         def spaces
           proc { |value| value.delete(" ") }
+        end
+
+        def direct_as_nil
+          proc { |value| DIRECT_TRANSSHIPMENT_IDENTIFIERS.include?(value.downcase) ? nil : value }
         end
 
         def optional_integer_from_string
