@@ -274,16 +274,15 @@ module Api
       let!(:query_calculation) { FactoryBot.create(:journey_query_calculation, query: query, status: status) }
       let(:query_status) { "running" }
       let(:status) { "completed" }
+      before do
+        FactoryBot.create(:journey_error,
+          query: query,
+          code: 3002,
+          query_calculation: FactoryBot.create(:journey_query_calculation, query: query, status: "failed"))
+      end
 
       context "when async error has occurred " do
-        before do
-          result.destroy
-          FactoryBot.create(:journey_error,
-            query: query,
-            code: 3002,
-            query_calculation: query_calculation)
-          get :show, params: { organization_id: organization.id, id: query.id }
-        end
+        before { get :show, params: { organization_id: organization.id, id: query.id } }
 
         let(:status) { "failed" }
 

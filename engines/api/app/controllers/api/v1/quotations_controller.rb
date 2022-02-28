@@ -228,10 +228,9 @@ module Api
           "failed"
         end
         query.update(status: new_status)
+        return query unless new_status == "failed"
 
         raise OfferCalculator::Errors.from_code(code: query.result_errors.first.code) if query.result_errors.present?
-
-        query
       end
 
       def validation_params
