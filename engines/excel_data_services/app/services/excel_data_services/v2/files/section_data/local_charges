@@ -112,7 +112,7 @@ column "max",
   sanitizer: "decimal",
   validator: "optional_numeric",
   required: false,
-  alternative_keys: ["minimum"],
+  alternative_keys: ["maximum"],
   type: :object
 column "fee_name",
   sanitizer: "text",

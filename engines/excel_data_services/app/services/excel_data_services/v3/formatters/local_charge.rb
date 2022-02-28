@@ -123,10 +123,13 @@ module ExcelDataServices
           end
 
           def perform
-            row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "currency", "rate", active_fee_key)
+            row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "rate_basis", "currency", "rate")
               .merge(
                 "range" => range_from_grouping_rows,
-                "metadata" => metadata
+                "metadata" => metadata,
+                "name" => row["fee_name"],
+                "code" => row["fee_code"].upcase,
+                active_fee_key => row[active_fee_key].to_d
               )
           end
 
@@ -136,8 +139,9 @@ module ExcelDataServices
 
           def range_from_grouping_rows
             filtered = frame[(!frame["range_min"].missing) & (!frame["range_max"].missing)].yield_self do |frame|
-              frame["min"] = frame.delete("range_min")
-              frame["max"] = frame.delete("range_max")
+              frame["min"] = frame.delete("range_min").to(:float)
+              frame["max"] = frame.delete("range_max").to(:float)
+              frame[active_fee_key] = frame[active_fee_key].to(:float)
               frame
             end
             filtered[["min", "max", active_fee_key]].to_a
