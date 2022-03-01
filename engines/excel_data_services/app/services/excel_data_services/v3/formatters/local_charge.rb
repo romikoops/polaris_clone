@@ -126,7 +126,6 @@ module ExcelDataServices
             row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "rate_basis", "currency", "rate")
               .merge(
                 "range" => range_from_grouping_rows,
-                "metadata" => metadata,
                 "name" => row["fee_name"],
                 "code" => row["fee_code"].upcase,
                 active_fee_key => row[active_fee_key].to_d
@@ -149,14 +148,6 @@ module ExcelDataServices
 
           def active_fee_key
             @active_fee_key ||= FEE_KEYS.find { |key| row[key].present? }
-          end
-
-          def metadata
-            row.slice("sheet_name").tap do |combined_metadata|
-              combined_metadata["row_number"] = frame["row"].to_a.uniq.join(",")
-              combined_metadata["file_name"] = state.file_name
-              combined_metadata["document_id"] = state.file.id
-            end
           end
         end
       end

@@ -87,7 +87,7 @@ module ExcelDataServices
         end
 
         def required(rows, columns, content)
-          @requirements = xlsx.sheets.map do |sheet_name|
+          @requirements = non_empty_sheets.map do |sheet_name|
             ExcelDataServices::V3::Files::Requirement.new(rows: rows, columns: columns, content: content, sheet_name: sheet_name, xlsx: xlsx)
           end
         end
@@ -129,10 +129,14 @@ module ExcelDataServices
         end
 
         def expand_for_sheets(sheet_name:, exclude_sheets:)
-          all_sheets = xlsx.sheets
+          all_sheets = non_empty_sheets
           all_sheets = [sheet_name] & all_sheets if sheet_name.present?
           all_sheets -= exclude_sheets if exclude_sheets.present?
           all_sheets
+        end
+
+        def non_empty_sheets
+          @non_empty_sheets ||= xlsx.sheets.select { |all_sheet_name| xlsx.sheet(all_sheet_name).first_column }
         end
 
         class ConnectedActions

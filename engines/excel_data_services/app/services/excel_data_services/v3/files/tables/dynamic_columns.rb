@@ -53,7 +53,7 @@ module ExcelDataServices
             end
 
             def header_values
-              @header_values ||= roo_sheet.row(header_row).map(&:downcase)
+              @header_values ||= roo_sheet.row(header_row).map(&:to_s).map(&:downcase)
             end
 
             def target_headers

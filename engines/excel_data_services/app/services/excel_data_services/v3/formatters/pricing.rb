@@ -4,26 +4,34 @@ module ExcelDataServices
   module V3
     module Formatters
       class Pricing < ExcelDataServices::V3::Formatters::Base
-        ATTRIBUTE_KEYS = %w[
-          cargo_class
-          effective_date
-          expiration_date
-          internal
-          transshipment
-          vm_rate
-          wm_rate
-          group_id
-          itinerary_id
-          tenant_vehicle_id
-          organization_id
-        ].freeze
-        GROUPING_KEYS = %w[itinerary_id group_id cargo_class tenant_vehicle_id effective_date expiration_date].freeze
-        NAMESPACE_UUID = ::UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
         UUID_KEYS = %w[itinerary_id tenant_vehicle_id cargo_class group_id organization_id].freeze
+        GROUPING_KEYS = UUID_KEYS + %w[effective_date expiration_date].freeze
+        NAMESPACE_UUID = ::UUIDTools::UUID.parse(Pricings::Pricing::UUID_V5_NAMESPACE)
 
         def insertable_data
-          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq.map do |row|
-            loop_frame = frame.filter(row)
+          rows_for_insertion[GROUPING_KEYS].to_a.uniq.map do |row|
+            RowPricing.new(
+              state: state,
+              frame: frame.filter(row),
+              upsert_id: upsert_id(row: row)
+            ).perform
+          end
+        end
+
+        def target_attribute
+          "pricing_id"
+        end
+
+        class RowPricing
+          attr_reader :frame, :state, :upsert_id
+
+          def initialize(frame:, state:, upsert_id:)
+            @frame = frame
+            @state = state
+            @upsert_id = upsert_id
+          end
+
+          def perform
             row.slice(
               "cargo_class",
               "effective_date",
@@ -37,18 +45,18 @@ module ExcelDataServices
             )
               .merge(
                 "vm_rate" => row["vm_rate"].present? ? row["vm_rate"].to_f / 1000.0 : 1.0,
-                "fees" => RowFees.new(frame: loop_frame, state: state).fees,
-                "notes" => RowNotes.new(frame: loop_frame).notes,
+                "fees" => RowFees.new(frame: frame, state: state).fees,
+                "notes" => RowNotes.new(frame: frame).notes,
                 "internal" => row["internal"].present?,
                 "load_type" => row["cargo_class"] == "lcl" ? "cargo_item" : "container",
                 "validity" => "[#{row['effective_date'].to_date}, #{row['expiration_date'].to_date})",
-                "upsert_id" => upsert_id(row: row)
+                "upsert_id" => upsert_id
               )
           end
-        end
 
-        def target_attribute
-          "pricing_id"
+          def row
+            @row ||= frame.to_a.first
+          end
         end
 
         class RowFees

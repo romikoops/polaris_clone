@@ -106,11 +106,6 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
             "rate_basis" => "PER_TON",
             "currency" => "EUR",
             "range" => [],
-            "metadata" =>
-            { "sheet_name" => "Local Charges",
-              "row_number" => "2",
-              "file_name" => "test-sheet.xlsx",
-              "document_id" => file.id },
             "name" => "B/L Fee",
             "code" => "BL" } }
       end
@@ -161,11 +156,6 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
             "rate_basis" => "PER_KG",
             "currency" => "EUR",
             "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],
-            "metadata" =>
-            { "sheet_name" => "Local Charges",
-              "row_number" => "2",
-              "file_name" => "test-sheet.xlsx",
-              "document_id" => file.id },
             "name" => "B/L Fee",
             "code" => "BL" } }
       end

@@ -91,7 +91,7 @@ module ExcelDataServices
         end
 
         def sheet_objects
-          @sheet_objects ||= sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Sheet.new(section: self, sheet_name: sheet_name) }
+          @sheet_objects ||= non_empty_sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Sheet.new(section: self, sheet_name: sheet_name) }
         end
 
         def required_columns_present?
@@ -107,7 +107,7 @@ module ExcelDataServices
         end
 
         def validated_columns
-          @validated_columns ||= columns.select { |col| sheets.include?(col.sheet_name) && col.valid? }
+          @validated_columns ||= columns.select { |col| non_empty_sheets.include?(col.sheet_name) && col.valid? }
         end
 
         def all_sheets_meet_requirements?
@@ -115,7 +115,7 @@ module ExcelDataServices
         end
 
         delegate :columns, :requirements, :prerequisites, :operations, :dynamic_columns, :model,
-          :row_validations, :sorted_dependencies, :dependency_actions, :matrixes, :framer, :data_validations, to: :sheet_parser
+          :row_validations, :sorted_dependencies, :dependency_actions, :matrixes, :framer, :non_empty_sheets, :data_validations, to: :sheet_parser
 
         private
 
