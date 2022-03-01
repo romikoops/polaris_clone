@@ -101,13 +101,11 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
             "min" => 2.0,
             "max" => 100.0,
             "ton" => 0.4e1,
-            "charge_category_id" => 944,
-            "rate_basis_id" => "74e8dcfc-a47c-462a-aefe-108f696a24c0",
             "rate_basis" => "PER_TON",
             "currency" => "EUR",
             "range" => [],
             "name" => "B/L Fee",
-            "code" => "BL" } }
+            "key" => "BL" } }
       end
 
       let(:types) do
@@ -127,10 +125,8 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
       let(:row_deltas) do
         [
           {
-            "charge_category_id" => 944,
             "fee_code" => "bl",
             "fee_name" => "B/L Fee",
-            "rate_basis_id" => "74e8dcfc-a47c-462a-aefe-108f696a24c0",
             "external_code" => "PER_KG",
             "row" => 2,
             "min" => 2.0,
@@ -151,13 +147,11 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
             "min" => 2.0,
             "max" => 100.0,
             "kg" => 0.4e1,
-            "charge_category_id" => 944,
-            "rate_basis_id" => "74e8dcfc-a47c-462a-aefe-108f696a24c0",
             "rate_basis" => "PER_KG",
             "currency" => "EUR",
             "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],
             "name" => "B/L Fee",
-            "code" => "BL" } }
+            "key" => "BL" } }
       end
 
       let(:types) do

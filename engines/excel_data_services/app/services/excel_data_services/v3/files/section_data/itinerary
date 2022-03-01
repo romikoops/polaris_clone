@@ -51,7 +51,6 @@ column "mode_of_transport",
   alternative_keys: ["mot"],
   type: :object
 column "transshipment",
-  sanitizer: "text",
   sanitizer: "transshipment",
   validator: "optional_string",
   required: false,

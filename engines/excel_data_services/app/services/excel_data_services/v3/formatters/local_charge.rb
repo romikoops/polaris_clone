@@ -123,11 +123,11 @@ module ExcelDataServices
           end
 
           def perform
-            row.slice("organization_id", "base", "min", "max", "charge_category_id", "rate_basis_id", "rate_basis", "currency", "rate")
+            row.slice("organization_id", "base", "min", "max", "rate_basis", "currency", "rate")
               .merge(
                 "range" => range_from_grouping_rows,
                 "name" => row["fee_name"],
-                "code" => row["fee_code"].upcase,
+                "key" => row["fee_code"].upcase,
                 active_fee_key => row[active_fee_key].to_d
               )
           end
