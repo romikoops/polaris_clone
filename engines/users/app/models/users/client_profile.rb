@@ -34,7 +34,8 @@ module Users
       [first_name, last_name].compact.join(" ")
     end
     alias name full_name
-    delegate :email, to: :user, allow_nil: true
+    delegate :email, :settings, to: :user, allow_nil: true
+    delegate :currency, :language, :locale, to: :settings, allow_nil: true
   end
 end
 

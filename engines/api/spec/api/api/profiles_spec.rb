@@ -62,20 +62,39 @@ RSpec.describe "Profiles", type: :request, swagger: true do
               email: {
                 description: "The new email of the client",
                 type: "string",
-                pattern: "email"
+                pattern: "email",
+                nullable: true
               },
               firstName: {
                 description: "First name of the user",
-                type: "string"
+                type: "string",
+                nullable: true
               },
               lastName: {
                 description: "Last name of the user",
-                type: "string"
+                type: "string",
+                nullable: true
+              },
+              currency: {
+                description: "ISO 4217 3 letter currency code",
+                type: "string",
+                nullable: true
+              },
+              language: {
+                description: "Language code eg. en-US",
+                type: "string",
+                nullable: true
+              },
+              locale: {
+                description: "Localization format eg. en-US",
+                type: "string",
+                nullable: true
               },
               password: {
                 description: "A new password for the user account",
                 type: "string",
-                minLength: 8
+                minLength: 8,
+                nullable: true
               }
             }
           }
@@ -87,7 +106,10 @@ RSpec.describe "Profiles", type: :request, swagger: true do
           profile: {
             email: "john@example.com",
             firstName: "John",
-            lastName: "Doe"
+            lastName: "Doe",
+            currency: nil,
+            language: nil,
+            locale: nil
           }
         }
       end

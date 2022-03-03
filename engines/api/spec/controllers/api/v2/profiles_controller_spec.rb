@@ -12,8 +12,9 @@ module Api
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
-    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com", profile: client_profile, organization: organization) }
+    let!(:client) { FactoryBot.create(:users_client, email: "test@example.com", profile: client_profile, settings: client_settings, organization: organization) }
     let(:client_profile) { FactoryBot.build(:users_client_profile) }
+    let(:client_settings) { FactoryBot.build(:users_client_settings) }
 
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public") }
     let(:token_header) { "Bearer #{access_token.token}" }
@@ -36,7 +37,8 @@ module Api
         it "returns the profile" do
           expect(response_data["attributes"]).to eq({
             "email" => client.email, "firstName" => client_profile.first_name,
-            "lastName" => client_profile.last_name, "phone" => client_profile.phone
+            "lastName" => client_profile.last_name, "phone" => client_profile.phone,
+            "currency" => client_settings.currency, "language" => client_settings.language, "locale" => client_settings.locale
           })
         end
       end
@@ -51,33 +53,47 @@ module Api
         it "returns the profile" do
           expect(response_data["attributes"]).to eq({
             "email" => nil, "firstName" => "",
-            "lastName" => "", "phone" => nil
+            "lastName" => "", "phone" => nil,
+            "currency" => nil, "language" => nil, "locale" => nil
           })
         end
       end
     end
 
     describe "PATCH #update" do
+      let(:request_object) do
+        patch :update, params: {
+          organization_id: organization.id,
+          profile: profile_params
+        }, as: :json
+      end
+
       context "when request is successful" do
         let(:expected_data) do
           {
             "email" => "updated@itsmycargo.com",
             "firstName" => "new first name",
             "lastName" => "new last name",
-            "phone" => client_profile.phone
+            "phone" => client_profile.phone,
+            "language" => "en-GB",
+            "locale" => "es-ES",
+            "currency" => "USD"
+          }
+        end
+        let(:profile_params) do
+          {
+            email: expected_data["email"],
+            firstName: expected_data["firstName"],
+            lastName: expected_data["lastName"],
+            currency: expected_data["currency"],
+            language: expected_data["language"],
+            locale: expected_data["locale"],
+            password: "NEWPASSWORD"
           }
         end
 
-        let(:request_object) do
-          patch :update, params: {
-            organization_id: organization.id,
-            profile: {
-              email: expected_data["email"],
-              firstName: expected_data["firstName"],
-              lastName: expected_data["lastName"],
-              password: "NEWPASSWORD"
-            }
-          }, as: :json
+        before do
+          FactoryBot.create(:treasury_exchange_rate, from: "USD")
         end
 
         it "returns an http status of success" do
@@ -91,6 +107,14 @@ module Api
           expect(response_data["attributes"]).to eq(expected_data)
         end
 
+        it "updates the user settings successfully", :aggregate_failures do
+          perform_request
+          client_settings.reload
+          expect(client_settings.language).to eq(expected_data["language"])
+          expect(client_settings.locale).to eq(expected_data["locale"])
+          expect(client_settings.currency).to eq(expected_data["currency"])
+        end
+
         it "updates the user email and password successfully" do
           perform_request
 
@@ -100,8 +124,10 @@ module Api
 
       context "when update email request is invalid" do
         let(:other_client) { FactoryBot.create(:users_client, organization: organization) }
-        let(:request_object) do
-          patch :update, params: { organization_id: organization.id, profile: { email: other_client.email } }, as: :json
+        let(:profile_params) do
+          {
+            email: other_client.email
+          }
         end
 
         it "returns with a 422 response" do
@@ -112,6 +138,23 @@ module Api
         it "returns list of errors" do
           json = JSON.parse(perform_request.body)
           expect(json["error"]).to match_array(["Email has already been taken"])
+        end
+      end
+
+      context "when update currency request is invalid" do
+        let(:profile_params) do
+          {
+            currency: "123"
+          }
+        end
+
+        it "returns with a 422 response" do
+          perform_request
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it "returns list of errors" do
+          expect(JSON.parse(perform_request.body)).to eq("currency" => ["Invalid currency. Refer to ISO 4217 for list of valid codes"])
         end
       end
     end
