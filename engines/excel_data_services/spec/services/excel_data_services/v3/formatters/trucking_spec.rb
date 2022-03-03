@@ -37,21 +37,16 @@ RSpec.describe ExcelDataServices::V3::Formatters::Trucking do
                 "min_value" => "0.0" }] },
         "fees" =>
           { "FSC" =>
-            { "organization_id" => organization.id,
+            {
               "base" => nil,
               "min" => nil,
               "max" => nil,
-              "charge_category_id" => 128,
+              "name" => "Fuel Surcharge Fee",
               "rate_basis" => "PER_SHIPMENT",
               "currency" => "EUR",
               "rate" => 30.0,
-              "code" => "fsc",
-              "range" => [],
-              "metadata" =>
-              { "sheet_name" => "Fees",
-                "row_number" => "0",
-                "file_name" => "test-sheet.xlsx",
-                "document_id" => file.id } } },
+              "key" => "FSC",
+              "range" => [] } },
         "load_meterage" =>
           { "stackable_type" => "area",
             "non_stackable_type" => "ldm",

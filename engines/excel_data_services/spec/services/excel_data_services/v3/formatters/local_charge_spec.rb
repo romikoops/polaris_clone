@@ -96,11 +96,11 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
       end
       let(:expected_fees) do
         { "BL" =>
-          { "organization_id" => "5a72a4d8-b836-441b-bb8a-0bf590db7db9",
+          {
             "base" => nil,
             "min" => 2.0,
             "max" => 100.0,
-            "ton" => 0.4e1,
+            "ton" => 4.0,
             "rate_basis" => "PER_TON",
             "currency" => "EUR",
             "range" => [],
@@ -142,11 +142,11 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
 
       let(:expected_fees) do
         { "BL" =>
-          { "organization_id" => "5a72a4d8-b836-441b-bb8a-0bf590db7db9",
+          {
             "base" => nil,
             "min" => 2.0,
             "max" => 100.0,
-            "kg" => 0.4e1,
+            "kg" => 4.0,
             "rate_basis" => "PER_KG",
             "currency" => "EUR",
             "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],

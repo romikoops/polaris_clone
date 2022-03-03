@@ -68,7 +68,7 @@ module ExcelDataServices
           end
 
           def fees
-            RowFeesHash.new(frame: frame.filter({ "rate_type" => "trucking_fee" }), state: state).fees
+            JsonFeeStructure.new(frame: frame.filter({ "rate_type" => "trucking_fee" })).perform
           end
 
           def load_meterage

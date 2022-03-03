@@ -622,5 +622,45 @@ RSpec.describe Pricings::Manipulator do
         end
       end
     end
+
+    context "with with atypical json data" do
+      let(:fees) do
+        {
+          "SOLAS" => {
+            "key" => "SOLAS",
+            "max" => nil,
+            "min" => 17.5,
+            "name" => "SOLAS",
+            "value" => 17.5,
+            "currency" => "EUR",
+            "rate_basis" => "PER_SHIPMENT",
+            "metadata" => {}
+          },
+          "THC" => {
+            "key" => "THC",
+            "max" => nil,
+            "min" => 15,
+            "name" => "THC",
+            "value" => 15,
+            "currency" => "EUR",
+            "rate_basis" => "PER_WM",
+            "rate_basis_id" => ""
+          }
+        }
+      end
+      let(:local_charge) do
+        FactoryBot.create(:legacy_local_charge,
+          hub: hub,
+          direction: "export",
+          tenant_vehicle: tenant_vehicle,
+          organization: organization,
+          fees: fees)
+      end
+
+      it "returns the manipulated local charge with no errors", :aggregate_failures do
+        expect(target_result.id).to eq(local_charge.id)
+        expect(target_result.breakdowns.map(&:code).uniq).to eq(%w[solas thc])
+      end
+    end
   end
 end

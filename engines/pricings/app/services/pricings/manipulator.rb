@@ -4,6 +4,7 @@ module Pricings
   class Manipulator
     MissingArgument = Class.new(StandardError)
     TRUCKING_QUERY_DAYS = 10
+    RATE_VALUE_KEYS = %w[ton cbm kg item shipment bill container wm percentage rate value].freeze
 
     def initialize(type:, target:, organization:, args:)
       @type = type
@@ -475,11 +476,10 @@ module Pricings
 
     def apply_json_fee_manipulation(value:, operator:, fee:)
       new_fee = fee.dup.with_indifferent_access
-      only_values = fee.except("name", "key", "currency", "rate_basis", "range", "effective_date", "expiration_date")
-      only_values.each_key do |k|
+      RATE_VALUE_KEYS.each do |k|
         new_fee[k] = determine_manipulation(rate: fee[k].to_d, value: value, operator: operator) if fee[k]
       end
-      new_fee["key"] = fee["key"].downcase
+      new_fee["key"] = fee.values_at("key", "code").first.downcase
 
       return new_fee if fee["range"].blank?
 

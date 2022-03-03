@@ -53,7 +53,7 @@ module ExcelDataServices
         end
 
         def expired_rates_errors
-          rate_frame[%w[expiration_date sheet_name]].to_a.uniq.reject { |date_and_sheet| Time.zone.today < date_and_sheet["expiration_date"] }.each do |frame_row|
+          rate_frame[%w[expiration_date sheet_name]].to_a.uniq.compact.reject { |date_and_sheet| Time.zone.today < date_and_sheet["expiration_date"] }.each do |frame_row|
             @state.errors << error(row: frame_row, message: "Already expired rates are not permitted.", attribute: "expiration_date")
           end
         end
