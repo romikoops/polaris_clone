@@ -9,7 +9,7 @@ module Notifications
       request_for_quotation = GlobalID.find(event.data.fetch(:request_for_quotation_id))
 
       Subscription.where(
-        event_type: "Journey::RequestCreated",
+        event_type: "Journey::RequestForQuotationEvent",
         organization_id: query.organization_id
       ).find_each do |subscription|
         RequestMailer.with(

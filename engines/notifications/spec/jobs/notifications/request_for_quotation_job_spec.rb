@@ -12,7 +12,7 @@ module Notifications
     let!(:subscription) do
       Notifications::Subscription.create(
         organization: organization,
-        event_type: "Journey::RequestCreated",
+        event_type: "Journey::RequestForQuotationEvent",
         email: "test@example.com"
       )
     end
