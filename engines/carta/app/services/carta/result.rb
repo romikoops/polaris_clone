@@ -13,6 +13,7 @@ module Carta
     :locality,
     :administrative_area,
     :country,
+    :function,
     keyword_init: true
   ) do
     def city

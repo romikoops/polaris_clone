@@ -15,11 +15,13 @@ FactoryBot.define do
     locality { "Hamburg" }
     administrative_area { "" }
     country { "DE" }
+    function { "ocean" }
 
     trait :address do
       id { "here:123456789" }
       type { "address" }
       address { "Brooktorkai 7, Hamburg, DE" }
+      function { nil }
     end
 
     initialize_with do
