@@ -24,28 +24,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
     end
   end
 
-  describe "#framed_data" do
-    shared_examples_for "returns a DataFrame populated by the columns defined in the configs" do
-      it "returns a DataFrame of extracted values" do
-        expect(service.framed_data).to match_array(expected_results)
-      end
-    end
-
-    context "when section is Hubs" do
-      let(:section_string) { "Hubs" }
-      let(:expected_results) { FactoryBot.build(:excel_data_services_section_data, :hubs, organization: organization, default_group: default_group) }
-
-      it_behaves_like "returns a DataFrame populated by the columns defined in the configs"
-    end
-
-    context "when section is Nexus" do
-      let(:section_string) { "Nexus" }
-      let(:expected_results) { FactoryBot.build(:excel_data_services_section_data, :nexuses, organization: organization, default_group: default_group) }
-
-      it_behaves_like "returns a DataFrame populated by the columns defined in the configs"
-    end
-  end
-
   describe "#perform (integration test)" do
     let(:section_string) { "Hubs" }
     let(:hamburg) do

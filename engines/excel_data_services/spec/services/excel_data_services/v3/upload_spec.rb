@@ -30,7 +30,7 @@ RSpec.describe ExcelDataServices::V3::Upload do
   describe "#perform" do
     let(:dummy_state) { instance_double("ExcelDataServices::V3::State", stats: [stat], errors: []) }
     let(:stat) { FactoryBot.build(:excel_data_services_stats) }
-    let(:email_result) do
+    let(:email_formatted_stats) do
       {
         pricings: { created: 1, failed: 0 },
         errors: []
@@ -41,8 +41,8 @@ RSpec.describe ExcelDataServices::V3::Upload do
       allow(service).to receive(:result_state).and_return(dummy_state)
     end
 
-    it "triggers returns the stats object from the result_state" do
-      expect(service.perform).to eq(email_result)
+    it "returns the stats object formatted for the upload email" do
+      expect(service.perform).to eq(email_formatted_stats)
     end
   end
 

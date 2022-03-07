@@ -21,45 +21,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
     end
   end
 
-  describe "#framed_data" do
-    let(:expected_results) do
-      [{ "vessel_name" => "Cap Sud",
-         "origin_locode" => "DEHAM",
-         "destination_locode" => "CNSHA",
-         "origin_departure" => Date.parse("Wed, 05 Jan 2022"),
-         "destination_arrival" => Date.parse("Sun, 30 Jan 2022"),
-         "closing_date" => Date.parse("Sat, 01 Jan 2022"),
-         "carrier" => "Hamburg Sud",
-         "carrier_code" => "hamburg sud",
-         "service" => "standard",
-         "mode_of_transport" => "ocean",
-         "vessel_code" => "CPSD-11",
-         "voyage_code" => "DDFF44-E",
-         "sheet_name" => "Sheet1",
-         "organization_id" => organization.id,
-         "row" => 2 },
-        { "vessel_name" => "Cap Nord",
-          "origin_locode" => "DEHAM",
-          "destination_locode" => "CNSHA",
-          "origin_departure" => Date.parse("Sat, 05 Feb 2022"),
-          "destination_arrival" => Date.parse("Sat, 05 Mar 2022"),
-          "closing_date" => Date.parse("Tue, 01 Feb 2022"),
-          "carrier" => "Hamburg Sud",
-          "carrier_code" => "hamburg sud",
-          "service" => "standard",
-          "mode_of_transport" => "ocean",
-          "vessel_code" => "CPSD-12",
-          "voyage_code" => "DFDFF_999",
-          "sheet_name" => "Sheet1",
-          "organization_id" => organization.id,
-          "row" => 3 }]
-    end
-
-    it "returns a DataFrame of extracted values" do
-      expect(service.framed_data).to eq(Rover::DataFrame.new(expected_results))
-    end
-  end
-
   describe "#perform" do
     let(:carrier) { FactoryBot.create(:legacy_carrier, name: "Hamburg Sud", code: "hamburg sud") }
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "standard", carrier: carrier, organization: organization) }

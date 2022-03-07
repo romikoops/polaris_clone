@@ -6,13 +6,14 @@ module ExcelDataServices
       module Tables
         class Sheet
           # This class encapsulates the logic for combingin the columns together to form a DataFrame that can be incoroporated in the larger DataFrame for processing later in the pipeline
-          attr_reader :section, :sheet_name
+          attr_reader :sheet_parser, :sheet_name, :state
 
-          delegate :validated_columns, :columns, :xlsx, :state, :dynamic_columns, :matrixes, to: :section
+          delegate :validated_columns, :columns, :xlsx, :dynamic_columns, :matrixes, to: :sheet_parser
 
-          def initialize(section:, sheet_name:)
-            @section = section
+          def initialize(sheet_parser:, sheet_name:, state:)
+            @sheet_parser = sheet_parser
             @sheet_name = sheet_name
+            @state = state
           end
 
           def sheet
@@ -20,31 +21,35 @@ module ExcelDataServices
           end
 
           def perform
-            return Rover::DataFrame.new if frame_columns.empty?
+            return Rover::DataFrame.new if validated_defined_data_sources.empty?
 
-            column_frame.concat(matrix_data).concat(overrides)
+            sheet_data.concat(overrides)
           end
 
-          def matrix_data
-            @matrix_data ||= sheet_matrixes.map(&:frame).inject(Rover::DataFrame.new) { |memo, matrix_data_frame| memo.concat(matrix_data_frame) }
+          def sheet_data
+            @sheet_data ||= validated_data_sources.map(&:frame).inject(Rover::DataFrame.new) { |memo, source_data_frame| memo.concat(source_data_frame) }
           end
 
           def errors
-            @errors ||= validated_columns.flat_map(&:errors) + dynamically_generated_columns.flat_map(&:errors)
-          end
-
-          def headers
-            sheet_columns.map(&:header)
+            @errors ||= error_data_sources.flat_map(&:errors)
           end
 
           def sheet_columns
-            @sheet_columns ||= validated_columns.select { |col| col.sheet_name == sheet_name }
+            @sheet_columns ||= columns.select { |col| col.sheet_name == sheet_name }.map(&:sheet_column)
           end
 
           private
 
-          def sheet_matrixes
-            @sheet_matrixes ||= matrixes.select { |matrix| matrix.sheet_name == sheet_name }
+          def validated_data_sources
+            @validated_data_sources ||= validated_defined_data_sources + dynamically_generated_columns
+          end
+
+          def validated_defined_data_sources
+            @validated_defined_data_sources ||= (columns + matrixes).select { |data_source| data_source.sheet_name == sheet_name && data_source.valid? }
+          end
+
+          def error_data_sources
+            @error_data_sources ||= (columns + matrixes).select { |data_source| data_source.sheet_name == sheet_name && data_source.present_on_sheet? }
           end
 
           def overrides
@@ -59,24 +64,6 @@ module ExcelDataServices
                 }
               end
             )
-          end
-
-          def update_column_on_missing_rows(key:, replacement_value:)
-            column_frame[column_frame[key].missing][key].map! { |_value| replacement_value }
-          end
-
-          def column_frame
-            @column_frame ||= frame_columns.drop(1).inject(initial_column_frame) do |result, col|
-              result.concat(col.frame)
-            end
-          end
-
-          def frame_columns
-            @frame_columns ||= columns.select { |col| col.sheet_name == sheet_name } + dynamically_generated_columns
-          end
-
-          def initial_column_frame
-            frame_columns.first.frame
           end
 
           def dynamically_generated_columns

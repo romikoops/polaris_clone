@@ -87,7 +87,8 @@ group :development do
   gem "guard-rspec", require: false
 
   # Rubocop
-  gem "rubocop-github", "0.16.1"
+  gem "rubocop", "~> 1.7.0"
+  gem "rubocop-github", "0.17.0"
   gem "rubocop-rspec", "~> 2.2.0"
 end
 

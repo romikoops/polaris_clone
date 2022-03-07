@@ -35,7 +35,11 @@ module ExcelDataServices
           end
 
           def valid?
-            sheet_column.present? || fallback == false || fallback.present?
+            errors.empty? || fallback_configured?
+          end
+
+          def present_on_sheet?
+            sheet_column.present?
           end
 
           def errors
@@ -67,7 +71,7 @@ module ExcelDataServices
 
           private
 
-          delegate :fallback, :dynamic, :column_index, :column_length, :alternative_keys, :required, :sanitizer, :validator, to: :options
+          delegate :fallback_configured?, :dynamic, :column_index, :column_length, :alternative_keys, :required, :sanitizer, :validator, to: :options
 
           def sheet
             xlsx.sheet(sheet_name)

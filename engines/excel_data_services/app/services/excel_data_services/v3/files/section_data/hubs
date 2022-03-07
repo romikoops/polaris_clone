@@ -65,36 +65,31 @@ column "free_out",
   sanitizer: "boolean",
   validator: "boolean",
   type: :bool,
-  required: false,
-  fallback:false
+  required: false
 
 column "import_charges",
   sanitizer: "boolean",
   validator: "boolean",
   type: :bool,
-  required: false,
-  fallback:false
+  required: false
 
 column "export_charges",
   sanitizer: "boolean",
   validator: "boolean",
   type: :bool,
-  required: false,
-  fallback:false
+  required: false
 
 column "pre_carriage",
   sanitizer: "boolean",
   validator: "boolean",
   type: :bool,
-  required: false,
-  fallback:false
+  required: false
 
 column "on_carriage",
   sanitizer: "boolean",
   validator: "boolean",
   type: :bool,
-  required: false,
-  fallback:false
+  required: false
 
 column "alternative_names",
   sanitizer: "text",

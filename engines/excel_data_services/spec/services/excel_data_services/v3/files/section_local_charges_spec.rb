@@ -9,7 +9,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
   let(:service) { described_class.new(state: state_arguments) }
   let(:sheet_name) { xlsx.sheets.first }
   let(:result_state) { service.perform }
-  let!(:default_group) { FactoryBot.create(:groups_group, :default, organization: organization) }
   let!(:shanghai) { FactoryBot.create(:legacy_hub, :shanghai, organization: organization) }
   let!(:felixstowe) { FactoryBot.create(:legacy_hub, :felixstowe, organization: organization) }
 
@@ -22,21 +21,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
 
     it "returns successfully" do
       expect(service.valid?).to eq(true)
-    end
-  end
-
-  describe "#framed_data" do
-    shared_examples_for "returns a DataFrame populated by the columns defined in the configs" do
-      it "returns a DataFrame of extracted values" do
-        expect(service.framed_data[0..2].to_a).to match_array(expected_results.to_a)
-      end
-    end
-
-    context "when section is LocalCharges" do
-      let(:section_string) { "LocalCharges" }
-      let(:expected_results) { FactoryBot.build(:excel_data_services_section_data, :local_charges, organization: organization, default_group: default_group) }
-
-      it_behaves_like "returns a DataFrame populated by the columns defined in the configs"
     end
   end
 

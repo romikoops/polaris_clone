@@ -77,6 +77,8 @@ module ExcelDataServices
             ].flatten.compact
           end
 
+          alias present_on_sheet? valid?
+
           private
 
           def sheet

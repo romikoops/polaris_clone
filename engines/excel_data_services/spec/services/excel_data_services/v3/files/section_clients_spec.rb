@@ -19,63 +19,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
     end
   end
 
-  describe "#framed_data" do
-    let(:expected_results) do
-      [{"company_name"=>"Test Company",
-        "first_name"=>"User 1",
-        "last_name"=>"Test",
-        "email"=>"user1@itsmycargo.test",
-        "phone"=>"123456789.0",
-        "external_id"=>nil,
-        "password"=>"TEST1234",
-        "currency"=>"EUR",
-        "language"=>"en-US",
-        "sheet_name"=>"Agents",
-        "organization_id"=> organization.id,
-        "row"=>2},
-       {"company_name"=>"Test Company",
-        "first_name"=>"User 2",
-        "last_name"=>"Test",
-        "email"=>"user2@itsmycargo.test",
-        "phone"=>"987654321.0",
-        "external_id"=>nil,
-        "password"=>"TEST1235",
-        "currency"=>"EUR",
-        "language"=>"de-DE",
-        "sheet_name"=>"Agents",
-        "organization_id"=> organization.id,
-        "row"=>3},
-       {"company_name"=>"Test Company",
-        "first_name"=>"User 3",
-        "last_name"=>"Test",
-        "email"=>"user3@itsmycargo.test",
-        "phone"=>nil,
-        "external_id"=>"235.0",
-        "password"=>"TEST1236",
-        "currency"=>"USD",
-        "language"=>"es-ES",
-        "sheet_name"=>"Agents",
-        "organization_id"=> organization.id,
-        "row"=>4},
-       {"company_name"=>"Test Company",
-        "first_name"=>"User 4",
-        "last_name"=>"Test",
-        "email"=>"user4@itsmycargo.test",
-        "phone"=>nil,
-        "external_id"=>"556.0",
-        "password"=>"TEST1237",
-        "currency"=>nil,
-        "language"=>"en-US",
-        "sheet_name"=>"Agents",
-        "organization_id"=> organization.id,
-        "row"=>5}]
-    end
-
-    it "returns a DataFrame of extracted values" do
-      expect(service.framed_data).to eq(Rover::DataFrame.new(expected_results))
-    end
-  end
-
   describe "#perform" do
     before do
       %w[EUR USD].each do |currency|

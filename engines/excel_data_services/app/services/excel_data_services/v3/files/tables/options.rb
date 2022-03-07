@@ -55,6 +55,10 @@ module ExcelDataServices
             @column_index ||= options[:column_index]
           end
 
+          def fallback_configured?
+            @fallback_configured ||= options.key?(:fallback)
+          end
+
           def errors
             %i[dynamic unique required].each_with_object([]) do |key, errs|
               next if [true, false, nil].include?(options[key])

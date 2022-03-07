@@ -82,7 +82,7 @@ module ExcelDataServices
             end
 
             def defined_columns
-              @defined_columns ||= sheet.sheet_columns.map(&:sheet_column)
+              @defined_columns ||= sheet.sheet_columns
             end
           end
 

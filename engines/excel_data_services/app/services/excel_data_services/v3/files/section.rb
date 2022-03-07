@@ -4,11 +4,9 @@ module ExcelDataServices
   module V3
     module Files
       class Section
-        # A section is defined by a config file that runs a pipeline of Operations that extract, manipulate, validate and insert data based on the classes invoked.
         attr_reader :state
 
-        delegate :xlsx, :section, to: :state
-        delegate :sheets, to: :xlsx
+        delegate :section, to: :state
 
         def self.state(state:)
           new(state: state).perform
@@ -19,114 +17,39 @@ module ExcelDataServices
         end
 
         def perform
-          @state.frame = framed_data
-          @state.errors |= errors
-          execute_actions(actions: (row_validations + operations + data_validations))
-          nested_pipeline(connected_actions: dependency_actions)
+          section_pipeline.each do |executor|
+            @state = executor.perform
+            return state if failed?
+          end
           state
         end
 
-        def nested_pipeline(connected_actions:)
-          connected_action = connected_actions.first
-          return if failed?
+        delegate :valid?, to: :sheet_validator
 
-          if (importer = connected_action.importer)
-            importer.model.transaction do
-              inner_transaction_loop(connected_actions: connected_actions)
-            end
-          else
-            inner_transaction_loop(connected_actions: connected_actions)
-          end
+        private
+
+        def section_pipeline
+          [data_framer, pipeline_executor]
         end
 
-        def inner_transaction_loop(connected_actions:)
-          if connected_actions.length > 1
-            nested_pipeline(connected_actions: connected_actions[1..])
-          else
-            execute_pipeline
-          end
+        def data_framer
+          @data_framer ||= ExcelDataServices::V3::Files::DataFramer.new(state: state, sheet_parser: sheet_parser)
         end
 
-        def execute_pipeline
-          dependency_actions.reverse_each do |connected_action|
-            execute_actions(actions: connected_action.actions)
-            next if failed?
-
-            @state = connected_action.importer.state(state: state)
-            next unless failed?
-            raise ActiveRecord::Rollback if atomic_insert?
-
-            break @state
-          end
+        def sheet_validator
+          @sheet_validator ||= ExcelDataServices::V3::Files::SheetValidator.new(state: state, sheet_parser: sheet_parser)
         end
 
-        def framed_data
-          @framed_data ||= framer.new(frame: matrix_data).perform
-        end
-
-        def matrix_data
-          @matrix_data ||= sheet_objects.inject(Rover::DataFrame.new) do |result, sheet_object|
-            result.concat(sheet_object.perform)
-          end
-        end
-
-        def execute_actions(actions:)
-          actions.each do |action|
-            break if failed?
-
-            @state = action.state(state: state)
-          end
-        end
-
-        def valid?
-          all_sheets_meet_requirements? && required_columns_present?
-        end
-
-        def errors
-          @errors ||= sheet_objects.flat_map(&:errors)
+        def pipeline_executor
+          @pipeline_executor ||= ExcelDataServices::V3::Files::PipelineExecutor.new(state: state, sheet_parser: sheet_parser)
         end
 
         def failed?
           state.errors.present?
         end
 
-        def sheet_objects
-          @sheet_objects ||= non_empty_sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Sheet.new(section: self, sheet_name: sheet_name) }
-        end
-
-        def required_columns_present?
-          columns.select(&:required).all?(&:valid?)
-        end
-
-        def column_types
-          validated_columns.map(&:frame_type).reduce(&:merge)
-        end
-
-        def rows
-          @rows ||= columns.first.cells.map(&:row).drop(1)
-        end
-
-        def validated_columns
-          @validated_columns ||= columns.select { |col| non_empty_sheets.include?(col.sheet_name) && col.valid? }
-        end
-
-        def all_sheets_meet_requirements?
-          requirements.all?(&:valid?)
-        end
-
-        delegate :columns, :requirements, :prerequisites, :operations, :dynamic_columns, :model,
-          :row_validations, :sorted_dependencies, :dependency_actions, :matrixes, :framer, :non_empty_sheets, :data_validations, to: :sheet_parser
-
-        private
-
         def sheet_parser
           @sheet_parser ||= SheetParser.new(type: "section", section: section, state: state)
-        end
-
-        def atomic_insert?
-          OrganizationManager::ScopeService.new(
-            target: nil, organization: organization
-          ).fetch(:atomic_insert)
         end
       end
     end

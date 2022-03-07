@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V3::Files::Tables::DynamicColumns do
   include_context "V3 setup"
 
-  let(:sheet) { ExcelDataServices::V3::Files::Tables::Sheet.new(section: section, sheet_name: sheet_name) }
-  let(:section) { ExcelDataServices::V3::Files::Section.new(state: state_arguments) }
+  let(:sheet) { ExcelDataServices::V3::Files::Tables::Sheet.new(state: state_arguments, sheet_name: sheet_name, sheet_parser: sheet_parser) }
+  let(:sheet_parser) { ExcelDataServices::V3::Files::SheetParser.new(section: section_string, state: state_arguments, type: "section") }
   let(:dynamic_columns) { described_class.new(excluding: excluding, including: including, header_row: header_row).columns(sheet: sheet) }
 
   before do

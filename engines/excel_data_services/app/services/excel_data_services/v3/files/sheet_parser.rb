@@ -10,6 +10,7 @@ module ExcelDataServices
           :importers, :row_validations, :data_validations, :pipelines, :operations, :matrixes, :framer
 
         delegate :xlsx, :organization, to: :state
+        delegate :sheets, to: :xlsx
 
         def initialize(section:, state:, type:)
           @section = section
@@ -118,10 +119,14 @@ module ExcelDataServices
           PrerequisiteExtractor.new(parent: section).dependencies
         end
 
-        def dependency_actions
-          @dependency_actions ||= sorted_dependencies.reverse.map do |dependency_section|
+        def connected_actions
+          @connected_actions ||= sorted_dependencies.map do |dependency_section|
             ConnectedActions.new(state: state, section: dependency_section, scope: scope)
           end
+        end
+
+        def global_actions
+          (row_validations + operations + data_validations)
         end
 
         def scope
@@ -160,7 +165,7 @@ module ExcelDataServices
           end
 
           def actions
-            (validators + conflicts + extractors + formatters)
+            (validators + conflicts + extractors + formatters + [importer])
           end
 
           private
