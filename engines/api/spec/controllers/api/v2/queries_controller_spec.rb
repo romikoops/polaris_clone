@@ -56,6 +56,7 @@ module Api
           destination_hub.nexus
         )
         FactoryBot.create(:legacy_cargo_item_type)
+        access_token
         post :create, params: {
           items: items,
           loadType: load_type,
@@ -71,6 +72,15 @@ module Api
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           expect(response_data["id"]).to be_present
           expect(DateTime.parse(response_data.dig("attributes", "cargoReadyDate"))).to eq(Time.zone.tomorrow)
+        end
+      end
+
+      context "when there is no auth provided" do
+        let(:token_header) { "Bearer " }
+
+        it "successfuly triggers the job and returns the query", :aggregate_failures do
+          expect(response_data["id"]).to be_present
+          expect(response_data.dig("attributes", "client", "id")).to be_nil
         end
       end
 

@@ -111,7 +111,7 @@ module Api
         Wheelhouse::QueryService.new(
           creator: current_user,
           client: current_user,
-          source: doorkeeper_application,
+          source: query_source,
           params: query_service_params
         )
       end
@@ -187,6 +187,10 @@ module Api
 
         query.update(status: new_status)
         query
+      end
+
+      def query_source
+        current_user ? doorkeeper_application : Doorkeeper::Application.find_by(name: "siren")
       end
     end
   end
