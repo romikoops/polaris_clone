@@ -10,6 +10,7 @@ RSpec.describe "Profiles", type: :request, swagger: true do
   let(:Authorization) { "Bearer #{access_token.token}" }
 
   before do
+    FactoryBot.create(:companies_membership, client: client)
     Organizations.current_id = organization_id
   end
 

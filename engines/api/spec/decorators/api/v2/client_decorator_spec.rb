@@ -6,9 +6,12 @@ RSpec.describe Api::V2::ClientDecorator do
   let(:user) { FactoryBot.create(:users_client, profile: profile) }
   let(:profile) { FactoryBot.build(:users_client_profile) }
   let(:decorated_user) { described_class.new(user) }
+  let(:company) { FactoryBot.create(:companies_company, organization: user.organization) }
 
   describe ".decorate" do
     context "with profile" do
+      before { FactoryBot.create(:companies_membership, client: user, company: company) }
+
       it "returns the first name" do
         expect(decorated_user.first_name).to eq(user.profile.first_name)
       end
@@ -18,7 +21,7 @@ RSpec.describe Api::V2::ClientDecorator do
       end
 
       it "returns the company name" do
-        expect(decorated_user.company_name).to eq(user.profile.company_name)
+        expect(decorated_user.company_name).to eq(company.name)
       end
 
       it "returns the phone" do

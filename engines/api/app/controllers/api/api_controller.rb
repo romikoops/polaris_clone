@@ -121,7 +121,7 @@ module Api
     end
 
     def doorkeeper_application
-      @doorkeeper_application ||= doorkeeper_token.application
+      @doorkeeper_application ||= doorkeeper_token&.application
     end
 
     def organization_results

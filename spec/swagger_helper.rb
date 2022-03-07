@@ -2054,7 +2054,23 @@ RSpec.configure do |config|
                   phone: {
                     description: "User's phone number for contact purposes",
                     type: "string"
-                  }
+                  },
+                  newUser: {
+                    description: "A boolean indicating whether the user has even logged in to the application before",
+                    type: "boolean"
+                  },
+                  currency: {
+                    description: "The users preferred currency. ISO 4217 3 letter currency code",
+                    type: "string"
+                  },
+                  language: {
+                    description: "The Users preferred Language eg. en-US",
+                    type: "string"
+                  },
+                  locale: {
+                    description: "The Users preferred Localization eg. en-US",
+                    type: "string"
+                  },
                 },
                 required: %w[
                   email

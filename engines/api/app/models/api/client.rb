@@ -32,7 +32,7 @@ module Api
     }
 
     def profile
-      super || Users::ClientProfile.new(first_name: "", last_name: "")
+      super || Users::ClientProfile.new(first_name: "", last_name: "", user: self)
     end
 
     def settings

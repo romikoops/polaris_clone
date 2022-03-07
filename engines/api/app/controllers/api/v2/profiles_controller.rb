@@ -13,16 +13,20 @@ module Api
           profile.update!(profile_update_params) unless profile_update_params.empty?
           settings.update!(settings_update_params) unless settings_update_params.empty?
         end
-        render json: Api::V2::ProfileSerializer.new(profile)
+        render json: serialized_profile
       rescue ActiveRecord::RecordInvalid => e
         render(json: { error: e.record.errors.full_messages }, status: :unprocessable_entity)
       end
 
       def show
-        render json: Api::V2::ProfileSerializer.new(profile)
+        render json: serialized_profile
       end
 
       private
+
+      def serialized_profile
+        Api::V2::ProfileSerializer.new(Api::V2::ProfileDecorator.new(profile, context: { application: doorkeeper_application }))
+      end
 
       def profile
         @profile ||= organization_user.profile

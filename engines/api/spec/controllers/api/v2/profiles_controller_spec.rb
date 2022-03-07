@@ -30,16 +30,21 @@ module Api
       before { perform_request }
 
       context "when successful" do
+        let(:expected_data) do
+          {
+            "email" => client.email, "firstName" => client_profile.first_name,
+            "lastName" => client_profile.last_name, "phone" => client_profile.phone,
+            "currency" => client_settings.currency, "language" => client_settings.language,
+            "locale" => client_settings.locale, "newUser" => true
+          }
+        end
+
         it "returns 200" do
           expect(response.status).to eq 200
         end
 
         it "returns the profile" do
-          expect(response_data["attributes"]).to eq({
-            "email" => client.email, "firstName" => client_profile.first_name,
-            "lastName" => client_profile.last_name, "phone" => client_profile.phone,
-            "currency" => client_settings.currency, "language" => client_settings.language, "locale" => client_settings.locale
-          })
+          expect(response_data["attributes"]).to eq(expected_data)
         end
       end
 
@@ -50,11 +55,11 @@ module Api
           expect(response.status).to eq 200
         end
 
-        it "returns the profile" do
+        it "returns the default values for the profile" do
           expect(response_data["attributes"]).to eq({
-            "email" => nil, "firstName" => "",
-            "lastName" => "", "phone" => nil,
-            "currency" => nil, "language" => nil, "locale" => nil
+            "email" => client.email, "firstName" => "",
+            "lastName" => "", "phone" => nil, "newUser" => true,
+            "currency" => "EUR", "language" => "en-GB", "locale" => "en-GB"
           })
         end
       end
@@ -77,7 +82,8 @@ module Api
             "phone" => client_profile.phone,
             "language" => "en-GB",
             "locale" => "es-ES",
-            "currency" => "USD"
+            "currency" => "USD",
+            "newUser" => true
           }
         end
         let(:profile_params) do

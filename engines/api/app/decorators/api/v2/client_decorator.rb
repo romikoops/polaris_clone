@@ -4,15 +4,12 @@ module Api
   module V2
     class ClientDecorator < ApplicationDecorator
       decorates "Users::Client"
+      decorates_association :profile, with: ProfileDecorator
       delegate_all
-      delegate :first_name, :last_name, :phone, to: :profile
+      delegate :first_name, :last_name, :phone, :company_name, to: :profile
 
       def email
         object.email.to_s
-      end
-
-      def company_name
-        profile.company_name.to_s
       end
     end
   end
