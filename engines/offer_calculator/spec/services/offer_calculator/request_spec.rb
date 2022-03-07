@@ -15,7 +15,7 @@ RSpec.describe OfferCalculator::Request do
   let(:delivery_address) { nil }
   let(:origin_hub) { nil }
   let(:destination_hub) { nil }
-  let(:query) { FactoryBot.create(:journey_query) }
+  let(:query) { FactoryBot.create(:journey_query, cargo_count: 0) }
   let(:persist) { false }
   let(:request) { described_class.new(query: query, params: params, persist: persist, pre_carriage: pre_carriage, on_carriage: on_carriage) }
   let(:pre_carriage) { true }
@@ -43,6 +43,42 @@ RSpec.describe OfferCalculator::Request do
   describe "#load_type" do
     it "returns the load_type" do
       expect(request.load_type).to eq("cargo_item")
+    end
+  end
+
+  describe "#cargo_classes" do
+    context "when fcl" do
+      before do
+        FactoryBot.create(:journey_cargo_unit, :fcl,cargo_class: "fcl_20", query: query)
+        FactoryBot.create(:journey_cargo_unit, :fcl, cargo_class: "fcl_40", query: query)
+        query.reload
+      end
+
+      it "returns the container cargo_classes" do
+        expect(request.cargo_classes).to match_array(%w[fcl_20 fcl_40])
+      end
+    end
+
+    context "when lcl" do
+      before do
+        FactoryBot.create(:journey_cargo_unit, query: query)
+        query.reload
+      end
+
+      it "returns the cargo item cargo_class" do
+        expect(request.cargo_classes).to match_array(%w[lcl])
+      end
+    end
+
+    context "when aggregate_lcl" do
+      before do
+        FactoryBot.create(:journey_cargo_unit, :aggregate_lcl, query: query)
+        query.reload
+      end
+
+      it "returns lcl as its cargo class" do
+        expect(request.cargo_classes).to match_array(%w[lcl])
+      end
     end
   end
 

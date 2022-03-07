@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activesupport", "~> 5.2.6"
-  spec.add_dependency "measured"
+  spec.add_dependency "measured", "~> 2.8.2"
   spec.add_dependency "rake", "~> 13.0"
 
   spec.add_development_dependency "bundler"

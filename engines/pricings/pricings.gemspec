@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "measured-itsmycargo"
 
   spec.add_dependency "geocoder"
-  spec.add_dependency "measured-rails"
+  spec.add_dependency "measured-rails", "~> 2.8.2"
   spec.add_dependency "uuidtools"
 
   spec.add_dependency "companies"

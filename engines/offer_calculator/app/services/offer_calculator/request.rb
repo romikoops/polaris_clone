@@ -43,17 +43,21 @@ module OfferCalculator
     end
 
     def pickup_address
-      @pickup_address ||= address(
-        latitude: query.origin_coordinates.y,
-        longitude: query.origin_coordinates.x
-      ) if pre_carriage?
+      if pre_carriage?
+        @pickup_address ||= address(
+          latitude: query.origin_coordinates.y,
+          longitude: query.origin_coordinates.x
+        )
+      end
     end
 
     def delivery_address
-      @delivery_address ||= address(
-        latitude: query.destination_coordinates.y,
-        longitude: query.destination_coordinates.x
-      ) if on_carriage?
+      if on_carriage?
+        @delivery_address ||= address(
+          latitude: query.destination_coordinates.y,
+          longitude: query.destination_coordinates.x
+        )
+      end
     end
 
     def address(latitude:, longitude:)
@@ -84,7 +88,7 @@ module OfferCalculator
     end
 
     def cargo_classes
-      @cargo_classes ||= query.load_type == "lcl" ? [query.load_type] : cargo_units.pluck(:cargo_class).uniq
+      @cargo_classes ||= cargo_units.pluck(:cargo_class).uniq.map { |string| string.gsub("aggregated_", "") }
     end
 
     def persist_cargo?

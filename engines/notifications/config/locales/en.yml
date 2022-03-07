@@ -24,5 +24,17 @@ en:
     request_mailer:
       request_created:
         dimensions_key: (LxWxH)
+        barrel: "Barrel"
+        bottle: "Bottle"
+        carton: "Carton"
+        case: "Case"
+        crate: "Crate"
+        drum: "Drum"
+        package: "Package"
+        pallet: "Pallet"
+        roll: "Roll"
+        skid: "Skid"
+        stack: "Stack"
+        aggregated_lcl: "Aggregated LCL"
 
 

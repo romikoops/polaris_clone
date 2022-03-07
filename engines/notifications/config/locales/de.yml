@@ -16,6 +16,23 @@ de:
         subject: "[%{company}] Bestätigen Sie Ihr Konto"
       reset_password_email:
         subject: "[%{company}] Passwort zurücksetzen"
+    client_mailer:
+      activation_needed_email:
+        subject: "[%{company}] Bestätigen Sie Ihr Konto"
+      reset_password_email:
+        subject: "[%{company}] Passwort zurücksetzen"
     request_mailer:
       request_created:
         dimensions_key: (LxBxH)
+        barrel: "Tonne"
+        bottle: "Flaschenkiste"
+        carton: "Kartonage"
+        case: "Kasten"
+        crate: "Lattenkiste"
+        drum: "Fass"
+        package: "Paket"
+        pallet: "Palette"
+        roll: "Rolle"
+        skid: "Palette (Skid)"
+        stack: "Stapel"
+        aggregate_lcl: "Sammelgüter"

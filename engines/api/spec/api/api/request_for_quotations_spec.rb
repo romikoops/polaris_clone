@@ -32,7 +32,8 @@ RSpec.describe "RequestForQuotations", type: :request, swagger: true do
         properties: {
           email: { type: :string, description: "Email of the client requesting for quotation." },
           fullName: { type: :string, description: "Name of the client requesting for quotation." },
-          phone: { type: :string, description: "Phone number of the client requesting for quotation." }
+          phone: { type: :string, description: "Phone number of the client requesting for quotation." },
+          note: { type: :string, description: "Any additional information regarding the request." }
         }
       }
 
@@ -40,7 +41,8 @@ RSpec.describe "RequestForQuotations", type: :request, swagger: true do
         {
           fullName: "John Doe",
           email: "john.doe@example.com",
-          phone: "+49-4647484950"
+          phone: "+49-4647484950",
+          note: ""
         }
       end
 

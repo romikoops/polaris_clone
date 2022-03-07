@@ -94,7 +94,7 @@ PATH
     cargo (1)
       legacy
       measured-itsmycargo
-      measured-rails
+      measured-rails (~> 2.8.2)
       money-rails
       organization_manager
       organizations
@@ -200,7 +200,7 @@ PATH
     journey (1)
       date_validator
       measured-itsmycargo
-      measured-rails
+      measured-rails (~> 2.8.2)
       rein
       shared-runtime
 
@@ -264,7 +264,7 @@ PATH
       cargo_packer
       chronic
       legacy
-      measured
+      measured (~> 2.8.2)
       money_cache
       notes
       organization_manager
@@ -320,7 +320,7 @@ PATH
       groups
       legacy
       measured-itsmycargo
-      measured-rails
+      measured-rails (~> 2.8.2)
       organization_manager
       organizations
       shared-runtime
@@ -412,7 +412,7 @@ PATH
       aasm
       address_book
       cargo
-      measured-rails
+      measured-rails (~> 2.8.2)
       money-rails (~> 1.12)
       organizations
       quotations
@@ -522,7 +522,7 @@ PATH
   specs:
     measured-itsmycargo (1)
       activesupport (~> 5.2.6)
-      measured
+      measured (~> 2.8.2)
       rake (~> 13.0)
 
 PATH
@@ -565,7 +565,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.1.1)
+    aasm (5.2.0)
       concurrent-ruby (~> 1.0)
     actioncable (5.2.6)
       actionpack (= 5.2.6)
@@ -703,7 +703,7 @@ GEM
     dalli (2.7.10)
     data_migrate (6.5.0)
       rails (>= 5.0)
-    date_validator (0.10.0)
+    date_validator (0.12.0)
       activemodel (>= 3)
       activesupport (>= 3)
     debase (0.2.4.1)
@@ -920,13 +920,13 @@ GEM
     marginalia (1.8.0)
       actionpack (>= 2.3)
       activerecord (>= 2.3)
-    measured (2.5.2)
-      activesupport (>= 5.0)
-    measured-rails (2.5.2)
-      activemodel (>= 4.2)
-      activerecord (>= 4.2)
-      measured (= 2.5.2)
-      railties (>= 4.2)
+    measured (2.8.2)
+      activesupport (>= 5.2)
+    measured-rails (2.8.2)
+      activemodel (>= 5.2)
+      activerecord (>= 5.2)
+      measured (= 2.8.2)
+      railties (>= 5.2)
     memoist (0.16.2)
     method_source (0.9.2)
     mime-types (3.3)

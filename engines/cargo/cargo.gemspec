@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "measured-itsmycargo"
 
   # External Gems
-  spec.add_dependency "measured-rails"
+  spec.add_dependency "measured-rails", "~> 2.8.2"
   spec.add_dependency "money-rails"
 
   # Internal Engines
