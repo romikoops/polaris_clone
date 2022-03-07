@@ -8,10 +8,6 @@ module Api
 
       delegate :query, :imc_reference, :mode_of_transport, to: :result
 
-      def status
-        super.humanize
-      end
-
       def origin_hub
         result.origin_route_point.name
       end

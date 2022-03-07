@@ -21,12 +21,6 @@ RSpec.describe Api::V2::ShipmentRequestDecorator do
     ::Organizations.current_id = organization.id
   end
 
-  describe "#status" do
-    it "returns the humanized status" do
-      expect(decorated_shipment_request.status).to eq("Requested")
-    end
-  end
-
   describe "#origin_hub" do
     it "returns the name of the origin hub" do
       expect(decorated_shipment_request.origin_hub).to eq("Hamburg")
