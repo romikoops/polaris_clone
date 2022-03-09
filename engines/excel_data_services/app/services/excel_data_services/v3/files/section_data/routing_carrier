@@ -7,7 +7,15 @@ target_model Routing::Carrier
 column "carrier",
   sanitizer: "text",
   validator: "string",
+  fallback: organization.slug,
   required: true
+column "carrier_code",
+  sanitizer: "downcase",
+  validator: "string",
+  fallback: organization.slug.downcase,
+  required: false,
+  alternative_keys: ["carrier"]
+
 
 add_extractor "RoutingCarrier"
 add_formatter "RoutingCarrier"

@@ -7,10 +7,12 @@ target_model Legacy::Carrier
 column "carrier",
   sanitizer: "text",
   validator: "string",
+  fallback: organization.slug,
   required: true
 column "carrier_code",
   sanitizer: "downcase",
   validator: "string",
+  fallback: organization.slug.downcase,
   required: false,
   alternative_keys: ["carrier"]
 
