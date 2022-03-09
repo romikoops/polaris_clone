@@ -14,7 +14,6 @@ module Api
     let(:expected_serialized_query) do
       {
         id: query.id,
-        aggregated: false,
         billable: query.billable,
         originName: query.origin,
         destinationName: query.destination,
