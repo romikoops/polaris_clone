@@ -119,11 +119,11 @@ column "destination_terminal",
   validator: "optional_string",
   required: false,
   type: :object
-column "fee_min",
+column "min",
   sanitizer: "decimal",
   validator: "optional_numeric",
   required: false,
-  alternative_keys: ["min"],
+  alternative_keys: ["minimum", "fee_min"],
   type: :object
 column "fee_name",
   sanitizer: "text",
