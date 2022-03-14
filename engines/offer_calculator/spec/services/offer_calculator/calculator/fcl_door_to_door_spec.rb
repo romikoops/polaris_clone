@@ -132,8 +132,8 @@ RSpec.describe OfferCalculator::Calculator do
         allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_raise(Carta::Client::ServiceUnavailable)
       end
 
-      it "raises OfferBuilder exception" do
-        expect { results }.to raise_error(OfferCalculator::Errors::OfferBuilder)
+      it "raises LocationServiceFailure exception" do
+        expect { results }.to raise_error(OfferCalculator::Errors::LocationServiceFailure)
       end
     end
 
@@ -143,7 +143,7 @@ RSpec.describe OfferCalculator::Calculator do
         allow(Carta::Client).to receive(:reverse_geocode).with(latitude: delivery_address.latitude, longitude: delivery_address.longitude).and_raise(Carta::Client::LocationNotFound)
       end
 
-      it "raises OfferBuilder exception" do
+      it "raises LocationNotFound exception" do
         expect { results }.to raise_error(OfferCalculator::Errors::LocationNotFound)
       end
     end

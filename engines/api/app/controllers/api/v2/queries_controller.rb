@@ -22,8 +22,8 @@ module Api
         new_query = wheelhouse_query_service.perform
         decorated = Api::V2::QueryDecorator.decorate(new_query)
         render json: Api::V2::QuerySerializer.new(decorated), status: :created
-      rescue Wheelhouse::ApplicationError => e
-        render json: { error: e.message }, status: :unprocessable_entity
+      rescue OfferCalculator::Errors::Failure => e
+        render json: { error: e.message, code: e.code }, status: :unprocessable_entity
       end
 
       def show
@@ -44,6 +44,14 @@ module Api
 
       def result_set
         render json: Api::V2::QueryStatusSerializer.new(Api::V2::QueryDecorator.new(query_with_updated_status))
+      end
+
+      def recalculate
+        new_query = OfferCalculator::Recalculate.new(original_query: query).perform
+        decorated = Api::V2::QueryDecorator.decorate(new_query)
+        render json: Api::V2::QuerySerializer.new(decorated), status: :created
+      rescue OfferCalculator::Errors::Failure => e
+        render json: { error: e.message, code: e.code }, status: :unprocessable_entity
       end
 
       private

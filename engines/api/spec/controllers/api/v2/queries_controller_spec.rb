@@ -44,6 +44,17 @@ module Api
       end
       let(:cargo_classes) { ["lcl"] }
       let(:load_type) { "cargo_item" }
+      let(:params) do
+        {
+          items: items,
+          loadType: load_type,
+          cargoReadyDate: Time.zone.tomorrow,
+          parentId: parent_id,
+          originId: origin.id,
+          destinationId: destination.id,
+          organization_id: organization.id
+        }
+      end
 
       before do
         { USD: 1.26, SEK: 8.26 }.each do |currency, rate|
@@ -57,18 +68,11 @@ module Api
         )
         FactoryBot.create(:legacy_cargo_item_type)
         access_token
-        post :create, params: {
-          items: items,
-          loadType: load_type,
-          cargoReadyDate: Time.zone.tomorrow,
-          parentId: parent_id,
-          originId: origin.id,
-          destinationId: destination.id,
-          organization_id: organization.id
-        }, as: :json
       end
 
       context "when lcl" do
+        before { post :create, params: params, as: :json }
+
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           expect(response_data["id"]).to be_present
           expect(DateTime.parse(response_data.dig("attributes", "cargoReadyDate"))).to eq(Time.zone.tomorrow)
@@ -77,6 +81,8 @@ module Api
 
       context "when there is no auth provided" do
         let(:token_header) { "Bearer " }
+
+        before { post :create, params: params, as: :json }
 
         it "successfuly triggers the job and returns the query", :aggregate_failures do
           expect(response_data["id"]).to be_present
@@ -97,6 +103,8 @@ module Api
         end
         let(:load_type) { "container" }
 
+        before { post :create, params: params, as: :json }
+
         it "successfuly triggers the job and returns the query" do
           expect(response_data["id"]).to be_present
         end
@@ -106,6 +114,8 @@ module Api
         let(:destination) do
           FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: "ZACPT")
         end
+
+        before { post :create, params: params, as: :json }
 
         it "successfuly triggers the job and returns the query" do
           expect(response_data["id"]).to be_present
@@ -117,6 +127,8 @@ module Api
           FactoryBot.create(:journey_query).id
         end
 
+        before { post :create, params: params, as: :json }
+
         it "successfuly triggers the job and returns the query" do
           expect(response_data["attributes"]["parentId"]).to be_present
         end
@@ -125,7 +137,9 @@ module Api
       context "when items are empty" do
         let(:items) { [] }
 
-        it "returns invalid params" do
+        before { post :create, params: params, as: :json }
+
+        it "returns invalid params", :aggregate_failures do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)).to eq({ "items" => ["must be present"] })
         end
@@ -143,9 +157,25 @@ module Api
           ]
         end
 
+        before { post :create, params: params, as: :json }
+
         it "returns invalid params", :aggregate_failures do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)).to eq({ "items" => { "0" => { "cargoClass" => ["must be filled"] } } })
+        end
+      end
+
+      context "when an error is raised" do
+        before do
+          query_generator_double = instance_double(OfferCalculator::Service::QueryGenerator)
+          allow(OfferCalculator::Service::QueryGenerator).to receive(:new).and_return(query_generator_double)
+          allow(query_generator_double).to receive(:query).and_raise(OfferCalculator::Errors::InvalidQuery)
+          post :create, params: params, as: :json
+        end
+
+        it "returns the error message and code", :aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to eq({ "error" => "OfferCalculator::Errors::InvalidQuery", "code" => 1012 })
         end
       end
     end
@@ -159,6 +189,31 @@ module Api
         it "successfuly returns the query object", :aggregate_failures do
           get :show, params: params, as: :json
           expect(response_data["id"]).to be_present
+        end
+      end
+    end
+
+    describe "POST #recalculate" do
+      let(:query) { FactoryBot.create(:journey_query, organization: organization, source_id: access_token.application_id, status: "failed") }
+
+      let(:params) { { query_id: query.id, organization_id: organization.id } }
+
+      it "successfuly returns the new query object", :aggregate_failures do
+        post :recalculate, params: params, as: :json
+        expect(response_data["id"]).not_to eq(query.id)
+        expect(response_data.dig("attributes", "parentId")).to eq(query.id)
+      end
+
+      context "when the Query is invalid" do
+        let(:query) do
+          FactoryBot.build(:journey_query, organization: organization, source_id: access_token.application_id, origin_geo_id: nil, status: "failed")
+            .tap { |invalid_query| invalid_query.save(validate: false) }
+        end
+
+        it "returns the error message and code", :aggregate_failures do
+          post :recalculate, params: params, as: :json
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)).to eq({ "error" => "OfferCalculator::Errors::InvalidQuery", "code" => 1012 })
         end
       end
     end

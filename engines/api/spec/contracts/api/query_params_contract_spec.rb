@@ -24,11 +24,12 @@ RSpec.describe Api::QueryParamsContract do
     end
     let(:cargo_classes) { ["lcl"] }
     let(:load_type) { "cargo_item" }
+    let(:cargo_ready_date) { Time.zone.tomorrow }
     let(:params) do
       {
         items: items,
         loadType: load_type,
-        cargoReadyDate: Time.zone.tomorrow.to_s,
+        cargoReadyDate: cargo_ready_date.to_s,
         parentId: parent_id,
         originId: origin_id,
         destinationId: destination_id
@@ -80,6 +81,22 @@ RSpec.describe Api::QueryParamsContract do
       let(:parent_id) { SecureRandom.uuid }
 
       it_behaves_like "valid params"
+    end
+
+    context "when cargoReadyDate is in the past" do
+      let(:cargo_ready_date) { Time.zone.yesterday }
+
+      it "returns errors indicating cargoReadyDate mus be in the future" do
+        expect(result.errors.to_h).to eq({ cargoReadyDate: ["must be in the future"] })
+      end
+    end
+
+    context "when loadType is invalid" do
+      let(:load_type) { "blue" }
+
+      it "returns errors indicating cargoReadyDate mus be in the future" do
+        expect(result.errors.to_h).to eq({ loadType: ["must be one of cargo_item | container"] })
+      end
     end
 
     context "when items are empty" do

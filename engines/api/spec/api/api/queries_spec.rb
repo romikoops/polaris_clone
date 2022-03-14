@@ -313,4 +313,35 @@ RSpec.describe "Queries", type: :request, swagger: true do
       end
     end
   end
+
+  path "/v2/organizations/{organization_id}/queries/{query_id}/recalculate" do
+    let(:query) do
+      FactoryBot.create(:journey_query,
+        organization: organization,
+        origin_geo_id: origin.id,
+        destination_geo_id: destination.id,
+        source_id: source.id,
+        client: user,
+        results: [FactoryBot.build(:journey_result)])
+    end
+
+    post "Recalculate Query" do
+      tags "Query"
+      description "Recalculate Query"
+      operationId "recalculateQuery"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :query_id, in: :path, type: :string, description: "The Query ID"
+
+      response "201", "successful operation" do
+        let(:query_id) { query.id }
+
+        run_test!
+      end
+    end
+  end
 end

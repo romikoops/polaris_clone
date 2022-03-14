@@ -93,7 +93,7 @@ module OfferCalculator
           end
 
           def geo_id_from_address(address:)
-            request.geo_id(target: address == request.pickup_address ? "origin" : "destination")
+            address == request.pickup_address ? request.origin_geo_id : request.destination_geo_id
           end
 
           def transshipment

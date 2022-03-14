@@ -19,8 +19,10 @@ module Journey
     validates :cargo_ready_date, presence: true
     validates :delivery_date, presence: true
     validates :destination, presence: true
+    validates :destination_geo_id, presence: true
     validates :destination_coordinates, presence: true
     validates :origin, presence: true
+    validates :origin_geo_id, presence: true
     validates :origin_coordinates, presence: true
     validates :load_type, presence: true
 

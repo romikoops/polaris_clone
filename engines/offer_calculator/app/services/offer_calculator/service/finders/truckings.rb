@@ -16,8 +16,7 @@ module OfferCalculator
 
           last_target = targets.last
           base_query.or(
-            carriage_association(carriage: last_target,
-                                 hub_ids: hub_ids_by_carriage(target: last_target))
+            carriage_association(carriage: last_target, hub_ids: hub_ids_by_carriage(target: last_target))
           )
         end
 
@@ -53,8 +52,7 @@ module OfferCalculator
         end
 
         def selected_trucking_ids(results:, carriage:)
-          filter_combos(results: results, carriage: carriage).map do |filters|
-            cargo_class, hub_id, truck_type, tenant_vehicle_id = filters
+          filter_combos(results: results, carriage: carriage).filter_map do |cargo_class, hub_id, truck_type, tenant_vehicle_id|
             target_trucking = nil
             hierarchy.each do |group|
               next if target_trucking.present?
@@ -68,14 +66,14 @@ module OfferCalculator
               )
             end
             target_trucking&.id
-          end.compact
+          end
         end
 
         def filter_combos(results:, carriage:)
           cargo_classes.product(
             valid_hub_ids(results: results),
-            truck_types(carriage: carriage),
-            results.pluck(:tenant_vehicle_id).uniq
+            default_truck_types,
+            results.where(carriage: carriage).pluck(:tenant_vehicle_id).uniq
           )
         end
 
@@ -96,10 +94,6 @@ module OfferCalculator
           )
         end
 
-        def truck_types(carriage:)
-          truck_type_for_carriage(carriage: carriage) || default_truck_types
-        end
-
         def default_truck_types
           load_type == "container" ? Trucking::Trucking::FCL_TRUCK_TYPES : Trucking::Trucking::LCL_TRUCK_TYPES
         end
@@ -110,13 +104,6 @@ module OfferCalculator
           else
             request.delivery_address
           end
-        end
-
-        def truck_type_for_carriage(carriage:)
-          assigned_truck_type = trucking_details.dig("#{carriage}_carriage", "truck_type")
-          return if assigned_truck_type.blank?
-
-          [assigned_truck_type]
         end
 
         def exclude_default

@@ -12,7 +12,7 @@ module OfferCalculator
 
     attr_reader :params, :query, :on_carriage, :pre_carriage
 
-    delegate :source, :creator, :organization, :cargo_ready_date, :currency, to: :query
+    delegate :source, :creator, :organization, :cargo_ready_date, :currency, :origin_geo_id, :destination_geo_id, to: :query
 
     def cargo_units
       @cargo_units ||= query.cargo_units.presence || OfferCalculator::Service::CargoCreator.new(
@@ -68,7 +68,11 @@ module OfferCalculator
     end
 
     def nexus_id(target:)
-      params.dig(target, "nexus_id")
+      params.dig(target, "nexus_id") || nexus_id_from_carta(target: target)
+    end
+
+    def truck_type
+      load_type == "container" ? "chassis" : "default"
     end
 
     def estimated
@@ -95,10 +99,6 @@ module OfferCalculator
       params.key?("estimated") ? !params["estimated"] : persist?
     end
 
-    def geo_id(target:)
-      params.dig(target, "id")
-    end
-
     def currency
       client_currency = client.settings&.currency
 
@@ -111,6 +111,19 @@ module OfferCalculator
 
     def scope
       @scope ||= OrganizationManager::ScopeService.new(target: client, organization: organization).fetch
+    end
+
+    def origin
+      @origin ||= Carta::Client.lookup(id: query.origin_geo_id)
+    end
+
+    def destination
+      @destination ||= Carta::Client.lookup(id: query.destination_geo_id)
+    end
+
+    def nexus_id_from_carta(target:)
+      carta_result = target == :origin ? origin : destination
+      Legacy::Nexus.where(organization: query.organization, locode: carta_result.address).pluck(:id).first
     end
   end
 end

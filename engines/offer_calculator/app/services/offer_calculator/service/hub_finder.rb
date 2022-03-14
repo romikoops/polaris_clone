@@ -23,18 +23,15 @@ module OfferCalculator
       end
 
       def trucking_hubs(carriage:)
-        trucking_details = request.trucking_params["#{carriage}_carriage"]
-        args = {
+        Trucking::Queries::Hubs.new({
           address: carriage == "pre" ? request.pickup_address : request.delivery_address,
           load_type: request.load_type,
           organization_id: organization.id,
-          truck_type: trucking_details["truck_type"],
+          truck_type: request.truck_type,
           carriage: carriage,
           cargo_classes: request.cargo_classes,
           groups: groups
-        }
-
-        Trucking::Queries::Hubs.new(args).perform
+        }).perform
       end
 
       def groups

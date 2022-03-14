@@ -65,7 +65,7 @@ Layout/ParameterAlignment:
   IndentationWidth: ~
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 10
+  Max: 15
 
 RSpec/NestedGroups:
   Max: 4

@@ -2,6 +2,8 @@
 
 module Api
   class QueryParamsContract < Dry::Validation::Contract
+    VALID_PARAM_LOAD_TYPES = %w[cargo_item container].freeze
+
     CargoItemSchema = Dry::Schema.Params do
       required(:cargoClass).filled(:string)
       optional(:stackable).value(:bool)
@@ -31,6 +33,14 @@ module Api
 
     rule(:items) do
       key.failure("must be present") if values[:items].blank?
+    end
+
+    rule(:cargoReadyDate) do
+      key.failure("must be in the future") if values[:cargoReadyDate] && Time.zone.today > Time.zone.parse(values[:cargoReadyDate])
+    end
+
+    rule(:loadType) do
+      key.failure("must be one of #{VALID_PARAM_LOAD_TYPES.join(' | ')}") if VALID_PARAM_LOAD_TYPES.exclude?(values[:loadType])
     end
   end
 end

@@ -38,8 +38,11 @@ module OfferCalculator
     NoManipulatedImportFeesFound = Class.new(Failure)
     NoManipulatedPricingsFound = Class.new(Failure)
     InvalidDirection = Class.new(Failure)
+    InvalidQuery = Class.new(Failure)
+    InvalidParentQuery = Class.new(Failure)
     InvalidCargoUnit = Class.new(Failure)
     LocationNotFound = Class.new(Failure)
+    LocationServiceFailure = Class.new(Failure)
 
     CODE_LOOKUP = {
       1000 => OfferCalculator::Errors::NoRoute,
@@ -53,6 +56,8 @@ module OfferCalculator
       1009 => OfferCalculator::Errors::InvalidCargoUnit,
       1010 => OfferCalculator::Errors::InvalidDirection,
       1011 => OfferCalculator::Errors::LocationNotFound,
+      1012 => OfferCalculator::Errors::InvalidQuery,
+      1013 => OfferCalculator::Errors::LocationServiceFailure,
       2001 => OfferCalculator::Errors::NoValidPricings,
       2003 => OfferCalculator::Errors::InvalidLocalChargeResult,
       2004 => OfferCalculator::Errors::InvalidFreightResult,

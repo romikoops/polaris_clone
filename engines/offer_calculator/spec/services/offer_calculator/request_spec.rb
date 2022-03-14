@@ -49,7 +49,7 @@ RSpec.describe OfferCalculator::Request do
   describe "#cargo_classes" do
     context "when fcl" do
       before do
-        FactoryBot.create(:journey_cargo_unit, :fcl,cargo_class: "fcl_20", query: query)
+        FactoryBot.create(:journey_cargo_unit, :fcl, cargo_class: "fcl_20", query: query)
         FactoryBot.create(:journey_cargo_unit, :fcl, cargo_class: "fcl_40", query: query)
         query.reload
       end
@@ -124,6 +124,26 @@ RSpec.describe OfferCalculator::Request do
       it "returns an Address when there is on carriage" do
         expect(request.delivery_address).to be_a(Legacy::Address)
       end
+    end
+  end
+
+  describe "#origin" do
+    before { allow(Carta::Client).to receive(:lookup).with(id: query.origin_geo_id).and_return(origin) }
+
+    let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode") }
+
+    it "returns the Carta::Result object for the Location" do
+      expect(request.origin).to eq(origin)
+    end
+  end
+
+  describe "#destination" do
+    before { allow(Carta::Client).to receive(:lookup).with(id: query.destination_geo_id).and_return(destination) }
+
+    let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode") }
+
+    it "returns the Carta::Result object for the Location" do
+      expect(request.destination).to eq(destination)
     end
   end
 end

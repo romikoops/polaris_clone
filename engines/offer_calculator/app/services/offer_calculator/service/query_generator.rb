@@ -16,7 +16,16 @@ module OfferCalculator
       alias persist? persist
 
       def query
-        @query ||= Journey::Query.new(
+        return initialized_query unless persist?
+        raise OfferCalculator::Errors::InvalidQuery unless initialized_query.save
+
+        initialized_query
+      end
+
+      private
+
+      def initialized_query
+        @initialized_query ||= Journey::Query.new(
           parent: parent_query,
           cargo_ready_date: cargo_ready_date,
           delivery_date: delivery_date,
@@ -35,12 +44,8 @@ module OfferCalculator
           origin_geo_id: origin_geo_id,
           destination_geo_id: destination_geo_id,
           status: "running"
-        ).tap do |new_query|
-          new_query.save! if persist?
-        end
+        )
       end
-
-      private
 
       def load_type
         params[:load_type] == "container" ? :fcl : :lcl
@@ -56,7 +61,7 @@ module OfferCalculator
 
       def delivery_date
         @delivery_date ||= params[:selected_collection_day] ||
-          cargo_ready_date + OfferCalculator::Schedule::DURATION.days
+          (cargo_ready_date + OfferCalculator::Schedule::DURATION.days)
       end
 
       def origin_string
@@ -176,11 +181,10 @@ module OfferCalculator
           valid_geo = Carta::Client.reverse_geocode(latitude: target.latitude, longitude: target.longitude) if target.latitude.present? && target.longitude.present?
         end
         valid_geo.id if valid_geo.present?
-
-        rescue Carta::Client::ServiceUnavailable
-          raise OfferCalculator::Errors::OfferBuilder
-        rescue Carta::Client::LocationNotFound
-          raise OfferCalculator::Errors::LocationNotFound
+      rescue Carta::Client::ServiceUnavailable
+        raise OfferCalculator::Errors::LocationServiceFailure
+      rescue Carta::Client::LocationNotFound
+        raise OfferCalculator::Errors::LocationNotFound
       end
     end
   end
