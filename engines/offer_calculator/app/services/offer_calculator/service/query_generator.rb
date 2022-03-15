@@ -19,6 +19,11 @@ module OfferCalculator
         return initialized_query unless persist?
         raise OfferCalculator::Errors::InvalidQuery unless initialized_query.save
 
+        OfferCalculator::Service::CargoCreator.new(
+          query: initialized_query,
+          params: params,
+          persist: persist?
+        ).perform
         initialized_query
       end
 

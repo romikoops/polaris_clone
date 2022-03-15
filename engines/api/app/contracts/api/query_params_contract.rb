@@ -8,7 +8,7 @@ module Api
       required(:cargoClass).filled(:string)
       optional(:stackable).value(:bool)
       optional(:dangerous).value(:bool)
-      optional(:colliType).filled(:string)
+      optional(:colliType).maybe(:string)
       optional(:quantity).value(:integer, gt?: 0)
       optional(:width).maybe(:decimal, gt?: 0)
       optional(:height).maybe(:decimal, gt?: 0)

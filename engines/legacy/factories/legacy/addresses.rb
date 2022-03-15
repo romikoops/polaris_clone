@@ -12,8 +12,8 @@ FactoryBot.define do
 
     trait :shanghai do
       name { "Shanghai" }
-      latitude { "31.232014" }
-      longitude { "121.4867159" }
+      latitude { "31.2231338" }
+      longitude { "120.9162975" }
       zip_code { "20001" }
       street { "Henan Middle Road" }
       street_number { "88" }

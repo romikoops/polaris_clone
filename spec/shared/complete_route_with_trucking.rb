@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.shared_context "complete_route_with_trucking" do
   let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, organization: organization) }
   let(:origin_hub) { itinerary.origin_hub }
@@ -136,22 +137,6 @@ RSpec.shared_context "complete_route_with_trucking" do
   end
 
   before do
-    Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
-      "address_components" => [{ "types" => ["premise"] }],
-      "address" => pickup_address.geocoded_address,
-      "city" => pickup_address.city,
-      "country" => pickup_address.country.name,
-      "country_code" => pickup_address.country.code,
-      "postal_code" => pickup_address.zip_code
-    ])
-    Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
-      "address_components" => [{ "types" => ["premise"] }],
-      "address" => delivery_address.geocoded_address,
-      "city" => delivery_address.city,
-      "country" => delivery_address.country.name,
-      "country_code" => delivery_address.country.code,
-      "postal_code" => delivery_address.zip_code
-    ])
     Geocoder::Lookup::Test.add_stub([origin_hub.latitude, origin_hub.longitude], [
       "address_components" => [{ "types" => ["premise"] }],
       "address" => "",
@@ -168,6 +153,23 @@ RSpec.shared_context "complete_route_with_trucking" do
       "country_code" => destination_hub.nexus.country.code,
       "postal_code" => ""
     ])
+    Geocoder::Lookup::Test.add_stub([pickup_address.latitude, pickup_address.longitude], [
+      "address_components" => [{ "types" => ["premise"] }],
+      "address" => pickup_address.geocoded_address,
+      "city" => pickup_address.city,
+      "country" => pickup_address.country.name,
+      "country_code" => pickup_address.country.code,
+      "postal_code" => pickup_address.zip_code
+    ])
+    Geocoder::Lookup::Test.add_stub([delivery_address.latitude, delivery_address.longitude], [
+      "address_components" => [{ "types" => ["premise"] }],
+      "address" => delivery_address.geocoded_address,
+      "city" => delivery_address.city,
+      "country" => delivery_address.country.name,
+      "country_code" => delivery_address.country.code,
+      "postal_code" => delivery_address.zip_code
+    ])
     FactoryBot.create(:routing_carrier, name: carrier.name, code: carrier.code)
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

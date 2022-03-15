@@ -121,7 +121,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
           {
             stackable: true,
             cargoClass: "fcl_20",
-            colliType: "container",
+            colliType: nil,
             quantity: 1,
             length: nil,
             width: nil,
@@ -141,7 +141,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
           {
             stackable: true,
             cargoClass: "aggregated_lcl",
-            colliType: "pallet",
+            colliType: nil,
             quantity: 1,
             length: nil,
             width: nil,
