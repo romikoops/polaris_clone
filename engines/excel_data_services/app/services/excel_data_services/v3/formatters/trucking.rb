@@ -110,7 +110,7 @@ module ExcelDataServices
           def build_rate_hash(row:)
             min_max = bracket(row: row)
             {
-              "rate" => row.slice("currency", "rate_basis", "base", "value")
+              "rate" => row.slice("currency", "rate_basis", "base").merge("rate" => row["rate"].to_f)
             }.merge(min_max).merge(min_value_attributes(row: row.compact))
           end
 
@@ -119,7 +119,7 @@ module ExcelDataServices
           end
 
           def min_value_attributes(row:)
-            { "min_value" => row.values_at("row_minimum", "bracket_minimum").compact.max }
+            { "min_value" => row.values_at("row_minimum", "bracket_minimum").compact.max.to_f }
           end
 
           def bracket(row:)

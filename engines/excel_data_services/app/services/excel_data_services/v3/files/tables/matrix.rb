@@ -7,17 +7,16 @@ module ExcelDataServices
         class Matrix
           # A Column class is defined in the config file. It results in one column of the data frame and allows you to configure
           # santizers, fallback values, validators, required content and more
-          attr_reader :header, :rows, :columns, :xlsx, :sheet_name, :options
+          attr_reader :header, :coordinates, :xlsx, :sheet_name, :options
 
           def initialize(xlsx:, rows:, columns:, header:, sheet_name:, options: Options.new)
             @xlsx = xlsx
             @options = options
             @header = header
             @sheet_name = sheet_name
-            @rows = parse_coordinate_string(input: rows, type: :row)
-            @columns = parse_coordinate_string(input: columns, type: :column)
+            @coordinates = ExcelDataServices::V3::Files::Coordinates::Parser.new(sheet: sheet, input_rows: rows, input_columns: columns)
           end
-
+          delegate :rows, :columns, to: :coordinates
           delegate :sanitizer, :validator, :required, :alternative_keys, :fallback, :type, :dynamic, to: :options
 
           def cells

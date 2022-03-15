@@ -9,11 +9,15 @@ module ExcelDataServices
         end
 
         def error_reason(row:)
-          "The location '#{row[row['identifier']]}' cannot be found."
+          "The location '#{row.values_at(row['identifier'], 'range').compact.join(', ')}' cannot be found."
         end
 
         def filtered_frame
           frame[frame["query_type"] == Extractors::QueryType::QUERY_TYPE_ENUM["location"]]
+        end
+
+        def row_key
+          "zone_row"
         end
       end
     end

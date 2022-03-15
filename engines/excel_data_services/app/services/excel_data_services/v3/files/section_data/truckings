@@ -435,7 +435,7 @@ add_validator "TruckingLocation"
 
 add_formatter "Trucking"
 
-conflict Trucking::Trucking, %w[hub_id cargo_class organization_id group_id tenant_vehicle_id]
+conflict Trucking::Trucking, %w[hub_id cargo_class organization_id group_id tenant_vehicle_id carriage]
 
 model_importer Trucking::Trucking, { batch_size: 500 }
 target_model Trucking::Trucking

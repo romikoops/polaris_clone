@@ -54,7 +54,7 @@ RSpec.describe ExcelDataServices::V3::Files::Tables::Matrix do
       let(:columns) { xlsx }
 
       it "raises and argument error" do
-        expect { service }.to raise_error(ArgumentError)
+        expect { service.columns }.to raise_error(ArgumentError)
       end
     end
 

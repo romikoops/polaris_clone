@@ -28,8 +28,8 @@ column "locode",
   type: :object,
   sheet_name: "Zones"
 column "distance",
-  sanitizer: "integer",
-  validator: "optional_numeric",
+  sanitizer: "distance",
+  validator: "optional_numeric_like",
   required: true,
   type: :object,
   sheet_name: "Zones"

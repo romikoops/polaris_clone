@@ -79,9 +79,7 @@ RSpec.describe OfferCalculator::Results do
     allow(Carta::Client).to receive(:lookup).with(id: query.destination_geo_id).and_return(destination)
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.hub_code).and_return(origin)
     allow(Carta::Client).to receive(:suggest).with(query: destination_hub.hub_code).and_return(destination)
-    # rubocop:disable RSpec/RSpec/AnyInstance
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
-    # rubocop:enable RSpec/RSpec/AnyInstance
   end
 
   describe "#perform" do

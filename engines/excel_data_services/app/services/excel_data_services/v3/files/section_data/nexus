@@ -24,7 +24,6 @@ column "longitude",
 column "country",
   sanitizer: "text",
   validator: "string",
-  required: true,
   type: :object,
   required: false
 

@@ -23,18 +23,18 @@ RSpec.describe ExcelDataServices::V3::Formatters::Trucking do
         "tenant_vehicle_id" => 550,
         "rates" =>
           { "kg" =>
-            [{ "rate" => { "currency" => "EUR", "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
+            [{ "rate" => { "currency" => "EUR", "rate" => 28.392, "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
                "min_kg" => 0.0,
                "max_kg" => 100.0,
-               "min_value" => "0.0" },
-              { "rate" => { "currency" => "EUR", "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
+               "min_value" => 0.0 },
+              { "rate" => { "currency" => "EUR", "rate" => 35.49, "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
                 "min_kg" => 100.0,
                 "max_kg" => 200.0,
-                "min_value" => "0.0" },
-              { "rate" => { "currency" => "EUR", "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
+                "min_value" => 0.0 },
+              { "rate" => { "currency" => "EUR", "rate" => 45.422, "rate_basis" => "PER_SHIPMENT", "base" => 1.0 },
                 "min_kg" => 200.0,
                 "max_kg" => 300.0,
-                "min_value" => "0.0" }] },
+                "min_value" => 0.0 }] },
         "fees" =>
           { "FSC" =>
             {
@@ -46,7 +46,8 @@ RSpec.describe ExcelDataServices::V3::Formatters::Trucking do
               "currency" => "EUR",
               "rate" => 30.0,
               "key" => "FSC",
-              "range" => [] } },
+              "range" => []
+            } },
         "load_meterage" =>
           { "stackable_type" => "area",
             "non_stackable_type" => "ldm",
