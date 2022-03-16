@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Trestle.resource(:clients, model: Users::Client) do
+Trestle.resource(:clients, model: Api::Client) do
   menu :clients, icon: "fa fa-users", group: :users
 
   collection do
@@ -57,10 +57,20 @@ Trestle.resource(:clients, model: Users::Client) do
     column :created_at, sort: { default: true, default_order: :desc }
   end
 
-  form do
+  form do |client|
     collection_select :organization_id, Organizations::Organization.all, :id, :slug
 
     text_field :email
+
+    fields_for :profile, client.profile || client.build_profile do
+      text_field :first_name
+      text_field :last_name
+    end
+
+    fields_for :settings, client.settings || client.build_settings do
+      text_field :locale
+      text_field :language
+    end
 
     password_field :password
     password_field :password_confirmation
