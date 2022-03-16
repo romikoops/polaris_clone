@@ -33,6 +33,34 @@ module Api
       expect(target[:queryId]).to be_present
     end
 
+    it "returns preCarriage as false when there is no Pre-carriage" do
+      expect(target[:preCarriage]).to eq(false)
+    end
+
+    it "returns onCarriage as false when there is no On-carriage" do
+      expect(target[:onCarriage]).to eq(false)
+    end
+
+    context "when Result has Pre-carriage and On-carriage" do
+      let(:result) do
+        FactoryBot.create(:journey_result,
+          query_id: journey_query.id,
+          route_sections: [
+            FactoryBot.build(:journey_route_section, :pre_carriage),
+            FactoryBot.build(:journey_route_section, :main_carriage),
+            FactoryBot.build(:journey_route_section, :on_carriage)
+          ])
+      end
+
+      it "returns preCarriage as true when there is Pre-carriage" do
+        expect(target[:preCarriage]).to eq(true)
+      end
+
+      it "returns onCarriage as true when there is On-carriage" do
+        expect(target[:onCarriage]).to eq(true)
+      end
+    end
+
     context "when the result decorator's total returns nil" do
       it "returns nil values for a money representation" do
         allow(decorated_result).to receive(:total).and_return(nil)

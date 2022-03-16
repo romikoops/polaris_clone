@@ -11,5 +11,34 @@ FactoryBot.define do
     sequence(:order) { |n| n }
     transit_time { nil }
     transshipment { nil }
+
+    main_carriage
+
+    trait :pre_carriage do
+      mode_of_transport { "carriage" }
+      order { 1 }
+      association :from, factory: :journey_route_point_address
+    end
+
+    trait :export do
+      mode_of_transport { "relay" }
+      order { 2 }
+    end
+
+    trait :main_carriage do
+      mode_of_transport { "ocean" }
+      order { 3 }
+    end
+
+    trait :import do
+      mode_of_transport { "relay" }
+      order { 4 }
+    end
+
+    trait :on_carriage do
+      mode_of_transport { "carriage" }
+      order { 5 }
+      association :to, factory: :journey_route_point_address
+    end
   end
 end

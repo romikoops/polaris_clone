@@ -1672,6 +1672,14 @@ RSpec.configure do |config|
               numberOfStops: {
                 description: "The number of times the cargo will be loaded and unloaded during the journey",
                 type: "integer"
+              },
+              preCarriage: {
+                description: "Whether or not the Result includes Pre-carriage of any kind",
+                type: "boolean"
+              },
+              onCarriage: {
+                description: "Whether or not the Result includes On-carriage of any kind",
+                type: "boolean"
               }
             }
           },

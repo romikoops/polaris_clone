@@ -29,6 +29,14 @@ module Api
         result.destination_route_point.name
       end
 
+      attribute :pre_carriage do |result|
+        result.pre_carriage_section.present?
+      end
+
+      attribute :on_carriage do |result|
+        result.on_carriage_section.present?
+      end
+
       attribute :valid_until, &:expiration_date
 
       attribute :total do |result|
