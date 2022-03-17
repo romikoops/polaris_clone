@@ -69,9 +69,9 @@ module OfferCalculator
         end
 
         def value_from_fee
-          return fee["percentage"] if rate_basis == "PERCENTAGE"
+          return fee.values_at("rate", "percentage").find(&:present?) if rate_basis == "PERCENTAGE"
 
-          fee.dig("value") || fee.dig("rate") || fee.dig(measure_key)
+          fee.values_at("value", "rate", measure_key).find(&:present?)
         end
 
         def handle_non_standard_rate_basis

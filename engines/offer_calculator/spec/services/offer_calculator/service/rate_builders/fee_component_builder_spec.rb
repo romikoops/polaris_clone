@@ -83,6 +83,18 @@ RSpec.describe OfferCalculator::Service::RateBuilders::FeeComponentBuilder do
       end
     end
 
+    context "with the reformatted percentage fee type " do
+      let(:fee) { FactoryBot.build(:component_builder_fee, :rate_percentage) }
+
+      it "returns the properly set up Fee Component", :aggregate_failures do
+        expect(fee_components.length).to eq(1)
+        expect(fee_components.first.value).to eq(Money.new(0, "USD"))
+        expect(fee_components.first.percentage).to eq(0.325)
+        expect(fee_components.first.modifier).to eq(:percentage)
+        expect(fee_components.first.base).to eq(default_base)
+      end
+    end
+
     context "with stowage range fee (ton)" do
       let(:fee) { FactoryBot.build(:component_builder_fee, :stowage) }
 

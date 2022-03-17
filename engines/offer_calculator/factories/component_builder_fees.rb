@@ -52,6 +52,19 @@ FactoryBot.define do
         }
       end
     end
+    trait :rate_percentage do
+      data do
+        {
+          "key" => "FSC",
+          "max" => nil,
+          "min" => 5,
+          "name" => "Fuel Surcharge",
+          "rate" => 0.325,
+          "currency" => "EUR",
+          "rate_basis" => "PERCENTAGE"
+        }
+      end
+    end
     trait :maximum_minimum do
       data do
         {
