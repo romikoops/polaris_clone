@@ -3,12 +3,12 @@
 module Api
   module V2
     class ChargeSerializer < Api::ApplicationSerializer
-      attributes %i[id fee_code description original_value value order section unit_price units]
+      attributes %i[id fee_code description value order section unit_price units]
 
       attribute :value do |charge|
         {
-          value: charge.total.cents / 100.0,
-          currency: charge.total.currency.iso_code
+          value: charge.value.cents / 100.0,
+          currency: charge.value.currency.iso_code
         }
       end
 

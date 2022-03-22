@@ -13,7 +13,11 @@ module Api
       end
 
       def value
-        total
+        total.exchange_to(currency)
+      end
+
+      def unit_price
+        super.exchange_to(currency)
       end
 
       def section
@@ -59,6 +63,10 @@ module Api
 
       def organization
         Organizations::Organization.find(Organizations.current_id)
+      end
+
+      def currency
+        context[:currency] || total_currency
       end
     end
   end

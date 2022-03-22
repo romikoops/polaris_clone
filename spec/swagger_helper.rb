@@ -731,6 +731,51 @@ RSpec.configure do |config|
               level
             ]
           },
+          v2Charge: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Charge ID",
+                type: "string"
+              },
+              description: {
+                description: "Description",
+                type: "string"
+              },
+              feeCode: {
+                description: "The fee code describing the Charge",
+                type: "string"
+              },
+              value: {
+                "$ref": "#/components/schemas/v2Money"
+              },
+              unitPrice: {
+                "$ref": "#/components/schemas/v2Money"
+              },
+              order: {
+                description: "Order of the charges",
+                type: "integer"
+              },
+              section: {
+                description: "Section of charge",
+                type: "string"
+              },
+              units: {
+                description: "Quantity of cargo this Charge was calculated with",
+                type: "integer"
+              }
+            },
+            required: %w[
+              id
+              description
+              feeCode
+              value
+              unitPrice
+              order
+              section
+              units
+            ]
+          },
           commodityInfo: {
             type: "object",
             properties: {
@@ -1418,6 +1463,30 @@ RSpec.configure do |config|
             },
             required: %w[
               amount
+              currency
+            ]
+          },
+          v2Money: {
+            type: "object",
+            properties: {
+              value: {
+                anyOf: [
+                  {
+                    type: "string"
+                  },
+                  {
+                    type: "number"
+                  }
+                ],
+                description: "Monetary amount in given currency"
+              },
+              currency: {
+                type: "string",
+                description: "ISO 4217 code for currency"
+              }
+            },
+            required: %w[
+              value
               currency
             ]
           },

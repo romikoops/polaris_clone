@@ -9,7 +9,7 @@ module Api
 
       def index
         render json: Api::V2::ChargeSerializer.new(
-          Api::V2::LineItemDecorator.decorate_collection(line_items)
+          Api::V2::LineItemDecorator.decorate_collection(line_items, context: decorator_context)
         )
       end
 
@@ -20,11 +20,19 @@ module Api
       end
 
       def line_item_set
-        Journey::LineItemSet.where(result: result)
+        Journey::LineItemSet.where(result: result).order(created_at: :desc).first
       end
 
       def result
-        Journey::Result.find(params[:result_id])
+        Journey::Result.find(charges_params[:result_id])
+      end
+
+      def charges_params
+        params.permit(:result_id, :currency)
+      end
+
+      def decorator_context
+        { currency: charges_params[:currency] }.compact
       end
     end
   end

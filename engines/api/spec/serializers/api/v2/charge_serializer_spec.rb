@@ -20,7 +20,6 @@ module Api
         id: line_item.id,
         feeCode: line_item.fee_code,
         description: line_item.description,
-        originalValue: nil,
         value: line_item_total,
         order: line_item.order,
         section: decorated_line_item.section,

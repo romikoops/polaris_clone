@@ -14,8 +14,8 @@ RSpec.describe "Charges", type: :request, swagger: true do
   before do
     FactoryBot.create(:users_membership, organization: organization, user: user)
     Treasury::ExchangeRate.create(from: "USD",
-                                  to: "EUR", rate: 1.3,
-                                  created_at: result.created_at - 30.seconds)
+      to: "EUR", rate: 1.3,
+      created_at: result.created_at - 30.seconds)
   end
 
   path "/v1/organizations/{organization_id}/quotations/{quotation_id}/charges/{id}" do
@@ -37,16 +37,61 @@ RSpec.describe "Charges", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {"$ref" => "#/components/schemas/quotationTender"}
-               },
-               required: ["data"]
+          properties: {
+            data: { "$ref" => "#/components/schemas/quotationTender" }
+          },
+          required: ["data"]
 
         run_test!
       end
 
       response "404", "Invalid Charge ID" do
         let(:id) { "deadbeef" }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/results/{result_id}/charges" do
+    let(:result_id) { result.id }
+    let(:currency) { "EUR" }
+
+    get "Fetch Charges (Journey::LineItem)" do
+      tags "Quote"
+      description "Fetches the Line Items for the Result in question."
+      operationId "getCharge"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :result_id, in: :path, type: :string, description: "The selected result ID"
+      parameter name: :currency, in: :query, type: :string, description: "Optional currency to convert charges to"
+
+      response "200", "successful operation" do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  id: { type: :string, description: "The ID of the Charge" },
+                  type: { type: :string },
+                  attributes: { "$ref" => "#/components/schemas/v2Charge" }
+                }
+              }
+            }
+          },
+          required: ["data"]
+
+        run_test!
+      end
+
+      response "404", "Invalid Result ID" do
+        let(:result_id) { "deadbeef" }
 
         run_test!
       end
