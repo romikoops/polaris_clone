@@ -26,7 +26,8 @@ module Api
         destinationId: query.destination_geo_id,
         parentId: nil,
         companyId: query.company_id,
-        cargoReadyDate: query.cargo_ready_date
+        cargoReadyDate: query.cargo_ready_date,
+        currency: query.currency
       }
     end
 

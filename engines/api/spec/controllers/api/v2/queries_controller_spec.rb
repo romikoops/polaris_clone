@@ -186,9 +186,43 @@ module Api
       let(:params) { { id: query.id, organization_id: organization.id } }
 
       context "when lcl" do
-        it "successfuly returns the query object", :aggregate_failures do
+        let(:expected_data) do
+          {
+            "id" => query.id,
+            "billable" => true,
+            "loadType" => "cargo_item",
+            "originName" => query.origin,
+            "destinationName" => query.destination,
+            "reference" => line_item_set.reference,
+            "modesOfTransport" => ["ocean"],
+            "client" =>
+         { "data" =>
+           { "id" => query.client_id,
+             "type" => "client",
+             "attributes" =>
+             { "email" => query.client.email,
+               "organizationId" => organization.id,
+               "firstName" => query.client.profile.first_name,
+               "lastName" => query.client.profile.last_name,
+               "phone" => query.client.profile.phone,
+               "companyName" => company.name } },
+           "meta" => {},
+           "links" => {} },
+            "offerId" => nil,
+            "issueDate" => query.created_at,
+            "currency" => query.currency,
+            "originId" => query.origin_geo_id,
+            "destinationId" => query.destination_geo_id,
+            "parentId" => nil,
+            "companyId" => query.company_id,
+            "cargoReadyDate" => query.cargo_ready_date
+          }
+        end
+
+        it "successfuly returns the query object" do
           get :show, params: params, as: :json
-          expect(response_data["id"]).to be_present
+
+          expect(response_data["attributes"]).to eq(expected_data.as_json)
         end
       end
     end
