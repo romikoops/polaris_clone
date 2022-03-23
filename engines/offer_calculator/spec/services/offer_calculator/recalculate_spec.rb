@@ -3,14 +3,24 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Recalculate do
-  let(:query) { FactoryBot.create(:journey_query, source_id: application.id, cargo_count: 0, cargo_units: [cargo_unit], status: "failed") }
+  let(:query) do
+    FactoryBot.create(:journey_query,
+      client: client,
+      source_id: application.id,
+      organization: organization,
+      cargo_count: 0,
+      cargo_units: [cargo_unit],
+      status: "failed")
+  end
   let(:cargo_unit) { FactoryBot.build(:journey_cargo_unit, commodity_infos: [commodity_info]) }
   let(:commodity_info) { FactoryBot.build(:journey_commodity_info) }
   let(:new_query) { described_class.new(original_query: query).perform }
   let(:application) { FactoryBot.create(:application) }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:client) { FactoryBot.create(:users_client, organization: organization) }
 
   before do
-    Organizations.current_id = query.organization_id
+    Organizations.current_id = organization.id
   end
 
   describe "#perform" do
@@ -37,6 +47,7 @@ RSpec.describe OfferCalculator::Recalculate do
       expect(new_query.client_id).to eq(query.client_id)
       expect(new_query.organization_id).to eq(query.organization_id)
       expect(new_query.load_type).to eq(query.load_type)
+      expect(new_query.currency).to eq(organization.scope.default_currency)
       expect(new_query.status).to eq("running")
     end
 
@@ -56,6 +67,18 @@ RSpec.describe OfferCalculator::Recalculate do
       let(:cargo_unit) { FactoryBot.build(:journey_cargo_unit, :aggregate_lcl, commodity_infos: [commodity_info]) }
 
       it_behaves_like "duplicating cargo units"
+    end
+
+    context "when the Client has updated their desired currency" do
+      let(:client) do
+        FactoryBot.create(:users_client,
+          organization: organization,
+          settings: FactoryBot.build(:users_client_settings, currency: "ZAR"))
+      end
+
+      it "updates the currency on the new Query" do
+        expect(new_query.currency).to eq("ZAR")
+      end
     end
   end
 end

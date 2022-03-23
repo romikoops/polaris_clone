@@ -14,10 +14,13 @@ module OfferCalculator
     def query
       @query ||= original_query.dup.tap do |new_query|
         new_query.cargo_units = original_query.cargo_units.map { |old_cargo_unit| clone_cargo(cargo: old_cargo_unit) }
-        new_query.status = "running"
-        new_query.parent_id = original_query.id
-        new_query.cargo_ready_date = [original_query.cargo_ready_date, tomorrow].max
-        new_query.delivery_date = [original_query.delivery_date, (tomorrow + OfferCalculator::Schedule::DURATION.days)].max
+        new_query.assign_attributes(
+          status: "running",
+          currency: currency,
+          parent_id: original_query.id,
+          cargo_ready_date: [original_query.cargo_ready_date, tomorrow].max,
+          delivery_date: [original_query.delivery_date, (tomorrow + OfferCalculator::Schedule::DURATION.days)].max
+        )
         raise OfferCalculator::Errors::InvalidQuery unless new_query.save
       end
     end
@@ -33,6 +36,10 @@ module OfferCalculator
 
     def tomorrow
       @tomorrow ||= Time.zone.tomorrow
+    end
+
+    def currency
+      Users::ClientSettings.find_by(user_id: original_query.client_id)&.currency || scope.default_currency
     end
   end
 end
