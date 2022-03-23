@@ -80,6 +80,18 @@ en:
       http_code: 400
       code: 1010
       message: "Direction must be either 'import' or 'export'"
+    location_not_found:
+      http_code: 404
+      code: 1011
+      message: "We had some trouble finding that location. Check your inputs and try again."
+    invalid_query:
+      http_code: 400
+      code: 1012
+      message: "The params provided were not valid"
+    location_service_failure:
+      http_code: 500
+      code: 1013
+      message: "Oops! Something went wrong searching for your route. Please try again."
     # Pricing : Code prefix 2
     no_valid_pricings:
       http_code: 400

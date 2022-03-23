@@ -163,6 +163,21 @@ RSpec.describe Shipments::BookingProcessController do
         expect(response_data["completed"]).to be true
       end
     end
+
+    context "when an InvalidQuery error is raised" do
+      before do
+        query_generator_double = instance_double(OfferCalculator::Service::QueryGenerator)
+        allow(OfferCalculator::Service::QueryGenerator).to receive(:new).and_return(query_generator_double)
+        allow(query_generator_double).to receive(:query).and_raise(OfferCalculator::Errors::InvalidQuery)
+      end
+
+      it "catches the error and returns the ApplicationError version of the original OfferCalculator::Error", :aggregate_failures do
+        post :get_offers, params: params
+
+        expect(json[:code]).to eq(1012)
+        expect(json[:message]).to eq("The params provided were not valid")
+      end
+    end
   end
 
   describe "GET #refresh_quotes" do
