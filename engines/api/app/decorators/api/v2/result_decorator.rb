@@ -18,8 +18,7 @@ module Api
       end
 
       def number_of_stops
-        transshipment_count = transshipment.nil? || transshipment.casecmp("direct").zero? ? 1 : 0
-        route_sections.where.not(mode_of_transport: "relay").count - transshipment_count
+        transshipment.present? ? 1 : 0
       end
 
       def total

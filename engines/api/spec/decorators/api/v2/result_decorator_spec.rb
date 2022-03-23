@@ -66,22 +66,14 @@ RSpec.describe Api::V2::ResultDecorator do
   end
 
   describe ".number_of_stops" do
-    it "returns the Relay count as the number of stops " do
-      expect(decorated_result.number_of_stops).to eq(1)
+    it "returns zero when the transshipment is blank" do
+      expect(decorated_result.number_of_stops).to eq(0)
     end
 
     context "with transshipment" do
       let(:transshipment) { "ZACPT" }
 
-      it "returns the Relay count + 1 for the transshipment as the number of stops " do
-        expect(decorated_result.number_of_stops).to eq(2)
-      end
-    end
-
-    context "with transshipment as 'DIRECT'" do
-      let(:transshipment) { "DIRECT" }
-
-      it "returns the Relay count + 1 for the transshipment as the number of stops " do
+      it "returns 1 as the number of stops when transsshipment is present" do
         expect(decorated_result.number_of_stops).to eq(1)
       end
     end
