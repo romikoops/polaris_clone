@@ -1350,7 +1350,7 @@ DEPENDENCIES
   committee (~> 4.3)
   companies!
   dalli
-  debase
+  debase (~> 0.2.3)
   diffy (~> 3.4.0)
   dotenv-rails
   easymon

@@ -94,7 +94,7 @@ end
 
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
-  gem "debase"
+  gem "debase", "~> 0.2.3"
   gem "rspec", "~> 3.10"
   gem "rspec-rails"
   gem "rswag-specs"
