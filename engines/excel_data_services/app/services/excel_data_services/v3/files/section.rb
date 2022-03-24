@@ -32,24 +32,24 @@ module ExcelDataServices
           [data_framer, pipeline_executor]
         end
 
-        def data_framer
-          @data_framer ||= ExcelDataServices::V3::Files::DataFramer.new(state: state, sheet_parser: sheet_parser)
-        end
-
         def sheet_validator
-          @sheet_validator ||= ExcelDataServices::V3::Files::SheetValidator.new(state: state, sheet_parser: sheet_parser)
+          @sheet_validator ||= ExcelDataServices::V3::Files::SheetValidator.new(state: state, section_parser: section_parser)
         end
 
         def pipeline_executor
-          @pipeline_executor ||= ExcelDataServices::V3::Files::PipelineExecutor.new(state: state, sheet_parser: sheet_parser)
+          @pipeline_executor ||= ExcelDataServices::V3::Files::PipelineExecutor.new(state: state, section_parser: section_parser)
+        end
+
+        def data_framer
+          @data_framer ||= ExcelDataServices::V3::Files::DataFramer.new(state: state, section_parser: section_parser)
         end
 
         def failed?
           state.errors.present?
         end
 
-        def sheet_parser
-          @sheet_parser ||= SheetParser.new(type: "section", section: section, state: state)
+        def section_parser
+          @section_parser ||= SectionParser.new(section: section, state: state)
         end
       end
     end

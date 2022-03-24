@@ -4,26 +4,26 @@ module ExcelDataServices
   module V3
     module Files
       class DataFramer
-        attr_reader :state, :sheet_parser
+        attr_reader :state, :section_parser
 
-        def initialize(state:, sheet_parser:)
+        def initialize(state:, section_parser:)
           @state = state
-          @sheet_parser = sheet_parser
+          @section_parser = section_parser
         end
 
         def perform
-          @state.frame = framer.new(frame: spreadsheet_cell_data.frame).perform
-          @state.errors += spreadsheet_cell_data.errors
+          @state.frame = framer_klass.perform
+          @state.errors += framer_klass.errors
           state
         end
 
         private
 
-        def spreadsheet_cell_data
-          @spreadsheet_cell_data ||= ExcelDataServices::V3::Files::SpreadsheetData.new(state: state, sheet_parser: sheet_parser)
-        end
+        delegate :framer, to: :section_parser
 
-        delegate :framer, to: :sheet_parser
+        def framer_klass
+          @framer_klass ||= framer.new(state: state, section_parser: section_parser)
+        end
       end
     end
   end

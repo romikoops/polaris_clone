@@ -7,15 +7,14 @@ module ExcelDataServices
     module Files
       class PrerequisiteExtractor
         attr_reader :parent
+        SPLIT_PATTERN = /^(prerequisite)/.freeze
 
         def initialize(parent:)
           @parent = parent
         end
 
         def prerequisites_for_section(section:)
-          schema_file = File.read(File.expand_path("./section_data/#{section.underscore}", __dir__))
-          schema_file.lines.select { |line| line.starts_with?("prerequisite") }
-            .map { |line| line.gsub!("prerequisite", "").delete('"').strip! }
+          ExcelDataServices::V3::Files::Parsers::Schema.new(path: "section_data", section: section.underscore, pattern: SPLIT_PATTERN).dependencies
         end
 
         def dependencies

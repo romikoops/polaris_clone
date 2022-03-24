@@ -11,8 +11,8 @@ RSpec.describe ExcelDataServices::V3::Files::PipelineExecutor do
       overrides: overrides
     )
   end
-  let(:sheet_parser) { instance_double(ExcelDataServices::V3::Files::SheetParser, global_actions: global_actions, connected_actions: connected_actions) }
-  let(:service) { described_class.new(state: state_arguments, sheet_parser: sheet_parser) }
+  let(:section_parser) { instance_double(ExcelDataServices::V3::Files::SectionParser, global_actions: global_actions, connected_actions: connected_actions) }
+  let(:service) { described_class.new(state: state_arguments, section_parser: section_parser) }
   let(:global_actions) { [instance_double(ExcelDataServices::V3::Files::RowValidation, state: state_arguments)] }
   let(:connected_actions) { [connected_action] }
   let(:connected_action) { instance_double("ConnectedActions", actions: [extractor_double]) }

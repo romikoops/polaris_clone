@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V3::Files::SheetValidator do
   include_context "V3 setup"
 
-  let(:service) { described_class.new(state: state_arguments, sheet_parser: sheet_parser) }
-  let(:sheet_parser) { instance_double(ExcelDataServices::V3::Files::SheetParser, columns: columns, requirements: requirements) }
+  let(:service) { described_class.new(state: state_arguments, section_parser: section_parser) }
+  let(:section_parser) { instance_double(ExcelDataServices::V3::Files::SectionParser, columns: columns, requirements: requirements) }
   let(:columns) { [instance_double(ExcelDataServices::V3::Files::Tables::Column, required: true, present_on_sheet?: true)] }
   let(:requirements) { [instance_double(ExcelDataServices::V3::Files::Requirement, valid?: true)] }
 

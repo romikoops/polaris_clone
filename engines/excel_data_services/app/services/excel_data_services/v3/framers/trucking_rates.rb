@@ -24,7 +24,7 @@ module ExcelDataServices
         end
 
         def zone_range_frame
-          @zone_range_frame ||= ExcelDataServices::V3::Framers::Table.new(frame: frame[(frame["sheet_name"] == "Zones") & (frame["header"] != "identifier")]).perform
+          @zone_range_frame ||= ExcelDataServices::V3::Framers::SheetFramer.new(sheet_name: "Zones", frame: values[values["header"] != "identifier"]).perform
         end
 
         def rate_frame

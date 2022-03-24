@@ -15,6 +15,7 @@ module ExcelDataServices
 
           delegate :xlsx, :organization, to: :state
           delegate :sheets, to: :xlsx
+          delegate :scope, to: :organization
 
           private
 

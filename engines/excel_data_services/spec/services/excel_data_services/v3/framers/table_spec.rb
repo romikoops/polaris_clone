@@ -3,7 +3,16 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V3::Framers::Table do
-  let(:service) { described_class.new(frame: Rover::DataFrame.new(frame_data)) }
+  let(:result_frame) { described_class.new(section_parser: section_parser, state: state_arguments).perform }
+  let(:state_arguments) { instance_double(ExcelDataServices::V3::State) }
+  let(:section_parser) { instance_double(ExcelDataServices::V3::Files::SectionParser, headers: %w[a b]) }
+  let(:spreadsheet_cell_data) { instance_double(ExcelDataServices::V3::Files::SpreadsheetData, frame: Rover::DataFrame.new(frame_data), errors: errors) }
+  let(:errors) { [] }
+
+  before do
+    allow(ExcelDataServices::V3::Files::SpreadsheetData).to receive(:new).with(section_parser: section_parser, state: state_arguments).and_return(spreadsheet_cell_data)
+  end
+
 
   describe "#perform" do
     let(:frame_data) do
@@ -26,7 +35,7 @@ RSpec.describe ExcelDataServices::V3::Framers::Table do
     end
 
     it "returns a DataFrame of matrix values grouped into a table structure" do
-      expect(service.perform).to eq(expected_results)
+      expect(result_frame).to eq(expected_results)
     end
   end
 end

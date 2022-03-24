@@ -39,7 +39,7 @@ module ExcelDataServices
         end
 
         def valid?
-          pipelines.all?(&:valid?)
+          xlsx_has_content? && pipelines.all?(&:valid?)
         end
 
         def pipelines
@@ -49,7 +49,7 @@ module ExcelDataServices
         private
 
         def sheet_parser
-          @sheet_parser ||= SheetParser.new(type: "file", section: type, state: state)
+          @sheet_parser ||= SheetParser.new(section: type, state: state)
         end
 
         def duplicate_state_for_section(section:)
@@ -58,6 +58,10 @@ module ExcelDataServices
             section: section,
             overrides: state.overrides
           )
+        end
+
+        def xlsx_has_content?
+          state.xlsx.first_row.present?
         end
       end
     end

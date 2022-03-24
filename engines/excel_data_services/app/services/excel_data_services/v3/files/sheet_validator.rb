@@ -4,11 +4,11 @@ module ExcelDataServices
   module V3
     module Files
       class SheetValidator
-        attr_reader :state, :sheet_parser
+        attr_reader :state, :section_parser
 
-        def initialize(state:, sheet_parser:)
+        def initialize(state:, section_parser:)
           @state = state
-          @sheet_parser = sheet_parser
+          @section_parser = section_parser
         end
 
         def valid?
@@ -23,7 +23,7 @@ module ExcelDataServices
           requirements.all?(&:valid?)
         end
 
-        delegate :columns, :requirements, to: :sheet_parser
+        delegate :columns, :requirements, to: :section_parser
       end
     end
   end

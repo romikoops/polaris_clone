@@ -6,18 +6,14 @@ module ExcelDataServices
       module Tables
         class Sheet
           # This class encapsulates the logic for combingin the columns together to form a DataFrame that can be incoroporated in the larger DataFrame for processing later in the pipeline
-          attr_reader :sheet_parser, :sheet_name, :state
+          attr_reader :section_parser, :sheet_name, :state
 
-          delegate :validated_columns, :columns, :xlsx, :dynamic_columns, :matrixes, to: :sheet_parser
+          delegate :columns, :dynamic_columns, :matrixes, :xlsx, to: :section_parser
 
-          def initialize(sheet_parser:, sheet_name:, state:)
-            @sheet_parser = sheet_parser
+          def initialize(section_parser:, sheet_name:, state:)
+            @section_parser = section_parser
             @sheet_name = sheet_name
             @state = state
-          end
-
-          def sheet
-            @sheet = xlsx.sheet(sheet_name)
           end
 
           def perform

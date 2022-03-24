@@ -4,13 +4,13 @@ module ExcelDataServices
   module V3
     module Files
       class SpreadsheetData
-        attr_reader :state, :sheet_parser
+        attr_reader :state, :section_parser
 
-        delegate :sheets, to: :sheet_parser
+        delegate :sheets, to: :section_parser
 
-        def initialize(state:, sheet_parser:)
+        def initialize(state:, section_parser:)
           @state = state
-          @sheet_parser = sheet_parser
+          @section_parser = section_parser
         end
 
         def frame
@@ -26,7 +26,7 @@ module ExcelDataServices
         private
 
         def table_sheets
-          @table_sheets ||= sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, sheet_parser: sheet_parser) }
+          @table_sheets ||= sheets.map { |sheet_name| ExcelDataServices::V3::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, section_parser: section_parser) }
         end
       end
     end

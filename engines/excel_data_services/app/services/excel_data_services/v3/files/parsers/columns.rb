@@ -5,7 +5,7 @@ module ExcelDataServices
     module Files
       module Parsers
         class Columns < ExcelDataServices::V3::Files::Parsers::Base
-          SPLIT_PATTERN = /^((column)|(matrix)|(add_dynamic_columns)|(\s+sanitizer)|(\s+validator)|(\s+required)|(unique)|(\s+alternative_keys)|(\s+fallback)|(\s+type)|(\s+dynamic)|(\s+header_row)|(\s+column_length)|(\s+column_index)|(\s+fallback)|(\s+rows)|(\s+columns)|(\s+exclude_sheets)|(\s+sheet_name))/.freeze
+          SPLIT_PATTERN = /^((column)|(matrix)|(add_dynamic_columns)|(\s+sanitizer)|(\s+validator)|(\s+required)|(\s+unique)|(\s+alternative_keys)|(\s+fallback)|(\s+type)|(\s+dynamic)|(\s+header_row)|(\s+column_length)|(\s+column_index)|(\s+fallback)|(\s+rows)|(\s+columns)|(\s+exclude_sheets)|(\s+sheet_name))/.freeze
 
           def columns
             @columns ||= []

@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V3::Files::SpreadsheetData do
   include_context "V3 setup"
 
-  let(:service) { described_class.new(state: state_arguments, sheet_parser: sheet_parser) }
-  let(:sheet_parser) { ExcelDataServices::V3::Files::SheetParser.new(section: section_string, state: state_arguments, type: "section") }
+  let(:service) { described_class.new(state: state_arguments, section_parser: section_parser) }
+  let(:section_parser) { ExcelDataServices::V3::Files::SectionParser.new(section: section_string, state: state_arguments) }
   let(:xlsx) { File.open(file_fixture("excel/example_pricings_slim.xlsx")) }
 
   describe "#frame" do

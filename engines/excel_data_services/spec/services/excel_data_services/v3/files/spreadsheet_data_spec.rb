@@ -5,14 +5,14 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V3::Files::SpreadsheetData do
   include_context "V3 setup"
 
-  let(:service) { described_class.new(state: state_arguments, sheet_parser: sheet_parser) }
-  let(:sheet_parser) { instance_double("ExcelDataServices::V3::Files::SheetParser", sheets: sheets) }
+  let(:service) { described_class.new(state: state_arguments, section_parser: section_parser) }
+  let(:section_parser) { instance_double("ExcelDataServices::V3::Files::SectionParser", sheets: sheets) }
   let(:sheets) { ["Sheet1"] }
   let(:sheet_object_double) { instance_double(ExcelDataServices::V3::Files::Tables::Sheet, errors: errors, perform: sheet_object_frame) }
   let(:sheet_object_frame) { Rover::DataFrame.new({ "a" => [1] }) }
 
   before do
-    allow(ExcelDataServices::V3::Files::Tables::Sheet).to receive(:new).with(state: state_arguments, sheet_name: "Sheet1", sheet_parser: sheet_parser).and_return(sheet_object_double)
+    allow(ExcelDataServices::V3::Files::Tables::Sheet).to receive(:new).with(state: state_arguments, sheet_name: "Sheet1", section_parser: section_parser).and_return(sheet_object_double)
   end
 
   describe "#frame" do
@@ -32,7 +32,7 @@ RSpec.describe ExcelDataServices::V3::Files::SpreadsheetData do
         let(:sheets) { %w[Sheet1 Sheet2] }
 
         before do
-          allow(ExcelDataServices::V3::Files::Tables::Sheet).to receive(:new).with(state: state_arguments, sheet_name: "Sheet2", sheet_parser: sheet_parser).and_return(second_sheet_object_double)
+          allow(ExcelDataServices::V3::Files::Tables::Sheet).to receive(:new).with(state: state_arguments, sheet_name: "Sheet2", section_parser: section_parser).and_return(second_sheet_object_double)
         end
 
         it "returns the Sheet objects' DataFrames concatenated together", :aggregate_failures do

@@ -3,10 +3,18 @@
 module ExcelDataServices
   module V3
     module Framers
-      class TruckingFees < ExcelDataServices::V3::Framers::Base
+      class TruckingFees
+        def initialize(frame:)
+          @frame = frame
+        end
+
         def perform
           Rover::DataFrame.new(fee_rows_for_frame)
         end
+
+        private
+
+        attr_reader :frame
 
         def fee_rows_for_frame
           frame_grouped_by_row.map do |row_values|

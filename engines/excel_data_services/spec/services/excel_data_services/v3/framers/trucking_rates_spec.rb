@@ -3,7 +3,15 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V3::Framers::TruckingRates do
-  let(:result_frame) { described_class.new(frame: Rover::DataFrame.new(frame_data)).perform }
+  let(:result_frame) { described_class.new(section_parser: section_parser, state: state_arguments).perform }
+  let(:state_arguments) { instance_double(ExcelDataServices::V3::State) }
+  let(:section_parser) { instance_double(ExcelDataServices::V3::Files::SectionParser) }
+  let(:spreadsheet_cell_data) { instance_double(ExcelDataServices::V3::Files::SpreadsheetData, frame: Rover::DataFrame.new(frame_data), errors: errors) }
+  let(:errors) { [] }
+
+  before do
+    allow(ExcelDataServices::V3::Files::SpreadsheetData).to receive(:new).with(section_parser: section_parser, state: state_arguments).and_return(spreadsheet_cell_data)
+  end
 
   describe "#perform" do
     let(:frame_data) do
@@ -74,18 +82,23 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingRates do
     end
     let(:expected_results) do
       Rover::DataFrame.new([
-        { "zone" => "1.0",
-          "range" => "20037 - 20039",
-          "country_code" => "DE",
-          "postal_code" => nil,
-          "sheet_name" => "Sheet3",
+        { "sheet_name" => "Sheet3",
           "row" => 0,
           "zone_row" => 6,
+          "zone_column" => "A",
+          "zone" => "1.0",
+          "range_row" => 4,
+          "range_column" => "C",
+          "range" => "20037 - 20039",
+          "country_code_row" => 2,
+          "country_code_column" => "D",
+          "country_code" => "DE",
+          "postal_code_row" => 2,
+          "postal_code_column" => "B",
+          "postal_code" => nil,
           "rate_row" => 6,
           "rate_column" => "C",
           "rate" => 28.392,
-          "range_row" => 4,
-          "range_column" => "C",
           "range_min" => 0.0,
           "range_max" => 100.0,
           "modifier_row" => 3,
@@ -126,18 +139,23 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingRates do
           "hub_id" => 1,
           "organization_id" => "organization-id",
           "identifier" => "postal_code" },
-        { "zone" => nil,
-          "range" => nil,
-          "country_code" => nil,
-          "postal_code" => nil,
-          "sheet_name" => "Fees",
+        { "sheet_name" => "Fees",
           "row" => 0,
           "zone_row" => nil,
+          "zone_column" => nil,
+          "zone" => nil,
+          "range_row" => nil,
+          "range_column" => nil,
+          "range" => nil,
+          "country_code_row" => nil,
+          "country_code_column" => nil,
+          "country_code" => nil,
+          "postal_code_row" => nil,
+          "postal_code_column" => nil,
+          "postal_code" => nil,
           "rate_row" => nil,
           "rate_column" => nil,
           "rate" => 30.0,
-          "range_row" => nil,
-          "range_column" => nil,
           "range_min" => nil,
           "range_max" => nil,
           "modifier_row" => nil,
@@ -146,6 +164,7 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingRates do
           "fee_code" => "fsc",
           "fee_name" => "Fuel Surcharge Fee",
           "rate_type" => "trucking_fee",
+          "mode_of_transport" => "truck_carriage",
           "row_minimum_row" => nil,
           "row_minimum" => nil,
           "bracket_minimum_row" => nil,
@@ -174,7 +193,6 @@ RSpec.describe ExcelDataServices::V3::Framers::TruckingRates do
           "group_id" => nil,
           "min" => nil,
           "max" => nil,
-          "mode_of_transport" => "truck_carriage",
           "hub_id" => 1,
           "organization_id" => "organization-id",
           "identifier" => "postal_code" }

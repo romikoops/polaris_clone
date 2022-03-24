@@ -5,7 +5,7 @@ module ExcelDataServices
     module Files
       module Parsers
         class OrderedConnectedActions < ExcelDataServices::V3::Files::Parsers::Base
-          SPLIT_PATTERN = /^(add_framer)/.freeze
+          SPLIT_PATTERN = /^(NULLPATTERN)/.freeze
           attr_reader :section, :state
 
           def connected_actions

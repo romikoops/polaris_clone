@@ -4,13 +4,24 @@ module ExcelDataServices
   module V3
     module Framers
       class Base
-        attr_reader :frame
+        attr_reader :section_parser, :state
 
-        def initialize(frame:)
-          @frame = frame
+        def initialize(state:, section_parser:)
+          @state = state
+          @section_parser = section_parser
         end
 
+        def perform
+          defined_frame.concat(framed_data).left_join(overrides, on: { "organization_id" => "organization_id" })
+        end
+
+        delegate :errors, :frame, to: :spreadsheet_cell_data
+
         private
+
+        def spreadsheet_cell_data
+          @spreadsheet_cell_data ||= ExcelDataServices::V3::Files::SpreadsheetData.new(state: state, section_parser: section_parser)
+        end
 
         def values
           # rubocop:disable Style/NumericPredicate .positive? not a Vector method
@@ -38,6 +49,10 @@ module ExcelDataServices
 
         def prefixed_column_mapper(mapped_object:, header:)
           ExcelDataServices::V3::Helpers::PrefixedColumnMapper.new(mapped_object: mapped_object, header: header).perform
+        end
+
+        def defined_frame
+          @defined_frame ||= Rover::DataFrame.new(section_parser.headers.each_with_object({}) { |header, result| result[header] = [] })
         end
       end
     end
