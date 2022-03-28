@@ -56,10 +56,6 @@ module ExcelDataServices
           frame.keys & IDENTIFYING_KEYS
         end
 
-        def empty_frame
-          Rover::DataFrame.new({ "sheet_name" => [], "row" => [] })
-        end
-
         class ExpandedFrame
           def initialize(row:, counterpart_frame:, expandable_frame:)
             @row = row

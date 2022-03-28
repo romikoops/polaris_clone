@@ -191,6 +191,7 @@ add_validator "ChargeCategory"
 add_validator "Group"
 add_validator "RateBasis"
 
+add_operation "ExpandedDates"
 add_operation "DynamicFees"
 
 add_extractor "Pricing"

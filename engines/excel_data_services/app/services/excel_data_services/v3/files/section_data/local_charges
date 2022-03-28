@@ -222,6 +222,7 @@ add_validator "Hub"
 add_validator "CounterpartHub"
 
 add_operation "CounterpartHubExpander" if scope.expand_non_counterpart_local_charges
+add_operation "ExpandedDates"
 
 add_formatter "LocalCharge"
 conflict Legacy::LocalCharge, %w[hub_id counterpart_hub_id tenant_vehicle_id load_type mode_of_transport group_id direction organization_id]

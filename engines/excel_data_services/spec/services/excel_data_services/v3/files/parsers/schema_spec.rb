@@ -11,12 +11,12 @@ RSpec.describe ExcelDataServices::V3::Files::Parsers::Schema do
   describe "#perform" do
     it "yields the relevant schema lines in the block when one is provided" do
       service.perform do |schema_lines|
-        expect(schema_lines).to eq("add_operation \"DynamicFees\"\n")
+        expect(schema_lines).to eq("add_operation \"ExpandedDates\"\nadd_operation \"DynamicFees\"\n")
       end
     end
 
     it "returns the relevant schema lines when no block is provided" do
-      expect(service.perform).to eq("add_operation \"DynamicFees\"\n")
+      expect(service.perform).to eq("add_operation \"ExpandedDates\"\nadd_operation \"DynamicFees\"\n")
     end
 
     it "raises and InvalidPath error when the path is invalid" do

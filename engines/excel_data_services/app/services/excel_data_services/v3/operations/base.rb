@@ -26,6 +26,10 @@ module ExcelDataServices
           raise NotImplementedError, "This method must be implemented in #{self.class.name} "
         end
 
+        def empty_frame
+          Rover::DataFrame.new({ "sheet_name" => [], "row" => [] })
+        end
+
         delegate :frame, to: :state
       end
     end
