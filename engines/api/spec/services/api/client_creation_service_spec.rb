@@ -25,9 +25,8 @@ RSpec.describe Api::ClientCreationService do
       currency: "EUR"
     }
   end
-  let(:country) { FactoryBot.create(:country_de) }
   let(:address_attributes) do
-    { street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: country.name }
+    { street: "Brooktorkai", house_number: "7", city: "Hamburg", postal_code: "22047", country: "Germany" }
   end
   let(:company_name) { "Person Freight" }
   let(:group) { FactoryBot.create(:groups_group, organization: organization) }
@@ -43,11 +42,11 @@ RSpec.describe Api::ClientCreationService do
   end
   let!(:company) { FactoryBot.create(:companies_company, organization: organization, name: company_name) }
   let(:client) { service.perform }
-  let(:client_address) { Legacy::UserAddress.find_by(user: client) }
   let!(:default_company) { FactoryBot.create(:companies_company, organization: organization, name: "default") }
 
   describe ".perform" do
     before do
+      FactoryBot.create(:country_de)
       Organizations.current_id = organization.id
     end
 
@@ -78,6 +77,7 @@ RSpec.describe Api::ClientCreationService do
     end
 
     it "creates the address properly", :aggregate_failures do
+      client_address = Legacy::UserAddress.find_by(user: client)
       expect(client_address).to be_valid
       expect(client_address.address.zip_code).to eq(address_attributes[:postal_code])
       expect(client_address).to be_a(Legacy::UserAddress)
@@ -102,11 +102,7 @@ RSpec.describe Api::ClientCreationService do
 
     context "when creating client with email belonging to a soft deleted user" do
       let!(:existing_client) do
-        FactoryBot.create(:users_client, email: test_email, organization: organization)
-      end
-
-      before do
-        existing_client.destroy
+        FactoryBot.create(:users_client, email: test_email, organization: organization, deleted_at: Time.zone.yesterday)
       end
 
       it_behaves_like "restoring an existing client"
@@ -114,13 +110,23 @@ RSpec.describe Api::ClientCreationService do
       context "when the email provided has mixed case" do
         let(:client_attributes) do
           {
-            email: test_email.humanize,
+            email: existing_client.email.humanize,
             password: "123456789",
             organization_id: organization.id
           }
         end
 
         it_behaves_like "restoring an existing client"
+      end
+    end
+
+    context "when attempting to create a client with email belonging to an existing user" do
+      before do
+        FactoryBot.create(:users_client, email: test_email, organization: organization)
+      end
+
+      it "raises a RecordInvalid error with the correct message" do
+        expect { service.perform }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Email has already been taken")
       end
     end
   end

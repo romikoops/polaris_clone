@@ -89,7 +89,43 @@ RSpec.describe UsersController do
         }
       end
 
-      it "raises ActiveRecord::RecordInvalid" do
+      it "has the status UnprocessableEntity" do
+        post :create, params: params
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when creating with an existing users email" do
+      let(:user_param) do
+        {
+          email: user.email,
+          password: "123456789",
+          organization_id: user.organization_id
+        }
+      end
+
+      it "has the status UnprocessableEntity" do
+        post :create, params: params
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when creating with an existing users email but rails validations miss" do
+      let(:user_param) do
+        {
+          email: user.email,
+          password: "123456789",
+          organization_id: user.organization_id
+        }
+      end
+
+      before do
+        client_creator = instance_double(Api::ClientCreationService)
+        allow(Api::ClientCreationService).to receive(:new).and_return(client_creator)
+        allow(client_creator).to receive(:perform).and_raise(ActiveRecord::RecordNotUnique)
+      end
+
+      it "has the status UnprocessableEntity" do
         post :create, params: params
         expect(response).to have_http_status(:unprocessable_entity)
       end
