@@ -84,6 +84,16 @@ RSpec.describe Admin::ClientsController do
       end
     end
 
+    context "when user does not have a profile" do
+      let!(:other_client) { FactoryBot.create(:users_client, organization: organization, profile: FactoryBot.build(:users_client_profile, deleted_at: Time.zone.yesterday)) }
+
+      it "returns users despite their ClientProfile being deleted" do
+        get :index, params: { organization_id: organization.id, email: other_client.email[0, 4] }
+
+        expect(resp["data"]["clientData"].pluck("email")).to include(other_client.email)
+      end
+    end
+
     shared_examples_for "A searchable & orderable collection" do |search_keys|
       search_keys.each do |search_key|
         context "#{search_key} search & ordering" do

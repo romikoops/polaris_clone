@@ -17,7 +17,7 @@ module Admin
 
     # Return selected User, assigned managers, groups and user addresses
     def show
-      client = Users::Client.find_by(organization_id: params[:organization_id], id: params[:id])
+      client = Api::Client.find_by(organization_id: params[:organization_id], id: params[:id])
       addresses = Address.joins(:user_addresses).where(user_addresses: { user_id: client.id })
       groups = target_groups(target: client).map { |group| group_index_json(group) }
       manager_assignments = UserManager.where(user_id: client.id)
@@ -70,7 +70,7 @@ module Admin
     end
 
     def clients
-      @clients ||= Users::Client.where(organization_id: current_organization.id)
+      @clients ||= Api::Client.where(organization_id: current_organization.id)
         .order(updated_at: :desc)
     end
 
@@ -90,11 +90,10 @@ module Admin
     end
 
     def handle_search(params)
-      profile_query = profiles
-      profile_query = profile_query.first_name_search(params[:first_name]) if params[:first_name]
-      profile_query = profile_query.last_name_search(params[:last_name]) if params[:last_name]
-      query = clients.joins(:profile).merge(profile_query)
-      query = query.where("users_clients.email ILIKE ?", "#{params[:email]}%") if params[:email]
+      query = clients.left_joins(:profile)
+      query = query.where("users_client_profiles.first_name ILIKE ?", "%#{params[:first_name]}%") if params[:first_name]
+      query = query.where("users_client_profiles.last_name ILIKE ?", "%#{params[:last_name]}%") if params[:last_name]
+      query = query.where("users_clients.email ILIKE ?", "%#{params[:email]}%") if params[:email]
       query = query.joins(
         "LEFT OUTER JOIN companies_memberships ON companies_memberships.client_id = users_clients.id
         AND companies_memberships.deleted_at IS NULL
