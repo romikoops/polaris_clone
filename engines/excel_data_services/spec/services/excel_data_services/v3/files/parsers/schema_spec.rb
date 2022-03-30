@@ -34,11 +34,7 @@ RSpec.describe ExcelDataServices::V3::Files::Parsers::Schema do
 
   describe "#dependencies" do
     it "returns the dependencies defined as 'prerequisites'" do
-      expect(service.dependencies).to eq(%w[
-        TenantVehicle
-        Itinerary
-        ChargeCategory
-      ])
+      expect(service.dependencies).to eq(%w[TenantVehicle Itinerary ChargeCategory TransitTime])
     end
   end
 end

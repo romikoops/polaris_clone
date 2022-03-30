@@ -92,14 +92,6 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
       it "dynamically generates a note that is added to the pricing" do
         expect(september_pricings.where(itinerary: cabinda_hamburg).find_by(cargo_class: "fcl_20").notes.count).to eq(2)
       end
-
-      context "when the sheet has errors" do
-        let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
-
-        it "collates the errors in the 'errors' object and exits" do
-          expect(result_state.errors.map(&:reason)).to include("Required data is missing at: (Sheet: Sheet1) row: 3, column: G. Please fill in the missing data and try again.")
-        end
-      end
     end
   end
 end

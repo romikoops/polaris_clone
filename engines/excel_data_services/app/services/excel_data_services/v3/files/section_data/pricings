@@ -177,6 +177,7 @@ column "remarks",
 prerequisite "TenantVehicle"
 prerequisite "Itinerary"
 prerequisite "ChargeCategory"
+prerequisite "TransitTime"
 
 add_dynamic_columns excluding: %w[REMARKS WM_RATIO VM_RATIO TRANSIT_TIME]
 

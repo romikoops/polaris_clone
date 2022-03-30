@@ -15,7 +15,7 @@ RSpec.describe ExcelDataServices::V3::Files::PrerequisiteExtractor do
 
   describe "#dependencies" do
     it "returns the section in order of dependecy" do
-      expect(result).to eq(%w[RoutingCarrier Carrier TenantVehicle Itinerary ChargeCategory Pricings])
+      expect(result).to eq(%w[RoutingCarrier Carrier TenantVehicle Itinerary ChargeCategory TransitTime Pricings])
     end
   end
 end

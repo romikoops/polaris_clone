@@ -80,38 +80,46 @@ RSpec.describe ExcelDataServices::V3::Upload do
     before do
       FactoryBot.create(:pricings_rate_basis, external_code: "PER_WM")
       FactoryBot.create(:pricings_rate_basis, external_code: "PER_CONTAINER")
-      result_stats
     end
 
-    it "returns inserts the lcl fees ", :aggregate_failures do
-      expect(lcl_fee.rate).to eq(40)
-      expect(lcl_range_fee.range).to match_array([{ "max" => 100.0, "min" => 0.0, "rate" => 210.0 }, { "max" => 500.0, "min" => 100.0, "rate" => 110.0 }])
-      expect(transhipment_lcl_fee.rate).to eq(210)
-    end
+    context "when dynamic and fcl and range based formats are together in the same sheet" do
+      before { service.perform }
 
-    it "returns a dynamic fcl fees", :aggregate_failures do
-      expect(fcl_40_fee.rate).to eq(4660)
-      expect(fcl_40_hq_fee.rate).to eq(5330)
-      expect(transhipment_fcl_20_ofr_fee.rate).to eq(4330)
-      expect(transhipment_fcl_20_lss_fee.rate).to eq(200)
-    end
-
-    context "when an error occurs" do
-      before do
-        organization.scope.update(content: { atomic_insert: true })
-        service.perform
+      it "returns inserts the lcl fees ", :aggregate_failures do
+        expect(lcl_fee.rate).to eq(40)
+        expect(lcl_range_fee.range).to match_array([{ "max" => 100.0, "min" => 0.0, "rate" => 210.0 }, { "max" => 500.0, "min" => 100.0, "rate" => 110.0 }])
+        expect(transhipment_lcl_fee.rate).to eq(210)
       end
 
-      let(:origin_hub) { nil }
+      it "returns a dynamic fcl fees", :aggregate_failures do
+        expect(fcl_40_fee.rate).to eq(4660)
+        expect(fcl_40_hq_fee.rate).to eq(5330)
+        expect(transhipment_fcl_20_ofr_fee.rate).to eq(4330)
+        expect(transhipment_fcl_20_lss_fee.rate).to eq(200)
+      end
 
-      it "does not persist any data", :aggregate_failures do
-        expect(Pricings::Pricing.all).to be_empty
-        expect(Pricings::Fee.all).to be_empty
+      it "creates a TransitTime when one is specified" do
+        transit_time = Legacy::TransitTime.joins(:itinerary).find_by(tenant_vehicle: tenant_vehicle, itineraries: { origin_hub_id: origin_hub.id, destination_hub_id: destination_hub.id, transshipment: "ZACPT" })
+        expect(transit_time.duration).to eq(35)
+      end
+    end
+
+    context "when the TransitTime already exists" do
+      let!(:itinerary) { FactoryBot.create(:legacy_itinerary, origin_hub_id: origin_hub.id, destination_hub_id: destination_hub.id, transshipment: "ZACPT", organization: organization) }
+      let!(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "standard", carrier: FactoryBot.create(:legacy_carrier, name: "MSC", code: "msc"), organization: organization, mode_of_transport: "ocean") }
+      let!(:transit_time) { FactoryBot.create(:legacy_transit_time, itinerary: itinerary, tenant_vehicle: tenant_vehicle, duration: 5) }
+
+      before { service.perform }
+
+      it "updates the existing TransitTime when one is specified" do
+        expect(transit_time.reload.duration).to eq(35)
       end
     end
 
     context "with only dynamic formats in one upload" do
       let(:xlsx) { File.open(file_fixture("excel/example_pricings_dynamic.xlsx")) }
+
+      before { service.perform }
 
       it "returns a dynamic fcl fees", :aggregate_failures do
         expect(fcl_40_fee.rate).to eq(4660)

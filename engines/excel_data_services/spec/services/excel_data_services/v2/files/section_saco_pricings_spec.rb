@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ExcelDataServices::V2::Files::Section do
+RSpec.describe ExcelDataServices::V2::Files::Section, skip: "Deprecated in Favour of V3" do
   include_context "for excel_data_services setup"
 
   let(:service) { described_class.new(state: state_arguments) }

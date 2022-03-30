@@ -21,6 +21,14 @@ module ExcelDataServices
 
           private
 
+          def parse_config
+            ExcelDataServices::V3::Files::Parsers::Schema.new(
+              path: "section_data", section: section, pattern: self.class::SPLIT_PATTERN
+            ).perform do |schema_lines|
+              instance_eval(schema_lines)
+            end
+          end
+
           def validators
             @validators ||= []
           end
