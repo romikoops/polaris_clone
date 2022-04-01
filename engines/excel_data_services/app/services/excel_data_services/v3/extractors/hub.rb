@@ -5,9 +5,7 @@ module ExcelDataServices
     module Extractors
       class Hub < ExcelDataServices::V3::Extractors::Base
         def extracted
-          @extracted ||= joins.inject(blank_frame.concat(frame)) do |inner_frame, join|
-            inner_frame.left_join(hub_frame, on: join)
-          end
+          @extracted ||= blank_frame.concat(frame).left_join(hub_frame, on: joins)
         end
 
         def frame_data
@@ -29,10 +27,8 @@ module ExcelDataServices
         end
 
         def joins
-          @joins ||= filter_joins(joins: [%w[locode], %w[hub terminal country]]).map do |join_array|
-            join_array.each_with_object({ "mode_of_transport" => "mode_of_transport" }) do |prefixed_key, join_arg|
-              join_arg[prefixed_key] = prefixed_key
-            end
+          @joins ||= filtered_join_keys.each_with_object({ "mode_of_transport" => "mode_of_transport" }) do |prefixed_key, join_arg|
+            join_arg[prefixed_key] = prefixed_key
           end
         end
 
@@ -62,14 +58,15 @@ module ExcelDataServices
           @hub_frame ||= Rover::DataFrame.new(frame_data, types: state.frame.types.merge(frame_types))
         end
 
-        def filter_joins(joins:)
-          # rubocop:disable Rails/NegateInclude include is a Rover method, not standard rails include
-          joins
-            .map { |join| join.map { |row_key| prefix_key(key: row_key) } }
-            .select { |join| frame.include?(join.first) }
-            .map { |join| join.delete_if { |key, _value| !frame.include?(key) } }
-            .reject(&:empty?)
-          # rubocop:enable Rails/NegateInclude
+        def filtered_join_keys
+          prefixed_and_validated_keys = %w[locode hub terminal country]
+            .map { |row_key| prefix_key(key: row_key) }
+            .select { |join_key| frame.include?(join_key) }
+            .reject { |join_key| frame[join_key].missing.all? }
+
+          return prefixed_and_validated_keys if prefixed_and_validated_keys.exclude?(prefix_key(key: "locode"))
+
+          prefixed_and_validated_keys - [prefix_key(key: "country")]
         end
       end
     end

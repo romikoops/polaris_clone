@@ -87,8 +87,7 @@ RSpec.describe ExcelDataServices::V3::Validators::CounterpartHub do
         ]
       end
 
-      it "appends an error to the state", :aggregate_failures do
-        expect(result.errors).to be_present
+      it "appends an error to the state" do
         expect(result.errors.map(&:reason)).to match_array(error_messages)
       end
     end
