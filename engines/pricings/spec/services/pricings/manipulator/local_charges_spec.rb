@@ -92,7 +92,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -115,7 +115,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(results.first.result["id"]).to eq(local_charge.id)
           expect(results.first.result["fees"].keys).to eq(["solas"])
-          expect(results.first.result.dig("fees", "solas", "value")).to eq(17.5)
+          expect(results.first.result.dig("fees", "solas", "rate")).to eq(17.5)
           expect(results.first.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -124,7 +124,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(results.last.result["id"]).to eq(local_charge.id)
           expect(results.last.result["fees"].keys).to eq(["solas"])
-          expect(results.last.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(results.last.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(results.last.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -150,7 +150,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -182,7 +182,7 @@ RSpec.describe Pricings::Manipulator do
       it "returns the manipulated local_charge (export) attached to the user with multiple margins" do
         aggregate_failures do
           expect(results.map { |mp| mp.result["id"] }.uniq).to match_array([local_charge.id])
-          expect(results.map { |mp| mp.result.dig("fees", "solas", "value") }).to match_array([17.5, 19.25, 17.5, 17.5])
+          expect(results.map { |mp| mp.result.dig("fees", "solas", "rate") }).to match_array([17.5, 19.25, 17.5, 17.5])
           expect(results.map(&:flat_margins)).to eq([{}, {"solas" => 0.1e2}, {"solas" => 0.1e2}, {}])
         end
       end
@@ -230,7 +230,7 @@ RSpec.describe Pricings::Manipulator do
           expect(manipulated_results.flat_map { |pricing| pricing.result["fees"].keys }.uniq).to eq(["solas"])
           expect(manipulated_results.map(&:flat_margins)).to eq([{}, {"solas" => 0.1e2}, {"solas" => 0.1e2}, {}])
           expect(
-            manipulated_results.map { |pricing| pricing.result.dig("fees", "solas", "value") }
+            manipulated_results.map { |pricing| pricing.result.dig("fees", "solas", "rate") }
           ).to match_array([17.5, 19.25, 17.5, 17.5])
           expect(
             manipulated_results.map { |pricing| pricing.result.dig("fees", "solas", "rate_basis") }.uniq
@@ -249,7 +249,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -283,7 +283,7 @@ RSpec.describe Pricings::Manipulator do
             expect(results.map(&:id).uniq).to eq([local_charge.id])
             expect(results.flat_map { |pricing| pricing.result["fees"].keys }.uniq).to eq(["solas"])
             expect(
-              results.map { |pricing| pricing.result.dig("fees", "solas", "value") }
+              results.map { |pricing| pricing.result.dig("fees", "solas", "rate") }
             ).to eq([19.25, 17.5, 26.25, 17.5])
             expect(
               results.map { |pricing| pricing.result.dig("fees", "solas", "rate_basis") }.uniq
@@ -318,7 +318,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -338,7 +338,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(21.875)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(21.875)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end
@@ -449,7 +449,7 @@ RSpec.describe Pricings::Manipulator do
       let!(:results) { klass.perform }
 
       it "returns the manipulated local_charge attached to the user for addition margin", :aggregate_failures do
-        expect(target_result.result.dig("fees", "solas", "value")).to eq(17.5)
+        expect(target_result.result.dig("fees", "solas", "rate")).to eq(17.5)
         expect(target_result.flat_margins).to eq("solas" => 1.0e1)
         expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         expect(manipulated_results.map(&:flat_margins)).to match_array([{ "solas" => 1.0e1 }])
@@ -467,7 +467,7 @@ RSpec.describe Pricings::Manipulator do
         aggregate_failures do
           expect(target_result.result["id"]).to eq(local_charge.id)
           expect(target_result.result["fees"].keys).to eq(["solas"])
-          expect(target_result.result.dig("fees", "solas", "value")).to eq(19.25)
+          expect(target_result.result.dig("fees", "solas", "rate")).to eq(19.25)
           expect(target_result.result.dig("fees", "solas", "rate_basis")).to eq("PER_SHIPMENT")
         end
       end

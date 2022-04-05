@@ -62,7 +62,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
         aggregate_failures do
           expect(component).to be_a(OfferCalculator::Service::RateBuilders::FeeComponent)
           expect(fee.components.length).to eq(1)
-          expect(component.value).to eq(Money.new(solas_fee["value"] * 100, solas_fee["currency"]))
+          expect(component.value).to eq(Money.new(solas_fee["rate"] * 100, solas_fee["currency"]))
         end
       end
     end
@@ -147,7 +147,7 @@ RSpec.describe OfferCalculator::Service::RateBuilders::LocalCharges do
         aggregate_failures do
           expect(component).to be_a(OfferCalculator::Service::RateBuilders::FeeComponent)
           expect(fee.components.length).to eq(1)
-          expect(component.value).to eq(Money.new(solas_fee["value"] * 100, solas_fee["currency"]))
+          expect(component.value).to eq(Money.new(solas_fee["rate"] * 100, solas_fee["currency"]))
         end
       end
     end

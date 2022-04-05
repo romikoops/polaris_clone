@@ -90,7 +90,7 @@ module ExcelDataServices
       end
 
       def dynamic_lookup(fee, range)
-        fee_value = fee["value"]
+        fee_value = fee.values_at("value", "rate").find(&:present?)
 
         { "PER_SHIPMENT" => { shipment: fee_value },
           "PER_CONTAINER" => { container: fee_value },

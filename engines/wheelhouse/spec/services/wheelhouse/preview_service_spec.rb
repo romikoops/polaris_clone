@@ -143,9 +143,9 @@ module Wheelhouse
       it "generates the preview for local charges with one pricing available", :aggregate_failures do
         expect(results.length).to eq(1)
         expect(results.dig(0, :import, :fees, :solas, :margins, 0, :source_id)).to eq(import_margin.id)
-        expect(results.dig(0, :import, :fees, :solas, :final, "value")).to eq(19.25)
+        expect(results.dig(0, :import, :fees, :solas, :final, "rate")).to eq(19.25)
         expect(results.dig(0, :export, :fees, :solas, :margins, 0, :source_id)).to eq(export_margin.id)
-        expect(results.dig(0, :export, :fees, :solas, :final, "value")).to eq(19.25)
+        expect(results.dig(0, :export, :fees, :solas, :final, "rate")).to eq(19.25)
       end
 
       it "generates the preview for pre carriage with one pricing available", :aggregate_failures do

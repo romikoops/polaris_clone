@@ -16,7 +16,7 @@ FactoryBot.define do
           "max" => nil,
           "min" => 17.5,
           "name" => "SOLAS",
-          "value" => 17.5,
+          "rate" => 17.5,
           "currency" => "EUR",
           "rate_basis" => "PER_SHIPMENT"
         }
