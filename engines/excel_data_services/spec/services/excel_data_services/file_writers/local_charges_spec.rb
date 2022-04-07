@@ -83,8 +83,9 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
     context "with ranges" do
       let!(:local_charge) { FactoryBot.create(:legacy_local_charge, :range, hub: hub, organization: organization) }
 
-      let(:local_charge_data_with_ranges) do
-        { "GROUP_ID" => default_group.id,
+      let(:local_charge_data_with_ranges_base) do
+        {
+          "GROUP_ID" => default_group.id,
           "GROUP_NAME" => default_group.name,
           "EFFECTIVE_DATE" => local_charge.effective_date.strftime("%F"),
           "EXPIRATION_DATE" => local_charge.expiration_date.strftime("%F"),
@@ -106,23 +107,32 @@ RSpec.describe ExcelDataServices::FileWriters::LocalCharges do
           "MINIMUM" => 57,
           "MAXIMUM" => nil,
           "BASE" => nil,
-          "TON" => 41,
-          "CBM" => nil,
           "KG" => nil,
           "ITEM" => nil,
           "SHIPMENT" => nil,
           "BILL" => nil,
           "CONTAINER" => nil,
           "WM" => nil,
-          "RANGE_MIN" => 0,
-          "RANGE_MAX" => 5,
-          "DANGEROUS" => nil }
+          "DANGEROUS" => nil
+        }
+      end
+
+      let(:local_charge_data_with_ranges) do
+        [{ "TON" => 41,
+           "CBM" => nil,
+           "RANGE_MIN" => 0,
+           "RANGE_MAX" => 5 },
+          { "TON" => nil,
+            "CBM" => 8.0,
+            "RANGE_MIN" => 6,
+            "RANGE_MAX" => 40 }].map { |range| local_charge_data_with_ranges_base.merge(range) }
       end
 
       describe ".perform" do
         it "writes all local charges to the sheet", :aggregate_failures do
-          expect(first_sheet.row(1)).to eq(local_charge_data_with_ranges.keys)
-          expect(first_sheet.row(2)).to eq(local_charge_data_with_ranges.values)
+          expect(first_sheet.row(1)).to match_array(local_charge_data_with_ranges.first.keys)
+          expect(first_sheet.row(2)).to match_array(local_charge_data_with_ranges.first.values)
+          expect(first_sheet.row(3)).to match_array(local_charge_data_with_ranges.second.values)
         end
       end
     end

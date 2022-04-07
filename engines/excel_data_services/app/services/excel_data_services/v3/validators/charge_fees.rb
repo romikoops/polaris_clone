@@ -24,6 +24,7 @@ module ExcelDataServices
               range_presence_validations,
               range_value_validation,
               standard_validation,
+              stowage_validation,
               base_validation
             ].compact.flatten
           end
@@ -47,9 +48,16 @@ module ExcelDataServices
           end
 
           def standard_validation
-            return if row.values_at(*row_value_keys).all?(&:present?)
+            return if row.values_at(*row_value_keys).all?(&:present?) || stowage_fee?
 
             error(message: "#{rate_basis} requires values in all the following columns: #{row_value_keys.join(', ')}.", attribute: "rate_basis")
+          end
+
+          def stowage_validation
+            return unless stowage_fee?
+            return if row.values_at(*row_value_keys).any?(&:present?)
+
+            error(message: "#{rate_basis} requires values in either of the following columns: #{row_value_keys.join(', ')}.", attribute: "rate_basis")
           end
 
           def base_validation
@@ -79,6 +87,10 @@ module ExcelDataServices
               reason: message,
               exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
             )
+          end
+
+          def stowage_fee?
+            rate_basis == "PER_UNIT_TON_CBM_RANGE"
           end
         end
       end

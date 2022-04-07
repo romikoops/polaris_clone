@@ -31,10 +31,10 @@ RSpec.describe ExcelDataServices::V3::Validators::ChargeFees do
       end
     end
 
-    context "when the rate basis is PER_CBM_TON_RANGE and cbm / ton values are missing" do
+    context "when the rate basis is PER_CBM_TON and cbm / ton values are missing" do
       let(:row) do
         {
-          "rate_basis" => "PER_CBM_TON_RANGE",
+          "rate_basis" => "PER_CBM_TON",
           "cbm" => nil,
           "ton" => nil,
           "row" => 2,
@@ -44,10 +44,48 @@ RSpec.describe ExcelDataServices::V3::Validators::ChargeFees do
         }
       end
 
-      let(:error_messages) { ["PER_CBM_TON_RANGE requires values in all the following columns: cbm, ton."] }
+      let(:error_messages) { ["PER_CBM_TON requires values in all the following columns: cbm, ton."] }
 
       it "returns the state with the missing cbm and ton error message" do
         expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when the rate basis is PER_UNIT_TON_CBM_RANGE and cbm / ton values are missing" do
+      let(:row) do
+        {
+          "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+          "cbm" => nil,
+          "ton" => nil,
+          "row" => 2,
+          "range_min" => 1,
+          "range_max" => 10,
+          "sheet_name" => "Sheet1"
+        }
+      end
+
+      let(:error_messages) { ["PER_UNIT_TON_CBM_RANGE requires values in either of the following columns: cbm, ton."] }
+
+      it "returns the state with the missing cbm and ton error message" do
+        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when the rate basis is PER_UNIT_TON_CBM_RANGE and only one value is present" do
+      let(:row) do
+        {
+          "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+          "cbm" => 2.0,
+          "ton" => nil,
+          "row" => 2,
+          "range_min" => 1,
+          "range_max" => 10,
+          "sheet_name" => "Sheet1"
+        }
+      end
+
+      it "returns the state without any errors" do
+        expect(result.errors).to be_empty
       end
     end
 

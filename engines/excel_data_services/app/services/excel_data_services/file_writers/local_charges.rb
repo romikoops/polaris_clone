@@ -3,6 +3,8 @@
 module ExcelDataServices
   module FileWriters
     class LocalCharges < ExcelDataServices::FileWriters::Base
+      LOCAL_CHARGE_FEE_KEYS = ExcelDataServices::V3::Formatters::JsonFeeStructure::FeesHash::FEE_KEYS
+
       private
 
       def load_and_prepare_data
@@ -10,12 +12,9 @@ module ExcelDataServices
 
         rows_data = []
         filtered_local_charges.each do |local_charge|
-          hub = ::Legacy::Hub.find_by(id: local_charge.hub_id)
-          next if hub.nil?
-
           local_charge["fees"].each_value do |fees|
             ranges = fees["range"]
-
+            hub = local_charge.hub
             if ranges.present?
               ranges.each do |range|
                 rows_data << build_row_data(hub, local_charge, fees, range)
@@ -33,6 +32,7 @@ module ExcelDataServices
       def filtered_local_charges
         @filtered_local_charges ||= Legacy::LocalCharge
           .where(organization: organization)
+          .joins(:hub)
           .current
           .yield_self do |result|
           mot = options["mode_of_transport"]
@@ -47,14 +47,14 @@ module ExcelDataServices
         effective_date = Date.parse(local_charge.effective_date.to_s) if local_charge.effective_date
         expiration_date = Date.parse(local_charge.expiration_date.to_s) if local_charge.expiration_date
         counterpart_hub = local_charge.counterpart_hub
-        counterpart_country = counterpart_hub.address.country if counterpart_hub
+        counterpart_country = counterpart_hub.nexus.country if counterpart_hub
         tenant_vehicle = local_charge.tenant_vehicle
 
         { group_id: local_charge.group_id,
           group_name: Groups::Group.find_by(id: local_charge.group_id)&.name,
           locode: hub.nexus.locode,
           hub: hub.name,
-          country: hub.address.country.name,
+          country: hub.nexus.country.name,
           effective_date: effective_date,
           expiration_date: expiration_date,
           counterpart_locode: counterpart_hub&.nexus&.locode,
@@ -90,7 +90,7 @@ module ExcelDataServices
       end
 
       def dynamic_lookup(fee, range)
-        fee_value = fee.values_at("value", "rate").find(&:present?)
+        fee_value = fee.values_at(*LOCAL_CHARGE_FEE_KEYS).find(&:present?)
 
         { "PER_SHIPMENT" => { shipment: fee_value },
           "PER_CONTAINER" => { container: fee_value },
@@ -127,6 +127,8 @@ module ExcelDataServices
           { cbm: range["cbm"] }
         elsif range["ton"]
           { ton: range["ton"] }
+        else
+          {}
         end
       end
 
