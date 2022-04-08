@@ -61,7 +61,7 @@ module OfferCalculator
           chargeable_error = aggregate_errors.find { |error| error.attribute == :chargeable_weight }
           return unless chargeable_error && errors.find { |error| error.attribute == :chargeable_weight }.blank?
 
-          expand_attr_errors(units: cargo_units, attributes: STANDARD_ATTRIBUTES, error: chargeable_error)
+          expand_attr_errors(units: cargo_units, attributes: keys_for_aggregate_expansion, error: chargeable_error)
         end
 
         def expand_aggregate_payload
@@ -115,6 +115,14 @@ module OfferCalculator
         def keys_for_aggregate_validation
           AGGREGATE_ATTRIBUTES.reject do |key|
             cargo_units.all? { |cargo| cargo.send(CARGO_DIMENSION_LOOKUP[key]).value.zero? }
+          end
+        end
+
+        def keys_for_aggregate_expansion
+          if cargo_units.all?(&:aggregated?)
+            keys_for_aggregate_validation
+          else
+            STANDARD_ATTRIBUTES
           end
         end
 

@@ -454,7 +454,7 @@ RSpec.configure do |config|
               landing_page_variant: {
                 description: "Custom theme landing page variants with options such as `default` `quotation_plugin` and `light`",
                 type: "string",
-                enum: ["default", "quotation_plugin", "light"],
+                enum: %w[default quotation_plugin light],
                 nullable: true
               },
               landing_page_hero: {
@@ -484,26 +484,26 @@ RSpec.configure do |config|
                   sales: {
                     description: "sales email",
                     type: "object",
-                    items:{
+                    items: {
                       general: {
                         description: "general sales email",
-                        type: "object",
+                        type: "object"
                       }
                     }
                   },
                   support: {
                     description: "support email",
                     type: "object",
-                    items:{
+                    items: {
                       general: {
                         description: "general support email",
-                        type: "object",
+                        type: "object"
                       }
                     }
                   }
                 }
               },
-              websites:{
+              websites: {
                 description: "websites of the organzation",
                 type: "object",
                 nullable: true
@@ -512,7 +512,7 @@ RSpec.configure do |config|
                 description: "phone numbers of the organization",
                 type: "object",
                 nullable: true,
-                items:{
+                items: {
                   main: {
                     description: "organizations main phone number",
                     type: "string"
@@ -527,7 +527,7 @@ RSpec.configure do |config|
                 description: "phone numbers of the organization",
                 type: "object",
                 nullable: true,
-                items:{
+                items: {
                   main: {
                     description: "organizations main address",
                     type: "string"
@@ -537,7 +537,7 @@ RSpec.configure do |config|
                     type: "array"
                   }
                 }
-              },
+              }
             }
           },
           cargo_item_type: {
@@ -1150,6 +1150,51 @@ RSpec.configure do |config|
               weight
               commodities
               cargoClass
+            ]
+          },
+          validation_item_lcl: {
+            allOf: [
+              { "$ref": "#/components/schemas/item_lcl" },
+              {
+                type: "object",
+                properties: {
+                  id: {
+                    description: "A UUID to be used to identify which CargoUnit to render the error on",
+                    type: "string"
+                  }
+                },
+                required: %w[id]
+              }
+            ]
+          },
+          validation_item_aggregated_lcl: {
+            allOf: [
+              { "$ref": "#/components/schemas/item_aggregated_lcl" },
+              {
+                type: "object",
+                properties: {
+                  id: {
+                    description: "A UUID to be used to identify which CargoUnit to render the error on",
+                    type: "string"
+                  }
+                },
+                required: %w[id]
+              }
+            ]
+          },
+          validation_item_fcl: {
+            allOf: [
+              { "$ref": "#/components/schemas/item_fcl" },
+              {
+                type: "object",
+                properties: {
+                  id: {
+                    description: "A UUID to be used to identify which CargoUnit to render the error on",
+                    type: "string"
+                  }
+                },
+                required: %w[id]
+              }
             ]
           },
           item_response: {
@@ -2147,7 +2192,7 @@ RSpec.configure do |config|
                   locale: {
                     description: "The Users preferred Localization eg. en-US",
                     type: "string"
-                  },
+                  }
                 },
                 required: %w[
                   email

@@ -80,7 +80,7 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       let(:cargo_units) do
         [FactoryBot.build(:journey_cargo_unit,
           :aggregate_lcl,
-          weight_value: 15000)]
+          weight_value: 15_000)]
       end
 
       before { FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization) }
@@ -402,9 +402,24 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       it "returns an array of errors for each input when aggregate fails validation" do
-        aggregate_failures do
-          expect(result.length).to eq(0)
-        end
+        expect(result.length).to eq(0)
+      end
+    end
+
+    context "when the cargos are invalid and aggregated_lcl, they return only the aggregated_lcl attributes when chargeable weight is broken" do
+      before do
+        FactoryBot.create(:aggregated_max_dimensions_bundle, chargeable_weight: 1000, organization: organization)
+      end
+
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          :aggregate_lcl,
+          quantity: 1,
+          weight_value: 12_000)]
+      end
+
+      it "returns an array of errors for each input when aggregate fails validation", :aggregate_failures do
+        expect(result.map(&:attribute)).to match_array(%i[payload_in_kg volume])
       end
     end
   end

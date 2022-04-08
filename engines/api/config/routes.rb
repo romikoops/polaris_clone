@@ -89,6 +89,7 @@ Api::Engine.routes.draw do
         get "pdf"
         get "xlsx"
       end
+      resource :validation, only: [:create]
       resources :uploads, only: [:create, :show]
       resource :theme, only: [:show]
       resource :scope, only: [:show]
