@@ -598,6 +598,7 @@ end
 
 # == Route Map
 #
+# Couldn't find the MJML 4. binary.. have you run $ npm install mjml?
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
@@ -606,7 +607,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007ff28ddcaf28 /Users/wbeamish/imc/polaris/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fe587946e88@/Users/ajith/Development/IMC/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1042,7 +1043,11 @@ end
 #                      v1_organization_company PATCH  /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
 #                                              PUT    /v1/organizations/:organization_id/companies/:id(.:format)                               api/v1/companies#update
 #                             v1_organizations GET    /v1/organizations(.:format)                                                              api/v1/organizations#index
+#                           v2_admin_passwords POST   /v2/admin/passwords(.:format)                                                            api/v2/admin/passwords#create
+#                            v2_admin_password PATCH  /v2/admin/passwords/:id(.:format)                                                        api/v2/admin/passwords#update
+#                                              PUT    /v2/admin/passwords/:id(.:format)                                                        api/v2/admin/passwords#update
 #             v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
+#            v2_organization_query_recalculate POST   /v2/organizations/:organization_id/queries/:query_id/recalculate(.:format)               api/v2/queries#recalculate
 # v2_organization_query_request_for_quotations POST   /v2/organizations/:organization_id/queries/:query_id/request_for_quotations(.:format)    api/v2/request_for_quotations#create
 #            v2_organization_query_cargo_units GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units(.:format)               api/v2/cargo_units#index
 #             v2_organization_query_cargo_unit GET    /v2/organizations/:organization_id/queries/:query_id/cargo_units/:id(.:format)           api/v2/cargo_units#show
@@ -1091,6 +1096,7 @@ end
 #                                              PATCH  /v2/users/:id(.:format)                                                                  api/v2/users#update
 #                                              PUT    /v2/users/:id(.:format)                                                                  api/v2/users#update
 #                                              DELETE /v2/users/:id(.:format)                                                                  api/v2/users#destroy
+#                          v2_file_descriptors POST   /v2/file_descriptors(.:format)                                                           api/v2/file_descriptors#create
 #                                 v2_passwords POST   /v2/passwords(.:format)                                                                  api/v2/passwords#create
 #                                  v2_password PATCH  /v2/passwords/:id(.:format)                                                              api/v2/passwords#update
 #                                              PUT    /v2/passwords/:id(.:format)                                                              api/v2/passwords#update

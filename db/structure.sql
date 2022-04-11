@@ -191,6 +191,18 @@ CREATE TYPE public.excel_data_services_uploads_status AS ENUM (
 
 
 --
+-- Name: file_sync_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.file_sync_status AS ENUM (
+    'ready',
+    'in_progress',
+    'synced',
+    'failed'
+);
+
+
+--
 -- Name: hub_type_mode_of_transport; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1591,6 +1603,32 @@ CREATE SEQUENCE public.exchange_rates_id_seq
 --
 
 ALTER SEQUENCE public.exchange_rates_id_seq OWNED BY public.exchange_rates.id;
+
+
+--
+-- Name: files_file_descriptors; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.files_file_descriptors (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    file_path character varying NOT NULL,
+    file_type character varying NOT NULL,
+    originator character varying NOT NULL,
+    source character varying NOT NULL,
+    source_type character varying NOT NULL,
+    synced_at character varying,
+    file_created_at character varying,
+    file_updated_at character varying,
+    file_added_to_source_at character varying,
+    status public.file_sync_status NOT NULL,
+    organization_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT files_file_descriptors_file_path_presence CHECK (((file_path IS NOT NULL) AND ((file_path)::text !~ '^\s*$'::text))),
+    CONSTRAINT files_file_descriptors_file_type_presence CHECK (((file_type IS NOT NULL) AND ((file_type)::text !~ '^\s*$'::text))),
+    CONSTRAINT files_file_descriptors_originator_presence CHECK (((originator IS NOT NULL) AND ((originator)::text !~ '^\s*$'::text))),
+    CONSTRAINT files_file_descriptors_source_presence CHECK (((source IS NOT NULL) AND ((source)::text !~ '^\s*$'::text)))
+);
 
 
 --
@@ -5844,6 +5882,14 @@ ALTER TABLE ONLY public.exchange_rates
 
 
 --
+-- Name: files_file_descriptors files_file_descriptors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files_file_descriptors
+    ADD CONSTRAINT files_file_descriptors_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: groups_groups groups_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7619,6 +7665,27 @@ CREATE INDEX index_exchange_rates_on_from ON public.exchange_rates USING btree (
 --
 
 CREATE INDEX index_exchange_rates_on_to ON public.exchange_rates USING btree ("to");
+
+
+--
+-- Name: index_files_file_descriptors_on_file_path; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_files_file_descriptors_on_file_path ON public.files_file_descriptors USING btree (file_path);
+
+
+--
+-- Name: index_files_file_descriptors_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_files_file_descriptors_on_organization_id ON public.files_file_descriptors USING btree (organization_id);
+
+
+--
+-- Name: index_files_file_descriptors_on_organization_id_and_file_path; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_files_file_descriptors_on_organization_id_and_file_path ON public.files_file_descriptors USING btree (organization_id, file_path);
 
 
 --
@@ -11532,6 +11599,14 @@ ALTER TABLE ONLY public.journey_route_sections
 
 
 --
+-- Name: files_file_descriptors fk_rails_ba845f0e07; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.files_file_descriptors
+    ADD CONSTRAINT fk_rails_ba845f0e07 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: rates_sections fk_rails_bbae927883; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12585,6 +12660,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220209070931'),
 ('20220209071249'),
 ('20220216103614'),
-('20220223104305');
+('20220223104305'),
+('20220324010131');
 
 

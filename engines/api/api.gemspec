@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "carta"
   spec.add_dependency "cms_data"
   spec.add_dependency "dry-validation", "~> 1.6"
+  spec.add_dependency "files"
   spec.add_dependency "journey"
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"
@@ -44,4 +45,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rspec-rails", "~> 4.0.1"
   spec.add_development_dependency "rswag-specs"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

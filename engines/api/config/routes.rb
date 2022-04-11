@@ -101,6 +101,7 @@ Api::Engine.routes.draw do
     resources :users do
       get "validate", on: :collection
     end
+    resources :file_descriptors, only: %i[create]
     resources :passwords, only: %i[create update]
   end
 end

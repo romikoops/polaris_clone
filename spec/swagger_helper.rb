@@ -172,6 +172,53 @@ RSpec.configure do |config|
               }
             }
           },
+          file_descriptor: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier for file_descriptor",
+                type: "string"
+              },
+              type: {
+                description: "Generic type of the file_descriptor",
+                type: "string"
+              },
+              attributes: {
+                organizationId: {
+                  description: "Organization ID",
+                  type: "string"
+                },
+                filePath: {
+                  description: "File path description of a file with its name.",
+                  type: "string"
+                },
+                originator: {
+                  description: "Datasource  of the file ex: 'SFTP'.",
+                  type: "string"
+                },
+                source: {
+                  description: "source folder name or bucket name depending on the source_type",
+                  type: "string"
+                },
+                source_type: {
+                  description: "describes the source ex : S3_BUCKET",
+                  type: "string"
+                },
+                fileCreatedAt: {
+                  description: "The birth date and time of the file even before it was synced.",
+                  type: "string"
+                },
+                fileUpdatedAt: {
+                  description: "File updated at date and time in its originator.",
+                  type: "string"
+                },
+                syncedAt: {
+                  description: "Date and time when the file was synced to the source.",
+                  type: "string"
+                }
+              }
+            }
+          },
           contact: {
             type: "object",
             properties: {
