@@ -4,9 +4,10 @@ require "rails_helper"
 
 RSpec.describe ExcelDataServices::V3::Import do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:stats) { described_class.import(model: model, data: data, type: "charge_categories", options: options) }
+  let(:stats) { described_class.import(model: model, data: data, type: type, options: options) }
   let(:options) { {} }
   let(:model) { Legacy::ChargeCategory }
+  let(:type) { "charge_categories" }
   let(:data) do
     [{
       "code" => "bas",
@@ -51,6 +52,38 @@ RSpec.describe ExcelDataServices::V3::Import do
       it "catches the error and returns a default set of Stats", :aggregate_failures do
         expect(stats.failed).to eq(1)
         expect(stats.errors.pluck(:reason)).to include("We were not able to insert your Charge categories correctly.")
+      end
+    end
+
+    context "when data includes records to be updated as well as created" do
+      let(:options) { { on_duplicate_key_ignore: false, on_duplicate_key_update: [:duration], validate: true } }
+      let(:model) { Legacy::TransitTime }
+      let(:type) { "transit_times" }
+      let!(:existing_record) { FactoryBot.create(:legacy_transit_time, duration: 5) }
+      let(:data) do
+        [
+          {
+            "id" => nil,
+            "itinerary_id" => FactoryBot.create(:legacy_itinerary).id,
+            "tenant_vehicle_id" => FactoryBot.create(:legacy_tenant_vehicle).id,
+            "duration" => 5
+          },
+          {
+            "id" => existing_record.id,
+            "itinerary_id" => existing_record.itinerary_id,
+            "tenant_vehicle_id" => existing_record.tenant_vehicle_id,
+            "duration" => 10
+          }
+        ]
+      end
+
+      it "successfully inserts the new record" do
+        expect { stats }.to change(Legacy::TransitTime, :count).by(1)
+      end
+
+      it "successfully updates the existing one" do
+        stats
+        expect(existing_record.reload.duration).to eq(10)
       end
     end
   end

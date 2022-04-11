@@ -20,8 +20,12 @@ module ExcelDataServices
       end
 
       def perform
-        import_result
-        stats
+        ExcelDataServices::V3::Stats.new(
+          type: type,
+          created: update_result.ids.count + create_result.ids.count,
+          failed: update_result.failed_instances.count + create_result.failed_instances.count,
+          errors: import_errors
+        )
       rescue ActiveRecord::StatementInvalid => e
         Sentry.capture_exception(e)
         ExcelDataServices::V3::Stats.new(
@@ -39,28 +43,28 @@ module ExcelDataServices
 
       private
 
-      def import_result
-        @import_result ||= model.import(
-          model_data,
-          default_options.merge(options)
+      def model_data
+        @model_data ||= ModelInitializer.new(model: model, data: data).perform
+      end
+
+      def update_result
+        @update_result ||= ImportAction.new(
+          model: model,
+          data: model_data.select { |datum| datum.id.present? },
+          options: options
         )
       end
 
-      def model_data
-        ModelInitializer.new(model: model, data: data).perform
-      end
-
-      def stats
-        ExcelDataServices::V3::Stats.new(
-          type: type,
-          created: import_result.ids.count,
-          failed: import_result.failed_instances.count,
-          errors: import_errors
+      def create_result
+        @create_result ||= ImportAction.new(
+          model: model,
+          data: model_data.reject { |datum| datum.id.present? },
+          options: options
         )
       end
 
       def import_errors
-        import_result.failed_instances.map do |failed|
+        (update_result.failed_instances + create_result.failed_instances).map do |failed|
           {
             sheet_name: type,
             reason: failed.errors.to_a.join(", ")
@@ -70,6 +74,31 @@ module ExcelDataServices
 
       def default_options
         { batch_size: BATCH_SIZE, on_duplicate_key_ignore: true }
+      end
+
+      class ImportAction
+        def initialize(model:, data:, options: {})
+          @model = model
+          @data = data
+          @options = options
+        end
+
+        attr_reader :model, :data, :options
+
+        delegate :failed_instances, :ids, to: :import_result
+
+        private
+
+        def import_result
+          @import_result ||= model.import(
+            data,
+            default_options.merge(options)
+          )
+        end
+
+        def default_options
+          { batch_size: BATCH_SIZE, on_duplicate_key_ignore: true }
+        end
       end
     end
   end
