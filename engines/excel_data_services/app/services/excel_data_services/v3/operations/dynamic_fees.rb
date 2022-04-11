@@ -6,6 +6,7 @@ module ExcelDataServices
       class DynamicFees < ExcelDataServices::V3::Operations::Base
         PRICING_COLUMNS = %w[group_id group_name effective_date expiration_date country_origin service_level origin origin_locode country_destination mode_of_transport destination destination_locode transshipment transit_time carrier service load_type cargo_class rate currency rate_basis fee_code fee_name fee_min fee wm_ratio vm_ratio range_max range_min remarks].freeze
         STATE_COLUMNS = %w[hub_id group_id organization_id row sheet_name].freeze
+        PLACEHOLDER = ExcelDataServices::V3::Operations::Dynamic::DataColumn::PRIMARY_CODE_PLACEHOLDER
 
         def perform
           return state if dynamic_keys.empty?
@@ -52,7 +53,9 @@ module ExcelDataServices
         end
 
         def fees_with_notes
-          @fees_with_notes ||= fee_frame[!fee_frame["rate"].missing].left_join(notes_frame, on: { "sheet_name" => "sheet_name", "row" => "row" })
+          @fees_with_notes ||= fee_frame[!fee_frame["rate"].missing]
+            .inner_join(rows_with_valid_rates, on: %w[sheet_name row cargo_class].zip(%w[sheet_name row cargo_class]).to_h)
+            .left_join(notes_frame, on: { "sheet_name" => "sheet_name", "row" => "row" })
         end
 
         def fee_frame
@@ -94,6 +97,14 @@ module ExcelDataServices
 
         def empty_frame
           Rover::DataFrame.new({ "sheet_name" => [], "row" => [], "rate" => [] })
+        end
+
+        def rows_with_valid_rates
+          @rows_with_valid_rates ||= (primary_fee_code_rows.empty? ? fee_frame : primary_fee_code_rows)[%w[row sheet_name cargo_class]]
+        end
+
+        def primary_fee_code_rows
+          @primary_fee_code_rows ||= fee_frame[(fee_frame["fee_code"] == PLACEHOLDER) & (!fee_frame["rate"].missing)]
         end
       end
     end

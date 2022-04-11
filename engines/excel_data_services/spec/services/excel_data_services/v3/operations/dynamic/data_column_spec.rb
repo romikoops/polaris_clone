@@ -31,6 +31,14 @@ RSpec.describe ExcelDataServices::V3::Operations::Dynamic::DataColumn do
       it "returns the correct fee_code from the header" do
         expect(data_column.fee_code).to eq("baf")
       end
+
+      context "when the fee_code is to be replaced with the Primary Fee Code in the PrimaryFeeCode Extractor" do
+        let(:header) { "Dynamic:20dc" }
+
+        it "returns the correct fee_code from the header" do
+          expect(data_column.fee_code).to eq(described_class::PRIMARY_CODE_PLACEHOLDER)
+        end
+      end
     end
 
     describe "#category" do

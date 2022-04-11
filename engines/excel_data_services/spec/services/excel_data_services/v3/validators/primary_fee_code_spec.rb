@@ -11,7 +11,7 @@ RSpec.describe ExcelDataServices::V3::Validators::PrimaryFeeCode do
   describe ".state" do
     let(:row) do
       {
-        "fee_code" => nil,
+        "fee_code" => ExcelDataServices::V3::Operations::Dynamic::DataColumn::PRIMARY_CODE_PLACEHOLDER,
         "fee_name" => nil,
         "row" => 2
       }

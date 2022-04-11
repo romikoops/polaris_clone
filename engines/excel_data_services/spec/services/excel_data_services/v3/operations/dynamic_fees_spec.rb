@@ -119,7 +119,7 @@ RSpec.describe ExcelDataServices::V3::Operations::DynamicFees do
           "destination_terminal" => nil,
           "rate_basis" => "PER_CONTAINER",
           "remarks" => nil,
-          "Dynamic:20dc" => Money.new(343_000.0, "EUR"),
+          "Dynamic:20dc" => "n/a",
           "Dynamic:40dc" => Money.new(532_500.0, "EUR"),
           "Dynamic:40hq" => Money.new(532_500.0, "EUR"),
           "Dynamic:int/ref_nr" => "FL4222-ERF-A-002",
@@ -175,14 +175,15 @@ RSpec.describe ExcelDataServices::V3::Operations::DynamicFees do
       end
 
       it "excludes the n/a rates correctly", :aggregate_failures do
-        expect(extracted_table[extracted_table["fee_code"] == "emergency_imbalance_surcharge"]).to be_empty
-        expect(extracted_table[extracted_table["fee_code"] == "operation_cost_contribution"]).to be_empty
-        expect(extracted_table[extracted_table["fee_code"] == "piracy_risk"]).to be_empty
+        expect(extracted_table.filter("fee_code" => "emergency_imbalance_surcharge")).to be_empty
+        expect(extracted_table.filter("fee_code" => "operation_cost_contribution")).to be_empty
+        expect(extracted_table.filter("fee_code" => "piracy_risk")).to be_empty
+        expect(extracted_table.filter("fee_code" => "bas", "cargo_class" => "fcl_20")).to be_empty
       end
 
       it "dynamically changes the fee code if the value", :aggregate_failures do
-        expect(extracted_table[extracted_table["fee_code"] == "included_caf"]).not_to be_empty
-        expect(extracted_table[extracted_table["fee_code"] == "included_baf"]).not_to be_empty
+        expect(extracted_table.filter("fee_code" => "included_caf")).not_to be_empty
+        expect(extracted_table.filter("fee_code" => "included_baf")).not_to be_empty
       end
 
       it "adds the note headers to the remarks column", :aggregate_failures do
@@ -190,7 +191,7 @@ RSpec.describe ExcelDataServices::V3::Operations::DynamicFees do
           "electronic cargo tracking note/waiver (ectn/besc)",
           "import lizenz nr. (form m)"
         ].map(&:upcase))
-        expect(extracted_table[extracted_table["fee_code"] == "included_baf"]).not_to be_empty
+        expect(extracted_table.filter("fee_code" => "included_baf")).not_to be_empty
       end
     end
   end

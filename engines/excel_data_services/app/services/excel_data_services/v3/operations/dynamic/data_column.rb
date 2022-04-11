@@ -8,6 +8,7 @@ module ExcelDataServices
           STANDARD_OCEAN_COLUMNS = %w[20dc 40dc 40hq].freeze
           TWENTY_FT_CLASSES = %w[fcl_20].freeze
           FORTY_FT_CLASSES =  %w[fcl_40 fcl_40_hq].freeze
+          PRIMARY_CODE_PLACEHOLDER = "PRIMARY_FREIGHT_CODE"
 
           def initialize(header:, frame:)
             @header = header
@@ -19,7 +20,7 @@ module ExcelDataServices
           end
 
           def fee_code
-            @fee_code ||= STANDARD_OCEAN_COLUMNS.include?(raw_fee_code) ? nil : header_values.last.downcase
+            @fee_code ||= STANDARD_OCEAN_COLUMNS.include?(raw_fee_code) ? PRIMARY_CODE_PLACEHOLDER : header_values.last.downcase
           end
 
           def data
