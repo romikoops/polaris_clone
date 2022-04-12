@@ -42,12 +42,19 @@ module ExcelDataServices
           end
 
           def perform
-            row.slice("base", "min", "max", "rate_basis", "currency")
+            active_fee_keys.inject(fee_base) do |fee, active_fee_key|
+              next fee unless range_frame.empty?
+
+              fee.merge(active_fee_key => row.values_at(active_fee_key, "rate", "value").find(&:present?).to_d)
+            end
+          end
+
+          def fee_base
+            @fee_base ||= row.slice("base", "min", "max", "rate_basis", "currency")
               .merge(
                 "range" => range_from_grouping_rows,
                 "name" => row["fee_name"],
-                "key" => row["fee_code"].upcase,
-                active_fee_key => row[active_fee_key].to_d
+                "key" => row["fee_code"].upcase
               )
           end
 
@@ -56,17 +63,37 @@ module ExcelDataServices
           end
 
           def range_from_grouping_rows
-            filtered = frame[(!frame["range_min"].missing) & (!frame["range_max"].missing)].yield_self do |frame|
-              frame["min"] = frame.delete("range_min").to(:float)
-              frame["max"] = frame.delete("range_max").to(:float)
-              frame[active_fee_key] = frame[active_fee_key].to(:float)
-              frame
+            @range_from_grouping_rows ||= present_active_fee_keys.inject([]) do |result, active_fee_key|
+              result.concat(range_frame[!range_frame[active_fee_key].missing][["min", "max", active_fee_key]].to_a)
             end
-            filtered[["min", "max", active_fee_key]].to_a
           end
 
-          def active_fee_key
-            @active_fee_key ||= FEE_KEYS.find { |key| row[key].present? }
+          def range_frame
+            @range_frame ||= frame[(!frame["range_min"].missing) & (!frame["range_max"].missing)].yield_self do |frame|
+              frame["min"] = frame.delete("range_min").to(:float)
+              frame["max"] = frame.delete("range_max").to(:float)
+              frame
+            end
+          end
+
+          def rate_basis
+            row["rate_basis"]
+          end
+
+          def present_active_fee_keys
+            present_and_active = active_fee_keys & frame.keys
+            present_and_active || ["rate"]
+          end
+
+          def active_fee_keys
+            @active_fee_keys ||= if rate_basis == "PER_UNIT_TON_CBM_RANGE"
+              %w[cbm ton]
+            else
+              rate_basis
+                .split("_")
+                .reject { |part| part.in?(%w[PER X RANGE FLAT]) }
+                .map(&:downcase)
+            end
           end
         end
       end

@@ -146,7 +146,6 @@ RSpec.describe ExcelDataServices::V3::Formatters::LocalCharge do
             "base" => nil,
             "min" => 2.0,
             "max" => 100.0,
-            "kg" => 4.0,
             "rate_basis" => "PER_KG",
             "currency" => "EUR",
             "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],

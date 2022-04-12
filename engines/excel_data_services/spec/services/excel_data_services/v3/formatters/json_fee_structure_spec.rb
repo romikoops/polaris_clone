@@ -120,12 +120,60 @@ RSpec.describe ExcelDataServices::V3::Formatters::JsonFeeStructure do
               "base" => nil,
               "min" => 2.0,
               "max" => 100.0,
-              "kg" => 4.0,
               "rate_basis" => "PER_KG",
               "currency" => "EUR",
               "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],
               "name" => "B/L Fee",
               "key" => "BL"
+            } }
+        end
+
+        it_behaves_like "a successful formatting"
+      end
+
+      context "with a range based fee stowage fee" do
+        let(:row_deltas) do
+          [
+            {
+              "fee_code" => "stw",
+              "fee_name" => "Stowage",
+              "external_code" => "PER_UNIT_TON_CBM_RANGE",
+              "row" => 2,
+              "min" => 2.0,
+              "max" => 100.0,
+              "currency" => "EUR",
+              "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+              "cbm" => 8.0,
+              "range_min" => 0.0,
+              "range_max" => 10.0
+            },
+            {
+              "fee_code" => "stw",
+              "fee_name" => "Stowage",
+              "external_code" => "PER_UNIT_TON_CBM_RANGE",
+              "row" => 2,
+              "min" => 2.0,
+              "max" => 100.0,
+              "currency" => "EUR",
+              "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+              "ton" => 4.0,
+              "range_min" => 10.0,
+              "range_max" => 100.0
+            }
+          ]
+        end
+
+        let(:expected_fees) do
+          { "STW" =>
+            {
+              "base" => nil,
+              "currency" => "EUR",
+              "key" => "STW",
+              "max" => 100.0,
+              "min" => 2.0,
+              "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+              "range" => [{ "min" => 0.0, "max" => 10.0, "cbm" => 8.0 }, { "min" => 10.0, "max" => 100.0, "ton" => 4.0 }],
+              "name" => "Stowage"
             } }
         end
 
@@ -143,7 +191,7 @@ RSpec.describe ExcelDataServices::V3::Formatters::JsonFeeStructure do
               "rate_basis" => "PER_SHIPMENT",
               "currency" => "EUR",
               "name" => "Fuel Surcharge Fee",
-              "rate" => 30.0,
+              "shipment" => 30.0,
               "key" => "FSC",
               "range" => []
             } }

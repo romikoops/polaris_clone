@@ -44,7 +44,7 @@ RSpec.describe ExcelDataServices::V3::Formatters::Trucking do
               "name" => "Fuel Surcharge Fee",
               "rate_basis" => "PER_SHIPMENT",
               "currency" => "EUR",
-              "rate" => 30.0,
+              "shipment" => 30.0,
               "key" => "FSC",
               "range" => []
             } },
