@@ -35,8 +35,8 @@ module OfferCalculator
           Journey::LineItem.new(
             route_section: route_section,
             route_point: route_section.from,
-            total: charge.value,
-            unit_price: charge.value / charge.quantity,
+            total: charge.rounded_value,
+            unit_price: charge.unit_value,
             units: charge.quantity,
             line_item_set: line_item_set,
             fee_code: charge.code.sub(/\A(included_|unknown_)/, ""),

@@ -26,38 +26,71 @@ RSpec.describe OfferCalculator::Service::Calculators::Charge do
   let(:value) { Money.new(2500, "USD") }
   let(:rate) { Money.new(pricing_fee.rate * 100.0, pricing_fee.currency_name) }
   let(:min_value) { Money.new(pricing_fee.min * 100.0, pricing_fee.currency_name) }
+  let!(:charge) do
+    described_class.new(
+      value: value,
+      fee: fee,
+      fee_component: fee.components.first
+    )
+  end
 
-  describe "it creates a valid Charge object" do
-    let!(:charge) do
-      described_class.new(
-        value: value,
-        fee: fee,
-        fee_component: fee.components.first
-      )
-    end
-
+  describe "#charge_category" do
     it "returns the charge category" do
       expect(charge.charge_category).to eq(charge_category)
     end
+  end
 
+  describe "#targets" do
     it "returns the targets" do
       expect(charge.targets).to eq(measures.cargo_units)
     end
+  end
 
+  describe "#min_value" do
     it "returns the min value" do
       expect(charge.min_value).to eq(fee.min_value)
     end
+  end
 
+  describe "#rate" do
     it "returns the rate" do
       expect(charge.rate).to eq(rate)
     end
+  end
 
+  describe "#fee" do
     it "returns the fee" do
       expect(charge.fee).to eq(fee)
     end
+  end
 
-    it "returns the value" do
-      expect(charge.value).to eq(value)
+  describe "#rounded_value" do
+    it "returns the value as is when there are no fractional cents" do
+      expect(charge.rounded_value).to eq(value)
+    end
+
+    context "when the charge value is a fraction of the currency's base unit" do
+      let(:value) { Money.new(0.75, "USD") }
+
+      it "rounds the value to the nearest cent" do
+        expect(charge.rounded_value).to eq(Money.new(1, "USD"))
+      end
+    end
+  end
+
+  describe "#unit_value" do
+    before { allow(fee).to receive(:quantity).and_return(2) }
+
+    it "returns the value divided by the number of units" do
+      expect(charge.unit_value).to eq(Money.new(1250, "USD"))
+    end
+
+    context "when the charge unit_value results in a fraction of the currency's base unit" do
+      let(:value) { Money.new(25, "USD") }
+
+      it "rounds the value to the nearest cent" do
+        expect(charge.unit_value).to eq(Money.new(13, "USD"))
+      end
     end
   end
 end
