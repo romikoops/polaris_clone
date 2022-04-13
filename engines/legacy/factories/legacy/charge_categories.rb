@@ -92,6 +92,13 @@ FactoryBot.define do
   end
 end
 
+def factory_charge_category_from(code:, organization:)
+  existing_charge_category = Legacy::ChargeCategory.find_by(code: code.downcase, organization: organization)
+  return existing_charge_category if existing_charge_category.present?
+
+  FactoryBot.create(:legacy_charge_categories, code: code.downcase, name: code.upcase, organization: organization)
+end
+
 # == Schema Information
 #
 # Table name: charge_categories
