@@ -9,7 +9,7 @@
       "url": "https://support.itsmycargo.com",
       "email": "support@itsmycargo.com"
     },
-    "version": "2022-04-11"
+    "version": "2022-04-12"
   },
   "tags": [
     {
@@ -2637,7 +2637,7 @@
                 "example": {
                   "data": [
                     {
-                      "id": "19",
+                      "id": "5",
                       "type": "cargoItemType",
                       "attributes": {
                         "width": "101.0",
@@ -2717,7 +2717,7 @@
                 "example": {
                   "data": [
                     {
-                      "id": "ba80a04e-5cfc-4720-a9f4-65000b1c8f02",
+                      "id": "c97231a2-9fdc-4a45-97b3-c7e860b4f013",
                       "type": "cargoUnit",
                       "attributes": {
                         "cargoClass": "lcl",
@@ -2735,7 +2735,7 @@
                       }
                     },
                     {
-                      "id": "967b5b90-7f92-4e8b-a9eb-d118ca8ba8c3",
+                      "id": "d6f6096b-af82-4b5f-b6ee-55cdef0a5acf",
                       "type": "cargoUnit",
                       "attributes": {
                         "cargoClass": "lcl",
@@ -2753,7 +2753,7 @@
                       }
                     },
                     {
-                      "id": "5443459e-ac63-43ac-8ba4-1983152e4ff5",
+                      "id": "aa42dbc1-b99a-4bdd-9ebf-c05d55336a18",
                       "type": "cargoUnit",
                       "attributes": {
                         "cargoClass": "lcl",
@@ -2847,7 +2847,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "1a2d36f0-3680-4ffa-9ba7-5c8f3a83cbb9",
+                    "id": "0f6e1bfa-b39f-4955-934e-546b4a89ecaf",
                     "type": "cargoUnit",
                     "attributes": {
                       "cargoClass": "lcl",
@@ -2920,53 +2920,53 @@
                 "example": {
                   "data": [
                     {
-                      "id": "dce16d7f-6277-4971-b9b2-b192d2621186",
+                      "id": "6c5d0f5f-7d2b-4560-8ecb-ec5b29be7ffc",
                       "type": "carrier",
                       "attributes": {
-                        "id": "dce16d7f-6277-4971-b9b2-b192d2621186",
+                        "id": "6c5d0f5f-7d2b-4560-8ecb-ec5b29be7ffc",
                         "code": "carrier_1",
                         "name": "Carrier - 1",
-                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaU1RIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--7f239d5345493f26628591ac1be979be418cdaec/test-image.jpg"
+                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa2NDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--93e94b9031cf1789dbe0dbebfa7d833e989fd34e/test-image.jpg"
                       }
                     },
                     {
-                      "id": "3ccc21b6-c86f-4d8b-a598-7bec776b1f0d",
+                      "id": "1f76a3b1-555c-4228-a3c8-dfae7016554e",
                       "type": "carrier",
                       "attributes": {
-                        "id": "3ccc21b6-c86f-4d8b-a598-7bec776b1f0d",
+                        "id": "1f76a3b1-555c-4228-a3c8-dfae7016554e",
                         "code": "carrier_2",
                         "name": "Carrier - 2",
-                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaVFRIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--31d1db571efe5880a26d111b2d64079274049caf/test-image.jpg"
+                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa2dDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3a8525e152c07e42b9b25784a8f3f959b23c6dff/test-image.jpg"
                       }
                     },
                     {
-                      "id": "08e175e0-3f92-4d5e-b534-c9cc8a943480",
+                      "id": "a2b0c7a0-3bb3-447c-afdb-edac272f5fee",
                       "type": "carrier",
                       "attributes": {
-                        "id": "08e175e0-3f92-4d5e-b534-c9cc8a943480",
+                        "id": "a2b0c7a0-3bb3-447c-afdb-edac272f5fee",
                         "code": "carrier_3",
                         "name": "Carrier - 3",
-                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaVVRIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--b63b3695aca8f4729cbd947872cb68390f95e033/test-image.jpg"
+                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa2tDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--46c9d0a436b7c9b273468a2ee42586cfb17e4a3d/test-image.jpg"
                       }
                     },
                     {
-                      "id": "0b5a28c1-efd3-4e43-a6c0-1c777ab469f7",
+                      "id": "1c6abd26-31e2-4c82-b05e-fc1dc5c06503",
                       "type": "carrier",
                       "attributes": {
-                        "id": "0b5a28c1-efd3-4e43-a6c0-1c777ab469f7",
+                        "id": "1c6abd26-31e2-4c82-b05e-fc1dc5c06503",
                         "code": "carrier_4",
                         "name": "Carrier - 4",
-                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaVlRIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--6f4234f73884f039003ed2691ca2ef042e227fa4/test-image.jpg"
+                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa29DIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--4e1fd86bfb0b33a6b115948086f2234e4fd970bb/test-image.jpg"
                       }
                     },
                     {
-                      "id": "7783a36b-cc7c-4cf1-a971-c05111082921",
+                      "id": "6bc639c7-af09-424d-8d64-52f525848d2f",
                       "type": "carrier",
                       "attributes": {
-                        "id": "7783a36b-cc7c-4cf1-a971-c05111082921",
+                        "id": "6bc639c7-af09-424d-8d64-52f525848d2f",
                         "code": "carrier_5",
                         "name": "Carrier - 5",
-                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaWNRIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--a1c6c8d895c8899cfd712d6b3a6962de12ad9bd4/test-image.jpg"
+                        "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBa3NDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--da251d80468d74c9efe10f2257a463186aa5ab37/test-image.jpg"
                       }
                     }
                   ],
@@ -3040,13 +3040,13 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "1c97833e-06d1-4e13-a0ee-395df9f9ccaf",
+                    "id": "f712aa13-defe-486f-b4da-c303292b31d1",
                     "type": "carrier",
                     "attributes": {
-                      "id": "1c97833e-06d1-4e13-a0ee-395df9f9ccaf",
+                      "id": "f712aa13-defe-486f-b4da-c303292b31d1",
                       "code": "carrier_16",
                       "name": "Carrier - 16",
-                      "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBalVRIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--95870575ba9aa33f499d0b4d21e4fb0918a80e47/test-image.jpg"
+                      "logo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGtDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--b9e700def4a207ab3325e8818849b8c9a7296cc6/test-image.jpg"
                     }
                   },
                   "meta": {
@@ -3125,14 +3125,14 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                    "id": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                     "type": "detailedResult",
                     "attributes": {
-                      "queryId": "994fda4c-cc6a-4afd-aa5f-3fbbeb441454",
+                      "queryId": "1ce8c10e-0bcb-4166-802b-56bfd06737b7",
                       "paymentTerms": "Some quotation payment terms",
                       "charges": [
                         {
-                          "id": "4d706ebf-4e83-4eac-bae4-37ee25b610dc",
+                          "id": "97e963c7-d6c6-46ab-af53-c950330dd76d",
                           "editId": null,
                           "order": 0,
                           "parentId": null,
@@ -3149,17 +3149,17 @@
                             "amount": "180.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 0
                         },
                         {
-                          "id": "aa6c78bf-d9ad-44ed-9b2a-965820ade4bc",
+                          "id": "b1318d2b-cc82-4344-aa44-1796e9ad3851",
                           "editId": null,
                           "order": 0,
                           "parentId": null,
                           "lineItemId": null,
                           "code": null,
-                          "chargeCategoryId": 790,
+                          "chargeCategoryId": 193,
                           "description": "Trucking pre",
                           "section": "trucking_pre",
                           "value": {
@@ -3170,14 +3170,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 1
                         },
                         {
-                          "id": "400f7dff-d6c5-4b43-9667-e98ee59c0718",
-                          "editId": "f3e0dc83-f2c3-4b14-9509-999238d46605",
+                          "id": "bde8d325-3610-47b5-8885-ebb3cfa1fa20",
+                          "editId": "b79468b4-9e16-4f2e-89e2-b6000e9eaa54",
                           "order": 0,
-                          "parentId": "aa6c78bf-d9ad-44ed-9b2a-965820ade4bc",
+                          "parentId": "b1318d2b-cc82-4344-aa44-1796e9ad3851",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": "",
@@ -3191,14 +3191,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 2
                         },
                         {
-                          "id": "27d497a0-d480-4865-86c7-75c4ac47b321",
+                          "id": "ab1cc004-024a-43e8-95b4-dbb6cd56487a",
                           "editId": null,
                           "order": 0,
-                          "parentId": "400f7dff-d6c5-4b43-9667-e98ee59c0718",
+                          "parentId": "bde8d325-3610-47b5-8885-ebb3cfa1fa20",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": null,
@@ -3212,15 +3212,15 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 3
                         },
                         {
-                          "id": "835509b3-70c0-49bf-8de8-a5c97fe3c272",
-                          "editId": "b30392fc-9b7c-4673-b2a1-db18b6ac64d0",
+                          "id": "efcc0de3-119d-4556-99d9-8a3628e936cd",
+                          "editId": "bb240eae-3cd0-4ebc-97c7-3a55d85b9280",
                           "order": 0,
-                          "parentId": "400f7dff-d6c5-4b43-9667-e98ee59c0718",
-                          "lineItemId": "b30392fc-9b7c-4673-b2a1-db18b6ac64d0",
+                          "parentId": "bde8d325-3610-47b5-8885-ebb3cfa1fa20",
+                          "lineItemId": "bb240eae-3cd0-4ebc-97c7-3a55d85b9280",
                           "code": "Fee 8",
                           "chargeCategoryId": null,
                           "description": "FEE 8 - ",
@@ -3237,19 +3237,19 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 4,
                           "rateFactor": null,
                           "rate": null
                         },
                         {
-                          "id": "d9859afc-ba95-46b2-82fa-1c57bd748cd4",
+                          "id": "7bae8732-43e5-44b6-bad1-b66afcf45c0b",
                           "editId": null,
                           "order": 1,
                           "parentId": null,
                           "lineItemId": null,
                           "code": null,
-                          "chargeCategoryId": 793,
+                          "chargeCategoryId": 196,
                           "description": "Export",
                           "section": "export",
                           "value": {
@@ -3260,14 +3260,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 1
                         },
                         {
-                          "id": "ad047e1f-7260-4786-8d59-432967e873d8",
-                          "editId": "f3e0dc83-f2c3-4b14-9509-999238d46605",
+                          "id": "127ab726-b4a0-40f9-a803-2ee878539a44",
+                          "editId": "b79468b4-9e16-4f2e-89e2-b6000e9eaa54",
                           "order": 0,
-                          "parentId": "d9859afc-ba95-46b2-82fa-1c57bd748cd4",
+                          "parentId": "7bae8732-43e5-44b6-bad1-b66afcf45c0b",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": "",
@@ -3281,14 +3281,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 2
                         },
                         {
-                          "id": "f93e6301-6bd3-4816-8622-d3b5b95916b5",
+                          "id": "627f8062-cdb1-441c-9b34-b3fdc3c9d72f",
                           "editId": null,
                           "order": 0,
-                          "parentId": "ad047e1f-7260-4786-8d59-432967e873d8",
+                          "parentId": "127ab726-b4a0-40f9-a803-2ee878539a44",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": null,
@@ -3302,15 +3302,15 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 3
                         },
                         {
-                          "id": "8b363e9d-10e3-482f-8442-d4cf57c6f47c",
-                          "editId": "030aafbc-4044-4d84-90b7-c768c2a80ad4",
+                          "id": "32f2c90b-5450-4f73-b57d-751040af7535",
+                          "editId": "a4cc9f6b-c4e0-4b40-8519-da181b6e1298",
                           "order": 0,
-                          "parentId": "ad047e1f-7260-4786-8d59-432967e873d8",
-                          "lineItemId": "030aafbc-4044-4d84-90b7-c768c2a80ad4",
+                          "parentId": "127ab726-b4a0-40f9-a803-2ee878539a44",
+                          "lineItemId": "a4cc9f6b-c4e0-4b40-8519-da181b6e1298",
                           "code": "Fee 11",
                           "chargeCategoryId": null,
                           "description": "FEE 11 - ",
@@ -3327,19 +3327,19 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 4,
                           "rateFactor": null,
                           "rate": null
                         },
                         {
-                          "id": "57aad958-53d7-4ab7-9837-755d21579548",
+                          "id": "95d99303-dc92-43f2-9f20-cc6627d5126b",
                           "editId": null,
                           "order": 2,
                           "parentId": null,
                           "lineItemId": null,
                           "code": null,
-                          "chargeCategoryId": 792,
+                          "chargeCategoryId": 195,
                           "description": "Cargo",
                           "section": "cargo",
                           "value": {
@@ -3350,14 +3350,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 1
                         },
                         {
-                          "id": "5b1498d9-9dd7-40ee-9a30-3a123e40314c",
-                          "editId": "f3e0dc83-f2c3-4b14-9509-999238d46605",
+                          "id": "10db49d8-7eba-44e6-9662-56d809d59ac9",
+                          "editId": "b79468b4-9e16-4f2e-89e2-b6000e9eaa54",
                           "order": 0,
-                          "parentId": "57aad958-53d7-4ab7-9837-755d21579548",
+                          "parentId": "95d99303-dc92-43f2-9f20-cc6627d5126b",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": "",
@@ -3371,14 +3371,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 2
                         },
                         {
-                          "id": "7b173b92-1b7b-4a0f-b038-ae3b9c8c433b",
+                          "id": "cfd0bc58-b0db-4d3b-a3d1-7deb925bfce1",
                           "editId": null,
                           "order": 0,
-                          "parentId": "5b1498d9-9dd7-40ee-9a30-3a123e40314c",
+                          "parentId": "10db49d8-7eba-44e6-9662-56d809d59ac9",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": null,
@@ -3392,15 +3392,15 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 3
                         },
                         {
-                          "id": "ff25c23d-764b-46cf-a97a-a9395cc6ba7a",
-                          "editId": "9e121ec0-42c1-45cd-9434-00b64c4ed904",
+                          "id": "6e0f708b-9519-48cb-96ab-0396ea44f1b5",
+                          "editId": "692f9eaf-5a2e-4d88-83bf-86c30ba95a49",
                           "order": 0,
-                          "parentId": "5b1498d9-9dd7-40ee-9a30-3a123e40314c",
-                          "lineItemId": "9e121ec0-42c1-45cd-9434-00b64c4ed904",
+                          "parentId": "10db49d8-7eba-44e6-9662-56d809d59ac9",
+                          "lineItemId": "692f9eaf-5a2e-4d88-83bf-86c30ba95a49",
                           "code": "Fee 14",
                           "chargeCategoryId": null,
                           "description": "FEE 14 - ",
@@ -3417,19 +3417,19 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 4,
                           "rateFactor": null,
                           "rate": null
                         },
                         {
-                          "id": "4f0f5695-f732-48aa-87f9-266f8d39dfa0",
+                          "id": "92336117-9bf2-4416-a9b4-15fd0ffb95e8",
                           "editId": null,
                           "order": 3,
                           "parentId": null,
                           "lineItemId": null,
                           "code": null,
-                          "chargeCategoryId": 794,
+                          "chargeCategoryId": 197,
                           "description": "Import",
                           "section": "import",
                           "value": {
@@ -3440,14 +3440,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 1
                         },
                         {
-                          "id": "a6ab5647-287d-4dbb-873f-81ef6d476f53",
-                          "editId": "f3e0dc83-f2c3-4b14-9509-999238d46605",
+                          "id": "144b6857-a648-4fb9-bce5-f01ff0321241",
+                          "editId": "b79468b4-9e16-4f2e-89e2-b6000e9eaa54",
                           "order": 0,
-                          "parentId": "4f0f5695-f732-48aa-87f9-266f8d39dfa0",
+                          "parentId": "92336117-9bf2-4416-a9b4-15fd0ffb95e8",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": "",
@@ -3461,14 +3461,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 2
                         },
                         {
-                          "id": "832cb484-bc24-433a-8b56-020565522a06",
+                          "id": "f0248488-ba46-43fb-b89e-72c5b4ee9fd5",
                           "editId": null,
                           "order": 0,
-                          "parentId": "a6ab5647-287d-4dbb-873f-81ef6d476f53",
+                          "parentId": "144b6857-a648-4fb9-bce5-f01ff0321241",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": null,
@@ -3482,15 +3482,15 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 3
                         },
                         {
-                          "id": "313b64da-5e1c-4a88-9229-3634cf048510",
-                          "editId": "da1f58b1-4270-4242-88a5-c2e472ff6e2f",
+                          "id": "5f201c82-4d8b-4b74-96a6-dd3dfc9cc4f3",
+                          "editId": "af2f89a7-ccc9-4e6b-bb8d-6916aa6ea7c8",
                           "order": 0,
-                          "parentId": "a6ab5647-287d-4dbb-873f-81ef6d476f53",
-                          "lineItemId": "da1f58b1-4270-4242-88a5-c2e472ff6e2f",
+                          "parentId": "144b6857-a648-4fb9-bce5-f01ff0321241",
+                          "lineItemId": "af2f89a7-ccc9-4e6b-bb8d-6916aa6ea7c8",
                           "code": "Fee 17",
                           "chargeCategoryId": null,
                           "description": "FEE 17 - ",
@@ -3507,19 +3507,19 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 4,
                           "rateFactor": null,
                           "rate": null
                         },
                         {
-                          "id": "83581728-99df-430d-9608-14f42d3c16ed",
+                          "id": "0c171abb-654b-473f-aaf8-efa06c0ac2f7",
                           "editId": null,
                           "order": 4,
                           "parentId": null,
                           "lineItemId": null,
                           "code": null,
-                          "chargeCategoryId": 791,
+                          "chargeCategoryId": 194,
                           "description": "Trucking on",
                           "section": "trucking_on",
                           "value": {
@@ -3530,14 +3530,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 1
                         },
                         {
-                          "id": "d7087cee-d794-4a29-a522-24a82221e5b7",
-                          "editId": "f3e0dc83-f2c3-4b14-9509-999238d46605",
+                          "id": "c711df45-4d9a-49a1-ae21-b976ab3740d0",
+                          "editId": "b79468b4-9e16-4f2e-89e2-b6000e9eaa54",
                           "order": 0,
-                          "parentId": "83581728-99df-430d-9608-14f42d3c16ed",
+                          "parentId": "0c171abb-654b-473f-aaf8-efa06c0ac2f7",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": "",
@@ -3551,14 +3551,14 @@
                             "amount": "36.0",
                             "currency": "EUR"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 2
                         },
                         {
-                          "id": "940bcfb2-df07-4718-9132-73da5861aabc",
+                          "id": "f2ccf4d2-afc4-40bd-bb82-51d79a75c68e",
                           "editId": null,
                           "order": 0,
-                          "parentId": "d7087cee-d794-4a29-a522-24a82221e5b7",
+                          "parentId": "c711df45-4d9a-49a1-ae21-b976ab3740d0",
                           "lineItemId": null,
                           "code": null,
                           "chargeCategoryId": null,
@@ -3572,15 +3572,15 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 3
                         },
                         {
-                          "id": "ac5917c1-5e2e-4371-8e21-27be0f5f507d",
-                          "editId": "10da3845-846a-4a23-b6d4-60e882d94f9d",
+                          "id": "fde37eea-4650-43f9-bd32-fe2b65b68bca",
+                          "editId": "eb91e9a2-72de-4c36-9d4d-440a07f792a3",
                           "order": 0,
-                          "parentId": "d7087cee-d794-4a29-a522-24a82221e5b7",
-                          "lineItemId": "10da3845-846a-4a23-b6d4-60e882d94f9d",
+                          "parentId": "c711df45-4d9a-49a1-ae21-b976ab3740d0",
+                          "lineItemId": "eb91e9a2-72de-4c36-9d4d-440a07f792a3",
                           "code": "Fee 20",
                           "chargeCategoryId": null,
                           "description": "FEE 20 - ",
@@ -3597,7 +3597,7 @@
                             "amount": "30.0",
                             "currency": "USD"
                           },
-                          "tenderId": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                          "tenderId": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                           "level": 4,
                           "rateFactor": null,
                           "rate": null
@@ -3605,7 +3605,7 @@
                       ],
                       "route": "Gothenburg - Shanghai",
                       "vessel": "",
-                      "id": "92bee66e-ac82-4793-8e47-1e948d7ed891",
+                      "id": "a82639da-795d-49c7-a629-0bc9f1c17c11",
                       "pickupTruckType": null,
                       "deliveryTruckType": null,
                       "pickupCarrier": "SACO",
@@ -3700,10 +3700,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "e63e7a55-9a95-429f-b1e3-cfb100d29270",
+                      "id": "3201c4f8-d879-42a8-af4d-f6ff4eafa56c",
                       "type": "charge",
                       "attributes": {
-                        "id": "e63e7a55-9a95-429f-b1e3-cfb100d29270",
+                        "id": "3201c4f8-d879-42a8-af4d-f6ff4eafa56c",
                         "feeCode": "Fee 50",
                         "description": "",
                         "value": {
@@ -3720,10 +3720,10 @@
                       }
                     },
                     {
-                      "id": "e2040e11-c21d-4fbe-8929-b97ff18520ef",
+                      "id": "bb4b0e7b-35af-4a33-a812-56448a60f94e",
                       "type": "charge",
                       "attributes": {
-                        "id": "e2040e11-c21d-4fbe-8929-b97ff18520ef",
+                        "id": "bb4b0e7b-35af-4a33-a812-56448a60f94e",
                         "feeCode": "Fee 53",
                         "description": "",
                         "value": {
@@ -3740,10 +3740,10 @@
                       }
                     },
                     {
-                      "id": "9437a79d-92f4-43f9-a3ce-1dad96feae55",
+                      "id": "39346895-4d34-4cb6-b52b-1c69b4d8bda9",
                       "type": "charge",
                       "attributes": {
-                        "id": "9437a79d-92f4-43f9-a3ce-1dad96feae55",
+                        "id": "39346895-4d34-4cb6-b52b-1c69b4d8bda9",
                         "feeCode": "Fee 56",
                         "description": "",
                         "value": {
@@ -3760,10 +3760,10 @@
                       }
                     },
                     {
-                      "id": "0107b2fd-46c3-4998-85f9-f13b991d02a3",
+                      "id": "522e0c32-01a1-4da8-a47b-0ca1c7532cfe",
                       "type": "charge",
                       "attributes": {
-                        "id": "0107b2fd-46c3-4998-85f9-f13b991d02a3",
+                        "id": "522e0c32-01a1-4da8-a47b-0ca1c7532cfe",
                         "feeCode": "Fee 59",
                         "description": "",
                         "value": {
@@ -3780,10 +3780,10 @@
                       }
                     },
                     {
-                      "id": "708c2149-c2f3-4114-be78-bf0d488e1e5e",
+                      "id": "0d8e3e09-6de9-405f-a9d5-40316e16023d",
                       "type": "charge",
                       "attributes": {
-                        "id": "708c2149-c2f3-4114-be78-bf0d488e1e5e",
+                        "id": "0d8e3e09-6de9-405f-a9d5-40316e16023d",
                         "feeCode": "Fee 62",
                         "description": "",
                         "value": {
@@ -3908,25 +3908,25 @@
                 "example": {
                   "data": [
                     {
-                      "id": "089c9a16-1015-4aff-ac94-26d5e65c66a4",
+                      "id": "28357c19-f58e-476f-aa77-9a0147a99f23",
                       "type": "client",
                       "attributes": {
                         "email": "john.doe.119@itsmycargo.test",
-                        "organizationId": "e0335046-87ed-42c0-a2b7-e50733db9c6b",
+                        "organizationId": "f10ed049-3786-45af-aa05-7b2f3c30bfa2",
                         "firstName": "Guest",
                         "lastName": "User 119",
                         "phone": "081 9847079",
                         "companyName": "default",
                         "paymentTerms": "Some quotation payment terms",
-                        "companyId": "de0aa010-6bba-4539-88d7-3942f34652bb"
+                        "companyId": "af7f6f75-396d-4268-b8d9-c3221a55cec8"
                       }
                     }
                   ],
                   "links": {
-                    "first": "http://www.example.com/v1/organizations/e0335046-87ed-42c0-a2b7-e50733db9c6b/clients?page=1&per_page=1&q=",
+                    "first": "http://www.example.com/v1/organizations/f10ed049-3786-45af-aa05-7b2f3c30bfa2/clients?page=1&per_page=1.0&q=",
                     "prev": null,
-                    "next": "http://www.example.com/v1/organizations/e0335046-87ed-42c0-a2b7-e50733db9c6b/clients?page=2&per_page=1&q=",
-                    "last": "http://www.example.com/v1/organizations/e0335046-87ed-42c0-a2b7-e50733db9c6b/clients?page=6&per_page=1&q="
+                    "next": "http://www.example.com/v1/organizations/f10ed049-3786-45af-aa05-7b2f3c30bfa2/clients?page=2&per_page=1.0&q=",
+                    "last": "http://www.example.com/v1/organizations/f10ed049-3786-45af-aa05-7b2f3c30bfa2/clients?page=6&per_page=1.0&q="
                   },
                   "meta": {
                   }
@@ -3988,17 +3988,17 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "137f5462-c26e-4005-a5ad-69c2db1b90ef",
+                    "id": "cfbbf77e-67a8-4d2a-9984-6956ed3a0c0c",
                     "type": "client",
                     "attributes": {
                       "email": "john@example.com",
-                      "organizationId": "f3b1adf7-ffa6-4417-a86f-ea4113a00705",
+                      "organizationId": "54efa1e8-6531-458b-a070-1e4e249dfadf",
                       "firstName": "John",
                       "lastName": "Doe",
                       "phone": "+1 2345 2345",
                       "companyName": "default",
                       "paymentTerms": "Some quotation payment terms",
-                      "companyId": "4460fb06-4c97-4896-a0f0-267b904f11c4"
+                      "companyId": "0f3c0716-f109-4f63-91c1-3bf0cc677db8"
                     }
                   },
                   "meta": {
@@ -4077,17 +4077,17 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "549af1f2-3e7d-463e-890d-3036328482ff",
+                    "id": "1440562c-5cb3-4bbf-84ad-41a51175c834",
                     "type": "client",
                     "attributes": {
                       "email": "john.doe.149@itsmycargo.test",
-                      "organizationId": "5a1cba3b-249a-4538-ac43-62764ac32678",
+                      "organizationId": "597eb17a-abda-4201-8760-5afd61b192be",
                       "firstName": "Guest",
                       "lastName": "User 149",
                       "phone": "081 9847079",
                       "companyName": "default",
                       "paymentTerms": "Some quotation payment terms",
-                      "companyId": "e600ef56-76f6-4c57-925a-ad584a2accf6"
+                      "companyId": "7c9265a3-cf02-4de7-b822-bc5b1c919c5c"
                     }
                   },
                   "meta": {
@@ -4293,7 +4293,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "password": "50cg1p7gbsvDpbz8"
+                    "password": "t4GRiN8tnfJaBWb8"
                   }
                 },
                 "schema": {
@@ -4435,10 +4435,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "621f9045-ac71-4367-81d4-ce717d4019d5",
+                    "id": "90da0602-79ed-467b-b10f-823766a63102",
                     "type": "company",
                     "attributes": {
-                      "id": "621f9045-ac71-4367-81d4-ce717d4019d5",
+                      "id": "90da0602-79ed-467b-b10f-823766a63102",
                       "email": "awesome@company.com",
                       "name": "awesome company",
                       "paymentTerms": "an awesome payment term",
@@ -4556,10 +4556,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "e4b6c565-4d21-4ae9-8543-d4a0a2535fc6",
+                    "id": "65219e92-f3af-40e5-afdc-47f8a5618baf",
                     "type": "company",
                     "attributes": {
-                      "id": "e4b6c565-4d21-4ae9-8543-d4a0a2535fc6",
+                      "id": "65219e92-f3af-40e5-afdc-47f8a5618baf",
                       "email": "foo@bar.com",
                       "name": "company1",
                       "paymentTerms": "Some quotation payment terms",
@@ -4651,10 +4651,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "a1425573-4620-48d4-8ea1-adb8db94da4c",
+                    "id": "f7920356-aef3-4f12-9002-f8950a5be682",
                     "type": "company",
                     "attributes": {
-                      "id": "a1425573-4620-48d4-8ea1-adb8db94da4c",
+                      "id": "f7920356-aef3-4f12-9002-f8950a5be682",
                       "email": "awesome@company.com",
                       "name": "awesome company",
                       "paymentTerms": "an awesome payment term",
@@ -5014,10 +5014,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "cc434eb7-f2ef-40f8-8aaf-148c665f610b",
+                    "id": "0204f0fa-49cd-4a50-b17d-494210a6b5bf",
                     "type": "company",
                     "attributes": {
-                      "id": "cc434eb7-f2ef-40f8-8aaf-148c665f610b",
+                      "id": "0204f0fa-49cd-4a50-b17d-494210a6b5bf",
                       "email": "company@test-company.com",
                       "name": "test-company",
                       "paymentTerms": null,
@@ -5327,10 +5327,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "b101a125-974c-4d20-b5e3-1b77749e5ec6",
+                      "id": "4efb923d-17ae-4d70-b6f9-8024573910a6",
                       "type": "error",
                       "attributes": {
-                        "id": "b101a125-974c-4d20-b5e3-1b77749e5ec6",
+                        "id": "4efb923d-17ae-4d70-b6f9-8024573910a6",
                         "carrier": "MSC",
                         "code": 1001,
                         "limit": "1000",
@@ -5338,8 +5338,8 @@
                         "property": "Weight",
                         "service": "Standard",
                         "value": "1100",
-                        "cargoUnitId": "d6e89ca0-dd03-4b06-b69e-4799206d6b9a",
-                        "queryId": "a2a554d3-5058-44a5-8946-b7054e99dc16"
+                        "cargoUnitId": "bf973b29-802a-4f4c-bf11-4c53465baa9a",
+                        "queryId": "8675c827-ae67-41c5-8afa-6ff039f891b3"
                       }
                     }
                   ],
@@ -5393,19 +5393,19 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "3c4bf84c-e2f8-4435-8869-1a18e49122f1",
+                    "id": "4a52f8f6-bc7d-45ad-88b2-f862b84626b6",
                     "type": "fileDescriptor",
                     "attributes": {
-                      "organizationId": "70da9763-e975-48e6-a2d7-6d529be8b098",
+                      "organizationId": "274eaf2d-5703-4f12-9922-24b96669678f",
                       "filePath": "/testing/download/sailing_schedule/test.png",
                       "fileType": "schedule",
                       "originator": "SFTP",
                       "source": "itsmycargo_dataflow",
                       "sourceType": "S3_BUCKET",
                       "status": "ready",
-                      "fileCreatedAt": "2022-04-09 02:30:14 UTC",
-                      "fileUpdatedAt": "2022-04-09 02:30:14 UTC",
-                      "syncedAt": "2022-04-10 02:30:14 UTC"
+                      "fileCreatedAt": "2022-04-10 13:50:36 UTC",
+                      "fileUpdatedAt": "2022-04-10 13:50:36 UTC",
+                      "syncedAt": "2022-04-11 13:50:36 UTC"
                     }
                   },
                   "meta": {
@@ -5546,42 +5546,42 @@
                 "example": {
                   "data": [
                     {
-                      "id": "d94bfdc0-8e8d-482c-95a5-f206d31b30ae",
+                      "id": "7743e169-ec98-4ad1-b74e-33ca0f80ccd0",
                       "type": "organizationsGroup",
                       "attributes": {
-                        "id": "d94bfdc0-8e8d-482c-95a5-f206d31b30ae",
+                        "id": "7743e169-ec98-4ad1-b74e-33ca0f80ccd0",
                         "name": "Group1"
                       }
                     },
                     {
-                      "id": "8f5a05d3-54de-4bb6-9c34-fe01cb662c53",
+                      "id": "bd5d2fc2-55d9-456f-ae85-6a8c00864ee0",
                       "type": "organizationsGroup",
                       "attributes": {
-                        "id": "8f5a05d3-54de-4bb6-9c34-fe01cb662c53",
+                        "id": "bd5d2fc2-55d9-456f-ae85-6a8c00864ee0",
                         "name": "Group2"
                       }
                     },
                     {
-                      "id": "2b8dbea4-7ab7-4f17-b7f1-41401e8e6b5d",
+                      "id": "bb3eefbc-c1c4-4981-ade2-7f248c066c47",
                       "type": "organizationsGroup",
                       "attributes": {
-                        "id": "2b8dbea4-7ab7-4f17-b7f1-41401e8e6b5d",
+                        "id": "bb3eefbc-c1c4-4981-ade2-7f248c066c47",
                         "name": "Group3"
                       }
                     },
                     {
-                      "id": "7f0dad89-d4e0-440e-95cc-894d1dd21e3b",
+                      "id": "ee906bc8-8d4b-4ec7-b58b-73c0ee18c14d",
                       "type": "organizationsGroup",
                       "attributes": {
-                        "id": "7f0dad89-d4e0-440e-95cc-894d1dd21e3b",
+                        "id": "ee906bc8-8d4b-4ec7-b58b-73c0ee18c14d",
                         "name": "Group4"
                       }
                     },
                     {
-                      "id": "ceecbb76-011e-49d4-b396-10e058f02c8e",
+                      "id": "12daee0f-671f-45a7-9924-a05019ed13ee",
                       "type": "organizationsGroup",
                       "attributes": {
-                        "id": "ceecbb76-011e-49d4-b396-10e058f02c8e",
+                        "id": "12daee0f-671f-45a7-9924-a05019ed13ee",
                         "name": "Group5"
                       }
                     }
@@ -5648,10 +5648,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "487",
+                      "id": "70",
                       "type": "itinerary",
                       "attributes": {
-                        "id": 487,
+                        "id": 70,
                         "modeOfTransport": "ocean",
                         "name": "Hamburg - Shanghai"
                       },
@@ -5814,10 +5814,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "1264",
+                      "id": "229",
                       "type": "nexus",
                       "attributes": {
-                        "id": 1264,
+                        "id": 229,
                         "name": "Gothenburg",
                         "latitude": 57.694253,
                         "longitude": 11.854048,
@@ -5912,10 +5912,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "1267",
+                      "id": "232",
                       "type": "nexus",
                       "attributes": {
-                        "id": 1267,
+                        "id": 232,
                         "name": "Shanghai",
                         "latitude": 31.2231338,
                         "longitude": 120.9162975,
@@ -5973,10 +5973,10 @@
             "content": {
               "application/json": {
                 "example": {
-                  "access_token": "56b74af87b46475e38dd8703fa0bd40b2d46d8cd804ff92238d113100acebed5",
+                  "access_token": "9164a9f2949a874e517a4671ec09ac07e190347f0bcdfcc237ef0376295b30aa",
                   "token_type": "Bearer",
                   "scope": "public",
-                  "created_at": 1649644215
+                  "created_at": 1649771437
                 },
                 "schema": {
                   "type": "object",
@@ -6072,11 +6072,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "eaab68b2-5ef5-4145-9569-797dd304b84d",
+                    "id": "8b46897b-490f-4259-8b3b-7960d69de2f3",
                     "type": "offer",
                     "attributes": {
-                      "id": "eaab68b2-5ef5-4145-9569-797dd304b84d",
-                      "url": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaTRSIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--a64dcea6b5552dd64a227b156b2d590325803ccf/offer.pdf?disposition=attachment"
+                      "id": "8b46897b-490f-4259-8b3b-7960d69de2f3",
+                      "url": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbElEIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--39a5acdbea595b66f9845321e13a49502dadfaa7/offer.pdf?disposition=attachment"
                     }
                   },
                   "meta": {
@@ -6173,7 +6173,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "4f02d465-5463-4a93-98f9-3db8e1421857",
+                    "id": "6ac704f2-01b0-4112-81bf-1b1d7fd26129",
                     "type": "organization",
                     "attributes": {
                       "slug": "test_213",
@@ -6291,7 +6291,7 @@
                 "example": {
                   "data": [
                     {
-                      "id": "590",
+                      "id": "126",
                       "type": "country",
                       "attributes": {
                         "name": "Sweden",
@@ -6695,10 +6695,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "1198",
+                      "id": "242",
                       "type": "port",
                       "attributes": {
-                        "id": 1198,
+                        "id": 242,
                         "name": "Shanghai",
                         "hubType": "ocean"
                       }
@@ -6794,7 +6794,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "63450904-3a1f-4672-92af-2e636d74b95c",
+                    "id": "6b7435e6-1467-40e0-9015-a31547c61fb8",
                     "type": "profile",
                     "attributes": {
                       "email": "john.doe.267@itsmycargo.test",
@@ -6863,7 +6863,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "7dc5e249-37e3-4e9f-b051-1eb089056f05",
+                    "id": "17b109e8-6113-4acb-a59c-5723adbb33bf",
                     "type": "profile",
                     "attributes": {
                       "email": "john@example.com",
@@ -6988,10 +6988,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "3e8a8ab9-3f0d-4599-88c4-2a105b3df80e",
+                    "id": "313a9cd3-4b73-46b5-a1a5-f5ced006023f",
                     "type": "query",
                     "attributes": {
-                      "id": "3e8a8ab9-3f0d-4599-88c4-2a105b3df80e",
+                      "id": "313a9cd3-4b73-46b5-a1a5-f5ced006023f",
                       "billable": true,
                       "loadType": "cargo_item",
                       "originName": "SEGOT",
@@ -7002,11 +7002,11 @@
                       ],
                       "client": {
                         "data": {
-                          "id": "32767d1c-4379-4012-84c9-bfc705f8f177",
+                          "id": "8d4a4cd6-cb30-441e-84d6-7551324f99d8",
                           "type": "client",
                           "attributes": {
                             "email": "john.doe.286@itsmycargo.test",
-                            "organizationId": "8dff1785-d033-45d5-b3dd-e20cda1cea3a",
+                            "organizationId": "f0f993c8-4f56-4088-837c-fe2a0955bbd0",
                             "firstName": "Guest",
                             "lastName": "User 286",
                             "phone": "081 9847079",
@@ -7019,12 +7019,12 @@
                         }
                       },
                       "offerId": null,
-                      "issueDate": "2022-04-11T02:30:20.228Z",
+                      "issueDate": "2022-04-12T13:50:46.010Z",
                       "originId": "xxx1",
                       "destinationId": "xxx2",
                       "parentId": null,
                       "companyId": null,
-                      "cargoReadyDate": "2022-04-11T03:30:20.214Z",
+                      "cargoReadyDate": "2022-04-12T14:50:45.978Z",
                       "currency": "EUR"
                     }
                   },
@@ -7210,10 +7210,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "a1dfac4f-776f-4a96-809e-9baa102160fa",
+                      "id": "bb5b87e9-821c-48af-a0bd-9b455fd455c3",
                       "type": "query",
                       "attributes": {
-                        "id": "a1dfac4f-776f-4a96-809e-9baa102160fa",
+                        "id": "bb5b87e9-821c-48af-a0bd-9b455fd455c3",
                         "billable": true,
                         "loadType": "cargo_item",
                         "originName": "aaaaa",
@@ -7224,11 +7224,11 @@
                         ],
                         "client": {
                           "data": {
-                            "id": "49a3cb17-a650-4646-9d74-08befba30b06",
+                            "id": "386a801d-504b-48b5-b018-00e08cd68341",
                             "type": "client",
                             "attributes": {
                               "email": "john.doe.300@itsmycargo.test",
-                              "organizationId": "1cf784bd-8283-4ba7-8947-49e8b3917953",
+                              "organizationId": "173ebb27-a70a-43a3-826f-6d7af39d6e37",
                               "firstName": "Guest",
                               "lastName": "User 300",
                               "phone": "081 9847079",
@@ -7241,20 +7241,20 @@
                           }
                         },
                         "offerId": null,
-                        "issueDate": "2022-04-11T00:30:21.057Z",
+                        "issueDate": "2022-04-12T11:50:47.619Z",
                         "originId": "itsmycargo:locode:blb5dabfrwa6ozq",
                         "destinationId": "itsmycargo:locode:74lee67oju4vvwy",
                         "parentId": null,
-                        "companyId": "95ed7956-8164-4ae7-9223-9e4a905881d8",
-                        "cargoReadyDate": "2022-04-14T02:30:21.057Z",
+                        "companyId": "0cf9f0e5-3ed0-436f-b492-bd30788fd59c",
+                        "cargoReadyDate": "2022-04-15T13:50:47.619Z",
                         "currency": "EUR"
                       }
                     },
                     {
-                      "id": "37d68125-926c-426a-ac8b-b7b5913599ef",
+                      "id": "88a694d8-f2ca-476b-aa18-b8d48229aeee",
                       "type": "query",
                       "attributes": {
-                        "id": "37d68125-926c-426a-ac8b-b7b5913599ef",
+                        "id": "88a694d8-f2ca-476b-aa18-b8d48229aeee",
                         "billable": true,
                         "loadType": "cargo_item",
                         "originName": "bbbbb",
@@ -7265,11 +7265,11 @@
                         ],
                         "client": {
                           "data": {
-                            "id": "49a3cb17-a650-4646-9d74-08befba30b06",
+                            "id": "386a801d-504b-48b5-b018-00e08cd68341",
                             "type": "client",
                             "attributes": {
                               "email": "john.doe.300@itsmycargo.test",
-                              "organizationId": "1cf784bd-8283-4ba7-8947-49e8b3917953",
+                              "organizationId": "173ebb27-a70a-43a3-826f-6d7af39d6e37",
                               "firstName": "Guest",
                               "lastName": "User 300",
                               "phone": "081 9847079",
@@ -7282,12 +7282,12 @@
                           }
                         },
                         "offerId": null,
-                        "issueDate": "2022-04-10T21:30:21.141Z",
+                        "issueDate": "2022-04-12T08:50:47.761Z",
                         "originId": "itsmycargo:locode:blb5dabfrwa6ozq",
                         "destinationId": "itsmycargo:locode:74lee67oju4vvwy",
                         "parentId": null,
-                        "companyId": "234fa3ac-3f88-46be-be60-f626edc22630",
-                        "cargoReadyDate": "2022-04-13T02:30:21.141Z",
+                        "companyId": "fe96a7a7-a64e-499f-a454-104cc38f0095",
+                        "cargoReadyDate": "2022-04-14T13:50:47.761Z",
                         "currency": "EUR"
                       }
                     }
@@ -7345,10 +7345,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "5d0fd4c2-6e75-4c82-946b-dca10f166102",
+                    "id": "25d110fb-ac70-4be4-8058-becc9f5469ec",
                     "type": "query",
                     "attributes": {
-                      "id": "5d0fd4c2-6e75-4c82-946b-dca10f166102",
+                      "id": "25d110fb-ac70-4be4-8058-becc9f5469ec",
                       "billable": true,
                       "loadType": "cargo_item",
                       "originName": "20457, Hamburg",
@@ -7359,11 +7359,11 @@
                       ],
                       "client": {
                         "data": {
-                          "id": "c7f5f9b6-554c-4d2f-b507-31011099cebc",
+                          "id": "b9c63e5b-afa5-4ccf-8fc6-191a3dcff5e4",
                           "type": "client",
                           "attributes": {
                             "email": "john.doe.307@itsmycargo.test",
-                            "organizationId": "d2097610-9e3a-4a5d-84e0-ad48e6a09b46",
+                            "organizationId": "606bbf74-dab0-4eac-91f2-1bdf03013524",
                             "firstName": "Guest",
                             "lastName": "User 307",
                             "phone": "081 9847079",
@@ -7376,12 +7376,12 @@
                         }
                       },
                       "offerId": null,
-                      "issueDate": "2022-04-11T02:30:21.000Z",
+                      "issueDate": "2022-04-12T13:50:49.000Z",
                       "originId": "itsmycargo:locode:blb5dabfrwa6ozq",
                       "destinationId": "itsmycargo:locode:74lee67oju4vvwy",
                       "parentId": null,
-                      "companyId": "70dec70e-11bc-44f5-bfaa-f2086be72f49",
-                      "cargoReadyDate": "2022-04-12T00:00:00.000Z",
+                      "companyId": "f8df01a6-2303-4b74-a120-7d98e3e9058c",
+                      "cargoReadyDate": "2022-04-13T00:00:00.000Z",
                       "currency": "EUR"
                     }
                   },
@@ -7436,10 +7436,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "543bc6f1-95b2-4b3f-99ff-27b710c13120",
+                    "id": "c59e02dd-8b1c-4d82-9576-5f9f24953006",
                     "type": "query",
                     "attributes": {
-                      "id": "543bc6f1-95b2-4b3f-99ff-27b710c13120",
+                      "id": "c59e02dd-8b1c-4d82-9576-5f9f24953006",
                       "billable": true,
                       "loadType": "cargo_item",
                       "originName": "20457, Hamburg",
@@ -7450,11 +7450,11 @@
                       ],
                       "client": {
                         "data": {
-                          "id": "e32d76ad-04c0-4ae4-923d-ec6239f159e9",
+                          "id": "3c6d2579-931d-43f4-9903-f778485ba0ae",
                           "type": "client",
                           "attributes": {
                             "email": "john.doe.317@itsmycargo.test",
-                            "organizationId": "5279a2dc-882a-4d64-8bb0-d4727ac2f2f8",
+                            "organizationId": "ddb6fdba-f70b-46bd-8ba6-36521fb55000",
                             "firstName": "Guest",
                             "lastName": "User 317",
                             "phone": "081 9847079",
@@ -7467,12 +7467,12 @@
                         }
                       },
                       "offerId": null,
-                      "issueDate": "2022-04-11T02:30:22.000Z",
+                      "issueDate": "2022-04-12T13:50:50.000Z",
                       "originId": "itsmycargo:locode:blb5dabfrwa6ozq",
                       "destinationId": "itsmycargo:locode:74lee67oju4vvwy",
                       "parentId": null,
                       "companyId": null,
-                      "cargoReadyDate": "2022-04-12T00:00:00.000Z",
+                      "cargoReadyDate": "2022-04-13T00:00:00.000Z",
                       "currency": "EUR"
                     }
                   },
@@ -7532,10 +7532,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "c94cdf80-103b-49f9-8e50-a7deb72e6fe9",
+                    "id": "5444631b-632b-40da-91da-060c1fb16baf",
                     "type": "query",
                     "attributes": {
-                      "id": "c94cdf80-103b-49f9-8e50-a7deb72e6fe9",
+                      "id": "5444631b-632b-40da-91da-060c1fb16baf",
                       "billable": true,
                       "loadType": "cargo_item",
                       "originName": "20457, Hamburg",
@@ -7546,11 +7546,11 @@
                       ],
                       "client": {
                         "data": {
-                          "id": "1dd22680-562f-46e1-8ef9-967380a93d31",
+                          "id": "afc45946-6b5c-489e-a7a8-196483dd6ca1",
                           "type": "client",
                           "attributes": {
                             "email": "john.doe.333@itsmycargo.test",
-                            "organizationId": "ab85dff3-3b78-48c6-b096-2f6ee85e4b1e",
+                            "organizationId": "8c703655-08aa-4012-96db-06b1f681c3e2",
                             "firstName": "Guest",
                             "lastName": "User 333",
                             "phone": "081 9847079",
@@ -7563,12 +7563,12 @@
                         }
                       },
                       "offerId": null,
-                      "issueDate": "2022-04-11T02:30:23.498Z",
+                      "issueDate": "2022-04-12T13:50:52.178Z",
                       "originId": "xxx1",
                       "destinationId": "xxx2",
-                      "parentId": "a5e2d5ae-0213-4d8b-9e0a-a2dfa8527ce8",
-                      "companyId": "ffc043cb-618d-4a01-8bac-1ae99ebe6cda",
-                      "cargoReadyDate": "2022-04-12T00:00:00.000Z",
+                      "parentId": "d13628ae-e8f9-4e42-b240-eb49472b1788",
+                      "companyId": "c02845df-1c97-46ff-945c-a01547eee9e1",
+                      "cargoReadyDate": "2022-04-13T00:00:00.000Z",
                       "currency": "EUR"
                     }
                   },
@@ -7616,7 +7616,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "dcfff33e-e2a7-4ff2-aa48-490ce56df875",
+                    "id": "d3662c7f-1033-4fc4-8cd1-b942b80d72c7",
                     "type": "query",
                     "attributes": {
                       "completed": true,
@@ -7624,14 +7624,14 @@
                       "paymentTerms": null,
                       "companyName": null,
                       "parentId": null,
-                      "selectedDate": "2022-04-11T03:30:25.346Z",
+                      "selectedDate": "2022-04-12T14:50:56.067Z",
                       "user": {
                         "data": {
                           "id": null,
                           "type": "user",
                           "attributes": {
                             "email": "",
-                            "organizationId": "212f3095-8b6a-48cf-852a-93e2c1ba1dec",
+                            "organizationId": "5ea8b281-dced-4532-b7e8-14fdeaf51bde",
                             "firstName": "",
                             "lastName": "",
                             "phone": null,
@@ -7646,7 +7646,7 @@
                       },
                       "creator": {
                         "data": {
-                          "id": "cdd69783-f1da-461d-a46a-7941cb655444",
+                          "id": "7b9f6877-d2c7-4913-8fcb-f5259025e85c",
                           "type": "user",
                           "attributes": {
                             "email": "john.doe.49@itsmycargo.test",
@@ -7665,10 +7665,10 @@
                       },
                       "origin": {
                         "data": {
-                          "id": "1310",
+                          "id": "275",
                           "type": "nexus",
                           "attributes": {
-                            "id": 1310,
+                            "id": 275,
                             "name": "Gothenburg",
                             "latitude": 57.694253,
                             "longitude": 11.854048,
@@ -7686,10 +7686,10 @@
                       },
                       "destination": {
                         "data": {
-                          "id": "1309",
+                          "id": "274",
                           "type": "nexus",
                           "attributes": {
-                            "id": 1309,
+                            "id": 274,
                             "name": "Shanghai",
                             "latitude": 31.2231338,
                             "longitude": 120.9162975,
@@ -7708,10 +7708,10 @@
                       "containers": {
                         "data": [
                           {
-                            "id": "e247ba79-79a0-48e3-8937-6217342bfd19",
+                            "id": "614a85d4-cc1f-417c-b4de-ec8f8f216ae2",
                             "type": "fclCargoUnit",
                             "attributes": {
-                              "shipmentId": "dcfff33e-e2a7-4ff2-aa48-490ce56df875",
+                              "shipmentId": "d3662c7f-1033-4fc4-8cd1-b942b80d72c7",
                               "sizeClass": "fcl_20",
                               "weightClass": null,
                               "payloadInKg": 1.0,
@@ -7748,7 +7748,7 @@
                       "tenders": {
                         "data": [
                           {
-                            "id": "346d262b-cf2f-4395-9b6d-8b183a4c3497",
+                            "id": "d87cf506-c6ec-4f3e-bf56-a98555ab3229",
                             "type": "result",
                             "attributes": {
                               "remarks": [
@@ -7756,7 +7756,7 @@
                               ],
                               "carrier": "IMC",
                               "modeOfTransport": "ocean",
-                              "id": "346d262b-cf2f-4395-9b6d-8b183a4c3497",
+                              "id": "d87cf506-c6ec-4f3e-bf56-a98555ab3229",
                               "origin": "Gothenburg",
                               "destination": "Shanghai",
                               "originHub": "Gothenburg Port",
@@ -7768,10 +7768,10 @@
                                 "currency": "EUR",
                                 "amount": "250.0"
                               },
-                              "quotationId": "dcfff33e-e2a7-4ff2-aa48-490ce56df875",
+                              "quotationId": "d3662c7f-1033-4fc4-8cd1-b942b80d72c7",
                               "transshipment": null,
                               "estimated": false,
-                              "validUntil": "2022-10-11T23:59:59.999Z",
+                              "validUntil": "2022-10-12T23:59:59.999Z",
                               "pickupTruckType": "",
                               "deliveryTruckType": "",
                               "pickupCarrier": null,
@@ -7984,7 +7984,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "dbc834d4-a79e-4072-8ae2-3e29d7cfd7f3",
+                    "id": "1369b090-98e7-4bd8-ae0b-a6c1cd786837",
                     "type": "query",
                     "attributes": {
                       "completed": true,
@@ -7992,14 +7992,14 @@
                       "paymentTerms": "Some quotation payment terms",
                       "companyName": "company147",
                       "parentId": null,
-                      "selectedDate": "2022-04-12T00:00:00.000Z",
+                      "selectedDate": "2022-04-13T00:00:00.000Z",
                       "user": {
                         "data": {
-                          "id": "52d41f21-8425-4159-8247-d30f1d33b24e",
+                          "id": "7276d7a4-c644-4fe1-af10-c4b0c5a5314f",
                           "type": "user",
                           "attributes": {
                             "email": "john.doe.401@itsmycargo.test",
-                            "organizationId": "d6cb92e1-e80b-475c-bcba-eb56221e56fd",
+                            "organizationId": "f3eec429-e4de-4031-b503-1a02b2fd0598",
                             "firstName": "Guest",
                             "lastName": "User 401",
                             "phone": "081 9847079",
@@ -8014,11 +8014,11 @@
                       },
                       "creator": {
                         "data": {
-                          "id": "b783cf56-8c1a-4a3a-9885-6c7865cbce79",
+                          "id": "0350dce3-a347-42ab-aab2-b7604cf6ef39",
                           "type": "user",
                           "attributes": {
                             "email": "john.doe.402@itsmycargo.test",
-                            "organizationId": "d6cb92e1-e80b-475c-bcba-eb56221e56fd",
+                            "organizationId": "f3eec429-e4de-4031-b503-1a02b2fd0598",
                             "firstName": "Guest",
                             "lastName": "User 402",
                             "phone": "081 9847079",
@@ -8053,7 +8053,7 @@
                       },
                       "destination": {
                         "data": {
-                          "id": "0",
+                          "id": "42544",
                           "type": "address",
                           "attributes": {
                             "longitude": 121.4867159,
@@ -8083,7 +8083,7 @@
                       "cargoItems": {
                         "data": [
                           {
-                            "id": "cfb437de-f132-4818-8d1b-75c013c66b33",
+                            "id": "ddaa65b9-bd59-46f6-987b-0db808527a2a",
                             "type": "lclCargoUnit",
                             "attributes": {
                               "payloadInKg": "1000.0",
@@ -8118,7 +8118,7 @@
                       "tenders": {
                         "data": [
                           {
-                            "id": "f7237b81-b795-4c85-9c22-ba053f8cdd2c",
+                            "id": "1eca64c1-35ee-4340-9aa2-dbe3f0295dce",
                             "type": "result",
                             "attributes": {
                               "remarks": [
@@ -8126,7 +8126,7 @@
                               ],
                               "carrier": "MSC",
                               "modeOfTransport": "ocean",
-                              "id": "f7237b81-b795-4c85-9c22-ba053f8cdd2c",
+                              "id": "1eca64c1-35ee-4340-9aa2-dbe3f0295dce",
                               "origin": "438 80 Landvetter, Sweden",
                               "destination": "88 Henan Middle Road, Shanghai",
                               "originHub": "Hamburg Port",
@@ -8138,10 +8138,10 @@
                                 "currency": "EUR",
                                 "amount": "180.0"
                               },
-                              "quotationId": "dbc834d4-a79e-4072-8ae2-3e29d7cfd7f3",
+                              "quotationId": "1369b090-98e7-4bd8-ae0b-a6c1cd786837",
                               "transshipment": null,
                               "estimated": false,
-                              "validUntil": "2022-04-25T02:30:28.319Z",
+                              "validUntil": "2022-04-26T13:51:01.298Z",
                               "pickupTruckType": "",
                               "deliveryTruckType": "",
                               "pickupCarrier": "SACO",
@@ -8231,10 +8231,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "e45332e3-96b8-4286-817b-88bcc87cbd6e",
+                    "id": "c25a2ce7-b895-4255-8103-4723c8a562f3",
                     "type": "file",
                     "attributes": {
-                      "url": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZ0VTIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e9dcfddd0801e3f54d0394a9f0bc71fd1ec66c1b/offer_e45332e3-96b8-4286-817b-88bcc87cbd6e.pdf?disposition=attachment"
+                      "url": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaVVFIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--95acc64eb448e7392595a34dd25a923d85b03af8/offer_c25a2ce7-b895-4255-8103-4723c8a562f3.pdf?disposition=attachment"
                     }
                   },
                   "meta": {
@@ -8310,16 +8310,16 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "0df96842-96ad-4ce7-a790-1ced1486645e",
+                    "id": "312d4ac7-8810-4cf1-beb9-382fc71e3bcf",
                     "type": "requestForQuotation",
                     "attributes": {
-                      "id": "0df96842-96ad-4ce7-a790-1ced1486645e",
+                      "id": "312d4ac7-8810-4cf1-beb9-382fc71e3bcf",
                       "fullName": "John Doe",
                       "email": "john.doe@example.com",
                       "phone": "+49-4647484950",
                       "companyName": "company172",
-                      "organizationId": "a5a3d578-521b-4318-9305-70e31a339ef0",
-                      "queryId": "c4ca0728-88d3-4d4d-b485-25939ac7e55a"
+                      "organizationId": "34f99f27-a3fa-4d9f-8f38-ecdd95d78bb7",
+                      "queryId": "5cc53679-c978-4e60-926b-ea820011ba3a"
                     }
                   },
                   "meta": {
@@ -8432,10 +8432,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "0498d423-454e-4ea4-b60e-dc92bf86b187",
+                      "id": "2522a68a-c3a2-4284-bff1-1d21a0f582ec",
                       "type": "restful",
                       "attributes": {
-                        "id": "0498d423-454e-4ea4-b60e-dc92bf86b187"
+                        "id": "2522a68a-c3a2-4284-bff1-1d21a0f582ec"
                       }
                     }
                   ],
@@ -8506,12 +8506,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "fec7abad-8026-419e-b889-3591536f64b3",
+                    "id": "59fec39e-5de1-48ff-8dba-43aa3aaddbf9",
                     "type": "result",
                     "attributes": {
-                      "id": "fec7abad-8026-419e-b889-3591536f64b3",
+                      "id": "59fec39e-5de1-48ff-8dba-43aa3aaddbf9",
                       "carrier": "MSC",
-                      "carrierLogo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZ2NTIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e72c69a0859889f9a1a19c294d022da0d789595b/test-image.jpg",
+                      "carrierLogo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaXNFIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--f5fa4f79b17e5421fc1bb558e83762d3386b4dd8/test-image.jpg",
                       "modesOfTransport": [
                         "ocean"
                       ],
@@ -8520,15 +8520,15 @@
                         "currency": "EUR"
                       },
                       "serviceLevel": "standard",
-                      "validUntil": "2022-05-09T02:30:40.155Z",
+                      "validUntil": "2022-05-10T13:51:16.464Z",
                       "transitTime": null,
-                      "cargoReadyDate": "2022-04-12T00:00:00.000Z",
+                      "cargoReadyDate": "2022-04-13T00:00:00.000Z",
                       "cargoDeliveryDate": null,
                       "origin": "Hamburg",
                       "destination": "Hamburg",
                       "transshipment": null,
                       "numberOfStops": 0,
-                      "queryId": "8841d9aa-d2e0-4fde-9989-9f60d5c24afe",
+                      "queryId": "c4516757-af1a-464a-87d7-a34e51526455",
                       "preCarriage": false,
                       "onCarriage": false
                     }
@@ -8596,13 +8596,13 @@
                 "example": {
                   "data": [
                     {
-                      "id": "7854f58c-ee37-4c11-90b1-e6d95497d11f",
+                      "id": "58e0ba4b-f172-4857-af1e-d6ac01be9e57",
                       "type": "routeSection",
                       "attributes": {
-                        "id": "7854f58c-ee37-4c11-90b1-e6d95497d11f",
+                        "id": "58e0ba4b-f172-4857-af1e-d6ac01be9e57",
                         "service": "standard",
                         "carrier": "Carrier - 23",
-                        "carrierLogo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBZ2tTIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3723d83481e11b1f416e8f905f33c5b85bd07246/test-image.jpg",
+                        "carrierLogo": "http://localhost:3000/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaTBFIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--005cec775812d77fb850ec1bb49e3bf1e1eecce1/test-image.jpg",
                         "modeOfTransport": "ocean",
                         "transshipment": null,
                         "transitTime": null,
@@ -8706,31 +8706,31 @@
                 "example": {
                   "data": [
                     {
-                      "id": "256",
+                      "id": "110",
                       "type": "trip",
                       "attributes": {
-                        "closing": "2022-04-12",
-                        "start": "2022-04-16",
-                        "end": "2022-05-16",
+                        "closing": "2022-04-13",
+                        "start": "2022-04-17",
+                        "end": "2022-05-17",
                         "service": "slowly",
                         "carrier": "Hapag Lloyd",
                         "vessel": null,
                         "voyageCode": null,
-                        "tenderId": "17419600-8538-4ccf-a5a4-2c36a3cf5630"
+                        "tenderId": "315f19da-bfcb-4ea8-a887-e5a0ae977e9b"
                       }
                     },
                     {
-                      "id": "257",
+                      "id": "111",
                       "type": "trip",
                       "attributes": {
-                        "closing": "2022-04-17",
-                        "start": "2022-04-21",
-                        "end": "2022-05-21",
+                        "closing": "2022-04-18",
+                        "start": "2022-04-22",
+                        "end": "2022-05-22",
                         "service": "slowly",
                         "carrier": "Hapag Lloyd",
                         "vessel": null,
                         "voyageCode": null,
-                        "tenderId": "17419600-8538-4ccf-a5a4-2c36a3cf5630"
+                        "tenderId": "315f19da-bfcb-4ea8-a887-e5a0ae977e9b"
                       }
                     }
                   ],
@@ -9003,18 +9003,18 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "1852acce-34a4-446a-9fcc-024f83686bd3",
+                    "id": "76823fd4-8cea-4a47-b0c0-82e94e22cdb2",
                     "type": "schedule",
                     "attributes": {
-                      "id": "1852acce-34a4-446a-9fcc-024f83686bd3",
+                      "id": "76823fd4-8cea-4a47-b0c0-82e94e22cdb2",
                       "vesselName": "saco",
                       "vesselCode": "ab123",
                       "voyageCode": "12345",
                       "origin": "20457, hamburg",
                       "destination": "shanghai airport",
-                      "destinationArrival": "2022-05-02T00:00:00.000Z",
-                      "originDeparture": "2022-04-12T00:00:00.000Z",
-                      "closingDate": "2022-04-12T00:00:00.000Z",
+                      "destinationArrival": "2022-05-03T00:00:00.000Z",
+                      "originDeparture": "2022-04-13T00:00:00.000Z",
+                      "closingDate": "2022-04-13T00:00:00.000Z",
                       "carrier": "msc",
                       "service": "standard",
                       "modeOfTransport": "ocean",
@@ -9079,7 +9079,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "aa2f0fc5-8639-457a-a321-dfa6de8dd42b",
+                    "id": "9512beec-f8fc-4f5d-8ad1-ac785df1c676",
                     "type": "scope",
                     "attributes": {
                       "links": {
@@ -9088,7 +9088,7 @@
                         "legal": "",
                         "privacy": ""
                       },
-                      "id": "f07ac2d1-82ba-4962-b9c8-cdb8c03fba2f",
+                      "id": "8fc48836-5e16-4bd2-b314-f16094b0c649",
                       "authMethods": [
                         "password"
                       ],
@@ -9144,7 +9144,7 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "3e54befb-3a4c-4334-b896-20c313d86f63",
+                    "id": "2a05c9c9-48c3-4d82-b17e-3bd6791db833",
                     "type": "setting",
                     "attributes": {
                       "language": "en-GB",
@@ -9341,12 +9341,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "513d9f3b-9979-42f4-81f7-67da44618953",
+                    "id": "543389ef-4094-4810-afdc-aab41a3e3719",
                     "type": "shipmentRequest",
                     "attributes": {
-                      "resultId": "7c4f6a01-782d-4cab-84f1-eec909ae2dd7",
-                      "companyId": "7ab8d038-8484-4758-9c1e-b9fe3af2d335",
-                      "clientId": "84368548-eb02-4443-b817-51cfff5c9317",
+                      "resultId": "6e0327ca-c74a-45c7-b823-8900f4b0ecbf",
+                      "companyId": "6bfed4cb-976c-4160-abc3-e92a3040a87a",
+                      "clientId": "8cded32a-735e-4cfd-a79f-c9dca0913711",
                       "withInsurance": false,
                       "withCustomsHandling": false,
                       "status": "requested",
@@ -9361,7 +9361,7 @@
                       "contacts": {
                         "data": [
                           {
-                            "id": "f45e1849-e2b6-442b-a409-73e7e1a03e26",
+                            "id": "b66eb4b1-fe4e-4d27-b3f7-746d9a971460",
                             "type": "contact"
                           }
                         ]
@@ -9369,7 +9369,7 @@
                       "documents": {
                         "data": [
                           {
-                            "id": "3463378d-150b-409b-adfe-caaa4aef4194",
+                            "id": "27d64b43-767b-4ac9-9975-cb56ff57dd5e",
                             "type": "document"
                           }
                         ]
@@ -9458,12 +9458,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "f9b22e0d-c742-4c90-a062-7b4ef1c66a77",
+                    "id": "c0d43b77-dc1c-4355-ac74-71cadce98260",
                     "type": "shipmentRequest",
                     "attributes": {
-                      "resultId": "be421722-135f-4d82-9053-43a3018ccbda",
-                      "companyId": "d7b25a9a-86a2-4598-9148-40ef4724c348",
-                      "clientId": "db7f3454-f994-4353-b73e-cfc47f8e20d5",
+                      "resultId": "8a122cad-aaad-4f42-a8b7-fb21195130d6",
+                      "companyId": "0ec99641-48d7-45d2-84ff-bcfbee85e0b7",
+                      "clientId": "33f1aedd-5775-4da6-9d87-e4e9d0da9c9e",
                       "withInsurance": false,
                       "withCustomsHandling": false,
                       "status": "requested",
@@ -9478,7 +9478,7 @@
                       "contacts": {
                         "data": [
                           {
-                            "id": "c6e39620-1c97-41a1-8ee0-cf82283dc498",
+                            "id": "0822fe17-e833-427b-bcb9-2e3aa9afe0a5",
                             "type": "contact"
                           }
                         ]
@@ -9486,7 +9486,7 @@
                       "documents": {
                         "data": [
                           {
-                            "id": "c6d0efc4-5944-4d20-a11c-2be1a3107de6",
+                            "id": "47ab8091-6633-4ae4-9dea-85ba6fef508f",
                             "type": "document"
                           }
                         ]
@@ -9572,11 +9572,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "f4c21c14-802f-4417-b9c0-b23322fae612",
+                    "id": "d95ca665-9abc-4abc-b679-f3281994867a",
                     "type": "theme",
                     "attributes": {
-                      "id": "f4c21c14-802f-4417-b9c0-b23322fae612",
-                      "organizationId": "8fa01cf2-46bf-479f-a040-7d116a5088be",
+                      "id": "d95ca665-9abc-4abc-b679-f3281994867a",
+                      "organizationId": "dc342799-f892-4aee-b4d5-6f70750157c0",
                       "emails": {
                         "sales": {
                           "general": "sales.general@demo.com"
@@ -9915,7 +9915,7 @@
                 "example": {
                   "data": [
                     {
-                      "id": "636",
+                      "id": "172",
                       "type": "country",
                       "attributes": {
                         "name": "Sweden",
@@ -10056,12 +10056,12 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "693672bf-b6ed-4b0e-a691-15c6904a716e",
+                    "id": "4a8ce8e4-8656-4f23-b546-4a78d6e9a19a",
                     "type": "uploads",
                     "relationships": {
                       "file": {
                         "data": {
-                          "id": "8dfdd28b-854b-4766-914f-fc5a771a0210",
+                          "id": "39e9b2ee-3d7f-4f31-8dbb-d4ce02d8be55",
                           "type": "file"
                         }
                       }
@@ -10138,14 +10138,14 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": "ced3b8c6-184c-45e2-80d7-10b114562993",
-                  "organization_id": "88e81787-c4e1-4857-9c3d-fcaf1d4968a9",
-                  "file_id": "62574583-10af-4f68-abf9-9c8b4d8a3c5c",
-                  "user_id": "cf6ccdc3-4585-48df-b887-e4a8587ba714",
+                  "id": "6c2793f8-b9a5-4a28-a256-9531d011a231",
+                  "organization_id": "692096e7-5cc7-430c-a9d5-753ac582df8b",
+                  "file_id": "2f50eb6b-a06c-4b3b-ad80-dd9a2d8e0c24",
+                  "user_id": "f4751e6a-f91f-4c87-a53d-3e3d282b2044",
                   "status": "not_started",
                   "last_job_id": "63546232-fc34-438e-afd1-fe5c33896931",
-                  "created_at": "2022-04-11T02:30:46.039Z",
-                  "updated_at": "2022-04-11T02:30:46.039Z"
+                  "created_at": "2022-04-12T13:51:26.653Z",
+                  "updated_at": "2022-04-12T13:51:26.653Z"
                 }
               }
             }
@@ -10178,11 +10178,11 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "112b4996-c642-4fea-8b00-325b41ce1525",
+                    "id": "2e5d0697-9db1-47f7-bc75-0cfd0d0a6fbe",
                     "type": "user",
                     "attributes": {
                       "email": "john.doe.67@itsmycargo.test",
-                      "organizationId": "80ce7a12-a7d5-4d1f-b11b-dbd917a87a81",
+                      "organizationId": "b875c853-8dc2-45de-a88a-6dad79f31ea1",
                       "firstName": "Guest",
                       "lastName": "User 67",
                       "phone": "081 9847079",
@@ -10298,10 +10298,10 @@
               "application/json": {
                 "example": {
                   "data": {
-                    "id": "1c770d4e-2bc6-4b08-bc20-ab0b6e496ed0",
+                    "id": "b3e558ac-7cc3-440c-811c-b1d96b03c4b6",
                     "type": "user",
                     "attributes": {
-                      "id": "1c770d4e-2bc6-4b08-bc20-ab0b6e496ed0",
+                      "id": "b3e558ac-7cc3-440c-811c-b1d96b03c4b6",
                       "firstName": "Guest",
                       "authMethods": [
                         "password"
@@ -10402,10 +10402,10 @@
                 "example": {
                   "data": [
                     {
-                      "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                      "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                       "type": "validationError",
                       "attributes": {
-                        "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                        "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                         "limit": "0.1 m",
                         "attribute": "width",
                         "message": "Width exceeds the limit of 0.1 m",
@@ -10413,10 +10413,10 @@
                       }
                     },
                     {
-                      "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                      "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                       "type": "validationError",
                       "attributes": {
-                        "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                        "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                         "limit": "0.1 m",
                         "attribute": "height",
                         "message": "Height exceeds the limit of 0.1 m",
@@ -10424,10 +10424,10 @@
                       }
                     },
                     {
-                      "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                      "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                       "type": "validationError",
                       "attributes": {
-                        "id": "1ef833a6-f10b-47e4-a941-4649b1a65fbe",
+                        "id": "320bc270-67a8-4a2d-80ea-780af4321d8b",
                         "limit": "10 kg",
                         "attribute": "weight",
                         "message": "Weight exceeds the limit of 10 kg",
@@ -10448,6 +10448,9 @@
             "content": {
               "application/json": {
                 "example": {
+                  "types": [
+                    "is missing"
+                  ],
                   "items": [
                     "must be present"
                   ]
@@ -10473,6 +10476,17 @@
                   "loadType": {
                     "type": "string",
                     "description": "The load type of the query"
+                  },
+                  "types": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "The type of the query",
+                      "enum": [
+                        "cargo_item",
+                        "routing"
+                      ]
+                    }
                   },
                   "items": {
                     "type": "array",

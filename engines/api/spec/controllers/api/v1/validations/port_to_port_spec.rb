@@ -105,7 +105,7 @@ module Api
 
         before do
           request.headers["Authorization"] = token_header
-          FactoryBot.create(:fcl_20_pricing, organization: organization)
+          FactoryBot.create(:lcl_pricing, organization: organization)
           post :create, params: params
         end
 

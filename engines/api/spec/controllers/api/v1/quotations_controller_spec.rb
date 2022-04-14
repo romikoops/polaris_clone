@@ -257,7 +257,7 @@ module Api
       end
 
       context "when no available schedules" do
-        before { FactoryBot.create(:lcl_pricing, organization: organization) }
+        before { FactoryBot.create(:fcl_20_pricing, organization: organization) }
 
         let(:cargo_items_attributes) { default_cargo_items_attributes }
 

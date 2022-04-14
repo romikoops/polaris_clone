@@ -598,7 +598,6 @@ end
 
 # == Route Map
 #
-# Couldn't find the MJML 4. binary.. have you run $ npm install mjml?
 #                                                       Prefix Verb   URI Pattern                                                                                        Controller#Action
 #                                                          idp        /                                                                                                  IDP::Engine
 #                                               google_sign_in        /google_sign_in                                                                                    GoogleSignIn::Engine
@@ -607,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x00007fe587946e88@/Users/ajith/Development/IMC/polaris/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000106305a78 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1072,6 +1071,7 @@ end
 #                    v2_organization_offer_pdf GET    /v2/organizations/:organization_id/offers/:offer_id/pdf(.:format)                        api/v2/offers#pdf
 #                   v2_organization_offer_xlsx GET    /v2/organizations/:organization_id/offers/:offer_id/xlsx(.:format)                       api/v2/offers#xlsx
 #                       v2_organization_offers POST   /v2/organizations/:organization_id/offers(.:format)                                      api/v2/offers#create
+#                   v2_organization_validation POST   /v2/organizations/:organization_id/validation(.:format)                                  api/v2/validations#create
 #                      v2_organization_uploads POST   /v2/organizations/:organization_id/uploads(.:format)                                     api/v2/uploads#create
 #                       v2_organization_upload GET    /v2/organizations/:organization_id/uploads/:id(.:format)                                 api/v2/uploads#show
 #                        v2_organization_theme GET    /v2/organizations/:organization_id/theme(.:format)                                       api/v2/themes#show

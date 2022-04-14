@@ -9,8 +9,7 @@ module Api
     let(:app) { FactoryBot.create(:application) }
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: "public") }
-    let(:token_header) { "Bearer #{access_token.token}" }
+    let(:token_header) { "Bearer #{FactoryBot.create(:access_token, resource_owner_id: client.id, scopes: 'public').token}" }
     let(:origin) do
       FactoryBot.build(:carta_result,
         id: "xxx1",
@@ -32,9 +31,8 @@ module Api
     let(:params) do
       {
         items: items,
-        loadType: load_type,
-        cargoReadyDate: Time.zone.tomorrow,
-        parentId: nil,
+        loadType: "container",
+        types: ["cargo_item"],
         originId: origin.id,
         destinationId: destination.id,
         organization_id: organization.id
@@ -59,7 +57,7 @@ module Api
       [
         {
           id: cargo_item_id,
-          weight: 12_000,
+          weight: 12_000_000,
           width: nil,
           length: nil,
           height: nil,
@@ -78,17 +76,11 @@ module Api
         mode_of_transport: "ocean",
         payload_in_kg: 10_000,
         cargo_class: "fcl_20")
-      FactoryBot.create(:fcl_20_pricing, organization: organization, itinerary: itinerary)
+      FactoryBot.create(:fcl_20_pricing, organization: organization)
       allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
       allow(Carta::Client).to receive(:lookup).with(id: destination.id).and_return(destination)
       allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(origin)
       allow(Carta::Client).to receive(:suggest).with(query: destination_hub.nexus.locode).and_return(destination)
-    end
-
-    shared_examples_for "Expected errors are returned" do
-      it "returns an array of expected errors" do
-        expect(response_data.pluck("attributes")).to eq(expected_errors)
-      end
     end
 
     describe "post #create" do
@@ -112,43 +104,9 @@ module Api
           post :create, params: params
         end
 
-        it_behaves_like "Expected errors are returned"
-      end
-
-      context "when port to port request (no routing &invalid cargo)" do
-        let(:items) do
-          [
-            {
-              id: cargo_item_id,
-              weight: 12_000,
-              width: nil,
-              length: nil,
-              height: nil,
-              quantity: 1,
-              cargoClass: "fcl_20",
-              stackable: true
-            }
-          ]
+        it "returns an array of expected errors" do
+          expect(response_data.pluck("attributes")).to eq(expected_errors)
         end
-        let(:expected_errors) do
-          [
-            {
-              "id" => cargo_item_id,
-              "message" => "Weight exceeds the limit of 10000 kg",
-              "limit" => "10000 kg",
-              "attribute" => "weight",
-              "code" => 4001
-            }
-          ]
-        end
-
-        before do
-          FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary)
-          request.headers["Authorization"] = token_header
-          post :create, params: params
-        end
-
-        it_behaves_like "Expected errors are returned"
       end
     end
   end

@@ -82,6 +82,14 @@ RSpec.describe "Validation", type: :request, swagger: true do
             type: :string,
             description: "The load type of the query"
           },
+          types: {
+            type: :array,
+            items: {
+              type: :string,
+              description: "The type of the query",
+              enum: %w[cargo_item routing]
+            }
+          },
           items: {
             type: :array,
             items: {
@@ -100,6 +108,7 @@ RSpec.describe "Validation", type: :request, swagger: true do
           originId: origin.id,
           destinationId: destination.id,
           loadType: load_type,
+          types: ["cargo_item"],
           items: [item]
         }
       end

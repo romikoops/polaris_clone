@@ -32,6 +32,7 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
 
   before do
     allow(request).to receive(:cargo_units).and_return(cargo_units)
+    allow(request).to receive(:load_type).and_return("container")
     Organizations::Organization.current_id = organization.id
   end
 
@@ -59,6 +60,21 @@ RSpec.describe OfferCalculator::Service::Validations::ContainerValidationService
 
       it "returns an empty array" do
         expect(result).to be_empty
+      end
+    end
+
+    context "when pricings relation is empty" do
+      let(:pricings) { Pricings::Pricing.none }
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          id: SecureRandom.uuid,
+          quantity: 1,
+          cargo_class: "fcl_20",
+          weight_value: 120)]
+      end
+
+      it "returns uses of the same load type to fill in for the defaults, returning an empty array" do
+        expect(result).to eq([])
       end
     end
 

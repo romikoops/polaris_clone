@@ -26,13 +26,13 @@ RSpec.describe Api::ValidationContract do
     end
     let(:cargo_classes) { ["lcl"] }
     let(:load_type) { "cargo_item" }
+    let(:types) { ["cargo_item"] }
     let(:cargo_ready_date) { Time.zone.tomorrow }
     let(:params) do
       {
+        types: types,
         items: items,
         loadType: load_type,
-        cargoReadyDate: cargo_ready_date.to_s,
-        parentId: parent_id,
         originId: origin_id,
         destinationId: destination_id
       }
@@ -89,6 +89,30 @@ RSpec.describe Api::ValidationContract do
       end
     end
 
+    context "when types are empty" do
+      let(:types) { [] }
+
+      it "returns errors indicating Types are needed" do
+        expect(result.errors.to_h).to eq({ types: ["must be present"] })
+      end
+    end
+
+    context "when types includes 'routing'" do
+      let(:types) { ["routing"] }
+
+      it "returns no errors" do
+        expect(result.errors.to_h).to eq({})
+      end
+    end
+
+    context "when types are invalid" do
+      let(:types) { ["blue"] }
+
+      it "returns errors indicating the Type was invalid" do
+        expect(result.errors.to_h).to eq({ types: ["must be one of cargo_item | routing"] })
+      end
+    end
+
     context "when item is missing cargo class" do
       let(:items) do
         [
@@ -130,6 +154,29 @@ RSpec.describe Api::ValidationContract do
 
       it "returns errors indicating Items require an Id" do
         expect(result.errors.to_h).to eq({ items: { 0 => { id: ["must be a string"] } } })
+      end
+    end
+
+    context "when item only has the weight provided" do
+      let(:items) do
+        [
+          {
+            id: id,
+            cargoClass: "lcl",
+            stackable: true,
+            colliType: "pallet",
+            quantity: 1,
+            length: 0,
+            width: 0,
+            height: 0,
+            weight: 1200,
+            commodities: []
+          }
+        ]
+      end
+
+      it "returns no errors" do
+        expect(result.errors.to_h).to be_empty
       end
     end
   end

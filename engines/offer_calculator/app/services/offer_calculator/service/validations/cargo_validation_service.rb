@@ -136,7 +136,9 @@ module OfferCalculator
         def pricings_for_rate
           return pricings if pricings.present?
 
-          Pricings::Pricing.where(organization: organization).order(wm_rate: :desc).limit(1)
+          pricings_for_load_type = Pricings::Pricing.where(organization: organization, load_type: load_type)
+          pricings_for_load_type = Pricings::Pricing.where(organization: organization) if pricings_for_load_type.empty?
+          pricings_for_load_type.order(wm_rate: :desc).limit(1)
         end
 
         def measured_request

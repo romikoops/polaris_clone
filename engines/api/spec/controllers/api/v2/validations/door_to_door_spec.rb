@@ -8,8 +8,7 @@ module Api
     include_context "complete_route_with_trucking"
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:client) { FactoryBot.create(:users_client, organization_id: organization.id) }
-    let(:access_token) { FactoryBot.create(:access_token, application: FactoryBot.create(:application), resource_owner_id: client.id, scopes: "public") }
-    let(:token_header) { "Bearer #{access_token.token}" }
+    let(:token_header) { "Bearer #{FactoryBot.create(:access_token, application: FactoryBot.create(:application), resource_owner_id: client.id, scopes: 'public').token}" }
     let(:origin) do
       FactoryBot.build(:carta_result,
         id: "xxx1",
@@ -28,12 +27,12 @@ module Api
     end
     let(:cargo_classes) { ["lcl"] }
     let(:load_type) { "cargo_item" }
+    let(:types) { ["cargo_item"] }
     let(:params) do
       {
         items: items,
+        types: types,
         loadType: load_type,
-        cargoReadyDate: Time.zone.tomorrow,
-        parentId: nil,
         originId: origin.id,
         destinationId: destination.id,
         organization_id: organization.id
@@ -223,6 +222,95 @@ module Api
         end
 
         it_behaves_like "Expected errors are returned"
+      end
+
+      context "when no pricing available & invalid cargo" do
+        let(:items) do
+          [
+            {
+              id: cargo_item_id,
+              weight: 12_000,
+              width: nil,
+              length: nil,
+              height: nil,
+              volume: 1.0,
+              quantity: 1,
+              dangerous_goods: false,
+              cargoClass: "lcl",
+              colliType: "pallet",
+              stackable: true
+            }
+          ]
+        end
+        let(:pricings) do
+          [FactoryBot.create(:pricings_pricing, load_type: "cargo_item", cargo_class: "lcl", organization: organization)]
+        end
+
+        context "when type is 'cargo_item', only the cargo_item errors are returned" do
+          let(:types) { ["cargo_item"] }
+          let(:expected_errors) do
+            [
+              {
+                "id" => cargo_item_id,
+                "message" => "Weight exceeds the limit of 10000 kg",
+                "limit" => "10000 kg",
+                "attribute" => "weight",
+                "code" => 4001
+              }
+            ]
+          end
+
+          it_behaves_like "Expected errors are returned"
+        end
+
+        context "when the type is 'routing', only the routing errors are returned" do
+          let(:types) { ["routing"] }
+          let(:expected_errors) do
+            [
+              {
+                "id" => "routing",
+                "message" => "No Pricings are available for your route",
+                "limit" => nil,
+                "attribute" => "routing",
+                "code" => 4008
+              }
+            ]
+          end
+
+          it_behaves_like "Expected errors are returned"
+        end
+
+        context "when the type is set to both 'routing' and 'cargo_item', only the routing errors are returned" do
+          let(:types) { %w[routing cargo_item] }
+          let(:expected_errors) do
+            [
+              {
+                "id" => cargo_item_id,
+                "message" => "Weight exceeds the limit of 10000 kg",
+                "limit" => "10000 kg",
+                "attribute" => "weight",
+                "code" => 4001
+              },
+              {
+                "id" => "routing",
+                "message" => "No Pricings are available for your route",
+                "limit" => nil,
+                "attribute" => "routing",
+                "code" => 4008
+              }
+            ]
+          end
+
+          it_behaves_like "Expected errors are returned"
+        end
+
+        context "when types is invalid" do
+          let(:types) { ["invalid"] }
+
+          it "returns the error indication the types are invalid" do
+            expect(response.body).to eq("{\"types\":[\"must be one of cargo_item | routing\"]}")
+          end
+        end
       end
     end
   end
