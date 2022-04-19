@@ -43,6 +43,8 @@ module OfferCalculator
     InvalidCargoUnit = Class.new(Failure)
     LocationNotFound = Class.new(Failure)
     LocationServiceFailure = Class.new(Failure)
+    MissedInRange = Class.new(Failure)
+    ExceededRange = Class.new(Failure)
 
     CODE_LOOKUP = {
       1000 => OfferCalculator::Errors::NoRoute,
@@ -77,6 +79,8 @@ module OfferCalculator
       3001 => OfferCalculator::Errors::MissingTruckingData,
       3002 => OfferCalculator::Errors::LoadMeterageExceeded,
       3003 => OfferCalculator::Errors::TruckingRateNotFound,
+      3004 => OfferCalculator::Errors::MissedInRange,
+      3005 => OfferCalculator::Errors::ExceededRange,
       6001 => OfferCalculator::Errors::OfferBuilder,
       6002 => OfferCalculator::Errors::NoValidOffers
     }.freeze

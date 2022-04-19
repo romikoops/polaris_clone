@@ -182,7 +182,14 @@ en:
       http_code: 400
       code: 3003
       message: "Unfortunately we cannot find rates for a package of this size. Please change your inputs and try again."
-
+    missed_in_range:
+      http_code: 400
+      code: 3003
+      message: "Unfortunately we cannot find rates for a package of this size. Please change your inputs and try again."
+    exceeded_range:
+      http_code: 400
+      code: 3004
+      message: "Unfortunately we cannot find rates for a package of this size. Enter a smaller cargo load and try again."
     # ...:
     #   http_code: 400
     #   code: 1004
