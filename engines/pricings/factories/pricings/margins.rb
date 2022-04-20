@@ -12,6 +12,10 @@ FactoryBot.define do
       FactoryBot.create(:users_client, organization: instance.organization)
     end
 
+    trait :total do
+      margin_type { :total_margin }
+    end
+
     trait :freight do
       margin_type { :freight_margin }
     end

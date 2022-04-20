@@ -5,7 +5,7 @@ module Pricings
     attr_accessor :transient_marked_as_old
 
     enum margin_type: {
-      trucking_pre_margin: 1, export_margin: 2, freight_margin: 3, import_margin: 4, trucking_on_margin: 5
+      trucking_pre_margin: 1, export_margin: 2, freight_margin: 3, import_margin: 4, trucking_on_margin: 5, total_margin: 6
     }
 
     belongs_to :applicable, polymorphic: true

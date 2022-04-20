@@ -67,6 +67,10 @@ module Rover
       self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)]
     end
 
+    def reject(arguments)
+      self[arguments.keys.map { |key| (self[key] != arguments[key]) }.reduce(&:&)]
+    end
+
     def group_by(columns)
       self[columns].to_a.uniq.map {|args| filter(args) }
     end
