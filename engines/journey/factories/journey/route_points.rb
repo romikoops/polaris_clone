@@ -10,11 +10,19 @@ FactoryBot.define do
     coordinates { RGeo::Geos.factory(srid: 4326).point(longitude, latitude) }
     sequence(:geo_id) { |x| "GEOID-#{x}" }
     locode
+    country { "DE" }
 
     trait :locode do
       function { "ocean" }
       name { "Hamburg" }
       locode { "DEHAM" }
+    end
+
+    trait :terminal do
+      function { "ocean" }
+      name { "Hamburg" }
+      locode { "DEHAM" }
+      terminal { "1-A" }
     end
 
     trait :address do

@@ -7,7 +7,17 @@ module ResultFormatter
     delegate_all
 
     def description
-      locode.present? ? "#{name} (#{locode})" : name
+      [
+        name_and_terminal,
+        locode && "(#{locode})"
+      ].compact.join(" ")
+    end
+
+    def name_and_terminal
+      [
+        name,
+        terminal && "- #{terminal}"
+      ].compact.join(" ")
     end
 
     def latitude

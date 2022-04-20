@@ -1610,7 +1610,7 @@ ALTER SEQUENCE public.exchange_rates_id_seq OWNED BY public.exchange_rates.id;
 --
 
 CREATE TABLE public.files_file_descriptors (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     file_path character varying NOT NULL,
     file_type character varying NOT NULL,
     originator character varying NOT NULL,
@@ -2242,6 +2242,7 @@ CREATE TABLE public.journey_route_points (
     street character varying DEFAULT ''::character varying,
     street_number character varying DEFAULT ''::character varying,
     administrative_area character varying DEFAULT ''::character varying,
+    terminal character varying,
     CONSTRAINT journey_route_points_function_presence CHECK (((function IS NOT NULL) AND ((function)::text !~ '^\s*$'::text))),
     CONSTRAINT journey_route_points_name_presence CHECK (((name IS NOT NULL) AND ((name)::text !~ '^\s*$'::text)))
 );
@@ -12661,6 +12662,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220209071249'),
 ('20220216103614'),
 ('20220223104305'),
-('20220324010131');
+('20220324010131'),
+('20220414062616');
 
 

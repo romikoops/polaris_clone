@@ -23,6 +23,7 @@ end
 #  postal_code         :string           default("")
 #  street              :string           default("")
 #  street_number       :string           default("")
+#  terminal            :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  geo_id              :string

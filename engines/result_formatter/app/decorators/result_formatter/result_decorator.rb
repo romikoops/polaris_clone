@@ -306,11 +306,11 @@ module ResultFormatter
     delegate :line_items, to: :current_line_item_set
 
     def origin_route_point
-      @origin_route_point ||= main_freight_section.from
+      @origin_route_point ||= RoutePointDecorator.new(main_freight_section.from)
     end
 
     def destination_route_point
-      @destination_route_point ||= main_freight_section.to
+      @destination_route_point ||= RoutePointDecorator.new(main_freight_section.to)
     end
 
     def total_chargeable_weight(section:)

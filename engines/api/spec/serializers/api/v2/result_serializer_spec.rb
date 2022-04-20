@@ -71,5 +71,55 @@ module Api
     it "returns a money representation when the total is present" do
       expect(target[:total]).to eq({ value: 36.00, currency: "EUR" })
     end
+
+    context "when origin and destination have terminal information" do
+      let(:result) do
+        FactoryBot.create(:journey_result,
+          query_id: journey_query.id,
+          route_sections: [
+            FactoryBot.build(:journey_route_section,
+              :main_carriage,
+              from: FactoryBot.build(:journey_route_point, name: "Hamburg", locode: "DEHAM", terminal: "A-1"),
+              to: FactoryBot.build(:journey_route_point, name: "Shanghai", locode: "CNSGH", terminal: "B-2"))
+          ])
+      end
+
+      it "returns name as the origin" do
+        expect(target[:origin]).to eq("Hamburg")
+      end
+
+      it "returns name as the destination" do
+        expect(target[:destination]).to eq("Shanghai")
+      end
+
+      it "returns terminal of the origin" do
+        expect(target[:originTerminal]).to eq("A-1")
+      end
+
+      it "returns terminal of the destination" do
+        expect(target[:destinationTerminal]).to eq("B-2")
+      end
+    end
+
+    context "when origin is an address (pre-carriage) and destination is a hub without terminal information" do
+      let(:result) do
+        FactoryBot.create(:journey_result,
+          query_id: journey_query.id,
+          route_sections: [
+            FactoryBot.build(:journey_route_section,
+              :main_carriage,
+              from: FactoryBot.build(:journey_route_point, :address, name: "Brooktorkai 7"),
+              to: FactoryBot.build(:journey_route_point, name: "Shanghai", locode: "CNSGH"))
+          ])
+      end
+
+      it "returns address as the origin" do
+        expect(target[:origin]).to eq("Brooktorkai 7")
+      end
+
+      it "returns name as the destination" do
+        expect(target[:destination]).to eq("Shanghai")
+      end
+    end
   end
 end

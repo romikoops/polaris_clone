@@ -22,7 +22,7 @@ module Api
       private
 
       def route_point_info(route_point:)
-        route_point.slice(:name, :locode, :city, :coordinates).tap do |data|
+        route_point.slice(:name, :terminal, :locode, :city, :coordinates).tap do |data|
           data[:address] = data.delete(:name)
         end
       end

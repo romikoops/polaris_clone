@@ -2,7 +2,7 @@
 
 module Api
   module V2
-    class RoutePointDecorator < Draper::Decorator
+    class RoutePointDecorator < ResultFormatter::RoutePointDecorator
       decorates "Journey::RoutePoint"
 
       delegate_all
@@ -15,14 +15,10 @@ module Api
         coordinates.x
       end
 
-      def description
-        name
-      end
-
       def country
-        @country ||= Legacy::Address.new(
+        @country ||= super || Legacy::Address.new(
           latitude: coordinates.y, longitude: coordinates.x
-        ).reverse_geocode.country.code
+        ).reverse_geocode.country&.code
       end
     end
   end

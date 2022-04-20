@@ -21,7 +21,12 @@ RSpec.describe OfferCalculator::Service::OfferCreators::Routing::Freight do
     before do
       allow(offer).to receive(:itinerary).and_return(itinerary)
       allow(offer).to receive(:tenant_vehicle).and_return(tenant_vehicle)
-      allow(service).to receive(:geo_id_from_hub).and_return("XXX")
+      allow(Carta::Client).to receive(:suggest).with(query: itinerary.origin_hub.nexus.locode).and_return(
+        instance_double(Carta::Result, id: "XXX")
+      )
+      allow(Carta::Client).to receive(:suggest).with(query: itinerary.destination_hub.nexus.locode).and_return(
+        instance_double(Carta::Result, id: "YYY")
+      )
     end
 
     context "when Routing::Carrier exists" do

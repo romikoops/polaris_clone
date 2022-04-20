@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe ResultFormatter::RoutePointDecorator do
+RSpec.describe Api::V2::RoutePointDecorator do
   let(:route_point) { FactoryBot.create(:journey_route_point) }
   let(:decorated_route_point) { described_class.new(route_point) }
 
@@ -42,26 +42,32 @@ RSpec.describe ResultFormatter::RoutePointDecorator do
     end
   end
 
-  describe "#name_and_terminal" do
-    context "when the RoutePoint has a locode" do
-      it "returns a name with the locode in parentheses" do
-        expect(decorated_route_point.name_and_terminal).to include("Hamburg")
+  describe "#country" do
+    context "when the RoutePoint has a country value" do
+      let(:route_point) { FactoryBot.create(:journey_route_point, country: "DE") }
+
+      it "returns the `country` attribute from the RoutePoint" do
+        expect(decorated_route_point.country).to eq(route_point.country)
       end
     end
 
-    context "when the RoutePoint has a locode and terminal" do
-      let(:route_point) { FactoryBot.create(:journey_route_point, terminal: "ABC") }
-
-      it "returns a name with the locode in parentheses" do
-        expect(decorated_route_point.name_and_terminal).to include("Hamburg - ABC")
+    context "when the RoutePoint has no country value" do
+      before do
+        Geocoder::Lookup::Test.add_stub([route_point.coordinates.y, route_point.coordinates.x], [
+          "address_components" => [{ "types" => ["premise"] }],
+          "address" => "",
+          "city" => "",
+          "country" => country.name,
+          "country_code" => country.code,
+          "postal_code" => ""
+        ])
       end
-    end
 
-    context "when the RoutePoint does not have a locode present" do
-      let(:route_point) { FactoryBot.create(:journey_route_point, locode: nil) }
+      let(:country) { FactoryBot.create(:legacy_country, code: "DE", name: "Germany") }
+      let(:route_point) { FactoryBot.create(:journey_route_point, country: nil) }
 
-      it "returns a the name alone" do
-        expect(decorated_route_point.name_and_terminal).to eq(route_point.name)
+      it "returns the Country based off the latitude and longitude" do
+        expect(decorated_route_point.country).to eq(country.code)
       end
     end
   end

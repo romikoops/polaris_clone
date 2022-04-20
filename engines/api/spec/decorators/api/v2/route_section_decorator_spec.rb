@@ -18,6 +18,7 @@ RSpec.describe Api::V2::RouteSectionDecorator do
     let(:expected_result) do
       {
         "locode" => route_section.from.locode,
+        "terminal" => route_section.from.terminal,
         "city" => route_section.from.city,
         "coordinates" => route_section.from.coordinates,
         "address" => route_section.from.name

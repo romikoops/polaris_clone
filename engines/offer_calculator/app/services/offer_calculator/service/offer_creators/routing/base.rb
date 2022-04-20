@@ -25,11 +25,15 @@ module OfferCalculator
           end
 
           def from_route_point
-            @from_route_point ||= route_point(location: from)
+            @from_route_point ||= OfferCalculator::Service::OfferCreators::Routing::LocationAsRoutePoint.new(
+              location: from, request: request
+            ).perform
           end
 
           def to_route_point
-            @to_route_point ||= route_point(location: to)
+            @to_route_point ||= OfferCalculator::Service::OfferCreators::Routing::LocationAsRoutePoint.new(
+              location: to, request: request
+            ).perform
           end
 
           def route_section
@@ -55,23 +59,6 @@ module OfferCalculator
             routing_carrier.name
           end
 
-          def route_point(location:)
-            name, function, locode, geo_id = case location.class.to_s
-                                             when "Legacy::Hub"
-                                               [location.name, "port", location.nexus.locode, geo_id_from_hub(hub: location)]
-                                             when "Legacy::Address"
-                                               [location.geocoded_address, "address", nil, geo_id_from_address(address: location)]
-            end
-
-            Journey::RoutePoint.create(
-              name: name,
-              function: function,
-              locode: locode,
-              coordinates: RGeo::Geos.factory(srid: 4326).point(location.longitude, location.latitude),
-              geo_id: geo_id
-            )
-          end
-
           def offer_data
             @offer_data ||= offer.section(key: section)
           end
@@ -82,18 +69,6 @@ module OfferCalculator
 
           def order
             @order ||= offer.section_keys.index(section)
-          end
-
-          def geo_id_from_hub(hub:)
-            Carta::Client.suggest(query: hub.nexus.locode).id
-          rescue Carta::Client::ServiceUnavailable
-            raise OfferCalculator::Errors::OfferBuilder
-          rescue Carta::Client::LocationNotFound
-            raise OfferCalculator::Errors::LocationNotFound
-          end
-
-          def geo_id_from_address(address:)
-            address == request.pickup_address ? request.origin_geo_id : request.destination_geo_id
           end
 
           def transshipment

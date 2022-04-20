@@ -1826,6 +1826,16 @@ RSpec.configure do |config|
                 description: "The full name of the end point of the quoted journey",
                 type: "string"
               },
+              origin_terminal: {
+                description: "The terminal of the start point of the quoted journey, if the data is present.",
+                type: "string",
+                nullable: true
+              },
+              destination_terminal: {
+                description: "The terminal of the end point of the quoted journey, if the data is present.",
+                type: "string",
+                nullable: true
+              },
               transshipment: {
                 description: "Information regarding the transhipments (if any) that happen during the main section of the journey",
                 type: "string"
@@ -1960,6 +1970,11 @@ RSpec.configure do |config|
               locode: {
                 type: "string",
                 description: "The UN/LOCODE of the location",
+                nullable: true
+              },
+              terminal: {
+                type: "string",
+                description: "The terminal info of the location, if present",
                 nullable: true
               },
               city: {

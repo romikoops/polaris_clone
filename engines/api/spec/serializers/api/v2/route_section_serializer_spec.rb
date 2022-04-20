@@ -14,7 +14,8 @@ module Api
         "locode" => route_section.from.locode,
         "city" => route_section.from.city,
         "coordinates" => route_section.from.coordinates,
-        "address" => route_section.from.name
+        "address" => route_section.from.name,
+        "terminal" => route_section.from.terminal
       }
     end
 

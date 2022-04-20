@@ -29,6 +29,14 @@ module Api
         result.destination_route_point.name
       end
 
+      attribute :origin_terminal do |result|
+        result.origin_route_point.terminal
+      end
+
+      attribute :destination_terminal do |result|
+        result.destination_route_point.terminal
+      end
+
       attribute :pre_carriage do |result|
         result.pre_carriage_section.present?
       end
