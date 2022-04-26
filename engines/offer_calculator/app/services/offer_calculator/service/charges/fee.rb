@@ -7,6 +7,7 @@ module OfferCalculator
         :rate_basis,
         :minimum_charge,
         :maximum_charge,
+        :surcharge,
         :base,
         :cargo_class,
         :charge_category_id,
@@ -25,6 +26,8 @@ module OfferCalculator
         def sourced_from_margin?
           sourced_from_margin
         end
+
+        delegate :currency, to: :minimum_charge
       end
     end
   end

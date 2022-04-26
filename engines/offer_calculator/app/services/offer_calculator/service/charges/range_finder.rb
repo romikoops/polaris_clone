@@ -24,6 +24,7 @@ module OfferCalculator
             charge_category_id: data["charge_category_id"],
             rate_basis: data["rate_basis"],
             base: data["base"].to_d,
+            surcharge: Money.from_amount(0, currency),
             minimum_charge: Money.from_amount(data["min"] || 0, currency),
             maximum_charge: Money.from_amount(data["max"] || DEFAULT_MAX, currency),
             range_min: data["range_min"],
