@@ -11,7 +11,7 @@ module OfferCalculator
         attr_accessor :components
 
         delegate :code, to: :charge_category
-        delegate :object, :stackability, :quantity, to: :measures
+        delegate :object, :stackability, to: :measures
         delegate :section, :load_type, :cargo_class, :validity, :itinerary_id,
           :tenant_vehicle_id, :truck_type, :hub_id, to: :object
 
@@ -49,6 +49,14 @@ module OfferCalculator
           return FCL_CHARGEABLE_DENSITY if /fcl/.match?(cargo_class)
 
           @measures.chargeable_weight_in_tons.value / @measures.volume.value
+        end
+
+        def quantity
+          if Lookups::SHIPMENT_LEVEL_RATE_BASES.include?(rate_basis)
+            1
+          else
+            measures.quantity
+          end
         end
       end
     end

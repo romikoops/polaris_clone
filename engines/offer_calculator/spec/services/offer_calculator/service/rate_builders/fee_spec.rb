@@ -53,10 +53,9 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
       targets: measures.cargo_units
     )
   end
+  let!(:fee) { described_class.new(inputs: inputs) }
 
   describe "it creates a valid Fee object" do
-    let!(:fee) { described_class.new(inputs: inputs) }
-
     it "returns the charge category" do
       expect(fee.charge_category).to eq(charge_category)
     end
@@ -95,6 +94,24 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Fee do
 
     it "returns the flat_margin" do
       expect(fee.flat_margin).to eq(Money.new(5000, max_value.currency))
+    end
+  end
+
+  describe "#quantity" do
+    context "when the rate basis is PER_WM" do
+      let(:rate_basis) { "PER_WM" }
+
+      it "returns the quantity" do
+        expect(fee.quantity).to eq(measures.quantity)
+      end
+    end
+
+    context "when the rate basis is is one of the SHIPMENT_LEVEL rate bases" do
+      let(:rate_basis) { "PER_SHIPMENT" }
+
+      it "returns the quantity as 1" do
+        expect(fee.quantity).to eq(1)
+      end
     end
   end
 end
