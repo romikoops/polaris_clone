@@ -4,7 +4,7 @@ module Api
   module V2
     class FileDescriptorsController < ApiController
       skip_before_action :doorkeeper_authorize!
-      before_action :authenticate, only: %i[create]
+      before_action :authenticate_request!, only: %i[create]
       before_action :validate_required_params, only: :create
 
       def create
@@ -17,12 +17,22 @@ module Api
 
       private
 
-      def authenticate
-        authenticated = authenticate_with_http_token do |token, _options|
-          ActiveSupport::SecurityUtils.secure_compare(Settings.uploads.secret, token)
-        end
+      def authenticate_request!
+        render json: { message: "Unauthorized Request" }, status: :unauthorized if [auth_token, integration_token].any?(&:nil?)
+      end
 
-        head :unauthorized unless authenticated
+      def auth_token
+        @auth_token ||= begin
+          token, _options = ActionController::HttpAuthentication::Token.token_and_options(request)
+          token
+        end
+      end
+
+      def integration_token
+        @integration_token ||= Organizations::IntegrationToken.active.find_by(
+          token: auth_token,
+          scope: "pricings.upload"
+        )
       end
 
       def file_descriptor_arguments

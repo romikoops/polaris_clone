@@ -5,12 +5,12 @@ require "rails_helper"
 module Api
   RSpec.describe V2::FileDescriptorsController, type: :controller do
     routes { Engine.routes }
+    let(:organization) { FactoryBot.create(:organizations_organization) }
+    let(:token) { FactoryBot.create(:organizations_integration_token, organization: organization) }
 
     before do
-      request.headers["Authorization"] = "Token token=FAKEKEY"
+      request.headers["Authorization"] = "Bearer #{token.token}"
     end
-
-    let(:organization) { FactoryBot.create(:organizations_organization) }
 
     describe "POST #create" do
       let(:file_path) { "/testing/download/sailing_schedule/test.png" }

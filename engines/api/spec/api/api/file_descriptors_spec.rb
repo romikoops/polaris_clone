@@ -4,7 +4,8 @@ require "swagger_helper"
 
 RSpec.describe "FileDescriptors", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let(:Authorization) { "Token token=FAKEKEY" }
+  let(:integration_token) { FactoryBot.create(:organizations_integration_token, organization: organization) }
+  let(:Authorization) { "Bearer #{integration_token.token}" }
 
   path "/v2/file_descriptors" do
     let(:file_created_at) { 2.days.ago.to_s }
