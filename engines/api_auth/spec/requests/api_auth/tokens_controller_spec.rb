@@ -6,11 +6,14 @@ RSpec.describe ApiAuth::TokensController, type: :request do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:email) { "agent@itsmycargo.com" }
   let(:password) { "IMC123456789" }
+  let(:application) { FactoryBot.create(:application) }
   let(:params) do
-    { "email": user.email,
-      "password": password,
-      "organization_id": organization.id,
-      "grant_type": "password" }
+    { email: user.email,
+      password: password,
+      organization_id: organization.id,
+      grant_type: "password",
+      client_id: application.uid,
+      client_secret: application.secret }
   end
 
   before do
@@ -26,13 +29,13 @@ RSpec.describe ApiAuth::TokensController, type: :request do
     end
   end
 
-  describe "unauthorized" do
+  describe "bad_request" do
     let(:user) { FactoryBot.create(:users_client) }
 
-    it "returns unauthorized" do
+    it "returns bad_request" do
       post "/oauth/token", params: params
 
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:bad_request)
     end
   end
 

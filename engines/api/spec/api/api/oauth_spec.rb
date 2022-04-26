@@ -19,25 +19,25 @@ RSpec.describe "OAuth", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 access_token: {
-                   type: :string,
-                   description: "Token used to access this endpoint"
-                 },
-                 token_type: {
-                   type: :string,
-                   description: "Type of the token (always Bearer)"
-                 },
-                 scope: {
-                   type: :string,
-                   description: "OAuth scopes of the token."
-                 },
-                 created_at: {
-                   type: :number,
-                   description: "Timestamp when token was created."
-                 }
-               },
-               required: %w[access_token token_type scope created_at]
+          properties: {
+            access_token: {
+              type: :string,
+              description: "Token used to access this endpoint"
+            },
+            token_type: {
+              type: :string,
+              description: "Type of the token (always Bearer)"
+            },
+            scope: {
+              type: :string,
+              description: "OAuth scopes of the token."
+            },
+            created_at: {
+              type: :number,
+              description: "Timestamp when token was created."
+            }
+          },
+          required: %w[access_token token_type scope created_at]
 
         run_test! do
           result = JSON.parse(response.body)
@@ -45,21 +45,21 @@ RSpec.describe "OAuth", type: :request, swagger: true do
         end
       end
 
-      response "401", "Invalid Credentials" do
-        let(:Authorization) { "Basic deadbeef" }
+      response "400", "Invalid Request" do
+        let(:Authorization) { "Bearer deadbeef" }
 
         schema type: :object,
-               properties: {
-                 error: {
-                   type: :string,
-                   description: "Error code describing the encountered error."
-                 },
-                 error_description: {
-                   type: :string,
-                   description: "Detailed description of the error occured."
-                 }
-               },
-               required: %w[error error_description]
+          properties: {
+            error: {
+              type: :string,
+              description: "Error code describing the encountered error."
+            },
+            error_description: {
+              type: :string,
+              description: "Detailed description of the error occurred."
+            }
+          },
+          required: %w[error error_description]
 
         run_test!
       end
