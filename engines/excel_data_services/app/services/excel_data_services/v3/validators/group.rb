@@ -13,7 +13,7 @@ module ExcelDataServices
         end
 
         def required_key
-          "group_id"
+          "group_found"
         end
       end
     end

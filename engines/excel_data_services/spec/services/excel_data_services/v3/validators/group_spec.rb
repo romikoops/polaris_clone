@@ -15,22 +15,26 @@ RSpec.describe ExcelDataServices::V3::Validators::Group do
           {
             "group_id" => group.id,
             "group_name" => group.name,
-            "row" => 2
+            "row" => 2,
+            "organization_id" => organization.id
           },
           {
             "group_id" => group.id,
             "group_name" => nil,
-            "row" => 3
+            "row" => 3,
+            "organization_id" => organization.id
           },
           {
             "group_id" => nil,
             "group_name" => group.name,
-            "row" => 4
+            "row" => 4,
+            "organization_id" => organization.id
           },
           {
             "group_id" => nil,
             "group_name" => nil,
-            "row" => 4
+            "row" => 4,
+            "organization_id" => organization.id
           }
         ]
       end
@@ -45,7 +49,28 @@ RSpec.describe ExcelDataServices::V3::Validators::Group do
         [{
           "group_name" => "AAA",
           "group_id" => nil,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
+        }]
+      end
+
+      let(:error_messages) do
+        ["The Group '#{rows.first['group_name']}' cannot be found."]
+      end
+
+      it "appends an error to the state", :aggregate_failures do
+        expect(result.errors).to be_present
+        expect(result.errors.map(&:reason)).to match_array(error_messages)
+      end
+    end
+
+    context "when id is provided but is invalid" do
+      let(:rows) do
+        [{
+          "group_name" => "AAA",
+          "group_id" => "aaa-bbb-ccc-ddd",
+          "row" => 2,
+          "organization_id" => organization.id
         }]
       end
 

@@ -32,25 +32,22 @@ module ExcelDataServices
         def default_group_frame
           return if rows_for_default_group.blank?
 
-          @default_group_frame ||= Rover::DataFrame.new(
-            rows_for_default_group,
-            types: frame_types
-          ).tap do |tapped_frame|
-            tapped_frame["group_id"] = default_group_id
-          end
+          @default_group_frame ||= rows_for_default_group.left_join(default_group_id_frame, on: { "organization_id" => "organization_id" })
         end
 
         def frame_data
           Groups::Group.where(organization_id: Organizations.current_id)
-            .select("id as group_id, name AS group_name")
+            .select("id as group_id, name AS group_name, organization_id").as_json.map do |group|
+              group.merge("group_found" => true)
+            end
         end
 
         def frame_types
           { "group_id" => :object, "group_name" => :object }
         end
 
-        def default_group_id
-          Groups::Group.find_by(organization_id: Organizations.current_id, name: "default").id
+        def default_group_id_frame
+          @default_group_id_frame ||= extracted_frame[extracted_frame["group_name"] == "default"]
         end
 
         def rows_identified_by_id
