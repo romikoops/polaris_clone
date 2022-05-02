@@ -1,0 +1,441 @@
+# frozen_string_literal: true
+
+required "1:4", "A:?", %w[ZONE]
+
+column "service",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+
+column "carrier",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+
+column "group_name",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object
+
+column "group_id",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object
+
+column "zone",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "service",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  alternative_keys: ["service_level"],
+  sheet_name: "Fees"
+
+column "carrier",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "carrier_code",
+  sanitizer: "downcase",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  alternative_keys: ["carrier"],
+  sheet_name: "Fees"
+
+column "direction",
+  sanitizer: "downcase",
+  validator: "direction",
+  required: true,
+  type: :object,
+  sheet_name: "Fees"
+
+column "truck_type",
+  sanitizer: "downcase",
+  validator: "truck_type",
+  required: true,
+  type: :object,
+  sheet_name: "Fees"
+
+column "cargo_class",
+  sanitizer: "downcase",
+  validator: "optional_cargo_class",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "min",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  alternative_keys: ["minimum"],
+  type: :object,
+  sheet_name: "Fees"
+column "max",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  alternative_keys: ["maximum"],
+  type: :object,
+  sheet_name: "Fees"
+
+column "fee_name",
+  sanitizer: "text",
+  validator: "string",
+  required: false,
+  alternative_keys: ["fee"],
+  type: :object,
+  sheet_name: "Fees"
+
+column "fee_code",
+  sanitizer: "downcase",
+  validator: "string",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "currency",
+  sanitizer: "upcase",
+  validator: "currency",
+  required: true,
+  type: :object,
+  sheet_name: "Fees"
+
+column "rate_basis",
+  sanitizer: "upcase",
+  validator: "string",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "range_min",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "range_max",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "base",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "ton",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "cbm",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "kg",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "item",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "shipment",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "bill",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "container",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "wm",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "percentage",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  sheet_name: "Fees"
+
+column "service",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  alternative_keys: ["service_level"],
+  fallback: "standard",
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "carrier",
+  sanitizer: "text",
+  validator: "string",
+  required: false,
+  type: :object,
+  fallback: organization.slug,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+column "carrier_code",
+  sanitizer: "downcase",
+  validator: "string",
+  required: false,
+  type: :object,
+  fallback: organization.slug,
+  alternative_keys: ["carrier"],
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "direction",
+  sanitizer: "downcase",
+  validator: "direction",
+  required: true,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "cargo_class",
+  sanitizer: "downcase",
+  validator: "cargo_class",
+  required: true,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_type",
+  sanitizer: "downcase",
+  validator: "load_type",
+  required: true,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "truck_type",
+  sanitizer: "downcase",
+  validator: "truck_type",
+  required: true,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "effective_date",
+  sanitizer: "date",
+  validator: "date",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+column "expiration_date",
+  sanitizer: "date",
+  validator: "date",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "cbm_ratio",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "currency",
+  sanitizer: "upcase",
+  validator: "currency",
+  required: true,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "base",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_meterage_stackable_limit",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_meterage_non_stackable_limit",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_meterage_hard_limit",
+  sanitizer: "boolean",
+  validator: "optional_boolean",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_meterage_stackable_type",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "load_meterage_non_stackable_type",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "rate_basis",
+  sanitizer: "upcase",
+  validator: "string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees],
+  column_length: 1
+
+column "mode_of_transport",
+  sanitizer: "downcase",
+  validator: "string",
+  required: false,
+  fallback: "truck_carriage",
+  type: :object
+
+matrix "rate",
+  rows: "6:?",
+  columns: "C:?",
+  sanitizer: "decimal",
+  validator: "numeric",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+
+matrix "row_minimum",
+  rows: "6:?",
+  columns: "B",
+  sanitizer: "text",
+  validator: "string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+
+matrix "zone",
+  rows: "6:?",
+  columns: "A",
+  sanitizer: "text",
+  validator: "string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+
+matrix "bracket_minimum",
+  rows: "5",
+  columns: "C:?",
+  sanitizer: "text",
+  validator: "string",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+
+matrix "bracket",
+  rows: "4",
+  columns: "C:?",
+  sanitizer: "text",
+  validator: "zone_range",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+
+matrix "modifier",
+  rows: "3",
+  columns: "C:?",
+  sanitizer: "text",
+  validator: "modifier",
+  required: false,
+  type: :object,
+  exclude_sheets: %w[Zones Fees]
+add_framer "TruckingRates"
+
+prerequisite "TenantVehicle"
+prerequisite "TruckingLocations"
+prerequisite "HubAvailability"
+prerequisite "ChargeCategory"
+
+add_operation "TruckingFees"
+add_extractor "Carriage"
+
+add_data_validator "ChargeFees"
+add_data_validator "TruckingSheet"
+add_validator "Carrier"
+add_validator "TenantVehicle"
+add_validator "ChargeCategory"
+add_validator "Group"
+add_validator "RateBasis"
+add_validator "TruckingLocation"
+
+add_formatter "Trucking"
+
+conflict Trucking::Trucking, %w[hub_id cargo_class organization_id group_id tenant_vehicle_id carriage]
+
+model_importer Trucking::Trucking, { batch_size: 500 }
+target_model Trucking::Trucking

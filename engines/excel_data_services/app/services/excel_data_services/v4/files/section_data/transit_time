@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+column "transit_time",
+  sanitizer: "decimal",
+  validator: "optional_numeric",
+  required: false,
+  type: :object
+  
+prerequisite "TenantVehicle"
+prerequisite "Itinerary"
+
+add_validator "Itinerary"
+add_validator "TenantVehicle"
+add_extractor "TransitTime"
+add_formatter "TransitTime"
+
+model_importer Legacy::TransitTime, { on_duplicate_key_ignore: false, on_duplicate_key_update: [:duration], validate: true }
+target_model Legacy::TransitTime

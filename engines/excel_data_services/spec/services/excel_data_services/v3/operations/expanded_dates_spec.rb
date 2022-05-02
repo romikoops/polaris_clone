@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V3::Operations::ExpandedDates do
-  include_context "for excel_data_services setup"
+  include_context "V3 setup"
 
   let(:extracted_table) { described_class.state(state: state_arguments).frame }
   let(:rows) do

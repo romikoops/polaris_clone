@@ -3,7 +3,7 @@
 module ExcelDataServices
   module V3
     module Sanitizers
-      class Internal < ExcelDataServices::V2::Sanitizers::Base
+      class Internal < ExcelDataServices::V3::Sanitizers::Base
         def valid_types_with_sanitizers
           {
             ::Float => ->(obj) { decimal.call(obj).positive? },

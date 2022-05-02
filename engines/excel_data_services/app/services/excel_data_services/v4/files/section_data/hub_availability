@@ -1,0 +1,36 @@
+column "postal_code",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  alternative_keys: ["zipcode"],
+  type: :object,
+  sheet_name: "Zones"
+column "locode",
+  sanitizer: "locode",
+  validator: "optional_locode",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+column "distance",
+  sanitizer: "distance",
+  validator: "optional_numeric_like",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+column "city",
+  sanitizer: "text",
+  validator: "optional_string",
+  required: false,
+  type: :object,
+  sheet_name: "Zones"
+
+add_framer "TruckingRates"
+
+prerequisite "TypeAvailability"
+
+add_validator "TypeAvailability"
+
+add_formatter "HubAvailability"
+
+model_importer Trucking::HubAvailability
+target_model Trucking::HubAvailability

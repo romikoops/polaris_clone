@@ -1,0 +1,36 @@
+required '1:1', 'A:?', ["NAME", "LOCODE"]
+
+column "name",
+  sanitizer: "text",
+  validator: "string",
+  required: true,
+  fallback: "default"
+column "locode",
+  sanitizer: "text",
+  validator: "locode",
+  required: true,
+  fallback: "default"
+column "latitude",
+  sanitizer: "decimal",
+  validator: "numeric",
+  type: :object,
+  required: false
+column "longitude",
+  sanitizer: "decimal",
+  validator: "numeric",
+  type: :object,
+  required: false
+
+column "country",
+  sanitizer: "text",
+  validator: "string",
+  type: :object,
+  required: false
+
+add_validator "CartaLocodeData"
+add_validator "Country"
+add_extractor "Nexus"
+add_formatter "Nexus"
+
+model_importer Legacy::Nexus
+target_model Legacy::Nexus

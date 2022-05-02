@@ -29,7 +29,7 @@ module ExcelDataServices
             result_frame.concat(
               ExpandedFrame.new(
                 row: row,
-                frame: ExcelDataServices::V2::Helpers::FrameFilter.new(input_frame: frame, arguments: row).frame
+                frame: frame.filter(row)
               ).expanded_frame
             )
           end
@@ -64,7 +64,7 @@ module ExcelDataServices
 
           def expanded_dates_for_row
             @expanded_dates_for_row ||= validities.inject(Rover::DataFrame.new) do |result, validity|
-              result.concat(ExcelDataServices::V2::Operations::Dynamic::ExpandedDatesFrame.new(row: validity, row_frame: frame).frame)
+              result.concat(ExcelDataServices::V3::Operations::Dynamic::ExpandedDatesFrame.new(row: validity, row_frame: frame).frame)
             end
           end
         end
