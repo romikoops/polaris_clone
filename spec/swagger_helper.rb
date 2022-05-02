@@ -2048,6 +2048,10 @@ RSpec.configure do |config|
                 type: "boolean",
                 description: "This boolean signals whether it is mandatory for a user to log in before they can access the quoting tool itself"
               },
+              registrationProhibited: {
+                type: "boolean",
+                description: "This boolean signals whether it is the case that a user can not register for the quoting tool."
+              },
               links: {
                 type: "object",
                 properties: {

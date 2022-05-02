@@ -60,6 +60,8 @@ class UsersController < ApplicationController
   end
 
   def create
+    render json: { error_code: "user_registration_not_allowed", success: false }, status: :unauthorized and return if current_scope[:closed_registration]
+
     user = Api::ClientCreationService.new(
       client_attributes: new_user_params,
       profile_attributes: profile_params,

@@ -16,6 +16,7 @@ module Api
         expect(target[:links]).to eq(Organizations::DEFAULT_SCOPE["links"])
         expect(target[:loginMandatory]).to eq(Organizations::DEFAULT_SCOPE["closed_shop"])
         expect(target[:loginSamlText]).to eq(Organizations::DEFAULT_SCOPE["saml_text"])
+        expect(target[:registrationProhibited]).to eq(Organizations::DEFAULT_SCOPE["closed_registration"])
       end
     end
 

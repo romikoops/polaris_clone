@@ -130,6 +130,19 @@ RSpec.describe UsersController do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context "when the shop prohibits user registration" do
+      before do
+        allow(controller).to receive(:current_scope).and_return({ closed_registration: true })
+      end
+
+      it "has the status Unauthorized", :aggregate_failures do
+        post :create, params: params
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(json[:error_code]).to eq("user_registration_not_allowed")
+      end
+    end
   end
 
   describe "POST #passwordless_authentication" do

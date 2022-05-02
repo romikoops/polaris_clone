@@ -6,7 +6,7 @@ module Api
   RSpec.describe V2::ScopesController, type: :controller do
     routes { Engine.routes }
 
-    let(:scope_content) { { closed_shop: true, links: { link1: "link1" } } }
+    let(:scope_content) { { closed_shop: true, links: { link1: "link1" }, closed_registration: false } }
     let(:scope) { FactoryBot.build(:organizations_scope, content: scope_content) }
     let!(:organization) { FactoryBot.create(:organizations_organization, scope: scope) }
     let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
@@ -17,6 +17,7 @@ module Api
         {
           "links" => Organizations::DEFAULT_SCOPE["links"].merge("link1" => "link1"),
           "loginMandatory" => scope_content[:closed_shop],
+          "registrationProhibited" => scope_content[:closed_registration],
           "loginSamlText" => Organizations::DEFAULT_SCOPE["saml_text"],
           "authMethods" => ["password"]
         }
