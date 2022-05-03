@@ -210,6 +210,38 @@ RSpec.describe IDP::SamlController, type: :request do
           expect(success_event).to be_present
         end
       end
+
+      context "when referrer_host is a Siren domain" do
+        let(:attributes) { base_attributes.merge("companyID" => [external_id], "companyName" => ["new_company"]).merge(address_params) }
+        let!(:siren_domain) { FactoryBot.create(:organizations_domain, domain: "siren.itsmycargo.com", organization: organization, application_id: siren.id, default: false) }
+        let(:siren) { FactoryBot.create(:application, name: "siren") }
+
+        before do
+          allow(controller).to receive(:referrer_host).and_return(siren_domain.domain)
+          get "/saml/#{saml_metadatum.organization_id}/init", headers: { "HTTP_REFERER" => "https://#{siren_domain.domain}" }
+          post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
+        end
+
+        it "returns a token for application listed on the Domain matching the referrer host" do
+          expect(Doorkeeper::AccessToken.find_by(token: response_params["access_token"]).application).to eq(siren)
+        end
+      end
+
+      context "when referrer_host is a Siren review app domain" do
+        let(:attributes) { base_attributes.merge("companyID" => [external_id], "companyName" => ["new_company"]).merge(address_params) }
+        let!(:siren_domain) { FactoryBot.create(:organizations_domain, domain: "siren-%.itsmycargo.dev", organization: organization, application_id: siren.id, default: false) }
+        let(:siren) { FactoryBot.create(:application, name: "siren") }
+
+        before do
+          allow(controller).to receive(:referrer_host).and_return(siren_domain.domain)
+          get "/saml/#{saml_metadatum.organization_id}/init", headers: { "HTTP_REFERER" => "https://siren-sir-999.itsmycargo.dev" }
+          post "/saml/#{organization.id}/consume", params: { id: organization.id, SAMLResponse: saml_response }
+        end
+
+        it "returns a token for application listed on the Domain matching the referrer host" do
+          expect(Doorkeeper::AccessToken.find_by(token: response_params["access_token"]).application).to eq(siren)
+        end
+      end
     end
 
     context "with unsuccessful login" do

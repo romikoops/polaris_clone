@@ -1610,7 +1610,7 @@ ALTER SEQUENCE public.exchange_rates_id_seq OWNED BY public.exchange_rates.id;
 --
 
 CREATE TABLE public.files_file_descriptors (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     file_path character varying NOT NULL,
     file_type character varying NOT NULL,
     originator character varying NOT NULL,
@@ -3001,7 +3001,8 @@ CREATE TABLE public.organizations_domains (
     "default" boolean DEFAULT false NOT NULL,
     aliases character varying[],
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    application_id uuid
 );
 
 
@@ -12663,6 +12664,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220216103614'),
 ('20220223104305'),
 ('20220324010131'),
-('20220414062616');
+('20220414062616'),
+('20220502144623');
 
 

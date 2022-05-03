@@ -2,13 +2,14 @@
 
 module IDP
   class SamlDataBuilder
-    attr_reader :saml_response, :organization_id, :data, :errors, :user
+    attr_reader :saml_response, :organization_id, :data, :errors, :user, :application_id
 
     delegate :company_attributes, :address_attributes, to: :saml_response
 
-    def initialize(saml_response:, organization_id:)
+    def initialize(saml_response:, organization_id:, application_id: nil)
       @saml_response = saml_response
       @organization_id = organization_id
+      @application_id = application_id
       @invalid_record = nil
       @errors = []
       @data = nil
@@ -83,12 +84,20 @@ module IDP
 
     def create_token
       token = Doorkeeper::AccessToken.create!(resource_owner_id: user.id,
-                                              refresh_token: refresh_token,
-                                              application: Doorkeeper::Application.find_by(name: "dipper"),
-                                              expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
-                                              scopes: "public")
+        refresh_token: refresh_token,
+        application: doorkeeper_application,
+        expires_in: Doorkeeper.configuration.access_token_expires_in.to_i,
+        scopes: "public")
 
       Doorkeeper::OAuth::TokenResponse.new(token).body
+    end
+
+    def doorkeeper_application
+      if application_id
+        Doorkeeper::Application.find_by(id: application_id)
+      else
+        Doorkeeper::Application.find_by(name: "dipper")
+      end
     end
 
     def refresh_token

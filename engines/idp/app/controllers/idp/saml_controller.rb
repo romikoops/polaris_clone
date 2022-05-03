@@ -11,6 +11,7 @@ module IDP
 
     def init
       session[:redirect_url] = request.referrer
+      session[:application_id] = referrer_application_id
       redirect_to(OneLogin::RubySaml::Authrequest.new.create(saml_settings))
     end
 
@@ -30,7 +31,7 @@ module IDP
         return
       end
 
-      @response_params = SamlDataBuilder.new(saml_response: decorated_saml, organization_id: organization_id).perform
+      @response_params = SamlDataBuilder.new(saml_response: decorated_saml, organization_id: organization_id, application_id: session[:application_id]).perform
 
       if @response_params.errors.any?
         register_errors_and_redirect(errors: @response_params.errors)
@@ -46,6 +47,17 @@ module IDP
     end
 
     private
+
+    def referrer_application_id
+      [
+        Organizations::Domain.find_by(domain: referrer_host),
+        Organizations::Domain.find_by("? ILIKE domain", referrer_host)
+      ].compact.map(&:application_id).first
+    end
+
+    def referrer_host
+      @referrer_host ||= URI(request.referrer.to_s).host
+    end
 
     def error_redirect
       redirect_to URI.join(organization_url, "login/saml/error")
