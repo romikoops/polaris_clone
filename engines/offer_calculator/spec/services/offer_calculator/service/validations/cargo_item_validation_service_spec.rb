@@ -3,15 +3,6 @@
 require "rails_helper"
 
 RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService do
-  before do
-    FactoryBot.create(:legacy_max_dimensions_bundle,
-      organization: organization,
-      mode_of_transport: "ocean",
-      volume: 1000)
-    Organizations::Organization.current_id = organization.id
-    allow(request).to receive(:cargo_units).and_return(cargo_units)
-  end
-
   let(:request) { FactoryBot.build(:offer_calculator_request, organization: organization) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, organization: organization) }
@@ -41,12 +32,18 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       quantity: 1)]
   end
 
-  describe ".perform" do
+  describe "#perform" do
     before do
       FactoryBot.create(:pricings_pricing,
         organization: organization,
         itinerary: itinerary,
         tenant_vehicle: tenant_vehicle)
+      FactoryBot.create(:legacy_max_dimensions_bundle,
+        organization: organization,
+        mode_of_transport: "ocean",
+        volume: 1000)
+      Organizations::Organization.current_id = organization.id
+      allow(request).to receive(:cargo_units).and_return(cargo_units)
     end
 
     context "when the object is complete and valid" do
@@ -403,6 +400,35 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
       it "returns an array of errors for each input when aggregate fails validation" do
         expect(result.length).to eq(0)
+      end
+    end
+
+    context "when the cargos are invalid for the general mot" do
+      before do
+        FactoryBot.create(:legacy_max_dimensions_bundle,
+          organization: organization,
+          mode_of_transport: "general",
+          payload_in_kg: 500)
+        FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization)
+      end
+
+      let(:cargo_units) do
+        [FactoryBot.build(:journey_cargo_unit,
+          quantity: 1,
+          width_value: 1,
+          length_value: 1,
+          height_value: 1,
+          weight_value: 1200)]
+      end
+
+      let(:expected_help_text) do
+        [
+          "Weight exceeds the limit of 500 kg"
+        ]
+      end
+
+      it "returns an array of one error" do
+        expect(result.map(&:message).uniq).to match_array(expected_help_text)
       end
     end
 

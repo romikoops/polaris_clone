@@ -86,13 +86,11 @@ module OfferCalculator
         delegate :organization, :load_type, :client, :creator, to: :request
 
         def modes_of_transport
-          @modes_of_transport ||= begin
-            if trucking_involved?
-              pricing_modes_of_transport + ["truck_carriage"]
-            else
-              pricing_modes_of_transport
-            end
-          end
+          @modes_of_transport ||= [
+            ["general"],
+            pricing_modes_of_transport,
+            trucking_involved? ? ["truck_carriage"] : []
+          ].flatten
         end
 
         def pricing_modes_of_transport
@@ -156,12 +154,12 @@ module OfferCalculator
         end
 
         def cargo_class_from_unit(unit:)
-          unit.cargo_class.include?("lcl") ? "lcl" : unit.cargo_class
+          (unit.cargo_class.include?("lcl") ? "lcl" : unit.cargo_class)
         end
 
         def validate_cargo(cargo_unit:)
           cargo_class = cargo_class_from_unit(unit: cargo_unit)
-          max_dimensions_by_cargo_class = filtered_max_dimensions.where(cargo_class: cargo_class)
+          max_dimensions_by_cargo_class = filtered_max_dimensions.where(cargo_class: [cargo_class, "general"])
           lcl_max_dimensions = filtered_max_dimensions.where(cargo_class: "lcl")
           attributes = keys_for_validation(cargo_unit: cargo_unit)
           attributes.each do |attribute|
@@ -279,7 +277,7 @@ module OfferCalculator
         end
 
         def si_attribute_limit(max_dimensions:, attribute:)
-          main_mot_limit = max_dimensions.select(attribute).max&.send(attribute)
+          main_mot_limit = max_dimensions.pluck(attribute).min
           trucking_limit = trucking_limit(attribute: attribute)
 
           for_comparison = [main_mot_limit, trucking_limit].compact.min
