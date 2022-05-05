@@ -33,6 +33,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
       "organization_id" => organization.id,
       "max" => nil,
       "carrier_lock" => false,
+      "carrier_id" => local_charge.tenant_vehicle.carrier_id,
       "source_id" => local_charge.id,
       "source_type" => "Legacy::LocalCharge" }
   end

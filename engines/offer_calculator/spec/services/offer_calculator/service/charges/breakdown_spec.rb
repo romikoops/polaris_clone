@@ -14,15 +14,15 @@ RSpec.describe OfferCalculator::Service::Charges::Breakdown do
       maximum_charge: Money.from_amount(10_000, "USD"),
       range_min: 0,
       range_max: Float::INFINITY,
-      surcharge: Money.from_amount(0, "USD")
+      surcharge: Money.from_amount(0, "USD"),
+      applied_margin: source
     )
   end
   let(:breakdown) do
     described_class.new(
       fee: fee,
-      delta: 100,
-      source: source,
-      metadata: {}
+      order: 0,
+      metadata: { original_id: 1 }
     )
   end
   let(:source) { FactoryBot.create(:pricings_margin, applicable: applicable, organization: organization) }

@@ -10,7 +10,7 @@ module OfferCalculator
           range_min range_max range_unit charge_category_id itinerary_id code rate base currency
           section organization_id load_meterage_ratio
           load_meterage_stackable_type load_meterage_non_stackable_type load_meterage_hard_limit
-          load_meterage_stackable_limit load_meterage_non_stackable_limit km truck_type carrier_lock
+          load_meterage_stackable_limit load_meterage_non_stackable_limit km truck_type carrier_lock carrier_id
           source_id source_type min max
         ].freeze
 

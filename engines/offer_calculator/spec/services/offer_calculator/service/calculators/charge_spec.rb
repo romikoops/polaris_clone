@@ -64,6 +64,12 @@ RSpec.describe OfferCalculator::Service::Calculators::Charge do
     end
   end
 
+  describe "#tenant_vehicle" do
+    it "returns the Legacy::TenantVehicle from the Charge" do
+      expect(charge.tenant_vehicle).to eq(pricing.tenant_vehicle)
+    end
+  end
+
   describe "#rounded_value" do
     it "returns the value as is when there are no fractional cents" do
       expect(charge.rounded_value).to eq(value)

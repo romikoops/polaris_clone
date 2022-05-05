@@ -16,6 +16,7 @@ RSpec.describe OfferCalculator::Service::Charges::Fee do
       maximum_charge: Money.from_amount(10_000, currency),
       range_min: 0,
       range_max: Float::INFINITY,
+      measure: 1,
       sourced_from_margin: sourced_from_margin
     )
   end

@@ -13,6 +13,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
   let(:expected_base) do
     { "cbm_ratio" => pricing.wm_rate,
       "tenant_vehicle_id" => pricing.tenant_vehicle_id,
+      "carrier_id" => pricing.tenant_vehicle.carrier_id,
       "cargo_class" => pricing.cargo_class,
       "load_type" => "cargo_item",
       "origin_hub_id" => pricing.itinerary.origin_hub_id,

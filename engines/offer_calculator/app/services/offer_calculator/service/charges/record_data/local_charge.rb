@@ -43,6 +43,7 @@ module OfferCalculator
               "source_type" => record.class.name,
               "source_id" => id,
               "carrier_lock" => tenant_vehicle.carrier_lock,
+              "carrier_id" => tenant_vehicle.carrier_id,
               "effective_date" => effective_date.to_date,
               "expiration_date" => expiration_date.to_date
             )

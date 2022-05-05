@@ -158,24 +158,4 @@ RSpec.describe OfferCalculator::Service::Charges::Margin do
       end
     end
   end
-
-  describe "#breakdown" do
-    before { output_fee }
-
-    let(:operator) { "%" }
-    let(:rate) { 0.1 }
-    let(:breakdown) { margin.breakdown }
-
-    it "builds a Breakdown with the output fee" do
-      expect(breakdown.fee).to eq(output_fee)
-    end
-
-    it "builds a Breakdown with the delta of the Margin" do
-      expect(breakdown.delta).to eq(rate)
-    end
-
-    it "builds a Breakdown with the source of the Margin" do
-      expect(breakdown.source).to eq(margin.source)
-    end
-  end
 end

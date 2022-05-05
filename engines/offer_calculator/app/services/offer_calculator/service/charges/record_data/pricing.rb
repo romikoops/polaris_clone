@@ -46,7 +46,8 @@ module OfferCalculator
               pricings_fees.range,
               pricings_pricings.wm_rate as cbm_ratio,
               pricings_pricings.vm_rate as vm_ratio,
-              tenant_vehicles.carrier_lock
+              tenant_vehicles.carrier_lock,
+              tenant_vehicles.carrier_id
               ").as_json
           end
 

@@ -10,6 +10,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
   let(:expected_base) do
     { "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[local_charge.mode_of_transport],
       "tenant_vehicle_id" => local_charge.tenant_vehicle_id,
+      "carrier_id" => local_charge.tenant_vehicle.carrier_id,
       "cargo_class" => local_charge.load_type,
       "origin_hub_id" => local_charge.hub_id,
       "destination_hub_id" => local_charge.hub_id,

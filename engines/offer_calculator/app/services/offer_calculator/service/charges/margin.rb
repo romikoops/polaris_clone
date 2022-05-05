@@ -11,7 +11,7 @@ module OfferCalculator
           @source = source
         end
 
-        attr_reader :operator, :rate, :currency, :source, :breakdown
+        attr_reader :operator, :rate, :currency, :source
 
         def apply(input_fee:)
           OfferCalculator::Service::Charges::Fee.new(
@@ -25,14 +25,11 @@ module OfferCalculator
             surcharge: updated_surcharge(fee: input_fee),
             range_min: input_fee.range_min,
             range_max: input_fee.range_max,
-            sourced_from_margin: input_fee.sourced_from_margin
-          ).tap do |output_fee|
-            @breakdown = OfferCalculator::Service::Charges::Breakdown.new(
-              source: source,
-              delta: rate,
-              fee: output_fee
-            )
-          end
+            sourced_from_margin: input_fee.sourced_from_margin,
+            applied_margin: source,
+            delta: rate,
+            parent: input_fee
+          )
         end
 
         private

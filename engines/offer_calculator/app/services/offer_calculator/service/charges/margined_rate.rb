@@ -20,16 +20,6 @@ module OfferCalculator
           end
         end
 
-        def breakdowns
-          @breakdowns ||= [
-            OfferCalculator::Service::Charges::Breakdown.new(
-              source: nil,
-              delta: 0,
-              fee: fee
-            )
-          ] + margins.map(&:breakdown)
-        end
-
         private
 
         def source_from_row(row:)

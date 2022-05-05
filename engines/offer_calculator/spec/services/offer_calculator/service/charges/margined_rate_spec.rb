@@ -168,17 +168,4 @@ RSpec.describe OfferCalculator::Service::Charges::MarginedRate do
       end
     end
   end
-
-  describe "#breakdowns" do
-    context "without margins" do
-      let(:first_breakdown) { margined_rate.breakdowns.first }
-
-      it "returns a single Breakdown linking to the original record", :aggregate_failures do
-        expect(margined_rate.breakdowns).to eq([first_breakdown])
-        expect(first_breakdown.source).to be_nil
-        expect(first_breakdown.delta).to be_zero
-        expect(first_breakdown.data).to eq(fee.to_h)
-      end
-    end
-  end
 end

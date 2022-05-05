@@ -31,6 +31,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::Pricing do
       "section" => "cargo",
       "organization_id" => organization.id,
       "carrier_lock" => false,
+      "carrier_id" => pricing.tenant_vehicle.carrier_id,
       "source_id" => pricing.id,
       "source_type" => "Pricings::Pricing" }
   end

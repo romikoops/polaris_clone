@@ -46,6 +46,7 @@ module OfferCalculator
               "context_id" => id,
               "source_type" => record.class.name,
               "carrier_lock" => tenant_vehicle.carrier_lock,
+              "carrier_id" => tenant_vehicle.carrier_id,
               "km" => location.query == "distance" ? location.data : nil
             ).merge(load_meterage_data)
           end

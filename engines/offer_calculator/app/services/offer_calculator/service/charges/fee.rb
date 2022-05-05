@@ -13,7 +13,11 @@ module OfferCalculator
         :charge_category_id,
         :range_min,
         :range_max,
+        :measure,
         :sourced_from_margin,
+        :applied_margin,
+        :delta,
+        :parent,
         keyword_init: true) do
         def charge_category
           @charge_category ||= Legacy::ChargeCategory.find(charge_category_id)
