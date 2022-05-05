@@ -97,5 +97,31 @@ RSpec.describe OfferCalculator::Calculator do
         expect(result).to be_a(Journey::Query)
       end
     end
+
+    context "when dangerous goods are sent and they are not enabled" do
+      let(:container_attributes) do
+        [
+          {
+            payload_in_kg: 12_000,
+            size_class: "fcl_20",
+            quantity: 1,
+            dangerous_goods: true
+          }
+        ]
+      end
+
+      it "does not queue any job" do
+        expect(service).not_to have_received(:async_calculation_for_permutation)
+        result
+      end
+
+      it "returns the Query" do
+        expect(result).to be_a(Journey::Query)
+      end
+
+      it "validates the journey error code returned" do
+        expect(Journey::Error.where(query: result).first.code).to eq(1014)
+      end
+    end
   end
 end

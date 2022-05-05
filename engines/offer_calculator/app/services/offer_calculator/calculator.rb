@@ -11,13 +11,17 @@ module OfferCalculator
     end
 
     def perform
+      raise OfferCalculator::Errors::DangerousGoodsProhibited if dangerous_good_prohibited_error.present?
       return async_calculation if async?
 
       results.perform
       query_with_updated_status
     rescue OfferCalculator::Errors::Failure => e
-      query_with_updated_status
-      raise e unless async?
+      if async?
+        query_with_updated_status
+      elsif query_with_updated_status
+        raise e
+      end
     end
 
     private
@@ -107,6 +111,23 @@ module OfferCalculator
 
     def sync_query_calculation
       @sync_query_calculation ||= query_calculations.first
+    end
+
+    def dangerous_goods_present_and_prohibited?
+      query.cargo_units
+        .flat_map(&:commodity_infos)
+        .any? { |commodity_info| commodity_info.imo_class.present? } && organization.scope.dangerous_goods.blank?
+    end
+
+    def dangerous_good_prohibited_error
+      return unless dangerous_goods_present_and_prohibited?
+
+      Journey::Error.create(
+        code: OfferCalculator::Errors::DangerousGoodsProhibited.new.code,
+        property: "imo_class",
+        query: query,
+        query_calculation: sync_query_calculation
+      )
     end
   end
 end

@@ -92,6 +92,10 @@ en:
       http_code: 500
       code: 1013
       message: "Oops! Something went wrong searching for your route. Please try again."
+    dangerous_goods_prohibited:
+      http_code: 400
+      code: 1014
+      message: "Shipments that fall under 'Dangerous goods' cannot be booked online. Please fill out the request form and someone will be in touch."
     # Pricing : Code prefix 2
     no_valid_pricings:
       http_code: 400

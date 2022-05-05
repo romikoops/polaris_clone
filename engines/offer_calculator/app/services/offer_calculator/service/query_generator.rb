@@ -24,6 +24,7 @@ module OfferCalculator
           params: params,
           persist: persist?
         ).perform
+
         initialized_query
       end
 

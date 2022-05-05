@@ -45,6 +45,7 @@ module OfferCalculator
     LocationServiceFailure = Class.new(Failure)
     MissedInRange = Class.new(Failure)
     ExceededRange = Class.new(Failure)
+    DangerousGoodsProhibited = Class.new(Failure)
 
     CODE_LOOKUP = {
       1000 => OfferCalculator::Errors::NoRoute,
@@ -60,6 +61,7 @@ module OfferCalculator
       1011 => OfferCalculator::Errors::LocationNotFound,
       1012 => OfferCalculator::Errors::InvalidQuery,
       1013 => OfferCalculator::Errors::LocationServiceFailure,
+      1014 => OfferCalculator::Errors::DangerousGoodsProhibited,
       2001 => OfferCalculator::Errors::NoValidPricings,
       2003 => OfferCalculator::Errors::InvalidLocalChargeResult,
       2004 => OfferCalculator::Errors::InvalidFreightResult,
