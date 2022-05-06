@@ -45,7 +45,15 @@ module ExcelDataServices
         end
 
         def attributes_as_sql_where_clause
-          attributes.keys.map { |key| "#{key} = :#{key}" }.join(" AND ")
+          attributes.keys.map { |key| key_equality_in_sql(key: key) }.join(" AND ")
+        end
+
+        def key_equality_in_sql(key:)
+          if arguments[key]
+            "#{key} = :#{key}"
+          else
+            "#{key} IS NULL"
+          end
         end
 
         def attributes

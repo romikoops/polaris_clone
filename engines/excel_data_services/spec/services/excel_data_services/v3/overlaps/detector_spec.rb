@@ -3,9 +3,9 @@
 require "rails_helper"
 
 RSpec.describe ExcelDataServices::V3::Overlaps::Detector do
-  let(:result) { described_class.overlaps(table: "pricings_pricings", arguments: arguments) }
+  let(:result) { described_class.overlaps(table: record.class.table_name, arguments: arguments) }
   let(:organization) { FactoryBot.create(:organizations_organization) }
-  let!(:pricing) do
+  let!(:record) do
     FactoryBot.create(:pricings_pricing,
       organization: organization,
       group: default_group,
@@ -18,10 +18,11 @@ RSpec.describe ExcelDataServices::V3::Overlaps::Detector do
   let(:end_date) { DateTime.parse("2021/02/28") }
   let(:default_group) { FactoryBot.create(:groups_group, organization: organization, name: "default") }
   let(:arguments) do
-    pricing.slice("itinerary_id", "cargo_class", "organization_id", "group_id", "tenant_vehicle_id")
+    record.slice(*conflict_keys)
       .merge(effective_date: start_date, expiration_date: end_date)
       .symbolize_keys
   end
+  let(:conflict_keys) { %w[itinerary_id cargo_class organization_id group_id tenant_vehicle_id] }
 
   let(:errors) { result.errors }
 
@@ -77,7 +78,7 @@ RSpec.describe ExcelDataServices::V3::Overlaps::Detector do
         let(:expected_result) { %w[extends_past_existing extends_before_existing] }
 
         before do
-          pricing.dup.tap do |new_pricing|
+          record.dup.tap do |new_pricing|
             new_pricing.update(
               effective_date: DateTime.parse("2021/03/01"),
               expiration_date: DateTime.parse("2021/05/01").end_of_day,
@@ -85,6 +86,22 @@ RSpec.describe ExcelDataServices::V3::Overlaps::Detector do
             )
           end
         end
+
+        it_behaves_like "a successful validation"
+      end
+
+      context "when comparing LocalCharges and counterpart_hub_id is nil" do
+        let(:record) do
+          FactoryBot.create(:legacy_local_charge,
+            organization: organization,
+            group: default_group,
+            effective_date: DateTime.parse("2021/02/01"),
+            expiration_date: DateTime.parse("2021/02/28").end_of_day,
+            validity: validity)
+        end
+
+        let(:conflict_keys) { %w[hub_id counterpart_hub_id tenant_vehicle_id load_type mode_of_transport group_id direction organization_id] }
+        let(:expected_result) { ["contained_by_new"] }
 
         it_behaves_like "a successful validation"
       end
