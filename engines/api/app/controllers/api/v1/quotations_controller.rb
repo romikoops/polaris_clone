@@ -44,8 +44,7 @@ module Api
           if download_params[:dl] == "1"
             excel_direct_download
           else
-            render json: XlsxSerializer.new(offer,
-              { url: [request.url, "?dl=1"].join })
+            render json: XlsxSerializer.new(offer, params: { url: [request.url, "?dl=1"].join })
           end
         when "pdf"
           render json: FileSerializer.new(offer)

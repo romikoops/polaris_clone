@@ -447,7 +447,7 @@ module Api
           it "returns the url of the generated document for the quotation tenders" do
             post :download, params: { organization_id: organization.id, quotation_id: query.id, format: format }
 
-            expect(response_data["id"]).not_to be_empty
+            expect(response_data.dig("attributes", "url")).to include(".#{format}")
           end
         end
 
@@ -465,7 +465,7 @@ module Api
           it "renders origin and destination as nexus objects" do
             post :download, params: params
 
-            expect(response_data["id"]).not_to be_empty
+            expect(response_data.dig("attributes", "url")).to include(".#{format}")
           end
         end
       end
