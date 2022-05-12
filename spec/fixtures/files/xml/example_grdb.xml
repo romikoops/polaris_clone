@@ -1,0 +1,177 @@
+<OceanFreightCharge>
+  <Envelope>
+    <ReceiverID>gdfgdfsg</ReceiverID>
+    <SenderID>WdafdsgaaE</SenderID>
+    <Type>Charges_Response</Type>
+    <Version>2.0.1</Version>
+    <requestID>8052176546</requestID>
+  </Envelope>
+  <RateDetails>
+    <ChargeHeader>
+      <ChargeHeaderID>26971335</ChargeHeaderID>
+      <ChargeDetailsType>OceanFreightCharge</ChargeDetailsType>
+      <WWAMember>WAIC</WWAMember>
+      <Customer>STANDARD</Customer>
+      <OriginRegion>EMEA</OriginRegion>
+      <OriginCountryCode>DE</OriginCountryCode>
+      <OriginCFSUncode>DEHAM</OriginCFSUncode>
+      <OriginConsoleCFSUncode>DEHAM</OriginConsoleCFSUncode>
+      <OriginPortUncode>DEHAM</OriginPortUncode>
+      <Transshipment1 />
+      <Transshipment2 />
+      <Transshipment3 />
+      <DestinationPortUncode>CNSHA</DestinationPortUncode>
+      <DestinationDeconsoleCFSUncode>CNSHA</DestinationDeconsoleCFSUncode>
+      <DestinationCFSUncode>CNSHA</DestinationCFSUncode>
+      <DestinationCountryCode>CN</DestinationCountryCode>
+      <DestinationRegion>ASIA</DestinationRegion>
+      <QuotingRegion>EMEA</QuotingRegion>
+    </ChargeHeader>
+    <ChargeDetails>
+      <Charge>
+        <ChargeID>132897</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>OFR</ChargeCode>
+        <ChargeName>Ocean Freight</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>40.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>40.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>-</Notes>
+        <EffectiveDate>2021-04-03</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>Y</Mandatory>
+      </Charge>
+      <Charge>
+        <ChargeID>18970844</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>HAZ</ChargeCode>
+        <ChargeName>Hazardous</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>40.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>150.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>HAZ</Notes>
+        <EffectiveDate>2021-10-10</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>N</Mandatory>
+      </Charge>
+      <Charge>
+        <ChargeID>18970845</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>IM20</ChargeCode>
+        <ChargeName>IMO2020</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>4.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>4.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>-</Notes>
+        <EffectiveDate>2021-07-18</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>Y</Mandatory>
+      </Charge>
+    </ChargeDetails>
+  </RateDetails>
+  <RateDetails>
+    <ChargeHeader>
+      <ChargeHeaderID>26971336</ChargeHeaderID>
+      <ChargeDetailsType>OceanFreightCharge</ChargeDetailsType>
+      <WWAMember>WAIC</WWAMember>
+      <Customer>STANDARD</Customer>
+      <OriginRegion>EMEA</OriginRegion>
+      <OriginCountryCode>DE</OriginCountryCode>
+      <OriginCFSUncode>DEHAM</OriginCFSUncode>
+      <OriginConsoleCFSUncode>DEHAM</OriginConsoleCFSUncode>
+      <OriginPortUncode>DEHAM</OriginPortUncode>
+      <Transshipment1 />
+      <Transshipment2 />
+      <Transshipment3 />
+      <DestinationPortUncode>CNNBG</DestinationPortUncode>
+      <DestinationDeconsoleCFSUncode>CNNBG</DestinationDeconsoleCFSUncode>
+      <DestinationCFSUncode>CNNBG</DestinationCFSUncode>
+      <DestinationCountryCode>CN</DestinationCountryCode>
+      <DestinationRegion>ASIA</DestinationRegion>
+      <QuotingRegion>EMEA</QuotingRegion>
+    </ChargeHeader>
+    <ChargeDetails>
+      <Charge>
+        <ChargeID>132897</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>OFR</ChargeCode>
+        <ChargeName>Ocean Freight</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>40.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>40.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>-</Notes>
+        <EffectiveDate>2021-04-03</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>Y</Mandatory>
+      </Charge>
+      <Charge>
+        <ChargeID>18970844</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>HAZ</ChargeCode>
+        <ChargeName>Hazardous</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>40.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>150.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>HAZ</Notes>
+        <EffectiveDate>2021-10-10</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>N</Mandatory>
+      </Charge>
+      <Charge>
+        <ChargeID>18970845</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>IM20</ChargeCode>
+        <ChargeName>IMO2020</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>4.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>4.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>-</Notes>
+        <EffectiveDate>2021-07-18</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>Y</Mandatory>
+      </Charge>
+    </ChargeDetails>
+  </RateDetails>
+</OceanFreightCharge>

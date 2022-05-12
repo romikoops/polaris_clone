@@ -36,10 +36,23 @@ module ExcelDataServices
       end
 
       def spreadsheet
-        @spreadsheet ||= ExcelDataServices::V4::Spreadsheet.new(document: file)
+        @spreadsheet ||= ExcelDataServices::V4::Spreadsheet.new(document: file) unless xml?
       end
 
-      delegate :xlsx, to: :spreadsheet
+      def hash_from_xml
+        @hash_from_xml ||= ExcelDataServices::V4::Xml.new(document: file) if xml?
+      end
+
+      def content_type
+        @content_type ||= file.file.content_type
+      end
+
+      def xml?
+        content_type == "application/xml"
+      end
+
+      delegate :xlsx, to: :spreadsheet, allow_nil: true
+      delegate :xml, to: :hash_from_xml, allow_nil: true
     end
   end
 end

@@ -53,6 +53,12 @@ module ExcelDataServices
         end
 
         delegate :framer, to: :framer_parser
+
+        def xml_data_parser
+          @xml_data_parser ||= ExcelDataServices::V4::Files::Parsers::Xml.new(section: section, state: state)
+        end
+
+        delegate :xml_columns, :xml_data, to: :xml_data_parser
       end
     end
   end
