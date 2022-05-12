@@ -2216,6 +2216,64 @@ RSpec.configure do |config|
               attributes
             ]
           },
+          v2Client: {
+            type: "object",
+            properties: {
+              id: {
+                description: "ID",
+                type: "string"
+              },
+              type: {
+                description: "Type",
+                type: "string"
+              },
+              attributes: {
+                description: "Attributes",
+                type: "object",
+                properties: {
+                  email: {
+                    description: "Email",
+                    type: "string"
+                  },
+                  organizationId: {
+                    description: "organization",
+                    type: "string"
+                  },
+                  firstName: {
+                    description: "First Name",
+                    type: "string"
+                  },
+                  lastName: {
+                    description: "Last Name",
+                    type: "string"
+                  },
+                  phone: {
+                    description: "Phone",
+                    type: "string",
+                    nullable: true
+                  },
+                  companyName: {
+                    description: "The name of the Company the client belongs to",
+                    type: "string"
+                  },
+                  companyId: {
+                    description: "The ID of the Company the client belongs to",
+                    type: "string"
+                  },
+                  paymentTerms: {
+                    description: "The Payment Terms applicable to the client",
+                    type: "string",
+                    nullable: true
+                  },
+                  lastActivityAt: {
+                    description: "clients last activity data and time",
+                    type: "string",
+                    nullable: true
+                  }
+                }
+              }
+            }
+          },
           profile: {
             type: "object",
             properties: {

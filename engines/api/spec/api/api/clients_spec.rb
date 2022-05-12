@@ -45,14 +45,14 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: { "$ref" => "#/components/schemas/v1Client" }
-                 },
-                 links: { "$ref" => "#/components/schemas/paginationLinks" }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :array,
+              items: { "$ref" => "#/components/schemas/v1Client" }
+            },
+            links: { "$ref" => "#/components/schemas/paginationLinks" }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -75,7 +75,7 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :query, in: :body, description: "Query", schema: { "$ref" => "#/components/schemas/client" },
-                required: %w[email first_name last_name]
+        required: %w[email first_name last_name]
 
       let(:query) do
         {
@@ -127,10 +127,10 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: { "$ref" => "#/components/schemas/v1Client" }
-               },
-               required: ["data"]
+          properties: {
+            data: { "$ref" => "#/components/schemas/v1Client" }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -193,16 +193,16 @@ RSpec.describe "Clients", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     password: { type: :string }
-                   },
-                   required: ["password"]
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                password: { type: :string }
+              },
+              required: ["password"]
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -268,6 +268,79 @@ RSpec.describe "Clients", type: :request, swagger: true do
             phone: "+1 2345 2345"
           } }
         end
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/admin/companies/{company_id}/clients" do
+    get "Fetch all clients for a company" do
+      tags "Clients"
+      description "Fetch all customer client accounts for a company."
+      operationId "getClients"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_id, in: :path, type: :string, description: "company ID"
+      parameter name: :page, in: :query, type: :number, description: "Page number"
+      parameter name: :perPage, in: :query, type: :number, description: "Results per page"
+      parameter name: :sortBy,
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort clients",
+        enum: %w[
+          created_at
+          email
+          first_name
+          last_name
+          phone
+          activity
+        ]
+
+      parameter name: :direction,
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
+      parameter name: :searchBy,
+        in: :query,
+        type: :string,
+        description: "The attribute of the clients and its related models to search through",
+        enum: %w[email
+          first_name
+          last_name
+          phone
+          activity]
+
+      parameter name: :searchQuery,
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
+
+      let(:sortBy) { "email" }
+      let(:direction) { "asc" }
+      let(:page) { 1 }
+      let(:perPage) { 10 }
+      let(:searchBy) { "first_name" }
+      let(:searchQuery) { "test" }
+      let(:company_id) { company.id }
+
+      response "200", "successful operation" do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: { "$ref" => "#/components/schemas/v2Client" }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end

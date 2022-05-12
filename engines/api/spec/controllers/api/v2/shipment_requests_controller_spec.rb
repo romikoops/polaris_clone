@@ -141,7 +141,7 @@ module Api
     describe "GET #index" do
       let(:params) { { organization_id: organization.id } }
 
-      context "when sorting " do
+      context "when sorting" do
         let!(:shipment_request_a_id) do
           FactoryBot.create(:journey_shipment_request,
             created_at: 2.hours.ago,

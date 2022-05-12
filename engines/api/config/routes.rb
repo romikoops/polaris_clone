@@ -66,6 +66,13 @@ Api::Engine.routes.draw do
       resources :passwords, only: %i[create update]
     end
     resources :organizations, only: :index do
+      namespace :admin do
+        resources :companies, only: :index do
+          resources :clients, only: %i[index]
+        end
+      end
+    end
+    resources :organizations, only: :index do
       resources :queries, only: %i[create show index update] do
         get "result_set"
         post "recalculate"

@@ -16,7 +16,8 @@ module Api
         firstName: client.profile.first_name,
         lastName: client.profile.last_name,
         companyName: company.name,
-        phone: client.profile.phone
+        phone: client.profile.phone,
+        lastActivityAt: client.last_activity_at
       }
     end
 

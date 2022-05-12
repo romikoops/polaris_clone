@@ -4,31 +4,92 @@ module Api
   class Client < ::Users::Client
     self.inheritance_column = nil
 
-    PROFILE_ATTRIBUTES = %w[first_name last_name phone].freeze
+    AVAILABLE_FILTERS = %i[
+      sorted_by
+      email_search
+      first_name_search
+      last_name_search
+      phone_search
+      activity_search
+    ].freeze
+
+    SUPPORTED_SEARCH_OPTIONS = %w[
+      email
+      first_name
+      last_name
+      phone
+      activity
+    ].freeze
+
+    SUPPORTED_SORT_OPTIONS = %w[
+      created_at
+      email
+      first_name
+      last_name
+      phone
+      activity
+    ].freeze
 
     has_one :membership, class_name: "Companies::Membership"
     has_one :company, through: :membership, class_name: "Companies::Company"
 
     filterrific(
       default_filter_params: { sorted_by: "email_asc" },
-      available_filters: [
-        :sorted_by
-      ]
+      available_filters: AVAILABLE_FILTERS
     )
 
-    scope :sorted_by, lambda { |sort_by, direction|
-      if sort_by == "email"
+    scope :sorted_by, lambda { |sort_option|
+      direction = /desc$/.match?(sort_option) ? "desc" : "asc"
+      case sort_option.to_s
+      when /^email/
         order(sanitize_sql_for_order("email #{direction}"))
-      elsif sort_by == "company_name"
+      when /^company_name/
         joins("INNER JOIN companies_memberships ON users_clients.id = companies_memberships.client_id
                INNER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id")
           .order(sanitize_sql_for_order("name #{direction}"))
-      elsif PROFILE_ATTRIBUTES.include?(sort_by)
-        joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
-          .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+      when /^first_name/
+        sort_by_profile_atributes("first_name", direction)
+      when /^last_name/
+        sort_by_profile_atributes("last_name", direction)
+      when /^phone/
+        sort_by_profile_atributes("phone", direction)
+      when /^activity/
+        order(sanitize_sql_for_order("last_activity_at #{direction}"))
       else
-        raise(ArgumentError, "Invalid sort option: #{sort_by.inspect}")
+        raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
       end
+    }
+
+    scope :sort_by_profile_atributes, lambda { |sort_by, direction|
+      joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
+        .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+    }
+
+    scope :from_company, lambda { |company_id|
+      joins(:membership).where(companies_memberships: { company_id: company_id })
+    }
+
+    scope :email_search, lambda { |email|
+      where("users_clients.email ILIKE ?", "%#{email}%")
+    }
+
+    scope :last_name_search, lambda { |last_name|
+      joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
+        .where("users_client_profiles.last_name ILIKE ?", "%#{last_name}%")
+    }
+
+    scope :phone_search, lambda { |phone|
+      joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
+        .where("users_client_profiles.phone ILIKE ?", "%#{phone}%")
+    }
+
+    scope :first_name_search, lambda { |first_name|
+      joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
+        .where("users_client_profiles.first_name ILIKE ?", "%#{first_name}%")
+    }
+
+    scope :activity_search, lambda { |range|
+      where(last_activity_at: range).distinct
     }
 
     def profile

@@ -4,6 +4,20 @@ require "rails_helper"
 
 RSpec.describe Api::Client, type: :model do
   let(:user) { FactoryBot.build(:api_client, organization: organization) }
+  let!(:asc_user) do
+    FactoryBot.create(:api_client,
+      email: "aaa@itsmycargo.test",
+      organization: organization,
+      last_activity_at: 2.weeks.ago.to_s,
+      profile: FactoryBot.build(:users_client_profile, first_name: "adam", last_name: "art", phone: "9111222333"))
+  end
+  let!(:desc_user) do
+    FactoryBot.create(:api_client,
+      email: "bbb@itsmycargo.test",
+      organization: organization,
+      last_activity_at: 1.day.ago.to_s,
+      profile: FactoryBot.build(:users_client_profile, first_name: "zulu", last_name: "xi", phone: "9222333444"))
+  end
 
   let(:organization) { FactoryBot.create(:organizations_organization) }
 
@@ -15,14 +29,11 @@ RSpec.describe Api::Client, type: :model do
     expect(user).to be_valid
   end
 
-  context "when sorted by email" do
-    let(:sort_by) { "email" }
-    let!(:asc_user) { FactoryBot.create(:api_client, email: "aaa@itsmycargo.test", organization: organization) }
-    let!(:desc_user) { FactoryBot.create(:api_client, email: "bbb@itsmycargo.test", organization: organization) }
-    let(:sorted_users) { described_class.sorted_by(sort_by, direction) }
+  describe "#sorted_by" do
+    let(:sorted_users) { described_class.sorted_by(sort_by) }
 
     context "when sorted by email asc" do
-      let(:direction) { "ASC" }
+      let(:sort_by) { "email_asc" }
 
       it "returns clients based on email in ascending order" do
         expect(sorted_users.map(&:id)).to eq([asc_user.id, desc_user.id])
@@ -30,11 +41,113 @@ RSpec.describe Api::Client, type: :model do
     end
 
     context "when sorted by email desc" do
-      let(:direction) { "DESC" }
+      let(:sort_by) { "email_desc" }
 
       it "returns clients based on email in descending order" do
         expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
       end
+    end
+
+    context "when sorted by `last_activity_at` asc" do
+      let(:sort_by) { "activity_asc" }
+
+      it "returns clients based on email in ascending order" do
+        expect(sorted_users.map(&:id)).to eq([asc_user.id, desc_user.id])
+      end
+    end
+
+    context "when sorted by `last_activity_at` desc" do
+      let(:sort_by) { "activity_desc" }
+
+      it "returns clients based on email in descending order" do
+        expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
+      end
+    end
+
+    context "when sorting based on profile attributes" do
+      context "when sorted by first_name asc" do
+        let(:sort_by) { "first_name_asc" }
+
+        it "returns clients based on first_name in ascending order" do
+          expect(sorted_users.map(&:id)).to eq([asc_user.id, desc_user.id])
+        end
+      end
+
+      context "when sorted by first_name desc" do
+        let(:sort_by) { "first_name_desc" }
+
+        it "returns clients based on first_name in descending order" do
+          expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
+        end
+      end
+
+      context "when sorted by last_name asc" do
+        let(:sort_by) { "last_name_asc" }
+
+        it "returns clients based on last_name in ascending order" do
+          expect(sorted_users.map(&:id)).to eq([asc_user.id, desc_user.id])
+        end
+      end
+
+      context "when sorted by last_name desc" do
+        let(:sort_by) { "last_name_desc" }
+
+        it "returns clients based on last_name in descending order" do
+          expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
+        end
+      end
+
+      context "when sorted by phone asc" do
+        let(:sort_by) { "phone_asc" }
+
+        it "returns clients based on phone in ascending order" do
+          expect(sorted_users.map(&:id)).to eq([asc_user.id, desc_user.id])
+        end
+      end
+
+      context "when sorted by phone desc" do
+        let(:sort_by) { "phone_desc" }
+
+        it "returns clients based on phone in descending order" do
+          expect(sorted_users.map(&:id)).to eq([desc_user.id, asc_user.id])
+        end
+      end
+
+      context "without matching sort_by scope" do
+        let(:sort_by) { "nonsense_desc" }
+
+        it "returns default direction" do
+          expect { sorted_users }.to raise_error(ArgumentError)
+        end
+      end
+    end
+  end
+
+  context "when filtering clients by email" do
+    it "returns client with email `bbb@itsmycargo.test`" do
+      expect(described_class.email_search("bbb").pluck(:email)).to eq(["bbb@itsmycargo.test"])
+    end
+  end
+
+  context "when filtering clients by last_name" do
+    it "returns client with last name `xi`" do
+      expect(described_class.last_name_search("xi").pluck(:last_name)).to eq(["xi"])
+    end
+  end
+
+  context "when filtering clients by phone" do
+    it "returns client with phone number `9111222333`" do
+      expect(described_class.phone_search("9111222333").pluck(:phone)).to eq(["9111222333"])
+    end
+  end
+
+  context "when filtering clients by last activity" do
+    it "returns client with activity older 3 days" do
+      expect(described_class.activity_search(4.weeks.ago..3.days.ago)).to eq([asc_user])
+    end
+
+    it "returns client with activity in this week" do
+      expect(described_class.activity_search(1.week.ago..Time.zone.today.to_s)).to eq([desc_user])
     end
   end
 
@@ -48,47 +161,3 @@ RSpec.describe Api::Client, type: :model do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: users_users
-#
-#  id                                  :uuid             not null, primary key
-#  access_count_to_reset_password_page :integer          default(0)
-#  activation_state                    :string
-#  activation_token                    :string
-#  activation_token_expires_at         :datetime
-#  crypted_password                    :string
-#  deleted_at                          :datetime
-#  email                               :string           not null
-#  failed_logins_count                 :integer          default(0)
-#  last_activity_at                    :datetime
-#  last_login_at                       :datetime
-#  last_login_from_ip_address          :string
-#  last_logout_at                      :datetime
-#  lock_expires_at                     :datetime
-#  magic_login_email_sent_at           :datetime
-#  magic_login_token                   :string
-#  magic_login_token_expires_at        :datetime
-#  reset_password_email_sent_at        :datetime
-#  reset_password_token                :string
-#  reset_password_token_expires_at     :datetime
-#  salt                                :string
-#  type                                :string
-#  unlock_token                        :string
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  organization_id                     :uuid
-#
-# Indexes
-#
-#  index_users_users_on_activation_token        (activation_token) WHERE (deleted_at IS NULL)
-#  index_users_users_on_conflict_organizations  (email,organization_id) UNIQUE WHERE ((type)::text = 'Users::Client'::text)
-#  index_users_users_on_conflict_users          (email) UNIQUE WHERE ((type)::text = 'Users::User'::text)
-#  index_users_users_on_email                   (email) WHERE (deleted_at IS NULL)
-#  index_users_users_on_magic_login_token       (magic_login_token) WHERE (deleted_at IS NULL)
-#  index_users_users_on_organization_id         (organization_id)
-#  index_users_users_on_reset_password_token    (reset_password_token) WHERE (deleted_at IS NULL)
-#  index_users_users_on_unlock_token            (unlock_token) WHERE (deleted_at IS NULL)
-#  users_users_activity                         (last_logout_at,last_activity_at) WHERE (deleted_at IS NULL)
-#
