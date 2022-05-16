@@ -8,11 +8,10 @@ module OfferCalculator
 
         delegate :quantity, :object, to: :measured_cargo
 
-        def initialize(fee_rows:, margin_rows:, measured_cargo:, range_unit:)
+        def initialize(fee_rows:, margin_rows:, measured_cargo:)
           @fee_rows = fee_rows
           @margin_rows = margin_rows
           @measured_cargo = measured_cargo
-          @range_unit = range_unit
         end
 
         def perform
@@ -42,7 +41,7 @@ module OfferCalculator
         end
 
         def range_units
-          @range_units ||= fee_rows["range_unit"].to_a.uniq.presence || [range_unit]
+          @range_units ||= fee_rows["range_unit"].to_a.uniq.presence || margin_rows["range_unit"].to_a.uniq
         end
       end
     end

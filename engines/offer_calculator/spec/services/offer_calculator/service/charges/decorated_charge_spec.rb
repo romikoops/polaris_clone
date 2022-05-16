@@ -7,7 +7,6 @@ RSpec.describe OfferCalculator::Service::Charges::DecoratedCharge do
   let(:pricing) { FactoryBot.create(:pricings_pricing, organization: organization) }
   let(:context) do
     instance_double("OfferCalculator::Service::Charges::Context",
-      id: nil,
       organization_id: "c1cc1bfb-885d-40c7-ace2-7d5ac9735012",
       context_id: pricing.id,
       itinerary_id: pricing.itinerary_id,

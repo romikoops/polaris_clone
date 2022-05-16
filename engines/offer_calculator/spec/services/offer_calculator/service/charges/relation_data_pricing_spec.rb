@@ -47,6 +47,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
       "truck_type" => nil,
       "carrier_lock" => false,
       "source_id" => pricing.id,
+      "metadata" => fee.metadata,
       "source_type" => "Pricings::Pricing",
       "max" => nil }
   end

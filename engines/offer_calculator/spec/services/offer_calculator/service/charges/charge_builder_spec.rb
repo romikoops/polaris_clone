@@ -86,8 +86,7 @@ RSpec.describe OfferCalculator::Service::Charges::ChargeBuilder do
     described_class.new(
       fee_rows: Rover::DataFrame.new(fee_rows),
       margin_rows: Rover::DataFrame.new(margin_rows),
-      measured_cargo: measured_cargo,
-      range_unit: range_unit
+      measured_cargo: measured_cargo
     ).perform
   end
   let(:direction) { "export" }

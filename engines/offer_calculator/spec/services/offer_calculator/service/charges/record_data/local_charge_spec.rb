@@ -35,6 +35,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
       "carrier_lock" => false,
       "carrier_id" => local_charge.tenant_vehicle.carrier_id,
       "source_id" => local_charge.id,
+      "metadata" => local_charge.metadata,
       "source_type" => "Legacy::LocalCharge" }
   end
   let!(:local_charge) { FactoryBot.create(:legacy_local_charge, fees: fees, organization: organization) }

@@ -63,7 +63,14 @@ module OfferCalculator
         end
 
         def units_for_cargo_class
-          cargo_units.select { |unit| unit.cargo_class.include?(cargo_class) }
+          cargo_units.select do |unit|
+            unit_cargo_class = unit.cargo_class
+            if cargo_class == "lcl"
+              unit_cargo_class.include?(cargo_class)
+            else
+              cargo_class == unit_cargo_class
+            end
+          end
         end
 
         def cargo_item?

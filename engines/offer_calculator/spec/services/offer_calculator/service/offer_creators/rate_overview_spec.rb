@@ -27,27 +27,27 @@ RSpec.describe OfferCalculator::Service::OfferCreators::RateOverview do
 
     context "when a other cargo classes available in load type" do
       let(:journey_load_type) { :fcl }
-      let(:pricing) {
+      let(:pricing) do
         FactoryBot.create(:pricings_pricing,
           :fcl_20,
           tenant_vehicle: tenant_vehicle,
           itinerary: itinerary,
           organization: organization)
-      }
-      let(:fcl_40_pricing) {
+      end
+      let(:fcl_40_pricing) do
         FactoryBot.create(:pricings_pricing,
           :fcl_40,
           tenant_vehicle: tenant_vehicle,
           itinerary: itinerary,
           organization: organization)
-      }
-      let(:fcl_40_hq_pricing) {
+      end
+      let(:fcl_40_hq_pricing) do
         FactoryBot.create(:pricings_pricing,
           :fcl_40_hq,
           tenant_vehicle: tenant_vehicle,
           itinerary: itinerary,
           organization: organization)
-      }
+      end
       let(:fee) { pricing.fees.first }
       let!(:fcl_40_fee) { fcl_40_pricing.fees.first }
       let!(:fcl_40_hq_fee) { fcl_40_hq_pricing.fees.first }

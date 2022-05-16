@@ -29,7 +29,7 @@ module OfferCalculator
           end
 
           def local_charge_info
-            record.slice("tenant_vehicle_id", "organization_id").merge(
+            record.slice("tenant_vehicle_id", "organization_id", "metadata").merge(
               "origin_hub_id" => hub_id,
               "destination_hub_id" => hub_id,
               "section" => direction,

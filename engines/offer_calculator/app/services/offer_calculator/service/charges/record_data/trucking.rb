@@ -34,7 +34,7 @@ module OfferCalculator
           end
 
           def trucking_info
-            @trucking_info ||= record.slice("cbm_ratio", "tenant_vehicle_id", "cargo_class", "load_type", "organization_id").merge(
+            @trucking_info ||= record.slice("cbm_ratio", "tenant_vehicle_id", "cargo_class", "load_type", "organization_id", "metadata").merge(
               "origin_hub_id" => carriage == "on" ? hub_id : nil,
               "destination_hub_id" => carriage == "pre" ? hub_id : nil,
               "section" => "trucking_#{carriage}",

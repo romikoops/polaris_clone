@@ -33,6 +33,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::Pricing do
       "carrier_lock" => false,
       "carrier_id" => pricing.tenant_vehicle.carrier_id,
       "source_id" => pricing.id,
+      "metadata" => fee.metadata,
       "source_type" => "Pricings::Pricing" }
   end
 

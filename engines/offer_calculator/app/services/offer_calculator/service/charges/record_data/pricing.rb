@@ -44,6 +44,7 @@ module OfferCalculator
               pricings_fees.charge_category_id,
               pricings_fees.min,
               pricings_fees.range,
+              pricings_fees.metadata,
               pricings_pricings.wm_rate as cbm_ratio,
               pricings_pricings.vm_rate as vm_ratio,
               tenant_vehicles.carrier_lock,

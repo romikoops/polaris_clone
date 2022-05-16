@@ -9,7 +9,7 @@ module OfferCalculator
         attr_reader :fee, :measured_cargo
 
         delegate :object, to: :measured_cargo
-        delegate :context_id, :effective_date, :expiration_date, :metadata, to: :object
+        delegate :context_id, :effective_date, :expiration_date, :metadata, :cargo_class, to: :object
         delegate :rate, :base, :rate_basis, :currency, :measure, :minimum_charge, :maximum_charge, :percentage?, :surcharge, to: :fee
 
         def initialize(fee:, measured_cargo:)

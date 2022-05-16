@@ -73,7 +73,7 @@ RSpec.describe OfferCalculator::Service::ChargeCalculator do
   context "when calculating per_wm fee with flat margin" do
     let(:fee) { FactoryBot.create(:fee_per_wm, pricing: pricing) }
     let(:flat_margins) { { fee.charge_category.code => 50 } }
-    let(:expected_value) { measures.wm.value * Money.new(fee.rate * 100, fee.currency_name) + flat_margin_value }
+    let(:expected_value) { (measures.wm.value * Money.new(fee.rate * 100, fee.currency_name)) + flat_margin_value }
     let(:flat_margin_value) { Money.new(5000, "USD") }
 
     include_examples "ChargeCalculator Single Component"
