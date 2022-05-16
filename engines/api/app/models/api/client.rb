@@ -30,11 +30,13 @@ module Api
       activity
     ].freeze
 
+    DEFAULT_FILTER_PARAMS = { sorted_by: "email_asc" }.freeze
+
     has_one :membership, class_name: "Companies::Membership"
     has_one :company, through: :membership, class_name: "Companies::Company"
 
     filterrific(
-      default_filter_params: { sorted_by: "email_asc" },
+      default_filter_params: DEFAULT_FILTER_PARAMS,
       available_filters: AVAILABLE_FILTERS
     )
 

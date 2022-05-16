@@ -4,9 +4,12 @@ module Api
   class FilterParamValidator
     include ActiveModel::Validations
 
+    attr_reader :default_filter_params
+
     REQUIRED_DATE_FORMAT = "%Y-%m-%d"
     DEFAULT_BEFORE_DATE = Time.zone.today
     DEFAULT_AFTER_DATE = Time.zone.at(1)
+    DEFAULT_DIRECTION = "asc"
 
     DIRECTION_OPTIONS = %w[
       asc
@@ -19,20 +22,25 @@ module Api
     validate :sort_by_validation
     validate :activity_validation
 
-    def initialize(supported_search_options, supported_sort_options, options:)
+    def initialize(supported_search_options, supported_sort_options, default_filter_params, options:)
+      @default_filter_params = default_filter_params
       SUPPORTED_FILTERS.each { |filter| define_variables(filter, options[filter]) }
       define_variables("search_options", supported_search_options)
       define_variables("sort_options", supported_sort_options)
+      @direction = DEFAULT_DIRECTION if direction.blank?
     end
 
     def to_h
       return {} if errors.present?
 
-      {}.tap do |filter|
+      filters = {}.tap do |filter|
         filter.merge!(sorted_by) if sort_by.present?
         filter.merge!(search) if search_by.present?
         filter.merge!(activity) if dates_present?
       end
+      return default_filter_params if filters.blank?
+
+      filters
     end
 
     private
@@ -49,8 +57,6 @@ module Api
       return if sort_by.blank?
 
       errors.add(:sort_by, error_code: "INVALID_SORT_BY_OPTION", error_message: "#{sort_by} is unsupported sort_by option, options available for sorting are : #{sort_options}") unless sort_options.include?(sort_by.downcase)
-
-      errors.add(:sort_by, error_code: "DIRECTION_MISSING", error_message: "direction needs to be specified with sort by") and return if direction.blank?
 
       errors.add(:sort_by, error_code: "INVALID_DIRECTION_OPTION", error_message: "#{direction} is unsupported direction option, options available for direction are : #{DIRECTION_OPTIONS}") unless DIRECTION_OPTIONS.include?(direction.downcase)
     end

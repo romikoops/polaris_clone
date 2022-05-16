@@ -67,6 +67,7 @@ Api::Engine.routes.draw do
     end
     resources :organizations, only: :index do
       namespace :admin do
+        resources :companies, only: %i[create show update destroy]
         resources :companies, only: :index do
           resources :clients, only: %i[index]
         end
@@ -103,7 +104,6 @@ Api::Engine.routes.draw do
       resource :colli_types, only: [:show]
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
-      resources :companies, only: %i[index create show update destroy]
     end
     resources :users do
       get "validate", on: :collection

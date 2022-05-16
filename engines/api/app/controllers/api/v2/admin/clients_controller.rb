@@ -46,6 +46,7 @@ module Api
           @filter_params_validator ||= FilterParamValidator.new(
             Api::Client::SUPPORTED_SEARCH_OPTIONS,
             Api::Client::SUPPORTED_SORT_OPTIONS,
+            Api::Client::DEFAULT_FILTER_PARAMS,
             options: index_params.to_h
           )
         end

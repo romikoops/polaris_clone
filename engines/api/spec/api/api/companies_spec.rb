@@ -10,8 +10,9 @@ RSpec.describe "Companies", type: :request, swagger: true do
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1", country: factory_country_from_code(code: "cn")) }
+  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1", address: hamburg_address, country: factory_country_from_code(code: "cn")) }
   let(:company_id) { companies_company.id }
+  let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
   let(:shipment_request_status) { "requested" }
 
   before do
@@ -62,12 +63,12 @@ RSpec.describe "Companies", type: :request, swagger: true do
         end
 
         schema type: :object,
-               properties: {
-                 data: {
-                   "$ref" => "#/components/schemas/company"
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              "$ref" => "#/components/schemas/company"
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -80,7 +81,7 @@ RSpec.describe "Companies", type: :request, swagger: true do
     end
   end
 
-  path "/v2/organizations/{organization_id}/companies/{company_id}" do
+  path "/v2/organizations/{organization_id}/admin/companies/{company_id}" do
     get "Fetch a company" do
       tags "Companies"
       description "Fetch a specific company"
@@ -95,15 +96,15 @@ RSpec.describe "Companies", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     attributes: { "$ref" => "#/components/schemas/company" }
-                   }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                attributes: { "$ref" => "#/components/schemas/company" }
+              }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -156,12 +157,12 @@ RSpec.describe "Companies", type: :request, swagger: true do
         end
 
         schema type: :object,
-               properties: {
-                 data: {
-                   "$ref" => "#/components/schemas/company"
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              "$ref" => "#/components/schemas/company"
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -198,7 +199,7 @@ RSpec.describe "Companies", type: :request, swagger: true do
     end
   end
 
-  path "/v2/organizations/{organization_id}/companies" do
+  path "/v2/organizations/{organization_id}/admin/companies" do
     get "Fetch companies" do
       tags "Companies"
       description "Fetches list of companies"
@@ -212,34 +213,34 @@ RSpec.describe "Companies", type: :request, swagger: true do
       parameter name: :perPage, in: :query, type: :integer, description: "number of companies per page"
       parameter name: :page, in: :query, type: :integer, description: "current page number"
       parameter name: :sortBy,
-                in: :query,
-                type: :string,
-                description: "The attribute by which to sort the Companies",
-                enum: %w[name country activity]
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort the Companies",
+        enum: %w[name country activity]
       parameter name: :direction,
-                in: :query,
-                type: :string,
-                description: "The defining whether the sorting is ascending or descending",
-                enum: %w[asc desc]
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[asc desc]
       parameter name: :searchBy,
-                in: :query,
-                type: :string,
-                description: "The attribute of the Company and its related models to search through",
-                enum: %w[name_search country_search activity_search]
+        in: :query,
+        type: :string,
+        description: "The attribute of the Company and its related models to search through",
+        enum: %w[name_search country_search activity_search]
       parameter name: :searchQuery,
-                in: :query,
-                type: :string,
-                description: "The value we want to use in our search"
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
 
       parameter name: :beforeDate,
-                in: :query,
-                type: :string,
-                description: "To filter companies which updated queries before a specific date in `YYYY-mm-dd` format default being today"
+        in: :query,
+        type: :string,
+        description: "To filter companies which updated queries before a specific date in `YYYY-mm-dd` format default being today"
 
       parameter name: :afterDate,
-                in: :query,
-                type: :string,
-                description: "To filter companies which updated queries after a specific date in `YYYY-mm-dd` format"
+        in: :query,
+        type: :string,
+        description: "To filter companies which updated queries after a specific date in `YYYY-mm-dd` format"
 
       let(:perPage) { 2 }
       let(:page) { 1 }
@@ -252,18 +253,18 @@ RSpec.describe "Companies", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       attributes: { "$ref" => "#/components/schemas/company" }
-                     }
-                   }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  attributes: { "$ref" => "#/components/schemas/company" }
+                }
+              }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -280,83 +281,83 @@ RSpec.describe "Companies", type: :request, swagger: true do
       response "422", "Unprocessable Entity" do
         let(:searchQuery) { nil }
         schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     search_by: {
-                       type: :array,
-                       items: {
-                         type: :object,
-                         properties: {
-                           error_code: {
-                             type: :string,
-                             description: "describes 422 errors with self explanatory error code `SEARCH_QUERY_MISSING`"
-                           },
-                           error_message: {
-                             type: :string,
-                             description: "describes the reason for the error"
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-               }
+          properties: {
+            errors: {
+              type: :object,
+              properties: {
+                search_by: {
+                  type: :array,
+                  items: {
+                    type: :object,
+                    properties: {
+                      error_code: {
+                        type: :string,
+                        description: "describes 422 errors with self explanatory error code `SEARCH_QUERY_MISSING`"
+                      },
+                      error_message: {
+                        type: :string,
+                        description: "describes the reason for the error"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         run_test!
 
         let(:searchBy) { "price" }
         schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     search_by: {
-                       type: :array,
-                       items: {
-                         type: :object,
-                         properties: {
-                           error_code: {
-                             type: :string,
-                             description: "describes 422 errors with self explanatory error code `INVALID_SEARCH_BY_OPTION`"
-                           },
-                           error_message: {
-                             type: :string,
-                             description: "describes the reason for the error with the options to be used for search by"
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-               }
+          properties: {
+            errors: {
+              type: :object,
+              properties: {
+                search_by: {
+                  type: :array,
+                  items: {
+                    type: :object,
+                    properties: {
+                      error_code: {
+                        type: :string,
+                        description: "describes 422 errors with self explanatory error code `INVALID_SEARCH_BY_OPTION`"
+                      },
+                      error_message: {
+                        type: :string,
+                        description: "describes the reason for the error with the options to be used for search by"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         run_test!
 
         let(:beforeDate) { "12/12/1975" }
         schema type: :object,
-               properties: {
-                 errors: {
-                   type: :object,
-                   properties: {
-                     date: {
-                       type: :array,
-                       items: {
-                         type: :object,
-                         properties: {
-                           error_code: {
-                             type: :string,
-                             description: "describes 422 errors with self explanatory error code `INVALID_DATE`"
-                           },
-                           error_message: {
-                             type: :string,
-                             description: "describes the reason for the error with the options to be used for search by"
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-               }
+          properties: {
+            errors: {
+              type: :object,
+              properties: {
+                date: {
+                  type: :array,
+                  items: {
+                    type: :object,
+                    properties: {
+                      error_code: {
+                        type: :string,
+                        description: "describes 422 errors with self explanatory error code `INVALID_DATE`"
+                      },
+                      error_message: {
+                        type: :string,
+                        description: "describes the reason for the error with the options to be used for search by"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         run_test!
       end
     end
@@ -402,15 +403,15 @@ RSpec.describe "Companies", type: :request, swagger: true do
 
       response "201", "company creation success" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     attributes: { "$ref" => "#/components/schemas/company" }
-                   }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                attributes: { "$ref" => "#/components/schemas/company" }
+              }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end

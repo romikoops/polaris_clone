@@ -2,6 +2,8 @@
 
 module Api
   class Company < Companies::Company
+    delegate :street_number, :street, :city, :postal_code, :country, to: :address, allow_nil: true
+
     AVAILABLE_FILTERS = %i[
       sorted_by
       name_search
@@ -21,8 +23,10 @@ module Api
       activity
     ].freeze
 
+    DEFAULT_FILTER_PARAMS = { sorted_by: "name_asc" }.freeze
+
     filterrific(
-      default_filter_params: { sorted_by: "name_asc" },
+      default_filter_params: DEFAULT_FILTER_PARAMS,
       available_filters: Api::Company::AVAILABLE_FILTERS
     )
 
@@ -30,11 +34,15 @@ module Api
       direction = /desc$/.match?(sort_option) ? "desc" : "asc"
       case sort_option.to_s
       when /^name/
-        order(sanitize_sql_for_order("name #{direction}"))
+        order(sanitize_sql_for_order("companies_companies.name #{direction}"))
       when /^country/
         joins(:country).order(sanitize_sql_for_order("countries.name #{direction}"))
       when /^activity/
-        joins("INNER JOIN journey_queries ON companies_companies.id = journey_queries.company_id").order(sanitize_sql_for_order("journey_queries.updated_at #{direction}"))
+        sql_query = "SELECT companies_companies.*, MAX(journey_queries.updated_at) as last_activity
+                     from companies_companies
+                     INNER JOIN journey_queries ON journey_queries.company_id=companies_companies.id
+                     GROUP BY companies_companies.id"
+        from("(#{sql_query}) as companies_companies").order(sanitize_sql_for_order("last_activity #{direction}"))
       else
         raise(ArgumentError, "Invalid sort option: #{sort_by.inspect}")
       end
@@ -52,6 +60,10 @@ module Api
       joins("INNER JOIN journey_queries ON companies_companies.id = journey_queries.company_id")
         .where("journey_queries.updated_at": range).distinct
     }
+
+    def last_activity_at
+      Journey::Query.where(company_id: id).maximum(:updated_at)
+    end
   end
 end
 

@@ -100,6 +100,7 @@ module Api
         @filter_params_validator ||= FilterParamValidator.new(
           Api::ShipmentRequest::SUPPORTED_SEARCH_OPTIONS,
           Api::ShipmentRequest::SUPPORTED_SORT_OPTIONS,
+          Api::ShipmentRequest::DEFAULT_FILTER_PARAMS,
           options: index_params.transform_keys(&:underscore).to_h
         )
       end

@@ -25,8 +25,10 @@ module Api
       destination
     ].freeze
 
+    DEFAULT_FILTER_PARAMS = { sorted_by: "created_at_desc" }.freeze
+
     filterrific(
-      default_filter_params: { sorted_by: "created_at_desc" },
+      default_filter_params: DEFAULT_FILTER_PARAMS,
       available_filters: AVAILABLE_FILTERS
     )
 

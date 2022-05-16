@@ -15,6 +15,7 @@ module Legacy
     has_many :users, class_name: "Users::Client", through: :user_addresses, dependent: :destroy
     has_many :shipments
     before_validation :set_point
+    alias_attribute :postal_code, :zip_code
 
     reverse_geocoded_by :latitude, :longitude do |address, results|
       if (geo = results.first)

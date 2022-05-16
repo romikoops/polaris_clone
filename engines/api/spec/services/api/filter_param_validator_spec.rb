@@ -7,8 +7,9 @@ RSpec.describe Api::FilterParamValidator do
     { sort_by: sort_by, direction: direction, search_by: search_by, search_query: search_query, before_date: before_date, after_date: after_date }
   end
 
+  let(:default_filter_params) { { sorted_by: "name_asc" } }
   let(:direction) { "asc" }
-  let(:filter_param_validator) { described_class.new(%w[name country activity], %w[name country activity], options: options) }
+  let(:filter_param_validator) { described_class.new(%w[name country activity], %w[name country activity], default_filter_params, options: options) }
   let(:sort_by) { "name" }
   let(:search_by) { "country" }
   let(:search_query) { "Germany" }
@@ -47,7 +48,7 @@ RSpec.describe Api::FilterParamValidator do
 
     context "when sort_by is present" do
       let(:sort_by) { "invalid_sort_by" }
-      let(:direction) { "" }
+      let(:direction) { "AESC" }
 
       before { filter_param_validator.valid? } # This call is required to trigger validation on `Api::FilterParamValidator` instance
 
@@ -55,8 +56,8 @@ RSpec.describe Api::FilterParamValidator do
         expect(sort_by_error_codes).to include("INVALID_SORT_BY_OPTION")
       end
 
-      it "adds error with error code `DIRECTION_MISSING` with valid sort by but missing direction" do
-        expect(sort_by_error_codes).to include("DIRECTION_MISSING")
+      it "adds error with error code `INVALID_DIRECTION_OPTION` with valid sort by but invalid direction" do
+        expect(sort_by_error_codes).to include("INVALID_DIRECTION_OPTION")
       end
     end
 
@@ -144,6 +145,17 @@ RSpec.describe Api::FilterParamValidator do
 
       it "returns params that contain activity date with default after date" do
         expect(filter_param_validator.to_h[:activity_search]).to eq Range.new(described_class::DEFAULT_AFTER_DATE, Date.strptime(before_date, described_class::REQUIRED_DATE_FORMAT))
+      end
+    end
+
+    context "when no filters are specified" do
+      let(:sort_by) { nil }
+      let(:search_by) { nil }
+      let(:before_date) { nil }
+      let(:after_date) { nil }
+
+      it "returns params that contain the default filter params" do
+        expect(filter_param_validator.to_h).to eq default_filter_params
       end
     end
   end

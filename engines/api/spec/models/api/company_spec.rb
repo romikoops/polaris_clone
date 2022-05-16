@@ -3,18 +3,19 @@
 require "rails_helper"
 
 RSpec.describe Api::Company, type: :model do
+  let(:journey_query_2_days_ago) { FactoryBot.create(:journey_query, company: company_a, created_at: 2.days.ago, updated_at: 2.days.ago) }
+  let(:journey_query_yesterday) { FactoryBot.create(:journey_query, company: company_c, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday) }
+  let(:company_a) { FactoryBot.create(:companies_company, name: "abc cargo", country: FactoryBot.create(:country_cn)) }
+  let(:company_c) { FactoryBot.create(:companies_company, country: FactoryBot.create(:country_uk)) }
+
+  before do
+    journey_query_2_days_ago
+    journey_query_yesterday
+  end
+
   describe "with sorting" do
-    let(:journey_query_2_days_ago) { FactoryBot.create(:journey_query, company: company_a, created_at: 2.days.ago, updated_at: 2.days.ago) }
-    let(:journey_query_yesterday) { FactoryBot.create(:journey_query, company: company_c, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday) }
-    let(:company_a) { FactoryBot.create(:companies_company, name: "abc cargo", country: FactoryBot.create(:country_cn)) }
-    let(:company_c) { FactoryBot.create(:companies_company, country: FactoryBot.create(:country_uk)) }
     let(:sort_by) { "#{sort_key}_#{direction_key}" }
     let(:sorted_api_company) { described_class.sorted_by(sort_by) }
-
-    before do
-      journey_query_2_days_ago
-      journey_query_yesterday
-    end
 
     context "when sorting companies by name" do
       let(:sort_key) { "name" }
@@ -88,18 +89,12 @@ RSpec.describe Api::Company, type: :model do
 
   describe "with filtering" do
     let(:journey_query_1_week_ago) { FactoryBot.create(:journey_query, company: company, created_at: 1.week.ago, updated_at: 1.week.ago) }
-    let(:journey_query_2_days_ago) { FactoryBot.create(:journey_query, company: company_a, created_at: 2.days.ago, updated_at: 2.days.ago) }
-    let(:journey_query_yesterday) { FactoryBot.create(:journey_query, company: company_c, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday) }
-    let(:company_a) { FactoryBot.create(:companies_company, name: "abc cargo", country: FactoryBot.create(:country_cn)) }
-    let(:company_c) { FactoryBot.create(:companies_company, country: FactoryBot.create(:country_uk)) }
     let(:company) { FactoryBot.create(:companies_company) }
     let(:sort_by) { "#{sort_key}_#{direction_key}" }
     let(:sorted_api_company) { described_class.sorted_by(sort_by) }
 
     before do
       journey_query_1_week_ago
-      journey_query_2_days_ago
-      journey_query_yesterday
     end
 
     context "when filtering companies by name" do
@@ -126,6 +121,15 @@ RSpec.describe Api::Company, type: :model do
       it "returns companies with queries updated between starting last couple of weeks until 2 days ago" do
         expect(described_class.activity_search(2.weeks.ago..2.days.ago).ids).to match_array([company_a.id, company.id])
       end
+    end
+  end
+
+  describe "#last_activity_at" do
+    let(:journey_query_yesterday) { FactoryBot.create(:journey_query, company: company_a, created_at: Time.zone.yesterday, updated_at: Time.zone.yesterday) }
+    let(:api_company_a) { described_class.find_by(name: "abc cargo") }
+
+    it "returns the latest companies query updated_at date" do
+      expect(api_company_a.last_activity_at).to eq(journey_query_yesterday.updated_at)
     end
   end
 end
