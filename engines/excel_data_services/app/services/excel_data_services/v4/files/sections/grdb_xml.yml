@@ -1,0 +1,298 @@
+
+xml_data:
+  path:
+    - OceanFreightCharge
+    - RateDetails
+  schema:
+    identifier: "ChargeHeaderID"
+    header:
+      - ChargeHeader
+    body:
+      - ChargeDetails
+      - Charge
+
+required:
+  - type: xml
+    path:
+      - FreightRates
+
+xml_columns:
+  - header: charge_id
+    key: ChargeID
+    sanitizer: text
+    validator: string
+
+  - header: request_type
+    key: RequestType
+    sanitizer: text
+    validator: string
+
+  - header: fee_code
+    key: ChargeCode
+    sanitizer: downcase
+    validator: string
+
+  - header: fee_name
+    key: ChargeName
+    sanitizer: text
+    validator: string
+
+  - header: aspect
+    key: Aspect
+    sanitizer: text
+    validator: optional_string
+
+  - header: currency
+    key: Currency
+    sanitizer: upcase
+    validator: currency
+
+  - header: rate
+    key: Rate
+    sanitizer: decimal
+    validator: optional_numeric
+
+  - header: rate_basis
+    key: Basis
+    sanitizer: text
+    validator: string
+
+  - header: basis_name
+    key: BasisName
+    sanitizer: text
+    validator: string
+
+  - header: minimum
+    key: Minimum
+    sanitizer: decimal
+    validator: optional_numeric_like
+
+  - header: maximum
+    key: Maximum
+    sanitizer: decimal
+    validator: optional_numeric
+
+  - header: scale_uom
+    key: ScaleUOM
+    sanitizer: decimal
+    validator: optional_numeric
+
+  - header: range_min
+    key: CubeFrom
+    sanitizer: decimal
+    validator: optional_numeric
+
+  - header: range_max
+    key: CubeTo
+    sanitizer: decimal
+    validator: optional_numeric
+
+  - header: notes
+    key: Notes
+    sanitizer: text
+    validator: optional_string
+
+  - header: effective_date
+    key: EffectiveDate
+    sanitizer: date
+    validator: date
+
+  - header: expiration_date
+    key: ExpirationDate
+    sanitizer: date
+    validator: date
+
+  - header: mandatory
+    key: Mandatory
+    sanitizer: text
+    validator: string
+
+  - header: charge_header_id
+    key: ChargeHeaderID
+    sanitizer: text
+    validator: string
+
+  - header: charge_details_type
+    key: ChargeDetailsType
+    sanitizer: text
+    validator: string
+
+  - header: wwa_member
+    key: WWAMember
+    sanitizer: text
+    validator: string
+
+  - header: customer
+    key: Customer
+    sanitizer: text
+    validator: string
+
+  - header: origin_region
+    key: OriginRegion
+    sanitizer: text
+    validator: string
+
+  - header: origin_country_code
+    key: OriginCountryCode
+    sanitizer: text
+    validator: country_code
+
+  - header: origin_inland_cfs
+    key: OriginCFSUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: origin_consol_cfs
+    key: OriginConsoleCFSUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: origin_locode
+    key: OriginPortUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: transshipment_1
+    key: Transshipment1
+    sanitizer: locode
+    validator: optional_locode
+
+  - header: transshipment_2
+    key: Transshipment2
+    sanitizer: locode
+    validator: optional_locode
+
+  - header: transshipment_3
+    key: Transshipment3
+    sanitizer: locode
+    validator: optional_locode
+
+  - header: destination_locode
+    key: DestinationPortUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: destination_deconsol_cfs
+    key: DestinationDeconsoleCFSUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: destination_cfs
+    key: DestinationCFSUncode
+    sanitizer: locode
+    validator: locode
+
+  - header: destination_country_code
+    key: DestinationCountryCode
+    sanitizer: text
+    validator: country_code
+
+  - header: destination_region
+    key: DestinationRegion
+    sanitizer: text
+    validator: string
+
+  - header: quoting_region
+    key: QuotingRegion
+    sanitizer: text
+    validator: string
+  - header: carrier_code
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: wwa
+  - header: carrier
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: WWA
+  - header: service
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: standard
+  - header: mode_of_transport
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: ocean
+  - header: group_id
+    key:
+    sanitizer: text
+    validator: optional_string
+  - header: group_name
+    key:
+    sanitizer: text
+    validator: optional_string
+  - header: cargo_class
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: lcl
+  - header: load_type
+    key:
+    sanitizer: text
+    validator: optional_string
+    fallback: cargo_item
+
+operations:
+  - Grdb
+  - CountryCodeFromLocode
+  - ExpandedDates
+
+distributors:
+  - GrdbExcel
+
+pipelines:
+  - extractors:
+      - Carrier
+      - RoutingCarrier
+    importers:
+      - Carrier
+      - RoutingCarrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    importers:
+      - TenantVehicle
+  - validators:
+      - OriginHub
+      - DestinationHub
+    extractors:
+      - Itinerary
+    importers:
+      - Itinerary
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    importers:
+      - ChargeCategory
+
+  - validators:
+      - SequentialDates
+      - ChargeFees
+      - Carrier
+      - TenantVehicle
+      - OriginHub
+      - DestinationHub
+      - Itinerary
+      - ChargeCategory
+      - Group
+      - GrdbRateBasis
+      - RateBasis
+    extractors:
+      - Pricing
+    importers:
+      - Pricing
+    conflicts:
+      - model: Pricings::Pricing
+        conflict_keys:
+          - itinerary_id
+          - cargo_class
+          - organization_id
+          - group_id
+          - tenant_vehicle_id
+

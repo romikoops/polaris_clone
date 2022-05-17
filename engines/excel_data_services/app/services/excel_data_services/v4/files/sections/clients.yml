@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+required:
+- rows: "1:1"
+  columns: "A:?"
+  content:
+  - EMAIL
+  - FIRST_NAME
+  - LAST_NAME
+
+columns:
+  - header: company_name
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+  - header: first_name
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: last_name
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: email
+    sanitizer: "text"
+    validator: "email"
+    required: true
+    unique: true
+
+  - header: phone
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+  - header: external_id
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    unique: true
+
+  - header: password
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: currency
+    sanitizer: "upcase"
+    validator: "optional_string"
+    required: false
+
+  - header: language
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    fallback: "en-US"
+
+pipelines:
+  - validators:
+      - "ExistingClient"
+      - "Language"
+      - "Currency"
+    formatter: "Client"
+    importer:
+      model: "Users::Client"

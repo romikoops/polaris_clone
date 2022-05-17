@@ -5,10 +5,14 @@ module ExcelDataServices
     module Files
       module Parsers
         class Framer < ExcelDataServices::V4::Files::Parsers::Base
-          SPLIT_PATTERN = /^(add_framer)/.freeze
+          KEYS = %i[framer].freeze
 
           def framer
-            @framer ||= ExcelDataServices::V4::Framers::Table
+            @framer ||= if schema_data[:framer].present?
+              "ExcelDataServices::V4::Framers::#{schema_data[:framer]}".constantize
+            else
+              ExcelDataServices::V4::Framers::Table
+            end
           end
 
           def add_framer(klass)

@@ -11,7 +11,9 @@ module ExcelDataServices
 
           ALPHA_INDEX = ("A".."ZZ").each.with_index(1).to_h.freeze
 
-          def initialize(xlsx:, header:, sheet_name:, options: {})
+          ALPHA_INDEX = ("A".."ZZ").each.with_index(1).to_h.freeze
+
+          def initialize(xlsx:, header:, sheet_name:, options: Options.new)
             @xlsx = xlsx
             @options = options
             @header = header.strip
@@ -43,7 +45,7 @@ module ExcelDataServices
           end
 
           def header_row
-            @header_row ||= (1..sheet.last_row).find { |row_nr| row_nr_is_header_row(row_nr: row_nr) } || 1
+            @header_row ||= options.header_row || (1..sheet.last_row).find { |row_nr| row_nr_is_header_row(row_nr: row_nr) } || 1
           end
 
           def row_nr_is_header_row(row_nr:)
@@ -62,7 +64,7 @@ module ExcelDataServices
           def matches_any_header?(value:)
             return false unless value
 
-            ([header] | alternative_keys).include?(value.to_s.downcase)
+            ([header] | alternative_keys).include?(value.to_s.downcase.gsub(/\s/, "_"))
           end
 
           private

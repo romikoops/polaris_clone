@@ -9,26 +9,52 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Columns do
   let(:xlsx) { File.open(file_fixture("excel/example_hubs.xlsx")) }
 
   describe "#columns" do
-    let(:section_string) { "RoutingCarrier" }
+    let(:section_string) { "Hubs" }
+
+    expected_headers = %w[name
+      locode
+      hub_status
+      hub_type
+      terminal
+      terminal_code
+      latitude
+      longitude
+      country
+      full_address
+      free_out
+      import_charges
+      export_charges
+      pre_carriage
+      on_carriage
+      alternative_names]
 
     it "returns all columns defined in the schema", :aggregate_failures do
-      expect(service.columns.count).to eq(2)
-      expect(service.columns.map(&:header)).to match_array(%w[carrier carrier_code])
+      expect(service.columns.count).to eq(16)
+      expect(service.columns.map(&:header)).to match_array(expected_headers)
     end
 
-    context "when the section has prerequisites" do
-      let(:section_string) { "TenantVehicle" }
+    context "when there are sheet_names configured" do
+      let(:section_string) { "Trucking" }
+      let(:xlsx) { File.open(file_fixture("excel/example_trucking.xlsx")) }
 
-      it "includes the columns from the Prerequisites", :aggregate_failures do
-        expect(service.columns.count).to eq(4)
-        expect(service.columns.map(&:header)).to match_array(%w[carrier carrier_code mode_of_transport service])
+      it "returns all columns defined in the schema for the given sheet name" do
+        expect(service.columns.count { |col| col.header == "max" }).to eq(1)
+      end
+    end
+
+    context "when there are sheets configured" do
+      let(:section_string) { "SacoImport" }
+      let(:xlsx) { File.open(file_fixture("excel/example_saco_import.xlsx")) }
+
+      it "returns all columns defined in the schema for the given sheet name" do
+        expect(service.columns.map(&:sheet_name).uniq).to eq(["Tariff Sheet"])
       end
     end
   end
 
   describe "#matrixes" do
     context "when there are no Matrixes configured" do
-      let(:section_string) { "Carrier" }
+      let(:section_string) { "LocalCharge" }
 
       it "returns an empty array" do
         expect(service.matrixes).to eq([])
@@ -36,7 +62,7 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Columns do
     end
 
     context "when there are Matrixes configured" do
-      let(:section_string) { "Truckings" }
+      let(:section_string) { "Trucking" }
 
       it "returns all matrixes defined in the schema", :aggregate_failures do
         expect(service.matrixes.count).to eq(6)
@@ -47,7 +73,7 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Columns do
 
   describe "#dynamic_columns" do
     context "when there are no DynamicColumns configured" do
-      let(:section_string) { "Carrier" }
+      let(:section_string) { "LocalCharge" }
 
       it "returns an empty array" do
         expect(service.dynamic_columns).to eq([])
@@ -65,10 +91,9 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Columns do
   end
 
   describe "#headers" do
-    let(:section_string) { "Truckings" }
+    let(:section_string) { "Trucking" }
     let(:expected_headers) do
-      %w[fee_name
-        fee_code
+      %w[
         group_name
         group_id
         service
@@ -95,11 +120,12 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Columns do
         zone
         bracket_minimum
         bracket
-        modifier]
+        modifier
+      ]
     end
 
     it "returns the headers of all Matrixes and Columns defined in the schema" do
-      expect(service.headers).to match_array(expected_headers)
+      expect(service.headers.uniq).to match_array(expected_headers)
     end
   end
 end

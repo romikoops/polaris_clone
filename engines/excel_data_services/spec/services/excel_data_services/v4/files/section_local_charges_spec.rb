@@ -17,7 +17,7 @@ RSpec.describe ExcelDataServices::V4::Files::Section do
   end
 
   describe "#valid?" do
-    let(:section_string) { "LocalCharges" }
+    let(:section_string) { "LocalCharge" }
 
     it "returns successfully" do
       expect(service.valid?).to eq(true)
@@ -25,7 +25,7 @@ RSpec.describe ExcelDataServices::V4::Files::Section do
   end
 
   describe "#perform" do
-    let(:section_string) { "LocalCharges" }
+    let(:section_string) { "LocalCharge" }
     let(:carrier) { Legacy::Carrier.find_by(name: "MSC", code: "msc") }
     let(:tenant_vehicle) { Legacy::TenantVehicle.find_by(name: "standard", carrier: carrier, organization: organization) }
     let!(:hamburg) { FactoryBot.create(:legacy_hub, :hamburg, organization: organization) }

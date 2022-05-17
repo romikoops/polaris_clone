@@ -14,19 +14,19 @@ module ExcelDataServices
         end
 
         def frame
-          @frame ||= table_sheets.inject(Rover::DataFrame.new) do |result, sheet_object|
+          @frame ||= data_sources.inject(Rover::DataFrame.new) do |result, sheet_object|
             result.concat(sheet_object.perform)
           end
         end
 
         def errors
-          @errors ||= table_sheets.flat_map(&:errors)
+          @errors ||= data_sources.flat_map(&:errors)
         end
 
         private
 
-        def table_sheets
-          @table_sheets ||= sheets.map { |sheet_name| ExcelDataServices::V4::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, section_parser: section_parser) }
+        def data_sources
+          @data_sources ||= sheets.map { |sheet_name| ExcelDataServices::V4::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, section_parser: section_parser) }
         end
       end
     end

@@ -20,7 +20,7 @@ RSpec.describe ExcelDataServices::V4::Files::Section do
   after { Timecop.return }
 
   describe "#valid?" do
-    let(:section_string) { "Truckings" }
+    let(:section_string) { "Trucking" }
 
     it "returns successfully" do
       expect(service.valid?).to eq(true)
@@ -28,7 +28,7 @@ RSpec.describe ExcelDataServices::V4::Files::Section do
   end
 
   describe "#perform" do
-    let(:section_string) { "Truckings" }
+    let(:section_string) { "Trucking" }
     let(:country) { factory_country_from_code(code: "DE") }
     let(:carrier) { FactoryBot.create(:legacy_carrier, name: "Gateway Cargo GmbH", code: "gateway cargo gmbh") }
     let(:org_carrier) { FactoryBot.create(:legacy_carrier, name: organization.slug, code: organization.slug) }

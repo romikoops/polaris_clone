@@ -12,7 +12,7 @@ module ExcelDataServices
         end
 
         def valid?
-          all_sheets_meet_requirements? && required_columns_present?
+          xlsx_has_content? && all_sheets_meet_requirements? && required_columns_present?
         end
 
         def required_columns_present?
@@ -20,10 +20,14 @@ module ExcelDataServices
         end
 
         def all_sheets_meet_requirements?
-          requirements.all?(&:valid?)
+          requirements.present? && requirements.all?(&:valid?)
         end
 
         delegate :columns, :requirements, to: :section_parser
+
+        def xlsx_has_content?
+          state.xml? || state.xlsx.first_row.present?
+        end
       end
     end
   end

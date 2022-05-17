@@ -5,46 +5,36 @@ module ExcelDataServices
     module Files
       module Parsers
         class Schema
-          SCHEMA_PATH = [Rails.root, "/engines/excel_data_services/app/services/excel_data_services/v4/files"].join
-          VALID_PATHS = %w[section_data file_data].freeze
-          InvalidPath = Class.new(ArgumentError)
-          InvalidPattern = Class.new(ArgumentError)
+          SCHEMA_PATH = [Rails.root, "/engines/excel_data_services/app/services/excel_data_services/v4/files/sections"].join
           InvalidSection = Class.new(ArgumentError)
 
-          attr_reader :path, :section, :pattern
+          attr_reader :path, :section, :keys
 
-          def initialize(path:, section:, pattern:)
-            @path = path
+          def initialize(section:, keys:)
             @section = section
-            @pattern = pattern
+            @keys = keys
 
-            raise InvalidPath unless VALID_PATHS.include?(path)
-            raise InvalidPattern unless pattern.is_a?(Regexp)
             raise InvalidSection unless section_path_is_valid?
           end
 
           def perform
-            return schema_lines unless block_given?
+            return data unless block_given?
 
-            yield(schema_lines)
-          end
-
-          def dependencies
-            raw_lines.grep(/^(prerequisite)/).map { |raw_line| raw_line.gsub("prerequisite", "").delete('"').strip }
+            yield(data)
           end
 
           private
 
-          def schema_lines
-            raw_lines.grep(pattern).join
+          def data
+            keys.zip([[]] * keys.length).to_h.merge(schema.slice(*keys).compact)
           end
 
-          def raw_lines
-            @raw_lines ||= File.read(section_path).lines
+          def schema
+            @schema ||= YAML.load_file(section_path).deep_symbolize_keys!
           end
 
           def section_path
-            "#{SCHEMA_PATH}/#{path}/#{section.underscore}"
+            "#{SCHEMA_PATH}/#{section.underscore}.yml"
           end
 
           def section_path_is_valid?

@@ -5,7 +5,6 @@ module ExcelDataServices
     module Files
       class SectionParser
         delegate :xlsx, :organization, to: :state
-        delegate :sheets, to: :xlsx
 
         attr_reader :state, :section
 
@@ -15,20 +14,20 @@ module ExcelDataServices
         end
 
         def global_actions
-          (row_validations + operations + data_validations)
+          (operations + data_validations)
         end
 
         def column_parser
           @column_parser ||= ExcelDataServices::V4::Files::Parsers::Columns.new(section: section, state: state)
         end
 
-        delegate :columns, :matrixes, :headers, :dynamic_columns, to: :column_parser
+        delegate :columns, :matrixes, :dynamic_columns, :sheets, to: :column_parser
 
-        def validator_parser
-          @validator_parser ||= ExcelDataServices::V4::Files::Parsers::Validators.new(section: section, state: state)
+        def data_validator_parser
+          @data_validator_parser ||= ExcelDataServices::V4::Files::Parsers::DataValidators.new(section: section, state: state)
         end
 
-        delegate :row_validations, :data_validations, to: :validator_parser
+        delegate :data_validations, to: :data_validator_parser
 
         def requirement_parser
           @requirement_parser ||= ExcelDataServices::V4::Files::Parsers::Requirements.new(section: section, state: state)
@@ -59,6 +58,10 @@ module ExcelDataServices
         end
 
         delegate :xml_columns, :xml_data, to: :xml_data_parser
+
+        def headers
+          xml_data_parser.headers + column_parser.headers
+        end
       end
     end
   end

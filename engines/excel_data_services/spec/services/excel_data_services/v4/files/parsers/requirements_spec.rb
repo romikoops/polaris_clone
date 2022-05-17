@@ -15,8 +15,19 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Requirements do
       expect(service.requirements.map(&:class)).to eq([ExcelDataServices::V4::Files::Requirement] * 2)
     end
 
-    context "when there are no requirements" do
-      let(:section_string) { "ChargeCategory" }
+    context "when the requirements have specified sheets that don't match the available ones" do
+      sheet_schema = {
+        required: [{
+          rows: "1:1",
+          columns: "A:?",
+          content: %w[NAME LOCODE TERMINAL],
+          sheet_names: %w[Pricing]
+        }]
+      }
+
+      before do
+        allow(service).to receive(:schema_data).and_return(sheet_schema)
+      end
 
       it "returns an empty array" do
         expect(service.requirements).to eq([])

@@ -17,7 +17,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
         header => "NOV"
       }]
     end
-    let(:header) { "Dynamic:curr_month/baf" }
+    let(:header) { "Dynamic(Sheet1-11):curr_month/baf" }
 
     describe "#data" do
       it "returns the turns each row into a row for each fee defined in the dynamic columns", :aggregate_failures do
@@ -33,7 +33,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
       end
 
       context "when the fee_code is to be replaced with the Primary Fee Code in the PrimaryFeeCode Extractor" do
-        let(:header) { "Dynamic:20dc" }
+        let(:header) { "Dynamic(Sheet1-11):20dc" }
 
         it "returns the correct fee_code from the header" do
           expect(data_column.fee_code).to eq(described_class::PRIMARY_CODE_PLACEHOLDER)
@@ -53,7 +53,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
       end
 
       context "when header is NEXT_MONTH" do
-        let(:header) { "Dynamic:next_month/baf" }
+        let(:header) { "Dynamic(Sheet1-11):next_month/baf" }
 
         it "returns true when header include NEXT" do
           expect(data_column.current?).to eq(false)
@@ -74,7 +74,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
       }
     end
     let(:value) { Money.new(1500, "EUR") }
-    let(:header) { "Dynamic:curr_fee/20/baf" }
+    let(:header) { "Dynamic(Sheet1-11):curr_fee/20/baf" }
 
     describe "#data" do
       it "returns each cell in column expanded to a full fee", :aggregate_failures do
@@ -112,7 +112,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
       end
 
       context "when header is NEXT_MONTH" do
-        let(:header) { "Dynamic:next_fee/20/baf" }
+        let(:header) { "Dynamic(Sheet1-11):next_fee/20/baf" }
 
         it "returns true when header include CURR" do
           expect(data_column.current?).to eq(false)
@@ -122,7 +122,7 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
 
     describe "#cargo_classes" do
       context "when header is one of the main 3 dynamic fees" do
-        let(:header) { "Dynamic:20dc" }
+        let(:header) { "Dynamic(Sheet1-11):20dc" }
 
         it "returns 'fcl_20' when header is '20DC'" do
           expect(data_column.cargo_classes.to_a).to match_array([

@@ -6,7 +6,12 @@ module ExcelDataServices
       class Section
         attr_reader :state
 
-        delegate :section, to: :state
+        delegate :xlsx, :xml, :section, to: :state
+        delegate :sheets, to: :xlsx
+
+        def self.state(state:)
+          new(state: state).perform
+        end
 
         def initialize(state:)
           @state = state
@@ -20,7 +25,7 @@ module ExcelDataServices
           state
         end
 
-        delegate :valid?, to: :sheet_validator
+        delegate :valid?, :validation_error, to: :sheet_validator
 
         private
 

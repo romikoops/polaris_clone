@@ -46,16 +46,31 @@ RSpec.describe ExcelDataServices::V4::Upload do
     end
   end
 
-  describe "#schema_types" do
+  describe "#filtered_schema_types" do
+    all_schema_types = %w[
+      hubs
+      clients
+      grdb_xml_origin_charge
+      schedules
+      pricings
+      grdb_excel
+      trucking
+      saco_import
+      saco_pricings
+      grdb_xml_destination_charge
+      grdb_xml
+      local_charge
+    ]
+
     it "returns supported V4 schema types" do
-      expect(service.schema_types).to match(%w[SacoPricings Pricings Schedules LocalCharges Hubs Clients Truckings])
+      expect(service.filtered_schema_types).to match_array(all_schema_types)
     end
 
     context "with disabled uploaders option" do
-      let(:arguments) { { disabled_uploaders: %w[SacoPricings Pricings] } }
+      let(:arguments) { { disabled_uploaders: %w[saco_pricings pricings] } }
 
       it "returns only enabled uploaders" do
-        expect(service.schema_types).to match(%w[Schedules LocalCharges Hubs Clients Truckings])
+        expect(service.filtered_schema_types).to match_array(all_schema_types - %w[saco_pricings pricings])
       end
     end
   end

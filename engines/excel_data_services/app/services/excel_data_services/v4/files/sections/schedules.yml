@@ -1,0 +1,93 @@
+# frozen_string_literal: true
+
+required:
+  - rows: "1:1"
+    columns: "A:K"
+    content:
+      - VESSEL_NAME
+      - VESSEL_CODE
+      - ORIGIN_DEPARTURE
+      - DESTINATION_ARRIVAL
+      - VOYAGE_CODE
+
+columns:
+  - header: "vessel_name"
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: "origin_locode"
+    sanitizer: "text"
+    validator: "locode"
+    required: true
+    alternative_keys:
+      - "origin"
+
+  - header: "destination_locode"
+    sanitizer: "text"
+    validator: "locode"
+    required: true
+    alternative_keys:
+      - "destination"
+
+  - header: "origin_departure"
+    sanitizer: "date"
+    validator: "date"
+    required: true
+
+  - header: "destination_arrival"
+    sanitizer: "date"
+    validator: "date"
+    required: true
+
+  - header: "closing_date"
+    sanitizer: "date"
+    validator: "date"
+    required: true
+
+  - header: "carrier"
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: "carrier_code"
+    sanitizer: "downcase"
+    validator: "string"
+    required: false
+    alternative_keys:
+      - "carrier"
+
+  - header: "service"
+    sanitizer: "text"
+    validator: "string"
+    required: true
+    alternative_keys:
+      - "service_level"
+
+  - header: "mode_of_transport"
+    sanitizer: "downcase"
+    validator: "mode_of_transport"
+    required: true
+    alternative_keys:
+      - "mot"
+
+  - header: "vessel_code"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+  - header: "voyage_code"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+pipelines:
+  - validators:
+      - SequentialDates
+      - Carrier
+      - TenantVehicle
+      - OriginHub
+      - DestinationHub
+    formatter: Schedule
+    importer:
+      model: Schedules::Schedule

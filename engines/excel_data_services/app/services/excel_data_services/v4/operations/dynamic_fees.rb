@@ -84,7 +84,7 @@ module ExcelDataServices
         end
 
         def dynamic_keys
-          @dynamic_keys ||= frame.keys.select { |column_header| column_header.starts_with?("Dynamic") && !column_header.match?(/(_row|_column)$/) }
+          @dynamic_keys ||= frame.keys.select { |column_header| column_header.include?("Dynamic") && !column_header.match?(/(_row|_column)$/) }
         end
 
         def existing_columns

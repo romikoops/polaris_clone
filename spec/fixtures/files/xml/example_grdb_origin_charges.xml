@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <OriginCharge>
     <Envelope>
       <ReceiverID>gdfgdfsg</ReceiverID>
@@ -751,15 +750,6 @@
         </Charge>
       </ChargeDetails>
     </RateDetails>
-  </Rate>
-  <Rate >
-    <Envelope>
-      <ReceiverID>gdfgdfsg</ReceiverID>
-      <SenderID>WdafdsgaaE</SenderID>
-      <Type>Charges_Response</Type>
-      <Version>3.0.1</Version>
-      <requestID>2019953340833</requestID>
-    </Envelope>
     <RateDetails>
       <ChargeHeader>
         <ChargeHeaderID>39584003</ChargeHeaderID>
@@ -1504,4 +1494,4 @@
         </Charge>
       </ChargeDetails>
     </RateDetails>
-</</OriginCharge>>
+</OriginCharge>

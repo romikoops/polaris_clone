@@ -8,19 +8,11 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::OrderedConnectedActions do
   let(:service) { described_class.new(section: section_string, state: state_arguments) }
 
   describe "#connected_actions" do
-    let(:section_string) { "TenantVehicle" }
+    let(:section_string) { "Hubs" }
 
     it "returns all ConnectedActions defined in the schema", :aggregate_failures do
       expect(service.connected_actions).to be_all(ExcelDataServices::V4::Files::Parsers::ConnectedActions)
-      expect(service.connected_actions.map(&:section)).to eq(%w[RoutingCarrier Carrier TenantVehicle])
-    end
-
-    context "when there are prerequisite connected_actions" do
-      let(:section_string) { "RoutingCarrier" }
-
-      it "returns the defined prerequisites" do
-        expect(service.connected_actions.map(&:section)).to eq(["RoutingCarrier"])
-      end
+      expect(service.connected_actions.count).to eq(2)
     end
   end
 end

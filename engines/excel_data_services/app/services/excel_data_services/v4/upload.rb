@@ -4,6 +4,7 @@
 module ExcelDataServices
   module V4
     class Upload
+      DEFINITION_PATH = Rails.root.join("engines/excel_data_services/app/services/excel_data_services/v4/files/sections")
       # This class receives the uploaded file and attempts to find a valid Sheet config. Once found it will trigger the sheet and send the email with the results/errors
       attr_reader :file, :arguments
 
@@ -27,11 +28,30 @@ module ExcelDataServices
       end
 
       def sheet
-        @sheet ||= schema_types.map { |schem_type| ExcelDataServices::V4::Files::SheetType.new(file: file, type: schem_type, arguments: arguments) }.find(&:valid?)
+        @sheet ||= sheets.find(&:valid?)
       end
 
-      def schema_types
-        %w[SacoPricings Pricings Schedules LocalCharges Hubs Clients Truckings] - arguments.fetch(:disabled_uploaders, [])
+      def sheets
+        @sheets ||= filtered_schema_types.map do |schema_type|
+          ExcelDataServices::V4::Files::Section.new(
+            state: ExcelDataServices::V4::State.new(
+              file: file,
+              section: schema_type,
+              overrides: Overrides.new(
+                group_id: arguments[:group_id],
+                hub_id: arguments[:hub_id]
+              )
+            )
+          )
+        end
+      end
+
+      def filtered_schema_types
+        available_schema_types - arguments.fetch(:disabled_uploaders, []).map(&:underscore)
+      end
+
+      def available_schema_types
+        @available_schema_types ||= Dir[[DEFINITION_PATH, "*.yml"].join("/")].map { |path| File.basename(path, ".yml") }
       end
 
       def result_state

@@ -77,12 +77,12 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Column do
       let(:options) do
         {
           sanitizer: "text",
-          validator: "string",
+          validator: "optional_string",
           required: true,
           type: :object
         }
       end
-      let(:required_data_missing_error) { "Required data is missing at: (Sheet: Africa) row: 4, column: C. Please fill in the missing data and try again." }
+      let(:required_data_missing_error) { "Required data is missing at: (Sheet: Africa) row: 4 column: C. Please fill in the missing data and try again." }
 
       it "returns a DataFrame of extracted values for the column in question" do
         expect(service.errors.map(&:reason)).to include(required_data_missing_error)
@@ -100,11 +100,19 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Column do
           type: :object
         }
       end
-      let(:duplicate_data_error) { "Duplicates exists at (Sheet: Africa) row: 2, column: C & (Sheet: Africa) row: 3, column: C. Please remove all duplicate data and try again." }
+      let(:duplicate_data_error) { "Duplicates exists at (Sheet: Africa) row: 2 column: C & (Sheet: Africa) row: 3 column: C. Please remove all duplicate data and try again." }
 
       it "returns a DataFrame of extracted values for the column in question" do
         expect(service.errors.map(&:reason)).to include(duplicate_data_error)
       end
+    end
+  end
+
+  describe "#rows" do
+    let(:header) { "service" }
+
+    it "returns the rows in the coordinate shorthand" do
+      expect(service.rows).to eq("2:5")
     end
   end
 end

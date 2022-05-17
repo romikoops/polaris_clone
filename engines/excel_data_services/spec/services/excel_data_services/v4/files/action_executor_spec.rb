@@ -35,7 +35,7 @@ RSpec.describe ExcelDataServices::V4::Files::ActionExecutor do
           allow(second_action_double).to receive(:state).with(state: state_arguments).and_return(state_arguments)
         end
 
-        it "triggers boths actions in the array", :aggregate_failures do
+        it "triggers both actions in the array", :aggregate_failures do
           expect(service.perform).to eq(state_arguments)
           expect(action_double).to have_received(:state).once
           expect(second_action_double).to have_received(:state).once

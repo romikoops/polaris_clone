@@ -5,12 +5,12 @@ module ExcelDataServices
     module Files
       module Parsers
         class OrderedConnectedActions < ExcelDataServices::V4::Files::Parsers::Base
-          SPLIT_PATTERN = /^(NULLPATTERN)/.freeze
+          KEYS = %i[pipelines].freeze
           attr_reader :section, :state
 
           def connected_actions
-            @connected_actions ||= sorted_dependencies.map do |dependency_section|
-              ExcelDataServices::V4::Files::Parsers::ConnectedActions.new(state: state, section: dependency_section)
+            @connected_actions ||= schema_data[:pipelines].map do |dependency_section|
+              ExcelDataServices::V4::Files::Parsers::ConnectedActions.new(state: state, schema_data: dependency_section)
             end
           end
         end

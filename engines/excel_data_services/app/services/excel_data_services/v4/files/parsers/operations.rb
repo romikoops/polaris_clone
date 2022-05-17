@@ -5,15 +5,12 @@ module ExcelDataServices
     module Files
       module Parsers
         class Operations < ExcelDataServices::V4::Files::Parsers::Base
-          SPLIT_PATTERN = /^(add_operation)/.freeze
+          KEYS = %i[operations].freeze
 
           def operations
-            @operations ||= []
-          end
-
-          def add_operation(class_name)
-            operation_class = "ExcelDataServices::V4::Operations::#{class_name}".constantize
-            @operations << operation_class unless operations.include?(operation_class)
+            @operations ||= schema_data[:operations].map do |operation_class_name|
+              "ExcelDataServices::V4::Operations::#{operation_class_name}".constantize
+            end
           end
         end
       end

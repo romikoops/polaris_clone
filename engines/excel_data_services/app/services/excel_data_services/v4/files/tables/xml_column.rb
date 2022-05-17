@@ -95,7 +95,7 @@ module ExcelDataServices
                 row_nr: duplicates.first.row,
                 col_nr: duplicates.first.column,
                 sheet_name: duplicates.first.sheet_name,
-                reason: "Duplicates exists at #{error_locations}. Please remove all duplicate data and try again.",
+                reason: "Duplicates exist at #{error_locations}. Please remove all duplicate data and try again.",
                 exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks::DuplicateDataFound
               )
             end

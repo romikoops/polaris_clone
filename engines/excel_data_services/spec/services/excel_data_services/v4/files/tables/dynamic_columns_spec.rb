@@ -33,7 +33,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::DynamicColumns do
     end
 
     context "when two dynamic columns exists" do
-      let(:expected_headers) { %w[Dynamic:ofr Dynamic:lss] }
+      let(:expected_headers) { %w[Dynamic(Sheet2-22):ofr Dynamic(Sheet2-23):lss] }
       let(:excluding) { %w[REMARKS VM_RATIO WM_RATIO TRANSIT_TIME] }
       let(:including) { [] }
       let(:header_row) { 1 }
@@ -43,7 +43,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::DynamicColumns do
     end
 
     context "when defining the columns to be included" do
-      let(:expected_headers) { %w[Dynamic:ofr] }
+      let(:expected_headers) { %w[Dynamic(Sheet2-22):ofr] }
       let(:excluding) { %w[REMARKS VM_RATIO WM_RATIO TRANSIT_TIME] }
       let(:including) { ["OFR"] }
       let(:header_row) { 1 }

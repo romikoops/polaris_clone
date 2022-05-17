@@ -1,0 +1,297 @@
+# frozen_string_literal: true
+
+required:
+  - type: excel
+    rows: "1:1"
+    columns: A:?
+    content:
+      - MOT
+      - CARRIER
+      - SERVICE_LEVEL
+      - TRANSSHIPMENT
+
+columns:
+  - header: service
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    alternative_keys:
+      - service_level
+    fallback: standard
+  - header: group_id
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+  - header: group_name
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+  - header: effective_date
+    sanitizer: date
+    validator: date
+    required: false
+    type: :object
+  - header: expiration_date
+    sanitizer: date
+    validator: date
+    required: false
+    type: :object
+  - header: origin_locode
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+  - header: origin_hub
+    sanitizer: text
+    validator: optional_string
+    required: false
+    alternative_keys:
+      - origin
+    type: :object
+  - header: origin_country
+    sanitizer: text
+    validator: optional_string
+    required: false
+    alternative_keys:
+      - country_origin
+    type: :object
+  - header: destination_locode
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+  - header: destination_hub
+    sanitizer: text
+    validator: optional_string
+    required: false
+    alternative_keys:
+      - destination
+    type: :object
+  - header: destination_country
+    sanitizer: text
+    validator: optional_string
+    alternative_keys:
+      - country_destination
+    required: false
+    type: :object
+  - header: mode_of_transport
+    sanitizer: downcase
+    validator: mode_of_transport
+    required: false
+    alternative_keys:
+      - mot
+    type: :object
+  - header: carrier
+    sanitizer: text
+    validator: string
+    required: false
+    type: :object
+    fallback: ORGANIZATION_SLUG
+  - header: service_level
+    sanitizer: text
+    validator: string
+    required: false
+    type: :object
+  - header: cargo_class
+    sanitizer: downcase
+    validator: cargo_class
+    required: true
+    alternative_keys:
+      - load_type
+    type: :object
+  - header: internal
+    sanitizer: internal
+    validator: boolean
+    required: false
+    fallback: false
+    type: :object
+  - header: transshipment
+    sanitizer: transshipment
+    validator: optional_string
+    required: false
+    type: :object
+  - header: wm_rate
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    alternative_keys:
+      - wm_ratio
+    type: :object
+  - header: vm_rate
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    alternative_keys:
+      - vm_ratio
+    type: :object
+  - header: origin_terminal
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+  - header: destination_terminal
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+  - header: min
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    alternative_keys:
+      - minimum
+      - fee_min
+    type: :object
+  - header: fee_name
+    sanitizer: text
+    validator: string
+    required: false
+    type: :object
+  - header: fee_code
+    sanitizer: downcase
+    validator: string
+    required: false
+    alternative_keys:
+      - code
+    type: :object
+  - header: currency
+    sanitizer: upcase
+    validator: currency
+    required: true
+    type: :object
+  - header: rate
+    sanitizer: decimal
+    validator: numeric
+    required: false
+    alternative_keys:
+      - fee
+    type: :object
+  - header: rate_basis
+    sanitizer: text
+    validator: string
+    required: false
+    type: :object
+  - header: range_min
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    type: :object
+  - header: range_max
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    type: :object
+  - header: base
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    type: :object
+  - header: remarks
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+    fallback: nil
+  - header: "carrier_code"
+    sanitizer: "downcase"
+    validator: "string"
+    required: true
+    type: :object
+    fallback: ORGANIZATION_SLUG
+    alternative_keys:
+      - carrier
+  - header: transit_time
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+
+dynamic_columns:
+  - excluding:
+    - REMARKS
+    - WM_RATIO
+    - VM_RATIO
+    - TRANSIT_TIME
+
+operations:
+  - ExpandedDates
+  - DynamicFees
+
+pipelines:
+  - extractors:
+      - RoutingCarrier
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
+      - Carrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
+
+  - validators:
+      - OriginHub
+      - DestinationHub
+    extractors:
+      - Itinerary
+    formatter: Itinerary
+    importer:
+      model: Legacy::Itinerary
+
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
+
+  - validators:
+      - TenantVehicle
+      - Itinerary
+    extractors:
+      - TransitTime
+    formatter: TransitTime
+    importer:
+      model: Legacy::TransitTime
+      options:
+        on_duplicate_key_ignore: false
+        validate: true
+        on_duplicate_key_update:
+          - :duration
+
+  - validators:
+      - SequentialDates
+      - ChargeFees
+      - Carrier
+      - OriginHub
+      - DestinationHub
+      - ChargeCategory
+      - Group
+      - RateBasis
+    extractors:
+      - Pricing
+    formatter: Pricing
+    importer:
+      model: Pricings::Pricing
+      options:
+        recursive: true
+    conflicts:
+      - model: Pricings::Pricing
+        conflict_keys:
+          - itinerary_id
+          - cargo_class
+          - organization_id
+          - group_id
+          - tenant_vehicle_id

@@ -1,0 +1,126 @@
+required:
+  - rows: '1:1'
+    columns: 'A:?'
+    content:
+      - NAME
+      - LOCODE
+      - TERMINAL
+
+columns:
+  - header: "name"
+    sanitizer: "text"
+    validator: "string"
+    required: true
+
+  - header: "locode"
+    sanitizer: "text"
+    validator: "locode"
+    required: true
+
+  - header: "hub_status"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    alternative_keys:
+      - status
+    required: false
+    fallback: "active"
+
+  - header: "hub_type"
+    sanitizer: "text"
+    validator: "mode_of_transport"
+    type: :object
+    alternative_keys:
+      - type
+    required: true
+
+  - header: "terminal"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    required: false
+
+  - header: "terminal_code"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    required: false
+
+  - header: "latitude"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    type: :object
+    required: false
+
+  - header: "longitude"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    type: :object
+    required: false
+
+  - header: "country"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    required: false
+
+  - header: "full_address"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    required: false
+
+  - header: "free_out"
+    sanitizer: "boolean"
+    validator: "boolean"
+    type: :bool
+    required: false
+
+  - header: "import_charges"
+    sanitizer: "boolean"
+    validator: "boolean"
+    type: :bool
+    required: false
+
+  - header: "export_charges"
+    sanitizer: "boolean"
+    validator: "boolean"
+    type: :bool
+    required: false
+
+  - header: "pre_carriage"
+    sanitizer: "boolean"
+    validator: "boolean"
+    type: :bool
+    required: false
+
+  - header: "on_carriage"
+    sanitizer: "boolean"
+    validator: "boolean"
+    type: :bool
+    required: false
+
+  - header: "alternative_names"
+    sanitizer: "text"
+    validator: "optional_string"
+    type: :object
+    required: false
+
+pipelines:
+  - validators:
+      - CartaLocodeData
+      - Country
+    extractors:
+      - Nexus
+    formatter: Nexus
+    importer:
+      model: Legacy::Nexus
+  - validators:
+      - Nexus
+      - MandatoryCharge
+      - Country
+    extractors:
+      - Address
+    formatter: Hub
+    importer:
+      model: Legacy::Hub

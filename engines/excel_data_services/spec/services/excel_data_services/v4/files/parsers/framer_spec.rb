@@ -8,7 +8,7 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Framer do
   let(:service) { described_class.new(section: section_string, state: state_arguments) }
 
   describe "#framer" do
-    let(:section_string) { "Truckings" }
+    let(:section_string) { "Trucking" }
 
     it "returns the Framer defined in the schema" do
       expect(service.framer).to eq(ExcelDataServices::V4::Framers::TruckingRates)

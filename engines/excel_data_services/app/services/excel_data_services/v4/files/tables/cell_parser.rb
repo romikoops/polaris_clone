@@ -32,7 +32,11 @@ module ExcelDataServices
           end
 
           def location
-            "(Sheet: #{sheet_name}) row: #{row}, column: #{column}"
+            [
+              sheet_name && "(Sheet: #{sheet_name})",
+              row && "row: #{row}",
+              column && "column: #{column}"
+            ].compact.join(" ")
           end
 
           private

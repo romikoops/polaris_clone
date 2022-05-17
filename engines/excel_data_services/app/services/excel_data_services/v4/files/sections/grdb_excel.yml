@@ -1,0 +1,208 @@
+# frozen_string_literal: true
+
+required:
+  - type: excel
+    rows: "1:1"
+    columns: "A:?"
+    content:
+      - WWA Member
+      - Customer
+
+columns:
+  - header: service
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+    alternative_keys:
+      - service_level
+    fallback: standard
+    exclude_sheets:
+      - Kopfdaten
+  - header: carrier
+    sanitizer: text
+    validator: optional_string
+    required: false
+    type: :object
+    fallback: "WWA"
+    exclude_sheets:
+      - Kopfdaten
+  - header: carrier_code
+    sanitizer: downcase
+    validator: optional_string
+    required: false
+    type: :object
+    fallback: "wwa"
+    exclude_sheets:
+      - Kopfdaten
+  - header: customer
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: wwa_member
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: origin_region
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: origin_inland_cfs
+    sanitizer: text
+    validator: locode
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: consol_cfs
+    sanitizer: text
+    validator: locode
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: origin_locode
+    sanitizer: text
+    validator: locode
+    required: true
+    type: :object
+    alternative_keys:
+      - port_of_loading
+    exclude_sheets:
+      - Kopfdaten
+  - header: transhipment_1
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: transhipment_2
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: transhipment_3
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: destination_region
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: destination_locode
+    sanitizer: text
+    validator: locode
+    required: true
+    type: :object
+    alternative_keys:
+    - port_of_discharge
+    exclude_sheets:
+      - Kopfdaten
+  - header: deconsol_cfs
+    sanitizer: text
+    validator: locode
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: destination_inland_cfs
+    sanitizer: text
+    validator: optional_locode
+    required: false
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+  - header: quoting_region
+    sanitizer: text
+    validator: string
+    required: true
+    type: :object
+    exclude_sheets:
+      - Kopfdaten
+
+framer: GrdbExcel
+
+dynamic_columns:
+  - excluding:
+      - REMARKS
+      - WM_RATIO
+      - VM_RATIO
+      - TRANSIT_TIME
+
+operations:
+  - Grdb
+  - CountryCodeFromLocode
+  - ExpandedDates
+
+distributors:
+  - GrdbExcel
+
+pipelines:
+  - extractors:
+      - Carrier
+      - RoutingCarrier
+    importers:
+      - Carrier
+      - RoutingCarrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    importers:
+      - TenantVehicle
+  - validators:
+      - OriginHub
+      - DestinationHub
+    extractors:
+      - Itinerary
+    importers:
+      - Itinerary
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    importers:
+      - ChargeCategory
+
+  - validators:
+      - SequentialDates
+      - ChargeFees
+      - Carrier
+      - TenantVehicle
+      - Itinerary
+      - ChargeCategory
+      - Group
+      - GrdbRateBasis
+      - RateBasis
+    extractors:
+      - Pricing
+    importers:
+      - Pricing
+    conflicts:
+      - model: Pricings::Pricing
+        conflict_keys:
+          - itinerary_id
+          - cargo_class
+          - organization_id
+          - group_id
+          - tenant_vehicle_id
+

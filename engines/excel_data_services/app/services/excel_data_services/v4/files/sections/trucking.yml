@@ -1,0 +1,558 @@
+# frozen_string_literal: true
+
+required:
+  - rows: "1:4"
+    columns: "A:?"
+    content:
+      - ZONE
+
+columns:
+  - header: "service"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Zones"
+
+  - header: "carrier"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Zones"
+
+  - header: "group_name"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+  - header: "group_id"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+
+  - header: "zone"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "service"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    alternative_keys:
+      - "service_level"
+    sheet_name: "Fees"
+
+  - header: "carrier"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "carrier_code"
+    sanitizer: "downcase"
+    validator: "optional_string"
+    required: false
+    alternative_keys:
+      - "carrier"
+    sheet_name: "Fees"
+
+  - header: "direction"
+    sanitizer: "downcase"
+    validator: "direction"
+    required: true
+    sheet_name: "Fees"
+
+  - header: "truck_type"
+    sanitizer: "downcase"
+    validator: "truck_type"
+    required: true
+    sheet_name: "Fees"
+
+  - header: "cargo_class"
+    sanitizer: "downcase"
+    validator: "optional_cargo_class"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "min"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    alternative_keys:
+      - "minimum"
+    sheet_name: "Fees"
+  - header: "max"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    alternative_keys:
+      - "maximum"
+    sheet_name: "Fees"
+
+  - header: "fee_name"
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    alternative_keys:
+      - "fee"
+    sheet_name: "Fees"
+
+  - header: "fee_code"
+    sanitizer: "downcase"
+    validator: "string"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "currency"
+    sanitizer: "upcase"
+    validator: "currency"
+    required: true
+    sheet_name: "Fees"
+
+  - header: "rate_basis"
+    sanitizer: "upcase"
+    validator: "string"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "range_min"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "range_max"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "base"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "ton"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "cbm"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "kg"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "item"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "shipment"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "bill"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "container"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "wm"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "percentage"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    sheet_name: "Fees"
+
+  - header: "service"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    alternative_keys:
+      - "service_level"
+    fallback: "standard"
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "carrier"
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    fallback: ORGANIZATION_SLUG
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+  - header: "carrier_code"
+    sanitizer: "downcase"
+    validator: "string"
+    required: false
+    fallback: ORGANIZATION_SLUG
+    alternative_keys:
+      - "carrier"
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "direction"
+    sanitizer: "downcase"
+    validator: "direction"
+    required: true
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "cargo_class"
+    sanitizer: "downcase"
+    validator: "cargo_class"
+    required: true
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_type"
+    sanitizer: "downcase"
+    validator: "load_type"
+    required: true
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "truck_type"
+    sanitizer: "downcase"
+    validator: "truck_type"
+    required: true
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "effective_date"
+    sanitizer: "date"
+    validator: "date"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+  - header: "expiration_date"
+    sanitizer: "date"
+    validator: "date"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "cbm_ratio"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "currency"
+    sanitizer: "upcase"
+    validator: "currency"
+    required: true
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "base"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_meterage_stackable_limit"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_meterage_non_stackable_limit"
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_meterage_hard_limit"
+    sanitizer: "boolean"
+    validator: "optional_boolean"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_meterage_stackable_type"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "load_meterage_non_stackable_type"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "rate_basis"
+    sanitizer: "upcase"
+    validator: "string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+    column_length: 1
+
+  - header: "mode_of_transport"
+    sanitizer: "downcase"
+    validator: "string"
+    required: false
+    fallback: "truck_carriage"
+
+  - header: "zone"
+    sanitizer: "text"
+    validator: "zone"
+    required: true
+    sheet_name: "Zones"
+  - header: "postal_code"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    alternative_keys:
+      - "zipcode"
+    sheet_name: "Zones"
+  - header: "locode"
+    sanitizer: "text"
+    validator: "optional_locode"
+    required: false
+    sheet_name: "Zones"
+  - header: "distance"
+    sanitizer: "distance"
+    validator: "optional_numeric_like"
+    required: false
+    sheet_name: "Zones"
+  - header: "city"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Zones"
+  - header: "province"
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    sheet_name: "Zones"
+  - header: "range"
+    sanitizer: "text"
+    validator: "zone_range"
+    required: false
+    sheet_name: "Zones"
+  - header: "country_code"
+    sanitizer: "upcase"
+    validator: "country_code"
+    required: true
+    sheet_name: "Zones"
+
+matrixes:
+  - header: "rate"
+    rows: "6:?"
+    columns: "C:?"
+    sanitizer: "decimal"
+    validator: "numeric"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "row_minimum"
+    rows: "6:?"
+    columns: "B"
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "zone"
+    rows: "6:?"
+    columns: "A"
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "bracket_minimum"
+    rows: "5"
+    columns: "C:?"
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "bracket"
+    rows: "4"
+    columns: "C:?"
+    sanitizer: "text"
+    validator: "zone_range"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "modifier"
+    rows: "3"
+    columns: "C:?"
+    sanitizer: "text"
+    validator: "modifier"
+    required: false
+    exclude_sheets:
+      - Zones
+      - Fees
+
+  - header: "identifier"
+    rows: "1"
+    columns: "B"
+    sanitizer: "identifier"
+    validator: "identifier"
+    required: true
+    sheet_name: "Zones"
+
+framer: "TruckingRates"
+
+operations:
+  - "TruckingZones"
+  - "TruckingFees"
+
+data_validators:
+  - ChargeFees
+  - TruckingSheet
+
+pipelines:
+  - extractors:
+      - RoutingCarrier
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
+      - Carrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
+
+  - validators:
+      - QueryType
+      - LocationsLocation
+      - Country
+    extractors:
+      - TruckingLocation
+    formatter: TruckingLocation
+    importer:
+      model: Trucking::Location
+
+  - validators:
+      - QueryMethod
+    extractors:
+      - Carriage
+      - TypeAvailability
+    formatter: TypeAvailability
+    importer:
+      model: Trucking::TypeAvailability
+
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
+
+  - validators:
+      - TypeAvailability
+    formatter: HubAvailability
+    importer:
+      model: Trucking::HubAvailability
+
+  - validators:
+      - Carrier
+      - TenantVehicle
+      - ChargeCategory
+      - Group
+      - RateBasis
+      - TruckingLocation
+    conflicts:
+      - model: Trucking::Trucking
+        conflict_keys:
+        - hub_id
+        - cargo_class
+        - organization_id
+        - group_id
+        - tenant_vehicle_id
+        - carriage
+    formatter: Trucking
+    importer:
+      model: Trucking::Trucking

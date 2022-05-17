@@ -1,0 +1,294 @@
+# frozen_string_literal: true
+
+required:
+  - type: excel
+    rows: "1:1"
+    columns: "A:?"
+    content:
+      - DIRECTION
+      - CURRENCY
+      - RATE_BASIS
+      - MINIMUM
+      - MAXIMUM
+      - BASE
+      - TON
+      - CBM
+      - KG
+      - RANGE_MIN
+      - RANGE_MAX
+columns:
+  - header: service
+    sanitizer: "text"
+    validator: "string"
+    required: true
+    type: :object
+    alternative_keys:
+      - service_level
+    fallback: "standard"
+  - header: group_id
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: group_name
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: effective_date
+    sanitizer: "date"
+    validator: "date"
+    required: false
+    type: :object
+  - header: expiration_date
+    sanitizer: "date"
+    validator: "date"
+    required: false
+    type: :object
+  - header: locode
+    sanitizer: "text"
+    validator: "optional_locode"
+    required: false
+    type: :object
+  - header: hub
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: country
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: counterpart_locode
+    sanitizer: "text"
+    validator: "optional_locode"
+    required: false
+    type: :object
+  - header: counterpart_hub
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: counterpart_country
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: mode_of_transport
+    sanitizer: "downcase"
+    validator: "mode_of_transport"
+    required: false
+    alternative_keys:
+      - mot
+    type: :object
+  - header: carrier
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    type: :object
+    fallback: ORGANIZATION_SLUG
+  - header: direction
+    sanitizer: "downcase"
+    validator: "direction"
+    required: true
+    type: :object
+  - header: service_level
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    type: :object
+  - header: cargo_class
+    sanitizer: "downcase"
+    validator: "cargo_class"
+    required: true
+    alternative_keys:
+      - load_type
+    type: :object
+  - header: load_type
+    sanitizer: "downcase"
+    validator: "cargo_class"
+    required: true
+    type: :object
+  - header: terminal
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: counterpart_terminal
+    sanitizer: "text"
+    validator: "optional_string"
+    required: false
+    type: :object
+  - header: min
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    alternative_keys:
+      - minimum
+    type: :object
+  - header: max
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    alternative_keys:
+      - maximum
+    type: :object
+  - header: fee_name
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    alternative_keys:
+      - fee
+    type: :object
+  - header: fee_code
+    sanitizer: "downcase"
+    validator: "string"
+    required: false
+    type: :object
+  - header: currency
+    sanitizer: "upcase"
+    validator: "currency"
+    required: true
+    type: :object
+  - header: rate_basis
+    sanitizer: "text"
+    validator: "string"
+    required: false
+    type: :object
+  - header: range_min
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: range_max
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: base
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: ton
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: cbm
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: kg
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: item
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: shipment
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: bill
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: container
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: wm
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: percentage
+    sanitizer: "decimal"
+    validator: "optional_numeric"
+    required: false
+    type: :object
+  - header: dangerous
+    sanitizer: "boolean"
+    validator: "optional_boolean"
+    fallback: false
+    required: false
+    type: :object
+  - header: internal
+    sanitizer: "internal"
+    validator: "boolean"
+    required: false
+    type: :object
+  - header: "carrier_code"
+    sanitizer: "downcase"
+    validator: "string"
+    required: true
+    type: :object
+    fallback: ORGANIZATION_SLUG
+    alternative_keys:
+      - carrier
+
+operations:
+  - ExpandedDates
+  - CounterpartHubExpander
+
+pipelines:
+  - extractors:
+      - RoutingCarrier
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
+      - Carrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
+
+  - validators:
+      - SequentialDates
+      - ChargeFees
+      - Carrier
+      - TenantVehicle
+      - Hub
+      - CounterpartHub
+      - ChargeCategory
+      - Group
+      - RateBasis
+    formatter: LocalCharge
+    importer:
+      model: Legacy::LocalCharge
+    conflicts:
+      - model: Legacy::LocalCharge
+        conflict_keys:
+          - hub_id
+          - counterpart_hub_id
+          - tenant_vehicle_id
+          - load_type
+          - mode_of_transport
+          - group_id
+          - direction
+          - organization_id

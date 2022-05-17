@@ -5,8 +5,6 @@ module ExcelDataServices
     module Files
       module Tables
         class Matrix
-          # A Column class is defined in the config file. It results in one column of the data frame and allows you to configure
-          # santizers, fallback values, validators, required content and more
           attr_reader :header, :coordinates, :xlsx, :sheet_name, :options
 
           def initialize(xlsx:, rows:, columns:, header:, sheet_name:, options: Options.new)

@@ -4,7 +4,7 @@ module ExcelDataServices
   module V4
     module Files
       class Importer
-        # The Importer class takes the configuration from the cofig file and triggers the Import class with the arguments provided and teh current State object
+        # The Importer class takes the configuration from the config file and triggers the Import class with the arguments provided and teh current State object
         attr_reader :model, :options
 
         def initialize(model:, options:)

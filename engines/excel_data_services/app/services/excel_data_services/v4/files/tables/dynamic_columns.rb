@@ -31,74 +31,71 @@ module ExcelDataServices
 
             def initialize(sheet:, including:, excluding:, header_row: 1)
               @sheet = sheet
-              @including = including
-              @excluding = excluding
+              @including = including.map(&:downcase)
+              @excluding = excluding.map(&:downcase)
               @header_row = header_row
             end
 
             def columns
-              target_headers.map do |column_index|
+              target_headers_with_column.map do |header_with_column|
                 DynamicSheetColumn.new(
                   xlsx: xlsx,
                   sheet_name: sheet_name,
-                  column_index: column_index
+                  header: header_with_column[:value],
+                  column_index: header_with_column[:column]
                 ).column
               end
             end
 
             delegate :xlsx, :sheet_name, to: :sheet
 
-            def headers
-              1.upto(roo_sheet.last_column).to_a - defined_columns
+            def unassigned_headers
+              header_values_with_index.reject do |value_and_column|
+                !value_and_column[:value] || sheet.columns.any? { |col| col.matches_any_header?(value: value_and_column[:value]) }
+              end
             end
 
-            def header_values
-              @header_values ||= roo_sheet.row(header_row).map(&:to_s).map(&:downcase)
+            def header_values_with_index
+              xlsx.sheet(sheet_name).row(header_row).map.with_index do |value, index|
+                value = value.downcase if value
+                { value: value, column: index + 1 }
+              end
             end
 
-            def target_headers
-              excluded = (headers - excluded_columns)
-              return excluded if including.blank?
+            def target_headers_with_column
+              return post_exclusion_headers if including.blank?
 
-              excluded & included_columns
+              post_inclusion_headers
             end
 
-            def roo_sheet
-              @roo_sheet ||= xlsx.sheet(sheet_name)
+            def post_exclusion_headers
+              unassigned_headers.reject do |unassigned_header|
+                excluding.include?(unassigned_header[:value])
+              end
             end
 
-            def excluded_columns
-              @excluded_columns ||= excluding.map(&:downcase)
-                .filter_map { |excluded_header| header_values.index(excluded_header) }
-                .map { |excluded_header_index| excluded_header_index + 1 }
-            end
-
-            def included_columns
-              @included_columns ||= including.map(&:downcase)
-                .map { |included_header| header_values.index(included_header) }
-                .map { |excluded_index| excluded_index + 1 }
-                .reject(&:zero?)
-            end
-
-            def defined_columns
-              @defined_columns ||= sheet.sheet_columns
+            def post_inclusion_headers
+              unassigned_headers.select do |unassigned_header|
+                including.include?(unassigned_header[:value])
+              end
             end
           end
 
           class DynamicSheetColumn
-            attr_reader :sheet_name, :xlsx, :column_index
+            attr_reader :sheet_name, :xlsx, :header, :column_index
 
-            def initialize(sheet_name:, xlsx:, column_index:)
+            def initialize(sheet_name:, xlsx:, header:, column_index:)
               @sheet_name = sheet_name
               @xlsx = xlsx
+              @header = header.downcase
               @column_index = column_index
             end
 
             def column
-              ExcelDataServices::V4::Files::Tables::Column.new(
+              @column ||= ExcelDataServices::V4::Files::Tables::Column.new(
                 xlsx: xlsx,
                 sheet_name: sheet_name,
-                header: "Dynamic:#{header.downcase.strip}",
+                header: "Dynamic(#{sheet_name}-#{column_index}):#{snake_case_header}",
                 options: options
               )
             end
@@ -108,19 +105,20 @@ module ExcelDataServices
                 dynamic: true,
                 alternative_keys: [header.downcase],
                 sanitizer: sanitizer,
-                validator: validator
+                validator: validator,
+                column_index: column_index
               })
             end
 
-            def header
-              (xlsx.sheet(sheet_name).cell(1, column_index) || column_index).to_s.strip
+            def snake_case_header
+              header.strip.downcase.gsub(/\s/, "_")
             end
 
             def sanitizer
               case header
-              when /curr_month|next_month/
+              when /_month/
                 "upcase"
-              when /curr_fee|next_fee/
+              when /_fee/
                 "money"
               else
                 "text"
@@ -129,9 +127,9 @@ module ExcelDataServices
 
             def validator
               case header
-              when /curr_month|next_month/
+              when /_month/
                 "optional_month"
-              when /curr_fee|next_fee/
+              when /_fee/
                 "optional_numeric_or_money"
               else
                 "any"

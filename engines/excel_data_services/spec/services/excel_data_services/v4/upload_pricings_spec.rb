@@ -139,8 +139,8 @@ RSpec.describe ExcelDataServices::V4::Upload do
       end
     end
 
-    context "with an hubs sheet" do
-      let(:xlsx) { File.open(file_fixture("excel/example_hubs.xlsx")) }
+    context "with an pricings sheet" do
+      let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
 
       it "is valid" do
         expect(service).to be_valid

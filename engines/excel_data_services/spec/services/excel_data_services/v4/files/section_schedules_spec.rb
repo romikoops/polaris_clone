@@ -26,7 +26,7 @@ RSpec.describe ExcelDataServices::V4::Files::Section do
     let(:tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "standard", carrier: carrier, organization: organization) }
     let(:origin_hub) { FactoryBot.create(:legacy_hub, :hamburg, organization: organization) }
     let(:destination_hub) { FactoryBot.create(:legacy_hub, :shanghai, organization: organization) }
-    let(:result_state) { service.perform }
+    let(:result_state) { described_class.state(state: state_arguments) }
     let(:schedule_count) { Schedules::Schedule.all.count }
 
     shared_examples_for "schedule creation fails" do

@@ -61,7 +61,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Matrix do
     context "when required data is missing" do
       let(:columns) { "Z" }
       let(:rows) { "2:3" }
-      let(:required_data_missing_error) { "Required data is missing at: (Sheet: Sheet1) row: 2, column: Z. Please fill in the missing data and try again." }
+      let(:required_data_missing_error) { "Required data is missing at: (Sheet: Sheet1) row: 2 column: Z. Please fill in the missing data and try again." }
 
       it "returns errors specifying the missing data's location" do
         expect(service.errors.map(&:reason)).to include(required_data_missing_error)
@@ -77,7 +77,9 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Matrix do
           type: :object
         }
       end
-      let(:duplicate_data_error) { "Duplicates exists at (Sheet: Sheet1) row: 2, column: N & (Sheet: Sheet1) row: 3, column: N & (Sheet: Sheet1) row: 4, column: N & (Sheet: Sheet1) row: 5, column: N. Please remove all duplicate data and try again." }
+      let(:duplicate_data_error) do
+        "Duplicates exists at (Sheet: Sheet1) row: 2 column: N & (Sheet: Sheet1) row: 3 column: N & (Sheet: Sheet1) row: 4 column: N & (Sheet: Sheet1) row: 5 column: N. Please remove all duplicate data and try again."
+      end
 
       it "returns errors specifying the duplicated data's location" do
         expect(service.errors.map(&:reason)).to include(duplicate_data_error)

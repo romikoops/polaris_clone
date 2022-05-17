@@ -4,73 +4,55 @@ module ExcelDataServices
   module V4
     module Files
       module Parsers
-        class ConnectedActions < ExcelDataServices::V4::Files::Parsers::Base
-          attr_reader :scope
+        class ConnectedActions
+          attr_reader :scope, :state
 
-          SPLIT_PATTERN = /^(add_validator)|(add_formatter)|(add_extractor)|(model_importer)|(conflict)|(target_model)/.freeze
+          KEYS = %i[validators conflicts extractors formatters importers].freeze
+
           delegate :organization, to: :state
           delegate :scope, to: :organization
 
-          def model
-            @model ||= nil
+          def initialize(state:, schema_data:)
+            @state = state
+            @schema_data = schema_data
           end
 
           def actions
-            (validators + conflicts + extractors + formatters + [importer])
+            (validators + conflicts + extractors + [formatter] + [importer])
           end
 
           private
 
-          def parse_config
-            ExcelDataServices::V4::Files::Parsers::Schema.new(
-              path: "section_data", section: section, pattern: self.class::SPLIT_PATTERN
-            ).perform do |schema_lines|
-              instance_eval(schema_lines)
+          attr_reader :schema_data
+
+          def validators
+            @validators ||= (schema_data[:validators] || []).map do |validator|
+              "ExcelDataServices::V4::Validators::#{validator}".constantize
             end
           end
 
-          def validators
-            @validators ||= []
-          end
-
-          def formatters
-            @formatters ||= []
+          def formatter
+            @formatter ||= "ExcelDataServices::V4::Formatters::#{schema_data[:formatter]}".constantize
           end
 
           def extractors
-            @extractors ||= []
+            @extractors ||= (schema_data[:extractors] || []).map do |extractor|
+              "ExcelDataServices::V4::Extractors::#{extractor}".constantize
+            end
           end
 
           def importer
-            @importer ||= nil
+            @importer ||= ExcelDataServices::V4::Files::Importer.new(model: importer_data[:model].constantize, options: importer_data[:options] || {}) if importer_data.present?
           end
 
           def conflicts
-            @conflicts ||= []
+            @conflicts ||= (schema_data[:conflicts] || []).map do |conflict|
+              ExcelDataServices::V4::Files::Conflict.new(model: conflict[:model].constantize, keys: conflict[:conflict_keys])
+            end
           end
 
-          def add_validator(class_name)
-            validators << "ExcelDataServices::V4::Validators::#{class_name}".constantize
-          end
-
-          def add_formatter(class_name)
-            formatters << "ExcelDataServices::V4::Formatters::#{class_name}".constantize
-          end
-
-          def add_extractor(class_name)
-            extractors << "ExcelDataServices::V4::Extractors::#{class_name}".constantize
-          end
-
-          def model_importer(model, options = {})
-            @importer = ExcelDataServices::V4::Files::Importer.new(model: model, options: options)
-          end
-
-          def target_model(model)
-            @model = model
-          end
-
-          def conflict(model, keys)
-            conflicts << ExcelDataServices::V4::Files::Conflict.new(model: model, keys: keys)
+          def importer_data
+            schema_data[:importer]
           end
         end
       end

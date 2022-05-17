@@ -24,7 +24,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
   describe "#frame" do
     let(:result) { service.frame }
 
-    context "when there frame does have the key" do
+    context "when the frame does have the key" do
       let(:expected_result) do
         Rover::DataFrame.new([
           { "value" => "OFR", "row" => 1, "header" => "fee_code", "sheet_name" => identifier, "column" => "ChargeCode", "organization_id" => organization.id },
@@ -38,7 +38,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
       end
     end
 
-    context "when there frame doesn't have the key" do
+    context "when the frame doesn't have the key" do
       let(:options) { ExcelDataServices::V4::Files::Tables::Options.new(options: { fallback: "x" }) }
       let(:expected_result) do
         Rover::DataFrame.new([
@@ -87,7 +87,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
       end
 
       it "returns the Uniqueness errors" do
-        expect(service.errors.map(&:reason)).to include("Duplicates exists at (Sheet: #{identifier}) row: 1, column: ChargeCode & (Sheet: #{identifier}) row: 2, column: ChargeCode. Please remove all duplicate data and try again.")
+        expect(service.errors.map(&:reason)).to include("Duplicates exist at (Sheet: #{identifier}) row: 1 column: ChargeCode & (Sheet: #{identifier}) row: 2 column: ChargeCode. Please remove all duplicate data and try again.")
       end
     end
 
@@ -99,7 +99,7 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
       end
 
       it "returns the Uniqueness errors" do
-        expect(service.errors.map(&:reason)).to include("Required data is missing at: (Sheet: #{identifier}) row: 2, column: ChargeCode. Please fill in the missing data and try again.")
+        expect(service.errors.map(&:reason)).to include("Required data is missing at: (Sheet: #{identifier}) row: 2 column: ChargeCode. Please fill in the missing data and try again.")
       end
     end
   end

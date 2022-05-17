@@ -38,7 +38,7 @@ module ExcelDataServices
           end
 
           def note_value
-            row.slice("row", "sheet_name").merge("remarks" => value.to_s.casecmp?("x") ? header.gsub("Dynamic:note/", "").upcase : nil)
+            row.slice("row", "sheet_name").merge("remarks" => value.to_s.casecmp?("x") ? header.gsub(%r{Dynamic\(\S{1,}-[0-9]{1,}\):note/}, "").upcase : nil)
           end
 
           def rate_values

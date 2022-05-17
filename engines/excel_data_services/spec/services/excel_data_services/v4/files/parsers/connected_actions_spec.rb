@@ -5,36 +5,28 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V4::Files::Parsers::ConnectedActions do
   include_context "V4 setup"
 
-  let(:service) { described_class.new(section: section_string, state: state_arguments) }
-
-  describe "#model" do
-    let(:section_string) { "Pricings" }
-
-    it "returns the model defined in the schema" do
-      expect(service.model).to eq(Pricings::Pricing)
-    end
-  end
+  let(:service) { described_class.new(schema_data: schema_data, state: state_arguments) }
 
   describe "#actions" do
-    let(:section_string) { "Pricings" }
-    let(:service_actions) { service.actions }
-    let(:expected_classes) do
-      [ExcelDataServices::V4::Validators::SequentialDates,
-        ExcelDataServices::V4::Validators::ChargeFees,
-        ExcelDataServices::V4::Validators::Carrier,
-        ExcelDataServices::V4::Validators::TenantVehicle,
-        ExcelDataServices::V4::Validators::OriginHub,
-        ExcelDataServices::V4::Validators::DestinationHub,
-        ExcelDataServices::V4::Validators::Itinerary,
-        ExcelDataServices::V4::Validators::ChargeCategory,
-        ExcelDataServices::V4::Validators::Group,
-        ExcelDataServices::V4::Validators::RateBasis]
+    let(:schema_data) do
+      {
+        validators: %w[QueryMethod],
+        extractors: %w[Carriage],
+        formatter: "TypeAvailability",
+        importer: { model: "Trucking::TypeAvailability", options: { validate: false } }
+      }
     end
+    let(:service_actions) { service.actions }
+
+    expected_actions = [
+      ExcelDataServices::V4::Validators::QueryMethod,
+      ExcelDataServices::V4::Extractors::Carriage,
+      ExcelDataServices::V4::Formatters::TypeAvailability
+    ]
 
     it "returns the all the validators conflicts extractors, formatters, and the importer defined in the schema" do
-      expected_classes.each do |klass|
-        expect(service_actions).to include(klass)
-      end
+      expect(service_actions[0..2]).to eq(expected_actions)
+      expect(service_actions[3]).to be_a(ExcelDataServices::V4::Files::Importer)
     end
   end
 end

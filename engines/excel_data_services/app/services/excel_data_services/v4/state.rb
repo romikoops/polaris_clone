@@ -48,7 +48,7 @@ module ExcelDataServices
       end
 
       def xml?
-        content_type == "application/xml"
+        %w[application/xml application/xhtml+xml].include?(content_type)
       end
 
       delegate :xlsx, to: :spreadsheet, allow_nil: true

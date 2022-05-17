@@ -5,8 +5,7 @@ module ExcelDataServices
     module Files
       module Tables
         class Options
-          OPTIONAL_BOOLEAN_VALUES = [true, false, nil].freeze
-
+          VALID_BOOLEAN_ARGS = [true, false, nil].freeze
           attr_reader :options
 
           def initialize(options: {})
@@ -63,7 +62,7 @@ module ExcelDataServices
 
           def errors
             %i[dynamic unique required].each_with_object([]) do |key, errs|
-              next if OPTIONAL_BOOLEAN_VALUES.include?(options[key])
+              next if VALID_BOOLEAN_ARGS.include?(options[key])
 
               errs << ExcelDataServices::V4::Files::Error.new(
                 type: :type_error,

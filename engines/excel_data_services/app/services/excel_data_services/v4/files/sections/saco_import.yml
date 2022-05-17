@@ -1,0 +1,332 @@
+required:
+  - rows: "6:6"
+    columns: "A:A"
+    content:
+      - POD
+    sheet_names:
+      - Tariff Sheet
+framer: SacoImport
+
+sheets:
+  - Tariff Sheet
+
+columns:
+  - header: base
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: 0
+  - header: service
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: standard
+  - header: carrier
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: Saco Shipping
+  - header: carrier_code
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: saco_shipping
+  - header: mode_of_transport
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: ocean
+  - header: destination_locode
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - pod
+  - header: origin_region
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - region
+  - header: destination_region
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: EMEA
+
+  - header: origin_hub
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - pol
+
+  - header: origin_locode
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - pol unlocode
+      - pol_unlocode
+
+  - header: currency
+    sanitizer: text
+    validator: currency
+    required: true
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - pol unlocode
+      - pol_unlocode
+
+  - header: minimum
+    sanitizer: decimal
+    validator: optional_numeric
+    required: true
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - rate min
+      - rate_min
+
+  - header: rate
+    sanitizer: decimal
+    validator: optional_numeric
+    required: true
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - rate
+  # - header: basis
+  #   sanitizer: text
+  #   validator: optional_string
+  #   required: true
+
+  #   sheet_name: Tariff Sheet
+  #   header_row: 6
+  #   alternative_keys:
+  #     - basis
+  - header: pre_carriage_minimum
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - precarriage min
+      - precarriage_min
+
+  - header: pre_carriage_rate
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - precarriage rate
+      - precarriage_rate
+  - header: pre_carriage_basis
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - precarriage basis
+      - precarriage_basis
+  - header: remarks
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - surcharges
+  - header: transshipment
+    sanitizer: transshipment
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - routing
+  - header: transit_time
+    sanitizer: text
+    validator: optional_string
+    required: true
+    sheet_name: Tariff Sheet
+    header_row: 6
+    alternative_keys:
+      - transit-time
+  - header: fee_code
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    header_row: 6
+    fallback: PRIMARY_FREIGHT_CODE
+  - header: effective_date
+    sanitizer: date
+    validator: optional_date
+    required: false
+    sheet_name: Tariff Sheet
+    alternative_keys:
+      - effective date
+  - header: expiration_date
+    sanitizer: date
+    validator: optional_date
+    required: false
+    sheet_name: Tariff Sheet
+    alternative_keys:
+      - expiration date
+  - header: crl
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+  - header: rate_info
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+  - header: origin_country_code
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    alternative_keys:
+      - country
+  - header: group_id
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+  - header: group_name
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+  - header: cargo_class
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    fallback: lcl
+  - header: load_type
+    sanitizer: text
+    validator: optional_string
+    required: false
+    sheet_name: Tariff Sheet
+    fallback: cargo_item
+  - header: range_min
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    sheet_name: Tariff Sheet
+  - header: range_max
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    sheet_name: Tariff Sheet
+
+matrixes:
+  - header: period
+    rows: "3:3"
+    columns: "A:A"
+
+dynamic_columns:
+  - excluding:
+      - REMARKS
+      - WM_RATIO
+      - VM_RATIO
+      - TRANSIT_TIME
+    header_row: 6
+
+operations:
+  - SacoImport
+  - CountryCodeFromLocode
+
+distributors:
+  - GrdbExcel
+
+pipelines:
+  - extractors:
+      - Carrier
+      - RoutingCarrier
+    importers:
+      - Carrier
+      - RoutingCarrier
+
+  - validators:
+      - Carrier
+    extractors:
+      - TenantVehicle
+    importers:
+      - TenantVehicle
+
+  - validators:
+      - OriginHub
+      - DestinationHub
+    extractors:
+      - Itinerary
+    importers:
+      - Itinerary
+
+  - validators:
+      - PrimaryFeeCode
+    extractors:
+      - ChargeCategory
+    importers:
+      - ChargeCategory
+
+  - extractors:
+      - TransitTime
+    importers:
+      - TransitTime
+
+  - validators:
+    - SequentialDates
+    - ChargeFees
+    - Carrier
+    - TenantVehicle
+    - OriginHub
+    - DestinationHub
+    - Itinerary
+    - ChargeCategory
+    - Group
+    - GrdbRateBasis
+    - RateBasis
+
+    extractors:
+      - Pricing
+    importers:
+      - Pricing
+
+    conflicts:
+      - model: Pricings::Pricing
+        conflict_keys:
+          - itinerary_id
+          - cargo_class
+          - organization_id
+          - group_id
+          - tenant_vehicle_id
