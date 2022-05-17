@@ -104,6 +104,7 @@ Api::Engine.routes.draw do
       resource :colli_types, only: [:show]
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
+      resource :active_locodes, only: %i[show]
     end
     resources :users do
       get "validate", on: :collection
