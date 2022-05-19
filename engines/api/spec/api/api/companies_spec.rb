@@ -10,7 +10,8 @@ RSpec.describe "Companies", type: :request, swagger: true do
   let(:group) { FactoryBot.create(:groups_group, name: "default", organization: organization) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
-  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1", address: hamburg_address, country: factory_country_from_code(code: "cn")) }
+  let(:germany) { factory_country_from_code(code: "DE") }
+  let!(:companies_company) { FactoryBot.create(:companies_company, organization: organization, email: "foo@bar.com", name: "company1", phone: "112233", vat_number: "DE-VATNUMBER1", address: hamburg_address) }
   let(:company_id) { companies_company.id }
   let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
   let(:shipment_request_status) { "requested" }
@@ -19,6 +20,17 @@ RSpec.describe "Companies", type: :request, swagger: true do
     Organizations.current_id = organization_id
     FactoryBot.create(:companies_company, organization: organization, name: "default")
     FactoryBot.create(:journey_shipment_request, company_id: companies_company.id, status: shipment_request_status)
+    Geocoder::Lookup::Test.set_default_stub([
+      "address_components" => [{ "types" => ["premise"] }],
+      "coordinates" => [54.2967559, 9.7094068],
+      "address" => "Brooktorkai 70 Hamburg 20457",
+      "street" => "Brooktorkai",
+      "street_number" => "70",
+      "city" => "Hamburg",
+      "country" => "Germany",
+      "country_code" => "DE",
+      "postal_code" => "20457"
+    ])
   end
 
   path "/v1/organizations/{organization_id}/companies/{company_id}" do
@@ -137,7 +149,14 @@ RSpec.describe "Companies", type: :request, swagger: true do
               name: { type: :string, description: "The name of the company" },
               paymentTerms: { type: :string, description: "The payment terms, set out by the company" },
               phone: { type: :string, description: "The phone number of the company" },
-              vatNumber: { type: :string, description: "The VAT number of the company" }
+              vatNumber: { type: :string, description: "The VAT number of the company" },
+              address: { type: :object, properties: {
+                street: { type: :string, description: "The street name of the company" },
+                streetNumber: { type: :string, description: "The street number of the company" },
+                zipCode: { type: :string, description: "Zip code of the company" },
+                city: { type: :string, description: "city name of the company" },
+                countryId: { type: :string, description: "country id associated to the address" }
+              } }
             }
           }
         }
@@ -151,7 +170,14 @@ RSpec.describe "Companies", type: :request, swagger: true do
               name: "awesome company",
               paymentTerms: "an awesome payment term",
               phone: "112233",
-              vatNumber: "VAT12345"
+              vatNumber: "VAT12345",
+              address: {
+                countryId: germany.id,
+                street: hamburg_address.street,
+                streetNumber: "70",
+                zipCode: hamburg_address.zip_code,
+                city: hamburg_address.city
+              }
             }
           }
         end

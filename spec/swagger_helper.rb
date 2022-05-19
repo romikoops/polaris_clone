@@ -126,23 +126,53 @@ RSpec.configure do |config|
                   description: "The registration number set by company",
                   type: "string"
                 },
+                address: {
+                  type: "object",
+                  description: "Address details of the company",
+                  properties: { "$ref" => "#/components/schemas/address" },
+                  nullable: true
+                },
+                lastActivityAt: {
+                  description: "Updated_at timestamp for the last query updated by the company",
+                  type: "string",
+                  nullable: true
+                }
+              }
+            }
+          },
+          address: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the address",
+                type: "integer"
+              },
+              type: {
+                description: "Generic type of the address",
+                type: "string"
+              },
+              attributes: {
+                id: {
+                  description: "Unique identifier of the address",
+                  type: "integer"
+                },
                 streetNumber: {
-                  description: "Street number of the company.",
+                  description: "Street number of the address.",
                   type: "string",
                   nullable: true
                 },
                 street: {
-                  description: "Street details of the company",
+                  description: "Street details of the address",
                   type: "string",
                   nullable: true
                 },
                 city: {
-                  description: "City of the company",
+                  description: "City name",
                   type: "string",
                   nullable: true
                 },
                 postalCode: {
-                  description: "PostalCode of the company",
+                  description: "PostalCode",
                   type: "string",
                   nullable: true
                 },
@@ -150,11 +180,6 @@ RSpec.configure do |config|
                   type: "object",
                   description: "Country details of the company",
                   properties: { "$ref" => "#/components/schemas/country" },
-                  nullable: true
-                },
-                lastActivityAt: {
-                  description: "Updated_at timestamp for the last query updated by the company",
-                  type: "string",
                   nullable: true
                 }
               }

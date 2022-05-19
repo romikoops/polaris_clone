@@ -14,13 +14,17 @@ module Api
         contact_phone
         contact_email
         registration_number
-        street_number
-        street
-        city
-        postal_code
-        country
         last_activity_at
       ]
+
+      attribute :address do |company|
+        company_address = company.address
+        if company_address.present?
+          %i[street street_number postal_code city country].inject({}) do |result, attribute|
+            result.merge(attribute.to_s.camelize(:lower) => company.send(attribute))
+          end
+        end
+      end
     end
   end
 end

@@ -41,14 +41,14 @@ module Api
         end
 
         def update
-          if company_params.empty?
+          if update_params.empty?
             return render(
               json: { error: "Please provide at least one param of email, name, paymentTerms, phone, or vatNumber" },
               status: :unprocessable_entity
             )
           end
 
-          company.update(company_params.transform_keys(&:underscore))
+          company.update(update_params)
           render json: Api::V2::CompanySerializer.new(company)
         end
 
@@ -64,18 +64,25 @@ module Api
           )
         end
 
+        def update_params
+          {}.tap do |param|
+            param.merge!(company_params.transform_keys(&:underscore))
+            param.merge!(address: address_from_params) unless address_params.empty?
+          end
+        end
+
         def address_from_params
           return nil if address_params.empty?
 
-          address_string = %i[streetNumber street city zipCode country].reduce("") do |memo, key|
+          address_string = %i[street streetNumber city zipCode].reduce("") do |memo, key|
             section = address_params.dig(:address, key)
-            memo + (section.presence || "")
+            memo + (section.present? ? "#{section}, " : "")
           end
-          Legacy::Address.geocoded_address(address_string)
+          Legacy::Address.geocoded_address(address_string).tap { |address| address.country_id = address_params.dig(:address, "countryId") }
         end
 
         def address_params
-          params.require(:company).permit(address: %i[streetNumber street city zipCode country])
+          params.require(:company).permit(address: %i[streetNumber street city zipCode countryId])
         end
 
         def company

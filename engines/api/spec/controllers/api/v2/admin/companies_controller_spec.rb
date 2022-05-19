@@ -37,11 +37,7 @@ module Api
            "contactPhone" => nil,
            "contactEmail" => nil,
            "registrationNumber" => nil,
-           "streetNumber" => nil,
-           "street" => nil,
-           "city" => nil,
-           "postalCode" => nil,
-           "country" => nil,
+           "address" => nil,
            "lastActivityAt" => nil } }
       end
 
@@ -151,6 +147,19 @@ module Api
 
         it_behaves_like "unauthorized for non users user"
       end
+
+      context "when company has an address attached" do
+        let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
+
+        before do
+          FactoryBot.create(:companies_company, name: "lclsaco", address: hamburg_address, organization: organization)
+          get :index, params: params
+        end
+
+        it "returns address as a part of response if present" do
+          expect(response_data.pluck("attributes").pluck("address").compact).to be_present
+        end
+      end
     end
 
     describe "PUT #update" do
@@ -169,11 +178,7 @@ module Api
              "contactPhone" => nil,
              "contactEmail" => nil,
              "registrationNumber" => nil,
-             "streetNumber" => nil,
-             "street" => nil,
-             "city" => nil,
-             "postalCode" => nil,
-             "country" => nil,
+             "address" => nil,
              "lastActivityAt" => nil }
         }
       end
@@ -216,6 +221,44 @@ module Api
             paymentTerms: "some payment terms example", phone: 554_433, vatNumber: "VAT12345"
           }
         }
+      end
+
+      context "when address of a company is updated" do
+        let(:hamburg_address) { FactoryBot.create(:hamburg_address) }
+        let!(:company_b) { FactoryBot.create(:companies_company, name: "lclsaco", address: hamburg_address, organization: organization) }
+        let(:new_address) do
+          {
+            "streetNumber" => "178",
+            "street" => "Brooktorkai",
+            "city" => "Hamburg",
+            "zipCode" => "20457",
+            "countryId" => hamburg_address.country.id
+          }
+        end
+
+        before do
+          Geocoder::Lookup::Test.set_default_stub([
+            "address_components" => [{ "types" => ["premise"] }],
+            "coordinates" => [54.2967559, 9.7094068],
+            "address" => "Brooktorkai 178 Hamburg 20457",
+            "street" => "Brooktorkai",
+            "street_number" => "178",
+            "city" => "Hamburg",
+            "country" => "Germany",
+            "country_code" => "DE",
+            "postal_code" => "20457"
+          ])
+          put :update, params: { organization_id: organization.id, id: company_b.id, company: { address: new_address } }, as: :json
+        end
+
+        it "returns company with updated address" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "updates the street number of the companies address with the new street number" do
+          company_b.reload
+          expect(company_b.address.street_number).to eq new_address["streetNumber"]
+        end
       end
     end
 
