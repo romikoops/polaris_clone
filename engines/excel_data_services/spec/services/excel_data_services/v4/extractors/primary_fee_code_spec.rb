@@ -14,7 +14,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::PrimaryFeeCode do
         {
           "fee_code" => ExcelDataServices::V4::Operations::Dynamic::DataColumn::PRIMARY_CODE_PLACEHOLDER,
           "fee_name" => nil,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -29,7 +30,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::PrimaryFeeCode do
         {
           "fee_code" => "included_",
           "fee_name" => nil,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

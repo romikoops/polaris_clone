@@ -13,7 +13,8 @@ RSpec.describe ExcelDataServices::V4::Validators::PrimaryFeeCode do
       {
         "fee_code" => ExcelDataServices::V4::Operations::Dynamic::DataColumn::PRIMARY_CODE_PLACEHOLDER,
         "fee_name" => nil,
-        "row" => 2
+        "row" => 2,
+        "organization_id" => organization.id
       }
     end
 

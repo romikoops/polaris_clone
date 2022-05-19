@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Validators::RateBasis do
         {
           "rate_basis" => rate_basis.external_code,
           "row" => 2,
-          "rate_basis_id" => nil
+          "rate_basis_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -29,7 +30,8 @@ RSpec.describe ExcelDataServices::V4::Validators::RateBasis do
         {
           "rate_basis" => "AAA",
           "row" => 2,
-          "rate_basis_id" => nil
+          "rate_basis_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

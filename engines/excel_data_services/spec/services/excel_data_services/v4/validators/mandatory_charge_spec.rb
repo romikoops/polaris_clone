@@ -10,7 +10,7 @@ RSpec.describe ExcelDataServices::V4::Validators::MandatoryCharge do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let!(:mandatory_charge) { factory_mandatory_charge }
 
-  describe ".state" do
+  describe "#state" do
     context "when found" do
       let(:row) do
         {
@@ -18,7 +18,8 @@ RSpec.describe ExcelDataServices::V4::Validators::MandatoryCharge do
           "import_charges" => false,
           "pre_carriage" => false,
           "on_carriage" => false,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -34,7 +35,8 @@ RSpec.describe ExcelDataServices::V4::Validators::MandatoryCharge do
           "import_charges" => true,
           "pre_carriage" => false,
           "on_carriage" => true,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Country do
         {
           "country" => country.name,
           "row" => 2,
-          "country_id" => nil
+          "country_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -29,7 +30,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Country do
         {
           "country" => "AAA",
           "row" => 2,
-          "country_id" => nil
+          "country_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

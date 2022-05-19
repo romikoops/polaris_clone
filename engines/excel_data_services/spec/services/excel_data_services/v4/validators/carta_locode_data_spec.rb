@@ -13,7 +13,8 @@ RSpec.describe ExcelDataServices::V4::Validators::CartaLocodeData do
     let(:row) do
       {
         "locode" => "DEHAM",
-        "row" => 2
+        "row" => 2,
+        "organization_id" => organization.id
       }
     end
 

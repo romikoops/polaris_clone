@@ -5,12 +5,13 @@ module ExcelDataServices
     module Extractors
       class TenantVehicle < ExcelDataServices::V4::Extractors::Base
         def frame_data
-          Legacy::TenantVehicle.where(organization_id: Organizations.current_id, mode_of_transport: modes_of_transport)
+          Legacy::TenantVehicle.where(organization_id: organization_ids, mode_of_transport: modes_of_transport)
             .select(
               "tenant_vehicles.id as tenant_vehicle_id,
               tenant_vehicles.name AS service,
               tenant_vehicles.carrier_id,
-              mode_of_transport"
+              mode_of_transport,
+              organization_id"
             )
         end
 
@@ -18,7 +19,8 @@ module ExcelDataServices
           {
             "service" => "service",
             "mode_of_transport" => "mode_of_transport",
-            "carrier_id" => "carrier_id"
+            "carrier_id" => "carrier_id",
+            "organization_id" => "organization_id"
           }
         end
 

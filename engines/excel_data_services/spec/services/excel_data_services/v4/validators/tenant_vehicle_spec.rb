@@ -18,7 +18,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TenantVehicle do
           "carrier_id" => tenant_vehicle.carrier_id,
           "mode_of_transport" => tenant_vehicle.mode_of_transport,
           "row" => 2,
-          "tenant_vehicle_id" => nil
+          "tenant_vehicle_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -35,7 +36,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TenantVehicle do
           "carrier_id" => 1222,
           "mode_of_transport" => "air",
           "row" => 2,
-          "tenant_vehicle_id" => nil
+          "tenant_vehicle_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

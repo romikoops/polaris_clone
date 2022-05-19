@@ -16,7 +16,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ChargeFees do
           "kg" => 8,
           "base" => nil,
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -40,7 +41,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ChargeFees do
           "row" => 2,
           "range_min" => 1,
           "range_max" => 10,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 

@@ -15,7 +15,7 @@ module ExcelDataServices
           return if rows_identified_by_name_only.blank?
 
           @group_name_frame ||= Rover::DataFrame.new(
-            rows_identified_by_name_only.left_join(extracted_frame, on: { "group_name" => "group_name" }),
+            rows_identified_by_name_only.left_join(extracted_frame, on: { "group_name" => "group_name", "organization_id" => "organization_id" }),
             types: frame_types
           )
         end
@@ -36,10 +36,8 @@ module ExcelDataServices
         end
 
         def frame_data
-          Groups::Group.where(organization_id: Organizations.current_id)
-            .select("id as group_id, name AS group_name, organization_id").as_json.map do |group|
-              group.merge("group_found" => true)
-            end
+          Groups::Group.where(organization_id: organization_ids)
+            .select("id as group_id, name AS group_name, organization_id, true as group_found")
         end
 
         def frame_types

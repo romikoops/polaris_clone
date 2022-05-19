@@ -20,7 +20,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Pricing do
           "effective_date" => pricing.effective_date.to_date,
           "expiration_date" => pricing.expiration_date.to_date,
           "row" => 2,
-          "pricing_id" => nil
+          "pricing_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -39,7 +40,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Pricing do
           "effective_date" => pricing.effective_date,
           "expiration_date" => pricing.expiration_date,
           "row" => 2,
-          "pricing_id" => nil
+          "pricing_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

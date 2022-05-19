@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Validators::QueryMethod do
       "zone" => 1.0,
       "identifier" => identifier,
       "country_code" => "DE",
-      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]
+      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type],
+      "organization_id" => organization.id
     }
   end
   let(:query_type) { :postal_code }

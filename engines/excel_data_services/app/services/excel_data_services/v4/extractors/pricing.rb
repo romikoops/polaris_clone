@@ -5,15 +5,15 @@ module ExcelDataServices
     module Extractors
       class Pricing < ExcelDataServices::V4::Extractors::Base
         def frame_data
-          Rover::DataFrame.new(
-            Pricings::Pricing.where(organization_id: Organizations.current_id)
+          @frame_data ||= Rover::DataFrame.new(
+            Pricings::Pricing.where(organization_id: organization_ids)
             .for_dates(max_and_min_dates.first, max_and_min_dates.last)
             .map { |pricing| pricing_row(pricing: pricing) }
           )
         end
 
         def pricing_row(pricing:)
-          pricing.slice("itinerary_id", "tenant_vehicle_id", "cargo_class", "group_id").merge(
+          pricing.slice("itinerary_id", "tenant_vehicle_id", "cargo_class", "group_id", "organization_id").merge(
             "pricing_id" => pricing.id,
             "effective_date" => pricing.effective_date.to_date,
             "expiration_date" => pricing.expiration_date.to_date
@@ -27,7 +27,8 @@ module ExcelDataServices
             "group_id" => "group_id",
             "tenant_vehicle_id" => "tenant_vehicle_id",
             "effective_date" => "effective_date",
-            "expiration_date" => "expiration_date"
+            "expiration_date" => "expiration_date",
+            "organization_id" => "organization_id"
           }
         end
 
@@ -39,7 +40,8 @@ module ExcelDataServices
             "group_id" => :object,
             "tenant_vehicle_id" => :object,
             "effective_date" => :object,
-            "expiration_date" => :object
+            "expiration_date" => :object,
+            "organization_id" => :object
           }
         end
 

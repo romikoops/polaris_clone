@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Validators::LocationsLocation do
       "distance" => nil,
       "zone" => 1.0,
       "identifier" => identifier,
-      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]
+      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type],
+      "organization_id" => organization.id
     }
   end
   let(:extracted_table) { result.frame }

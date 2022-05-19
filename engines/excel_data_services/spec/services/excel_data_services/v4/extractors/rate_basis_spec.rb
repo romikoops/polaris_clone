@@ -14,7 +14,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::RateBasis do
       let(:row) do
         {
           "rate_basis" => rate_basis.external_code,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -27,7 +28,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::RateBasis do
       let(:row) do
         {
           "rate_basis" => "AAA",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

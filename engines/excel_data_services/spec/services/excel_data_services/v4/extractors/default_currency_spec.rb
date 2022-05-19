@@ -13,11 +13,13 @@ RSpec.describe ExcelDataServices::V4::Extractors::DefaultCurrency do
         [
           {
             "currency" => "USD",
-            "row" => 2
+            "row" => 2,
+            "organization_id" => organization.id
           },
           {
             "currency" => "CHF",
-            "row" => 3
+            "row" => 3,
+            "organization_id" => organization.id
           }
         ]
       end

@@ -17,7 +17,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TruckingLocation do
       "identifier" => identifier,
       "locations_location_id" => location&.id,
       "country_code" => country.code,
-      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]
+      "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type],
+      "organization_id" => organization.id
     }.merge(example_row)
   end
   let(:example_row) { { identifier => data_value } }

@@ -13,7 +13,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ExistingClient do
       let(:row) do
         {
           "user_id" => users_client.id,
-          "email" => users_client.email
+          "email" => users_client.email,
+          "organization_id" => organization.id
         }
       end
       let!(:users_client) { FactoryBot.create(:users_client, organization: organization) }
@@ -28,7 +29,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ExistingClient do
       let(:row) do
         {
           "user_id" => nil,
-          "email" => "users1@itsmycargo.test"
+          "email" => "users1@itsmycargo.test",
+          "organization_id" => organization.id
         }
       end
 

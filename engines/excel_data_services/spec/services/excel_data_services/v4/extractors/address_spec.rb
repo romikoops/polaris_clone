@@ -26,7 +26,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Address do
         "latitude" => address.latitude,
         "longitude" => address.longitude,
         "country_id" => country.id,
-        "row" => 2
+        "row" => 2,
+        "organization_id" => organization.id
       }
     end
 

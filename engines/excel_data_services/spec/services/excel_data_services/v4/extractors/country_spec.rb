@@ -14,7 +14,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Country do
       let(:row) do
         {
           "country" => country.name,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -27,7 +28,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Country do
       let(:row) do
         {
           "country" => "AAA",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

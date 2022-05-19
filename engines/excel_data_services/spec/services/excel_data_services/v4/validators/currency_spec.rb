@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Currency do
       let(:row) do
         {
           "row" => 2,
-          "currency" => "eur"
+          "currency" => "eur",
+          "organization_id" => organization.id
         }
       end
 
@@ -28,7 +29,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Currency do
       let(:row) do
         {
           "row" => 2,
-          "currency" => "czk"
+          "currency" => "czk",
+          "organization_id" => organization.id
         }
       end
 

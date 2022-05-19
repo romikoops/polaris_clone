@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::QueryType do
       "zone" => 1.0,
       "identifier" => identifier,
       "locations_location_id" => location&.id,
-      "country_code" => "DE"
+      "country_code" => "DE",
+      "organization_id" => organization.id
     }.merge(example_row)
   end
   let(:example_row) { { identifier => data_value } }

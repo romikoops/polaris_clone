@@ -33,14 +33,13 @@ RSpec.describe ExcelDataServices::V4::Extractors::Group do
           {
             "group_id" => nil,
             "group_name" => nil,
-            "row" => 4,
+            "row" => 5,
             "organization_id" => organization.id
           }
         ]
       end
 
-      it "returns the frame with the group_id", :aggregate_failures do
-        expect(extracted_table["group_found"].to_a).to match_array([true] * 4)
+      it "returns the frame with the group_id" do
         expect(extracted_table["group_id"].to_a).to match_array([group.id, group.id, group.id, default_group.id])
       end
     end
@@ -56,7 +55,7 @@ RSpec.describe ExcelDataServices::V4::Extractors::Group do
       end
 
       it "does not find the record or add a group_id" do
-        expect(extracted_table["group_found"].to_a).to eq([nil])
+        expect(extracted_table["group_id"].to_a).to eq([nil])
       end
     end
   end

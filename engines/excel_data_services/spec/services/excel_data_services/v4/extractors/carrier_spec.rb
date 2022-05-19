@@ -15,7 +15,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Carrier do
         {
           "carrier" => carrier.name,
           "carrier_code" => carrier.code,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -29,7 +30,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Carrier do
         {
           "carrier" => "AAA",
           "carrier_code" => "aaa",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

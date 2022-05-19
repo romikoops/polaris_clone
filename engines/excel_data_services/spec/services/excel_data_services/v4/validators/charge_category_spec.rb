@@ -16,7 +16,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ChargeCategory do
           "fee_code" => charge_category.code,
           "fee_name" => charge_category.name,
           "row" => 2,
-          "charge_category_id" => nil
+          "charge_category_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -31,7 +32,8 @@ RSpec.describe ExcelDataServices::V4::Validators::ChargeCategory do
           "fee_code" => "AAA",
           "fee_name" => "BBBB",
           "row" => 2,
-          "charge_category_id" => nil
+          "charge_category_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

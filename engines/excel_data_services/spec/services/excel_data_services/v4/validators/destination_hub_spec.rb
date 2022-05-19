@@ -27,7 +27,8 @@ RSpec.describe ExcelDataServices::V4::Validators::DestinationHub do
           "destination_terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -43,7 +44,8 @@ RSpec.describe ExcelDataServices::V4::Validators::DestinationHub do
           "destination_terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -59,7 +61,8 @@ RSpec.describe ExcelDataServices::V4::Validators::DestinationHub do
           "destination_terminal" => destination_hub.terminal,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
       let(:destination_hub) { FactoryBot.create(:legacy_hub, :shanghai, hub_type: mot, terminal: "T1", organization: organization) }
@@ -78,7 +81,8 @@ RSpec.describe ExcelDataServices::V4::Validators::DestinationHub do
           "destination_terminal" => nil,
           "mode_of_transport" => "air",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 

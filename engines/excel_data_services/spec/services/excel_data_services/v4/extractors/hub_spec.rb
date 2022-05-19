@@ -32,7 +32,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Hub do
           "terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -48,7 +49,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Hub do
           "terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -64,7 +66,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Hub do
           "terminal" => hub.terminal,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
       let(:hub) { FactoryBot.create(:legacy_hub, :gothenburg, hub_type: mot, terminal: "T1", organization: organization) }
@@ -83,7 +86,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Hub do
           "terminal" => nil,
           "mode_of_transport" => "air",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -99,11 +103,75 @@ RSpec.describe ExcelDataServices::V4::Extractors::Hub do
           "terminal" => nil,
           "mode_of_transport" => "air",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
       it_behaves_like "doesn't find the hub ids"
+    end
+
+    context "with multiple Organizations, both Hubs found" do
+      let(:other_hub) { FactoryBot.create(:legacy_hub, :felixstowe, hub_type: mot, organization: organization) }
+      let(:rows) do
+        [
+          {
+            "locode" => hub.hub_code,
+            "hub" => nil,
+            "country" => nil,
+            "terminal" => nil,
+            "mode_of_transport" => "ocean",
+            "row" => 2,
+            "sheet_name" => "Sheet1",
+            "organization_id" => organization.id
+          },
+          {
+            "locode" => other_hub.hub_code,
+            "hub" => nil,
+            "country" => nil,
+            "terminal" => nil,
+            "mode_of_transport" => "ocean",
+            "row" => 2,
+            "sheet_name" => "Sheet1",
+            "organization_id" => other_hub.organization_id
+          }
+        ]
+      end
+
+      it "returns the frame with both the hub_ids" do
+        expect(extracted_table["hub_id"].to_a).to eq([hub.id, other_hub.id])
+      end
+    end
+
+    context "with multiple Organizations, only one Hub found" do
+      let(:rows) do
+        [
+          {
+            "locode" => hub.hub_code,
+            "hub" => nil,
+            "country" => nil,
+            "terminal" => nil,
+            "mode_of_transport" => "ocean",
+            "row" => 2,
+            "sheet_name" => "Sheet1",
+            "organization_id" => organization.id
+          },
+          {
+            "locode" => "ABCDE",
+            "hub" => nil,
+            "country" => nil,
+            "terminal" => nil,
+            "mode_of_transport" => "air",
+            "row" => 2,
+            "sheet_name" => "Sheet1",
+            "organization_id" => organization.id
+          }
+        ]
+      end
+
+      it "returns the frame with one hub_id and nil" do
+        expect(extracted_table["hub_id"].to_a).to eq([hub.id, nil])
+      end
     end
   end
 end

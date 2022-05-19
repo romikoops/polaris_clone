@@ -17,7 +17,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Nexus do
           "locode" => nexus.locode,
           "country" => nexus.country.name,
           "row" => 2,
-          "nexus_id" => nil
+          "nexus_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -33,7 +34,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Nexus do
           "locode" => "BBBB",
           "country" => "CCC",
           "row" => 2,
-          "nexus_id" => nil
+          "nexus_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

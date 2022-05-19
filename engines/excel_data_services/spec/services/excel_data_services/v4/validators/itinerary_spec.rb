@@ -17,7 +17,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Itinerary do
           "destination_hub_id" => itinerary.destination_hub_id,
           "transshipment" => itinerary.transshipment,
           "row" => 2,
-          "itinerary_id" => nil
+          "itinerary_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -35,7 +36,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Itinerary do
           "origin" => "Gothenburg",
           "destination" => "Shanghai",
           "row" => 2,
-          "itinerary_id" => nil
+          "itinerary_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

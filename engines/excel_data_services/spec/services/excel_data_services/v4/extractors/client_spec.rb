@@ -37,7 +37,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Client do
           "password" => "AAA",
           "currency" => 2,
           "language" => 2,
-          "user_id" => nil
+          "user_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

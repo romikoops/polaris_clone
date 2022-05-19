@@ -13,7 +13,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Language do
       let(:row) do
         {
           "row" => 2,
-          "language" => "en-US"
+          "language" => "en-US",
+          "organization_id" => organization.id
         }
       end
 
@@ -26,7 +27,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Language do
       let(:row) do
         {
           "language" => "en-FOO",
-          "row" => 3
+          "row" => 3,
+          "organization_id" => organization.id
         }
       end
 

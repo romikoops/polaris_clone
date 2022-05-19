@@ -13,7 +13,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Carriage do
       let(:row) do
         {
           "direction" => "export",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -27,7 +28,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Carriage do
         {
           "carrier" => "AAA",
           "carrier_code" => "aaa",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

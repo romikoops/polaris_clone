@@ -21,7 +21,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TypeAvailability do
           "carriage" => "pre",
           "country_code" => country.code,
           "query_method" => query_method,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -38,7 +39,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TypeAvailability do
           "carriage" => "on",
           "country_code" => "FR",
           "query_method" => query_method,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

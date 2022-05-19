@@ -32,6 +32,10 @@ module ExcelDataServices
         def blank_frame
           Rover::DataFrame.new(frame_types.keys.each_with_object({}) { |key, result| result[key] = [] }, types: state.frame.types.merge(frame_types))
         end
+
+        def organization_ids
+          @organization_ids ||= frame["organization_id"].to_a.uniq
+        end
       end
     end
   end

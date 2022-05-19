@@ -16,7 +16,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Nexus do
           "name" => nexus.name,
           "locode" => nexus.locode,
           "country" => nexus.country.name,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -31,7 +32,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::Nexus do
           "name" => "AAA",
           "locode" => "BBBB",
           "country" => "CCC",
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

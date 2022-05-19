@@ -26,7 +26,8 @@ RSpec.describe ExcelDataServices::V4::Validators::CounterpartHub do
           "counterpart_terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -42,7 +43,8 @@ RSpec.describe ExcelDataServices::V4::Validators::CounterpartHub do
           "counterpart_terminal" => nil,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 
@@ -58,7 +60,8 @@ RSpec.describe ExcelDataServices::V4::Validators::CounterpartHub do
           "counterpart_terminal" => counterpart_hub.terminal,
           "mode_of_transport" => "ocean",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
       let(:counterpart_hub) { FactoryBot.create(:legacy_hub, :gothenburg, hub_type: mot, terminal: "T1", organization: organization) }
@@ -77,7 +80,8 @@ RSpec.describe ExcelDataServices::V4::Validators::CounterpartHub do
           "counterpart_terminal" => nil,
           "mode_of_transport" => "air",
           "row" => 2,
-          "sheet_name" => "Sheet1"
+          "sheet_name" => "Sheet1",
+          "organization_id" => organization.id
         }
       end
 

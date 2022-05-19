@@ -16,7 +16,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Carrier do
           "carrier" => carrier.name,
           "carrier_code" => carrier.code,
           "row" => 2,
-          "carrier_id" => nil
+          "carrier_id" => nil,
+          "organization_id" => organization.id
         }
       end
 
@@ -31,7 +32,8 @@ RSpec.describe ExcelDataServices::V4::Validators::Carrier do
           "carrier" => "AAA",
           "carrier_code" => "aaa",
           "row" => 2,
-          "carrier_id" => nil
+          "carrier_id" => nil,
+          "organization_id" => organization.id
         }
       end
 

@@ -5,12 +5,16 @@ module ExcelDataServices
     module Extractors
       class Hub < ExcelDataServices::V4::Extractors::Base
         def extracted
-          @extracted ||= blank_frame.concat(frame).left_join(hub_frame, on: joins)
+          @extracted ||= if filtered_join_keys.present?
+            blank_frame.concat(frame).left_join(hub_frame, on: joins)
+          else
+            blank_frame.concat(frame)
+          end
         end
 
         def frame_data
           @frame_data ||=
-            Legacy::Hub.where(organization_id: Organizations.current_id)
+            Legacy::Hub.where(organization_id: organization_ids)
               .joins(nexus: :country)
               .select("
               hubs.id as #{prefix_key(key: 'hub_id')},
@@ -18,16 +22,18 @@ module ExcelDataServices
               terminal as #{prefix_key(key: 'terminal')},
               hub_code as #{prefix_key(key: 'locode')},
               countries.name as #{prefix_key(key: 'country')},
-              hub_type as mode_of_transport
+              countries.code as #{prefix_key(key: 'country_code')},
+              hub_type as mode_of_transport,
+              hubs.organization_id
             ")
         end
 
         def routing_row_keys
-          %w[terminal locode country hub].map { |atr| prefix_key(key: atr) } + %w[mode_of_transport]
+          @routing_row_keys ||= ([country_key] + %w[terminal locode hub]).map { |atr| prefix_key(key: atr) } + %w[mode_of_transport]
         end
 
         def joins
-          @joins ||= filtered_join_keys.each_with_object({ "mode_of_transport" => "mode_of_transport" }) do |prefixed_key, join_arg|
+          @joins ||= filtered_join_keys.each_with_object({ "organization_id" => "organization_id", "mode_of_transport" => "mode_of_transport" }) do |prefixed_key, join_arg|
             join_arg[prefixed_key] = prefixed_key
           end
         end
@@ -67,6 +73,10 @@ module ExcelDataServices
           return prefixed_and_validated_keys if prefixed_and_validated_keys.exclude?(prefix_key(key: "locode"))
 
           prefixed_and_validated_keys - [prefix_key(key: "country")]
+        end
+
+        def country_key
+          @country_key ||= %w[country_code country].find { |atr| frame.include?(prefix_key(key: atr)) }
         end
       end
     end

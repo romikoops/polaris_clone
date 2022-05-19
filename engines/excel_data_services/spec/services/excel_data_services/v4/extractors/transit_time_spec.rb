@@ -18,7 +18,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::TransitTime do
           "itinerary_id" => itinerary.id,
           "tenant_vehicle_id" => tenant_vehicle.id,
           "mode_of_transport" => tenant_vehicle.mode_of_transport,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 
@@ -33,7 +34,8 @@ RSpec.describe ExcelDataServices::V4::Extractors::TransitTime do
           "itinerary_id" => "abcde",
           "tenant_vehicle_id" => tenant_vehicle.id,
           "mode_of_transport" => tenant_vehicle.mode_of_transport,
-          "row" => 2
+          "row" => 2,
+          "organization_id" => organization.id
         }
       end
 

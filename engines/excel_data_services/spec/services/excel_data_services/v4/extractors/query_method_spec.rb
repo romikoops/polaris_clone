@@ -15,6 +15,7 @@ RSpec.describe ExcelDataServices::V4::Extractors::QueryMethod do
       "zone" => 1.0,
       "identifier" => identifier,
       "country_code" => "DE",
+      "organization_id" => organization.id,
       "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]
     }
   end
