@@ -10,9 +10,10 @@ module Analytics
     end
 
     def queries
-      Journey::Query.where(organization: organization)
+      Journey::Query
+        .where(organization: organization)
+        .where("journey_queries.client_id IS NULL OR journey_queries.client_id IN (?)", clients.select(:id))
         .where(created_at: start_date..end_date)
-        .where(client: clients)
     end
 
     def shipment_requests
@@ -32,17 +33,17 @@ module Analytics
 
     def requests_with_profiles
       if quotation_tool?
-        queries.joins(profile_join)
+        queries.left_joins(client: :profile)
       else
-        shipment_requests.joins(profile_join)
+        shipment_requests.left_joins(result: { query: { client: :profile } })
       end
     end
 
     def requests_with_companies
       if quotation_tool?
-        queries.joins(companies_join)
+        queries.left_joins(:company)
       else
-        shipment_requests.joins(companies_join)
+        shipment_requests.left_joins(result: { query: :company })
       end
     end
 
@@ -84,26 +85,6 @@ module Analytics
         target: user,
         organization: organization
       ).fetch
-    end
-
-    def profile_join
-      <<~SQL
-        INNER JOIN users_clients
-          ON journey_queries.client_id = users_clients.id
-        INNER JOIN users_client_profiles
-          ON users_clients.id = users_client_profiles.user_id
-      SQL
-    end
-
-    def companies_join
-      <<~SQL
-        INNER JOIN users_clients
-          ON journey_queries.client_id = users_clients.id
-        INNER JOIN companies_memberships
-          ON companies_memberships.client_id = users_clients.id
-        INNER JOIN companies_companies
-          ON companies_memberships.company_id = companies_companies.id
-      SQL
     end
   end
 end

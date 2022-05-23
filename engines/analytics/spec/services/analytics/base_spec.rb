@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe Analytics::Base, type: :service do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:user) { FactoryBot.create(:users_client, organization: organization) }
+  let(:company) { FactoryBot.create(:companies_company, organization: organization) }
   let(:mots) { %w[air ocean] }
   let(:clients) { FactoryBot.create_list(:users_client, 2, organization: organization) }
   let(:blacklisted_client) { FactoryBot.create(:users_client, organization: organization) }
@@ -19,6 +20,7 @@ RSpec.describe Analytics::Base, type: :service do
         2,
         client: client,
         creator: client,
+        company: company,
         organization: organization,
         result_count: 1)
     end
@@ -29,42 +31,73 @@ RSpec.describe Analytics::Base, type: :service do
       2,
       client: blacklisted_client,
       creator: blacklisted_client,
+      company: company,
       organization: organization,
       result_count: 1)
     ::Organizations.current_id = organization.id
     organization.scope.update(content: { blacklisted_emails: [blacklisted_client.email] })
   end
 
-  describe "queries" do
-    it "returns all the queries made in the period" do
+  describe "#queries" do
+    it "returns all the Queries made in the period scoped by organization" do
       expect(service.queries.count).to eq(requests.length)
+    end
+
+    context "when the Queries was made by a Guest User" do
+      let(:clients) { [nil] }
+      let(:company) { nil }
+
+      it "returns all the queries made in the period including those made by guest users" do
+        expect(service.queries.count).to eq(requests.length)
+      end
+    end
+
+    context "when the Queries was made by a User with no company" do
+      let(:clients) { [nil] }
+      let(:company) { nil }
+
+      it "returns all the queries made in the period including those without a company" do
+        expect(service.queries.count).to eq(requests.length)
+      end
     end
   end
 
-  describe "results" do
-    it "returns all the results made in the period" do
+  describe "#results" do
+    it "returns all the Results made in the period" do
       expect(service.results.count).to eq(requests.length)
     end
   end
 
-  describe "clients" do
+  describe "#clients" do
     before do
       ::Organizations.current_id = organization.id
     end
 
-    it "returns all the clients made in the period", :aggregate_failures do
+    it "returns all the clients active in the period", :aggregate_failures do
       expect(service.clients.count).to eq(3)
       expect(service.clients.first).to be_a(Users::Client)
     end
   end
 
   context "when a quote shop" do
-    describe "result_or_request" do
-      it "returns a collection of results" do
-        aggregate_failures do
-          expect(service.result_or_request.count).to eq(requests.length)
-          expect(service.result_or_request.first).to be_a(Journey::Result)
-        end
+    describe "#result_or_request" do
+      it "returns a collection of results", :aggregate_failures do
+        expect(service.result_or_request.count).to eq(requests.length)
+        expect(service.result_or_request.first).to be_a(Journey::Result)
+      end
+    end
+
+    describe "#requests_with_profiles" do
+      it "returns a collection of quotes with the Users::Client joined in", :aggregate_failures do
+        expect(service.requests_with_profiles.count).to eq(requests.length)
+        expect(service.requests_with_profiles.pluck("users_clients.id").uniq).to eq(clients.pluck(:id))
+      end
+    end
+
+    describe "#requests_with_companies" do
+      it "returns a collection of quotes with the Companies::Company joined in", :aggregate_failures do
+        expect(service.requests_with_companies.count).to eq(requests.length)
+        expect(service.requests_with_companies.pluck("companies_companies.id").uniq).to eq([company.id])
       end
     end
   end
@@ -81,12 +114,24 @@ RSpec.describe Analytics::Base, type: :service do
       end
     end
 
-    describe "result_or_request" do
-      it "returns a collection of tenders" do
-        aggregate_failures do
-          expect(service.result_or_request.count).to eq(requests.length)
-          expect(service.result_or_request.first).to be_a(Journey::ShipmentRequest)
-        end
+    describe "#result_or_request" do
+      it "returns a collection of bookings", :aggregate_failures do
+        expect(service.result_or_request.count).to eq(requests.length)
+        expect(service.result_or_request.first).to be_a(Journey::ShipmentRequest)
+      end
+    end
+
+    describe "#requests_with_profiles" do
+      it "returns a collection of bookings with the Users::Client joined in", :aggregate_failures do
+        expect(service.requests_with_profiles.count).to eq(requests.length)
+        expect(service.requests_with_profiles.pluck("users_clients.id").uniq).to eq(clients.pluck(:id))
+      end
+    end
+
+    describe "#requests_with_companies" do
+      it "returns a collection of bookings with the Companies::Company joined in", :aggregate_failures do
+        expect(service.requests_with_companies.count).to eq(requests.length)
+        expect(service.requests_with_companies.pluck("companies_companies.id").uniq).to eq([company.id])
       end
     end
   end

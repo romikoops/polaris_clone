@@ -23,11 +23,13 @@ RSpec.describe Analytics::Dashboard::BookingsPerCompany, type: :service do
       client: clients.first,
       organization: organization,
       result_count: 1,
+      company: company,
       created_at: Time.zone.now - 2.months)
     clients.map do |client|
       FactoryBot.create_list(:journey_query,
         2,
         client: client,
+        company: company,
         organization: organization,
         result_count: 1)
     end
