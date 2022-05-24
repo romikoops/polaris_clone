@@ -41,6 +41,28 @@ module Api
       it "ignores Nexuses from other Organizations" do
         expect(result.keys).not_to include("BBBBB")
       end
+
+      context "when there are Nexuses linked by LocationGroups for export" do
+        before do
+          FactoryBot.create(:pricings_location_group, nexus: Legacy::Nexus.find_by(locode: "AAAAA"), organization: organization, name: "gothenburg")
+          FactoryBot.create(:pricings_location_group, nexus: gothenburg_shanghai_itinerary.origin_hub.nexus, organization: organization, name: "gothenburg")
+        end
+
+        it "marks the ports related via LocationGroup as having rates" do
+          expect(result.dig("AAAAA", :export)).to eq(true)
+        end
+      end
+
+      context "when there are Nexuses linked by LocationGroups for import" do
+        before do
+          FactoryBot.create(:pricings_location_group, nexus: Legacy::Nexus.find_by(locode: "AAAAA"), organization: organization, name: "gothenburg")
+          FactoryBot.create(:pricings_location_group, nexus: gothenburg_shanghai_itinerary.destination_hub.nexus, organization: organization, name: "gothenburg")
+        end
+
+        it "marks the ports related via LocationGroup as having rates" do
+          expect(result.dig("AAAAA", :import)).to eq(true)
+        end
+      end
     end
   end
 end
