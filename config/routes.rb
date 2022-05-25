@@ -606,7 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000106305a78 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000128984dc8 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1045,6 +1045,14 @@ end
 #                           v2_admin_passwords POST   /v2/admin/passwords(.:format)                                                            api/v2/admin/passwords#create
 #                            v2_admin_password PATCH  /v2/admin/passwords/:id(.:format)                                                        api/v2/admin/passwords#update
 #                                              PUT    /v2/admin/passwords/:id(.:format)                                                        api/v2/admin/passwords#update
+#              v2_organization_admin_companies POST   /v2/organizations/:organization_id/admin/companies(.:format)                             api/v2/admin/companies#create
+#                v2_organization_admin_company GET    /v2/organizations/:organization_id/admin/companies/:id(.:format)                         api/v2/admin/companies#show
+#                                              PATCH  /v2/organizations/:organization_id/admin/companies/:id(.:format)                         api/v2/admin/companies#update
+#                                              PUT    /v2/organizations/:organization_id/admin/companies/:id(.:format)                         api/v2/admin/companies#update
+#                                              DELETE /v2/organizations/:organization_id/admin/companies/:id(.:format)                         api/v2/admin/companies#destroy
+#        v2_organization_admin_company_clients GET    /v2/organizations/:organization_id/admin/companies/:company_id/clients(.:format)         api/v2/admin/clients#index
+#                                              GET    /v2/organizations/:organization_id/admin/companies(.:format)                             api/v2/admin/companies#index
+#                             v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #             v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
 #            v2_organization_query_recalculate POST   /v2/organizations/:organization_id/queries/:query_id/recalculate(.:format)               api/v2/queries#recalculate
 # v2_organization_query_request_for_quotations POST   /v2/organizations/:organization_id/queries/:query_id/request_for_quotations(.:format)    api/v2/request_for_quotations#create
@@ -1082,13 +1090,8 @@ end
 #                                              PUT    /v2/organizations/:organization_id/profile(.:format)                                     api/v2/profiles#update
 #                     v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                    api/v2/carriers#index
 #                      v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                api/v2/carriers#show
-#                    v2_organization_companies GET    /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#index
-#                                              POST   /v2/organizations/:organization_id/companies(.:format)                                   api/v2/companies#create
-#                      v2_organization_company GET    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#show
-#                                              PATCH  /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
-#                                              PUT    /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#update
-#                                              DELETE /v2/organizations/:organization_id/companies/:id(.:format)                               api/v2/companies#destroy
-#                             v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
+#               v2_organization_active_locodes GET    /v2/organizations/:organization_id/active_locodes(.:format)                              api/v2/active_locodes#show
+#                                              GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #                            validate_v2_users GET    /v2/users/validate(.:format)                                                             api/v2/users#validate
 #                                     v2_users GET    /v2/users(.:format)                                                                      api/v2/users#index
 #                                              POST   /v2/users(.:format)                                                                      api/v2/users#create
@@ -1096,6 +1099,7 @@ end
 #                                              PATCH  /v2/users/:id(.:format)                                                                  api/v2/users#update
 #                                              PUT    /v2/users/:id(.:format)                                                                  api/v2/users#update
 #                                              DELETE /v2/users/:id(.:format)                                                                  api/v2/users#destroy
+#                                 v2_countries GET    /v2/countries(.:format)                                                                  api/v2/countries#index
 #                          v2_file_descriptors POST   /v2/file_descriptors(.:format)                                                           api/v2/file_descriptors#create
 #                                 v2_passwords POST   /v2/passwords(.:format)                                                                  api/v2/passwords#create
 #                                  v2_password PATCH  /v2/passwords/:id(.:format)                                                              api/v2/passwords#update

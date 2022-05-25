@@ -72,6 +72,37 @@ RSpec.describe ExcelDataServices::V4::Upload do
         expect(hamburg.local_charges.find_by(counterpart_hub: felixstowe).fees.keys).to match_array(base_local_charge.fees.keys + ["ISP"])
       end
     end
+
+    context "with distribution" do
+      let(:service) { described_class.new(file: file, arguments: { distribute: true }) }
+      let!(:distributed_tenant_vehicle) { FactoryBot.create(:legacy_tenant_vehicle, name: "standard", carrier: carrier, organization: distributee_org, mode_of_transport: "ocean") }
+      let!(:distributee_hamburg) { FactoryBot.create(:legacy_hub, :hamburg, organization: distributee_org) }
+      let(:local_charge) { Legacy::LocalCharge.find_by(organization: distributee_org, hub: distributee_hamburg, tenant_vehicle: distributed_tenant_vehicle, group: distributed_test_group) }
+      let!(:distributed_test_group) { FactoryBot.create(:groups_group, organization: distributee_org, name: "Local Charges Group One") }
+      let!(:distributee_org) { FactoryBot.create(:organizations_organization, slug: "distributed") }
+
+      before do
+        FactoryBot.create(:distributions_action, :duplicate,
+          organization: organization,
+          upload_schema: "local_charge",
+          target_organization: distributee_org,
+          where: { locode: hamburg.locode, fee_code: "aa" },
+          order: 1)
+        FactoryBot.create(:distributions_action, :adjust_fee,
+          organization: organization,
+          upload_schema: "local_charge",
+          target_organization: distributee_org,
+          order: 2,
+          where: { fee_code: "aa" },
+          arguments: { operator: "+", value: 5 })
+        FactoryBot.create(:groups_group, name: "default", organization: distributee_org)
+        service.perform
+      end
+
+      it "copies only the 'aa' fee" do
+        expect(local_charge.fees["AA"]).to eq({ "key" => "AA", "max" => nil, "min" => nil, "base" => nil, "name" => "AA Fee", "range" => [], "currency" => "EUR", "container" => "17.0", "rate_basis" => "PER_CONTAINER" })
+      end
+    end
   end
 
   describe "#valid?" do

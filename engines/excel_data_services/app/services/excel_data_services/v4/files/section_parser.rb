@@ -14,7 +14,7 @@ module ExcelDataServices
         end
 
         def global_actions
-          (operations + data_validations)
+          (operations + data_validations + [distributor])
         end
 
         def column_parser
@@ -40,6 +40,10 @@ module ExcelDataServices
         end
 
         delegate :operations, to: :operation_parser
+
+        def distributor
+          @distributor ||= ExcelDataServices::V4::Distributors::Distributor
+        end
 
         def ordered_connected_action_parser
           @ordered_connected_action_parser ||= ExcelDataServices::V4::Files::Parsers::OrderedConnectedActions.new(section: section, state: state)

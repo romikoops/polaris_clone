@@ -126,6 +126,12 @@ PATH
       users
 
 PATH
+  remote: engines/distributions
+  specs:
+    distributions (1)
+      shared-runtime
+
+PATH
   remote: engines/excel_data_services
   specs:
     excel_data_services (1)
@@ -1360,6 +1366,7 @@ DEPENDENCIES
   debase (~> 0.2.4)
   debase-ruby_core_source (~> 0.10.14)
   diffy (~> 3.4.0)
+  distributions!
   dotenv-rails
   easymon
   excel_data_services!

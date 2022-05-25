@@ -178,6 +178,18 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: distributions_action_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.distributions_action_type AS ENUM (
+    'add_fee',
+    'duplicate',
+    'adjust_fee',
+    'add_values'
+);
+
+
+--
 -- Name: excel_data_services_uploads_status; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1508,6 +1520,37 @@ ALTER SEQUENCE public.customs_fees_id_seq OWNED BY public.customs_fees.id;
 
 CREATE TABLE public.data_migrations (
     version character varying NOT NULL
+);
+
+
+--
+-- Name: distributions_actions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.distributions_actions (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    target_organization_id uuid,
+    action_type public.distributions_action_type,
+    upload_schema character varying NOT NULL,
+    "where" jsonb DEFAULT '{}'::jsonb,
+    arguments jsonb DEFAULT '{}'::jsonb,
+    "order" integer DEFAULT 1 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: distributions_executions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.distributions_executions (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    action_id uuid,
+    file_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -5852,6 +5895,22 @@ ALTER TABLE ONLY public.data_migrations
 
 
 --
+-- Name: distributions_actions distributions_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.distributions_actions
+    ADD CONSTRAINT distributions_actions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: distributions_executions distributions_executions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.distributions_executions
+    ADD CONSTRAINT distributions_executions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: event_store_events_in_streams event_store_events_in_streams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7569,6 +7628,48 @@ CREATE INDEX index_customs_fees_on_organization_id ON public.customs_fees USING 
 --
 
 CREATE INDEX index_customs_fees_on_tenant_id ON public.customs_fees USING btree (tenant_id);
+
+
+--
+-- Name: index_distributions_actions_on_order; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_distributions_actions_on_order ON public.distributions_actions USING btree ("order");
+
+
+--
+-- Name: index_distributions_actions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_distributions_actions_on_organization_id ON public.distributions_actions USING btree (organization_id);
+
+
+--
+-- Name: index_distributions_actions_on_target_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_distributions_actions_on_target_organization_id ON public.distributions_actions USING btree (target_organization_id);
+
+
+--
+-- Name: index_distributions_actions_on_upload_schema; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_distributions_actions_on_upload_schema ON public.distributions_actions USING btree (upload_schema);
+
+
+--
+-- Name: index_distributions_executions_on_action_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_distributions_executions_on_action_id ON public.distributions_executions USING btree (action_id);
+
+
+--
+-- Name: index_distributions_executions_on_file_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_distributions_executions_on_file_id ON public.distributions_executions USING btree (file_id);
 
 
 --
@@ -10937,6 +11038,14 @@ ALTER TABLE ONLY public.companies_companies
 
 
 --
+-- Name: distributions_actions fk_rails_3078fc04aa; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.distributions_actions
+    ADD CONSTRAINT fk_rails_3078fc04aa FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id) ON DELETE CASCADE;
+
+
+--
 -- Name: pricings_details fk_rails_37ead9b677; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11158,6 +11267,14 @@ ALTER TABLE ONLY public.quotations_quotations
 
 ALTER TABLE ONLY public.pricings_pricings
     ADD CONSTRAINT fk_rails_6cebea4109 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: distributions_actions fk_rails_725aed08f6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.distributions_actions
+    ADD CONSTRAINT fk_rails_725aed08f6 FOREIGN KEY (target_organization_id) REFERENCES public.organizations_organizations(id) ON DELETE CASCADE;
 
 
 --
@@ -12661,10 +12778,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220203123435'),
 ('20220209070931'),
 ('20220209071249'),
+('20220209110611'),
 ('20220216103614'),
 ('20220223104305'),
 ('20220324010131'),
 ('20220414062616'),
+('20220422143149'),
 ('20220502144623');
 
 

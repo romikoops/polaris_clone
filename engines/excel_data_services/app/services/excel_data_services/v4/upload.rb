@@ -39,7 +39,8 @@ module ExcelDataServices
               section: schema_type,
               overrides: Overrides.new(
                 group_id: arguments[:group_id],
-                hub_id: arguments[:hub_id]
+                hub_id: arguments[:hub_id],
+                distribute: arguments[:distribute]
               )
             )
           )

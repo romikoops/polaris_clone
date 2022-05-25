@@ -4,7 +4,7 @@ module ExcelDataServices
   module V4
     module Formatters
       class Trucking < ExcelDataServices::V4::Formatters::Base
-        VERSION_KEYS = %w[hub_id postal_code locode city distance truck_type carriage cargo_class carrier service].freeze
+        VERSION_KEYS = %w[organization_id hub_id postal_code locode city distance truck_type carriage cargo_class carrier service].freeze
 
         def insertable_data
           rate_versions.map do |rate_version|

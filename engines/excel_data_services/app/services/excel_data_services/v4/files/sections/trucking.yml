@@ -485,6 +485,7 @@ data_validators:
 
 pipelines:
   - extractors:
+      - OrganizationCarrier
       - RoutingCarrier
     formatter: RoutingCarrier
     importer:

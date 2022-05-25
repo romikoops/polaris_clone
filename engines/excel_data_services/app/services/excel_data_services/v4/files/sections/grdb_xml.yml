@@ -245,6 +245,7 @@ distributors:
 
 pipelines:
   - extractors:
+      - OrganizationCarrier
       - Carrier
       - RoutingCarrier
     importers:

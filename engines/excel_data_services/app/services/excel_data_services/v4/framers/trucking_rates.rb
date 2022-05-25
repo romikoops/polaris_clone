@@ -4,7 +4,7 @@ module ExcelDataServices
   module V4
     module Framers
       class TruckingRates < ExcelDataServices::V4::Framers::Base
-        STATE_COLUMNS = %w[hub_id group_id organization_id row sheet_name].freeze
+        STATE_COLUMNS = %w[distribute hub_id group_id organization_id row sheet_name].freeze
 
         def perform
           zone_range_frame
