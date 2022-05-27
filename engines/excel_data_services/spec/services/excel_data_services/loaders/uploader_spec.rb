@@ -53,7 +53,7 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     context "when V3 is enabled for a Pricings Sheet" do
       let(:v3_upload_double) { instance_double("ExcelDataServices::V3::Upload", valid?: true, perform: dummy_state) }
       let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
-      let(:scope_content) { { uploaders: { pricings: "v3" } } }
+      let(:scope_content) { { uploader: { pricings: "v3" } } }
 
       it_behaves_like "triggering the V3 upload path"
     end
@@ -61,7 +61,7 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     context "when V4 is enabled for a Pricings Sheet" do
       let(:v4_upload_double) { instance_double("ExcelDataServices::V4::Upload", valid?: true, perform: dummy_state) }
       let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
-      let(:scope_content) { { uploaders: { pricings: "v4" } } }
+      let(:scope_content) { { uploader: { pricings: "v4" } } }
 
       it "calls the perform method of the V4 uploader" do
         expect(v4_upload_double).to have_received(:perform)
@@ -70,14 +70,14 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
 
     context "when V3 is not enabled" do
       context "when it is a Pricings Sheet" do
-        let(:scope_content) { { uploaders: { pricings: "legacy" } } }
+        let(:scope_content) { { uploader: { pricings: "legacy" } } }
         let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
 
         it_behaves_like "triggering the Legacy upload path"
       end
 
       context "when it is a Hub Sheet" do
-        let(:scope_content) { { uploaders: { hubs: "legacy" } } }
+        let(:scope_content) { { uploader: { hubs: "legacy" } } }
         let(:xlsx) { File.open(file_fixture("excel/example_hubs.xlsx")) }
 
         it_behaves_like "triggering the Legacy upload path"

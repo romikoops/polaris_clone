@@ -46,7 +46,7 @@ module ExcelDataServices
       end
 
       def disabled_uploaders(version:)
-        scope[:uploaders].reject { |_, val| val == version }.keys.map(&:camelize)
+        scope[:uploader].reject { |_, val| val == version }.keys.map(&:camelize)
       end
 
       def scope
