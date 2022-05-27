@@ -219,4 +219,17 @@ v2_uploaders:
   hubs: false
   clients: false
   truckings: false
+uploader:
+  pricings: "v3"
+  saco_pricings: "v3"
+  schedules: "v3"
+  local_charges: "v3"
+  hubs: "legacy"
+  clients: "v3"
+  truckings: "v3"
+  grdb_excel: "v4"
+  saco_import: "v4"
+  grdb_xml_export: "v4"
+  grdb_xml_import: "v4"
+  grdb_xml: "v4"
 include_location_groups: false

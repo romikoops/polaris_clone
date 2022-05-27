@@ -3,13 +3,15 @@
 module ExcelDataServices
   module Loaders
     class Uploader
+      UPLOAD_VERSIONS = %w[v3 v4].freeze
+
       def initialize(file:, options: {})
         @file = file
         @options = options
       end
 
       def perform
-        return uploader_service.perform if uploader_service.valid?
+        return valid_uploader_service.perform if valid_uploader_service.present?
 
         legacy_service_result
       end
@@ -18,10 +20,14 @@ module ExcelDataServices
 
       attr_reader :file, :options
 
-      def uploader_service
-        @uploader_service ||= ExcelDataServices::V3::Upload.new(
+      def valid_uploader_service
+        UPLOAD_VERSIONS.map { |version| uploader_service(version: version) }.find(&:valid?)
+      end
+
+      def uploader_service(version:)
+        "ExcelDataServices::#{version.upcase}::Upload".constantize.new(
           file: file,
-          arguments: options.merge({ disabled_uploaders: v2_disabled_uploaders })
+          arguments: options.merge({ disabled_uploaders: disabled_uploaders(version: version) })
         )
       end
 
@@ -39,11 +45,15 @@ module ExcelDataServices
         @upload ||= ExcelDataServices::Upload.find_by(file: file)
       end
 
-      def v2_disabled_uploaders
-        OrganizationManager::ScopeService.new(
+      def disabled_uploaders(version:)
+        scope[:uploaders].reject { |_, val| val == version }.keys.map(&:camelize)
+      end
+
+      def scope
+        @scope ||= OrganizationManager::ScopeService.new(
           target: upload.user,
           organization: file.organization
-        ).fetch(:v2_uploaders).select { |_, val| val == false }.keys.map(&:camelize)
+        ).fetch
       end
     end
   end

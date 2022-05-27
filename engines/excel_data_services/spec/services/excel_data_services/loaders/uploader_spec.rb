@@ -23,14 +23,16 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     { has_errors: false, errors: [] }
   end
   let(:legacy_spy) { instance_double("LegacyUploader", perform: dummy_result) }
-  let(:sheet_type_double) { instance_double("ExcelDataServices::V3::Files::SheetType", valid?: true, perform: dummy_state) }
+  let(:v3_upload_double) { instance_double("ExcelDataServices::V3::Upload", valid?: false, perform: dummy_state) }
+  let(:v4_upload_double) { instance_double("ExcelDataServices::V4::Upload", valid?: false, perform: dummy_state) }
   let(:dummy_state) { instance_double("ExcelDataServices::V3::State", stats: [stat], errors: []) }
   let(:stat) { FactoryBot.build(:excel_data_services_stats) }
 
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:excel_data_services_upload, user: user, file: file, organization: organization)
-    allow(ExcelDataServices::V3::Files::SheetType).to receive(:new).and_return(sheet_type_double)
+    allow(ExcelDataServices::V3::Upload).to receive(:new).and_return(v3_upload_double)
+    allow(ExcelDataServices::V4::Upload).to receive(:new).and_return(v4_upload_double)
     allow(ExcelDataServices::Loaders::LegacyUploader).to receive(:new).and_return(legacy_spy)
     uploader.perform
   end
@@ -38,7 +40,7 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
   describe "#perform" do
     shared_examples_for "triggering the V3 upload path" do
       it "calls the perform method of the V3 uploader" do
-        expect(sheet_type_double).to have_received(:perform)
+        expect(v3_upload_double).to have_received(:perform)
       end
     end
 
@@ -49,20 +51,33 @@ RSpec.describe ExcelDataServices::Loaders::Uploader do
     end
 
     context "when V3 is enabled for a Pricings Sheet" do
+      let(:v3_upload_double) { instance_double("ExcelDataServices::V3::Upload", valid?: true, perform: dummy_state) }
       let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
-      let(:scope_content) { { v2_uploaders: { pricings: true } } }
+      let(:scope_content) { { uploaders: { pricings: "v3" } } }
 
       it_behaves_like "triggering the V3 upload path"
     end
 
+    context "when V4 is enabled for a Pricings Sheet" do
+      let(:v4_upload_double) { instance_double("ExcelDataServices::V4::Upload", valid?: true, perform: dummy_state) }
+      let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
+      let(:scope_content) { { uploaders: { pricings: "v4" } } }
+
+      it "calls the perform method of the V4 uploader" do
+        expect(v4_upload_double).to have_received(:perform)
+      end
+    end
+
     context "when V3 is not enabled" do
       context "when it is a Pricings Sheet" do
+        let(:scope_content) { { uploaders: { pricings: "legacy" } } }
         let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
 
         it_behaves_like "triggering the Legacy upload path"
       end
 
       context "when it is a Hub Sheet" do
+        let(:scope_content) { { uploaders: { hubs: "legacy" } } }
         let(:xlsx) { File.open(file_fixture("excel/example_hubs.xlsx")) }
 
         it_behaves_like "triggering the Legacy upload path"

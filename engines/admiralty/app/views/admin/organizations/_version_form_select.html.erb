@@ -1,0 +1,10 @@
+<label > <%= label %> </label>
+<select class="form-control" id="organization_scope_attributes_<%=key%>" name="organization[scope_attributes][<%=key%>]">
+  <% %w[v3 v4 legacy].each do |version| %>
+    <% if current_value == version %>
+      <option selected="selected" value="<%= version %>"><%= version.humanize %></option>
+    <% else %>
+      <option value="<%= version %>"><%= version.humanize %></option>
+    <% end %>
+  <% end %>
+</select>

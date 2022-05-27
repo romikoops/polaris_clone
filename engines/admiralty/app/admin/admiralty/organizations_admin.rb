@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+UPLOAD_VERSIONS = %w[legacy v3 v4].freeze
+
 Trestle.resource(:organizations, model: Admiralty::Organization) do
   remove_action :destroy
 
@@ -137,11 +139,13 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
 
         divider
 
-        static_field :v2_uploaders do
-          organization.scope.v2_uploaders.each_slice(4) do |slice|
+        static_field :uploaders do
+          organization.scope.uploaders.each_slice(4) do |slice|
             row do
               slice.each do |key|
-                col(sm: 3) { check_box key, { label: Organizations::Scope.key_name(extended_key: key) } }
+                col(sm: 3) do
+                  render "version_form_select", key: key, current_value: organization.scope.send(key), label: Organizations::Scope.key_name(extended_key: key)
+                end
               end
             end
           end
