@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["package"] = "admiralty"
   spec.metadata["type"] = "direct"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir["{app,config,lib}/**/*"]
 
@@ -21,10 +22,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "trestle", "~> 0.9.4"
   spec.add_dependency "trestle-active_storage", "~> 3.0.1"
   spec.add_dependency "trestle-auth", "~> 0.4.1"
+  spec.add_dependency "trestle-jsoneditor"
+  spec.add_dependency "trestle-rails_event_store"
   spec.add_dependency "trestle-search", "~> 0.4.3"
   spec.add_dependency "trestle-sidekiq", "~> 0.1.1"
-  spec.add_dependency "trestle-rails_event_store"
 
+  spec.add_dependency "distributions"
   spec.add_dependency "legacy"
   spec.add_dependency "organization_manager"
   spec.add_dependency "organizations"

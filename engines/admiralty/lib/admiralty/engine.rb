@@ -7,6 +7,7 @@ require "trestle/auth"
 require "trestle/rails_event_store"
 require "trestle/search"
 require "trestle/sidekiq"
+require "trestle/jsoneditor"
 
 module Admiralty
   class Engine < ::Rails::Engine
