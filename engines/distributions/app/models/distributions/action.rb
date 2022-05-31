@@ -5,6 +5,12 @@ module Distributions
     belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :target_organization, class_name: "Organizations::Organization"
     validates_uniqueness_of :order, scope: %i[organization_id target_organization_id]
+    enum action_types: {
+      "add_fee" => "add_fee",
+      "duplicate" => "duplicate",
+      "adjust_fee" => "adjust_fee",
+      "add_values" => "add_values"
+    }
   end
 end
 

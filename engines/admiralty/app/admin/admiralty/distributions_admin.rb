@@ -30,8 +30,24 @@ Trestle.resource(:distributions, model: Distributions::Action) do
     end
 
     row do
-      col(sm: 6) { text_field :upload_schema }
-      col(sm: 6) { number_field :order }
+      col(sm: 4) do
+        select :upload_schema, %w[hubs
+          clients
+          grdb_xml_origin_charge
+          schedules
+          pricings
+          grdb_excel
+          trucking
+          saco_import
+          saco_pricings
+          grdb_xml_destination_charge
+          grdb_xml
+          local_charge]
+      end
+      col(sm: 4) { number_field :order }
+      col(sm: 4) do
+        select :action_type, Distributions::Action.action_types.keys
+      end
     end
 
     row do
