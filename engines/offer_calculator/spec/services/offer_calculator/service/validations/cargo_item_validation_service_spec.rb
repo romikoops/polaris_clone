@@ -24,12 +24,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
     Pricings::Pricing.all
   end
   let(:cargo_units) do
-    [FactoryBot.build(:journey_cargo_unit,
-      width_value: 1.20,
-      length_value: 0.80,
-      height_value: 1.40,
-      weight_value: 500,
-      quantity: 1)]
+    [
+      FactoryBot.build(:journey_cargo_unit,
+        width_value: 1.20,
+        length_value: 0.80,
+        height_value: 1.40,
+        weight_value: 500,
+        quantity: 1)
+    ]
   end
 
   describe "#perform" do
@@ -48,12 +50,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is complete and valid" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1.2,
-          length_value: 1.2,
-          height_value: 1.2,
-          weight_value: 120)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1.2,
+            length_value: 1.2,
+            height_value: 1.2,
+            weight_value: 120)
+        ]
       end
 
       it "returns an empty array" do
@@ -63,9 +67,11 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is complete and valid aggregated lcl" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          :aggregate_lcl,
-          weight_value: 120)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            :aggregate_lcl,
+            weight_value: 120)
+        ]
       end
 
       it "passes validation" do
@@ -75,9 +81,11 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when aggregated_lcl unit exceeds the individual limit, but not the aggregate" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          :aggregate_lcl,
-          weight_value: 15_000)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            :aggregate_lcl,
+            weight_value: 15_000)
+        ]
       end
 
       before { FactoryBot.create(:aggregated_max_dimensions_bundle, organization: organization) }
@@ -89,13 +97,15 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is complete and valid except for trucking" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          id: SecureRandom.uuid,
-          quantity: 1,
-          width_value: 1.2,
-          length_value: 1.2,
-          height_value: 1.2,
-          weight_value: 120)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            id: SecureRandom.uuid,
+            quantity: 1,
+            width_value: 1.2,
+            length_value: 1.2,
+            height_value: 1.2,
+            weight_value: 120)
+        ]
       end
       let(:expected_help_text) do
         ["Chargeable Weight exceeds the limit of 50 kg"]
@@ -121,12 +131,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is incomplete and valid" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1.2,
-          length_value: 0,
-          height_value: 0,
-          weight_value: 0)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1.2,
+            length_value: 0,
+            height_value: 0,
+            weight_value: 0)
+        ]
       end
 
       it "returns an empty array" do
@@ -136,12 +148,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is incomplete and valid (final)" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 0,
-          width_value: 1.2,
-          length_value: 0,
-          height_value: 0,
-          weight_value: 0)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 0,
+            width_value: 1.2,
+            length_value: 0,
+            height_value: 0,
+            weight_value: 0)
+        ]
       end
       let(:final) { true }
       let(:expected_help_text) do
@@ -164,12 +178,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is invalid (negative values)" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: -1.2,
-          length_value: -1.0,
-          height_value: -1.0,
-          weight_value: -1.0)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: -1.2,
+            length_value: -1.0,
+            height_value: -1.0,
+            weight_value: -1.0)
+        ]
       end
       let(:tenant_vehicle_ids) { nil }
       let(:expected_help_text) do
@@ -195,12 +211,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is complete and all attrs are invalid" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 12,
-          length_value: 12,
-          height_value: 12,
-          weight_value: 12_000)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 12,
+            length_value: 12,
+            height_value: 12,
+            weight_value: 12_000)
+        ]
       end
       let(:expected_help_text) do
         ["Width exceeds the limit of 5 m",
@@ -225,12 +243,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
 
     context "when the object is incomplete and invalid" do
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 12,
-          length_value: 0,
-          height_value: 0,
-          weight_value: 0)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 12,
+            length_value: 0,
+            height_value: 0,
+            weight_value: 0)
+        ]
       end
       let(:expected_help_text) { ["Width exceeds the limit of 5 m"] }
 
@@ -254,18 +274,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.create(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1,
-          length_value: 1,
-          height_value: 1,
-          weight_value: 120),
+        [
           FactoryBot.create(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 400)]
+            weight_value: 120),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1,
+            length_value: 1,
+            height_value: 1,
+            weight_value: 400)
+        ]
       end
       let(:expected_help_text) do
         [
@@ -293,18 +315,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1,
-          length_value: 1,
-          height_value: 1,
-          weight_value: 1.2),
+        [
           FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 500)]
+            weight_value: 1.2),
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1,
+            length_value: 1,
+            height_value: 1,
+            weight_value: 500)
+        ]
       end
       let(:expected_help_text) do
         [
@@ -333,18 +357,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.create(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 5,
-          length_value: 2,
-          height_value: 1,
-          weight_value: 1.2),
+        [
           FactoryBot.create(:journey_cargo_unit,
             quantity: 1,
             width_value: 5,
             length_value: 2,
             height_value: 1,
-            weight_value: 1.2)]
+            weight_value: 1.2),
+          FactoryBot.create(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 5,
+            length_value: 2,
+            height_value: 1,
+            weight_value: 1.2)
+        ]
       end
       let(:expected_result) do
         cargo_units.flat_map do |unit|
@@ -384,18 +410,20 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       let(:modes_of_transport) { %w[ocean air] }
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1,
-          length_value: 1,
-          height_value: 1,
-          weight_value: 120),
+        [
           FactoryBot.build(:journey_cargo_unit,
             quantity: 1,
             width_value: 1,
             length_value: 1,
             height_value: 1,
-            weight_value: 500)]
+            weight_value: 120),
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1,
+            length_value: 1,
+            height_value: 1,
+            weight_value: 500)
+        ]
       end
 
       it "returns an array of errors for each input when aggregate fails validation" do
@@ -413,12 +441,14 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          quantity: 1,
-          width_value: 1,
-          length_value: 1,
-          height_value: 1,
-          weight_value: 1200)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            quantity: 1,
+            width_value: 1,
+            length_value: 1,
+            height_value: 1,
+            weight_value: 1200)
+        ]
       end
 
       let(:expected_help_text) do
@@ -438,10 +468,12 @@ RSpec.describe OfferCalculator::Service::Validations::CargoItemValidationService
       end
 
       let(:cargo_units) do
-        [FactoryBot.build(:journey_cargo_unit,
-          :aggregate_lcl,
-          quantity: 1,
-          weight_value: 12_000)]
+        [
+          FactoryBot.build(:journey_cargo_unit,
+            :aggregate_lcl,
+            quantity: 1,
+            weight_value: 12_000)
+        ]
       end
 
       it "returns an array of errors for each input when aggregate fails validation", :aggregate_failures do

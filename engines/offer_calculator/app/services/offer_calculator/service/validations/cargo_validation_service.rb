@@ -61,6 +61,7 @@ module OfferCalculator
 
         DEFAULT_MAX = Float::INFINITY
         DEFAULT_MOT = "general"
+        TRUCKING_MOT = "truck_carriage"
         DEFAULT_CONVERSION_RATIO = 1_000
 
         def self.errors(request:, pricings:, final: false)
@@ -85,16 +86,12 @@ module OfferCalculator
 
         delegate :organization, :load_type, :client, :creator, to: :request
 
-        def modes_of_transport
-          @modes_of_transport ||= [
-            ["general"],
-            pricing_modes_of_transport,
-            trucking_involved? ? ["truck_carriage"] : []
-          ].flatten
+        def main_modes_of_transport
+          @main_modes_of_transport ||= [DEFAULT_MOT, pricing_modes_of_transport].flatten
         end
 
         def pricing_modes_of_transport
-          @pricing_modes_of_transport ||= pricings.joins(:itinerary)
+          pricings.joins(:itinerary)
             .select("itineraries.mode_of_transport")
             .distinct
             .pluck(:mode_of_transport)
@@ -153,18 +150,17 @@ module OfferCalculator
           @max_dimensions_bundles ||= ::Legacy::MaxDimensionsBundle.where(organization_id: organization.id)
         end
 
-        def cargo_class_from_unit(unit:)
-          (unit.cargo_class.include?("lcl") ? "lcl" : unit.cargo_class)
-        end
-
         def validate_cargo(cargo_unit:)
           cargo_class = cargo_class_from_unit(unit: cargo_unit)
-          max_dimensions_by_cargo_class = filtered_max_dimensions.where(cargo_class: [cargo_class, "general"])
-          lcl_max_dimensions = filtered_max_dimensions.where(cargo_class: "lcl")
+          main_mot_max_dimensions_by_cargo_class = filtered_main_mot_max_dimensions.where(cargo_class: [cargo_class, "general"])
+          main_mot_lcl_max_dimensions = filtered_main_mot_max_dimensions.where(cargo_class: "lcl")
+          trucking_max_dimensions = filtered_trucking_max_dimensions(aggregate: cargo_unit.id == "aggregate")
           attributes = keys_for_validation(cargo_unit: cargo_unit)
+
           attributes.each do |attribute|
             validate_attribute(
-              max_dimensions: max_dimensions_by_cargo_class,
+              main_mot_max_dimensions: main_mot_max_dimensions_by_cargo_class,
+              trucking_max_dimensions: trucking_max_dimensions,
               id: cargo_unit.id,
               attribute: attribute,
               measurement: cargo_unit.send(CARGO_DIMENSION_LOOKUP[attribute]),
@@ -172,11 +168,21 @@ module OfferCalculator
             )
           end
 
-          validate_volume(lcl_max_dimensions: lcl_max_dimensions, cargo_unit: cargo_unit)
+          if cargo_unit.volume.present?
+            validate_attribute(
+              main_mot_max_dimensions: main_mot_lcl_max_dimensions,
+              trucking_max_dimensions: trucking_max_dimensions,
+              id: cargo_unit.id,
+              attribute: :volume,
+              measurement: cargo_unit.total_volume,
+              cargo: cargo_unit
+            )
+          end
 
           if attributes == STANDARD_ATTRIBUTES && request.load_type == "cargo_item"
             validate_attribute(
-              max_dimensions: lcl_max_dimensions,
+              main_mot_max_dimensions: main_mot_lcl_max_dimensions,
+              trucking_max_dimensions: trucking_max_dimensions,
               id: cargo_unit.id,
               attribute: :chargeable_weight,
               measurement: cargo_unit.chargeable_weight,
@@ -187,16 +193,74 @@ module OfferCalculator
           final_validation(cargo_unit: cargo_unit) if final.present?
         end
 
-        def validate_volume(lcl_max_dimensions:, cargo_unit:)
-          return if cargo_unit.volume.blank?
+        def cargo_class_from_unit(unit:)
+          (unit.cargo_class.include?("lcl") ? "lcl" : unit.cargo_class)
+        end
 
-          validate_attribute(
-            max_dimensions: lcl_max_dimensions,
-            id: cargo_unit.id,
-            attribute: :volume,
-            measurement: cargo_unit.total_volume,
-            cargo: cargo_unit
+        def filtered_main_mot_max_dimensions(aggregate: false)
+          filtered_max_dimensions(aggregate: aggregate, modes_of_transport: main_modes_of_transport)
+        end
+
+        def filtered_max_dimensions(aggregate:, modes_of_transport:)
+          query = max_dimensions_bundles.where(aggregate: aggregate, mode_of_transport: modes_of_transport)
+
+          if query.blank?
+            query
+          else
+            query = query.where(itinerary_id: itinerary_ids).presence || query
+            query = query.where(tenant_vehicle_id: tenant_vehicle_ids).presence || query
+            query.where(carrier_id: carrier_ids).presence || query
+          end
+        end
+
+        def keys_for_validation(cargo_unit:)
+          validation_attributes.reject { |key| cargo_unit.send(CARGO_DIMENSION_LOOKUP[key]).value.zero? }
+        end
+
+        def validate_attribute(main_mot_max_dimensions:, trucking_max_dimensions:, id:, attribute:, measurement:, cargo:)
+          return handle_negative_value(id: id, attribute: attribute) if measurement.value.negative?
+
+          limit = si_attribute_limit(
+            main_mot_max_dimensions: main_mot_max_dimensions,
+            trucking_max_dimensions: trucking_max_dimensions,
+            attribute: attribute
           )
+          return if limit >= measurement
+
+          build_error(attribute: attribute, limit: limit, id: id, cargo: cargo, measurement: measurement)
+        end
+
+        def handle_negative_value(id:, attribute:)
+          @errors << OfferCalculator::Service::Validations::Error.new(
+            id: id,
+            message: "#{HUMANIZED_DIMENSION_LOOKUP[attribute]} must be positive.",
+            attribute: attribute,
+            limit: 0,
+            section: "cargo_item",
+            code: 4015
+          )
+        end
+
+        def si_attribute_limit(main_mot_max_dimensions:, trucking_max_dimensions:, attribute:)
+          main_mot_limit = main_mot_max_dimensions.pluck(attribute).min
+          trucking_limit = trucking_max_dimensions.pluck(attribute).min
+          effective_limit = [main_mot_limit, trucking_limit].compact.min || DEFAULT_MAX
+
+          if %i[chargeable_weight payload_in_kg].include?(attribute)
+            Measured::Weight.new(effective_limit, "kg")
+          elsif attribute == :volume
+            Measured::Volume.new(effective_limit, "m3")
+          elsif effective_limit
+            Measured::Length.new(effective_limit / 100, "m")
+          end
+        end
+
+        def filtered_trucking_max_dimensions(aggregate: false)
+          if trucking_involved?
+            filtered_max_dimensions(aggregate: aggregate, modes_of_transport: [TRUCKING_MOT])
+          else
+            ::Legacy::MaxDimensionsBundle.none
+          end
         end
 
         def final_validation(cargo_unit:)
@@ -223,17 +287,6 @@ module OfferCalculator
             section: "cargo_item",
             code: 4017
           )
-        end
-
-        def validate_attribute(max_dimensions:, id:, attribute:, measurement:, cargo:)
-          if measurement.value.negative?
-            handle_negative_value(id: id, attribute: attribute)
-            return
-          end
-          limit = si_attribute_limit(max_dimensions: max_dimensions, attribute: attribute)
-          return if limit >= measurement
-
-          build_error(attribute: attribute, limit: limit, id: id, cargo: cargo, measurement: measurement)
         end
 
         def build_error(attribute:, limit:, id:, cargo:, measurement:)
@@ -267,92 +320,6 @@ module OfferCalculator
           return "Chargeable Weight Exceeded" if attribute == :chargeable_weight
 
           limit
-        end
-
-        def trucking_limit(attribute:)
-          return Float::INFINITY unless modes_of_transport.include? "truck_carriage"
-          return Float::INFINITY if trucking_max_dimensions.empty?
-
-          trucking_max_dimensions.select(attribute).max.send(attribute)
-        end
-
-        def si_attribute_limit(max_dimensions:, attribute:)
-          main_mot_limit = max_dimensions.pluck(attribute).min
-          trucking_limit = trucking_limit(attribute: attribute)
-
-          for_comparison = [main_mot_limit, trucking_limit].compact.min
-          validation_limit = for_comparison || DEFAULT_MAX
-
-          if %i[chargeable_weight payload_in_kg].include?(attribute)
-            Measured::Weight.new(validation_limit, "kg")
-          elsif attribute == :volume
-            Measured::Volume.new(validation_limit, "m3")
-          elsif validation_limit
-            Measured::Length.new(validation_limit / 100, "m")
-          end
-        end
-
-        def keys_for_validation(cargo_unit:)
-          validation_attributes.reject { |key| cargo_unit.send(CARGO_DIMENSION_LOOKUP[key]).value.zero? }
-        end
-
-        def filtered_max_dimensions(aggregate: false)
-          first_filter = aggregate_and_route_filter(aggregate: aggregate)
-
-          effective_max_dimensions = first_filter.where(
-            mode_of_transport: modes_of_transport,
-            tenant_vehicle_id: tenant_vehicle_ids
-          )
-
-          if effective_max_dimensions.empty?
-            effective_max_dimensions = first_filter.where(
-              mode_of_transport: modes_of_transport,
-              carrier_id: carrier_ids
-            )
-          end
-
-          if effective_max_dimensions.empty?
-            effective_max_dimensions = first_filter.where(
-              mode_of_transport: modes_of_transport
-            )
-          end
-
-          if effective_max_dimensions.empty?
-            effective_max_dimensions = first_filter.where(
-              mode_of_transport: DEFAULT_MOT
-            )
-          end
-
-          effective_max_dimensions
-        end
-
-        def aggregate_and_route_filter(aggregate: false)
-          query = max_dimensions_bundles.where(
-            aggregate: aggregate,
-            itinerary_id: itinerary_ids
-          )
-
-          return query if query.present?
-
-          max_dimensions_bundles.where(
-            aggregate: aggregate
-          )
-        end
-
-        def trucking_max_dimensions
-          @trucking_max_dimensions ||=
-            filtered_max_dimensions.where(mode_of_transport: "truck_carriage")
-        end
-
-        def handle_negative_value(id:, attribute:)
-          @errors << OfferCalculator::Service::Validations::Error.new(
-            id: id,
-            message: "#{HUMANIZED_DIMENSION_LOOKUP[attribute]} must be positive.",
-            attribute: attribute,
-            limit: 0,
-            section: "cargo_item",
-            code: 4015
-          )
         end
       end
     end

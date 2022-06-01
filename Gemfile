@@ -76,6 +76,7 @@ group :development do
   gem "lefthook"
   gem "letter_opener", "~> 1.6"
   gem "listen", ">= 3.0.5", "< 3.3"
+  gem "pry-byebug"
   gem "rails-erd"
   gem "reek"
   gem "spring"

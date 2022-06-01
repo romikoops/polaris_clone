@@ -91,11 +91,13 @@ module OfferCalculator
         end
 
         def validate_aggregate
-          aggregate_max_dimensions = filtered_max_dimensions(aggregate: true).where(cargo_class: "lcl")
+          aggregate_main_mot_max_dimensions = filtered_main_mot_max_dimensions(aggregate: true).where(cargo_class: "lcl")
+          aggregate_trucking_max_dimensions = filtered_trucking_max_dimensions(aggregate: true).where(cargo_class: "lcl")
 
           keys_for_aggregate_validation.each do |attribute|
             validate_attribute(
-              max_dimensions: aggregate_max_dimensions,
+              main_mot_max_dimensions: aggregate_main_mot_max_dimensions,
+              trucking_max_dimensions: aggregate_trucking_max_dimensions,
               id: "aggregate",
               attribute: attribute,
               measurement: measured_request.send(CARGO_DIMENSION_LOOKUP[attribute]),
@@ -104,7 +106,8 @@ module OfferCalculator
           end
 
           validate_attribute(
-            max_dimensions: aggregate_max_dimensions,
+            main_mot_max_dimensions: aggregate_main_mot_max_dimensions,
+            trucking_max_dimensions: aggregate_trucking_max_dimensions,
             id: "aggregate",
             attribute: :chargeable_weight,
             measurement: measured_request.chargeable_weight,
