@@ -241,5 +241,16 @@ RSpec.describe Api::Query, type: :model do
         expect(described_class.hs_code_search(commodity_info.description[0..5]).ids).to match_array([query.id])
       end
     end
+
+    describe "#mot_search" do
+      let(:result) { FactoryBot.create(:journey_result) }
+      let!(:query) { FactoryBot.create(:api_query, results: [result], organization: organization) }
+
+      before { FactoryBot.create(:journey_route_section, result: result, mode_of_transport: "carriage", order: 0) }
+
+      it "find the correct Query" do
+        expect(described_class.mot_search("carriage").ids).to match_array([query.id])
+      end
+    end
   end
 end

@@ -31,6 +31,7 @@ module Api
         hs_code_search
         load_type_search
         billable_search
+        mot_search
       ]
     )
 
@@ -93,6 +94,10 @@ module Api
 
     scope :hs_code_search, lambda { |input|
       joins(cargo_units: :commodity_infos).where("imo_class IS NULL AND description ILIKE ?", "%#{input}%")
+    }
+
+    scope :mot_search, lambda { |input|
+      joins(results: :route_sections).where(journey_route_sections: { mode_of_transport: input.to_s })
     }
 
     def client

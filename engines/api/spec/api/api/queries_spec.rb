@@ -200,53 +200,54 @@ RSpec.describe "Queries", type: :request, swagger: true do
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :sortBy,
-                in: :query,
-                type: :string,
-                description: "The attribute by which to sort the Queries",
-                enum: %w[
-                  load_type
-                  last_name
-                  origin
-                  destination
-                  selected_date
-                  cargo_ready_date
-                  created_at
-                ]
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort the Queries",
+        enum: %w[
+          load_type
+          last_name
+          origin
+          destination
+          selected_date
+          cargo_ready_date
+          created_at
+        ]
       parameter name: :direction,
-                in: :query,
-                type: :string,
-                description: "The defining whether the sorting is ascending or descending",
-                enum: %w[
-                  asc
-                  desc
-                ]
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
       parameter name: :searchBy,
-                in: :query,
-                type: :string,
-                description: "The attribute of the Query model to search through",
-                enum: %w[
-                  client_email
-                  client_name
-                  company_name
-                  destination
-                  hs_code
-                  imo_class
-                  load_type
-                  origin
-                  reference
-                ]
+        in: :query,
+        type: :string,
+        description: "The attribute of the Query model to search through",
+        enum: %w[
+          client_email
+          client_name
+          company_name
+          destination
+          hs_code
+          imo_class
+          load_type
+          origin
+          reference
+          mot
+        ]
       parameter name: :searchQuery,
-                in: :query,
-                type: :string,
-                description: "The value we want to use in our search"
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
       parameter name: :page,
-                in: :query,
-                type: :string,
-                description: "The page of result requested"
+        in: :query,
+        type: :string,
+        description: "The page of result requested"
       parameter name: :perPage,
-                in: :query,
-                type: :string,
-                description: "The number of results requested per page"
+        in: :query,
+        type: :string,
+        description: "The number of results requested per page"
 
       response "200", "successful operation" do
         let(:sortBy) { "created_at" }

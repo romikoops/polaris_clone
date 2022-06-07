@@ -80,6 +80,7 @@ module Api
           imo_class
           hs_code
           billable
+          mot
         ])
       end
 
@@ -139,6 +140,7 @@ module Api
           :aggregated,
           :billable,
           :cargoReadyDate,
+          :mot,
           items: [
             :cargoClass,
             :stackable,
