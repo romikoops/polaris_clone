@@ -124,7 +124,7 @@ RSpec.describe Analytics::Base, type: :service do
     describe "#requests_with_profiles" do
       it "returns a collection of bookings with the Users::Client joined in", :aggregate_failures do
         expect(service.requests_with_profiles.count).to eq(requests.length)
-        expect(service.requests_with_profiles.pluck("users_clients.id").uniq).to eq(clients.pluck(:id))
+        expect(service.requests_with_profiles.pluck("users_clients.id").uniq).to match_array(clients.pluck(:id))
       end
     end
 

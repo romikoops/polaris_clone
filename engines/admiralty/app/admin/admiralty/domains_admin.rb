@@ -29,7 +29,7 @@ Trestle.resource(:domains, model: Organizations::Domain) do
 
   table do
     column :organization, ->(domain) { domain.organization.slug }, sort: :organization
-    column :application, ->(domain) { Doorkeeper::Application.find(domain.application_id).name }, sort: :application
+    column :application, ->(domain) { Doorkeeper::Application.find(domain.application_id).name if domain.application_id.present? }, sort: :application
     column :domain
     column :default
 
