@@ -70,6 +70,7 @@ Api::Engine.routes.draw do
         resources :companies, only: %i[create show update destroy]
         resources :companies, only: :index do
           resources :clients, only: %i[index]
+          resources :shipment_requests, only: %i[index]
         end
       end
     end

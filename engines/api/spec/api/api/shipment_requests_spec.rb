@@ -4,7 +4,8 @@ require "swagger_helper"
 
 RSpec.describe "ShipmentRequests", type: :request, swagger: true do
   include ActionDispatch::TestProcess
-  let(:organization_id) { FactoryBot.create(:organizations_organization).id }
+  let(:organization) { FactoryBot.create(:organizations_organization) }
+  let(:organization_id) { organization.id }
   let(:user) { FactoryBot.create(:users_client, organization_id: organization_id) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user.id, scopes: "public") }
   let(:Authorization) { "Bearer #{access_token.token}" }
@@ -22,41 +23,41 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
       parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
       parameter name: :sortBy,
-                in: :query,
-                type: :string,
-                description: "The attribute by which to sort the Shipment Requests",
-                enum: %w[
-                  created_at
-                  origin
-                  destination
-                ]
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort the Shipment Requests",
+        enum: %w[
+          created_at
+          origin
+          destination
+        ]
       parameter name: :direction,
-                in: :query,
-                type: :string,
-                description: "The defining whether the sorting is ascending or descending",
-                enum: %w[
-                  asc
-                  desc
-                ]
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
       parameter name: :page,
-                in: :query,
-                type: :string,
-                description: "The page of Shipment Requests requested"
+        in: :query,
+        type: :string,
+        description: "The page of Shipment Requests requested"
       parameter name: :perPage,
-                in: :query,
-                type: :string,
-                description: "The number of Shipment Requests requested per page"
+        in: :query,
+        type: :string,
+        description: "The number of Shipment Requests requested per page"
 
       parameter name: :searchBy,
-                in: :query,
-                type: :string,
-                description: "The attribute of the shipment requests and its related models to search through",
-                enum: %w[origin_search destination_search status_search reference_search]
+        in: :query,
+        type: :string,
+        description: "The attribute of the shipment requests and its related models to search through",
+        enum: %w[origin_search destination_search status_search reference_search]
 
       parameter name: :searchQuery,
-                in: :query,
-                type: :string,
-                description: "The value we want to use in our search"
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
 
       let(:sortBy) { "created_at" }
       let(:direction) { "asc" }
@@ -67,13 +68,13 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: { "$ref" => "#/components/schemas/shipment_request_index" }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :array,
+              items: { "$ref" => "#/components/schemas/shipment_request_index" }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -97,15 +98,15 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
       response "200", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     attributes: { "$ref" => "#/components/schemas/shipment_request" }
-                   }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                attributes: { "$ref" => "#/components/schemas/shipment_request" }
+              }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
@@ -180,21 +181,94 @@ RSpec.describe "ShipmentRequests", type: :request, swagger: true do
 
       response "201", "successful operation" do
         schema type: :object,
-               properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     attributes: { "$ref" => "#/components/schemas/shipment_request" }
-                   }
-                 }
-               },
-               required: ["data"]
+          properties: {
+            data: {
+              type: :object,
+              properties: {
+                attributes: { "$ref" => "#/components/schemas/shipment_request" }
+              }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end
 
       response "422", "invalid file type" do
         let(:uploaded_document) { fixture_file_upload("spec/fixtures/files/dummy.json", "application/json") }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/admin/companies/{company_id}/shipment_requests" do
+    get "Fetch all shipment requests for a client" do
+      tags "ShipmentRequests"
+      description "Fetch all shipment requests"
+      operationId "getShipmentRequests"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_id, in: :path, type: :string, description: "The company ID for which the shipments have to be retrieved"
+      parameter name: :sortBy,
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort the Shipment Requests",
+        enum: %w[
+          created_at
+          origin
+          destination
+        ]
+      parameter name: :direction,
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
+      parameter name: :page,
+        in: :query,
+        type: :string,
+        description: "The page of Shipment Requests requested"
+      parameter name: :perPage,
+        in: :query,
+        type: :string,
+        description: "The number of Shipment Requests requested per page"
+
+      parameter name: :searchBy,
+        in: :query,
+        type: :string,
+        description: "The attribute of the shipment requests and its related models to search through",
+        enum: %w[origin_search destination_search status_search reference_search]
+
+      parameter name: :searchQuery,
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
+
+      let(:sortBy) { "created_at" }
+      let(:direction) { "asc" }
+      let(:page) { 1 }
+      let(:perPage) { 10 }
+      let(:searchBy) { "origin" }
+      let(:searchQuery) { "Hamburg" }
+      let(:user) { FactoryBot.create(:users_user).tap { |user| FactoryBot.create(:users_membership, organization: organization, user: user) } }
+      let(:company_id) { company.id }
+
+      response "200", "successful operation" do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: { "$ref" => "#/components/schemas/shipment_request_admin_index" }
+            }
+          },
+          required: ["data"]
 
         run_test!
       end

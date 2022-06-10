@@ -8,6 +8,8 @@ module Users
 
     acts_as_paranoid
 
+    delegate :first_name, :last_name, :phone, to: :profile, allow_nil: true
+
     default_scope { where(organization_id: ::Organizations.current_id) }
     scope :global, -> { unscoped.where(deleted_at: nil) }
 
