@@ -1052,6 +1052,7 @@ end
 #                                              DELETE /v2/organizations/:organization_id/admin/companies/:id(.:format)                         api/v2/admin/companies#destroy
 #        v2_organization_admin_company_clients GET    /v2/organizations/:organization_id/admin/companies/:company_id/clients(.:format)         api/v2/admin/clients#index
 #                                              GET    /v2/organizations/:organization_id/admin/companies(.:format)                             api/v2/admin/companies#index
+#                  v2_organization_admin_users POST   /v2/organizations/:organization_id/admin/users(.:format)                                 api/v2/admin/users#create
 #                             v2_organizations GET    /v2/organizations(.:format)                                                              api/v2/organizations#index
 #             v2_organization_query_result_set GET    /v2/organizations/:organization_id/queries/:query_id/result_set(.:format)                api/v2/queries#result_set
 #            v2_organization_query_recalculate POST   /v2/organizations/:organization_id/queries/:query_id/recalculate(.:format)               api/v2/queries#recalculate

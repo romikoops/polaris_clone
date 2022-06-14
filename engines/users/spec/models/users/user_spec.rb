@@ -6,7 +6,26 @@ module Users
   RSpec.describe User, type: :model do
     subject { FactoryBot.build(:users_user) }
 
+    let!(:another_user) do
+      FactoryBot.create(:users_user).tap do |user|
+        FactoryBot.create(:users_membership, organization: another_organization, user: user)
+      end
+    end
+    let(:another_organization) { FactoryBot.create(:organizations_organization, slug: "different_org") }
+
     it { is_expected.to be_valid }
+
+    describe "#from_organization" do
+      before do
+        ::Organizations::Organization.current_id = another_organization.id
+      end
+
+      context "with organization_id as `another_organization` id" do
+        it "returns `another_user` id" do
+          expect(described_class.from_organization.ids).to match_array([another_user.id])
+        end
+      end
+    end
   end
 end
 

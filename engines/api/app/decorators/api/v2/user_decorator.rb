@@ -5,7 +5,8 @@ module Api
     class UserDecorator < ApplicationDecorator
       decorates "Users::User"
       delegate_all
-      delegate :first_name, to: :profile, allow_nil: true
+      delegate :first_name, :last_name, :phone, to: :profile, allow_nil: true
+      delegate :locale, :language, :currency, to: :settings, allow_nil: true
 
       def saml_integrations
         []

@@ -1,27 +1,7 @@
 # frozen_string_literal: true
 
-module Users
-  class User < Base
-    self.inheritance_column = nil
-
-    has_one :profile, inverse_of: :user, required: true, dependent: :destroy
-    accepts_nested_attributes_for :profile, update_only: true
-
-    has_one :settings, inverse_of: :user, required: true, dependent: :destroy
-    accepts_nested_attributes_for :settings, update_only: true
-
-    has_many :memberships, dependent: :destroy, inverse_of: :user
-    accepts_nested_attributes_for :memberships
-
-    has_many :organizations, through: :memberships
-
-    validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-
-    acts_as_paranoid
-
-    scope :from_organization, lambda {
-      joins(:memberships).where(users_memberships: { organization_id: ::Organizations.current_id })
-    }
+module Api
+  class User < ::Users::User
   end
 end
 

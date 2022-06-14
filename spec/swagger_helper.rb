@@ -140,6 +140,102 @@ RSpec.configure do |config|
               }
             }
           },
+          admin_user: {
+            type: "object",
+            properties: {
+              id: {
+                description: "Unique identifier of the admin user",
+                type: "string"
+              },
+              type: {
+                description: "Generic type of the company",
+                type: "string"
+              },
+              attributes: {
+                id: {
+                  description: "Unique identifier of the company",
+                  type: "string"
+                },
+                email: {
+                  description: "email of the company",
+                  type: "string"
+                },
+                firstName: {
+                  description: "first name of the admin user",
+                  type: "string"
+                },
+                lastName: {
+                  description: "last name of the admin user",
+                  type: "string"
+                },
+                phone: {
+                  description: "phone number of the admin user",
+                  type: "string"
+                },
+                language: {
+                  type: "string",
+                  pattern: "[a-z]{2}-[A-Z]{2}",
+                  description: <<~DOC
+                    User's preferred language. Preferred language is given as language
+                    and country combination, allowing different dialects and languages
+                    for each region.
+
+                    Language code is combined with language and country, separated by
+                    dash. First part of the code, language is the lower-case
+                    two-letter codes as defined by ISO-639-1. Second part is the
+                    upper-case two-letter codes as defined by ISO-3166-1.
+
+                    Ex:
+
+                    * `en-US` - English as spoken in United States of America
+                    * `en-GB` - English as spoken in United Kingdom and the Northern Ireland
+                    * `sv-FI` - Swedish as spoken in Finland
+                  DOC
+                },
+                locale: {
+                  type: "string",
+                  pattern: "[a-z]{2}-[A-Z]{2}",
+                  description: <<~DOC
+                    User's preferred locale. Preferred locale defines how numbers and
+                    currencies, time et al. are displayed in the shop.
+
+                    Locale code is combined with language and country, separated by
+                    dash. First part of the code, language is the lower-case
+                    two-letter codes as defined by ISO-639-1. Second part is the
+                    upper-case two-letter codes as defined by ISO-3166-1.
+
+                    Ex:
+
+                    * `en-US` - English as spoken in United States of America
+                    * `en-GB` - English as spoken in United Kingdom and the Northern Ireland
+                    * `sv-FI` - Swedish as spoken in Finland
+                  DOC
+                },
+                currency: {
+                  type: "string",
+                  description: <<~DOC
+                    The preferred currency of the admin user, there is no check if the currency is valid or supported.
+                    It is for the caller to send the right currency as uppercase.
+
+                    Ex:
+
+                    * `USD` - US Doller
+                    * `EU` - Euro
+                    * We only support two currencies for now *
+                  DOC
+                },
+                authMethods: {
+                  type: "array",
+                  description: "This contains the auth methods this Organization accepts",
+                  schema: "string"
+                },
+                loginSamlText: {
+                  type: "string",
+                  description: "Custom text to be displayed in the 'Log in Via SAML' button"
+                }
+              }
+            }
+          },
           address: {
             type: "object",
             properties: {
