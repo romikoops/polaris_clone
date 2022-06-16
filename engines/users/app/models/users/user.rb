@@ -19,7 +19,7 @@ module Users
 
     acts_as_paranoid
 
-    scope :from_organization, lambda {
+    scope :from_current_organization, lambda {
       joins(:memberships).where(users_memberships: { organization_id: ::Organizations.current_id })
     }
   end

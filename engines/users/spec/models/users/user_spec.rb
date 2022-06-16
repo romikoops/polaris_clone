@@ -15,14 +15,14 @@ module Users
 
     it { is_expected.to be_valid }
 
-    describe "#from_organization" do
+    describe "#from_current_organization" do
       before do
         ::Organizations::Organization.current_id = another_organization.id
       end
 
       context "with organization_id as `another_organization` id" do
         it "returns `another_user` id" do
-          expect(described_class.from_organization.ids).to match_array([another_user.id])
+          expect(described_class.from_current_organization.ids).to match_array([another_user.id])
         end
       end
     end

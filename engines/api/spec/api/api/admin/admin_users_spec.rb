@@ -14,6 +14,75 @@ RSpec.describe "AdminUsers", type: :request, swagger: true do
   end
 
   path "/v2/organizations/{organization_id}/admin/users" do
+    get "Fetch all admin users for an organization" do
+      tags "AdminUsers"
+      description "Fetch all admin users for an organization."
+      operationId "getUsers"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :page, in: :query, type: :number, description: "Page number"
+      parameter name: :perPage, in: :query, type: :number, description: "Results per page"
+      parameter name: :sortBy,
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort admin users",
+        enum: %w[
+          email
+          first_name
+          last_name
+          phone
+          activity
+        ]
+
+      parameter name: :direction,
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
+      parameter name: :searchBy,
+        in: :query,
+        type: :string,
+        description: "The attribute of the admin users and its related models to search through",
+        enum: %w[email
+          first_name
+          last_name
+          phone
+          activity]
+
+      parameter name: :searchQuery,
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
+
+      let(:sortBy) { "email" }
+      let(:direction) { "asc" }
+      let(:page) { 1 }
+      let(:perPage) { 10 }
+      let(:searchBy) { "first_name" }
+      let(:searchQuery) { "test" }
+      let(:company_id) { company.id }
+
+      response "200", "successful operation" do
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: { "$ref" => "#/components/schemas/admin_user" }
+            }
+          },
+          required: ["data"]
+
+        run_test!
+      end
+    end
+
     post "Create new admin users" do
       tags "AdminUsers"
       description "Create new admin users"

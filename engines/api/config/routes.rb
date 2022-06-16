@@ -72,7 +72,7 @@ Api::Engine.routes.draw do
           resources :clients, only: %i[index]
           resources :shipment_requests, only: %i[index]
         end
-        resources :users, only: %i[create update destroy]
+        resources :users, only: %i[index create update destroy]
       end
     end
     resources :organizations, only: :index do

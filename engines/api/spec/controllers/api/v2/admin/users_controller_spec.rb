@@ -41,6 +41,56 @@ module Api
       end
     end
 
+    describe "GET #index" do
+      let(:params) { { organization_id: organization.id } }
+      let(:user) { FactoryBot.create(:users_user, email: "test@example.com").tap { |users_user| FactoryBot.create(:users_membership, organization: organization, user: users_user) } }
+      let(:admin_a) { FactoryBot.create(:users_user, email: "abc@example.com") }
+      let(:admin_b) { FactoryBot.create(:users_user, email: "zulu@example.com") }
+
+      before do
+        FactoryBot.create(:users_membership, organization: organization, user: admin_a)
+        FactoryBot.create(:users_membership, organization: organization, user: admin_b)
+      end
+
+      context "when no sorting applied" do
+        it "returns all admins", :aggregate_failures do
+          get :index, params: params, as: :json
+          expect(response).to be_successful
+          expect(response_data).not_to be_empty
+        end
+      end
+
+      context "when sorting by email" do
+        it "returns admins sorted by email desc", :aggregate_failures do
+          get :index, params: params.merge(sortBy: "email", direction: "desc"), as: :json
+          expect(response_data.pluck("id")).to eq([admin_b.id, user.id, admin_a.id])
+        end
+
+        it "returns admins sorted by email asc", :aggregate_failures do
+          get :index, params: params.merge(sortBy: "email", direction: "asc"), as: :json
+          expect(response_data.pluck("id")).to eq([admin_a.id, user.id, admin_b.id])
+        end
+      end
+
+      context "when paginating" do
+        it "returns one admin per page (Page 1)", :aggregate_failures do
+          get :index, params: params.merge(sortBy: "email", direction: "desc", page: 1, perPage: 1), as: :json
+          expect(response_data.pluck("id")).to eq([admin_b.id])
+        end
+      end
+
+      context "when search_by is invalid" do
+        let(:search_query) { "aaaa" }
+        let(:search_by) { "aaaa" }
+
+        it "raises and error when the param is invalid" do
+          get :index, params: params.merge(searchBy: search_by, searchQuery: search_query), as: :json
+
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+    end
+
     describe "POST #create" do
       let(:email) { "test@imc.com" }
       let(:profile) { { firstName: "John", lastName: "Doe" } }

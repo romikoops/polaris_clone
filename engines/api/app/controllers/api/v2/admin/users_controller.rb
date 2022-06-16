@@ -6,6 +6,16 @@ module Api
       class UsersController < ApiController
         include UsersUserAccess
 
+        def index
+          render json: { errors: filter_params_validator.errors }, status: :unprocessable_entity and return unless filter_params_validator.valid?
+
+          render json: Api::V2::UserSerializer.new(
+            Api::V2::UserDecorator.decorate_collection(
+              filtered_users.paginate(pagination_params)
+            )
+          )
+        end
+
         def create
           render json: { error_code: "duplicate_user_record" }, status: :unprocessable_entity and return if user_by_email.present?
 
@@ -44,6 +54,35 @@ module Api
           end
         end
 
+        def index_params
+          @index_params ||= params.permit(:sortBy, :direction, :page, :perPage, :searchBy, :searchQuery, :beforeDate, :afterDate).transform_keys(&:underscore)
+        end
+
+        def pagination_params
+          {
+            page: [index_params[:page], 1].map(&:to_i).max,
+            per_page: index_params[:per_page]
+          }
+        end
+
+        def filtered_users
+          @filterrific = initialize_filterrific(
+            users_by_organization,
+            filter_params_validator.to_h
+          ) || return
+
+          users_by_organization.filterrific_find(@filterrific)
+        end
+
+        def filter_params_validator
+          @filter_params_validator ||= FilterParamValidator.new(
+            Api::User::SUPPORTED_SEARCH_OPTIONS,
+            Api::User::SUPPORTED_SORT_OPTIONS,
+            Api::User::DEFAULT_FILTER_PARAMS,
+            options: index_params.to_h
+          )
+        end
+
         def admin_user_attributes
           {}.tap do |result|
             result[:email] = admin_params[:email]
@@ -57,7 +96,11 @@ module Api
         end
 
         def user_by_id
-          @user_by_id ||= Api::User.from_organization.find_by(id: params.require(:id))
+          @user_by_id ||= Api::User.from_current_organization.find_by(id: params.require(:id))
+        end
+
+        def users_by_organization
+          @users_by_organization = Api::User.from_current_organization
         end
       end
     end

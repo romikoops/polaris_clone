@@ -2,6 +2,86 @@
 
 module Api
   class User < ::Users::User
+    delegate :fist_name, :last_name, :phone, to: :profile, allow_nil: true
+    delegate :currency, :language, :locale, to: :settings, allow_nil: true
+
+    AVAILABLE_FILTERS = %i[
+      sorted_by
+      first_name_search
+      last_name_search
+      phone_search
+      email_search
+      role_search
+    ].freeze
+
+    SUPPORTED_SEARCH_OPTIONS = %w[
+      first_name
+      last_name
+      phone
+      email
+      role
+    ].freeze
+
+    SUPPORTED_SORT_OPTIONS = %w[
+      first_name
+      last_name
+      email
+      phone
+      activity
+    ].freeze
+
+    DEFAULT_FILTER_PARAMS = { sorted_by: "email_asc" }.freeze
+
+    filterrific(
+      default_filter_params: DEFAULT_FILTER_PARAMS,
+      available_filters: Api::User::AVAILABLE_FILTERS
+    )
+
+    scope :sorted_by, lambda { |sort_option|
+      direction = /desc$/.match?(sort_option) ? "desc" : "asc"
+      case sort_option.to_s
+      when /^email/
+        order(sanitize_sql_for_order("email #{direction}"))
+      when /^first_name/
+        sort_by_profile_attributes("first_name", direction)
+      when /^last_name/
+        sort_by_profile_attributes("last_name", direction)
+      when /^phone/
+        sort_by_profile_attributes("phone", direction)
+      when /^activity/
+        order(sanitize_sql_for_order("last_activity_at #{direction}"))
+      else
+        raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
+      end
+    }
+
+    scope :sort_by_profile_attributes, lambda { |sort_by, direction|
+      joins(:profile)
+        .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+    }
+
+    scope :email_search, lambda { |email|
+      where("users_users.email ILIKE ?", "%#{email}%")
+    }
+
+    scope :last_name_search, lambda { |last_name|
+      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
+        .where("users_profiles.last_name ILIKE ?", "%#{last_name}%")
+    }
+
+    scope :phone_search, lambda { |phone|
+      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
+        .where("users_profiles.phone ILIKE ?", "%#{phone}%")
+    }
+
+    scope :first_name_search, lambda { |first_name|
+      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
+        .where("users_profiles.first_name ILIKE ?", "%#{first_name}%")
+    }
+
+    scope :activity_search, lambda { |range|
+      where(last_activity_at: range).distinct
+    }
   end
 end
 
