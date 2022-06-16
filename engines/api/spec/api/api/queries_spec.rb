@@ -24,10 +24,13 @@ RSpec.describe "Queries", type: :request, swagger: true do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:organization_id) { organization.id }
   let(:source) { FactoryBot.create(:application, name: "siren") }
-  let(:user) { FactoryBot.create(:users_client, organization_id: organization.id) }
+  let(:user) { FactoryBot.create(:users_user).tap { |users_user| FactoryBot.create(:users_membership, organization: organization, user: users_user) } }
+
+  let(:user_client) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:origin) { FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode) }
   let(:destination) { FactoryBot.build(:carta_result, id: "xxx2", type: "locode", address: destination_hub.nexus.locode) }
   let(:pallet) { FactoryBot.create(:legacy_cargo_item_type) }
+  let(:company_id) { FactoryBot.create(:companies_company, organization_id: organization_id, name: "default").id }
 
   before do
     ::Organizations.current_id = organization.id
@@ -37,7 +40,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
       organization: organization,
       cargo_ready_date: 3.days.from_now,
       created_at: 2.hours.ago,
-      client: user,
+      client: user_client,
       results: [FactoryBot.build(:journey_result)])
     FactoryBot.create(:journey_query,
       origin: "bbbbb",
@@ -45,7 +48,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
       organization: organization,
       cargo_ready_date: 2.days.from_now,
       created_at: 5.hours.ago,
-      client: user,
+      client: user_client,
       results: [FactoryBot.build(:journey_result)])
     organization.scope.update(content: { base_pricing: true })
     allow(Carta::Client).to receive(:lookup).with(id: origin.id).and_return(origin)
@@ -113,6 +116,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
           items: [item]
         }
       end
+      let(:user) { user_client }
 
       response "201", "successful operation (FCL)" do
         let(:cargo_classes) { ["fcl_20"] }
@@ -266,7 +270,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
     let(:query) do
       FactoryBot.create(:journey_query,
         organization: organization,
-        client: user,
+        client: user_client,
         results: [FactoryBot.build(:journey_result)])
     end
 
@@ -322,7 +326,7 @@ RSpec.describe "Queries", type: :request, swagger: true do
         origin_geo_id: origin.id,
         destination_geo_id: destination.id,
         source_id: source.id,
-        client: user,
+        client: user_client,
         results: [FactoryBot.build(:journey_result)])
     end
 
@@ -340,6 +344,80 @@ RSpec.describe "Queries", type: :request, swagger: true do
 
       response "201", "successful operation" do
         let(:query_id) { query.id }
+
+        run_test!
+      end
+    end
+  end
+
+  path "/v2/organizations/{organization_id}/admin/companies/{company_id}/queries" do
+    get "Fetch all queries" do
+      tags "Query"
+      description "Fetch all queries"
+      operationId "getQueries"
+
+      security [oauth: []]
+      consumes "application/json"
+      produces "application/json"
+
+      parameter name: :organization_id, in: :path, type: :string, description: "The current organization ID"
+      parameter name: :company_id, in: :path, type: :string, description: "The company ID"
+      parameter name: :sortBy,
+        in: :query,
+        type: :string,
+        description: "The attribute by which to sort the Queries",
+        enum: %w[
+          load_type
+          last_name
+          origin
+          destination
+          selected_date
+          cargo_ready_date
+          created_at
+        ]
+      parameter name: :direction,
+        in: :query,
+        type: :string,
+        description: "The defining whether the sorting is ascending or descending",
+        enum: %w[
+          asc
+          desc
+        ]
+      parameter name: :searchBy,
+        in: :query,
+        type: :string,
+        description: "The attribute of the Query model to search through",
+        enum: %w[
+          client_email
+          client_name
+          destination
+          hs_code
+          imo_class
+          load_type
+          origin
+          reference
+          mot
+        ]
+      parameter name: :searchQuery,
+        in: :query,
+        type: :string,
+        description: "The value we want to use in our search"
+      parameter name: :page,
+        in: :query,
+        type: :string,
+        description: "The page of result requested"
+      parameter name: :perPage,
+        in: :query,
+        type: :string,
+        description: "The number of results requested per page"
+
+      response "200", "successful operation" do
+        let(:sortBy) { "created_at" }
+        let(:direction) { "desc" }
+        let(:searchBy) { "client_email" }
+        let(:searchQuery) { user.email }
+        let(:page) { "1" }
+        let(:perPage) { "10" }
 
         run_test!
       end

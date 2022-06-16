@@ -6,6 +6,52 @@ module Api
     belongs_to :client, class_name: "Api::Client"
     has_one :client_profile, through: :client, source: :profile
 
+    AVAILABLE_FILTERS = %i[
+      sorted_by
+      reference_search
+      client_email_search
+      client_name_search
+      company_name_search
+      origin_search
+      destination_search
+      imo_class_search
+      hs_code_search
+      load_type_search
+      billable_search
+      mot_search
+    ].freeze
+
+    SUPPORTED_SEARCH_OPTIONS = %w[
+      reference
+      client_email
+      client_name
+      company_name
+      origin
+      destination
+      load_type
+      billable
+      imo_class
+      hs_code
+      mot
+    ].freeze
+
+    SUPPORTED_SORT_OPTIONS = %w[
+      created_at
+      origin
+      destination
+      load_type
+      last_name
+      selected_date
+      cargo_ready_date
+    ].freeze
+
+    DEFAULT_FILTER_PARAMS = { sorted_by: "created_at_desc" }.freeze
+
+    filterrific(
+      default_filter_params: DEFAULT_FILTER_PARAMS,
+      available_filters: AVAILABLE_FILTERS
+    )
+
     pg_search_scope :search,
       against: %i[origin destination],
       associated_against: {
@@ -16,24 +62,6 @@ module Api
       using: {
         tsearch: { prefix: true }
       }
-
-    filterrific(
-      default_filter_params: { sorted_by: "created_at_desc" },
-      available_filters: %i[
-        sorted_by
-        reference_search
-        client_email_search
-        client_name_search
-        company_name_search
-        origin_search
-        destination_search
-        imo_class_search
-        hs_code_search
-        load_type_search
-        billable_search
-        mot_search
-      ]
-    )
 
     scope :sorted_by, lambda { |sort_option|
       direction = /desc$/.match?(sort_option) ? "desc" : "asc"
@@ -54,6 +82,10 @@ module Api
       else
         raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
       end
+    }
+
+    scope :from_current_organization, lambda {
+      where(organization_id: ::Organizations.current_id)
     }
 
     scope :reference_search, lambda { |input|

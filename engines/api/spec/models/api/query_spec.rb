@@ -171,6 +171,12 @@ RSpec.describe Api::Query, type: :model do
       Organizations.current_id = organization.id
     end
 
+    describe "#from_current_organization" do
+      it "finds the queries for the current organization" do
+        expect(described_class.from_current_organization.ids).to match_array(described_class.where(organization_id: organization.id).ids)
+      end
+    end
+
     describe ".reference_search" do
       let!(:line_item_set) { FactoryBot.create(:journey_line_item_set, result: query.results.first) }
 

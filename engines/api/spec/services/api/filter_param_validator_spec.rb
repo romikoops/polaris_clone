@@ -34,8 +34,17 @@ RSpec.describe Api::FilterParamValidator do
       end
     end
 
-    context "when search_by is not present" do
+    context "when search_by is not present and search_query is present" do
       let(:search_by) { "" }
+
+      it "returns filter params to be invalid" do
+        expect(filter_param_validator.valid?).to be false
+      end
+    end
+
+    context "when both search_by and search_query is not present" do
+      let(:search_by) { "" }
+      let(:search_query) { "" }
 
       it "returns filter params to be valid" do
         expect(filter_param_validator.valid?).to be true

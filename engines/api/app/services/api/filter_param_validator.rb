@@ -4,7 +4,7 @@ module Api
   class FilterParamValidator
     include ActiveModel::Validations
 
-    attr_reader :default_filter_params
+    attr_reader :default_filter_params, :search_query_options
 
     REQUIRED_DATE_FORMAT = "%Y-%m-%d"
     DEFAULT_BEFORE_DATE = Time.zone.today
@@ -22,12 +22,13 @@ module Api
     validate :sort_by_validation
     validate :activity_validation
 
-    def initialize(supported_search_options, supported_sort_options, default_filter_params, options:)
+    def initialize(supported_search_options, supported_sort_options, default_filter_params, options: {}, search_query_options: {})
       @default_filter_params = default_filter_params
       SUPPORTED_FILTERS.each { |filter| define_variables(filter, options[filter]) }
       define_variables("search_options", supported_search_options)
       define_variables("sort_options", supported_sort_options)
       @direction = DEFAULT_DIRECTION if direction.blank?
+      @search_query_options = search_query_options
     end
 
     def to_h
@@ -46,11 +47,20 @@ module Api
     private
 
     def search_by_validation
-      return if search_by.blank?
+      return if search_by.blank? && search_query.blank?
+      errors.add(:search_by, error_code: "SEARCH_BY_NOT_SPECIFIED", error_message: "search by option is not present") and return if search_by.blank?
 
       errors.add(:search_by, error_code: "INVALID_SEARCH_BY_OPTION", error_message: "#{search_by} is unsupported search by option, options available for search by are : #{search_options}") unless search_options.include?(search_by.downcase)
 
       errors.add(:search_by, error_code: "SEARCH_QUERY_MISSING", error_message: "search query needs to be specified with search by") if search_query.blank?
+
+      errors.add(:search_by, error_code: "INVALID_SEARCH_QUERY", error_message: "#{search_query} is not a valid #{search_by} option") unless search_query_options_valid?(key: search_by)
+    end
+
+    def search_query_options_valid?(key:)
+      return true if !search_query_options.key?(key) || search_query_options[key].include?(search_query)
+
+      false
     end
 
     def sort_by_validation
