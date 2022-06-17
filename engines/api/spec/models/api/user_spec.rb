@@ -127,8 +127,34 @@ RSpec.describe Api::User, type: :model do
   end
 
   context "when filtering users by last_name" do
-    it "returns client with last name `xi`" do
+    it "returns users with last name `xi`" do
       expect(described_class.last_name_search("xi").pluck(:last_name)).to eq(["xi"])
+    end
+
+    context "when sorting by last_name" do
+      before do
+        FactoryBot.create(:api_user,
+          email: "xia_user@itsmycargo.test",
+          last_activity_at: 1.day.ago.to_s,
+          profile: FactoryBot.build(:users_profile, first_name: "zulu", last_name: "xia", phone: "9222333444"))
+      end
+
+      it "returns users with last name containing 'xi' in sorted descending order" do
+        expect(described_class.last_name_search("xi").sorted_by(:last_name_desc).pluck(:last_name)).to match_array(%w[xia xi])
+      end
+    end
+
+    context "when sorting with a different field such as email" do
+      before do
+        FactoryBot.create(:api_user,
+          email: "axia@itsmycargo.test",
+          last_activity_at: 1.day.ago.to_s,
+          profile: FactoryBot.build(:users_profile, first_name: "zulu", last_name: "xia", phone: "9222333444"))
+      end
+
+      it "returns users with last name containing 'xi' in sorted by email ascending order" do
+        expect(described_class.last_name_search("xi").sorted_by(:email_asc).pluck(:last_name)).to match_array(%w[xia xi])
+      end
     end
   end
 

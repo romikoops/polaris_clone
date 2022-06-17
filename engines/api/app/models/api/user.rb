@@ -2,7 +2,7 @@
 
 module Api
   class User < ::Users::User
-    delegate :fist_name, :last_name, :phone, to: :profile, allow_nil: true
+    delegate :first_name, :last_name, :phone, to: :profile, allow_nil: true
     delegate :currency, :language, :locale, to: :settings, allow_nil: true
 
     AVAILABLE_FILTERS = %i[
@@ -57,7 +57,7 @@ module Api
 
     scope :sort_by_profile_attributes, lambda { |sort_by, direction|
       joins(:profile)
-        .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+        .order(sanitize_sql_for_order("users_profiles.#{sort_by} #{direction}"))
     }
 
     scope :email_search, lambda { |email|
@@ -65,18 +65,15 @@ module Api
     }
 
     scope :last_name_search, lambda { |last_name|
-      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
-        .where("users_profiles.last_name ILIKE ?", "%#{last_name}%")
+      joins(:profile).where("users_profiles.last_name ILIKE ?", "%#{last_name}%")
     }
 
     scope :phone_search, lambda { |phone|
-      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
-        .where("users_profiles.phone ILIKE ?", "%#{phone}%")
+      joins(:profile).where("users_profiles.phone ILIKE ?", "%#{phone}%")
     }
 
     scope :first_name_search, lambda { |first_name|
-      joins("INNER JOIN users_profiles ON users_users.id = users_profiles.user_id")
-        .where("users_profiles.first_name ILIKE ?", "%#{first_name}%")
+      joins(:profile).where("users_profiles.first_name ILIKE ?", "%#{first_name}%")
     }
 
     scope :activity_search, lambda { |range|

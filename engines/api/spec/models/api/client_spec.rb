@@ -127,11 +127,53 @@ RSpec.describe Api::Client, type: :model do
     it "returns client with email `bbb@itsmycargo.test`" do
       expect(described_class.email_search("bbb").pluck(:email)).to eq(["bbb@itsmycargo.test"])
     end
+
+    context "when sorting by email" do
+      before do
+        FactoryBot.create(:api_client,
+          email: "bbba@itsmycargo.test",
+          organization: organization,
+          last_activity_at: 1.day.ago.to_s,
+          profile: FactoryBot.build(:users_client_profile, first_name: "wor", last_name: "xi", phone: "9222333446"))
+      end
+
+      it "returns users with email containing 'bbb' in sorted descending order" do
+        expect(described_class.email_search("bbb").sorted_by(:email_desc).pluck(:email)).to match_array(%w[bbba@itsmycargo.test bbb@itsmycargo.test])
+      end
+    end
   end
 
   context "when filtering clients by last_name" do
     it "returns client with last name `xi`" do
       expect(described_class.last_name_search("xi").pluck(:last_name)).to eq(["xi"])
+    end
+
+    context "when sorting by last_name" do
+      before do
+        FactoryBot.create(:api_client,
+          email: "bbba@itsmycargo.test",
+          organization: organization,
+          last_activity_at: 1.day.ago.to_s,
+          profile: FactoryBot.build(:users_client_profile, first_name: "zuku", last_name: "xia", phone: "9222333446"))
+      end
+
+      it "returns clients with last name containing 'xi' in sorted descending order" do
+        expect(described_class.last_name_search("xi").sorted_by(:last_name_desc).pluck(:last_name)).to match_array(%w[xia xi])
+      end
+    end
+
+    context "when sorting with a different field such as email" do
+      before do
+        FactoryBot.create(:api_client,
+          email: "bbba@itsmycargo.test",
+          organization: organization,
+          last_activity_at: 1.day.ago.to_s,
+          profile: FactoryBot.build(:users_client_profile, first_name: "zuku", last_name: "xia", phone: "9222333446"))
+      end
+
+      it "returns clients with last name containing 'xi' in sorted by email ascending order" do
+        expect(described_class.last_name_search("xi").sorted_by(:email_asc).pluck(:last_name)).to match_array(%w[xia xi])
+      end
     end
   end
 

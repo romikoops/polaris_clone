@@ -50,11 +50,11 @@ module Api
                INNER JOIN companies_companies ON companies_companies.id = companies_memberships.company_id")
           .order(sanitize_sql_for_order("name #{direction}"))
       when /^first_name/
-        sort_by_profile_atributes("first_name", direction)
+        sort_by_profile_attributes("first_name", direction)
       when /^last_name/
-        sort_by_profile_atributes("last_name", direction)
+        sort_by_profile_attributes("last_name", direction)
       when /^phone/
-        sort_by_profile_atributes("phone", direction)
+        sort_by_profile_attributes("phone", direction)
       when /^activity/
         order(sanitize_sql_for_order("last_activity_at #{direction}"))
       else
@@ -62,9 +62,9 @@ module Api
       end
     }
 
-    scope :sort_by_profile_atributes, lambda { |sort_by, direction|
+    scope :sort_by_profile_attributes, lambda { |sort_by, direction|
       joins("INNER JOIN users_client_profiles ON users_clients.id = users_client_profiles.user_id")
-        .order(sanitize_sql_for_order("#{sort_by} #{direction}"))
+        .order(sanitize_sql_for_order("users_client_profiles.#{sort_by} #{direction}"))
     }
 
     scope :from_company, lambda { |company_id|
