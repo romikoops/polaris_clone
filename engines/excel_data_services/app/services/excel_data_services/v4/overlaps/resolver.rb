@@ -4,10 +4,6 @@ module ExcelDataServices
   module V4
     module Overlaps
       class Resolver
-        # The Resolver class will take the conflict keys andd extract the permutations from the data frame.
-        # It will then find all conflicts that exists for each pair and execute the Overlaps handler for that conflict type
-        include Sidekiq::Status::Worker
-
         DATE_KEYS = %w[effective_date expiration_date].freeze
         delegate :frame, to: :state
 
@@ -25,9 +21,9 @@ module ExcelDataServices
           append_internal_conflict_rows
           return state if state.errors.present?
 
-          frame[conflict_keys].to_a.uniq.each do |conflict_targets|
-            handle_overlap(arguments: conflict_targets)
-          end
+          ExcelDataServices::V4::Overlaps::Clearer.new(
+            frame: state.frame, model: model, conflict_keys: keys
+          ).perform
           state
         end
 
@@ -44,8 +40,8 @@ module ExcelDataServices
         end
 
         def append_internal_conflict_rows
-          frame[keys].to_a.uniq.each do |indentifying_attributes|
-            sub_frame = frame.filter(indentifying_attributes)
+          frame[keys].to_a.uniq.each do |identifying_attributes|
+            sub_frame = frame.filter(identifying_attributes)
             add_internal_conflict_error(rows: sub_frame.to_a) if internal_conflict_exists(sub_frame: sub_frame)
           end
         end
@@ -65,10 +61,6 @@ module ExcelDataServices
             reason: "The rows listed have conflicting validity dates. Please correct before reuploading.",
             exception_class: ExcelDataServices::Validators::ValidationErrors::InsertableChecks
           )
-        end
-
-        def conflict_keys
-          keys + DATE_KEYS
         end
       end
     end

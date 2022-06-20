@@ -64,15 +64,23 @@ module Rover
     #### CUSTOM IMC CODE ####
 
     def filter(arguments)
-      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)]
+      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)] || blank_frame
     end
 
     def reject(arguments)
-      self[arguments.keys.map { |key| (self[key] != arguments[key]) }.reduce(&:&)]
+      self[arguments.keys.map { |key| (self[key] != arguments[key]) }.reduce(&:&)] || blank_frame
     end
 
     def group_by(columns)
       self[columns].to_a.uniq.map {|args| filter(args) }
+    end
+
+    def uniq
+      Rover::DataFrame.new(to_a.uniq)
+    end
+
+    def blank_frame
+      Rover::DataFrame.new(keys.zip([[]] * keys.size).to_h)
     end
   end
 end

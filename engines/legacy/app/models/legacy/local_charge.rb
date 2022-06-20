@@ -3,9 +3,19 @@
 module Legacy
   class LocalCharge < ApplicationRecord
     include PgSearch::Model
+    include Legacy::Upsertable
 
     UUID_V5_NAMESPACE = "9a295592-e5a9-427a-ad64-df244730b9dc"
-
+    UUID_KEYS = %i[
+      hub_id
+      counterpart_hub_id
+      tenant_vehicle_id
+      load_type
+      mode_of_transport
+      group_id
+      direction
+      organization_id
+    ].freeze
     self.table_name = "local_charges"
 
     acts_as_paranoid
@@ -62,7 +72,7 @@ module Legacy
     def generate_upsert_id
       return if [hub_id, tenant_vehicle_id, load_type, mode_of_transport, group_id, direction, organization_id].any?(&:blank?)
 
-      self.uuid = ::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [hub_id.to_s, counterpart_hub_id.to_s, tenant_vehicle_id.to_s, load_type.to_s, mode_of_transport.to_s, group_id.to_s, direction.to_s, organization_id.to_s].join)
+      self.uuid = upsertable_id
     end
 
     def hub_name

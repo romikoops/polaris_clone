@@ -2,6 +2,7 @@
 
 module Pricings
   class Pricing < ApplicationRecord
+    include Legacy::Upsertable
     WM_RATIO_LOOKUP = { ocean: 1000,
                         air: 167,
                         rail: 500,
@@ -11,7 +12,13 @@ module Pricings
     self.ignored_columns = ["disabled"]
 
     UUID_V5_NAMESPACE = "0411d7c3-b309-4964-9bed-1ef2e470a1df"
-
+    UUID_KEYS = %i[
+      itinerary_id
+      tenant_vehicle_id
+      cargo_class
+      group_id
+      organization_id
+    ].freeze
     has_paper_trail
 
     belongs_to :itinerary, class_name: "Legacy::Itinerary"
@@ -103,11 +110,7 @@ module Pricings
     end
 
     def generate_upsert_id
-      self.upsert_id =::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [itinerary_id,
-        tenant_vehicle_id,
-        cargo_class,
-        group_id,
-        organization_id].map(&:to_s).join)
+      self.upsert_id = upsertable_id
     end
   end
 end
