@@ -69,7 +69,7 @@ jobs:
             ingress:
               host: polaris-production.itsmycargo.tech
               annotations:
-                alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:003688427525:certificate/30553e1b-8dc4-43ca-bd7e-d39977a53b1c
+                alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:003688427525:certificate/3ab97149-7f49-4e86-b1f3-80815166a6ff
             serviceAccount:
               annotations:
                 eks.amazonaws.com/role-arn: ${{ secrets.ROLE_PRODUCTION }}
