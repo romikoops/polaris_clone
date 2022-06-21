@@ -23,6 +23,8 @@ module OfferCalculator
           @charge_category ||= Legacy::ChargeCategory.find(charge_category_id)
         end
 
+        delegate :code, to: :charge_category
+
         def percentage?
           rate_basis == "PERCENTAGE"
         end

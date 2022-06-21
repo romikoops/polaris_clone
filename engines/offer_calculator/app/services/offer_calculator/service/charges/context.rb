@@ -18,6 +18,14 @@ module OfferCalculator
         def charge_category
           @charge_category ||= Legacy::ChargeCategory.find(charge_category_id)
         end
+
+        def load_meterage_limit(type:)
+          send(["load_meterage", type, "limit"].join("_"))
+        end
+
+        def load_meterage_type(type:)
+          send(["load_meterage", type, "type"].join("_")) || "none"
+        end
       end
     end
   end

@@ -20,6 +20,7 @@ module OfferCalculator
             charge_category_id: input_fee.charge_category_id,
             rate_basis: input_fee.rate_basis,
             base: input_fee.base,
+            measure: input_fee.measure,
             minimum_charge: apply_margin_to(value: input_fee.minimum_charge),
             maximum_charge: apply_margin_to(value: input_fee.maximum_charge),
             surcharge: updated_surcharge(fee: input_fee),

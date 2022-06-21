@@ -12,7 +12,7 @@ RSpec.describe OfferCalculator::Service::Charges::Support::ValueKeys do
       let(:fee) { { "rate_basis" => "PER_UNIT_TON_CBM_RANGE" } }
 
       it "returns 'stowage' as the value key" do
-        expect(result).to eq(["stowage"])
+        expect(result).to eq(["stowage_factor"])
       end
     end
 

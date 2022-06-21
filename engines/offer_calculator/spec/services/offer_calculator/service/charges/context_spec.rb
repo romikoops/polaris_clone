@@ -33,11 +33,11 @@ RSpec.describe OfferCalculator::Service::Charges::Context do
       section: "cargo",
       organization_id: organization.id,
       load_meterage_ratio: nil,
-      load_meterage_stackable_type: nil,
-      load_meterage_non_stackable_type: nil,
+      load_meterage_stackable_type: load_meterage_stackable_type,
+      load_meterage_non_stackable_type: load_meterage_non_stackable_type,
       load_meterage_hard_limit: nil,
-      load_meterage_stackable_limit: nil,
-      load_meterage_non_stackable_limit: nil,
+      load_meterage_stackable_limit: 100,
+      load_meterage_non_stackable_limit: 200,
       km: nil,
       truck_type: nil,
       carrier_lock: false,
@@ -49,6 +49,8 @@ RSpec.describe OfferCalculator::Service::Charges::Context do
   end
   let(:source_type) { "Pricings::Pricing" }
   let(:context_id) { fee.pricing_id }
+  let(:load_meterage_stackable_type) { "area" }
+  let(:load_meterage_non_stackable_type) { "height" }
 
   describe "#original" do
     context "when the source was a Pricings::Pricing" do
@@ -87,6 +89,39 @@ RSpec.describe OfferCalculator::Service::Charges::Context do
   describe "#charge_category" do
     it "returns the ChargeCategory based on the id" do
       expect(contex.charge_category).to eq(fee.charge_category)
+    end
+  end
+
+  describe "#load_meterage_limit" do
+    it "returns the load meterage limit for non_stackable" do
+      expect(contex.load_meterage_limit(type: "non_stackable")).to eq(contex.load_meterage_non_stackable_limit)
+    end
+
+    it "returns the load meterage limit for stackable" do
+      expect(contex.load_meterage_limit(type: "stackable")).to eq(contex.load_meterage_stackable_limit)
+    end
+  end
+
+  describe "#load_meterage_type" do
+    context "when the values are nil" do
+      let(:load_meterage_stackable_type) { nil }
+      let(:load_meterage_non_stackable_type) { nil }
+
+      it "returns the load meterage type for non_stackable" do
+        expect(contex.load_meterage_type(type: "non_stackable")).to eq("none")
+      end
+
+      it "returns the load meterage type for stackable" do
+        expect(contex.load_meterage_type(type: "stackable")).to eq("none")
+      end
+    end
+
+    it "returns the load meterage type for non_stackable" do
+      expect(contex.load_meterage_type(type: "non_stackable")).to eq(contex.load_meterage_non_stackable_type)
+    end
+
+    it "returns the load meterage type for stackable" do
+      expect(contex.load_meterage_type(type: "stackable")).to eq(contex.load_meterage_stackable_type)
     end
   end
 end

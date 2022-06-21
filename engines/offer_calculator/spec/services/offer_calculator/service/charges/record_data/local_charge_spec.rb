@@ -83,8 +83,8 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
     let(:code) { "qdf" }
     let(:expected_base_with_ranges) do
       [
-        { "range_min" => 0, "range_max" => 5, "rate" => 41, "range_unit" => "stowage", "rate_basis" => "PER_TON", "min" => 57, "max" => nil },
-        { "range_min" => 6, "range_max" => 40, "rate" => 8, "range_unit" => "stowage", "rate_basis" => "PER_CBM", "min" => 57, "max" => nil }
+        { "range_min" => 0, "range_max" => 5, "rate" => 41, "range_unit" => "stowage_factor", "rate_basis" => "PER_TON", "min" => 57, "max" => nil },
+        { "range_min" => 6, "range_max" => 40, "rate" => 8, "range_unit" => "stowage_factor", "rate_basis" => "PER_CBM", "min" => 57, "max" => nil }
       ].map do |range|
         expected_base.merge(range)
       end

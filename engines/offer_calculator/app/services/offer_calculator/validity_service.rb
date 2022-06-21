@@ -29,6 +29,10 @@ module OfferCalculator
       @end_date ||= end_value
     end
 
+    def period
+      Range.new(start_date, end_date, exclude_end: true)
+    end
+
     private
 
     def start_value

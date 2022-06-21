@@ -10,7 +10,7 @@ module OfferCalculator
 
         delegate :object, to: :measured_cargo
         delegate :context_id, :effective_date, :expiration_date, :metadata, :cargo_class, to: :object
-        delegate :rate, :base, :rate_basis, :currency, :measure, :minimum_charge, :maximum_charge, :percentage?, :surcharge, to: :fee
+        delegate :rate, :base, :rate_basis, :currency, :measure, :minimum_charge, :maximum_charge, :percentage?, :surcharge, :code, to: :fee
 
         def initialize(fee:, measured_cargo:)
           @fee = fee
@@ -32,7 +32,7 @@ module OfferCalculator
         private
 
         def calculated_value
-          @calculated_value ||= if base.zero?
+          @calculated_value ||= if ignore_base?
             rate * calculation_measure
           else
             rate * (calculation_measure / base).ceil
@@ -41,6 +41,10 @@ module OfferCalculator
 
         def calculation_measure
           SHIPMENT_LEVEL_RATE_BASES.exclude?(rate_basis) ? measure : 1
+        end
+
+        def ignore_base?
+          base <= 1e-6
         end
       end
     end

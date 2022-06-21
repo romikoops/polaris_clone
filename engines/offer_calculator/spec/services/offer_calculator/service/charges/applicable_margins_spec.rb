@@ -37,6 +37,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
           origin_hub_id
           destination_hub_id
           tenant_vehicle_id
+          itinerary_id
           pricing_id
           cargo_class
           currency
@@ -68,6 +69,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
             "origin_hub_id" => nil,
             "destination_hub_id" => nil,
             "tenant_vehicle_id" => nil,
+            "itinerary_id" => nil,
             "pricing_id" => nil,
             "cargo_class" => "lcl",
             "margin_type" => margin.margin_type,
@@ -101,6 +103,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "origin_hub_id" => nil,
               "destination_hub_id" => nil,
               "tenant_vehicle_id" => nil,
+              "itinerary_id" => nil,
               "pricing_id" => nil,
               "cargo_class" => cc,
               "margin_type" => margin.margin_type,
@@ -136,6 +139,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
             "origin_hub_id" => nil,
             "destination_hub_id" => nil,
             "tenant_vehicle_id" => nil,
+            "itinerary_id" => nil,
             "pricing_id" => nil,
             "cargo_class" => "lcl",
             "margin_type" => margin.margin_type,
@@ -198,6 +202,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "origin_hub_id" => nil,
               "destination_hub_id" => nil,
               "tenant_vehicle_id" => nil,
+              "itinerary_id" => nil,
               "pricing_id" => nil,
               "cargo_class" => "lcl",
               "margin_type" => margin_type,
@@ -236,6 +241,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "origin_hub_id" => nil,
               "destination_hub_id" => nil,
               "tenant_vehicle_id" => nil,
+              "itinerary_id" => nil,
               "pricing_id" => nil,
               "cargo_class" => "lcl",
               "margin_type" => margin_type,

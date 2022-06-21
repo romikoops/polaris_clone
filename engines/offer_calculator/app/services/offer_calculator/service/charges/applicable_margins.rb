@@ -16,7 +16,7 @@ module OfferCalculator
           @frame ||= base_margin_frame.concat(expanded_frame).inner_join(applicable_frame, on: {
             "applicable_type" => "applicable_type",
             "applicable_id" => "applicable_id"
-          })
+          }).sort_by! { |row| row["rank"] }
         end
 
         private
@@ -36,6 +36,7 @@ module OfferCalculator
             "expiration_date" => [],
             "origin_hub_id" => [],
             "destination_hub_id" => [],
+            "itinerary_id" => [],
             "tenant_vehicle_id" => [],
             "pricing_id" => [],
             "cargo_class" => [],
@@ -84,6 +85,7 @@ module OfferCalculator
               pricings_margins.expiration_date::date,
               pricings_margins.origin_hub_id,
               pricings_margins.destination_hub_id,
+              pricings_margins.itinerary_id,
               pricings_margins.tenant_vehicle_id,
               pricings_margins.pricing_id,
               COALESCE(pricings_margins.cargo_class, '#{expansion_value}') as cargo_class,

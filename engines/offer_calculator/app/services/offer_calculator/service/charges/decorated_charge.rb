@@ -30,7 +30,6 @@ module OfferCalculator
           itinerary_id
           tenant_vehicle_id
           truck_type
-          code
           carrier_lock
           carrier_id
           section
@@ -38,12 +37,12 @@ module OfferCalculator
         delegate(*CONTEXT_DELEGATIONS, to: :object)
 
         FEE_DELEGATIONS = %i[
-          currency measure surcharge minimum_charge maximum_charge
+          currency measure surcharge minimum_charge maximum_charge code
           rate range_max range_min charge_category rate_basis percentage? base
         ].freeze
         delegate(*FEE_DELEGATIONS, to: :fee)
 
-        delegate :name, to: :charge_category
+        delegate :name, :code, to: :charge_category
         alias fee_component fee
 
         def initialize(charge:, value:)

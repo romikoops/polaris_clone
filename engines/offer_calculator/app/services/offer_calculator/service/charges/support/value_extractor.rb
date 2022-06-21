@@ -20,8 +20,8 @@ module OfferCalculator
 
           def fee_range_data
             {
-              "range_min" => range["min"] || 0,
-              "range_max" => range["max"] || Float::INFINITY,
+              "range_min" => range.values_at("min", "range_min").find(&:present?) || 0,
+              "range_max" => range.values_at("max", "range_max").find(&:present?) || Float::INFINITY,
               "range_unit" => value_key,
               "rate_basis" => rate_basis
             }
@@ -33,7 +33,7 @@ module OfferCalculator
 
           def fall_back_rate_keys
             keys = [value_key, "rate", "value"]
-            keys += %w[ton cbm] if value_key == "stowage"
+            keys += %w[ton cbm] if value_key == "stowage_factor"
             keys
           end
 

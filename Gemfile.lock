@@ -149,7 +149,7 @@ PATH
       roo
       roo-xls
       routing
-      rover-df (= 0.2.6)
+      rover-df (= 0.3.0)
       shared-runtime
       trucking
       users
@@ -1127,7 +1127,7 @@ GEM
       nokogiri
       roo (>= 2.0.0, < 3)
       spreadsheet (> 0.9.0)
-    rover-df (0.2.6)
+    rover-df (0.3.0)
       numo-narray (>= 0.9.1.9)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)

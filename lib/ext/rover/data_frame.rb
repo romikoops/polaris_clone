@@ -2,15 +2,17 @@
 
 module Rover
   class DataFrame
+    NIL_ARRAY = [nil].freeze
+
     def concat(other)
       raise ArgumentError, "Must be a data frame" unless other.is_a?(DataFrame)
 
       size = self.size
       vectors.each do |k, v|
-        @vectors[k] = Vector.new(v.to_a + (other[k] ? other[k].to_a : [nil] * other.size), type: :object) # Forcing :object type on join
+        @vectors[k] = Vector.new(v.to_a + (other[k] ? other[k].to_a : NIL_ARRAY * other.size), type: :object) # Forcing :object type on join
       end
       (other.vector_names - vector_names).each do |k|
-        @vectors[k] = Vector.new([nil] * size + other[k].to_a, type: :object) # Forcing :object type on join
+        @vectors[k] = Vector.new((NIL_ARRAY * size) + other[k].to_a, type: :object) # Forcing :object type on join
       end
       self
     end
@@ -63,24 +65,32 @@ module Rover
 
     #### CUSTOM IMC CODE ####
 
+    def blank_frame
+      Rover::DataFrame.new(keys.zip([[]] * keys.size).to_h)
+    end
+
     def filter(arguments)
       self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)] || blank_frame
+    end
+
+    def filter_any(arguments)
+      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:|)] || blank_frame
+    end
+
+    def first_row
+      first.to_a.first
+    end
+
+    def group_by(columns)
+      self[columns].to_a.uniq.map { |args| filter(args) }
     end
 
     def reject(arguments)
       self[arguments.keys.map { |key| (self[key] != arguments[key]) }.reduce(&:&)] || blank_frame
     end
 
-    def group_by(columns)
-      self[columns].to_a.uniq.map {|args| filter(args) }
-    end
-
     def uniq
       Rover::DataFrame.new(to_a.uniq)
-    end
-
-    def blank_frame
-      Rover::DataFrame.new(keys.zip([[]] * keys.size).to_h)
     end
   end
 end

@@ -13,7 +13,7 @@ module OfferCalculator
 
           def value_keys
             @value_keys ||= if stowage?
-              ["stowage"]
+              ["stowage_factor"]
             elsif range_unit
               [range_unit]
             else

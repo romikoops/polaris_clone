@@ -23,8 +23,8 @@ RSpec.describe OfferCalculator::Service::Charges::Support::ExpandedFee do
       end
       let(:expected_data) do
         [
-          { "range_min" => 0, "range_max" => 5, "rate" => 41, "range_unit" => "stowage", "rate_basis" => "PER_TON", "min" => 57, "max" => nil },
-          { "range_min" => 6, "range_max" => 40, "rate" => 8, "range_unit" => "stowage", "rate_basis" => "PER_CBM", "min" => 57, "max" => nil }
+          { "range_min" => 0, "range_max" => 5, "rate" => 41, "range_unit" => "stowage_factor", "rate_basis" => "PER_TON", "min" => 57, "max" => nil },
+          { "range_min" => 6, "range_max" => 40, "rate" => 8, "range_unit" => "stowage_factor", "rate_basis" => "PER_CBM", "min" => 57, "max" => nil }
         ].map do |expected_range_data|
           base.merge(fee.except("range")).merge(expected_range_data)
         end
