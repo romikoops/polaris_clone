@@ -37,13 +37,11 @@ module Notifications
 
     initializer :event do |_app|
       config.to_prepare do
-        Rails.configuration.event_store.subscribe(AdminUserCreatedJob, to: [Users::UserCreated])
-        Rails.configuration.event_store.subscribe(UserCreatedJob, to: [Users::UserCreated])
-
-        # Offer created notifications
-        Rails.configuration.event_store.subscribe(OfferCreated::AdminNotifierJob, to: [Journey::OfferCreated])
-        Rails.configuration.event_store.subscribe(ShipmentRequestCreatedJob, to: [Journey::ShipmentRequestCreated])
-        Rails.configuration.event_store.subscribe(RequestForQuotationJob, to: [Journey::RequestForQuotationEvent])
+        Notifications::Events::EVENT_JOBS_LOOKUP.each do |event_class, jobs|
+          jobs.each do |job|
+            Rails.configuration.event_store.subscribe(job, to: [event_class])
+          end
+        end
       end
     end
   end
