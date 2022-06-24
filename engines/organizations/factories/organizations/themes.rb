@@ -50,6 +50,8 @@ FactoryBot.define do
         end
       end
     end
+
+    color_scheme { Organizations::DEFAULT_COLOR_SCHEMA }
   end
 end
 

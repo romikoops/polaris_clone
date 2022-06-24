@@ -67,6 +67,20 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           col(sm: 6) { text_field :bright_secondary_color }
         end
 
+        divider
+
+        row do
+          organization.theme.color_scheme.to_h.keys.each_slice(4) do |slice|
+            row do
+              slice.each do |key|
+                col(sm: 3) { text_field key }
+              end
+            end
+          end
+        end
+
+        divider
+
         %i[
           background
           small_logo

@@ -771,6 +771,11 @@ RSpec.configure do |config|
                 type: "string",
                 nullable: true
               },
+              color_scheme: {
+                description: "Set of color schemes specific to an organization",
+                type: "object",
+                nullable: true
+              },
               emails: {
                 description: "List of emails",
                 type: "object",

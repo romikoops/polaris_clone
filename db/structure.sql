@@ -3126,7 +3126,8 @@ CREATE TABLE public.organizations_themes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     websites jsonb DEFAULT '{}'::jsonb,
-    landing_page_variant public.theme_landing_page_variant_type DEFAULT 'default'::public.theme_landing_page_variant_type
+    landing_page_variant public.theme_landing_page_variant_type DEFAULT 'default'::public.theme_landing_page_variant_type,
+    color_scheme jsonb DEFAULT '{"dark": "", "main": "", "black": "", "white": "", "grey-1": "", "grey-2": "", "grey-3": "", "grey-4": "", "grey-7": "", "primary-1": "", "primary-2": "", "primary-3": "", "tertiary-1": "", "tertiary-2": "", "secondary-1": "", "secondary-2": ""}'::jsonb
 );
 
 
@@ -12784,6 +12785,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220324010131'),
 ('20220414062616'),
 ('20220422143149'),
-('20220502144623');
+('20220502144623'),
+('20220615105158'),
+('20220615133621');
 
 

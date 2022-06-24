@@ -20,7 +20,8 @@ module Api
         landing_page_hero
         landing_page_one
         landing_page_two
-        landing_page_three]
+        landing_page_three
+        color_scheme]
 
       attribute :background do |theme|
         if theme.background.attached?

@@ -27,7 +27,8 @@ module Api
         landingPageHero: Rails.application.routes.url_helpers.rails_blob_url(organization_theme.landing_page_hero),
         landingPageOne: Rails.application.routes.url_helpers.rails_blob_url(organization_theme.landing_page_one),
         landingPageTwo: Rails.application.routes.url_helpers.rails_blob_url(organization_theme.landing_page_two),
-        landingPageThree: Rails.application.routes.url_helpers.rails_blob_url(organization_theme.landing_page_three)
+        landingPageThree: Rails.application.routes.url_helpers.rails_blob_url(organization_theme.landing_page_three),
+        colorScheme: organization_theme.color_scheme
       }
     end
 

@@ -2,6 +2,7 @@
 
 module Organizations
   class Theme < ApplicationRecord
+    extend ColorSchemeSetter
     belongs_to :organization, class_name: "Organizations::Organization"
 
     has_one_attached :background
@@ -17,6 +18,23 @@ module Organizations
     has_one_attached :landing_page_three
 
     enum landing_page_variant: {default: "default", quotation_plugin: "quotation_plugin", light: "light"}
+
+    define_setters(*Organizations::DEFAULT_COLOR_SCHEMA.keys)
+
+    def method_missing(meth, *args, &blk)
+      method_name = meth.to_s
+      if color_scheme.key?(method_name)
+        color_scheme.fetch(method_name)
+      elsif Organizations::DEFAULT_COLOR_SCHEMA.key?(method_name)
+        Organizations::DEFAULT_COLOR_SCHEMA.fetch(method_name)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(meth, *)
+      color_scheme.key?(meth.to_s) || Organizations::DEFAULT_COLOR_SCHEMA.key?(meth.to_s) || super
+    end
   end
 end
 
@@ -28,6 +46,7 @@ end
 #  addresses              :jsonb
 #  bright_primary_color   :string
 #  bright_secondary_color :string
+#  color_scheme           :jsonb
 #  email_links            :jsonb
 #  emails                 :jsonb
 #  landing_page_variant   :enum             default("default")
