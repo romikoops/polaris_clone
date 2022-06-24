@@ -117,15 +117,6 @@ columns:
     header_row: 6
     alternative_keys:
       - rate
-  # - header: basis
-  #   sanitizer: text
-  #   validator: optional_string
-  #   required: true
-
-  #   sheet_name: Tariff Sheet
-  #   header_row: 6
-  #   alternative_keys:
-  #     - basis
   - header: pre_carriage_minimum
     sanitizer: decimal
     validator: optional_numeric
@@ -272,38 +263,47 @@ distributors:
 pipelines:
   - extractors:
       - OrganizationCarrier
-      - Carrier
       - RoutingCarrier
-    importers:
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
       - Carrier
-      - RoutingCarrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
 
   - validators:
       - Carrier
     extractors:
       - TenantVehicle
-    importers:
-      - TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
 
   - validators:
       - OriginHub
       - DestinationHub
     extractors:
       - Itinerary
-    importers:
-      - Itinerary
+    formatter: Itinerary
+    importer:
+      model: Legacy::Itinerary
 
   - validators:
       - PrimaryFeeCode
     extractors:
       - ChargeCategory
-    importers:
-      - ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
 
   - extractors:
       - TransitTime
-    importers:
-      - TransitTime
+    formatter: TransitTime
+    importer:
+      model: Legacy::TransitTime
 
   - validators:
     - SequentialDates
@@ -320,8 +320,11 @@ pipelines:
 
     extractors:
       - Pricing
-    importers:
-      - Pricing
+    formatter: Pricing
+    importer:
+      model: Pricings::Pricing
+      options:
+        recursive: true
 
     conflicts:
       - model: Pricings::Pricing

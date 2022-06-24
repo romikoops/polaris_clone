@@ -11,8 +11,6 @@ module ExcelDataServices
 
           ALPHA_INDEX = ("A".."ZZ").each.with_index(1).to_h.freeze
 
-          ALPHA_INDEX = ("A".."ZZ").each.with_index(1).to_h.freeze
-
           def initialize(xlsx:, header:, sheet_name:, options: Options.new)
             @xlsx = xlsx
             @options = options
