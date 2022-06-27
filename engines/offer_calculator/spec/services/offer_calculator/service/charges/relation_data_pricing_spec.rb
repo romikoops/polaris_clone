@@ -36,6 +36,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
       "currency" => fee.currency_name,
       "min" => 1.0,
       "section" => "cargo",
+      "mode_of_transport" => "ocean",
       "organization_id" => organization.id,
       "load_meterage_ratio" => nil,
       "load_meterage_stackable_type" => nil,

@@ -3,7 +3,7 @@
 module OfferCalculator
   module Service
     module OfferCreators
-      class Metadatum < OfferCalculator::Service::OfferCreators::Base
+      class Metadatum
         def self.metadatum(offer:, result:)
           new(
             offer: offer, result: result
@@ -19,6 +19,7 @@ module OfferCalculator
           offer.charges.each do |charge|
             build_breakdowns_for_charge(charge: charge)
           end
+          metadatum
         end
 
         private
@@ -33,8 +34,12 @@ module OfferCalculator
         end
 
         def build_breakdowns_for_charge(charge:)
-          charge.fee.breakdowns
-            .map.with_index do |result_breakdown, i|
+          records = if charge.is_a?(OfferCalculator::Service::Charges::DecoratedCharge)
+            charge.breakdowns
+          else
+            charge.fee.breakdowns
+          end
+          records.map.with_index do |result_breakdown, i|
             build_breakdown(
               result_breakdown: result_breakdown,
               charge: charge,
@@ -53,7 +58,7 @@ module OfferCalculator
             rate_origin: result_breakdown.metadata,
             cargo_class: charge&.cargo_class,
             source: result_breakdown.source,
-            target: result_breakdown.target
+            target: result_breakdown.source&.applicable
           )
         end
 

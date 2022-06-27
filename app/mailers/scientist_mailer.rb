@@ -14,6 +14,8 @@ class ScientistMailer < ApplicationMailer
     @query_input_params = params[:query_input_params]
     @control_diff = diff.left
     @candidate_diff = diff.right
+    @control_runtime = params.dig(:control_value, :duration)
+    @candidate_runtime = params.dig(:candidate_value, :duration)
 
     mail(to: "dev-services@itsmycargo.com", subject: "[ItsMyCargo] Experiment \"#{@experiment_name}\" completed #{verdict}")
   end

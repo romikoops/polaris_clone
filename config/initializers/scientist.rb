@@ -87,8 +87,8 @@ module Scientist
           app_name: app_name,
           has_errors: result.mismatched?,
           query_input_params: query_input_params,
-          control_value: control.cleaned_value,
-          candidate_value: candidate.cleaned_value
+          control_value: control_value,
+          candidate_value: candidate_value
         }.as_json.deep_symbolize_keys
       end
 
@@ -106,6 +106,14 @@ module Scientist
 
       def candidate
         @candidate ||= result.candidates.first
+      end
+
+      def control_value
+        @control_value ||= control.cleaned_value.merge(duration: result.control.duration)
+      end
+
+      def candidate_value
+        @candidate_value ||= candidate.cleaned_value.merge(duration: result.candidates.first.duration)
       end
 
       def request

@@ -40,13 +40,14 @@ RSpec.describe OfferCalculator::Calculator do
         cargo_items_attributes: cargo_items_attributes)
     ).perform
   end
+  let(:scope_content) { { closed_quotation_tool: true } }
 
   include_context "complete_route_with_trucking"
 
   before do
     Organizations.current_id = organization.id
     FactoryBot.create(:companies_membership, client: user)
-    organization.scope.update(content: { closed_quotation_tool: true })
+    organization.scope.update(content: scope_content)
     allow_any_instance_of(OfferCalculator::Service::ScheduleFinder).to receive(:longest_trucking_time).and_return(10)
     allow(Carta::Client).to receive(:suggest).with(query: origin_hub.nexus.locode).and_return(
       FactoryBot.build(:carta_result, id: "xxx1", type: "locode", address: origin_hub.nexus.locode)
@@ -62,6 +63,22 @@ RSpec.describe OfferCalculator::Calculator do
     let(:results) { query.results }
 
     context "with single trucking Availability" do
+      it "perform a booking calculation" do
+        expect(results.length).to eq(1)
+      end
+    end
+
+    context "when the Charge module is enabled" do
+      let(:scope_content) { { closed_quotation_tool: true, calculation_strategy: "new" } }
+
+      it "perform a booking calculation using the Charges module" do
+        expect(results.length).to eq(1)
+      end
+    end
+
+    context "when the Experiment is enabled" do
+      let(:scope_content) { { closed_quotation_tool: true, calculation_strategy: "experiment" } }
+
       it "perform a booking calculation" do
         expect(results.length).to eq(1)
       end

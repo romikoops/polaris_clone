@@ -36,6 +36,7 @@ module OfferCalculator
               pricings_pricings.expiration_date,
               itineraries.origin_hub_id as origin_hub_id,
               itineraries.destination_hub_id as destination_hub_id,
+              itineraries.mode_of_transport as mode_of_transport,
               charge_categories.code as code,
               pricings_rate_bases.internal_code as rate_basis_name,
               pricings_fees.currency_name as currency,
@@ -101,7 +102,7 @@ module OfferCalculator
               fee_row["rate_basis"] = rate_basis
               fee_row["effective_date"] = fee_row.delete("effective_date").to_date
               fee_row["expiration_date"] = fee_row.delete("expiration_date").to_date
-              fee_row["cbm_ratio"] ||= Pricings::Pricing::WM_RATIO_LOOKUP[pricing.mode_of_transport]
+              fee_row["cbm_ratio"] ||= ::Pricings::Pricing::WM_RATIO_LOOKUP[fee_row["mode_of_transport"].to_sym]
               fee_row["vm_ratio"] ||= 1
               fee_row.merge("source_id" => fee_row["context_id"])
             end

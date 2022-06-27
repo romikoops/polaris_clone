@@ -30,6 +30,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
       "min" => 17.5,
       "currency" => "EUR",
       "section" => "export",
+      "mode_of_transport" => "ocean",
       "organization_id" => organization.id,
       "max" => nil,
       "carrier_lock" => false,

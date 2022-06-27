@@ -29,6 +29,7 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::Pricing do
       "min" => 1.0,
       "id" => nil,
       "section" => "cargo",
+      "mode_of_transport" => "ocean",
       "organization_id" => organization.id,
       "carrier_lock" => false,
       "carrier_id" => pricing.tenant_vehicle.carrier_id,

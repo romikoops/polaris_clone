@@ -104,7 +104,7 @@ module OfferCalculator
           when "PERCENTAGE"
             rate.to_d
           else
-            Money.from_amount(rate, currency)
+            Money.from_amount(rate.to_d, currency)
           end
         end
 

@@ -42,6 +42,7 @@ module OfferCalculator
               "margin_type" => "trucking_#{carriage}_margin",
               "effective_date" => validity.first,
               "expiration_date" => validity.last,
+              "mode_of_transport" => "truck_carriage",
               "vm_ratio" => 1,
               "context_id" => id,
               "source_type" => record.class.name,
@@ -52,7 +53,7 @@ module OfferCalculator
           end
 
           def load_meterage_data
-            load_meterage.transform_keys { |key| "load_meterage_#{key}" }
+            (load_meterage || {}).transform_keys { |key| "load_meterage_#{key}" }
           end
 
           def rate_data(rate:, modifier:)

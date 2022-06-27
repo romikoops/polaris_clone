@@ -12,7 +12,7 @@ module OfferCalculator
         attr_reader :period, :dates
 
         def expand(input:)
-          input.inner_join(frame, on: {
+          input.inner_join(expanded_validity_frame, on: {
             "effective_date" => "original_effective_date",
             "expiration_date" => "original_expiration_date"
           })
@@ -20,8 +20,8 @@ module OfferCalculator
 
         private
 
-        def frame
-          Rover::DataFrame.new(expanded_validities.uniq)
+        def expanded_validity_frame
+          @expanded_validity_frame ||= Rover::DataFrame.new(expanded_validities.uniq)
         end
 
         def expanded_validities
@@ -55,11 +55,11 @@ module OfferCalculator
         end
 
         def date_pairs(effective_date:, expiration_date:)
-          date_sequence(effective_date: effective_date, expiration_date: expiration_date)
+          sorted_sequence = date_sequence(effective_date: effective_date, expiration_date: expiration_date)
             .uniq
             .sort
-            .each_cons(2)
-            .to_a
+          sorted_sequence << (sorted_sequence.first + 1.day) if sorted_sequence.length == 1
+          sorted_sequence.each_cons(2).to_a
         end
 
         def date_sequence(effective_date:, expiration_date:)

@@ -11,7 +11,7 @@ module OfferCalculator
           section organization_id load_meterage_ratio
           load_meterage_stackable_type load_meterage_non_stackable_type load_meterage_hard_limit
           load_meterage_stackable_limit load_meterage_non_stackable_limit km truck_type carrier_lock carrier_id
-          source_id source_type min max metadata
+          source_id source_type min max metadata mode_of_transport
         ].freeze
 
         attr_reader :relation, :period, :start_date, :end_date

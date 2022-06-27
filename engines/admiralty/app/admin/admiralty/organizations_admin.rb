@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 UPLOAD_VERSIONS = %w[legacy v3 v4].freeze
+CALCULATION_STRATEGIES = %w[legacy experiment new].freeze
 
 Trestle.resource(:organizations, model: Admiralty::Organization) do
   remove_action :destroy
@@ -183,6 +184,7 @@ Trestle.resource(:organizations, model: Admiralty::Organization) do
           col(sm: 3) { number_field :session_length }
           col(sm: 3) { number_field :search_buffer }
           col(sm: 3) { number_field :validity_period }
+          col(sm: 3) { select :calculation_strategy, CALCULATION_STRATEGIES }
         end
 
         divider

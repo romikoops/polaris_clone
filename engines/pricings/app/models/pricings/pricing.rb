@@ -2,7 +2,7 @@
 
 module Pricings
   class Pricing < ApplicationRecord
-    include Legacy::Upsertable
+    include ::Legacy::Upsertable
     WM_RATIO_LOOKUP = { ocean: 1000,
                         air: 167,
                         rail: 500,

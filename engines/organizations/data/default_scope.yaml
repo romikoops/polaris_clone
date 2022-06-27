@@ -233,3 +233,4 @@ uploader:
   grdb_xml_import: "v4"
   grdb_xml: "v4"
 include_location_groups: false
+calculation_strategy: "legacy"
