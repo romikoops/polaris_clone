@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-Trestle.resource(:distributions, model: Distributions::Action) do
-  menu :distributions, icon: "fa fa-arrows", group: :organizations
+Trestle.resource(:distributions_actions, model: Distributions::Action) do
+  menu :distributions_actions, icon: "fa fa-arrows", group: :distributions
 
   search do |query|
     if query

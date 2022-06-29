@@ -2,7 +2,8 @@
 
 Trestle::Engine.routes.draw do
   resources :admins, only: %i[new edit], module: "admins_admin", controller: "admin"
-  resources :distributions, only: %i[new edit], module: "distributions_admin", controller: "admin"
+  resources :distributions_actions, only: %i[new edit], module: "distributions_actions_admin", controller: "admin"
+  resources :distributions_executions, only: %i[show], module: "distributions_executions_admin", controller: "admin"
   resources :clients, only: %i[new edit], module: "clients_admin", controller: "admin"
   resources :carriers, only: %i[new edit], module: "carriers_admin", controller: "admin"
   resources :countries, only: %i[new edit], module: "countries_admin", controller: "admin"
@@ -15,6 +16,7 @@ Trestle::Engine.routes.draw do
   resources :queries, only: %i[new edit], module: "queries_admin", controller: "admin"
   resources :subscriptions, only: %i[new edit], module: "subscriptions_admin", controller: "admin"
   resources :themes, only: %i[new edit], module: "themes_admin", controller: "admin"
+  resources :uploads, only: %i[new edit], module: "uploads_admin", controller: "admin"
   resources :tenant_cargo_item_types, only: %i[new edit], module: "tenant_cargo_item_types_admin", controller: "admin"
 
   controller "trestle/auth/sessions" do

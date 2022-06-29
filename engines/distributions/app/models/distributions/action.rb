@@ -4,13 +4,19 @@ module Distributions
   class Action < ApplicationRecord
     belongs_to :organization, class_name: "Organizations::Organization"
     belongs_to :target_organization, class_name: "Organizations::Organization"
-    validates_uniqueness_of :order, scope: %i[organization_id target_organization_id]
+    validates_uniqueness_of :order, scope: %i[organization_id target_organization_id upload_schema]
     enum action_types: {
       "add_fee" => "add_fee",
       "duplicate" => "duplicate",
       "adjust_fee" => "adjust_fee",
       "add_values" => "add_values"
     }
+    before_save :sanitize_json_attributes
+
+    def sanitize_json_attributes
+      self.where = JSON.parse(where) if where.is_a?(String)
+      self.arguments = JSON.parse(arguments) if arguments.is_a?(String)
+    end
   end
 end
 
@@ -31,7 +37,7 @@ end
 #
 # Indexes
 #
-#  index_distributions_actions_on_order                   (order) UNIQUE
+#  index_distributions_actions_on_order                   (organization_id,target_organization_id,order,upload_schema) UNIQUE
 #  index_distributions_actions_on_organization_id         (organization_id)
 #  index_distributions_actions_on_target_organization_id  (target_organization_id)
 #  index_distributions_actions_on_upload_schema           (upload_schema)

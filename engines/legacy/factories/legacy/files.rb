@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :legacy_file, class: "Legacy::File" do
-    association :shipment, factory: :legacy_shipment
     association :organization, factory: :organizations_organization
 
     trait :with_file do

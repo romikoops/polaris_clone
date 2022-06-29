@@ -7635,7 +7635,7 @@ CREATE INDEX index_customs_fees_on_tenant_id ON public.customs_fees USING btree 
 -- Name: index_distributions_actions_on_order; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_distributions_actions_on_order ON public.distributions_actions USING btree ("order");
+CREATE UNIQUE INDEX index_distributions_actions_on_order ON public.distributions_actions USING btree (organization_id, target_organization_id, "order", upload_schema);
 
 
 --
@@ -12787,6 +12787,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220422143149'),
 ('20220502144623'),
 ('20220615105158'),
-('20220615133621');
+('20220615133621'),
+('20220624125413');
 
 

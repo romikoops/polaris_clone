@@ -11,5 +11,9 @@ module Distributions
     it "is invalid when the order already exists for the Organization/TargetOrganization pair" do
       expect(FactoryBot.create(:distributions_action).dup).not_to be_valid
     end
+
+    it "parses JSON strings into JSON objects before saving" do
+      expect(FactoryBot.create(:distributions_action, where: "{\"foo\":\"bar\"}").where).to eq("foo" => "bar")
+    end
   end
 end

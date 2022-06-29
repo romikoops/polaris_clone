@@ -58,8 +58,8 @@ RSpec.describe ExcelDataServices::V3::Files::Section do
         expect(Pricings::Pricing.where(cargo_class: "fcl_20").count).to eq(14)
         expect(Pricings::Pricing.where(cargo_class: "fcl_40").count).to eq(14)
         expect(Pricings::Pricing.where(cargo_class: "fcl_40_hq").count).to eq(14)
-        expect(Legacy::Itinerary.count).to eq(9)
-        expect(Legacy::Carrier.count).to eq(3)
+        expect(Legacy::Itinerary.count).to eq(8)
+        expect(Legacy::Carrier.count).to eq(2)
       end
 
       it "assigns the pricings from the internal row `internal: true`" do

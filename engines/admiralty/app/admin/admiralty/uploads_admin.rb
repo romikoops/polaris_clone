@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-Trestle.resource(:uploads, model: ExcelDataServices::Upload) do
-  remove_action :new, :edit, :create, :update, :destroy
+Trestle.resource(:uploads, model: Admiralty::Upload) do
+  remove_action  :edit, :update, :destroy
 
   menu :all_uploads, icon: "fa fa-file-alt", group: :uploads
 
@@ -102,6 +102,38 @@ Trestle.resource(:uploads, model: ExcelDataServices::Upload) do
       else
         redirect_to(uploads_admin_index_path)
       end
+    end
+
+    def create
+      user = Users::User.find_by(email: "shopadmin@itsmycargo.com")
+      instance.update(
+        status: "not_started",
+        user: user,
+        file: Legacy::File.create(
+          text: instance.text,
+          doc_type: instance.doc_type,
+          organization: instance.organization,
+          user: user,
+          file: instance.raw_file
+        )
+      )
+      ExcelDataServices::UploaderJob.perform_later(
+        upload_id: instance.id,
+        options: { user_id: user.id }.merge({ distribute: true, group_id: instance.group_id.presence })
+      )
+      super
+    end
+  end
+
+  form do
+    row do
+      col(sm: 6) { collection_select :organization_id, Organizations::Organization.all, :id, :slug }
+    end
+    row do
+      col(sm: 6) { file_field :raw_file }
+      col(sm: 6) { text_field :text }
+      col(sm: 6) { text_field :group_id }
+      col(sm: 6) { select :doc_type, %w[truckings local_charges schedules hubs pricings clients companies margins] }
     end
   end
 

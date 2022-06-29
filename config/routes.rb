@@ -606,6 +606,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
+#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000117cff608 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -855,8 +856,10 @@ end
 # Routes for Trestle::Engine:
 #                                         new_admin GET    /admins/new(.:format)                         admins_admin/admin#new
 #                                        edit_admin GET    /admins/:id/edit(.:format)                    admins_admin/admin#edit
-#                                  new_distribution GET    /distributions/new(.:format)                  distributions_admin/admin#new
-#                                 edit_distribution GET    /distributions/:id/edit(.:format)             distributions_admin/admin#edit
+#                          new_distributions_action GET    /distributions_actions/new(.:format)          distributions_actions_admin/admin#new
+#                         edit_distributions_action GET    /distributions_actions/:id/edit(.:format)     distributions_actions_admin/admin#edit
+#                       new_distributions_execution GET    /distributions_executions/new(.:format)       distributions_executions_admin/admin#new
+#                      edit_distributions_execution GET    /distributions_executions/:id/edit(.:format)  distributions_executions_admin/admin#edit
 #                                        new_client GET    /clients/new(.:format)                        clients_admin/admin#new
 #                                       edit_client GET    /clients/:id/edit(.:format)                   clients_admin/admin#edit
 #                                       new_carrier GET    /carriers/new(.:format)                       carriers_admin/admin#new
@@ -881,6 +884,8 @@ end
 #                                 edit_subscription GET    /subscriptions/:id/edit(.:format)             subscriptions_admin/admin#edit
 #                                         new_theme GET    /themes/new(.:format)                         themes_admin/admin#new
 #                                        edit_theme GET    /themes/:id/edit(.:format)                    themes_admin/admin#edit
+#                                        new_upload GET    /uploads/new(.:format)                        uploads_admin/admin#new
+#                                       edit_upload GET    /uploads/:id/edit(.:format)                   uploads_admin/admin#edit
 #                        new_tenant_cargo_item_type GET    /tenant_cargo_item_types/new(.:format)        tenant_cargo_item_types_admin/admin#new
 #                       edit_tenant_cargo_item_type GET    /tenant_cargo_item_types/:id/edit(.:format)   tenant_cargo_item_types_admin/admin#edit
 #                                            signin GET    /signin(.:format)                             trestle/auth/sessions#create
@@ -922,12 +927,14 @@ end
 #                                                   PATCH  /countries/:id(.:format)                      countries_admin/admin#update
 #                                                   PUT    /countries/:id(.:format)                      countries_admin/admin#update
 #                                                   DELETE /countries/:id(.:format)                      countries_admin/admin#destroy
-#                         distributions_admin_index GET    /distributions(.:format)                      distributions_admin/admin#index
-#                                                   POST   /distributions(.:format)                      distributions_admin/admin#create
-#                               distributions_admin GET    /distributions/:id(.:format)                  distributions_admin/admin#show
-#                                                   PATCH  /distributions/:id(.:format)                  distributions_admin/admin#update
-#                                                   PUT    /distributions/:id(.:format)                  distributions_admin/admin#update
-#                                                   DELETE /distributions/:id(.:format)                  distributions_admin/admin#destroy
+#                 distributions_actions_admin_index GET    /distributions_actions(.:format)              distributions_actions_admin/admin#index
+#                                                   POST   /distributions_actions(.:format)              distributions_actions_admin/admin#create
+#                       distributions_actions_admin GET    /distributions_actions/:id(.:format)          distributions_actions_admin/admin#show
+#                                                   PATCH  /distributions_actions/:id(.:format)          distributions_actions_admin/admin#update
+#                                                   PUT    /distributions_actions/:id(.:format)          distributions_actions_admin/admin#update
+#                                                   DELETE /distributions_actions/:id(.:format)          distributions_actions_admin/admin#destroy
+#              distributions_executions_admin_index GET    /distributions_executions(.:format)           distributions_executions_admin/admin#index
+#                    distributions_executions_admin GET    /distributions_executions/:id(.:format)       distributions_executions_admin/admin#show
 #                               domains_admin_index GET    /domains(.:format)                            domains_admin/admin#index
 #                                                   POST   /domains(.:format)                            domains_admin/admin#create
 #                                     domains_admin GET    /domains/:id(.:format)                        domains_admin/admin#show
@@ -988,6 +995,7 @@ end
 #                     trestle_sidekiq_sidekiq_admin GET    /sidekiq(.:format)                            trestle/sidekiq/sidekiq_admin/admin#index
 #                            download_uploads_admin GET    /uploads/:id/download(.:format)               uploads_admin/admin#download
 #                               uploads_admin_index GET    /uploads(.:format)                            uploads_admin/admin#index
+#                                                   POST   /uploads(.:format)                            uploads_admin/admin#create
 #                                     uploads_admin GET    /uploads/:id(.:format)                        uploads_admin/admin#show
 #                                              root GET    /                                             trestle/dashboard#index
 #
@@ -1059,6 +1067,7 @@ end
 #                                                 DELETE /v2/organizations/:organization_id/admin/companies/:id(.:format)                           api/v2/admin/companies#destroy
 #           v2_organization_admin_company_clients GET    /v2/organizations/:organization_id/admin/companies/:company_id/clients(.:format)           api/v2/admin/clients#index
 # v2_organization_admin_company_shipment_requests GET    /v2/organizations/:organization_id/admin/companies/:company_id/shipment_requests(.:format) api/v2/admin/shipment_requests#index
+#           v2_organization_admin_company_queries GET    /v2/organizations/:organization_id/admin/companies/:company_id/queries(.:format)           api/v2/admin/queries#index
 #                                                 GET    /v2/organizations/:organization_id/admin/companies(.:format)                               api/v2/admin/companies#index
 #                     v2_organization_admin_users GET    /v2/organizations/:organization_id/admin/users(.:format)                                   api/v2/admin/users#index
 #                                                 POST   /v2/organizations/:organization_id/admin/users(.:format)                                   api/v2/admin/users#create
