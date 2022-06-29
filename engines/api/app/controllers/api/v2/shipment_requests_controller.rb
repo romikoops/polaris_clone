@@ -55,7 +55,7 @@ module Api
 
       def creation_error_message
         "Please provide params of withInsurance, withCustomsHandling, status, "\
-        "preferredVoyage, notes, commercialValueCents, commercialValueCurrency, contactsAttributes"
+          "preferredVoyage, notes, commercialValueCents, commercialValueCurrency, contactsAttributes"
       end
 
       def shipment_request_params
@@ -66,7 +66,7 @@ module Api
             addressLine1 addressLine2 addressLine3 city
             companyName countryCode email function geocodedAddress
             name phone point postalCode
-          ]
+          ], addendumsAttributes: %i[labelName value]
         ).to_h.deep_transform_keys { |key| key.to_s.underscore.to_sym }
       end
 

@@ -41,7 +41,8 @@ module Api
             "status" => "requested", "withCustomsHandling" => false, "withInsurance" => false
           }, "id" => shipment_request.id, "relationships" => {
             "contacts" => { "data" => [{ "id" => shipment_request.contacts.first.id, "type" => "contact" }] },
-            "documents" => { "data" => [{ "id" => shipment_request.documents.first.id, "type" => "document" }] }
+            "documents" => { "data" => [{ "id" => shipment_request.documents.first.id, "type" => "document" }] },
+            "addendums" => { "data" => [{ "id" => kind_of(String), "type" => "addendum" }] }
           }
         }
       end
@@ -62,6 +63,12 @@ module Api
           name: "John Smith", phone: "+49123456", point: "On point", postalCode: "PC12"
         }
       end
+      let(:addendum_attributes) do
+        {
+          labelName: "contact_person",
+          value: "john doe"
+        }
+      end
       let(:params) do
         {
           organization_id: organization.id, result_id: result.id,
@@ -69,7 +76,8 @@ module Api
             documents: documents,
             withInsurance: false,
             withCustomsHandling: true, preferredVoyage: "1234", notes: "Some notes", commercialValueCents: 10, commercialValueCurrency: "EUR",
-            contactsAttributes: [contact_attributes]
+            contactsAttributes: [contact_attributes],
+            addendumsAttributes: [addendum_attributes]
           },
           commodityInfos: commodity_infos
         }
@@ -84,7 +92,9 @@ module Api
             "status" => "requested", "withCustomsHandling" => true, "withInsurance" => false
           },
           "id" => kind_of(String),
-          "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] }, "documents" => { "data" => [{ "id" => kind_of(String), "type" => "document" }] } },
+          "relationships" => { "contacts" => { "data" => [{ "id" => kind_of(String), "type" => "contact" }] },
+                               "documents" => { "data" => [{ "id" => kind_of(String), "type" => "document" }] },
+                               "addendums" => { "data" => [{ "id" => kind_of(String), "type" => "addendum" }] } },
           "type" => "shipmentRequest"
         }
       end

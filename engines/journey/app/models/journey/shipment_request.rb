@@ -8,11 +8,12 @@ module Journey
     has_many :documents
     has_many :contacts
     has_one :shipment
+    has_many :addendums
     has_one_attached :file
 
     monetize :commercial_value_cents, allow_nil: true
 
-    accepts_nested_attributes_for :contacts, :documents
+    accepts_nested_attributes_for :contacts, :documents, :addendums
 
     enum status: {
       requested: "requested",

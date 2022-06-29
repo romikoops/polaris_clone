@@ -606,7 +606,6 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000117cff608 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -858,8 +857,7 @@ end
 #                                        edit_admin GET    /admins/:id/edit(.:format)                    admins_admin/admin#edit
 #                          new_distributions_action GET    /distributions_actions/new(.:format)          distributions_actions_admin/admin#new
 #                         edit_distributions_action GET    /distributions_actions/:id/edit(.:format)     distributions_actions_admin/admin#edit
-#                       new_distributions_execution GET    /distributions_executions/new(.:format)       distributions_executions_admin/admin#new
-#                      edit_distributions_execution GET    /distributions_executions/:id/edit(.:format)  distributions_executions_admin/admin#edit
+#                           distributions_execution GET    /distributions_executions/:id(.:format)       distributions_executions_admin/admin#show
 #                                        new_client GET    /clients/new(.:format)                        clients_admin/admin#new
 #                                       edit_client GET    /clients/:id/edit(.:format)                   clients_admin/admin#edit
 #                                       new_carrier GET    /carriers/new(.:format)                       carriers_admin/admin#new

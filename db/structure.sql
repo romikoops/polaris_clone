@@ -1956,6 +1956,20 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 
 
 --
+-- Name: journey_addendums; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.journey_addendums (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    shipment_request_id uuid,
+    label_name character varying NOT NULL,
+    value character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: journey_cargo_units; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -6016,6 +6030,14 @@ ALTER TABLE ONLY public.itineraries
 
 
 --
+-- Name: journey_addendums journey_addendums_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_addendums
+    ADD CONSTRAINT journey_addendums_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: journey_cargo_units journey_cargo_units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7909,6 +7931,20 @@ CREATE INDEX index_itineraries_on_sandbox_id ON public.itineraries USING btree (
 --
 
 CREATE INDEX index_itineraries_on_tenant_id ON public.itineraries USING btree (tenant_id);
+
+
+--
+-- Name: index_journey_addendums_on_shipment_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_journey_addendums_on_shipment_request_id ON public.journey_addendums USING btree (shipment_request_id);
+
+
+--
+-- Name: index_journey_addendums_on_shipment_request_id_and_label_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_journey_addendums_on_shipment_request_id_and_label_name ON public.journey_addendums USING btree (shipment_request_id, label_name);
 
 
 --
@@ -11591,6 +11627,14 @@ ALTER TABLE ONLY public.cargo_cargos
 
 
 --
+-- Name: journey_addendums fk_rails_9bb649e179; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.journey_addendums
+    ADD CONSTRAINT fk_rails_9bb649e179 FOREIGN KEY (shipment_request_id) REFERENCES public.journey_shipment_requests(id);
+
+
+--
 -- Name: journey_line_items fk_rails_9c5fbc06ce; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12788,6 +12832,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220502144623'),
 ('20220615105158'),
 ('20220615133621'),
-('20220624125413');
+('20220624125413'),
+('20220627171157');
 
 

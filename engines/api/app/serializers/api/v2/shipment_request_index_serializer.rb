@@ -18,6 +18,8 @@ module Api
 
       attribute :requestedAt, &:created_at
       attribute :reference, &:imc_reference
+
+      has_many :addendums
     end
   end
 end

@@ -441,6 +441,21 @@ RSpec.configure do |config|
             },
             required: %w[email]
           },
+          addendum: {
+            type: "object",
+            properties: {
+              label_name: {
+                description: "labelName for the new attributes that needs to be on shipment requests",
+                nullable: false,
+                type: "string"
+              },
+              value: {
+                description: "The value for the label added to shipment request.",
+                nullable: true,
+                type: "string"
+              }
+            }
+          },
           shipment_request_index: {
             type: "object",
             properties: {
@@ -655,6 +670,13 @@ RSpec.configure do |config|
                 items: {
                   "$ref": "#/components/schemas/contact"
                 }
+              },
+              addendums_attributes: {
+                description: "Array of addendum attributes as objects",
+                type: "array",
+                items: {
+                  "$ref": "#/components/schemas/addendum"
+                }
               }
             }
           },
@@ -702,6 +724,11 @@ RSpec.configure do |config|
                 items: {
                   type: :binary
                 }
+              },
+              addendumsAttributes: {
+                type: :array,
+                description: "Addendums information for the shipment requests",
+                items: { "$ref" => "#/components/schemas/addendum" }
               }
             },
             required: %w[

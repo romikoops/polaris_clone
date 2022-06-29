@@ -15,6 +15,7 @@ module Api
 
       has_many :contacts
       has_many :documents
+      has_many :addendums
     end
   end
 end

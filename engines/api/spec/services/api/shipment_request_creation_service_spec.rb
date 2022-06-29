@@ -42,6 +42,10 @@ RSpec.describe Api::ShipmentRequestCreationService do
       expect { perform }.to change { Journey::CommodityInfo.count }.from(0).to(2)
     end
 
+    it "verfies that addendum is created" do
+      expect { perform }.to change { Journey::Addendum.count }.from(0).to(1)
+    end
+
     it "asserts that the Notifications::ShipmentRequestCreatedJob has been enqueued" do
       assert_enqueued_with(job: Notifications::ShipmentRequestCreatedJob) do
         perform
@@ -73,7 +77,8 @@ RSpec.describe Api::ShipmentRequestCreationService do
       {
         with_insurance: with_insurance, with_customs_handling: with_customs_handling,
         preferred_voyage: "1234", notes: "some notes", commercial_value_cents: 10,
-        commercial_value_currency: :eur, contacts_attributes: contacts_attributes
+        commercial_value_currency: :eur, contacts_attributes: contacts_attributes,
+        addendums_attributes: [{ label_name: "contact_person", value: "john doe" }]
       }
     end
 
