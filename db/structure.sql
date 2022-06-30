@@ -1960,7 +1960,7 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 --
 
 CREATE TABLE public.journey_addendums (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     shipment_request_id uuid,
     label_name character varying NOT NULL,
     value character varying NOT NULL,
