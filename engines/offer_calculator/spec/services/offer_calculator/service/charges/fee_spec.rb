@@ -14,16 +14,20 @@ RSpec.describe OfferCalculator::Service::Charges::Fee do
       base: 0,
       minimum_charge: Money.from_amount(10, currency),
       maximum_charge: Money.from_amount(10_000, currency),
-      range_min: 0,
-      range_max: Float::INFINITY,
+      range_min: range_min,
+      range_max: range_max,
       measure: 1,
+      range_unit: range_unit,
       sourced_from_margin: sourced_from_margin
     )
   end
+  let(:range_unit) { "shipment" }
   let(:rate_basis) { "PER_SHIPMENT" }
   let(:sourced_from_margin) { false }
   let(:rate_of_charge) { Money.from_amount(100, currency) }
   let(:currency) { Money::Currency.new("USD") }
+  let(:range_min) { 0 }
+  let(:range_max) { Float::INFINITY }
 
   describe "#charge_category" do
     it "returns the ChargeCategory based on the id" do
@@ -59,6 +63,83 @@ RSpec.describe OfferCalculator::Service::Charges::Fee do
 
       it "returns true" do
         expect(fee).to be_percentage
+      end
+    end
+  end
+
+  describe "#legacy_format" do
+    let(:expected_format) do
+      {
+        rate: rate_of_charge.amount,
+        base: 0,
+        rate_basis: rate_basis,
+        currency: currency.iso_code,
+        min: 10,
+        max: 10_000,
+        range: []
+      }
+    end
+
+    it "returns a hash with the legacy format" do
+      expect(fee.legacy_format).to eq(expected_format)
+    end
+
+    context "when it is a trucking fee" do
+      let(:charge_category) { FactoryBot.create(:legacy_charge_categories, organization: organization, code: "trucking_lcl") }
+      let(:range_unit) { "kg" }
+      let(:expected_format) do
+        {
+          range_unit => [
+            {
+              "rate" => {
+                "rate" => rate_of_charge.amount,
+                "base" => 0,
+                "rate_basis" => rate_basis,
+                "currency" => currency.iso_code
+              },
+              "min_value" => 10,
+              "max_value" => 10_000,
+              "min_#{range_unit}" => range_min,
+              "max_#{range_unit}" => range_max
+            }
+          ]
+        }
+      end
+      let(:range_min) { 0 }
+      let(:range_max) { 100 }
+
+      it "returns a hash with the legacy format" do
+        expect(fee.legacy_format).to eq(expected_format)
+      end
+    end
+
+    context "when it is a ranged fee" do
+      let(:range_unit) { "kg" }
+      let(:expected_format) do
+        {
+          rate: rate_of_charge.amount,
+          base: 0,
+          rate_basis: rate_basis,
+          currency: currency.iso_code,
+          min: 10,
+          max: 10_000,
+          range: [
+            {
+              rate: rate_of_charge.amount,
+              base: 0,
+              rate_basis: rate_basis,
+              currency: currency.iso_code,
+              min: range_min,
+              max: range_max
+            }
+          ]
+        }
+      end
+      let(:range_min) { 0 }
+      let(:range_max) { 100 }
+
+      it "returns a hash with the legacy format" do
+        expect(fee.legacy_format).to eq(expected_format)
       end
     end
   end

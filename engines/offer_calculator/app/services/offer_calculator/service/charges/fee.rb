@@ -13,6 +13,7 @@ module OfferCalculator
         :charge_category_id,
         :range_min,
         :range_max,
+        :range_unit,
         :measure,
         :sourced_from_margin,
         :applied_margin,
@@ -31,6 +32,61 @@ module OfferCalculator
 
         def sourced_from_margin?
           sourced_from_margin
+        end
+
+        def legacy_format
+          case code
+          when /^trucking_/
+            legacy_trucking_format
+          else
+            legacy_fee_format
+          end
+        end
+
+        def legacy_fee_format
+          {
+            rate: rate.amount,
+            base: base,
+            rate_basis: rate_basis,
+            currency: currency.iso_code,
+            min: minimum_charge.amount,
+            max: maximum_charge.amount,
+            range: legacy_range_format
+          }
+        end
+
+        def legacy_trucking_format
+          {
+            range_unit => [
+              {
+                "rate" => {
+                  "rate" => rate.amount,
+                  "base" => base,
+                  "rate_basis" => rate_basis,
+                  "currency" => currency.iso_code
+                },
+                "min_value" => minimum_charge.amount,
+                "max_value" => maximum_charge.amount,
+                "min_#{range_unit}" => range_min,
+                "max_#{range_unit}" => range_max
+              }
+            ]
+          }
+        end
+
+        def legacy_range_format
+          return [] if range_min.zero? && range_max.infinite?
+
+          [
+            {
+              rate: rate.amount,
+              base: base,
+              rate_basis: rate_basis,
+              currency: currency.iso_code,
+              min: range_min,
+              max: range_max
+            }
+          ]
         end
 
         delegate :currency, to: :minimum_charge

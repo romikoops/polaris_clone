@@ -26,6 +26,7 @@ module OfferCalculator
             surcharge: updated_surcharge(fee: input_fee),
             range_min: input_fee.range_min,
             range_max: input_fee.range_max,
+            range_unit: input_fee.range_unit,
             sourced_from_margin: input_fee.sourced_from_margin,
             applied_margin: source,
             delta: rate,

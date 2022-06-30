@@ -49,7 +49,8 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Ranges::Fee do
       weight_value: 100,
       quantity: 1)]
   end
-  let(:trucking_fee) { described_class.new(request: request, measure: measures.targets.first, modifier: trucking_pricing.rates.keys.first).fee }
+  let(:trucking_fee) { described_class.new(request: request, measure: measures.targets.first, modifier: modifier).fee }
+  let(:modifier) { trucking_pricing.rates.keys.first }
 
   before do
     allow(request).to receive(:cargo_units).and_return(cargo_units)
@@ -67,6 +68,21 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Ranges::Fee do
       expect(measures.object.breakdowns.select { |breakdown| breakdown.charge_category == trucking_charge_category }
         .flat_map { |breakdown| breakdown.data["kg"].map { |row| row.slice("max_kg", "min_kg") } }
         .uniq).to eq([trucking_pricing.rates.dig("kg", 0).slice("max_kg", "min_kg")])
+    end
+
+    context "when the the breakdown has no data" do
+      let(:breakdowns) do
+        [Pricings::ManipulatorBreakdown.new(
+          source: nil,
+          delta: 0,
+          data: {},
+          charge_category: trucking_charge_category
+        )]
+      end
+
+      it "returns a component successfully" do
+        expect(trucking_fee.components.length).to eq(1)
+      end
     end
   end
 end

@@ -14,6 +14,7 @@ RSpec.describe OfferCalculator::Service::Charges::BreakdownBuilder do
       maximum_charge: Money.from_amount(10_050, "USD"),
       range_min: 0,
       range_max: Float::INFINITY,
+      range_unit: "shipment",
       surcharge: Money.from_amount(0, "USD"),
       applied_margin: margin,
       parent: parent_fee,
@@ -30,6 +31,7 @@ RSpec.describe OfferCalculator::Service::Charges::BreakdownBuilder do
       maximum_charge: Money.from_amount(10_000, "USD"),
       range_min: 0,
       range_max: Float::INFINITY,
+      range_unit: "shipment",
       surcharge: Money.from_amount(0, "USD")
     )
   end
@@ -40,7 +42,7 @@ RSpec.describe OfferCalculator::Service::Charges::BreakdownBuilder do
   describe "#perform" do
     it "returns 1 breakdown for the original Fee and one for every margined Fee that is a descendant", :aggregate_failures do
       expect(breakdowns.map(&:source)).to eq([nil, margin])
-      expect(breakdowns.map(&:data)).to eq([parent_fee.to_h, fee.to_h])
+      expect(breakdowns.map(&:data)).to eq([parent_fee.legacy_format, fee.legacy_format])
       expect(breakdowns.map(&:order)).to eq([0, 1])
     end
   end

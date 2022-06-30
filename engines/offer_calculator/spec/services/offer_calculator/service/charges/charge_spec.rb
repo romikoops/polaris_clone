@@ -17,6 +17,7 @@ RSpec.describe OfferCalculator::Service::Charges::Charge do
       range_min: 0,
       measure: measure,
       range_max: Float::INFINITY,
+      range_unit: "shipment",
       surcharge: Money.from_amount(0, "USD")
     )
   end

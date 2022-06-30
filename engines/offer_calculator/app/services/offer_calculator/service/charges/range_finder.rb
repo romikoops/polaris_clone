@@ -29,6 +29,7 @@ module OfferCalculator
             maximum_charge: Money.from_amount(data["max"] || DEFAULT_MAX, currency),
             range_min: data["range_min"],
             range_max: data["range_max"],
+            range_unit: range_unit,
             measure: measure,
             sourced_from_margin: data.key?("operator")
           )

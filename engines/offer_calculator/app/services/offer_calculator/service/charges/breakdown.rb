@@ -9,7 +9,7 @@ module OfferCalculator
         delegate :code, to: :charge_category
 
         def data
-          fee.to_h
+          fee.legacy_format
         end
 
         def source

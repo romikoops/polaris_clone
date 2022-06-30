@@ -14,6 +14,7 @@ RSpec.describe OfferCalculator::Service::Charges::Breakdown do
       maximum_charge: Money.from_amount(10_000, "USD"),
       range_min: 0,
       range_max: Float::INFINITY,
+      range_unit: "shipment",
       surcharge: Money.from_amount(0, "USD"),
       applied_margin: source
     )
@@ -52,6 +53,14 @@ RSpec.describe OfferCalculator::Service::Charges::Breakdown do
       it "returns the name of the Client via the ClientProfile" do
         expect(breakdown.target_name).to eq(applicable.profile.full_name)
       end
+    end
+  end
+
+  describe "#data" do
+    let(:applicable) { FactoryBot.create(:users_client, organization: organization) }
+
+    it "returns the legacy format of the fee" do
+      expect(breakdown.data).to eq(fee.legacy_format)
     end
   end
 end
