@@ -33,5 +33,25 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Requirements do
         expect(service.requirements).to eq([])
       end
     end
+
+    context "when the requirements have specified sheets that should be excluded" do
+      sheet_schema = {
+        required: [{
+          rows: "1:1",
+          columns: "A:?",
+          content: %w[NAME LOCODE TERMINAL],
+          excluded_sheet_names: %w[Sheet1]
+        }]
+      }
+
+      before do
+        allow(service).to receive(:schema_data).and_return(sheet_schema)
+      end
+
+      it "returns all Requirements defined in the schema but only for the sheets not excluded", :aggregate_failures do
+        expect(service.requirements.map(&:sheet_name)).to eq(["Sheet2"])
+        expect(service.requirements.map(&:class)).to eq([ExcelDataServices::V4::Files::Requirement])
+      end
+    end
   end
 end

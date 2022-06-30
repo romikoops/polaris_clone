@@ -7,6 +7,8 @@ required:
     content:
       - WWA Member
       - Customer
+    excluded_sheet_names:
+      - "Kopfdaten"
 
 columns:
   - header: service
@@ -137,6 +139,54 @@ columns:
     type: :object
     exclude_sheets:
       - Kopfdaten
+  - header: group_id
+    sanitizer: text
+    validator: optional_string
+    exclude_sheets:
+      - Kopfdaten
+  - header: group_name
+    sanitizer: text
+    validator: optional_string
+    exclude_sheets:
+      - Kopfdaten
+  - header: cargo_class
+    sanitizer: text
+    validator: optional_string
+    fallback: lcl
+    exclude_sheets:
+      - Kopfdaten
+  - header: load_type
+    sanitizer: text
+    validator: optional_string
+    fallback: cargo_item
+    exclude_sheets:
+      - Kopfdaten
+  - header: mode_of_transport
+    sanitizer: text
+    validator: optional_string
+    fallback: ocean
+    exclude_sheets:
+      - Kopfdaten
+  - header: internal
+    sanitizer: internal
+    validator: boolean
+    exclude_sheets:
+      - Kopfdaten
+  - header: range_min
+    sanitizer: decimal
+    validator: optional_numeric
+    exclude_sheets:
+      - Kopfdaten
+  - header: range_max
+    sanitizer: decimal
+    validator: optional_numeric
+    exclude_sheets:
+      - Kopfdaten
+  - header: base
+    sanitizer: decimal
+    validator: optional_numeric
+    exclude_sheets:
+      - Kopfdaten
 
 framer: GrdbExcel
 
@@ -152,37 +202,42 @@ operations:
   - CountryCodeFromLocode
   - ExpandedDates
 
-distributors:
-  - GrdbExcel
-
 pipelines:
   - extractors:
       - OrganizationCarrier
-      - Carrier
       - RoutingCarrier
-    importers:
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
       - Carrier
-      - RoutingCarrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
 
   - validators:
       - Carrier
     extractors:
       - TenantVehicle
-    importers:
-      - TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
   - validators:
       - OriginHub
       - DestinationHub
     extractors:
       - Itinerary
-    importers:
-      - Itinerary
+    formatter: Itinerary
+    importer:
+      model: Legacy::Itinerary
   - validators:
       - PrimaryFeeCode
     extractors:
       - ChargeCategory
-    importers:
-      - ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
 
   - validators:
       - SequentialDates
@@ -196,8 +251,11 @@ pipelines:
       - RateBasis
     extractors:
       - Pricing
-    importers:
-      - Pricing
+    formatter: Pricing
+    importer:
+      model: Pricings::Pricing
+      options:
+        recursive: true
     conflicts:
       - model: Pricings::Pricing
         conflict_keys:

@@ -74,6 +74,8 @@ module ExcelDataServices
             def sheet_names
               if requirement_schema[:sheet_names].present?
                 requirement_schema[:sheet_names] & fallback_sheets
+              elsif requirement_schema[:excluded_sheet_names].present?
+                fallback_sheets - requirement_schema[:excluded_sheet_names]
               else
                 fallback_sheets
               end
