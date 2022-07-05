@@ -108,6 +108,8 @@ Api::Engine.routes.draw do
       resource :profile, only: %i[show update]
       resources :carriers, only: %i[index show]
       resource :active_locodes, only: %i[show]
+      resources :interactions, only: %i[index]
+      resources :users_interactions, only: %i[index create]
     end
     resources :users do
       get "validate", on: :collection

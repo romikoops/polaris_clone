@@ -20,3 +20,6 @@ eval_gemfile "../quotations/Gemfile.runtime"
 
 gem "shipments", path: "../shipments"
 eval_gemfile "../shipments/Gemfile.runtime"
+
+gem "tracking", path: "../tracker"
+eval_gemfile "../tracker/Gemfile.runtime"

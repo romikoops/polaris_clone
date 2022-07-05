@@ -1960,7 +1960,7 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 --
 
 CREATE TABLE public.journey_addendums (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     shipment_request_id uuid,
     label_name character varying NOT NULL,
     value character varying NOT NULL,
@@ -4726,6 +4726,32 @@ CREATE TABLE public.tenants_users (
 
 
 --
+-- Name: tracker_interactions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tracker_interactions (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    organization_id uuid,
+    name character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tracker_users_interactions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tracker_users_interactions (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    interaction_id uuid,
+    client_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: treasury_exchange_rates; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7078,6 +7104,22 @@ ALTER TABLE ONLY public.tenants_users
 
 
 --
+-- Name: tracker_interactions tracker_interactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tracker_interactions
+    ADD CONSTRAINT tracker_interactions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tracker_users_interactions tracker_users_interactions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tracker_users_interactions
+    ADD CONSTRAINT tracker_users_interactions_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: treasury_exchange_rates treasury_exchange_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7882,6 +7924,13 @@ CREATE INDEX index_hubs_on_sandbox_id ON public.hubs USING btree (sandbox_id);
 --
 
 CREATE INDEX index_hubs_on_tenant_id ON public.hubs USING btree (tenant_id);
+
+
+--
+-- Name: index_interactions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_interactions_on_organization_id ON public.tracker_interactions USING btree (organization_id, name);
 
 
 --
@@ -10125,6 +10174,27 @@ CREATE INDEX index_tenants_users_on_unlock_token ON public.tenants_users USING b
 
 
 --
+-- Name: index_tracker_interactions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tracker_interactions_on_organization_id ON public.tracker_interactions USING btree (organization_id);
+
+
+--
+-- Name: index_tracker_users_interactions_on_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tracker_users_interactions_on_client_id ON public.tracker_users_interactions USING btree (client_id);
+
+
+--
+-- Name: index_tracker_users_interactions_on_interaction_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tracker_users_interactions_on_interaction_id ON public.tracker_users_interactions USING btree (interaction_id);
+
+
+--
 -- Name: index_treasury_exchange_rates_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10514,6 +10584,13 @@ CREATE INDEX index_users_clients_on_reset_password_token ON public.users_clients
 --
 
 CREATE INDEX index_users_clients_on_unlock_token ON public.users_clients USING btree (unlock_token) WHERE (deleted_at IS NULL);
+
+
+--
+-- Name: index_users_interactions_on_client_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_interactions_on_client_id ON public.tracker_users_interactions USING btree (client_id, interaction_id);
 
 
 --
@@ -11091,6 +11168,14 @@ ALTER TABLE ONLY public.pricings_details
 
 
 --
+-- Name: tracker_interactions fk_rails_3b4262df17; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tracker_interactions
+    ADD CONSTRAINT fk_rails_3b4262df17 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: journey_queries fk_rails_3d0c562ec0; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11152,6 +11237,14 @@ ALTER TABLE ONLY public.journey_queries
 
 ALTER TABLE ONLY public.shipments
     ADD CONSTRAINT fk_rails_4acecd6f16 FOREIGN KEY (destination_nexus_id) REFERENCES public.nexuses(id) ON DELETE SET NULL;
+
+
+--
+-- Name: tracker_users_interactions fk_rails_4e7412f124; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tracker_users_interactions
+    ADD CONSTRAINT fk_rails_4e7412f124 FOREIGN KEY (client_id) REFERENCES public.users_clients(id);
 
 
 --
@@ -11496,6 +11589,14 @@ ALTER TABLE ONLY public.shipments_shipment_requests
 
 ALTER TABLE ONLY public.journey_errors
     ADD CONSTRAINT fk_rails_896e56a80e FOREIGN KEY (query_calculation_id) REFERENCES public.journey_query_calculations(id);
+
+
+--
+-- Name: tracker_users_interactions fk_rails_8a6e823fee; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tracker_users_interactions
+    ADD CONSTRAINT fk_rails_8a6e823fee FOREIGN KEY (interaction_id) REFERENCES public.tracker_interactions(id);
 
 
 --
@@ -12833,6 +12934,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220615105158'),
 ('20220615133621'),
 ('20220624125413'),
-('20220627171157');
+('20220627171157'),
+('20220629172559'),
+('20220629174735');
 
 

@@ -1,0 +1,11 @@
+# rubocop:disable Naming/FileName
+# frozen_string_literal: true
+
+# rubocop:enable Naming/FileName
+gem "shared-runtime", path: "../../gems/shared-runtime"
+
+gem "organizations", path: "../organizations"
+eval_gemfile "../organizations/Gemfile.runtime"
+
+gem "users", path: "../users"
+eval_gemfile "../users/Gemfile.runtime"

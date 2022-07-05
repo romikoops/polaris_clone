@@ -36,6 +36,7 @@ end
 #  data         :string
 #  deleted_at   :datetime
 #  distance     :integer
+#  identifier   :enum
 #  query        :integer
 #  zipcode      :string
 #  created_at   :datetime         not null

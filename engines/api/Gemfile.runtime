@@ -37,6 +37,9 @@ eval_gemfile "../routing/Gemfile.runtime"
 gem "cms_data", path: "../cms_data"
 eval_gemfile "../cms_data/Gemfile.runtime"
 
+gem "tracker", path: "../tracker"
+eval_gemfile "../tracker/Gemfile.runtime"
+
 gem "treasury", path: "../treasury"
 eval_gemfile "../treasury/Gemfile.runtime"
 

@@ -884,6 +884,8 @@ end
 #                                        edit_theme GET    /themes/:id/edit(.:format)                    themes_admin/admin#edit
 #                                        new_upload GET    /uploads/new(.:format)                        uploads_admin/admin#new
 #                                       edit_upload GET    /uploads/:id/edit(.:format)                   uploads_admin/admin#edit
+#                                   new_interaction GET    /interactions/new(.:format)                   interactions_admin/admin#new
+#                                  edit_interaction GET    /interactions/:id/edit(.:format)              interactions_admin/admin#edit
 #                        new_tenant_cargo_item_type GET    /tenant_cargo_item_types/new(.:format)        tenant_cargo_item_types_admin/admin#new
 #                       edit_tenant_cargo_item_type GET    /tenant_cargo_item_types/:id/edit(.:format)   tenant_cargo_item_types_admin/admin#edit
 #                                            signin GET    /signin(.:format)                             trestle/auth/sessions#create
@@ -942,6 +944,12 @@ end
 #                              download_files_admin GET    /files/:id/download(.:format)                 files_admin/admin#download
 #                                 files_admin_index GET    /files(.:format)                              files_admin/admin#index
 #                                       files_admin GET    /files/:id(.:format)                          files_admin/admin#show
+#                          interactions_admin_index GET    /interactions(.:format)                       interactions_admin/admin#index
+#                                                   POST   /interactions(.:format)                       interactions_admin/admin#create
+#                                interactions_admin GET    /interactions/:id(.:format)                   interactions_admin/admin#show
+#                                                   PATCH  /interactions/:id(.:format)                   interactions_admin/admin#update
+#                                                   PUT    /interactions/:id(.:format)                   interactions_admin/admin#update
+#                                                   DELETE /interactions/:id(.:format)                   interactions_admin/admin#destroy
 #                               margins_admin_index GET    /margins(.:format)                            margins_admin/admin#index
 #                                                   POST   /margins(.:format)                            margins_admin/admin#create
 #                                     margins_admin GET    /margins/:id(.:format)                        margins_admin/admin#show
@@ -1111,6 +1119,9 @@ end
 #                        v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                      api/v2/carriers#index
 #                         v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                  api/v2/carriers#show
 #                  v2_organization_active_locodes GET    /v2/organizations/:organization_id/active_locodes(.:format)                                api/v2/active_locodes#show
+#                    v2_organization_interactions GET    /v2/organizations/:organization_id/interactions(.:format)                                  api/v2/interactions#index
+#              v2_organization_users_interactions GET    /v2/organizations/:organization_id/users_interactions(.:format)                            api/v2/users_interactions#index
+#                                                 POST   /v2/organizations/:organization_id/users_interactions(.:format)                            api/v2/users_interactions#create
 #                                                 GET    /v2/organizations(.:format)                                                                api/v2/organizations#index
 #                               validate_v2_users GET    /v2/users/validate(.:format)                                                               api/v2/users#validate
 #                                        v2_users GET    /v2/users(.:format)                                                                        api/v2/users#index
