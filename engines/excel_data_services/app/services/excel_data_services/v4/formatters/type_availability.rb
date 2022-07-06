@@ -13,11 +13,23 @@ module ExcelDataServices
         ].freeze
 
         def insertable_data
-          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq
+          combined_frame[ATTRIBUTE_KEYS].to_a.uniq
         end
 
-        def target_attribute
-          nil
+        def combined_frame
+          @combined_frame ||= metadata_frame.left_join(country_and_query_method, on: { "organization_id" => "organization_id" })
+        end
+
+        def metadata_frame
+          @metadata_frame ||= state.frame("default")
+        end
+
+        def country_and_query_method
+          @country_and_query_method ||= zone_frame[%w[country_id query_method organization_id]].uniq
+        end
+
+        def zone_frame
+          @zone_frame ||= state.frame("zones")
         end
       end
     end

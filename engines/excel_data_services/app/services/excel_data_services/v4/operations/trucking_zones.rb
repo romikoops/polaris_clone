@@ -8,7 +8,7 @@ module ExcelDataServices
         ZONE_COLUMNS = %w[zone range postal_code distance city province country_code locode].freeze
 
         def perform
-          return state if %w[city locode].include?(identifier) || zone_range_frame.empty?
+          return state if %w[city locode postal_city].include?(identifier) || zone_range_frame.empty?
 
           super
         end

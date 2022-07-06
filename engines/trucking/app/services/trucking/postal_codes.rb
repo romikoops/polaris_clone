@@ -19,7 +19,7 @@ module Trucking
     def self.all
       country_codes.flat_map do |country_code|
         self.for(country_code: country_code).map do |postal_code|
-          {"country_code" => country_code.upcase, "postal_code" => postal_code}
+          { "country_code" => country_code.upcase, "postal_code" => postal_code }
         end
       end
     end

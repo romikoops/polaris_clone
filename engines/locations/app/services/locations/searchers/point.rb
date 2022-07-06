@@ -4,6 +4,7 @@ module Locations
   module Searchers
     class Point < Locations::Searchers::Base
       def location
+        return if geocoder_results.empty?
         return city if city
 
         Locations::Location.smallest_contains(point: point).first

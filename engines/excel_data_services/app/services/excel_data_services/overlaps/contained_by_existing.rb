@@ -39,14 +39,14 @@ module ExcelDataServices
             AND
               validity @> :adjusted_date::date
           )
-          INSERT INTO #{table} (#{model_attributes.join(", ")}, created_at, updated_at)
-          SELECT #{(model_attributes - ["validity"]).join(", ")},  daterange(:end_date, :new_end_date), now(), now()
+          INSERT INTO #{table} (#{model_attributes.join(', ')}, created_at, updated_at)
+          SELECT #{(model_attributes - ['validity']).join(', ')},  daterange(:end_date, :new_end_date), now(), now()
           FROM targets
         SQL
       end
 
       def model_attributes
-        @model_attributes ||= model.given_attribute_names
+        @model_attributes ||= model.given_attribute_names - ["validity"] + ["validity"]
       end
 
       def binds

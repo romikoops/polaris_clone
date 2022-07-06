@@ -25,10 +25,10 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Column do
 
   describe "#perform" do
     let(:column_results) do
-      [{ "value" => "standard", "header" => "service", "row" => 2, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 3, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 4, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 5, "column" => "N", "sheet_name" => "Sheet1" }]
+      [{ "value" => "standard", "header" => "service", "row" => 2, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 3, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 4, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 5, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" }]
     end
 
     context "when column header is 'service'" do

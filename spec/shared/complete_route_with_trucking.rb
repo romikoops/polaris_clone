@@ -83,12 +83,14 @@ RSpec.shared_context "complete_route_with_trucking" do
   let(:pickup_trucking_location) do
     FactoryBot.create(:trucking_location,
       :with_location,
+      data: pickup_address.zip_code,
       location: pickup_location,
       country: pickup_address.country)
   end
   let(:delivery_trucking_location) do
     FactoryBot.create(:trucking_location,
       :with_location,
+      data: delivery_address.zip_code,
       location: delivery_location,
       country: delivery_address.country)
   end

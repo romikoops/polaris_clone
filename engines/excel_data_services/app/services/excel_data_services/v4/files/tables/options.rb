@@ -60,6 +60,10 @@ module ExcelDataServices
             @fallback_configured ||= options.key?(:fallback)
           end
 
+          def target_frame
+            @target_frame ||= options[:target_frame] || "default"
+          end
+
           def errors
             %i[dynamic unique required].each_with_object([]) do |key, errs|
               next if VALID_BOOLEAN_ARGS.include?(options[key])

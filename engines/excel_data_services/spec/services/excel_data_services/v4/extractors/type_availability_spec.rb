@@ -10,6 +10,30 @@ RSpec.describe ExcelDataServices::V4::Extractors::TypeAvailability do
   let(:country) { FactoryBot.create(:legacy_country) }
   let!(:trucking_type_availability) { FactoryBot.create(:trucking_type_availability, :distance, country: country) }
   let(:query_method) { ExcelDataServices::V4::Extractors::QueryMethod::QUERY_METHOD_ENUM["distance"] }
+  let(:rates_rows) do
+    [
+      { "zone" => "1.0", "sheet_name" => "Sheet1", "organization_id" => organization.id },
+      { "zone" => "2.0", "sheet_name" => "Sheet1", "organization_id" => organization.id }
+    ]
+  end
+  let(:zones_rows) do
+    [{
+      "zone" => "1.0",
+      "country_id" => country.id,
+      "query_method" => query_method,
+      "sheet_name" => "Zones",
+      "organization_id" => organization.id
+    }]
+  end
+  let(:rows) do
+    [{
+      "truck_type" => "default",
+      "load_type" => "cargo_item",
+      "carriage" => "pre",
+      "sheet_name" => "Sheet1",
+      "organization_id" => organization.id
+    }]
+  end
 
   describe ".state" do
     context "when found" do
@@ -18,7 +42,7 @@ RSpec.describe ExcelDataServices::V4::Extractors::TypeAvailability do
           "truck_type" => "default",
           "load_type" => "cargo_item",
           "carriage" => "pre",
-          "country_code" => country.code,
+          "country_id" => country.id,
           "query_method" => query_method,
           "row" => 2,
           "organization_id" => organization.id
@@ -31,16 +55,23 @@ RSpec.describe ExcelDataServices::V4::Extractors::TypeAvailability do
     end
 
     context "when not found" do
-      let(:row) do
-        {
+      let(:zones_rows) do
+        [{
+          "zone" => "1.0",
+          "country_id" => 0,
+          "query_method" => query_method,
+          "sheet_name" => "Zones",
+          "organization_id" => organization.id
+        }]
+      end
+      let(:rows) do
+        [{
           "truck_type" => "default",
           "load_type" => "cargo_item",
           "carriage" => "on",
-          "country_code" => "FR",
-          "query_method" => query_method,
-          "row" => 2,
+          "sheet_name" => "Sheet1",
           "organization_id" => organization.id
-        }
+        }]
       end
 
       it "does not find the record or add a type_availability_id" do

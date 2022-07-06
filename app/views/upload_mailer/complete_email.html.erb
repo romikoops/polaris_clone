@@ -31,7 +31,33 @@
   </tr>
 <%- end %>
 
-<%- @result.except("has_errors", "errors").each do |type, counts| %>
+<%- if @result["warnings"].present? %>
+  <tr>
+    <td class="content-block aligncenter">
+      <h4>Warnings</h4>
+      <table class="invoice">
+        <tr>
+          <td>
+            <table class="invoice-items" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>Sheet</td><td>Row</td><td class="alignright">Reason</td>
+              </tr>
+              <%- @result["warnings"].each do |error| %>
+                <tr>
+                  <td><i><%= error["sheet_name"] %></i></td>
+                  <td><b><%= error["row_nr"] %></b></td>
+                  <td class="alignright"><%= error["reason"] %></td>
+                </tr>
+              <%- end %>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+<%- end %>
+
+<%- @result.except("has_errors", "errors", "warnings").each do |type, counts| %>
 <tr>
     <td class="content-block aligncenter">
       <h4><%= type.split("/").last.titleize %></h4>

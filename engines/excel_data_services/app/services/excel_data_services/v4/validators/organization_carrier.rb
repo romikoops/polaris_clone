@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class OrganizationCarrier < ExcelDataServices::V4::Validators::Base
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::OrganizationCarrier.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::OrganizationCarrier.new(state: state, target_frame: target_frame).perform
         end
 
         def key_base

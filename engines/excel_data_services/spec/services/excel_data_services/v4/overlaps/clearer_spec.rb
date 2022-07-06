@@ -114,7 +114,7 @@ RSpec.describe ExcelDataServices::V4::Overlaps::Clearer do
     end
 
     context "when the model is Trucking::Trucking" do
-      let(:conflict_keys) { %w[hub_id cargo_class organization_id group_id tenant_vehicle_id carriage] }
+      let(:conflict_keys) { %w[hub_id cargo_class organization_id group_id tenant_vehicle_id carriage country_id] }
       let(:model) { Trucking::Trucking }
       let!(:trucking) do
         FactoryBot.create(:trucking_trucking,
@@ -124,7 +124,7 @@ RSpec.describe ExcelDataServices::V4::Overlaps::Clearer do
       end
       let(:rows) do
         [
-          trucking.slice(*conflict_keys).merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1)
+          trucking.slice(*(conflict_keys - ["country_id"])).merge("effective_date" => start_date, "expiration_date" => end_date, "row" => 1, "country_id" => trucking.location.country_id)
         ]
       end
 

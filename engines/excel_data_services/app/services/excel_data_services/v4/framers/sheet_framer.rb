@@ -28,7 +28,7 @@ module ExcelDataServices
         end
 
         def sheet_name_and_row
-          @sheet_name_and_row ||= Rover::DataFrame.new(sheet_values[%w[sheet_name row]].to_a.uniq, types: frame_types)
+          @sheet_name_and_row ||= Rover::DataFrame.new(sheet_values[%w[sheet_name row target_frame]].to_a.uniq, types: frame_types)
         end
 
         def headers

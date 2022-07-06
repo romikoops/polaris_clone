@@ -10,12 +10,21 @@ module ExcelDataServices
         @file = file
         @section = section
         @overrides = overrides
-        @frame = Rover::DataFrame.new
+        @frames = { default: Rover::DataFrame.new }
         @errors = []
+        @warnings = []
         @stats = []
       end
 
-      attr_accessor :insertable_data, :stats, :errors, :frame
+      attr_accessor :insertable_data, :stats, :errors, :frames, :warnings
+
+      def frame(key = nil)
+        @frames[key || "default"]
+      end
+
+      def set_frame(value:, key: nil)
+        @frames[key || "default"] = value
+      end
 
       def [](key)
         send(key)

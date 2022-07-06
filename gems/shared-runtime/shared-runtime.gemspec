@@ -12,6 +12,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{lib}/**/*"]
   spec.require_paths = ["lib"]
 
+  spec.metadata["rubygems_mfa_required"] = "true"
+
   spec.add_dependency "activerecord-postgis-adapter"
   spec.add_dependency "activerecord-safer_migrations", "~> 3.0"
   spec.add_dependency "activestorage-cascade", "~> 0.1.1"
@@ -24,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails", rails_version
   spec.add_dependency "rails_event_store", "~> 1.2.2"
   spec.add_dependency "sidekiq", "~> 6.1"
-  spec.add_dependency "sidekiq-status", "~> 1.1.4"
+  spec.add_dependency "sidekiq-status", "~> 2.1.3"
   spec.add_dependency "skylight"
   spec.add_dependency "strong_migrations", "~> 0.6"
 

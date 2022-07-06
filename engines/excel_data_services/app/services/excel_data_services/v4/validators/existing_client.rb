@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class ExistingClient < ExcelDataServices::V4::Validators::Base
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::Client.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::Client.new(state: state, target_frame: target_frame).perform
         end
 
         def error_reason(row:)

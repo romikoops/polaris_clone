@@ -5,20 +5,21 @@ module ExcelDataServices
     module Operations
       # Operations are a flexible means of manipulating data in the upload pipeline. All Operations take a State object and return one in kind.
       class Base
-        attr_reader :state
+        attr_reader :state, :target_frame
 
-        def self.state(state:)
-          new(state: state).perform
+        def self.state(state:, target_frame: "default")
+          new(state: state, target_frame: target_frame).perform
         end
 
-        def initialize(state:)
+        def initialize(state:, target_frame:)
           @state = state
+          @target_frame = target_frame
         end
 
         def perform
           return state if frame.empty?
 
-          state.frame = operation_result
+          set_extracted_frame
           state
         end
 
@@ -30,7 +31,13 @@ module ExcelDataServices
           Rover::DataFrame.new({ "sheet_name" => [], "row" => [] })
         end
 
-        delegate :frame, to: :state
+        def frame
+          @frame ||= state.frame(target_frame)
+        end
+
+        def set_extracted_frame
+          state.set_frame(value: operation_result, key: target_frame)
+        end
       end
     end
   end

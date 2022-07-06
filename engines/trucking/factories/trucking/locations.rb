@@ -5,26 +5,31 @@ FactoryBot.define do
     country { factory_country_from_code(code: "SE") }
     data { "15211" }
     query { "postal_code" }
+    identifier { "postal_code" }
 
     trait :zipcode do
       query { "postal_code" }
+      identifier { "postal_code" }
       data { "15211" }
     end
 
     trait :with_location do
       query { "location" }
+      identifier { "city" }
       data { "Gothenburg" }
       association :location, factory: :swedish_location
     end
 
     trait :with_chinese_location do
       query { "location" }
+      identifier { "city" }
       data { "Shanghai" }
       association :location, factory: :chinese_location
     end
 
     trait :distance do
       query { "distance" }
+      identifier { "distance" }
       data { 55 }
     end
 
@@ -43,7 +48,21 @@ FactoryBot.define do
     end
 
     trait :postal_code do
+      identifier { "postal_code" }
       query { "postal_code" }
+    end
+
+    trait :postal_code_location do
+      identifier { "postal_code" }
+      query { "location" }
+      association :location, factory: :swedish_location
+    end
+
+    trait :locode_location do
+      identifier { "locode" }
+      query { "location" }
+      data { "SEGOT" }
+      association :location, factory: :xl_swedish_location
     end
 
     factory :city_location, traits: [:with_location]

@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class RateBasis < ExcelDataServices::V4::Validators::Base
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::RateBasis.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::RateBasis.new(state: state, target_frame: target_frame).perform
         end
 
         def error_reason(row:)

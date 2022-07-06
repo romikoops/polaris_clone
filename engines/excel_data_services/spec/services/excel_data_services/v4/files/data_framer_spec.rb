@@ -7,7 +7,7 @@ RSpec.describe ExcelDataServices::V4::Files::DataFramer do
 
   let(:service) { described_class.new(state: state_arguments, section_parser: section_parser) }
   let(:section_parser) { instance_double(ExcelDataServices::V4::Files::SectionParser, framer: ExcelDataServices::V4::Framers::Table) }
-  let(:framer_double) { instance_double(ExcelDataServices::V4::Framers::Table, perform: framed_data, errors: errors) }
+  let(:framer_double) { instance_double(ExcelDataServices::V4::Framers::Table, perform: { "default" => framed_data }, errors: errors) }
   let(:result_state) { service.perform }
   let(:framed_data) do
     Rover::DataFrame.new({

@@ -28,11 +28,7 @@ module ExcelDataServices
         private
 
         def operation_result
-          @operation_result ||= non_fees_frame.concat(fees_with_metadata)
-        end
-
-        def fees_with_metadata
-          @fees_with_metadata ||= metadata_frame.inner_join(
+          @operation_result ||= metadata_frame.inner_join(
             serviced,
             on: {
               "service" => "service",
@@ -41,15 +37,7 @@ module ExcelDataServices
               "cargo_class" => "cargo_class",
               "truck_type" => "truck_type"
             }
-          ).left_join(zone_and_country_frame, on: { "zone" => "zone" })
-        end
-
-        def zoned
-          @zoned ||= if zoneless_fees.empty?
-            zoned_fees
-          else
-            zoneless_fees.left_join(zone_frame, on: { "cargo_class" => "cargo_class" }).concat(zoned_fees)
-          end
+          )
         end
 
         def cargo_classed
@@ -72,21 +60,13 @@ module ExcelDataServices
           end
         end
 
-        def zoneless_fees
-          @zoneless_fees ||= cargo_classed[cargo_classed["zone"].missing]
-        end
-
-        def zoned_fees
-          @zoned_fees ||= cargo_classed[!cargo_classed["zone"].missing].left_join(zone_frame, on: { "zone" => "zone" })
-        end
-
         def serviced_fees
-          @serviced_fees ||= zoned[(!zoned["service"].missing) & (!zoned["carrier"].missing)]
-            .left_join(carrier_and_service_frame, on: { "service" => "service", "carrier" => "carrier", "direction" => "direction" })
+          @serviced_fees ||= cargo_classed[(!cargo_classed["service"].missing) & (!cargo_classed["carrier"].missing)]
+            .inner_join(carrier_and_service_frame, on: { "service" => "service", "carrier" => "carrier", "direction" => "direction" })
         end
 
         def serviceless_fees
-          @serviceless_fees ||= zoned[(zoned["service"].missing) & (zoned["carrier"].missing)]
+          @serviceless_fees ||= cargo_classed[(cargo_classed["service"].missing) & (cargo_classed["carrier"].missing)]
         end
 
         def cargo_classed_fees
@@ -98,19 +78,11 @@ module ExcelDataServices
         end
 
         def fees_frame
-          @fees_frame ||= frame[frame["rate_type"] == "trucking_fee"]
+          @fees_frame ||= state.frame("fees")
         end
 
         def non_fees_frame
-          @non_fees_frame ||= frame[frame["rate_type"] == "trucking_rate"]
-        end
-
-        def zone_frame
-          @zone_frame ||= Rover::DataFrame.new(non_fees_frame[[identifier, "zone", "cargo_class"]].to_a.uniq)
-        end
-
-        def zone_and_country_frame
-          @zone_and_country_frame ||= Rover::DataFrame.new(frame[!frame["country_code"].missing][%w[zone country_code]].to_a.uniq)
+          @non_fees_frame ||= state.frame("rates").left_join(metadata_frame, on: { "organization_id" => "organization_id", "sheet_name" => "sheet_name" })
         end
 
         def cargo_class_frame
@@ -124,7 +96,7 @@ module ExcelDataServices
         end
 
         def metadata_frame
-          @metadata_frame ||= Rover::DataFrame.new(non_fees_frame[METADATA_COLUMNS].to_a.uniq)
+          @metadata_frame ||= state.frame("default")
         end
 
         def identifier

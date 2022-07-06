@@ -17,33 +17,48 @@ module ExcelDataServices
         end
 
         def perform
-          return state if distributable_frame.blank?
-
-          @state.frame = distribution_result
+          state.frames.each do |frame_key, sub_frame|
+            state.set_frame(
+              value: DistributedFrame.new(frame: sub_frame, section: state.section, file_id: state.file.id).perform,
+              key: frame_key
+            )
+          end
           @state
         end
 
-        private
-
-        def distribution_result
-          actions.inject(distributable_frame) do |memo, action|
-            perform_action(action: action, result_frame: memo)
+        class DistributedFrame
+          def initialize(frame:, section:, file_id:)
+            @frame = frame
+            @section = section
+            @file_id = file_id
           end
-        end
 
-        def perform_action(action:, result_frame:)
-          action_klass = "ExcelDataServices::V4::Distributors::Actions::#{action.action_type.camelize}".constantize
-          action_klass.new(frame: result_frame, action: action).perform.tap do |_result|
-            Distributions::Execution.create!(action: action, file_id: state.file.id)
+          def perform
+            return frame if distributable_frame.blank?
+
+            actions.inject(distributable_frame) do |memo, action|
+              perform_action(action: action, result_frame: memo)
+            end
           end
-        end
 
-        def distributable_frame
-          @distributable_frame ||= frame.filter("distribute" => true)
-        end
+          private
 
-        def actions
-          @actions ||= Distributions::Action.where(organization: Organizations::Organization.current, upload_schema: state.section).order(:order)
+          attr_reader :frame, :section, :file_id
+
+          def perform_action(action:, result_frame:)
+            action_klass = "ExcelDataServices::V4::Distributors::Actions::#{action.action_type.camelize}".constantize
+            action_klass.new(frame: result_frame, action: action).perform.tap do
+              Distributions::Execution.create!(action: action, file_id: file_id)
+            end
+          end
+
+          def distributable_frame
+            @distributable_frame ||= frame.filter("distribute" => true)
+          end
+
+          def actions
+            @actions ||= Distributions::Action.where(organization: Organizations::Organization.current, upload_schema: section).order(:order)
+          end
         end
       end
     end

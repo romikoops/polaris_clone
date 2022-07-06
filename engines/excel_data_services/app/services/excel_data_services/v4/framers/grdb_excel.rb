@@ -96,7 +96,7 @@ module ExcelDataServices
         end
 
         class ColumnRangeFrame
-          FEE_KEYS = %w[currency rate basis minimum maximum notes effective_date expiration_date sheet_name row].freeze
+          FEE_KEYS = %w[currency rate basis minimum maximum notes effective_date expiration_date sheet_name target_frame row].freeze
 
           def initialize(frame:, sheet_name:)
             @frame = frame

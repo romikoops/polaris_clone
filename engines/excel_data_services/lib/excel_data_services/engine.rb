@@ -8,6 +8,7 @@ require "rails"
 require "roo"
 require "roo-xls"
 require "rover-df"
+require "stackprof"
 require "uuidtools"
 require "write_xlsx"
 

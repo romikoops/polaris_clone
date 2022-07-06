@@ -5,7 +5,6 @@ module ExcelDataServices
     module Overlaps
       class Resolver
         DATE_KEYS = %w[effective_date expiration_date].freeze
-        delegate :frame, to: :state
 
         def self.state(state:, model:, keys:)
           new(state: state, model: model, keys: keys).perform
@@ -22,7 +21,7 @@ module ExcelDataServices
           return state if state.errors.present?
 
           ExcelDataServices::V4::Overlaps::Clearer.new(
-            frame: state.frame, model: model, conflict_keys: keys
+            frame: frame, model: model, conflict_keys: keys
           ).perform
           state
         end
@@ -31,17 +30,12 @@ module ExcelDataServices
 
         attr_reader :state, :keys, :model
 
-        def handle_overlap(arguments:)
-          ExcelDataServices::V4::Overlaps::Detector.overlaps(
-            table: model.table_name, arguments: arguments
-          ).each do |conflict_type|
-            ExcelDataServices::V4::Overlaps.const_get(conflict_type.camelize).new(model: model, arguments: arguments).perform
-          end
+        def frame
+          @frame ||= state.frame("default")
         end
 
         def append_internal_conflict_rows
-          frame[keys].to_a.uniq.each do |identifying_attributes|
-            sub_frame = frame.filter(identifying_attributes)
+          frame.group_by(keys).each do |sub_frame|
             add_internal_conflict_error(rows: sub_frame.to_a) if internal_conflict_exists(sub_frame: sub_frame)
           end
         end

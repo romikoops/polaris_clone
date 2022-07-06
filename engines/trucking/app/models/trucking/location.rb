@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Trucking
   class Location < ApplicationRecord
     UUID_V5_NAMESPACE = "404827a9-bc4d-4c97-b813-d925588215d6"
@@ -15,13 +16,20 @@ module Trucking
     has_many :truckings, class_name: "Trucking::Trucking"
     has_many :hubs, through: :truckings
     enum query: { postal_code: 0, location: 1, distance: 2 }
+    enum identifier: {
+      "postal_code" => "postal_code",
+      "locode" => "locode",
+      "city" => "city",
+      "distance" => "distance",
+      "postal_city" => "postal_city"
+    }, _prefix: true
 
     acts_as_paranoid
 
     before_validation :generate_upsert_id
 
     def generate_upsert_id
-      self.upsert_id = ::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [data.to_s, query.to_s, location_id.to_s, country_id.to_s].join)
+      self.upsert_id = ::UUIDTools::UUID.sha1_create(::UUIDTools::UUID.parse(UUID_V5_NAMESPACE), [data.to_s, query.to_s, country_id.to_s].join)
     end
   end
 end

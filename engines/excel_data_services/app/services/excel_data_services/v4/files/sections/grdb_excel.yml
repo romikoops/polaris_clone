@@ -198,59 +198,59 @@ dynamic_columns:
       - TRANSIT_TIME
 
 operations:
-  - Grdb
-  - CountryCodeFromLocode
-  - ExpandedDates
+  - type: Grdb
+  - type: CountryCodeFromLocode
+  - type: ExpandedDates
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+      - type: RoutingCarrier
     formatter: RoutingCarrier
     importer:
       model: Routing::Carrier
 
   - extractors:
-      - Carrier
+      - type: Carrier
     formatter: Carrier
     importer:
       model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
     extractors:
-      - TenantVehicle
+      - type: TenantVehicle
     formatter: TenantVehicle
     importer:
       model: Legacy::TenantVehicle
   - validators:
-      - OriginHub
-      - DestinationHub
+      - type: OriginHub
+      - type: DestinationHub
     extractors:
-      - Itinerary
+      - type: Itinerary
     formatter: Itinerary
     importer:
       model: Legacy::Itinerary
   - validators:
-      - PrimaryFeeCode
+      - type: PrimaryFeeCode
     extractors:
-      - ChargeCategory
+      - type: ChargeCategory
     formatter: ChargeCategory
     importer:
       model: Legacy::ChargeCategory
 
   - validators:
-      - SequentialDates
-      - ChargeFees
-      - Carrier
-      - TenantVehicle
-      - Itinerary
-      - ChargeCategory
-      - Group
-      - GrdbRateBasis
-      - RateBasis
+      - type: SequentialDates
+      - type: Carrier
+      - type: TenantVehicle
+      - type: Itinerary
+      - type: ChargeCategory
+      - type: Group
+      - type: GrdbRateBasis
+      - type: RateBasis
+      - type: ChargeFees
     extractors:
-      - Pricing
+      - type: Pricing
     formatter: Pricing
     importer:
       model: Pricings::Pricing

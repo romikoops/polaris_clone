@@ -6,7 +6,9 @@ module Locations
       def location
         return nil if coordinates.nil?
 
-        Locations::Location.smallest_contains(point: point).first
+        Locations::Location.where("admin_level > 5")
+          .smallest_contains(point: point)
+          .first
       end
     end
   end

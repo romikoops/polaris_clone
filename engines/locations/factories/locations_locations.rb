@@ -31,14 +31,14 @@ FactoryBot.define do
     trait :postal_sweden do
       bounds { FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta) }
       osm_id { nil }
-      name { "22222" }
+      name { "22223" }
       admin_level { 8 }
       country_code { "se" }
     end
 
     trait :in_germany do
       bounds { "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40" }
-      osm_id { "22222" }
+      osm_id { "22224" }
       name { "Altenberg Bårenfels" }
       country_code { "de" }
       admin_level { nil }
@@ -54,7 +54,7 @@ FactoryBot.define do
 
     trait :in_sweden_large do
       bounds { FactoryBot.build(:legacy_bounds, lat: lat, lng: lng, delta: delta * 2) }
-      osm_id { "22222" }
+      osm_id { "22225" }
       name { "Gothenburg Metro" }
       admin_level { 8 }
       country_code { "se" }

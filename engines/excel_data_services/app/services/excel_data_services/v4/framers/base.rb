@@ -12,10 +12,12 @@ module ExcelDataServices
         end
 
         def perform
-          defined_frame.concat(framed_data).left_join(overrides, on: { "organization_id" => "organization_id" })
+          target_frames.each_with_object({}) do |target_frame, result|
+            result[target_frame] = all_frame_data.filter("target_frame" => target_frame)
+          end
         end
 
-        delegate :errors, :frame, to: :spreadsheet_cell_data
+        delegate :errors, to: :spreadsheet_cell_data
 
         private
 
@@ -47,12 +49,24 @@ module ExcelDataServices
           @sheet_names ||= values["sheet_name"].to_a.uniq
         end
 
+        def target_frames
+          @target_frames ||= values["target_frame"].to_a.uniq
+        end
+
         def prefixed_column_mapper(mapped_object:, header:)
           ExcelDataServices::V4::Helpers::PrefixedColumnMapper.new(mapped_object: mapped_object, header: header).perform
         end
 
         def defined_frame
           @defined_frame ||= Rover::DataFrame.new(section_parser.headers.each_with_object({}) { |header, result| result[header] = [] })
+        end
+
+        def frame
+          @frame ||= spreadsheet_cell_data.frame
+        end
+
+        def all_frame_data
+          @all_frame_data ||= defined_frame.concat(framed_data).left_join(overrides, on: { "organization_id" => "organization_id" })
         end
       end
     end

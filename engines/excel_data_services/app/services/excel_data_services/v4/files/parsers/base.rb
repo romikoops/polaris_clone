@@ -27,6 +27,10 @@ module ExcelDataServices
           def non_empty_sheets
             @non_empty_sheets ||= xlsx.sheets.select { |all_sheet_name| xlsx.sheet(all_sheet_name).first_column }
           end
+
+          def target_frames_or_default(input:)
+            input[:frames] || ["default"]
+          end
         end
       end
     end

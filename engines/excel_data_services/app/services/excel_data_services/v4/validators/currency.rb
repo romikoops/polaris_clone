@@ -9,7 +9,7 @@ module ExcelDataServices
         end
 
         def default_extracted
-          @default_extracted ||= ExcelDataServices::V4::Extractors::DefaultCurrency.state(state: state)
+          @default_extracted ||= ExcelDataServices::V4::Extractors::DefaultCurrency.new(state: state, target_frame: target_frame).perform
         end
 
         def error_reason(row:)

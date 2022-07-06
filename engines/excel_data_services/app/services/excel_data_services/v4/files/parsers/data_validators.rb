@@ -8,8 +8,13 @@ module ExcelDataServices
           KEYS = %i[data_validators].freeze
 
           def data_validations
-            @data_validations ||= (schema_data[:data_validators] || []).map do |validator|
-              "ExcelDataServices::V4::Validators::#{validator}".constantize
+            @data_validations ||= (schema_data[:data_validators] || []).flat_map do |validator|
+              validator[:frames].map do |target_frame|
+                ExcelDataServices::V4::Files::Parsers::ActionWrapper.new(
+                  action: "ExcelDataServices::V4::Validators::#{validator[:type]}".constantize,
+                  target_frame: target_frame
+                )
+              end
             end
           end
         end

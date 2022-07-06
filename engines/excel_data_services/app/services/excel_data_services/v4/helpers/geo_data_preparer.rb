@@ -43,12 +43,10 @@ module ExcelDataServices
         end
 
         def postal_city
-          postal_code, name = raw_data["city"].split("-").map { |string| string.strip.upcase }
-
           {
-            postal_code: postal_code,
+            postal_code: raw_data["postal_code"],
             country_code: raw_data["country_code"],
-            terms: [name]
+            terms: [raw_data["city"]]
           }
         end
       end

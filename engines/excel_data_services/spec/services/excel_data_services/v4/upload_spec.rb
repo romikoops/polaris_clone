@@ -29,11 +29,12 @@ RSpec.describe ExcelDataServices::V4::Upload do
 
   describe "#perform" do
     let(:dummy_state) { instance_double("ExcelDataServices::V4::State", stats: [stat], errors: []) }
-    let(:stat) { FactoryBot.build(:excel_data_services_stats) }
+    let(:stat) { ExcelDataServices::V4::Stats.new(type: "pricings", created: 1, failed: 0, errors: []) }
     let(:email_formatted_stats) do
       {
         pricings: { created: 1, failed: 0 },
-        errors: []
+        errors: [],
+        warnings: []
       }
     end
 

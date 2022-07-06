@@ -59,9 +59,9 @@ columns:
 
 pipelines:
   - validators:
-      - "ExistingClient"
-      - "Language"
-      - "Currency"
+      - type: "ExistingClient"
+      - type: "Language"
+      - type: "Currency"
     formatter: "Client"
     importer:
       model: "Users::Client"

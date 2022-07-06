@@ -2,6 +2,7 @@
 
 module Rover
   class DataFrame
+    # rubocop:disable
     NIL_ARRAY = [nil].freeze
 
     def concat(other)
@@ -62,7 +63,7 @@ module Rover
 
       DataFrame.new(vectors, types: types)
     end
-
+    # rubocop:enable
     #### CUSTOM IMC CODE ####
 
     def blank_frame
@@ -70,11 +71,11 @@ module Rover
     end
 
     def filter(arguments)
-      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)] || blank_frame
+      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:&)].presence || blank_frame
     end
 
     def filter_any(arguments)
-      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:|)] || blank_frame
+      self[arguments.keys.map { |key| (self[key] == arguments[key]) }.reduce(&:|)].presence || blank_frame
     end
 
     def first_row

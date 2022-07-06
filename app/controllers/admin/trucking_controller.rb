@@ -38,10 +38,14 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def download
     options = params[:options].as_json.symbolize_keys
-    options[:organization_id] = current_organization.id
-    options[:group_id] = options[:target] == "all" ? nil : options[:target]
-    url = DocumentService::TruckingWriter.new(options).perform
-    response_handler(url: url, key: "trucking")
+    group = Groups::Group.find_by(id: options[:target])
+    hub = Legacy::Hub.find_by(id: options[:hub_id])
+    sheet_string = ["trucking", group.name, hub.name, options[:load_type]].join("_")
+    file_name = "#{current_organization.slug}__#{sheet_string}"
+    handle_download(category_identifier: "trucking", file_name: file_name, options: options.merge(
+      organization_id: current_organization.id,
+      group_id: group.id
+    ))
   end
 
   private

@@ -12,7 +12,7 @@ module ExcelDataServices
         end
 
         def perform
-          @state.frame = framer_klass.perform
+          @state.frames = framer_klass.perform
           @state.errors += framer_klass.errors
           state
         end

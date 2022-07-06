@@ -16,9 +16,11 @@ RSpec.describe ExcelDataServices::V4::Validators::TruckingLocation do
       "zone" => 1.0,
       "identifier" => identifier,
       "locations_location_id" => location&.id,
+      "country_id" => country.id,
       "country_code" => country.code,
       "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type],
-      "organization_id" => organization.id
+      "organization_id" => organization.id,
+      "trucking_location_name" => data_value
     }.merge(example_row)
   end
   let(:example_row) { { identifier => data_value } }
@@ -89,10 +91,10 @@ RSpec.describe ExcelDataServices::V4::Validators::TruckingLocation do
     end
 
     context "when the Trucking Location is not found" do
-      let(:example_row) { { identifier => "xxx" } }
+      let(:example_row) { { "trucking_location_name" => "xxx", identifier => "xxx" } }
 
       it "returns an error" do
-        expect(result.errors.map(&:reason)).to include("The location 'xxx (#{country.code})' cannot be found.")
+        expect(result.errors.map(&:reason)).to include("The location 'xxx, (#{country.code})' cannot be found.")
       end
     end
   end

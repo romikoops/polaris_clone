@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class QueryMethod < ExcelDataServices::V4::Validators::Base
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::QueryMethod.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::QueryMethod.new(state: state, target_frame: target_frame).perform
         end
 
         def error_reason(row:)

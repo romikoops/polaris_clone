@@ -108,19 +108,19 @@ columns:
 
 pipelines:
   - validators:
-      - CartaLocodeData
-      - Country
+      - type: CartaLocodeData
+      - type: Country
     extractors:
-      - Nexus
+      - type: Nexus
     formatter: Nexus
     importer:
       model: Legacy::Nexus
   - validators:
-      - Nexus
-      - MandatoryCharge
-      - Country
+      - type: Nexus
+      - type: MandatoryCharge
+      - type: Country
     extractors:
-      - Address
+      - type: Address
     formatter: Hub
     importer:
       model: Legacy::Hub

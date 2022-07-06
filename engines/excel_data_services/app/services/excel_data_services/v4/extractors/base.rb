@@ -4,20 +4,19 @@ module ExcelDataServices
   module V4
     module Extractors
       class Base
-        attr_reader :state
+        attr_reader :state, :target_frame
 
-        delegate :frame, to: :state
-
-        def self.state(state:)
-          new(state: state).perform
+        def self.state(state:, target_frame: "default")
+          new(state: state, target_frame: target_frame).perform
         end
 
-        def initialize(state:)
+        def initialize(state:, target_frame:)
           @state = state
+          @target_frame = target_frame
         end
 
         def perform
-          @state.frame = extracted
+          state.set_frame(value: extracted, key: target_frame)
           state
         end
 
@@ -30,11 +29,15 @@ module ExcelDataServices
         end
 
         def blank_frame
-          Rover::DataFrame.new(frame_types.keys.each_with_object({}) { |key, result| result[key] = [] }, types: state.frame.types.merge(frame_types))
+          Rover::DataFrame.new(frame_types.keys.each_with_object({}) { |key, result| result[key] = [] }, types: frame.types.merge(frame_types))
         end
 
         def organization_ids
           @organization_ids ||= frame["organization_id"].to_a.uniq
+        end
+
+        def frame
+          @frame ||= state.frame(target_frame)
         end
       end
     end

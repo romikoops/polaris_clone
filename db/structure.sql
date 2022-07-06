@@ -340,6 +340,19 @@ CREATE TYPE public.theme_landing_page_variant_type AS ENUM (
 
 
 --
+-- Name: trucking_identifier; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.trucking_identifier AS ENUM (
+    'postal_code',
+    'locode',
+    'city',
+    'distance',
+    'postal_city'
+);
+
+
+--
 -- Name: get_latin_name(text, text, text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -1960,7 +1973,7 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 --
 
 CREATE TABLE public.journey_addendums (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     shipment_request_id uuid,
     label_name character varying NOT NULL,
     value character varying NOT NULL,
@@ -4730,7 +4743,7 @@ CREATE TABLE public.tenants_users (
 --
 
 CREATE TABLE public.tracker_interactions (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     organization_id uuid,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -4743,7 +4756,7 @@ CREATE TABLE public.tracker_interactions (
 --
 
 CREATE TABLE public.tracker_users_interactions (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     interaction_id uuid,
     client_id uuid,
     created_at timestamp without time zone NOT NULL,
@@ -4866,7 +4879,22 @@ CREATE TABLE public.trucking_locations (
     data character varying,
     query integer,
     country_id bigint,
-    upsert_id uuid
+    upsert_id uuid,
+    identifier public.trucking_identifier
+);
+
+
+--
+-- Name: trucking_postal_codes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.trucking_postal_codes (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    postal_code public.citext NOT NULL,
+    country_id bigint NOT NULL,
+    point public.geometry(Point,4326) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -4938,7 +4966,10 @@ CREATE TABLE public.trucking_truckings (
     user_id uuid,
     tenant_vehicle_id integer,
     deleted_at timestamp without time zone,
-    validity daterange
+    validity daterange,
+    target character varying,
+    secondary character varying,
+    zone character varying
 );
 
 
@@ -7165,6 +7196,14 @@ ALTER TABLE ONLY public.trucking_hub_availabilities
 
 ALTER TABLE ONLY public.trucking_locations
     ADD CONSTRAINT trucking_locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trucking_postal_codes trucking_postal_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.trucking_postal_codes
+    ADD CONSTRAINT trucking_postal_codes_pkey PRIMARY KEY (id);
 
 
 --
@@ -10356,6 +10395,27 @@ CREATE UNIQUE INDEX index_trucking_locations_upsert ON public.trucking_locations
 
 
 --
+-- Name: index_trucking_postal_codes_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_trucking_postal_codes_on_country_id ON public.trucking_postal_codes USING btree (country_id);
+
+
+--
+-- Name: index_trucking_postal_codes_on_postal_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_trucking_postal_codes_on_postal_code ON public.trucking_postal_codes USING btree (postal_code);
+
+
+--
+-- Name: index_trucking_postal_codes_on_postal_code_and_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_trucking_postal_codes_on_postal_code_and_country_id ON public.trucking_postal_codes USING btree (postal_code, country_id);
+
+
+--
 -- Name: index_trucking_rates_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -12933,9 +12993,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220502144623'),
 ('20220615105158'),
 ('20220615133621'),
+('20220622083427'),
+('20220622105627'),
 ('20220624125413'),
 ('20220627171157'),
 ('20220629172559'),
-('20220629174735');
+('20220629174735'),
+('20220703160347');
 
 

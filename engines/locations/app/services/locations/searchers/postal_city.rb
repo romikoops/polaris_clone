@@ -18,11 +18,11 @@ module Locations
       end
 
       def fallback
-        @fallback ||= locations_name && (geolocation_fallback || search_fallback)
+        @fallback ||= (search_fallback || geolocation_fallback) if point
       end
 
       def postal_location
-        @postal_location ||= Locations::Location.find_by(name: postal_code, country_code: country_code)
+        @postal_location ||= Locations::Location.find_by(name: postal_code, country_code: country_code.downcase)
       end
 
       def postal_code
@@ -30,28 +30,38 @@ module Locations
       end
 
       def locations_name
-        @locations_name ||= begin
-          return nil if postal_location.blank?
+        @locations_name ||= searching_locations_name || locode_name_fallback
+      end
 
+      def searching_locations_name
+        @searching_locations_name ||= if postal_location.present?
           Locations::Finders::PostalCode.data(
-            data: {postal_bounds: postal_location.bounds, terms: terms}
+            data: { postal_bounds: postal_location.bounds, terms: terms }
           )
+        else
+          Locations::Name.search(terms.first).results.first
         end
       end
 
       def geolocation_fallback
-        @geolocation_fallback ||= Locations::Location.smallest_contains(
-          point: locations_name.point
-        ).first
+        @geolocation_fallback ||= Locations::Location.where("admin_level > 5").where.not(id: postal_location&.id).smallest_contains(point: point).first
+      end
+
+      def locode_name_fallback
+        @locode_name_fallback ||= Locations::Name.search(terms.first.split(",").first).results.find(&:locode)
       end
 
       def search_fallback
         @search_fallback ||= Locations::Searchers::City.data(data: {
           terms: terms,
           country_code: country_code,
-          lat: locations_name.point.y,
-          lon: locations_name.point.x
+          lat: point.y,
+          lon: point.x
         })
+      end
+
+      def point
+        @point ||= locations_name&.point || super
       end
     end
   end

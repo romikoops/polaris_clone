@@ -5,7 +5,7 @@ module ExcelDataServices
     module TypeValidity
       module Types
         class IdentifierType < ExcelDataServices::Validators::TypeValidity::Types::Base
-          VALID_IDENTIFIERS = %w[postal_code zipcode city locode distance].freeze
+          VALID_IDENTIFIERS = %w[postal_code zipcode city locode distance postal_city].freeze
           def valid?
             case value
             when String

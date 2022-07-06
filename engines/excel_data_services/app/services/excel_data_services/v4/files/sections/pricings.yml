@@ -216,53 +216,53 @@ dynamic_columns:
     - TRANSIT_TIME
 
 operations:
-  - ExpandedDates
-  - DynamicFees
+  - type: ExpandedDates
+  - type: DynamicFees
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+      - type: RoutingCarrier
     formatter: RoutingCarrier
     importer:
       model: Routing::Carrier
 
   - extractors:
-      - Carrier
+      - type: Carrier
     formatter: Carrier
     importer:
       model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
     extractors:
-      - TenantVehicle
+      - type: TenantVehicle
     formatter: TenantVehicle
     importer:
       model: Legacy::TenantVehicle
 
   - validators:
-      - OriginHub
-      - DestinationHub
+      - type: OriginHub
+      - type: DestinationHub
     extractors:
-      - Itinerary
+      - type: Itinerary
     formatter: Itinerary
     importer:
       model: Legacy::Itinerary
 
   - validators:
-      - PrimaryFeeCode
+      - type: PrimaryFeeCode
     extractors:
-      - ChargeCategory
+      - type: ChargeCategory
     formatter: ChargeCategory
     importer:
       model: Legacy::ChargeCategory
 
   - validators:
-      - TenantVehicle
-      - Itinerary
+      - type: TenantVehicle
+      - type: Itinerary
     extractors:
-      - TransitTime
+      - type: TransitTime
     formatter: TransitTime
     importer:
       model: Legacy::TransitTime
@@ -273,16 +273,16 @@ pipelines:
           - :duration
 
   - validators:
-      - SequentialDates
-      - ChargeFees
-      - Carrier
-      - OriginHub
-      - DestinationHub
-      - ChargeCategory
-      - Group
-      - RateBasis
+      - type: SequentialDates
+      - type: ChargeFees
+      - type: Carrier
+      - type: OriginHub
+      - type: DestinationHub
+      - type: ChargeCategory
+      - type: Group
+      - type: RateBasis
     extractors:
-      - Pricing
+      - type: Pricing
     formatter: Pricing
     importer:
       model: Pricings::Pricing

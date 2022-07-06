@@ -237,48 +237,48 @@ columns:
       - carrier
 
 operations:
-  - ExpandedDates
-  - CounterpartHubExpander
+  - type: ExpandedDates
+  - type: CounterpartHubExpander
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+      - type: RoutingCarrier
     formatter: RoutingCarrier
     importer:
       model: Routing::Carrier
 
   - extractors:
-      - Carrier
+      - type: Carrier
     formatter: Carrier
     importer:
       model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
     extractors:
-      - TenantVehicle
+      - type: TenantVehicle
     formatter: TenantVehicle
     importer:
       model: Legacy::TenantVehicle
   - validators:
-      - PrimaryFeeCode
+      - type: PrimaryFeeCode
     extractors:
-      - ChargeCategory
+      - type: ChargeCategory
     formatter: ChargeCategory
     importer:
       model: Legacy::ChargeCategory
 
   - validators:
-      - SequentialDates
-      - ChargeFees
-      - Carrier
-      - TenantVehicle
-      - Hub
-      - CounterpartHub
-      - ChargeCategory
-      - Group
-      - RateBasis
+      - type: SequentialDates
+      - type: ChargeFees
+      - type: Carrier
+      - type: TenantVehicle
+      - type: Hub
+      - type: CounterpartHub
+      - type: ChargeCategory
+      - type: Group
+      - type: RateBasis
     formatter: LocalCharge
     importer:
       model: Legacy::LocalCharge

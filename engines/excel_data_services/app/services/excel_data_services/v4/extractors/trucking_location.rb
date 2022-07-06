@@ -5,39 +5,46 @@ module ExcelDataServices
     module Extractors
       class TruckingLocation < ExcelDataServices::V4::Extractors::Base
         def extracted
-          non_location_based_rows.left_join(extracted_frame, on: join_arguments).concat(
-            location_based_rows.left_join(extracted_frame, on: join_arguments.except(identifier))
-          )
+          @extracted ||= extracted_location_based_rows.tap do |tapped_frame|
+            tapped_frame.concat(extracted_non_location_based_rows) unless identifier == "postal_city"
+          end
+        end
+
+        def extracted_non_location_based_rows
+          @extracted_non_location_based_rows ||= non_location_based_rows.left_join(extracted_frame, on: join_arguments)
+        end
+
+        def extracted_location_based_rows
+          @extracted_location_based_rows ||= location_based_rows.left_join(extracted_frame, on: join_arguments.except(identifier))
         end
 
         def frame_data
-          Trucking::Location.joins(:country).where(countries: { code: country_codes }, query: query_types)
-            .select(
-              "trucking_locations.id as trucking_location_id,
+          Trucking::Location.where(country_id: country_ids, query: query_types).select(
+            "trucking_locations.id as trucking_location_id,
               trucking_locations.data AS trucking_location_name,
               trucking_locations.location_id as locations_location_id,
               trucking_locations.query,
-              countries.code as country_code"
-            )
+              country_id"
+          )
         end
 
         def join_arguments
           {
-            identifier => "trucking_location_name",
+            "trucking_location_name" => "trucking_location_name",
             "locations_location_id" => "locations_location_id",
-            "country_code" => "country_code"
+            "country_id" => "country_id"
           }
         end
 
-        def country_codes
-          frame["country_code"].uniq.to_a
+        def country_ids
+          frame["country_id"].uniq.to_a
         end
 
         def frame_types
           {
             "trucking_location_id" => :object,
             "trucking_location_name" => :object,
-            "country_code" => :object,
+            "country_id" => :object,
             "query" => :object
           }
         end

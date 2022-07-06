@@ -17,7 +17,7 @@ module ExcelDataServices
         end
 
         def final_table_keys
-          headers | overrides.keys | %w[row organization_id]
+          headers | overrides.keys | %w[row organization_id target_frame]
         end
 
         def data

@@ -11,7 +11,7 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Operations do
     let(:section_string) { "Pricings" }
 
     it "returns all Operations defined in the schema" do
-      expect(service.operations).to eq([ExcelDataServices::V4::Operations::ExpandedDates, ExcelDataServices::V4::Operations::DynamicFees])
+      expect(service.operations.map(&:action)).to eq([ExcelDataServices::V4::Operations::ExpandedDates, ExcelDataServices::V4::Operations::DynamicFees])
     end
 
     context "when there are no operations" do

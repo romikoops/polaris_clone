@@ -14,8 +14,10 @@ RSpec.describe ExcelDataServices::V4::Extractors::TruckingLocation do
       "locode" => nil,
       "distance" => nil,
       "zone" => 1.0,
+      "trucking_location_name" => data_value,
       "identifier" => identifier,
       "locations_location_id" => location&.id,
+      "country_id" => country.id,
       "country_code" => country.code,
       "organization_id" => organization.id,
       "query_type" => ExcelDataServices::V4::Extractors::QueryType::QUERY_TYPE_ENUM[query_type]

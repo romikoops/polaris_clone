@@ -26,8 +26,13 @@ module ExcelDataServices
           attr_reader :schema_data
 
           def validators
-            @validators ||= (schema_data[:validators] || []).map do |validator|
-              "ExcelDataServices::V4::Validators::#{validator}".constantize
+            @validators ||= (schema_data[:validators] || []).flat_map do |validator|
+              target_frames_or_default(input: validator).map do |target_frame|
+                ExcelDataServices::V4::Files::Parsers::ActionWrapper.new(
+                  action: "ExcelDataServices::V4::Validators::#{validator[:type]}".constantize,
+                  target_frame: target_frame
+                )
+              end
             end
           end
 
@@ -36,8 +41,13 @@ module ExcelDataServices
           end
 
           def extractors
-            @extractors ||= (schema_data[:extractors] || []).map do |extractor|
-              "ExcelDataServices::V4::Extractors::#{extractor}".constantize
+            @extractors ||= (schema_data[:extractors] || []).flat_map do |extractor|
+              target_frames_or_default(input: extractor).map do |target_frame|
+                ExcelDataServices::V4::Files::Parsers::ActionWrapper.new(
+                  action: "ExcelDataServices::V4::Extractors::#{extractor[:type]}".constantize,
+                  target_frame: target_frame
+                )
+              end
             end
           end
 
@@ -53,6 +63,10 @@ module ExcelDataServices
 
           def importer_data
             schema_data[:importer]
+          end
+
+          def target_frames_or_default(input:)
+            input[:frames] || ["default"]
           end
         end
       end

@@ -4,6 +4,8 @@ module ExcelDataServices
   module V4
     module Extractors
       class Group < ExcelDataServices::V4::Extractors::Base
+        private
+
         def extracted
           @extracted ||= [default_group_frame, group_name_frame, group_id_frame].compact
             .inject(Rover::DataFrame.new) do |result, group_frame|
@@ -57,7 +59,17 @@ module ExcelDataServices
         end
 
         def rows_for_default_group
-          @rows_for_default_group ||= (rows_without_group_id[rows_without_group_id["group_name"].missing] if frame_contains_group_name? && rows_without_group_id.present?)
+          @rows_for_default_group ||= [rows_for_default_group_when_group_name_is_present, rows_for_default_group_when_group_name_is_not_present].compact.inject(blank_frame) do |result, group_frame|
+            result.concat(group_frame)
+          end
+        end
+
+        def rows_for_default_group_when_group_name_is_present
+          @rows_for_default_group_when_group_name_is_present ||= (rows_without_group_id[rows_without_group_id["group_name"].missing] if frame_contains_group_name? && rows_without_group_id.present?)
+        end
+
+        def rows_for_default_group_when_group_name_is_not_present
+          @rows_for_default_group_when_group_name_is_not_present ||= rows_without_group_id if !frame_contains_group_name? && rows_without_group_id.present?
         end
 
         def rows_without_group_id

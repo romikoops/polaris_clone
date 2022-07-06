@@ -7,37 +7,38 @@ module ExcelDataServices
         STATE_COLUMNS = %w[distribute hub_id group_id organization_id row sheet_name].freeze
 
         def perform
-          zone_range_frame
-            .inner_join(rate_zone_frame, on: { "zone" => "zone" })
-            .inner_join(merged_rates_with_metadata, on: { "zone_row" => "rate_row", "sheet_name" => "sheet_name" })
-            .concat(fees)
-            .inner_join(state_data, on: { "sheet_name" => "sheet_name" })
-            .inner_join(identifier, on: { "sheet_name" => "sheet_name" })
+          {
+            "zones" => strip_coordinate_keys_from(data_frame: complete_zones),
+            "default" => strip_coordinate_keys_from(data_frame: complete_metadata),
+            "rates" => strip_coordinate_keys_from(data_frame: complete_rates),
+            "fees" => strip_coordinate_keys_from(data_frame: complete_fees)
+          }
         end
+
+        private
 
         def rate_zone_frame
           @rate_zone_frame ||= Rover::DataFrame.new(
-            rate_frame[rate_frame["header"] == "zone"][%w[row value sheet_name]].tap do |zone_inner_frame|
+            rate_frame.filter("header" => "zone")[%w[row value sheet_name]].tap do |zone_inner_frame|
               prefixed_column_mapper(mapped_object: zone_inner_frame, header: "zone")
             end
           )
         end
 
         def zone_range_frame
-          @zone_range_frame ||= ExcelDataServices::V4::Framers::SheetFramer.new(sheet_name: "Zones", frame: values[values["header"] != "identifier"]).perform
+          @zone_range_frame ||= ExcelDataServices::V4::Framers::SheetFramer.new(sheet_name: "Zones", frame: zone_values[zone_values["header"] != "identifier"]).perform
         end
 
         def rate_frame
           @rate_frame ||= frame[!frame["sheet_name"].in?(%w[Fees Zones])]
         end
 
-        def present_rate_frame
-          @present_rate_frame ||= rate_frame[!rate_frame["value"].missing]
+        def metadata_frame
+          @metadata_frame ||= frame.filter("target_frame" => "default")
         end
 
-        def merged_rates_with_metadata
-          @merged_rates_with_metadata ||= rates_with_ranges_and_minimum
-            .inner_join(metadata, on: { "sheet_name" => "sheet_name" })
+        def present_rate_frame
+          @present_rate_frame ||= rate_frame[!rate_frame["value"].missing]
         end
 
         def rates_with_ranges
@@ -47,9 +48,29 @@ module ExcelDataServices
             .inner_join(trucking_rate_defaults, on: { "sheet_name" => "sheet_name" })
         end
 
-        def rates_with_ranges_and_minimum
-          @rates_with_ranges_and_minimum ||= rates_with_ranges.inner_join(row_minimums, on: { "rate_row" => "row_minimum_row", "sheet_name" => "sheet_name" })
+        def complete_rates
+          @complete_rates ||= rates_with_ranges.inner_join(row_minimums, on: { "rate_row" => "row_minimum_row", "sheet_name" => "sheet_name" })
             .left_join(bracket_minimum, on: { "rate_column" => "bracket_minimum_column", "sheet_name" => "sheet_name" })
+            .inner_join(rate_zone_frame, on: { "rate_row" => "zone_row", "sheet_name" => "sheet_name" })
+            .inner_join(state_data, on: { "sheet_name" => "sheet_name" })
+            .inner_join(rate_basis_frame, on: { "sheet_name" => "sheet_name" }).tap do |tapped_frame|
+              tapped_frame["row"] = tapped_frame["rate_row"]
+            end
+        end
+
+        def complete_fees
+          @complete_fees ||= fees.inner_join(state_data, on: { "sheet_name" => "sheet_name" })
+        end
+
+        def complete_metadata
+          @complete_metadata ||= metadata.inner_join(state_data, on: { "sheet_name" => "sheet_name" })
+        end
+
+        def complete_zones
+          @complete_zones ||= zone_range_frame
+            .inner_join(state_data, on: { "sheet_name" => "sheet_name" })
+            .inner_join(rate_zones, on: { "zone" => "zone" })
+            .inner_join(identifier, on: { "sheet_name" => "sheet_name" })
         end
 
         def ranges_frame
@@ -64,6 +85,10 @@ module ExcelDataServices
 
         def rate_sheet_names
           @rate_sheet_names ||= rate_frame["sheet_name"].to_a.uniq
+        end
+
+        def rate_zones
+          @rate_zones ||= rate_zone_frame[["zone"]].uniq
         end
 
         def rate_values_frame
@@ -101,10 +126,18 @@ module ExcelDataServices
         def metadata
           @metadata ||= Rover::DataFrame.new(
             rate_sheet_names.map do |rate_sheet_name|
-              MetadataRows.new(sheet_name: rate_sheet_name, frame: rate_frame).perform.inject({}) do |memo, row|
+              MetadataRows.new(sheet_name: rate_sheet_name, frame: metadata_frame).perform.inject({}) do |memo, row|
                 row[row.delete("header")] = row.delete("value")
                 memo.merge(row)
               end
+            end
+          )
+        end
+
+        def rate_basis_frame
+          @rate_basis_frame ||= Rover::DataFrame.new(
+            rate_frame.filter("header" => "rate_basis").to_a.map do |value|
+              prefixed_column_mapper(mapped_object: value, header: "rate_basis")
             end
           )
         end
@@ -122,15 +155,15 @@ module ExcelDataServices
         end
 
         def fees
-          @fees ||= ExcelDataServices::V4::Framers::TruckingFees.new(frame: values).perform
+          @fees ||= ExcelDataServices::V4::Framers::TruckingFees.new(frame: values.filter("target_frame" => "fees")).perform
         end
 
         def state_data
           @state_data ||= Rover::DataFrame.new(
-            frame["sheet_name"].to_a.uniq.map do |rate_sheet_name|
+            sheet_names.uniq.map do |rate_sheet_name|
               frame[(frame["sheet_name"] == rate_sheet_name) & (frame["header"].in?(STATE_COLUMNS))].to_a.inject({}) do |memo, row|
                 row[row.delete("header")] = row.delete("value")
-                memo.merge(row)
+                memo.merge(row.except("row", "column", "target_frame"))
               end
             end
           )
@@ -138,13 +171,41 @@ module ExcelDataServices
 
         def identifier
           @identifier ||= Rover::DataFrame.new(
-            frame["sheet_name"].to_a.uniq.product(frame[frame["header"] == "identifier"]["value"].to_a).map do |sheet_name, identifier|
+            sheet_names.map do |sheet_name|
               {
-                "identifier" => identifier,
+                "identifier" => adjusted_identifier,
                 "sheet_name" => sheet_name
               }
             end
           )
+        end
+
+        def sheet_names
+          @sheet_names ||= frame["sheet_name"].to_a.uniq
+        end
+
+        def adjusted_identifier
+          @adjusted_identifier ||= if raw_identifier == "postal_code" && frame_has_city_data?
+            "postal_city"
+          else
+            raw_identifier
+          end
+        end
+
+        def frame_has_city_data?
+          frame.filter("header" => "city")["value"].any?(&:present?)
+        end
+
+        def raw_identifier
+          @raw_identifier ||= frame.filter("header" => "identifier")["value"].to_a.first
+        end
+
+        def strip_coordinate_keys_from(data_frame:)
+          data_frame[data_frame.keys.grep_v(/(_row|_column)$/)]
+        end
+
+        def zone_values
+          @zone_values ||= frame.filter("target_frame" => "zones")
         end
 
         class MetadataRows

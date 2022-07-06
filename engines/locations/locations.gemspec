@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Provides location information."
 
   spec.metadata["type"] = "service"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
@@ -17,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "elasticsearch", "~> 7.10.0"
   spec.add_dependency "rgeo"
   spec.add_dependency "rgeo-geojson"
-  spec.add_dependency "searchkick", "~> 4.4.0"
+  spec.add_dependency "searchkick", "~> 5.0.3"
 
   spec.add_dependency "legacy"
 

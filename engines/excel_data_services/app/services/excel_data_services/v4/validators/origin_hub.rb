@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class OriginHub < ExcelDataServices::V4::Validators::Hub
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::OriginHub.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::OriginHub.new(state: state, target_frame: target_frame).perform
         end
 
         def prefix

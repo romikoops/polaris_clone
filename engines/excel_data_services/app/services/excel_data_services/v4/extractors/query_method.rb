@@ -19,7 +19,7 @@ module ExcelDataServices
         end
 
         def frame_types
-          { "direction" => :object, "carriage" => :object }
+          { "query_method" => :object, "query_type" => :object }
         end
       end
     end

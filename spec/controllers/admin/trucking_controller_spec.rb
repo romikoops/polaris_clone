@@ -7,9 +7,9 @@ RSpec.describe Admin::TruckingController, type: :controller do
   let!(:user) { FactoryBot.create(:users_user) }
   let(:hub) { FactoryBot.create(:legacy_hub, organization: organization) }
   let(:json_response) { JSON.parse(response.body) }
+  let!(:group) { FactoryBot.create(:groups_group, :default, organization: organization) }
 
   before do
-    FactoryBot.create(:groups_group, :default, organization: organization)
     FactoryBot.create(:users_membership, organization: organization, user: user)
     append_token_header
   end
@@ -48,23 +48,64 @@ RSpec.describe Admin::TruckingController, type: :controller do
 
     context "when the group id is provided" do
       let(:group_id) { FactoryBot.create(:groups_group, organization: organization).id }
+      let(:expected_args) do
+        {
+          upload_id: dummy_upload.id,
+          options: {
+            user_id: user.id,
+            group_id: group_id,
+            hub_id: hub.id
+          }
+        }
+      end
 
       before { post :upload, params: base_params.merge(group_id: group_id) }
 
-      it "returns error with messages when an error is raised" do
-        aggregate_failures do
-          expect(response).to have_http_status(:success)
-          expect(json_response["data"]).to be_truthy
-          expect(ExcelDataServices::UploaderJob).to have_received(:perform_later).with(
-            upload_id: dummy_upload.id,
-            options: {
-              user_id: user.id,
-              group_id: group_id,
-              hub_id: hub.id
-            }
-          )
-        end
+      it "returns success after triggering the UploaderJob", :aggregate_failures do
+        expect(response).to have_http_status(:success)
+        expect(json_response["data"]).to be_truthy
+        expect(ExcelDataServices::UploaderJob).to have_received(:perform_later).with(expected_args)
       end
+    end
+  end
+
+  describe "POST #download" do
+    before do
+      allow(ExcelDataServices::DownloaderJob).to receive(:perform_later).and_return(true)
+      post :download, params: base_params
+    end
+
+    let(:base_params) do
+      {
+        options: {
+          target: group.id,
+          hub_id: hub.id,
+          load_type: "cargo_item"
+        },
+        organization_id: organization.id,
+        id: hub.id
+      }
+    end
+    let(:expected_args) do
+      {
+        organization: organization,
+        category_identifier: "trucking",
+        file_name: "#{organization.slug}__trucking_default_#{hub.name}_cargo_item",
+        user: user,
+        options: {
+          group_id: group.id,
+          target: group.id,
+          hub_id: hub.id.to_s,
+          load_type: "cargo_item",
+          organization_id: organization.id
+        }
+      }
+    end
+
+    it "returns error with messages when an error is raised", :aggregate_failures do
+      expect(response).to have_http_status(:success)
+      expect(json_response["data"]).to be_truthy
+      expect(ExcelDataServices::DownloaderJob).to have_received(:perform_later).with(expected_args)
     end
   end
 

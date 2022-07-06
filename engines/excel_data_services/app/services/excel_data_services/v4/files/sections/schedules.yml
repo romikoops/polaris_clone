@@ -83,11 +83,11 @@ columns:
 
 pipelines:
   - validators:
-      - SequentialDates
-      - Carrier
-      - TenantVehicle
-      - OriginHub
-      - DestinationHub
+      - type: SequentialDates
+      - type: Carrier
+      - type: TenantVehicle
+      - type: OriginHub
+      - type: DestinationHub
     formatter: Schedule
     importer:
       model: Schedules::Schedule

@@ -7,26 +7,16 @@ required:
       - ZONE
 
 columns:
-  - header: "service"
-    sanitizer: "text"
-    validator: "optional_string"
-    required: false
-    sheet_name: "Zones"
-
-  - header: "carrier"
-    sanitizer: "text"
-    validator: "optional_string"
-    required: false
-    sheet_name: "Zones"
-
   - header: "group_name"
     sanitizer: "text"
     validator: "optional_string"
+    target_frame: "default"
     required: false
 
   - header: "group_id"
     sanitizer: "text"
     validator: "optional_string"
+    target_frame: "default"
     required: false
 
   - header: "zone"
@@ -34,6 +24,7 @@ columns:
     validator: "optional_string"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "service"
     sanitizer: "text"
@@ -42,12 +33,14 @@ columns:
     alternative_keys:
       - "service_level"
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "carrier"
     sanitizer: "text"
     validator: "optional_string"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "carrier_code"
     sanitizer: "downcase"
@@ -56,24 +49,28 @@ columns:
     alternative_keys:
       - "carrier"
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "direction"
     sanitizer: "downcase"
     validator: "direction"
     required: true
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "truck_type"
     sanitizer: "downcase"
     validator: "truck_type"
     required: true
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "cargo_class"
     sanitizer: "downcase"
     validator: "optional_cargo_class"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "min"
     sanitizer: "decimal"
@@ -82,6 +79,7 @@ columns:
     alternative_keys:
       - "minimum"
     sheet_name: "Fees"
+    target_frame: "fees"
   - header: "max"
     sanitizer: "decimal"
     validator: "optional_numeric"
@@ -89,6 +87,7 @@ columns:
     alternative_keys:
       - "maximum"
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "fee_name"
     sanitizer: "text"
@@ -97,96 +96,112 @@ columns:
     alternative_keys:
       - "fee"
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "fee_code"
     sanitizer: "downcase"
     validator: "string"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "currency"
     sanitizer: "upcase"
     validator: "currency"
     required: true
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "rate_basis"
     sanitizer: "upcase"
     validator: "string"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "range_min"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "range_max"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "base"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "ton"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "cbm"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "kg"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "item"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "shipment"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "bill"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "container"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "wm"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "percentage"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
     sheet_name: "Fees"
+    target_frame: "fees"
 
   - header: "service"
     sanitizer: "text"
@@ -195,6 +210,7 @@ columns:
     alternative_keys:
       - "service_level"
     fallback: "standard"
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -205,6 +221,7 @@ columns:
     validator: "string"
     required: false
     fallback: ORGANIZATION_SLUG
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -216,6 +233,7 @@ columns:
     fallback: ORGANIZATION_SLUG
     alternative_keys:
       - "carrier"
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -225,6 +243,7 @@ columns:
     sanitizer: "downcase"
     validator: "direction"
     required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -234,6 +253,7 @@ columns:
     sanitizer: "downcase"
     validator: "cargo_class"
     required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -243,6 +263,7 @@ columns:
     sanitizer: "downcase"
     validator: "load_type"
     required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -252,6 +273,7 @@ columns:
     sanitizer: "downcase"
     validator: "truck_type"
     required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -261,6 +283,7 @@ columns:
     sanitizer: "date"
     validator: "date"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -269,6 +292,7 @@ columns:
     sanitizer: "date"
     validator: "date"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -277,16 +301,19 @@ columns:
   - header: "cbm_ratio"
     sanitizer: "decimal"
     validator: "optional_numeric"
-    required: false
+    required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
     column_length: 1
+    fallback: 0
 
   - header: "currency"
     sanitizer: "upcase"
     validator: "currency"
     required: true
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -295,16 +322,19 @@ columns:
   - header: "base"
     sanitizer: "decimal"
     validator: "optional_numeric"
-    required: false
+    required: true
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
     column_length: 1
+    fallback: 0
 
   - header: "load_meterage_stackable_limit"
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -314,6 +344,7 @@ columns:
     sanitizer: "decimal"
     validator: "optional_numeric"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -323,6 +354,7 @@ columns:
     sanitizer: "boolean"
     validator: "optional_boolean"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -332,6 +364,7 @@ columns:
     sanitizer: "text"
     validator: "optional_string"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -341,6 +374,7 @@ columns:
     sanitizer: "text"
     validator: "optional_string"
     required: false
+    target_frame: "default"
     exclude_sheets:
       - Zones
       - Fees
@@ -350,6 +384,7 @@ columns:
     sanitizer: "upcase"
     validator: "string"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -366,6 +401,7 @@ columns:
     validator: "zone"
     required: true
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "postal_code"
     sanitizer: "text"
     validator: "optional_string"
@@ -373,36 +409,43 @@ columns:
     alternative_keys:
       - "zipcode"
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "locode"
     sanitizer: "text"
     validator: "optional_locode"
     required: false
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "distance"
     sanitizer: "distance"
     validator: "optional_numeric_like"
     required: false
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "city"
     sanitizer: "text"
     validator: "optional_string"
     required: false
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "province"
     sanitizer: "text"
     validator: "optional_string"
     required: false
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "range"
     sanitizer: "text"
     validator: "zone_range"
     required: false
     sheet_name: "Zones"
+    target_frame: "zones"
   - header: "country_code"
     sanitizer: "upcase"
     validator: "country_code"
     required: true
     sheet_name: "Zones"
+    target_frame: "zones"
 
 matrixes:
   - header: "rate"
@@ -411,6 +454,7 @@ matrixes:
     sanitizer: "decimal"
     validator: "numeric"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -421,6 +465,7 @@ matrixes:
     sanitizer: "text"
     validator: "string"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -431,6 +476,7 @@ matrixes:
     sanitizer: "text"
     validator: "string"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -441,6 +487,7 @@ matrixes:
     sanitizer: "text"
     validator: "string"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -451,6 +498,7 @@ matrixes:
     sanitizer: "text"
     validator: "zone_range"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -461,6 +509,7 @@ matrixes:
     sanitizer: "text"
     validator: "modifier"
     required: false
+    target_frame: "rates"
     exclude_sheets:
       - Zones
       - Fees
@@ -472,88 +521,125 @@ matrixes:
     validator: "identifier"
     required: true
     sheet_name: "Zones"
+    target_frame: "zones"
 
 framer: "TruckingRates"
 
 operations:
-  - "TruckingZones"
-  - "TruckingFees"
+  - type: LocationFilter
+    frames: ["zones"]
+  - type: TruckingZones
+    frames: ["zones"]
+  # - type: TruckingFees
+  #   frames: ["fees"]
 
 data_validators:
-  - ChargeFees
-  - TruckingSheet
+  - type: DefaultTruckingDates
+    frames: ["default"]
+  - type: ChargeFees
+    frames: ["fees", "rates"]
+  - type: TruckingSheet
+    frames: ["rates"]
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+        frames: ["default"]
+      - type: RoutingCarrier
+        frames: ["default"]
     formatter: RoutingCarrier
     importer:
       model: Routing::Carrier
 
   - extractors:
-      - Carrier
+      - type: Carrier
+        frames: ["default"]
     formatter: Carrier
     importer:
       model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
+        frames: ["default"]
     extractors:
-      - TenantVehicle
+      - type: TenantVehicle
+        frames: ["default"]
     formatter: TenantVehicle
     importer:
       model: Legacy::TenantVehicle
 
   - validators:
-      - QueryType
-      - LocationsLocation
-      - Country
+      - type: QueryType
+        frames: ["zones"]
+      - type: LocationsLocation
+        frames: ["zones"]
+      - type: Country
+        frames: ["zones"]
     extractors:
-      - TruckingLocation
+      - type: TruckingLocation
+        frames: ["zones"]
+      - type: TruckingLocationUpsertId
+        frames: ["zones"]
     formatter: TruckingLocation
     importer:
       model: Trucking::Location
 
   - validators:
-      - QueryMethod
+      - type: QueryMethod
+        frames: ["zones"]
     extractors:
-      - Carriage
-      - TypeAvailability
+      - type: Carriage
+        frames: ["default", "fees"]
+      - type: DistributionHub
+        frames: ["default"]
+      - type: TypeAvailability
+        frames: ["default"]
     formatter: TypeAvailability
     importer:
       model: Trucking::TypeAvailability
 
-  - validators:
-      - PrimaryFeeCode
-    extractors:
-      - ChargeCategory
+  - extractors:
+      - type: ChargeCategory
+        frames: ["rates"]
     formatter: ChargeCategory
     importer:
       model: Legacy::ChargeCategory
 
   - validators:
-      - TypeAvailability
+      - type: TypeAvailability
+        frames: ["default"]
     formatter: HubAvailability
     importer:
       model: Trucking::HubAvailability
 
   - validators:
-      - Carrier
-      - TenantVehicle
-      - ChargeCategory
-      - Group
-      - RateBasis
-      - TruckingLocation
+      - type: Carrier
+        frames: ["default"]
+      - type: TenantVehicle
+        frames: ["default"]
+      - type: ChargeCategory
+        frames: ["rates", "fees"]
+      - type: Group
+        frames: ["default"]
+      - type: RateBasis
+        frames: ["rates", "fees"]
+      - type: TruckingLocation
+        frames: ["zones"]
+    extractors:
+      - type: StringValidity
+        frames: ["default"]
     conflicts:
       - model: Trucking::Trucking
         conflict_keys:
-        - hub_id
-        - cargo_class
-        - organization_id
-        - group_id
-        - tenant_vehicle_id
-        - carriage
+          - hub_id
+          - cargo_class
+          - organization_id
+          - group_id
+          - tenant_vehicle_id
+          - carriage
+          - country_id
     formatter: Trucking
     importer:
       model: Trucking::Trucking
+      options:
+        batch_size: 500

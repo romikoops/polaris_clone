@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V4::Extractors::QueryType do
   include_context "V4 setup"
 
-  let(:result) { described_class.state(state: state_arguments) }
-  let(:row) do
-    {
+  let(:result) { described_class.state(state: state_arguments, target_frame: "zones") }
+  let(:zones_rows) do
+    [{
       "postal_code" => nil,
       "city" => nil,
       "locode" => nil,
@@ -17,10 +17,10 @@ RSpec.describe ExcelDataServices::V4::Extractors::QueryType do
       "locations_location_id" => location&.id,
       "country_code" => "DE",
       "organization_id" => organization.id
-    }.merge(example_row)
+    }.merge(example_row)]
   end
   let(:example_row) { { identifier => data_value } }
-  let(:extracted_table) { result.frame }
+  let(:extracted_table) { result.frame("zones") }
   let(:identifier) { "postal_code" }
   let(:data_value) { "7795" }
   let(:location) do

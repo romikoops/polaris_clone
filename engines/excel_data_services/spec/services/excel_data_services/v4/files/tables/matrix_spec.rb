@@ -26,10 +26,10 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Matrix do
 
   describe "#perform" do
     let(:matrix_results) do
-      [{ "value" => "standard", "header" => "service", "row" => 2, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 3, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 4, "column" => "N", "sheet_name" => "Sheet1" },
-        { "value" => "standard", "header" => "service", "row" => 5, "column" => "N", "sheet_name" => "Sheet1" }]
+      [{ "value" => "standard", "header" => "service", "row" => 2, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 3, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 4, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" },
+        { "value" => "standard", "header" => "service", "row" => 5, "column" => "N", "sheet_name" => "Sheet1", "target_frame" => "default" }]
     end
     let(:options) do
       {
@@ -62,6 +62,14 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Matrix do
       let(:columns) { "Z" }
       let(:rows) { "2:3" }
       let(:required_data_missing_error) { "Required data is missing at: (Sheet: Sheet1) row: 2 column: Z. Please fill in the missing data and try again." }
+      let(:options) do
+        {
+          sanitizer: "text",
+          validator: "string",
+          required: true,
+          type: :object
+        }
+      end
 
       it "returns errors specifying the missing data's location" do
         expect(service.errors.map(&:reason)).to include(required_data_missing_error)

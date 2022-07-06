@@ -10,12 +10,12 @@ RSpec.describe ExcelDataServices::V4::Files::Parsers::Schema do
   describe "#perform" do
     it "yields the relevant schema data in the block when one is provided" do
       service.perform do |schema_data|
-        expect(schema_data).to eq(operations: %w[ExpandedDates DynamicFees])
+        expect(schema_data).to eq(operations: [{ type: "ExpandedDates" }, { type: "DynamicFees" }])
       end
     end
 
     it "returns the relevant schema data when no block is provided" do
-      expect(service.perform).to eq(operations: %w[ExpandedDates DynamicFees])
+      expect(service.perform).to eq(operations: [{ type: "ExpandedDates" }, { type: "DynamicFees" }])
     end
 
     it "raises and InvalidSection error when the path is invalid" do

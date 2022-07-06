@@ -46,7 +46,8 @@ module ExcelDataServices
                 "header" => header,
                 "row" => cell.row,
                 "column" => cell.column,
-                "sheet_name" => cell.sheet_name
+                "sheet_name" => cell.sheet_name,
+                "target_frame" => options.target_frame
               }
             end
           end

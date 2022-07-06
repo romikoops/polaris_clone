@@ -33,10 +33,18 @@ RSpec.describe ExcelDataServices::V4::Upload do
       end
 
       context "without distribution" do
-        before { result_stats }
+        expected_stats = {
+          carrier: { created: 2, failed: 0 },
+          charge_category: { created: 5, failed: 0 },
+          errors: [],
+          itinerary: { created: 2, failed: 0 },
+          pricing: { created: 2, failed: 0 },
+          tenant_vehicle: { created: 1, failed: 0 },
+          warnings: []
+        }
 
         it "returns a State object after inserting Data" do
-          expect(result_stats).to eq({ carrier: { created: 2, failed: 0 }, charge_category: { created: 5, failed: 0 }, errors: [], itinerary: { created: 2, failed: 0 }, pricing: { created: 2, failed: 0 }, tenant_vehicle: { created: 1, failed: 0 } })
+          expect(result_stats).to eq(expected_stats)
         end
       end
 

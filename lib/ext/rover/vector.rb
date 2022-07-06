@@ -2,6 +2,8 @@
 
 module Rover
   class Vector
+    BOOLEAN_VALUES = [true, false].freeze
+    # rubocop:disable
     def cast_data(data, type: :object) # Assign :object if no type specified. Casting is the source of most issues.
       numo_type = numo_type(type) if type
 
@@ -56,6 +58,20 @@ module Rover
       end
     end
 
+    %w[+ - * / % ** & | ^].each do |op|
+      define_method(op) do |other|
+        other = other.to_numo if other.is_a?(Vector)
+        # Cast booleans to ints to allow for comparison
+        other = Numo::Bit.cast(((other && 1) || 0)) if BOOLEAN_VALUES.include?(other)
+
+        if @data.is_a?(Numo::RObject) && !other.is_a?(Numo::RObject)
+          map { |v| v.send(op, other) }
+        else
+          Vector.new(@data.send(op, other))
+        end
+      end
+    end
+
     {
       "==" => "eq",
       "!=" => "ne",
@@ -77,5 +93,6 @@ module Rover
           Vector.new(Numo::Bit.cast(v))
       end
     end
+    # rubocop:enable
   end
 end

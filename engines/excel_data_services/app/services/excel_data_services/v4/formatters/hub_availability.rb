@@ -10,7 +10,7 @@ module ExcelDataServices
         ].freeze
 
         def insertable_data
-          rows_for_insertion[ATTRIBUTE_KEYS].to_a.uniq
+          state.frame("default")[ATTRIBUTE_KEYS].to_a.uniq
         end
 
         def target_attribute

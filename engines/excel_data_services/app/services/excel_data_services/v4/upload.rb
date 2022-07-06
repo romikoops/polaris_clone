@@ -18,7 +18,7 @@ module ExcelDataServices
       end
 
       def perform
-        stats.group_by(&:type).inject({ errors: errors }) do |result, (type, stats)|
+        stats.group_by(&:type).inject({ errors: errors, warnings: warnings }) do |result, (type, stats)|
           result.merge(type.to_sym => { created: stats.sum(&:created), failed: stats.sum(&:failed) })
         end
       end
@@ -57,6 +57,10 @@ module ExcelDataServices
 
       def result_state
         @result_state ||= sheet.perform
+      end
+
+      def warnings
+        @warnings ||= stats.select(&:warnings).inject([]) { |warnings, stat| warnings + stat.warnings }
       end
 
       delegate :errors, :stats, to: :result_state

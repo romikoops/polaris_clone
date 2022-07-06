@@ -4,19 +4,23 @@ module ExcelDataServices
   module V4
     module Formatters
       class TruckingLocation < ExcelDataServices::V4::Formatters::Base
-        ATTRIBUTE_KEYS = %w[country_id].freeze
+        ATTRIBUTE_KEYS = %w[trucking_location_name country_id locations_location_id query_type identifier upsert_id].freeze
 
         def insertable_data
-          frame[[identifier, "country_id", "locations_location_id", "query_type"]].to_a.uniq.map do |trucking_location_row|
-            trucking_location_row["location_id"] = trucking_location_row.delete("locations_location_id")
-            trucking_location_row["data"] = trucking_location_row.delete(identifier)
-            trucking_location_row["query"] = trucking_location_row.delete("query_type")
-            trucking_location_row
+          data_with_corrected_headers.to_a
+        end
+
+        def data_with_corrected_headers
+          zone_frame[ATTRIBUTE_KEYS].tap do |tapped_frame|
+            tapped_frame["location_id"] = tapped_frame.delete("locations_location_id")
+            tapped_frame["data"] = tapped_frame.delete("trucking_location_name")
+            tapped_frame["query"] = tapped_frame.delete("query_type")
+            tapped_frame.uniq
           end
         end
 
-        def identifier
-          @identifier ||= frame["identifier"].to_a.first
+        def zone_frame
+          @zone_frame ||= state.frame("zones")
         end
       end
     end

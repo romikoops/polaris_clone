@@ -4,6 +4,8 @@ module ExcelDataServices
   class UploaderJob < ApplicationJob
     queue_as :default
 
+    include Sidekiq::Status::Worker
+
     def perform(upload_id:, options:)
       upload = ExcelDataServices::Upload.find(upload_id)
       document = upload.file
@@ -48,6 +50,7 @@ module ExcelDataServices
     end
 
     def update_status!(upload:, status:)
+      at("Upload has #{status}")
       upload.status = status
       upload.last_job_id = job_id
       upload.save!

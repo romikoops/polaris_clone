@@ -54,12 +54,6 @@ module ExcelDataServices
           @relevant_frame ||= frame[relevant_keys].uniq
         end
 
-        def attributes_as_sql_where_clause
-          return "existing.#{upsert_key} = #{data_frame_table_name}.upsert_id" if upsert_key.present?
-
-          (conflict_keys + model_date_keys).map { |key| "existing.#{key} = #{data_frame_table_name}.#{key}" }.join(" AND ")
-        end
-
         def table_name
           @table_name ||= model.table_name
         end
@@ -90,9 +84,7 @@ module ExcelDataServices
                 #{data_frame_table_name}.validity as data_frame_validity,
                 UPPER(#{data_frame_table_name}.validity) < now()::date as expired,
                 LOWER(#{data_frame_table_name}.validity) > LOWER(existing.validity) as future
-              FROM #{table_name} AS existing
-              INNER JOIN #{data_frame_table_name}
-              ON #{attributes_as_sql_where_clause}
+              #{main_join_switch}
               AND #{data_frame_table_name}.validity && existing.validity
               AND existing.deleted_at IS NULL;
             SQL
@@ -192,6 +184,35 @@ module ExcelDataServices
 
         def model_date_keys
           @model_date_keys ||= DATE_KEYS.select { |key| model.respond_to?(key) }
+        end
+
+        def main_join_switch
+          return trucking_join if model == Trucking::Trucking
+
+          upsert_join
+        end
+
+        def trucking_join
+          <<-SQL.squish
+            FROM #{table_name} AS existing
+            INNER JOIN #{data_frame_table_name}
+            ON #{attributes_in_sql(attributes: (conflict_keys + model_date_keys) - ['country_id'])}
+            INNER JOIN trucking_locations
+            ON existing.location_id = trucking_locations.id
+            AND trucking_locations.country_id = #{data_frame_table_name}.country_id
+          SQL
+        end
+
+        def upsert_join
+          <<-SQL.squish
+            FROM #{table_name} AS existing
+            INNER JOIN #{data_frame_table_name}
+            ON existing.#{upsert_key} = #{data_frame_table_name}.upsert_id
+          SQL
+        end
+
+        def attributes_in_sql(attributes:)
+          attributes.map { |key| "existing.#{key} = #{data_frame_table_name}.#{key}" }.join(" AND ")
         end
       end
     end

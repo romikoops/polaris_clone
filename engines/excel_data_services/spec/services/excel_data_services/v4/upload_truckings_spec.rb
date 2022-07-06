@@ -108,7 +108,7 @@ RSpec.describe ExcelDataServices::V4::Upload do
     end
 
     context "with distance based truckings" do
-      let(:carrier) { FactoryBot.create(:legacy_carrier, name: organization.slug, code: organization.slug) }
+      let(:carrier) { FactoryBot.create(:legacy_carrier, name: organization.slug, code: organization.slug) } # temp till next pr comes through
       let(:xlsx) { File.open(file_fixture("excel/example_distance_trucking.xlsx")) }
       let(:zone_1_trucking_location) do
         FactoryBot.create(:trucking_location,

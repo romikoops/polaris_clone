@@ -14,7 +14,7 @@ RSpec.shared_context "V4 setup" do
       file: file,
       section: section_string,
       overrides: overrides
-    ).tap { |tapped_state| tapped_state.frame = frame }
+    ).tap { |tapped_state| tapped_state.frames = frames }
   end
   let(:overrides) { ExcelDataServices::V4::Overrides.new }
   let!(:file) do
@@ -24,6 +24,10 @@ RSpec.shared_context "V4 setup" do
   end
   let(:xlsx) { File.open(file_fixture("excel/example_pricings.xlsx")) }
   let(:section_string) { "Pricings" }
+  let(:rates_rows) { [] }
+  let(:zones_rows) { [] }
+  let(:fees_rows) { [] }
+  let(:frames) { { "zones" => Rover::DataFrame.new(zones_rows), "rates" => Rover::DataFrame.new(rates_rows), "fees" => Rover::DataFrame.new(fees_rows), "default" => frame } }
 
   before do
     default_group

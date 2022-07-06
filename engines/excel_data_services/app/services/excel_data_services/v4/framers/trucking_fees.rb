@@ -4,12 +4,16 @@ module ExcelDataServices
   module V4
     module Framers
       class TruckingFees
+        DEFAULT_FRAME_KEYS = %w[rate_type mode_of_transport row sheet_name group_name group_id zone service carrier
+          carrier_code direction truck_type cargo_class min max fee_name fee_code currency rate_basis range_min
+          range_max base rate].freeze
+
         def initialize(frame:)
           @frame = frame
         end
 
         def perform
-          Rover::DataFrame.new(fee_rows_for_frame)
+          blank_frame.concat(Rover::DataFrame.new(fee_rows_for_frame))
         end
 
         private
@@ -38,6 +42,10 @@ module ExcelDataServices
 
         def frame_from_fees_sheet
           @frame_from_fees_sheet ||= frame[(frame["sheet_name"] == "Fees")]
+        end
+
+        def blank_frame
+          @blank_frame ||= Rover::DataFrame.new(DEFAULT_FRAME_KEYS.zip([] * DEFAULT_FRAME_KEYS.size).to_h)
         end
 
         class CleanedRowPerValue

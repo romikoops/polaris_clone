@@ -12,19 +12,30 @@ module ExcelDataServices
       described_class.perform_now(
         organization: organization,
         user: user,
-        category_identifier: "hubs",
+        category_identifier: category_identifier,
         file_name: "#{organization.slug}__hubs_#{Time.zone.today.strftime('%d/%m/%Y')}"
       )
     end
+    let(:category_identifier) { "hubs" }
 
     describe "#perform" do
-      context "when writing document succeeds" do
+      shared_examples_for "successful download" do
         it "sends email to the user" do
           perform_enqueued_jobs do
             downloader_job_perform
           end
           expect(ActionMailer::Base.deliveries.map(&:to).flatten).to include(user.email)
         end
+      end
+
+      context "when writing document succeeds" do
+        it_behaves_like "successful download"
+      end
+
+      context "when writing document succeeds (trucking version)" do
+        let(:category_identifier) { "trucking" }
+
+        it_behaves_like "successful download"
       end
 
       context "when writing document fails with exception" do

@@ -35,11 +35,11 @@ RSpec.describe ExcelDataServices::V4::Helpers::GeoDataPreparer do
 
     context "when the identifier is postal_city" do
       let(:identifier) { "postal_city" }
-      let(:raw_data) { { city: "7795 - Cape Town", province: "Western Cape", country_code: "ZA" }.stringify_keys }
+      let(:raw_data) { { postal_code: "7795", city: "Cape Town", country_code: "ZA" }.stringify_keys }
 
       it "returns the correct structure", :aggregate_failures do
         expect(results.keys).to match_array(%i[postal_code terms country_code])
-        expect(results[:terms]).to eq(["CAPE TOWN"])
+        expect(results[:terms]).to eq(["Cape Town"])
         expect(results[:postal_code]).to eq("7795")
       end
     end

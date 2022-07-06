@@ -5,10 +5,21 @@ require "rails_helper"
 RSpec.describe ExcelDataServices::V4::Validators::TypeAvailability do
   include_context "V4 setup"
 
-  let(:result) { described_class.state(state: state_arguments) }
-  let(:extracted_table) { result.frame }
+  let(:result) { described_class.state(state: state_arguments, target_frame: "default") }
+  let(:extracted_table) { result.frame("default") }
   let(:country) { FactoryBot.create(:legacy_country) }
   let(:query_method) { ExcelDataServices::V4::Extractors::QueryMethod::QUERY_METHOD_ENUM["distance"] }
+  let(:frames) { { "default" => frame, "zones" => Rover::DataFrame.new([zone_row]), "rates" => Rover::DataFrame.new([rate_row]) } }
+  let(:rate_row) { { "sheet_name" => "Sheet1", "zone" => "1.0", "organization_id" => organization.id } }
+  let(:zone_row) do
+    {
+      "country_id" => country.id,
+      "query_method" => query_method,
+      "zone" => "1.0",
+      "organization_id" => organization.id,
+      "sheet_name" => "Zones"
+    }
+  end
 
   describe ".state" do
     context "when found" do
@@ -19,9 +30,8 @@ RSpec.describe ExcelDataServices::V4::Validators::TypeAvailability do
           "truck_type" => "default",
           "load_type" => "cargo_item",
           "carriage" => "pre",
-          "country_code" => country.code,
-          "query_method" => query_method,
           "row" => 2,
+          "sheet_name" => "Sheet1",
           "organization_id" => organization.id
         }
       end
@@ -37,10 +47,18 @@ RSpec.describe ExcelDataServices::V4::Validators::TypeAvailability do
           "truck_type" => "default",
           "load_type" => "cargo_item",
           "carriage" => "on",
-          "country_code" => "FR",
-          "query_method" => query_method,
           "row" => 2,
-          "organization_id" => organization.id
+          "organization_id" => organization.id,
+          "sheet_name" => "Sheet1"
+        }
+      end
+      let(:zone_row) do
+        {
+          "country_id" => "FR",
+          "query_method" => query_method,
+          "zone" => "1.0",
+          "organization_id" => organization.id,
+          "sheet_name" => "Zones"
         }
       end
 

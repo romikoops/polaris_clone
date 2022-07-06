@@ -30,7 +30,7 @@ module Locations
       def geocoder_results
         @geocoder_results ||= Geocoder.search(
           data.values_at(:terms, :city, :province, :country_code).flatten.compact.join(" "),
-          params: {region: country_code.downcase}
+          params: { region: country_code }
         )
       end
 
@@ -39,11 +39,11 @@ module Locations
       end
 
       def coordinates
-        @coordinates ||= geometry.dig("location").symbolize_keys
+        @coordinates ||= geometry["location"].symbolize_keys
       end
 
       def geometry
-        @geometry ||= geocoder_results.first.geometry || {}
+        @geometry ||= geocoder_results.map(&:geometry).first || {}
       end
 
       def lat

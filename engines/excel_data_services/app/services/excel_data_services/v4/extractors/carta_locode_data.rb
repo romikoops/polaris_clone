@@ -8,11 +8,15 @@ module ExcelDataServices
 
         def perform
           state.tap do |tapped_state|
-            tapped_state.frame = frame.left_join(
-              base_frame.concat(Rover::DataFrame.new(frame_data)),
-              on: { "locode" => "locode" }
-            )
+            tapped_state.set_frame(value: extracted_data, key: target_frame)
           end
+        end
+
+        def extracted_data
+          @extracted_data ||= frame.left_join(
+            base_frame.concat(Rover::DataFrame.new(frame_data)),
+            on: { "locode" => "locode" }
+          )
         end
 
         def frame_data

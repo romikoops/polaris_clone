@@ -4,8 +4,10 @@ module DocumentService
   class TruckingWriter
     include AwsConfig
     include WritingTool
+    FEE_KEYS = ExcelDataServices::V4::Formatters::JsonFeeStructure::FeesHash::FEE_KEYS
+
     attr_reader :options, :organization, :hub, :target_load_type, :directory, :header_values,
-      :workbook, :trucking_pricings, :results_by_truck_type, :dir_fees,
+      :workbook, :results_by_truck_type, :dir_fees,
       :zone_sheet, :fees_sheet, :header_format, :pages, :zones, :group
 
     def initialize(options)
@@ -16,12 +18,6 @@ module DocumentService
       @target_load_type = options[:load_type]
       @directory = "tmp/#{filename}"
       @workbook = create_workbook(@directory)
-      @trucking_pricings ||= Trucking::Trucking.where(
-        hub_id: options[:hub_id],
-        group_id: options[:group_id],
-        organization_id: options[:organization_id],
-        load_type: options[:load_type]
-      ).current
       @results_by_truck_type = {}
       @dir_fees = {}
       @header_format = @workbook.add_format
@@ -52,19 +48,29 @@ module DocumentService
       )
     end
 
+    private
+
     def zone_frame
       @zone_frame ||= Rover::DataFrame.new(
-        trucking_data.to_a.group_by { |trucking| trucking["rates"] }.each_with_index.flat_map do |(rate, grouped_truckings), index|
+        trucking_data.to_a.group_by { |trucking| trucking[zone_frame_grouping_key] }.each_with_index.flat_map do |(rate, grouped_truckings), index|
           zone_rows(grouped_truckings: grouped_truckings, index: index, rate: rate)
         end
       )
+    end
+
+    def zone_frame_grouping_key
+      if zones_and_secondaries_defined?
+        "zone"
+      else
+        "rates"
+      end
     end
 
     def zone_rows(grouped_truckings:, index:, rate:)
       secondary_string_and_countries(truckings: grouped_truckings).map do |secondary_string_and_country|
         {
           "rates" => rate,
-          "zone" => index,
+          "zone" => index + 1,
           "primary" => primary_string(truckings: grouped_truckings)
         }.merge(secondary_string_and_country)
       end
@@ -133,6 +139,15 @@ module DocumentService
       consecutive_arrays(locations: truckings)
     end
 
+    def trucking_pricings
+      @trucking_pricings ||= Trucking::Trucking.where(
+        hub_id: options[:hub_id],
+        group_id: options[:group_id],
+        organization_id: options[:organization_id],
+        load_type: options[:load_type]
+      ).current
+    end
+
     def trucking_data
       @trucking_data ||= Rover::DataFrame.new(
         trucking_pricings
@@ -151,8 +166,11 @@ module DocumentService
           rates,
           fees,
           identifier_modifier,
+          zone,
+          secondary,
           trucking_locations.id as location_id,
           trucking_locations.data as location_data,
+          trucking_locations.identifier as identifier,
           countries.code as country_code,
           LOWER(validity)::date as effective_date,
           UPPER(validity)::date as expiration_date
@@ -163,7 +181,7 @@ module DocumentService
     def data_frame
       @data_frame ||= trucking_data
         .left_join(direction_frame, on: { "carriage" => "carriage" })
-        .left_join(zone_frame, on: { "rates" => "rates" })
+        .left_join(zone_frame, on: { zone_frame_grouping_key => zone_frame_grouping_key })
     end
 
     def add_sheet(sheet_name)
@@ -198,21 +216,70 @@ module DocumentService
       ))
     end
 
+    def write_zone_headers_to_sheet
+      ["ZONE", *identifiers_to_write, "COUNTRY_CODE"].each_with_index { |header_value, index| zone_sheet.write(0, index, header_value, header_format) }
+    end
+
     def write_zone_to_sheet
-      header_values = ["ZONE", *identifiers_to_write, "COUNTRY_CODE"]
-      header_values.each_with_index { |header_value, index| zone_sheet.write(0, index, header_value, header_format) }
+      write_zone_headers_to_sheet
+
+      if zones_and_secondaries_defined?
+        write_model_based_zones_to_sheet
+      else
+        write_zone_from_primary_and_secondary_to_sheet
+      end
+    end
+
+    def write_zone_from_primary_and_secondary_to_sheet
       zone_frame[%w[primary secondary country_code zone]].sort_by! { |r| r["zone"] }.to_a.each.with_index do |zone_row, index|
         write_zone_data(zone_row: zone_row, sheet_row: index + 1)
       end
     end
 
+    def write_model_based_zones_to_sheet
+      case identifier
+      when "postal_city"
+        write_postal_city_based_zones_to_sheet
+      else
+        write_regular_zones_to_sheet
+      end
+    end
+
+    def write_regular_zones_to_sheet
+      row = 1
+      trucking_pricings.group_by(&:zone).each.with_index do |(zone, truckings)|
+        truckings_grouped_by_secondary = truckings.group_by(&:secondary)
+        secondaries = truckings_grouped_by_secondary.reject { |secondary, secondary_truckings| secondary.blank? || secondary_truckings.length == 1 }.keys
+        truckings_for_primary_rows = truckings_grouped_by_secondary.select { |secondary, secondary_truckings| secondary.blank? && secondary_truckings.length == 1 }.values.flatten
+        base_row = { "zone" => zone, "primary" => nil, "secondary" => nil, "country_code" => truckings.first.location.country.code }
+        truckings_for_primary_rows.each do |trucking|
+          write_zone_data(zone_row: base_row.merge("primary" => trucking.target), sheet_row: row)
+          row += 1
+        end
+        secondaries.each do |secondary|
+          write_zone_data(zone_row: base_row.merge("secondary" => secondary), sheet_row: row)
+          row += 1
+        end
+      end
+    end
+
+    def write_postal_city_based_zones_to_sheet
+      row = 1
+      trucking_pricings.group_by(&:zone).each.with_index do |(zone, truckings)|
+        base_row = { "zone" => zone, "primary" => nil, "secondary" => nil, "country_code" => truckings.first.location.country.code }
+        truckings.each do |trucking|
+          write_zone_data(zone_row: base_row.merge("primary" => trucking.target, "secondary" => trucking.secondary), sheet_row: row)
+          row += 1
+        end
+      end
+    end
+
     def identifiers_to_write
-      if identifier == "location" && [nil, "f"].exclude?(identifier_modifier)
-        %w[POSTAL_CODE RANGE]
-      elsif identifier == "location_id" && [nil, "f"].include?(identifier_modifier)
+      case identifier
+      when "city"
         %w[CITY PROVINCE]
-      elsif identifier == "distance" && [nil, "f"].exclude?(identifier_modifier)
-        ["#{identifier}_#{identifier_modifier}".upcase, "RANGE"]
+      when "postal_city"
+        %w[POSTAL_CODE CITY]
       else
         [identifier.upcase, "RANGE"]
       end
@@ -226,8 +293,8 @@ module DocumentService
     end
 
     def fee_header_values
-      %w[FEE MOT FEE_CODE TRUCK_TYPE DIRECTION CURRENCY RATE_BASIS TON CBM KG
-        ITEM SHIPMENT BILL CONTAINER MINIMUM WM PERCENTAGE]
+      %w[FEE MOT FEE_CODE CARRIER SERVICE ZONE CARGO_CLASS TRUCK_TYPE DIRECTION CURRENCY RATE_BASIS TON CBM KG
+        ITEM SHIPMENT BILL CONTAINER MINIMUM WM PERCENTAGE RANGE_MIN RANGE_MAX]
     end
 
     def metadata_headers
@@ -260,44 +327,58 @@ module DocumentService
       fee_header_values.each_with_index do |header_value, index|
         fees_sheet.write(0, index, header_value, header_format)
       end
-      data_frame[%w[direction fees truck_type]].to_a.uniq.each do |fee_classification|
+      data_frame[%w[direction fees truck_type carrier service zone cargo_class]].to_a.uniq.each do |fee_classification|
         JSON.parse(fee_classification["fees"]).each do |key, fee|
-          fees_sheet.write(row, 0, fee["fee"] || fee["name"])
-          fees_sheet.write(row, 1, hub.hub_type)
-          fees_sheet.write(row, 2, key)
-          fees_sheet.write(row, 3, fee_classification["truck_type"])
-          fees_sheet.write(row, 4, fee_classification["direction"])
-          fees_sheet.write(row, 5, fee["currency"])
-          fees_sheet.write(row, 6, fee["rate_basis"])
-          case fee["rate_basis"]
-          when "PER_CONTAINER"
-            fees_sheet.write(row, 13, fee["value"])
-          when "PER_ITEM"
-            fees_sheet.write(row, 10, fee["value"])
-          when "PER_BILL"
-            fees_sheet.write(row, 12, fee["value"])
-          when "PER_SHIPMENT"
-            fees_sheet.write(row, 11, fee["value"])
-          when "PER_CBM_TON"
-            fees_sheet.write(row, 7, fee["ton"])
-            fees_sheet.write(row, 8, fee["cbm"])
-            fees_sheet.write(row, 14, fee["min"])
-          when "PER_CBM_KG"
-            fees_sheet.write(row, 9, fee["kg"])
-            fees_sheet.write(row, 8, fee["cbm"])
-            fees_sheet.write(row, 14, fee["min"])
-          when "PER_WM"
-            fees_sheet.write(row, 15, fee["value"])
-          when "PERCENTAGE"
-            fees_sheet.write(row, 16, fee["percentage"])
+          (fee["range"].presence || [fee]).each do |range|
+            fees_sheet.write(row, 0, fee["fee"] || fee["name"])
+            fees_sheet.write(row, 1, hub.hub_type)
+            fees_sheet.write(row, 2, key)
+            fees_sheet.write(row, 3, fee_classification["carrier"])
+            fees_sheet.write(row, 4, fee_classification["service"])
+            fees_sheet.write(row, 5, fee_classification["zone"])
+            fees_sheet.write(row, 6, fee_classification["cargo_class"])
+
+            fees_sheet.write(row, 7, fee_classification["truck_type"])
+            fees_sheet.write(row, 8, fee_classification["direction"])
+            fees_sheet.write(row, 9, fee["currency"])
+            fees_sheet.write(row, 10, fee["rate_basis"])
+
+            range_or_fee = (range.presence || fee)
+            min_key = range_or_fee.keys.find { |hash_key| hash_key.starts_with?("min_") }
+            max_key = range_or_fee.keys.find { |hash_key| hash_key.starts_with?("max_") }
+            fee_value = range_or_fee.values_at(*FEE_KEYS).find(&:present?).to_d
+
+            case fee["rate_basis"]
+            when /CONTAINER/
+              fees_sheet.write(row, 17, fee_value)
+            when /ITEM/
+              fees_sheet.write(row, 14, fee_value)
+            when /BILL/
+              fees_sheet.write(row, 16, fee_value)
+            when /SHIPMENT/
+              fees_sheet.write(row, 15, fee_value)
+            when /CBM_TON/
+              fees_sheet.write(row, 11, range_or_fee["ton"])
+              fees_sheet.write(row, 12, range_or_fee["cbm"])
+            when /CBM_KG/
+              fees_sheet.write(row, 13, range_or_fee["kg"])
+              fees_sheet.write(row, 12, range_or_fee["cbm"])
+            when /WM/
+              fees_sheet.write(row, 19, fee_value)
+            when "PERCENTAGE"
+              fees_sheet.write(row, 20, range_or_fee["percentage"])
+            end
+            fees_sheet.write(row, 18, range_or_fee["min"])
+            fees_sheet.write(row, 21, range_or_fee[min_key])
+            fees_sheet.write(row, 22, range_or_fee[max_key])
+            row += 1
           end
-          row += 1
         end
       end
     end
 
     def write_rates_to_sheet
-      data_frame[%w[truck_type cargo_class load_type carriage]].to_a.uniq.each_with_index do |page, index|
+      data_frame[%w[truck_type cargo_class load_type carriage service carrier direction]].to_a.uniq.each_with_index do |page, index|
         rates_sheet = workbook.add_worksheet(index.to_s)
         rates_sheet.write(3, 0, "ZONE")
         rates_sheet.write(3, 1, "MIN")
@@ -326,7 +407,8 @@ module DocumentService
               next unless rate
 
               rates_sheet.write(rate_row, 1, rate["min_value"] ? rate["min_value"].round(2) : 0)
-              rates_sheet.write(rate_row, col, rate.dig("rate", "value").round(2))
+              rate_value = (rate.dig("rate", "value") || rate.dig("rate", "rate"))
+              rates_sheet.write(rate_row, col, rate_value.to_d.round(2)) if rate_value.present?
               col += 1
             end
           end
@@ -347,12 +429,7 @@ module DocumentService
     end
 
     def write_metadata(sheet:, page:)
-      metadata_row = metadata_frame[
-        metadata_frame["truck_type"] == page["truck_type"] &&
-          metadata_frame["cargo_class"] == page["cargo_class"] &&
-          metadata_frame["load_type"] == page["load_type"] &&
-          metadata_frame["carriage"] == page["carriage"]
-      ].to_a.first
+      metadata_row = metadata_frame.filter(page.slice(*%w[truck_type cargo_class load_type carriage service carrier direction])).to_a.first
       metadata_headers.each_with_index do |key, metadata_index|
         sheet.write(0, metadata_index, key.upcase)
         sheet.write(1, metadata_index, metadata_row[key])
@@ -367,7 +444,8 @@ module DocumentService
         numeric = array.all? { |location| location["location_data"].tr("^0-9", "").present? }
         next locations if alpha_and_country[:alpha].present? && numeric.blank?
 
-        num_array = array.map do |location|
+        num_array = array.sort_by { |location| location["location_data"].to_d }
+          .map do |location|
           {
             data: location["location_data"].gsub(alpha_and_country[:alpha], ""),
             country_code: location["country_code"]
@@ -381,14 +459,20 @@ module DocumentService
       end
     end
 
-    private
-
     def identifier
-      @identifier ||= Trucking::Location.find(trucking_data["location_id"].to_a.first).query
+      @identifier ||= trucking_location.identifier
+    end
+
+    def trucking_location
+      @trucking_location ||= trucking_pricings.first.location
     end
 
     def identifier_modifier
       @identifier_modifier ||= (trucking_data["identifier_modifier"].to_a.first unless trucking_data["identifier_modifier"].to_a.first == "f")
+    end
+
+    def zones_and_secondaries_defined?
+      @zones_and_secondaries_defined ||= trucking_pricings.where("zone IS NULL AND secondary IS NULL").empty?
     end
   end
 end

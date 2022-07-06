@@ -4,16 +4,15 @@ module ExcelDataServices
   module V4
     module Validators
       class Base
-        attr_reader :state
+        attr_reader :state, :target_frame
 
-        delegate :frame, to: :state
-
-        def self.state(state:)
-          new(state: state).perform
+        def self.state(state:, target_frame: "default")
+          new(state: state, target_frame: target_frame).perform
         end
 
-        def initialize(state:)
+        def initialize(state:, target_frame:)
           @state = state
+          @target_frame = target_frame
         end
 
         def perform
@@ -52,7 +51,7 @@ module ExcelDataServices
         end
 
         def row_key
-          "#{key_base}_row"
+          "row"
         end
 
         def error_reason(row:)
@@ -64,7 +63,11 @@ module ExcelDataServices
         end
 
         def filtered_frame
-          frame
+          @filtered_frame ||= extracted.frame(target_frame)
+        end
+
+        def frame
+          @frame ||= state.frame(target_frame)
         end
       end
     end

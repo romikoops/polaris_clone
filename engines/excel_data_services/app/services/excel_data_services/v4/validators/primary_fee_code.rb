@@ -5,7 +5,7 @@ module ExcelDataServices
     module Validators
       class PrimaryFeeCode < ExcelDataServices::V4::Validators::Base
         def extracted
-          @extracted ||= ExcelDataServices::V4::Extractors::PrimaryFeeCode.state(state: state)
+          @extracted ||= ExcelDataServices::V4::Extractors::PrimaryFeeCode.new(state: state, target_frame: target_frame).perform
         end
 
         def required_key

@@ -17,7 +17,7 @@ module ExcelDataServices
         end
 
         def frame_types
-          { "carrier_code" => :object, "join_value" => :object }
+          { "carrier_code" => :object, "join_value" => :object, "organization_id" => :object }
         end
       end
     end

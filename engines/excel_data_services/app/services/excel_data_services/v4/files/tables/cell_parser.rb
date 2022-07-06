@@ -9,7 +9,7 @@ module ExcelDataServices
 
           attr_reader :container, :input, :row, :column
 
-          delegate :blank?, to: :input
+          delegate :blank?, to: :value
           delegate :header, :sheet_name, :fallback, to: :container
 
           def initialize(container:, input:, row:, column:)

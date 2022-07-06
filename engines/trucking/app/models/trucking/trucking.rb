@@ -59,8 +59,11 @@ end
 #  metadata            :jsonb
 #  modifier            :string
 #  rates               :jsonb
+#  secondary           :string
+#  target              :string
 #  truck_type          :string
 #  validity            :daterange
+#  zone                :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  courier_id          :uuid

@@ -7,7 +7,7 @@ module ExcelDataServices
         QUERY_TYPE_ENUM = Trucking::Location.queries
 
         def extracted
-          @extracted ||= postal_code_rows.concat(location_rows).concat(distance_rows).concat(error_rows)
+          @extracted ||= postal_code_rows.concat(location_rows).concat(distance_rows).concat(postal_city_rows).concat(error_rows)
         end
 
         def postal_code_rows
@@ -17,23 +17,29 @@ module ExcelDataServices
         end
 
         def location_rows
-          @location_rows ||= frame[frame["identifier"].in?(%w[city locode])].tap do |location_frame|
+          @location_rows ||= zone_frame[zone_frame["identifier"].in?(%w[city locode])].tap do |location_frame|
             location_frame["query_type"] = QUERY_TYPE_ENUM["location"]
           end
         end
 
         def distance_rows
-          @distance_rows ||= frame[frame["identifier"] == "distance"].tap do |distance_frame|
+          @distance_rows ||= zone_frame.filter("identifier" => "distance").tap do |distance_frame|
             distance_frame["query_type"] = QUERY_TYPE_ENUM["distance"]
           end
         end
 
+        def postal_city_rows
+          @postal_city_rows ||= zone_frame.filter("identifier" => "postal_city").tap do |postal_city_frame|
+            postal_city_frame["query_type"] = QUERY_TYPE_ENUM["location"]
+          end
+        end
+
         def postal_based_rows
-          @postal_based_rows ||= frame[frame["identifier"] == "postal_code"]
+          @postal_based_rows ||= zone_frame.filter("identifier" => "postal_code")
         end
 
         def error_rows
-          @error_rows ||= frame[!frame["identifier"].in?(%w[city locode postal_code distance])]
+          @error_rows ||= zone_frame[!zone_frame["identifier"].in?(%w[city locode postal_code distance postal_city])]
         end
 
         def location_postal_countries
@@ -71,7 +77,11 @@ module ExcelDataServices
         end
 
         def country_codes
-          @country_codes ||= frame["country_code"].to_a.uniq
+          @country_codes ||= zone_frame["country_code"].to_a.uniq
+        end
+
+        def zone_frame
+          @zone_frame ||= state.frame("zones")
         end
 
         def base_frame

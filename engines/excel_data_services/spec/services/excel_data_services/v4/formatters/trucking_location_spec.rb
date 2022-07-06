@@ -10,12 +10,23 @@ RSpec.describe ExcelDataServices::V4::Formatters::TruckingLocation do
 
   describe "#insertable_data" do
     context "when found" do
-      let(:rows) { FactoryBot.build(:excel_data_services_section_data, :trucking, organization: organization) }
+      let(:zones_rows) do
+        [{
+          "trucking_location_name" => "20038",
+          "country_id" => 709,
+          "identifier" => "postal_code",
+          "locations_location_id" => "f8fde297-b404-4f8c-9d17-7f0161948aea",
+          "query_type" => 1,
+          "upsert_id" => "9f7c5890-050c-4349-af32-b63c46a7ab35"
+        }]
+      end
       let(:expected_data) do
         { "country_id" => 709,
           "location_id" => "f8fde297-b404-4f8c-9d17-7f0161948aea",
           "data" => "20038",
-          "query" => 1 }
+          "identifier" => "postal_code",
+          "query" => 1,
+          "upsert_id" => "9f7c5890-050c-4349-af32-b63c46a7ab35" }
       end
 
       it "returns the frame with the insertable_data" do

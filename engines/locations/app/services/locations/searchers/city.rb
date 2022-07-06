@@ -24,9 +24,11 @@ module Locations
       end
 
       def secondary_name
-        @secondary_name ||= Locations::Finders::Location.data(
-          data: { country_code: country_code, terms: [upper_term] }
-        )
+        @secondary_name ||= if upper_term
+          Locations::Finders::Location.data(
+            data: { country_code: country_code, terms: [upper_term] }
+          )
+        end
       end
 
       def fallback_name
