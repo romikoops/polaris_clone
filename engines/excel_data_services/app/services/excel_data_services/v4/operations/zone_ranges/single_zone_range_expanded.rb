@@ -42,7 +42,7 @@ module ExcelDataServices
           end
 
           def postal_zone_range
-            @postal_zone_range ||= Rover::DataFrame.new(postal_codes.map { |postal_code| { identifier => sanitized_postal_code(postal_code: postal_code), "country_code" => country_code } }) if postal_codes.present?
+            @postal_zone_range ||= Rover::DataFrame.new(postal_codes.map { |postal_code| { identifier => sanitized_postal_code(postal_code: postal_code), "country_code" => country_code } }).uniq if postal_codes.present?
           end
 
           def postal_codes

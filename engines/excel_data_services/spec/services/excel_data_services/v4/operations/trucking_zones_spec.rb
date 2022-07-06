@@ -119,9 +119,13 @@ RSpec.describe ExcelDataServices::V4::Operations::TruckingZones do
       end
 
       before do
+        netherlands = FactoryBot.create(:legacy_country, code: "NL")
         FactoryBot.create(:trucking_postal_code,
-          country: FactoryBot.create(:legacy_country, code: "NL"),
+          country: netherlands,
           postal_code: "01067 JX")
+        FactoryBot.create(:trucking_postal_code,
+          country: netherlands,
+          postal_code: "01067 PJ")
       end
 
       it "returns only the valid postal codes within that range, ignoring trailing non numerics" do
