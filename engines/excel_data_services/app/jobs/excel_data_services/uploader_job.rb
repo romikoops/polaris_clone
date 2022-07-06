@@ -30,7 +30,7 @@ module ExcelDataServices
         options: options
       ).perform
       update_status!(upload: upload, status: result[:errors].empty? ? "done" : "failed")
-      email_wrapper.enqueue_email(result: result)
+      email_wrapper.enqueue_email(result: result, bcc: result[:exception] ? ["ops@itsmycargo.com"] : [])
       # rubocop:disable Style/RescueStandardError
     rescue => e
       # rubocop:enable Style/RescueStandardError

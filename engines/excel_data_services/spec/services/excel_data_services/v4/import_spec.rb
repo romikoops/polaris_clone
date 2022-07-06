@@ -51,6 +51,7 @@ RSpec.describe ExcelDataServices::V4::Import do
 
       it "catches the error and returns a default set of Stats", :aggregate_failures do
         expect(stats.failed).to eq(1)
+        expect(stats.exception).to be_truthy
         expect(stats.errors.pluck(:reason)).to include("We were not able to insert your Charge categories correctly.")
       end
     end

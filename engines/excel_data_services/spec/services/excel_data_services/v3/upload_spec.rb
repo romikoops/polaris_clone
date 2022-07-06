@@ -33,7 +33,8 @@ RSpec.describe ExcelDataServices::V3::Upload do
     let(:email_formatted_stats) do
       {
         pricings: { created: 1, failed: 0 },
-        errors: []
+        errors: [],
+        exception: false
       }
     end
 

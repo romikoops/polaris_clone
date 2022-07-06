@@ -24,7 +24,8 @@ module ExcelDataServices
           type: type,
           created: update_result.ids.count + create_result.ids.count,
           failed: update_result.failed_instances.count + create_result.failed_instances.count,
-          errors: import_errors
+          errors: import_errors,
+          exception: false
         )
       rescue ActiveRecord::StatementInvalid => e
         Sentry.capture_exception(e)
@@ -32,6 +33,7 @@ module ExcelDataServices
           type: type,
           created: 0,
           failed: data.length,
+          exception: true,
           errors: [
             {
               sheet_name: type,

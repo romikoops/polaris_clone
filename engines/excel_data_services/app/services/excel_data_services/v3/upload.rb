@@ -17,7 +17,7 @@ module ExcelDataServices
       end
 
       def perform
-        stats.group_by(&:type).inject({ errors: errors }) do |result, (type, stats)|
+        stats.group_by(&:type).inject({ errors: errors, exception: exception_raised? }) do |result, (type, stats)|
           result.merge(type.to_sym => { created: stats.sum(&:created), failed: stats.sum(&:failed) })
         end
       end
@@ -36,6 +36,10 @@ module ExcelDataServices
 
       def result_state
         @result_state ||= sheet.perform
+      end
+
+      def exception_raised?
+        stats.any?(&:exception)
       end
 
       delegate :errors, :stats, to: :result_state
