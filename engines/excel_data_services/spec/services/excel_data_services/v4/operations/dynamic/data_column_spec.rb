@@ -39,6 +39,14 @@ RSpec.describe ExcelDataServices::V4::Operations::Dynamic::DataColumn do
           expect(data_column.fee_code).to eq(described_class::PRIMARY_CODE_PLACEHOLDER)
         end
       end
+
+      context "when the dynamic key includes underscores" do
+        let(:header) { "Dynamic(Sheet_1-11):curr_month/baf" }
+
+        it "returns the correct fee_code from the header" do
+          expect(data_column.fee_code).to eq("baf")
+        end
+      end
     end
 
     describe "#category" do

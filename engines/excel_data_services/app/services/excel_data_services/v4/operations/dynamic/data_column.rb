@@ -98,7 +98,7 @@ module ExcelDataServices
           end
 
           def header_values
-            header.gsub(/\ADynamic\([a-zA-Z0-9-)]{1,}:/, "").split("/")
+            header.gsub(/\ADynamic\(\S{1,}\):/, "").split("/")
           end
 
           def values_to_extract
