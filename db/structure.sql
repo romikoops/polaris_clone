@@ -1973,7 +1973,7 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 --
 
 CREATE TABLE public.journey_addendums (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     shipment_request_id uuid,
     label_name character varying NOT NULL,
     value character varying NOT NULL,
@@ -4743,8 +4743,7 @@ CREATE TABLE public.tenants_users (
 --
 
 CREATE TABLE public.tracker_interactions (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    organization_id uuid,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -4756,7 +4755,7 @@ CREATE TABLE public.tracker_interactions (
 --
 
 CREATE TABLE public.tracker_users_interactions (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     interaction_id uuid,
     client_id uuid,
     created_at timestamp without time zone NOT NULL,
@@ -4889,7 +4888,7 @@ CREATE TABLE public.trucking_locations (
 --
 
 CREATE TABLE public.trucking_postal_codes (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     postal_code public.citext NOT NULL,
     country_id bigint NOT NULL,
     point public.geometry(Point,4326) NOT NULL,
@@ -7966,13 +7965,6 @@ CREATE INDEX index_hubs_on_tenant_id ON public.hubs USING btree (tenant_id);
 
 
 --
--- Name: index_interactions_on_organization_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_interactions_on_organization_id ON public.tracker_interactions USING btree (organization_id, name);
-
-
---
 -- Name: index_itineraries_on_destination_hub_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10213,10 +10205,10 @@ CREATE INDEX index_tenants_users_on_unlock_token ON public.tenants_users USING b
 
 
 --
--- Name: index_tracker_interactions_on_organization_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_tracker_interactions_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_tracker_interactions_on_organization_id ON public.tracker_interactions USING btree (organization_id);
+CREATE UNIQUE INDEX index_tracker_interactions_on_name ON public.tracker_interactions USING btree (name);
 
 
 --
@@ -11225,14 +11217,6 @@ ALTER TABLE ONLY public.distributions_actions
 
 ALTER TABLE ONLY public.pricings_details
     ADD CONSTRAINT fk_rails_37ead9b677 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
-
-
---
--- Name: tracker_interactions fk_rails_3b4262df17; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.tracker_interactions
-    ADD CONSTRAINT fk_rails_3b4262df17 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
 --
@@ -12999,6 +12983,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220627171157'),
 ('20220629172559'),
 ('20220629174735'),
-('20220703160347');
+('20220703160347'),
+('20220707092136');
 
 

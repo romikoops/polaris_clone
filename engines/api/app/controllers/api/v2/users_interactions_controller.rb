@@ -22,7 +22,7 @@ module Api
       end
 
       def interaction
-        @interaction ||= Tracker::Interaction.find_by(name: create_params[:interaction_name], organization_id: current_organization.id)
+        @interaction ||= Tracker::Interaction.find_by(name: create_params[:interaction_name])
       end
     end
   end

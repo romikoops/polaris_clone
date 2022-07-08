@@ -8,8 +8,7 @@ module Tracker
 
     default_scope do
       joins(:interaction)
-        .select("tracker_users_interactions.*, tracker_interactions.name, tracker_interactions.organization_id")
-        .where(tracker_interactions: { organization_id: ::Organizations.current_id })
+        .select("tracker_users_interactions.*, tracker_interactions.name")
     end
   end
 end

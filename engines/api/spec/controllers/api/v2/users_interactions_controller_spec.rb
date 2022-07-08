@@ -7,13 +7,15 @@ module Api
     routes { Engine.routes }
     before do
       request.headers["Authorization"] = "Bearer #{access_token.token}"
+      FactoryBot.create(:organizations_domain, organization: organization, domain: "test.itsmycargo.com", default: false)
+      request.headers["Referer"] = "http://test.itsmycargo.com"
       tracker_interaction
     end
 
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:users_client) { FactoryBot.create(:users_client, organization_id: organization.id) }
     let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: users_client.id, scopes: "public") }
-    let(:tracker_interaction) { Tracker::Interaction.create(name: "tutorial", organization: organization) }
+    let(:tracker_interaction) { Tracker::Interaction.create(name: "tutorial") }
 
     describe "#index" do
       let(:params) { { organization_id: organization.id } }

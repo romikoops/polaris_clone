@@ -6,7 +6,7 @@ module Tracker
   RSpec.describe UsersInteraction, type: :model do
     let(:organization) { FactoryBot.create(:organizations_organization) }
     let(:params) { { client_id: user_client.id, interaction_id: tracker_interaction.id } }
-    let(:tracker_interaction) { Tracker::Interaction.create(organization_id: organization.id, name: "profiles") }
+    let(:tracker_interaction) { Tracker::Interaction.create(name: "profiles") }
 
     let(:user_client) { FactoryBot.create(:users_client, organization_id: organization.id) }
 
@@ -18,16 +18,10 @@ module Tracker
       end
     end
 
-    context "when interactions for the other organizations exist" do
-      let(:tracker_interaction_tutorial) { Tracker::Interaction.create!(organization_id: FactoryBot.create(:organizations_organization).id, name: "tutorials") }
-
-      before do
-        described_class.create(params)
-        described_class.create({ client_id: user_client.id, interaction_id: tracker_interaction_tutorial.id })
-      end
-
+    context "when trying to create interactions with the same name" do
       it "returns the interactions for the current organization" do
-        expect(described_class.pluck(:name)).not_to include("tutorial")
+        tracker_interaction
+        expect { Tracker::Interaction.create!(name: "profiles") }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

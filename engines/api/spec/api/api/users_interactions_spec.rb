@@ -8,13 +8,15 @@ RSpec.describe "UsersInteractions", type: :request, swagger: true do
   let(:organization_id) { organization.id }
   let(:user_client) { FactoryBot.create(:users_client, organization_id: organization.id) }
   let(:access_token) { FactoryBot.create(:access_token, resource_owner_id: user_client.id, scopes: "public") }
-  let(:tracker_interaction) { Tracker::Interaction.create(name: "tutorial", organization: organization) }
+  let(:tracker_interaction) { Tracker::Interaction.create(name: "tutorial") }
+  let(:Referer) { "http://siren-sir-1337.itsmycargo.dev" }
 
   before do
+    FactoryBot.create(:organizations_domain, organization: organization, domain: "siren-%.itsmycargo.dev", default: false)
     Tracker::UsersInteraction.create(interaction: tracker_interaction, client: user_client)
   end
 
-  path "/v2/organizations/{organization_id}/users_interactions" do
+  path "/v2/users_interactions" do
     post "creates users interaction" do
       tags "UsersInteraction (V2)"
       description "Create a new Users Interaction"
@@ -24,7 +26,7 @@ RSpec.describe "UsersInteractions", type: :request, swagger: true do
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :Referer, in: :header, type: :string, description: "HTTP Referrer from which the host/domain information will be extracted"
       parameter name: :users_interaction_params, in: :body, schema: {
         type: :object,
         properties: {
@@ -63,7 +65,7 @@ RSpec.describe "UsersInteractions", type: :request, swagger: true do
       consumes "application/json"
       produces "application/json"
 
-      parameter name: :organization_id, in: :path, type: :string, description: "Organization ID"
+      parameter name: :Referer, in: :header, type: :string, description: "HTTP Referrer from which the host/domain information will be extracted"
 
       response "200", "successful operation" do
         schema type: :object,
