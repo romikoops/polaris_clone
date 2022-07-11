@@ -93,7 +93,7 @@ RSpec.describe ExcelDataServices::V4::Operations::SacoImport do
     end
 
     it "converts secondary info related to pre-carriage cbm_ratio" do
-      expect(pre_carriage_rows["wm_rate"].to_a).to eq([333.0])
+      expect(pre_carriage_rows["cbm_ratio"].to_a).to eq([333.0])
     end
   end
 end

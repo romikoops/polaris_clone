@@ -44,7 +44,7 @@ module ExcelDataServices
             pre_car_frame["rate_basis"] = pre_car_frame.delete("pre_carriage_basis")
             pre_car_frame["rate"] = pre_car_frame.delete("pre_carriage_rate")
             pre_car_frame["minimum"] = pre_car_frame.delete("pre_carriage_minimum")
-            pre_car_frame["wm_rate"] = pre_car_frame[ratio_info_key].map { |row| parse_ratio_info(string: row) }
+            pre_car_frame["cbm_ratio"] = pre_car_frame[ratio_info_key].map { |row| parse_ratio_info(string: row) }
           end
         end
 
@@ -52,7 +52,7 @@ module ExcelDataServices
           @main_frame ||= valid_frame[main_keys].tap do |main_fra|
             main_fra["fee_code"] = PRIMARY_FEE_CODE
             main_fra["rate_basis"] = main_fra.delete(rate_basis_key)
-            main_fra["wm_rate"] = main_fra[ratio_info_key].map { |row| parse_ratio_info(string: row) }
+            main_fra["cbm_ratio"] = main_fra[ratio_info_key].map { |row| parse_ratio_info(string: row) }
           end
         end
 

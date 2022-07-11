@@ -3300,7 +3300,9 @@ CREATE TABLE public.pricings_fees (
     metadata jsonb DEFAULT '{}'::jsonb,
     organization_id uuid,
     deleted_at timestamp without time zone,
-    upsert_id uuid
+    upsert_id uuid,
+    cbm_ratio numeric(10,2),
+    vm_ratio numeric(10,2)
 );
 
 
@@ -12980,6 +12982,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220622083427'),
 ('20220622105627'),
 ('20220624125413'),
+('20220626154743'),
 ('20220627171157'),
 ('20220629172559'),
 ('20220629174735'),

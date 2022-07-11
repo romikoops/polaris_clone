@@ -6,7 +6,8 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
   let(:organization) { FactoryBot.create(:organizations_organization) }
   let(:result_frame) { described_class.new(record: local_charge).perform }
   let(:expected_base) do
-    { "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[local_charge.mode_of_transport],
+    { "cbm_ratio" => 333.0,
+      "vm_ratio" => 1.0,
       "tenant_vehicle_id" => local_charge.tenant_vehicle_id,
       "cargo_class" => local_charge.load_type,
       "origin_hub_id" => local_charge.hub_id,
@@ -17,7 +18,6 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
       "margin_type" => "export_margin",
       "effective_date" => local_charge.effective_date.to_date,
       "expiration_date" => local_charge.expiration_date.to_date,
-      "vm_ratio" => 1,
       "rate_basis" => "PER_SHIPMENT",
       "charge_category_id" => charge_category.id,
       "code" => charge_category.code,
@@ -61,7 +61,11 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
     end
 
     it "returns the LocalCharge fee flattened into a data frame" do
-      expect(result_frame.to_a).to eq([expected_base])
+      expect(result_frame.first_row.except("cbm_ratio")).to eq(expected_base.except("cbm_ratio"))
+    end
+
+    it "returns defaults the cbm_ratio for older records" do
+      expect(result_frame["cbm_ratio"].to_a).to eq([1000.0])
     end
   end
 
@@ -78,7 +82,9 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
               { "cbm" => 8, "max" => 40, "min" => 6, "currency" => "EUR" }
             ],
             "currency" => "EUR",
-            "rate_basis" => "PER_UNIT_TON_CBM_RANGE" }
+            "rate_basis" => "PER_UNIT_TON_CBM_RANGE",
+            "cbm_ratio" => 333.0,
+            "vm_ratio" => 1.0 }
       }
     end
     let(:code) { "qdf" }
@@ -109,7 +115,9 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
               { "min" => 6, "max" => 40, "kg" => 3, "currency" => "EUR" }
             ],
             "currency" => "EUR",
-            "rate_basis" => "PER_KG_RANGE" },
+            "rate_basis" => "PER_KG_RANGE",
+            "cbm_ratio" => 333.0,
+            "vm_ratio" => 1.0 },
         charge_category.code.upcase => {
           "key" => "THC",
           "max" => 100,
@@ -118,7 +126,9 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
           "value" => 17.5,
           "base" => 100,
           "currency" => "EUR",
-          "rate_basis" => "PER_X_KG"
+          "rate_basis" => "PER_X_KG",
+          "cbm_ratio" => 333.0,
+          "vm_ratio" => 1.0
         }
       }
     end

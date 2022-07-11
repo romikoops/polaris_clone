@@ -20,7 +20,7 @@ module ExcelDataServices
         ].freeze
 
         def insertable_data
-          frame[GROUPING_KEYS].to_a.uniq.map { |grouping| FormattedLocalCharge.new(frame: frame.filter(grouping), state: state).perform }
+          frame.group_by(GROUPING_KEYS).map { |grouping| FormattedLocalCharge.new(frame: grouping, state: state).perform }
         end
 
         class FormattedLocalCharge
@@ -51,8 +51,7 @@ module ExcelDataServices
               "organization_id",
               "direction",
               "dangerous",
-              "internal",
-              "cbm_ratio"
+              "internal"
             )
           end
 

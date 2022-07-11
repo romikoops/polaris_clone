@@ -57,7 +57,7 @@
   </tr>
 <%- end %>
 
-<%- @result.except("has_errors", "errors", "warnings").each do |type, counts| %>
+<%- @result.except("has_errors", "errors", "warnings", "exception").each do |type, counts| %>
 <tr>
     <td class="content-block aligncenter">
       <h4><%= type.split("/").last.titleize %></h4>

@@ -58,9 +58,7 @@ module ExcelDataServices
           load_type: load_type,
           transit_time: transit_time,
           group_name: group_name,
-          transshipment: transshipment,
-          wm_ratio: pricing.wm_rate,
-          vm_ratio: pricing.vm_rate
+          transshipment: transshipment
         )
       end
 
@@ -76,7 +74,13 @@ module ExcelDataServices
           :charge_category_id,
           :pricing_id,
           :organization_id
-        ).merge(fee_name: fee_name, rate_basis: rate_basis_string, shipping_type: charge_category.code.upcase)
+        ).merge(
+          fee_name: fee_name,
+          rate_basis: rate_basis_string,
+          shipping_type: charge_category.code.upcase,
+          wm_ratio: pricing_detail.cbm_ratio,
+          vm_ratio: pricing_detail.vm_ratio
+        )
       end
 
       def self.expand_ranges(data)

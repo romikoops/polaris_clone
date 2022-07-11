@@ -36,7 +36,6 @@ module ExcelDataServices
               "cargo_class",
               "effective_date",
               "expiration_date",
-              "wm_rate",
               "group_id",
               "itinerary_id",
               "tenant_vehicle_id",
@@ -44,7 +43,8 @@ module ExcelDataServices
               "transshipment"
             )
               .merge(
-                "vm_rate" => row["vm_rate"].present? ? row["vm_rate"].to_f / 1000.0 : 1.0,
+                "wm_rate" => row["cbm_ratio"],
+                "vm_rate" => row["vm_ratio"],
                 "fees" => RowFees.new(frame: frame, state: state).fees,
                 "notes" => RowNotes.new(frame: frame).notes,
                 "internal" => row["internal"].present?,
@@ -87,7 +87,7 @@ module ExcelDataServices
 
           def fee_from_grouping_rows(grouped_rows:)
             group_row = grouped_rows.to_a.first
-            group_row.slice("organization_id", "base", "min", "charge_category_id", "rate_basis_id", "rate")
+            group_row.slice("organization_id", "base", "min", "charge_category_id", "rate_basis_id", "rate", "cbm_ratio", "vm_ratio")
               .merge(
                 "currency_name" => group_row["currency"],
                 "range" => range_from_grouping_rows(grouped_rows: grouped_rows),

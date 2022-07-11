@@ -37,18 +37,18 @@ RSpec.describe ExcelDataServices::V4::Upload do
     context "without counterpart hub codes" do
       before { service.perform }
 
-      expected_fee_data = [{ "key" => "AA", "max" => nil, "min" => nil, "base" => nil, "name" => "AA Fee", "range" => [], "currency" => "EUR", "container" => "12.0", "rate_basis" => "PER_CONTAINER" },
-        { "wm" => "13.0", "key" => "BB", "max" => nil, "min" => nil, "base" => nil, "name" => "BB Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_WM" },
-        { "key" => "BL", "max" => nil, "min" => nil, "ton" => "4.0", "base" => nil, "name" => "B/L Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_TON" },
-        { "key" => "CC", "max" => nil, "min" => nil, "base" => nil, "name" => "CC Fee", "range" => [], "currency" => "EUR", "percentage" => "23.0", "rate_basis" => "PERCENTAGE" },
-        { "key" => "DD", "max" => nil, "min" => nil, "base" => nil, "name" => "DD Fee", "range" => [{ "kg" => "5.0", "max" => 100.0, "min" => 0.0 }], "currency" => "EUR", "rate_basis" => "PER_KG_RANGE" },
-        { "key" => "EE", "max" => nil, "min" => nil, "base" => nil, "name" => "EE Fee", "range" => [{ "kg" => "2.0", "max" => 200.0, "min" => 100.0 }], "currency" => "EUR", "rate_basis" => "PER_KG_RANGE" },
-        { "kg" => "30.0", "key" => "FF", "max" => nil, "min" => nil, "base" => "100.0", "name" => "FF Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_X_KG" },
-        { "key" => "SC", "max" => nil, "min" => "30.0", "base" => nil, "bill" => "9.0", "name" => "LCL Service Charge", "range" => [], "currency" => "EUR", "rate_basis" => "PER_BILL" },
-        { "kg" => "6.0", "key" => "HDL", "max" => nil, "min" => nil, "base" => nil, "name" => "Handling Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_KG" },
-        { "key" => "ISP", "max" => nil, "min" => nil, "base" => nil, "item" => "7.0", "name" => "ISPS Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_ITEM" },
-        { "key" => "SOL", "max" => nil, "min" => nil, "base" => nil, "name" => "SOLAS Fee", "range" => [], "currency" => "EUR", "shipment" => "8.0", "rate_basis" => "PER_SHIPMENT" },
-        { "cbm" => "5.0", "key" => "CUSTOMS DOC", "max" => nil, "min" => nil, "base" => nil, "name" => "CUSTOMS DOC", "range" => [], "currency" => "EUR", "rate_basis" => "PER_CBM" }]
+      expected_fee_data = [{ "key" => "AA", "max" => nil, "min" => nil, "base" => nil, "name" => "AA Fee", "range" => [], "currency" => "EUR", "container" => "12.0", "rate_basis" => "PER_CONTAINER", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "wm" => "13.0", "key" => "BB", "max" => nil, "min" => nil, "base" => nil, "name" => "BB Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_WM", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "BL", "max" => nil, "min" => nil, "ton" => "4.0", "base" => nil, "name" => "B/L Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_TON", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "CC", "max" => nil, "min" => nil, "base" => nil, "name" => "CC Fee", "range" => [], "currency" => "EUR", "percentage" => "23.0", "rate_basis" => "PERCENTAGE", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "DD", "max" => nil, "min" => nil, "base" => nil, "name" => "DD Fee", "range" => [{ "kg" => "5.0", "max" => 100.0, "min" => 0.0 }], "currency" => "EUR", "rate_basis" => "PER_KG_RANGE", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "EE", "max" => nil, "min" => nil, "base" => nil, "name" => "EE Fee", "range" => [{ "kg" => "2.0", "max" => 200.0, "min" => 100.0 }], "currency" => "EUR", "rate_basis" => "PER_KG_RANGE", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "kg" => "30.0", "key" => "FF", "max" => nil, "min" => nil, "base" => "100.0", "name" => "FF Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_X_KG", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "SC", "max" => nil, "min" => "30.0", "base" => nil, "bill" => "9.0", "name" => "LCL Service Charge", "range" => [], "currency" => "EUR", "rate_basis" => "PER_BILL", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "kg" => "6.0", "key" => "HDL", "max" => nil, "min" => nil, "base" => nil, "name" => "Handling Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_KG", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "ISP", "max" => nil, "min" => nil, "base" => nil, "item" => "7.0", "name" => "ISPS Fee", "range" => [], "currency" => "EUR", "rate_basis" => "PER_ITEM", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "key" => "SOL", "max" => nil, "min" => nil, "base" => nil, "name" => "SOLAS Fee", "range" => [], "currency" => "EUR", "shipment" => "8.0", "rate_basis" => "PER_SHIPMENT", "cbm_ratio" => 1000, "vm_ratio" => 1 },
+        { "cbm" => "5.0", "key" => "CUSTOMS DOC", "max" => nil, "min" => nil, "base" => nil, "name" => "CUSTOMS DOC", "range" => [], "currency" => "EUR", "rate_basis" => "PER_CBM", "cbm_ratio" => 1000, "vm_ratio" => 1 }]
 
       it "returns inserts the local charge with all fees formatted properly", :aggregate_failures do
         expect(local_charge.fees.values).to eq(expected_fee_data)
@@ -100,7 +100,7 @@ RSpec.describe ExcelDataServices::V4::Upload do
       end
 
       it "copies only the 'aa' fee" do
-        expect(local_charge.fees["AA"]).to eq({ "key" => "AA", "max" => nil, "min" => nil, "base" => nil, "name" => "AA Fee", "range" => [], "currency" => "EUR", "container" => "17.0", "rate_basis" => "PER_CONTAINER" })
+        expect(local_charge.fees["AA"]).to eq({ "key" => "AA", "max" => nil, "min" => nil, "base" => nil, "name" => "AA Fee", "range" => [], "currency" => "EUR", "container" => "17.0", "rate_basis" => "PER_CONTAINER", "cbm_ratio" => 1000, "vm_ratio" => 1 })
       end
     end
   end

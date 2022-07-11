@@ -90,6 +90,10 @@ module ExcelDataServices
         def identifier
           proc { |value| value.casecmp("zipcode").zero? ? "postal_code" : value.downcase }
         end
+
+        def vm_scale
+          proc { |value| value <= 1 ? value : value / 1000.0 }
+        end
       end
     end
   end

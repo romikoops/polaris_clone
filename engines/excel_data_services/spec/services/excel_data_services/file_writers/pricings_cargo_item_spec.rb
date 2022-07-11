@@ -68,8 +68,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           nil,
           transit_time.duration,
           nil,
-          pricing.wm_rate,
-          pricing.vm_rate,
+          pricing.fees.first.cbm_ratio,
+          pricing.fees.first.vm_ratio,
           "EUR",
           25
         ]
@@ -110,8 +110,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           nil,
           transit_time.duration,
           nil,
-          pricing.wm_rate,
-          pricing.vm_rate,
+          pricing.fees.first.cbm_ratio,
+          pricing.fees.first.vm_ratio,
           "EUR",
           25
         ]
@@ -165,8 +165,8 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
           pricing.transshipment,
           transit_time.duration,
           nil,
-          pricing.wm_rate,
-          pricing.vm_rate,
+          pricing.fees.first.cbm_ratio,
+          pricing.fees.first.vm_ratio,
           "BAS",
           "Basic Ocean Freight",
           "EUR",

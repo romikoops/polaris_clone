@@ -113,19 +113,21 @@ columns:
     validator: optional_string
     required: false
     type: :object
-  - header: wm_rate
+  - header: cbm_ratio
     sanitizer: decimal
     validator: optional_numeric
     required: false
     alternative_keys:
       - wm_ratio
+      - wm_rate
     type: :object
-  - header: vm_rate
-    sanitizer: decimal
+  - header: vm_ratio
+    sanitizer: vm_scale
     validator: optional_numeric
     required: false
+    fallback: 1
     alternative_keys:
-      - vm_ratio
+      - vm_rate
     type: :object
   - header: origin_terminal
     sanitizer: text

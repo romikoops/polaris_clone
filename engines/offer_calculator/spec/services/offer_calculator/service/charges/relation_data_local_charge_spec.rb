@@ -8,7 +8,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
   let(:result_frame) { described_class.new(relation: relation, period: period).frame }
   let(:relation) { Legacy::LocalCharge.where(organization: organization) }
   let(:expected_base) do
-    { "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[local_charge.mode_of_transport],
+    { "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[local_charge.mode_of_transport.to_sym],
       "tenant_vehicle_id" => local_charge.tenant_vehicle_id,
       "carrier_id" => local_charge.tenant_vehicle.carrier_id,
       "cargo_class" => local_charge.load_type,
@@ -20,7 +20,7 @@ RSpec.describe OfferCalculator::Service::Charges::RelationData do
       "margin_type" => "export_margin",
       "effective_date" => period.first,
       "expiration_date" => period.last,
-      "vm_ratio" => 1,
+      "vm_ratio" => 1.0,
       "rate_basis" => "PER_SHIPMENT",
       "charge_category_id" => charge_category.id,
       "itinerary_id" => nil,

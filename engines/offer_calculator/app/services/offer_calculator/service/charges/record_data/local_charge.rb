@@ -32,11 +32,11 @@ module OfferCalculator
             record.slice("tenant_vehicle_id", "organization_id", "metadata", "mode_of_transport").merge(
               "origin_hub_id" => hub_id,
               "destination_hub_id" => hub_id,
+              "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[mode_of_transport.to_sym],
+              "vm_ratio" => 1.0,
               "section" => direction,
               "margin_type" => "#{direction}_margin",
               "direction" => direction,
-              "cbm_ratio" => Pricings::Pricing::WM_RATIO_LOOKUP[mode_of_transport],
-              "vm_ratio" => 1,
               "cargo_class" => load_type,
               "load_type" => load_type == "lcl" ? "cargo_item" : "container",
               "context_id" => id,

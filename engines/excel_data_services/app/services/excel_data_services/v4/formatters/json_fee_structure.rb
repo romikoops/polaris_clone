@@ -50,7 +50,7 @@ module ExcelDataServices
           end
 
           def fee_base
-            @fee_base ||= row.slice("base", "min", "max", "rate_basis", "currency")
+            @fee_base ||= row.slice("base", "min", "max", "rate_basis", "currency", "cbm_ratio", "vm_ratio")
               .merge(
                 "range" => range_from_grouping_rows,
                 "name" => row["fee_name"],

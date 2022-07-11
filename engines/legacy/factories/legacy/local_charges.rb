@@ -18,7 +18,9 @@ FactoryBot.define do
           "name" => "SOLAS",
           "rate" => 17.5,
           "currency" => "EUR",
-          "rate_basis" => "PER_SHIPMENT"
+          "rate_basis" => "PER_SHIPMENT",
+          "cbm_ratio" => 1000.0,
+          "vm_ratio" => 1.0
         }
       }
     end
@@ -38,6 +40,8 @@ FactoryBot.define do
             { "key" => "QDF",
               "max" => nil,
               "min" => 57,
+              "cbm_ratio" => 1000.0,
+              "vm_ratio" => 1.0,
               "name" => "Wharfage / Quay Dues",
               "range" => [
                 { "max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR" },
@@ -59,12 +63,16 @@ FactoryBot.define do
             "name" => "SOLAS",
             "value" => 17.5,
             "currency" => "EUR",
+            "cbm_ratio" => 1000.0,
+            "vm_ratio" => 1.0,
             "rate_basis" => "PER_SHIPMENT"
           },
           "QDF" =>
             { "key" => "QDF",
               "max" => nil,
               "min" => 57,
+              "cbm_ratio" => 1000.0,
+              "vm_ratio" => 1.0,
               "name" => "Wharfage / Quay Dues",
               "range" => [
                 { "max" => 5, "min" => 0, "ton" => 41, "currency" => "EUR" },
@@ -82,6 +90,8 @@ FactoryBot.define do
             "key" => "THC",
             "max" => nil,
             "min" => 17.5,
+            "cbm_ratio" => 1000.0,
+            "vm_ratio" => 1.0,
             "name" => "Terminal Handling",
             "value" => 17.5,
             "base" => 100,

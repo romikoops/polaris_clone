@@ -151,6 +151,21 @@ columns:
     validator: "currency"
     required: true
     type: :object
+  - header: cbm_ratio
+    sanitizer: decimal
+    validator: optional_numeric
+    required: false
+    alternative_keys:
+      - wm_ratio
+      - wm_rate
+    type: :object
+  - header: vm_ratio
+    sanitizer: vm_scale
+    validator: optional_numeric
+    required: false
+    fallback: 1
+    alternative_keys:
+      - vm_rate
   - header: rate_basis
     sanitizer: "text"
     validator: "string"
@@ -279,6 +294,8 @@ pipelines:
       - type: ChargeCategory
       - type: Group
       - type: RateBasis
+    extractors:
+      - type: CbmRatioFromModeOfTransport
     formatter: LocalCharge
     importer:
       model: Legacy::LocalCharge

@@ -50,6 +50,8 @@ RSpec.describe ExcelDataServices::V4::Formatters::LocalCharge do
         "percentage" => nil,
         "dangerous" => false,
         "internal" => false,
+        "cbm_ratio" => 333.0,
+        "vm_ratio" => 1.0,
         "organization_id" => "5a72a4d8-b836-441b-bb8a-0bf590db7db9" }
     end
     let(:rows) { row_deltas.map { |delta| base_row.merge(delta) } }
@@ -105,7 +107,9 @@ RSpec.describe ExcelDataServices::V4::Formatters::LocalCharge do
             "currency" => "EUR",
             "range" => [],
             "name" => "B/L Fee",
-            "key" => "BL"
+            "key" => "BL",
+            "cbm_ratio" => 333.0,
+            "vm_ratio" => 1.0
           } }
       end
 
@@ -151,7 +155,9 @@ RSpec.describe ExcelDataServices::V4::Formatters::LocalCharge do
             "currency" => "EUR",
             "range" => [{ "min" => 0.0, "max" => 100.0, "kg" => 4.0 }],
             "name" => "B/L Fee",
-            "key" => "BL"
+            "key" => "BL",
+            "cbm_ratio" => 333.0,
+            "vm_ratio" => 1.0
           } }
       end
 

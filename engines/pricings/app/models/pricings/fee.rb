@@ -60,6 +60,7 @@ end
 #
 #  id                 :uuid             not null, primary key
 #  base               :decimal(, )
+#  cbm_ratio          :decimal(10, 2)
 #  currency_name      :string
 #  deleted_at         :datetime
 #  hw_threshold       :decimal(, )
@@ -67,6 +68,7 @@ end
 #  min                :decimal(, )
 #  range              :jsonb
 #  rate               :decimal(, )
+#  vm_ratio           :decimal(10, 2)
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  charge_category_id :integer          not null
