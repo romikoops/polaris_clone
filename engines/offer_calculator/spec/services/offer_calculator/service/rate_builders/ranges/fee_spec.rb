@@ -84,5 +84,20 @@ RSpec.describe OfferCalculator::Service::RateBuilders::Ranges::Fee do
         expect(trucking_fee.components.length).to eq(1)
       end
     end
+
+    context "when the the breakdown is not blank but does not have data under the modifier" do
+      let(:breakdowns) do
+        [Pricings::ManipulatorBreakdown.new(
+          source: nil,
+          delta: 0,
+          data: { "c" => [] },
+          charge_category: trucking_charge_category
+        )]
+      end
+
+      it "returns a component successfully" do
+        expect(trucking_fee.components.length).to eq(1)
+      end
+    end
   end
 end

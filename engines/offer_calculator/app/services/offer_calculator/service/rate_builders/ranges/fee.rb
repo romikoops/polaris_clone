@@ -118,7 +118,8 @@ module OfferCalculator
               .each do |breakdown|
               next if breakdown.data.blank?
 
-              breakdown.data[modifier].select! do |range|
+              ranges = breakdown.data[modifier].presence || []
+              ranges.select! do |range|
                 range[target_rate.min_key].to_d == target_rate.range_min && range[target_rate.max_key].to_d == target_rate.range_max
               end
             end
