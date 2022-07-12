@@ -67,12 +67,16 @@ Api::Engine.routes.draw do
     end
     resources :organizations, only: :index do
       namespace :admin do
-        resources :companies, only: %i[create show update destroy]
+        resources :companies, only: %i[create show update destroy] do
+          resources :groups_memberships, only: %i[index create destroy]
+        end
         resources :companies, only: :index do
           resources :clients, only: %i[index]
           resources :shipment_requests, only: %i[index]
           resources :queries, only: %i[index]
         end
+        resources :groups, only: %i[index create update destroy]
+
         resources :users, only: %i[index create update destroy]
       end
     end
