@@ -26,12 +26,17 @@ module ExcelDataServices
           @frame ||= Rover::DataFrame.new(
             xml_data.flat_map do |datum|
               headers = datum.dig(*header_path) || {}
-              datum.dig(*body_path).map do |row|
+              charges_extracted_from(datum: datum).map do |row|
                 row.merge(headers)
                   .tap { |tapped_row| tapped_row.merge("sheet_name" => tapped_row[identifier_key]) }
               end
             end
           )
+        end
+
+        def charges_extracted_from(datum:)
+          charges = datum.dig(*body_path)
+          charges.is_a?(Array) ? charges : [charges]
         end
 
         def identifiers

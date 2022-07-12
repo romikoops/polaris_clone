@@ -23,7 +23,7 @@ module ExcelDataServices
       end
 
       def valid?
-        sheet.present?
+        not_xml? && sheet.present?
       end
 
       def sheet
@@ -43,6 +43,10 @@ module ExcelDataServices
       end
 
       delegate :errors, :stats, to: :result_state
+
+      def not_xml?
+        ExcelDataServices::V4::State::XML_CONTENT_TYPES.exclude?(file.file.content_type)
+      end
     end
   end
 end

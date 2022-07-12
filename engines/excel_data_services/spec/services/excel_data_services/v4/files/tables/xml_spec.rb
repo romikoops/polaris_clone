@@ -23,8 +23,8 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::Xml do
       frame: Rover::DataFrame.new([{ "value" => "b", "header" => "header_b", "row" => 1, "column" => "header_b", "sheet_name" => "b" }]))
   end
 
-  describe "#frame" do
-    let(:result) { service.frame }
+  describe "#perform" do
+    let(:result) { service.perform }
     let(:expected_result) do
       Rover::DataFrame.new([
         { "value" => organization.id, "header" => "organization_id", "row" => 0, "column" => 0, "sheet_name" => "b" },

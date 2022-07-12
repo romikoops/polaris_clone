@@ -14,7 +14,8 @@ xml_data:
 required:
   - type: xml
     path:
-      - FreightRates
+      - OceanFreightCharge
+      - RateDetails
 
 xml_columns:
   - header: charge_id
@@ -195,7 +196,7 @@ xml_columns:
   - header: quoting_region
     key: QuotingRegion
     sanitizer: text
-    validator: string
+    validator: optional_string
   - header: carrier_code
     key:
     sanitizer: text
@@ -236,58 +237,68 @@ xml_columns:
     fallback: cargo_item
 
 operations:
-  - Grdb
-  - CountryCodeFromLocode
-  - ExpandedDates
+  - type: Grdb
+  - type: CountryCodeFromLocode
+  - type: ExpandedDates
 
-distributors:
-  - GrdbExcel
+# framer: "GrdbXml"
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - Carrier
-      - RoutingCarrier
-    importers:
-      - Carrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+      - type: RoutingCarrier
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
+      - type: Carrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
     extractors:
-      - TenantVehicle
-    importers:
-      - TenantVehicle
-  - validators:
-      - OriginHub
-      - DestinationHub
-    extractors:
-      - Itinerary
-    importers:
-      - Itinerary
-  - validators:
-      - PrimaryFeeCode
-    extractors:
-      - ChargeCategory
-    importers:
-      - ChargeCategory
+      - type: TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
 
   - validators:
-      - SequentialDates
-      - ChargeFees
-      - Carrier
-      - TenantVehicle
-      - OriginHub
-      - DestinationHub
-      - Itinerary
-      - ChargeCategory
-      - Group
-      - GrdbRateBasis
-      - RateBasis
+      - type: OriginHub
+      - type: DestinationHub
     extractors:
-      - Pricing
-    importers:
-      - Pricing
+      - type: Itinerary
+    formatter: Itinerary
+    importer:
+      model: Legacy::Itinerary
+
+  - validators:
+      - type: PrimaryFeeCode
+    extractors:
+      - type: ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
+
+  - validators:
+      - type: SequentialDates
+      - type: ChargeFees
+      - type: Carrier
+      - type: TenantVehicle
+      - type: OriginHub
+      - type: DestinationHub
+      - type: Itinerary
+      - type: ChargeCategory
+      - type: Group
+      - type: GrdbRateBasis
+      - type: RateBasis
+    formatter: Pricing
+    importer:
+      model: Pricings::Pricing
+      options:
+        recursive: true
     conflicts:
       - model: Pricings::Pricing
         conflict_keys:
@@ -296,4 +307,5 @@ pipelines:
           - organization_id
           - group_id
           - tenant_vehicle_id
+
 

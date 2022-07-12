@@ -8,7 +8,7 @@ module ExcelDataServices
           KEYS = %i[required].freeze
           XmlRequirement = Struct.new(:content, :path, keyword_init: true) do
             def valid?
-              content.present? && content.key?(*path)
+              content.present? && content.dig(*path).present?
             end
           end
 

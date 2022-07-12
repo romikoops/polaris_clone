@@ -82,6 +82,9 @@ module ExcelDataServices
         class OptionalIntegerLikeType < TypeValidity
         end
 
+        class OptionalNumericLikeType < TypeValidity
+        end
+
         class ValueType < TypeValidity
         end
 

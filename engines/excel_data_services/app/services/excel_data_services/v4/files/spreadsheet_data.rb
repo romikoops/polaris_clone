@@ -26,7 +26,11 @@ module ExcelDataServices
         private
 
         def data_sources
-          @data_sources ||= sheets.map { |sheet_name| ExcelDataServices::V4::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, section_parser: section_parser) }
+          @data_sources ||= if state.xml?
+            [ExcelDataServices::V4::Files::Tables::Xml.new(state: state, section_parser: section_parser)]
+          else
+            sheets.map { |sheet_name| ExcelDataServices::V4::Files::Tables::Sheet.new(state: state, sheet_name: sheet_name, section_parser: section_parser) }
+          end
         end
       end
     end

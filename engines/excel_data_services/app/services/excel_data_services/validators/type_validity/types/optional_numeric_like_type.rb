@@ -7,7 +7,7 @@ module ExcelDataServices
         class OptionalNumericLikeType < ExcelDataServices::Validators::TypeValidity::Types::Base
           def valid?
             case value
-            when NilClass, Integer
+            when NilClass, Integer, BigDecimal
               true
             when Float
               !value.nan?

@@ -15,7 +15,7 @@ module ExcelDataServices
             @state = state
           end
 
-          def frame
+          def perform
             xml_columns.map(&:frame).inject(base_frame) { |memo, source_data_frame| memo.concat(source_data_frame) }
           end
 

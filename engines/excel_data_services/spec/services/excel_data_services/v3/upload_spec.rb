@@ -25,6 +25,19 @@ RSpec.describe ExcelDataServices::V3::Upload do
         expect(service.valid?).to eq(false)
       end
     end
+
+    context "when the file is xml" do
+      let(:xlsx) { File.open(file_fixture("xml/example_grdb.xml")) }
+      let(:file) do
+        FactoryBot.create(:legacy_file).tap do |file_object|
+          file_object.file.attach(io: xlsx, filename: "test-sheet.xml", content_type: "application/xml")
+        end
+      end
+
+      it "returns false when the sheet is a trucking sheet" do
+        expect(service.valid?).to eq(false)
+      end
+    end
   end
 
   describe "#perform" do

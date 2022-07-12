@@ -3,6 +3,7 @@
 module ExcelDataServices
   module V4
     class State
+      XML_CONTENT_TYPES = %w[text/xml application/xml application/xhtml+xml].freeze
       # The State object gets passed along throughout the entire pipeline, carrying data and error information from step to step. It also holds the overrides provided to the uploader class for use in the different Sections
       attr_reader :file, :section, :overrides
 
@@ -57,7 +58,7 @@ module ExcelDataServices
       end
 
       def xml?
-        %w[application/xml application/xhtml+xml].include?(content_type)
+        XML_CONTENT_TYPES.include?(content_type)
       end
 
       delegate :xlsx, to: :spreadsheet, allow_nil: true

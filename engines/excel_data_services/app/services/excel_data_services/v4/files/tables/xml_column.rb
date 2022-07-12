@@ -63,6 +63,7 @@ module ExcelDataServices
             @frame_data_row_base ||= {
               "header" => header,
               "sheet_name" => sheet_name,
+              "target_frame" => "default",
               "column" => key,
               "organization_id" => Organizations.current_id
             }

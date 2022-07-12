@@ -174,4 +174,48 @@
       </Charge>
     </ChargeDetails>
   </RateDetails>
+  <RateDetails>
+    <ChargeHeader>
+      <ChargeHeaderID>26971336</ChargeHeaderID>
+      <ChargeDetailsType>OceanFreightCharge</ChargeDetailsType>
+      <WWAMember>WAIC</WWAMember>
+      <Customer>STANDARD</Customer>
+      <OriginRegion>EMEA</OriginRegion>
+      <OriginCountryCode>DE</OriginCountryCode>
+      <OriginCFSUncode>DEHAM</OriginCFSUncode>
+      <OriginConsoleCFSUncode>DEHAM</OriginConsoleCFSUncode>
+      <OriginPortUncode>DEHAM</OriginPortUncode>
+      <Transshipment1 />
+      <Transshipment2 />
+      <Transshipment3 />
+      <DestinationPortUncode>CNDAL</DestinationPortUncode>
+      <DestinationDeconsoleCFSUncode>CNDAL</DestinationDeconsoleCFSUncode>
+      <DestinationCFSUncode>CNDAL</DestinationCFSUncode>
+      <DestinationCountryCode>CN</DestinationCountryCode>
+      <DestinationRegion>ASIA</DestinationRegion>
+      <QuotingRegion>EMEA</QuotingRegion>
+    </ChargeHeader>
+    <ChargeDetails>
+      <Charge>
+        <ChargeID>132897</ChargeID>
+        <RequestType>N</RequestType>
+        <ChargeCode>OFR</ChargeCode>
+        <ChargeName>Ocean Freight</ChargeName>
+        <Aspect />
+        <Currency>USD</Currency>
+        <Rate>45.0</Rate>
+        <Basis>WM</Basis>
+        <BasisName>WM</BasisName>
+        <Minimum>30.000</Minimum>
+        <Maximum />
+        <ScaleUOM>C</ScaleUOM>
+        <CubeFrom>0</CubeFrom>
+        <CubeTo>0</CubeTo>
+        <Notes>-</Notes>
+        <EffectiveDate>2021-04-03</EffectiveDate>
+        <ExpirationDate>2022-06-30</ExpirationDate>
+        <Mandatory>Y</Mandatory>
+      </Charge>
+    </ChargeDetails>
+  </RateDetails>
 </OceanFreightCharge>

@@ -27,9 +27,9 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
     context "when the frame does have the key" do
       let(:expected_result) do
         Rover::DataFrame.new([
-          { "value" => "OFR", "row" => 1, "header" => "fee_code", "sheet_name" => identifier, "column" => "ChargeCode", "organization_id" => organization.id },
-          { "value" => "HAZ", "row" => 2, "header" => "fee_code", "sheet_name" => identifier, "column" => "ChargeCode", "organization_id" => organization.id },
-          { "value" => "IM20", "row" => 3, "header" => "fee_code", "sheet_name" => identifier, "column" => "ChargeCode", "organization_id" => organization.id }
+          { "value" => "OFR", "row" => 1, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "ChargeCode", "organization_id" => organization.id },
+          { "value" => "HAZ", "row" => 2, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "ChargeCode", "organization_id" => organization.id },
+          { "value" => "IM20", "row" => 3, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "ChargeCode", "organization_id" => organization.id }
         ])
       end
 
@@ -42,9 +42,9 @@ RSpec.describe ExcelDataServices::V4::Files::Tables::XmlColumn do
       let(:options) { ExcelDataServices::V4::Files::Tables::Options.new(options: { fallback: "x" }) }
       let(:expected_result) do
         Rover::DataFrame.new([
-          { "value" => "x", "row" => 1, "header" => "fee_code", "sheet_name" => identifier, "column" => "blue", "organization_id" => organization.id },
-          { "value" => "x", "row" => 2, "header" => "fee_code", "sheet_name" => identifier, "column" => "blue", "organization_id" => organization.id },
-          { "value" => "x", "row" => 3, "header" => "fee_code", "sheet_name" => identifier, "column" => "blue", "organization_id" => organization.id }
+          { "value" => "x", "row" => 1, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "blue", "organization_id" => organization.id },
+          { "value" => "x", "row" => 2, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "blue", "organization_id" => organization.id },
+          { "value" => "x", "row" => 3, "header" => "fee_code", "sheet_name" => identifier, "target_frame" => "default", "column" => "blue", "organization_id" => organization.id }
         ])
       end
 

@@ -22,8 +22,12 @@ RSpec.describe ExcelDataServices::Validators::TypeValidity::Types::OptionalNumer
       expect(described_class.new("31.0")).to be_valid
     end
 
-    it "returns false if input is a Float that has a decimal part" do
+    it "returns true if input is a Float that has a decimal part" do
       expect(described_class.new(5.2)).to be_valid
+    end
+
+    it "returns true if input is a BigDecimal" do
+      expect(described_class.new(BigDecimal("5.2", 1))).to be_valid
     end
 
     it "returns false if input is a an unexpected type" do

@@ -29,7 +29,7 @@ module ExcelDataServices
         end
 
         def rows_for_insertion
-          @rows_for_insertion ||= target_attribute ? frame[frame[target_attribute].missing] : frame
+          @rows_for_insertion ||= frame.include?(target_attribute) ? frame[frame[target_attribute].missing] : frame
         end
       end
     end
