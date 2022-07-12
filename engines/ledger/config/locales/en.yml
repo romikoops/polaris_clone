@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        "ledger/upload":
+          attributes:
+            processing_errors:
+              invalid_json: 'invalid json'

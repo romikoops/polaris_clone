@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 ENGINE_ROOT = File.expand_path('..', __dir__)
-ENGINE_PATH = File.expand_path('../lib/<%= @engine_name %>/engine', __dir__)
+ENGINE_PATH = File.expand_path('../lib/ledger/engine', __dir__)
 APP_PATH = File.expand_path('../../../lib/spec/dummy/config/application', __dir__)
 
 # Set up gems listed in the Gemfile.

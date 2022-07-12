@@ -6,6 +6,17 @@ package "core" {
 package "bookings" {
   class address_book << (D,orange) >>
 }
+package "data" {
+  class distributions << (D,orange) >>
+  class sequential << (D,orange) >>
+  class tracker << (D,orange) >>
+  class journey << (D,orange) >>
+  class files << (D,orange) >>
+  class treasury << (D,orange) >>
+  class notifications << (D,orange) >>
+  class ledger << (D,orange) >>
+  class schedules << (D,orange) >>
+}
 package "service" {
   class groups << (S,yellow) >>
   class legacy << (S,yellow) >>
@@ -36,13 +47,6 @@ package "service" {
   class rate_extractor << (S,yellow) >>
   class tender_calculator << (S,yellow) >>
   class validator << (S,yellow) >>
-}
-package "data" {
-  class sequential << (D,orange) >>
-  class journey << (D,orange) >>
-  class treasury << (D,orange) >>
-  class notifications << (D,orange) >>
-  class schedules << (D,orange) >>
 }
 package "admiralty" {
   class admiralty << (*,blue) >>
@@ -91,12 +95,16 @@ shipments *--> quotations
 shipments *--> routing
 shipments --> sequential
 shipments --> organizations
+tracker *--> organizations
+tracker *--> users
+admiralty --> distributions
 admiralty --> legacy
 admiralty --> organization_manager
 admiralty --> organizations
 admiralty --> quotations
 admiralty --> routing
 admiralty --> shipments
+admiralty --> tracker
 locations *--> legacy
 trucking *--> groups
 trucking *--> legacy
@@ -115,8 +123,8 @@ analytics *--> pricings
 analytics *--> organization_manager
 analytics --> organizations
 analytics --> users
-api_auth --> users
 api_auth --> organizations
+api_auth --> users
 cms_data --> organizations
 profiles --> users
 profiles --> organizations
@@ -163,6 +171,7 @@ api --> api_auth
 api --> cargo
 api --> carta
 api --> cms_data
+api --> files
 api --> journey
 api --> organization_manager
 api --> organizations
@@ -170,6 +179,7 @@ api --> pricings
 api --> profiles
 api --> result_formatter
 api --> routing
+api --> tracker
 api --> treasury
 api --> trucking
 api --> users
@@ -209,6 +219,8 @@ integrations *--> legacy
 integrations *--> organization_manager
 integrations *--> profiles
 integrations *--> shipments
+ledger *--> organizations
+ledger *--> users
 rates *--> cargo
 rates --> organizations
 rates *--> routing

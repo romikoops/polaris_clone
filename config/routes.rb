@@ -3,7 +3,15 @@
 Rails.application.routes.draw do
   mount Easymon::Engine, at: "/up"
   get "/healthz", to: "application#health"
-  get "/ping/version", to: proc { [200, {}, [(ENV["RELEASE"]).to_s]] }
+
+  version_endpoint = proc { [200, {}, [(ENV["RELEASE"]).to_s]] }
+  version_endpoint.tap do |b|
+    def b.inspect
+      "proc endpoint"
+    end
+  end
+
+  get "/ping/version", to: version_endpoint
   mount Rswag::Api::Engine, at: "/specs"
 
   get "/sidekiq", to: redirect("/admin/sidekiq", status: 301)
@@ -114,7 +122,7 @@ Rails.application.routes.draw do
 
       resources :open_pricings, only: [:index]
       post "open_pricings/ocean_lcl_pricings/process_csv", to: "open_pricings#overwrite_main_lcl_carriage",
-                                                           as: :open_main_lcl_carriage_pricings_overwrite
+        as: :open_main_lcl_carriage_pricings_overwrite
       post "shipments/:shipment_id/upload/:type", to: "shipments#upload_client_document"
       resources :local_charges, only: %i[index update destroy] do
         collection do
@@ -606,7 +614,7 @@ end
 #                                                          api        /                                                                                                  Api::Engine
 #                                                      easymon        /up                                                                                                Easymon::Engine
 #                                                      healthz GET    /healthz(.:format)                                                                                 application#health
-#                                                 ping_version GET    /ping/version(.:format)                                                                            #<Proc:0x0000000107f6bf28 /Users/warwick-itsmycargo/Documents/imc/polaris/config/routes.rb:6>
+#                                                 ping_version GET    /ping/version(.:format)                                                                            proc endpoint
 #                                                    rswag_api        /specs                                                                                             Rswag::Api::Engine
 #                                                      sidekiq GET    /sidekiq(.:format)                                                                                 redirect(301, /admin/sidekiq)
 #                             passwordless_authentication_user POST   /user/passwordless_authentication(.:format)                                                        users#passwordless_authentication
@@ -1120,9 +1128,6 @@ end
 #                        v2_organization_carriers GET    /v2/organizations/:organization_id/carriers(.:format)                                      api/v2/carriers#index
 #                         v2_organization_carrier GET    /v2/organizations/:organization_id/carriers/:id(.:format)                                  api/v2/carriers#show
 #                  v2_organization_active_locodes GET    /v2/organizations/:organization_id/active_locodes(.:format)                                api/v2/active_locodes#show
-#                    v2_organization_interactions GET    /v2/organizations/:organization_id/interactions(.:format)                                  api/v2/interactions#index
-#              v2_organization_users_interactions GET    /v2/organizations/:organization_id/users_interactions(.:format)                            api/v2/users_interactions#index
-#                                                 POST   /v2/organizations/:organization_id/users_interactions(.:format)                            api/v2/users_interactions#create
 #                                                 GET    /v2/organizations(.:format)                                                                api/v2/organizations#index
 #                               validate_v2_users GET    /v2/users/validate(.:format)                                                               api/v2/users#validate
 #                                        v2_users GET    /v2/users(.:format)                                                                        api/v2/users#index
@@ -1136,6 +1141,9 @@ end
 #                                    v2_passwords POST   /v2/passwords(.:format)                                                                    api/v2/passwords#create
 #                                     v2_password PATCH  /v2/passwords/:id(.:format)                                                                api/v2/passwords#update
 #                                                 PUT    /v2/passwords/:id(.:format)                                                                api/v2/passwords#update
+#                                 v2_interactions GET    /v2/interactions(.:format)                                                                 api/v2/interactions#index
+#                           v2_users_interactions GET    /v2/users_interactions(.:format)                                                           api/v2/users_interactions#index
+#                                                 POST   /v2/users_interactions(.:format)                                                           api/v2/users_interactions#create
 #
 # Routes for Easymon::Engine:
 #        GET  /(.:format)       easymon/checks#index

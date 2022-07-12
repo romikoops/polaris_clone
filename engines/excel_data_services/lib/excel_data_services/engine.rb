@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "activerecord_json_validator"
 require "activerecord-postgis-adapter"
 require "config"
 require "mimemagic"

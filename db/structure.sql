@@ -305,6 +305,19 @@ CREATE TYPE public.journey_status AS ENUM (
 
 
 --
+-- Name: ledger_uploads_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.ledger_uploads_status AS ENUM (
+    'not_started',
+    'superseded',
+    'processing',
+    'failed',
+    'done'
+);
+
+
+--
 -- Name: schedules_mode_of_transport; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -1624,7 +1637,8 @@ CREATE TABLE public.excel_data_services_uploads (
     status public.excel_data_services_uploads_status NOT NULL,
     last_job_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    processing_errors jsonb
 );
 
 
@@ -1973,7 +1987,7 @@ ALTER SEQUENCE public.itineraries_id_seq OWNED BY public.itineraries.id;
 --
 
 CREATE TABLE public.journey_addendums (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     shipment_request_id uuid,
     label_name character varying NOT NULL,
     value character varying NOT NULL,
@@ -2410,6 +2424,24 @@ CREATE SEQUENCE public.layovers_id_seq
 --
 
 ALTER SEQUENCE public.layovers_id_seq OWNED BY public.layovers.id;
+
+
+--
+-- Name: ledger_uploads; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_uploads (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    organization_id uuid NOT NULL,
+    file_id uuid NOT NULL,
+    user_id uuid,
+    status public.excel_data_services_uploads_status NOT NULL,
+    last_job_id uuid,
+    excel_data_services_uploads jsonb,
+    processing_errors jsonb,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -4745,7 +4777,7 @@ CREATE TABLE public.tenants_users (
 --
 
 CREATE TABLE public.tracker_interactions (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -4757,7 +4789,7 @@ CREATE TABLE public.tracker_interactions (
 --
 
 CREATE TABLE public.tracker_users_interactions (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     interaction_id uuid,
     client_id uuid,
     created_at timestamp without time zone NOT NULL,
@@ -4890,7 +4922,7 @@ CREATE TABLE public.trucking_locations (
 --
 
 CREATE TABLE public.trucking_postal_codes (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     postal_code public.citext NOT NULL,
     country_id bigint NOT NULL,
     point public.geometry(Point,4326) NOT NULL,
@@ -6261,6 +6293,14 @@ ALTER TABLE ONLY public.journey_shipments
 
 ALTER TABLE ONLY public.layovers
     ADD CONSTRAINT layovers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_uploads ledger_uploads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_uploads
+    ADD CONSTRAINT ledger_uploads_pkey PRIMARY KEY (id);
 
 
 --
@@ -8349,6 +8389,41 @@ CREATE INDEX index_layovers_on_sandbox_id ON public.layovers USING btree (sandbo
 --
 
 CREATE INDEX index_layovers_on_stop_id ON public.layovers USING btree (stop_id);
+
+
+--
+-- Name: index_ledger_uploads_on_file_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_uploads_on_file_id ON public.ledger_uploads USING btree (file_id);
+
+
+--
+-- Name: index_ledger_uploads_on_last_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_uploads_on_last_job_id ON public.ledger_uploads USING btree (last_job_id);
+
+
+--
+-- Name: index_ledger_uploads_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_uploads_on_organization_id ON public.ledger_uploads USING btree (organization_id);
+
+
+--
+-- Name: index_ledger_uploads_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_uploads_on_status ON public.ledger_uploads USING btree (status);
+
+
+--
+-- Name: index_ledger_uploads_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_uploads_on_user_id ON public.ledger_uploads USING btree (user_id);
 
 
 --
@@ -11302,6 +11377,14 @@ ALTER TABLE ONLY public.groups_memberships
 
 
 --
+-- Name: ledger_uploads fk_rails_4ff885d4f0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_uploads
+    ADD CONSTRAINT fk_rails_4ff885d4f0 FOREIGN KEY (file_id) REFERENCES public.legacy_files(id);
+
+
+--
 -- Name: tenant_routing_routes fk_rails_505fa01ce8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11854,6 +11937,14 @@ ALTER TABLE ONLY public.currencies
 
 
 --
+-- Name: ledger_uploads fk_rails_ade7140b87; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_uploads
+    ADD CONSTRAINT fk_rails_ade7140b87 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: shipments_cargos fk_rails_af3cb50c1d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12067,6 +12158,14 @@ ALTER TABLE ONLY public.journey_queries
 
 ALTER TABLE ONLY public.customs_fees
     ADD CONSTRAINT fk_rails_e4008c2f77 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
+-- Name: ledger_uploads fk_rails_e4a6380558; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_uploads
+    ADD CONSTRAINT fk_rails_e4a6380558 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
 
 
 --
@@ -12987,6 +13086,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220629172559'),
 ('20220629174735'),
 ('20220703160347'),
-('20220707092136');
+('20220707092136'),
+('20220711110510'),
+('20220712141456');
 
 
