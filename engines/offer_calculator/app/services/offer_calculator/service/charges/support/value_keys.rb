@@ -17,12 +17,7 @@ module OfferCalculator
             elsif range_unit
               [range_unit]
             else
-              rate_basis
-                .gsub("BILL", "SHIPMENT")
-                .gsub("CONTAINER", "UNIT")
-                .split("_")
-                .reject { |part| part.in?(%w[PER X RANGE FLAT]) }
-                .map(&:downcase)
+              rate_basis_keys
             end
           end
 
@@ -42,6 +37,13 @@ module OfferCalculator
 
           def range_unit
             @range_unit ||= fee["range_unit"]
+          end
+
+          def rate_basis_keys
+            @rate_basis_keys ||= rate_basis
+              .split("_")
+              .reject { |part| part.in?(%w[PER X RANGE FLAT]) }
+              .map(&:downcase)
           end
         end
       end

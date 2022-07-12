@@ -44,7 +44,8 @@ RSpec.describe OfferCalculator::Service::Charges::Support::ExpandedFee do
           "name" => "SOLAS",
           "rate" => 17.5,
           "currency" => "EUR",
-          "rate_basis" => "PER_SHIPMENT"
+          "rate_basis" => "PER_SHIPMENT",
+          "range" => []
         }
       end
 
@@ -74,7 +75,8 @@ RSpec.describe OfferCalculator::Service::Charges::Support::ExpandedFee do
           "name" => "SOLAS",
           "shipment" => 17.5,
           "currency" => "EUR",
-          "rate_basis" => "PER_SHIPMENT"
+          "rate_basis" => "PER_SHIPMENT",
+          "range" => []
         }
       end
 

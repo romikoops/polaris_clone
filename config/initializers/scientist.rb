@@ -113,7 +113,7 @@ module Scientist
       end
 
       def candidate_value
-        @candidate_value ||= candidate.cleaned_value.merge(duration: result.candidates.first.duration)
+        @candidate_value ||= (candidate.cleaned_value || {}).merge(duration: candidate.duration)
       end
 
       def request

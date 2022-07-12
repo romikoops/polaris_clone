@@ -36,9 +36,13 @@ module OfferCalculator
           Measured::Quantity.new(1, "pcs")
         end
 
+        alias bill shipment
+
         def unit
           Measured::Quantity.new(quantity, "pcs")
         end
+
+        alias container unit
 
         def weight_measure
           @weight_measure ||= Measured::WeightMeasure.new(

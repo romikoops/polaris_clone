@@ -25,7 +25,7 @@ module OfferCalculator
         def source_from_row(row:)
           return if row["source_type"].blank?
 
-          row["source_type"].constantize.find(row["source_id"])
+          row["source_type"].constantize.find(row["id"])
         end
 
         def margins

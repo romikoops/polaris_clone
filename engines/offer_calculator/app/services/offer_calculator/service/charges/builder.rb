@@ -93,11 +93,27 @@ module OfferCalculator
         end
 
         def margins_for(context:, fee_row:)
+          margin_keys = dynamic_context_keys_from(fee_row: fee_row)
           context_related_margins = margins_expanded_by_validities.filter(context.slice(*MARGIN_KEYS))
           context_related_margins["context_id"] = context["context_id"]
           return context_related_margins if fee_row.nil?
 
-          context_related_margins.filter_any(fee_row.slice(*rate_arguments).compact)
+          context_related_margins.filter(fee_row.slice(*margin_keys).compact)
+        end
+
+        def section
+          @section ||= query_frame.first_row["section"]
+        end
+
+        def dynamic_context_keys_from(fee_row:)
+          return MARGIN_KEYS if fee_row.nil?
+
+          case fee_row["section"]
+          when /trucking_/
+            MARGIN_KEYS + [section.include?("pre") ? "destination_hub_id" : "origin_hub_id"]
+          else
+            MARGIN_KEYS
+          end
         end
       end
     end

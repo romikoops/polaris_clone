@@ -148,4 +148,25 @@ RSpec.describe OfferCalculator::Service::Charges::RecordData::LocalCharge do
       expect(result_frame.to_a).to eq(expected_base_with_ranges)
     end
   end
+
+  context "with a PER_BILL fee" do
+    let(:code) { "solas" }
+    let(:fees) do
+      {
+        charge_category.code.upcase => {
+          "key" => charge_category.code.upcase,
+          "max" => nil,
+          "min" => 17.5,
+          "name" => charge_category.code.upcase,
+          "rate" => 17.5,
+          "currency" => "EUR",
+          "rate_basis" => "PER_BILL"
+        }
+      }
+    end
+
+    it "returns the LocalCharge fee flattened into a data frame" do
+      expect(result_frame.first_row.except("cbm_ratio")).to eq(expected_base.except("cbm_ratio").merge("rate_basis" => "PER_BILL", "range_unit" => "bill"))
+    end
+  end
 end

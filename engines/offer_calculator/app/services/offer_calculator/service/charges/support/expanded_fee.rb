@@ -26,7 +26,7 @@ module OfferCalculator
           private
 
           def range
-            @range ||= fee.delete("range") || [fee.except("min", "max")]
+            @range ||= fee.delete("range").presence || [fee.except("min", "max")]
           end
 
           def base_row

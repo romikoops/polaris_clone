@@ -45,6 +45,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
           range_min
           range_unit
           margin_type
+          source_type
           rate
           rank]
 
@@ -79,6 +80,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
             "rate_basis" => "PERCENTAGE",
             "currency" => "EUR",
             "charge_category_id" => nil,
+            "source_type" => "Pricings::Margin",
             "rank" => 0 }
         end
 
@@ -113,6 +115,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "rate_basis" => "PERCENTAGE",
               "currency" => "EUR",
               "charge_category_id" => nil,
+              "source_type" => "Pricings::Margin",
               "rank" => 0 }
           end
         end
@@ -149,6 +152,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
             "rate_basis" => "PER_SHIPMENT",
             "currency" => "EUR",
             "charge_category_id" => detail.charge_category_id,
+            "source_type" => "Pricings::Detail",
             "rank" => 0 }
         end
 
@@ -212,6 +216,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "rate_basis" => "PERCENTAGE",
               "currency" => "EUR",
               "charge_category_id" => nil,
+              "source_type" => "Pricings::Margin",
               "rank" => 0 }
           end
         end
@@ -251,6 +256,7 @@ RSpec.describe OfferCalculator::Service::Charges::ApplicableMargins do
               "rate_basis" => "PERCENTAGE",
               "currency" => "EUR",
               "charge_category_id" => nil,
+              "source_type" => "Pricings::Margin",
               "rank" => 0 }
           end
         end

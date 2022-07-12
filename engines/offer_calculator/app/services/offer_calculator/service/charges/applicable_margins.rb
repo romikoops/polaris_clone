@@ -44,7 +44,8 @@ module OfferCalculator
             "range_min" => [],
             "range_max" => [],
             "range_unit" => [],
-            "margin_type" => []
+            "margin_type" => [],
+            "source_type" => []
           })
         end
 
@@ -99,6 +100,7 @@ module OfferCalculator
               margin["range_min"] = 0
               margin["range_max"] = Float::INFINITY
               margin["currency"] = margin_currency
+              margin["source_type"] = margin["margin_id"].present? ? "Pricings::Detail" : "Pricings::Margin"
               margin
             end
           )

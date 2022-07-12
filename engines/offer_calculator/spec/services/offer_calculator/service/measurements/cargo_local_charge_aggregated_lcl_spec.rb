@@ -89,5 +89,13 @@ RSpec.describe OfferCalculator::Service::Measurements::Cargo do
         expect(measure.weight_measure.unit.name).to eq("t/m3")
       end
     end
+
+    it "returns bill as shipment" do
+      expect(measure.bill).to eq(measure.shipment)
+    end
+
+    it "returns container as unit" do
+      expect(measure.container).to eq(measure.unit)
+    end
   end
 end

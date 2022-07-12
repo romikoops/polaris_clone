@@ -142,5 +142,25 @@ RSpec.describe OfferCalculator::Service::Charges::Fee do
         expect(fee.legacy_format).to eq(expected_format)
       end
     end
+
+    context "when the rate_basis is PERCENTAGE" do
+      let(:rate_basis) { "PERCENTAGE" }
+      let(:expected_format) do
+        {
+          rate: rate_of_charge,
+          base: 0,
+          rate_basis: rate_basis,
+          currency: currency.iso_code,
+          min: 10,
+          max: 10_000,
+          range: []
+        }
+      end
+      let(:rate_of_charge) { 0.09 }
+
+      it "returns a hash with the legacy format" do
+        expect(fee.legacy_format).to eq(expected_format)
+      end
+    end
   end
 end

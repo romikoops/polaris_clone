@@ -45,7 +45,7 @@ module OfferCalculator
 
         def legacy_fee_format
           {
-            rate: rate.amount,
+            rate: rate_as_decimal,
             base: base,
             rate_basis: rate_basis,
             currency: currency.iso_code,
@@ -60,7 +60,7 @@ module OfferCalculator
             range_unit => [
               {
                 "rate" => {
-                  "rate" => rate.amount,
+                  "rate" => rate_as_decimal,
                   "base" => base,
                   "rate_basis" => rate_basis,
                   "currency" => currency.iso_code
@@ -79,7 +79,7 @@ module OfferCalculator
 
           [
             {
-              rate: rate.amount,
+              rate: rate_as_decimal,
               base: base,
               rate_basis: rate_basis,
               currency: currency.iso_code,
@@ -87,6 +87,15 @@ module OfferCalculator
               max: range_max
             }
           ]
+        end
+
+        def rate_as_decimal
+          case rate
+          when Money
+            rate.amount
+          when Numeric
+            rate
+          end
         end
 
         delegate :currency, to: :minimum_charge

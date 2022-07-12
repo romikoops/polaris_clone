@@ -214,6 +214,30 @@ RSpec.describe OfferCalculator::Service::Charges::RangeFinder do
           expect(range_finder.fee.range_max).to eq(2000)
         end
       end
+
+      context "when min and max are nil" do
+        let(:fees) do
+          [
+            {
+              "rate" => 0.1,
+              "currency" => "USD",
+              "charge_category_id" => charge_category.id,
+              "rate_basis" => "PERCENTAGE",
+              "base" => nil,
+              "min" => nil,
+              "max" => nil,
+              "range_min" => 0,
+              "range_max" => Float::INFINITY,
+              "range_unit" => "percentage"
+            }
+          ]
+        end
+
+        it "returns the correct fee row with default minimum_charge and maximum_charge values", :aggregate_failures do
+          expect(range_finder.fee.minimum_charge).to eq(Money.new(0, "USD"))
+          expect(range_finder.fee.maximum_charge).to eq(Money.new(1e14, "USD"))
+        end
+      end
     end
 
     describe "#range_unit" do

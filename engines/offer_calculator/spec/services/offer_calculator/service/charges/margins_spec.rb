@@ -36,6 +36,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
         range_min
         range_unit
         margin_type
+        source_type
         rank]
 
       it "returns an empty frame with all the correct keys", :aggregate_failures do
@@ -69,6 +70,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
           "cargo_class" => "lcl",
           "rate_basis" => "PERCENTAGE",
           "margin_type" => margin.margin_type,
+          "source_type" => "Pricings::Margin",
           "rank" => 0 }
       end
 
@@ -104,6 +106,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
             "cargo_class" => "lcl",
             "rate_basis" => "PERCENTAGE",
             "margin_type" => margin_type,
+            "source_type" => "Pricings::Margin",
             "rank" => 0 }
         end
       end
@@ -139,6 +142,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
           "charge_category_id" => detail.charge_category_id,
           "applicable_id" => client.id,
           "margin_type" => margin.margin_type,
+          "source_type" => "Pricings::Detail",
           "rank" => 0 }
       end
       let(:fee_codes) { Rover::DataFrame.new({ "code" => %w[bas baf] }) }
@@ -174,6 +178,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
             "pricing_id" => nil,
             "cargo_class" => "lcl",
             "margin_type" => margin.margin_type,
+            "source_type" => "Pricings::Margin",
             "rank" => 0 }
         end
       end
@@ -210,6 +215,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
             "pricing_id" => nil,
             "cargo_class" => "lcl",
             "margin_type" => margin.margin_type,
+            "source_type" => "Pricings::Margin",
             "rank" => 0 }
         end
       end
@@ -246,6 +252,7 @@ RSpec.describe OfferCalculator::Service::Charges::Margins do
             "pricing_id" => nil,
             "cargo_class" => cc,
             "margin_type" => margin.margin_type,
+            "source_type" => "Pricings::Margin",
             "rank" => 0 }
         end
       end
