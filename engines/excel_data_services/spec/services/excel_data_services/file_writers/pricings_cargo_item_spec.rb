@@ -37,6 +37,18 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
   let(:dynamic_headers) { headers.last(1) }
 
   describe ".perform" do
+    before do
+      Geocoder::Lookup::Test.add_stub([57.694253, 11.854048], [
+        "address_components" => [{ "types" => ["premise"] }],
+        "address" => "Gothenburg, Sweden",
+        "city" => "Gothenburg",
+        "country" => nil,
+        "country_code" => nil,
+        "postal_code" => "210001"
+      ])
+      pricing_row
+    end
+
     shared_examples_for "LCL Pricing Writer" do
       it "writes all pricings to the sheet", :aggregate_failures do
         expect(static_headers).to eq(static_pricing_headers)
@@ -44,8 +56,6 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
         expect(first_sheet.row(2)).to eq(pricing_row)
       end
     end
-
-    before { pricing_row }
 
     context "when all pricings are valid" do
       let(:pricing_row) do
@@ -77,7 +87,47 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
 
       let(:pricing) do
         FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary,
-                                        tenant_vehicle: tenant_vehicle)
+          tenant_vehicle: tenant_vehicle)
+      end
+
+      it_behaves_like "LCL Pricing Writer"
+    end
+
+    context "when all the origin hub has no country on the Address" do
+      let(:pricing_row) do
+        [
+          default_group.id,
+          default_group.name,
+          pricing.effective_date.to_date,
+          pricing.expiration_date.to_date,
+          itinerary.origin_hub.locode,
+          "Gothenburg",
+          "Sweden",
+          itinerary.destination_hub.locode,
+          "Shanghai",
+          "China",
+          "ocean",
+          tenant_vehicle.carrier.name,
+          "standard",
+          "LCL",
+          "PER_WM",
+          nil,
+          transit_time.duration,
+          nil,
+          pricing.fees.first.cbm_ratio,
+          pricing.fees.first.vm_ratio,
+          "EUR",
+          25
+        ]
+      end
+      let(:origin_hub_without_country) do
+        FactoryBot.create(:legacy_hub, organization: organization, name: "Gothenburg",
+          address: FactoryBot.create(:address, country: nil))
+      end
+      let(:itinerary) { FactoryBot.create(:gothenburg_shanghai_itinerary, origin_hub: origin_hub_without_country) }
+      let(:pricing) do
+        FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary,
+          tenant_vehicle: tenant_vehicle)
       end
 
       it_behaves_like "LCL Pricing Writer"
@@ -118,7 +168,7 @@ RSpec.describe ExcelDataServices::FileWriters::Pricings do
       end
       let(:pricing) do
         FactoryBot.create(:lcl_pricing, organization: organization, itinerary: itinerary,
-                                        tenant_vehicle: tenant_vehicle)
+          tenant_vehicle: tenant_vehicle)
       end
 
       it_behaves_like "LCL Pricing Writer"

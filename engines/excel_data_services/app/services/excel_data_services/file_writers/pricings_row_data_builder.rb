@@ -33,10 +33,10 @@ module ExcelDataServices
         mot = itinerary.mode_of_transport
         origin_hub = itinerary.origin_hub
         origin_hub_name = origin_hub.name
-        origin_country_name = origin_hub.address.country.name
+        origin_country_name = origin_hub.nexus.country.name
         destination_hub = itinerary.destination_hub
         destination_hub_name = destination_hub.name
-        destination_country_name = destination_hub.address.country.name
+        destination_country_name = destination_hub.nexus.country.name
         carrier_name = pricing.carrier
         service_level = pricing.tenant_vehicle.name
         transshipment = pricing.transshipment || itinerary.transshipment
