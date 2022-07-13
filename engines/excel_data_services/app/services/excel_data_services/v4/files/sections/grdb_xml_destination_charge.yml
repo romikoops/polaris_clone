@@ -14,7 +14,7 @@ xml_data:
 required:
   - type: xml
     path:
-      - DestinationRates
+      - DestinationCharge
 
 xml_columns:
   - header: charge_id
@@ -237,50 +237,60 @@ xml_columns:
     sanitizer: boolean
     validator: optional_boolean
     fallback: false
+  - header: internal
+    key:
+    sanitizer: boolean
+    validator: optional_boolean
+    fallback: false
 
 operations:
-  - Grdb
-  - ExpandedDates
-  - CounterpartHubExpander
-
-distributors:
-  - GrdbExcel
+  - type: Grdb
+  - type: ExpandedDates
+  - type: CounterpartHubExpander
 
 pipelines:
   - extractors:
-      - OrganizationCarrier
-      - Carrier
-      - RoutingCarrier
-    importers:
-      - Carrier
-      - RoutingCarrier
+      - type: OrganizationCarrier
+      - type: RoutingCarrier
+    formatter: RoutingCarrier
+    importer:
+      model: Routing::Carrier
+
+  - extractors:
+      - type: Carrier
+    formatter: Carrier
+    importer:
+      model: Legacy::Carrier
 
   - validators:
-      - Carrier
+      - type: Carrier
     extractors:
-      - TenantVehicle
-    importers:
-      - TenantVehicle
+      - type: TenantVehicle
+    formatter: TenantVehicle
+    importer:
+      model: Legacy::TenantVehicle
   - validators:
-      - PrimaryFeeCode
+      - type: PrimaryFeeCode
     extractors:
-      - ChargeCategory
-    importers:
-      - ChargeCategory
+      - type: ChargeCategory
+    formatter: ChargeCategory
+    importer:
+      model: Legacy::ChargeCategory
 
   - validators:
-      - SequentialDates
-      - ChargeFees
-      - Carrier
-      - TenantVehicle
-      - Hub
-      - CounterpartHub
-      - ChargeCategory
-      - Group
-      - GrdbRateBasis
-      - RateBasis
-    importers:
-      - LocalCharge
+      - type: SequentialDates
+      - type: ChargeFees
+      - type: Carrier
+      - type: TenantVehicle
+      - type: Hub
+      - type: CounterpartHub
+      - type: ChargeCategory
+      - type: Group
+      - type: GrdbRateBasis
+      - type: RateBasis
+    formatter: LocalCharge
+    importer:
+      model: Legacy::LocalCharge
     conflicts:
       - model: Legacy::LocalCharge
         conflict_keys:
