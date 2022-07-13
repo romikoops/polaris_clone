@@ -526,6 +526,81 @@ FactoryBot.define do
       end
     end
 
+    trait :new_rates do
+      rates do
+        {
+          kg: [
+            {
+              rate: { base: 100.0, rate: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "200.0",
+              min_kg: "0.1",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 237.5, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "300.0",
+              min_kg: "200.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 135.0, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "400.0",
+              min_kg: "300.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 135.0, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "500.0",
+              min_kg: "400.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 109.090909090909, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "600.0",
+              min_kg: "500.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 110.769230769231, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "700.0",
+              min_kg: "600.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "800.0",
+              min_kg: "700.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "900.0",
+              min_kg: "800.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 106.25, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "1000.0",
+              min_kg: "900.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 85.0, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "2500.0",
+              min_kg: "1000.0",
+              min_value: 400.0
+            },
+            {
+              rate: { base: 100.0, rate: 58.0, currency: "SEK", rate_basis: "PER_X_KG" },
+              max_kg: "5000.0",
+              min_kg: "2500.0",
+              min_value: 533.0
+            }
+          ]
+        }.freeze
+      end
+    end
+
     after(:create) do |trucking|
       trucking.fees.each do |key, fee|
         next if Legacy::ChargeCategory.exists?(organization: trucking.organization, code: key.downcase)

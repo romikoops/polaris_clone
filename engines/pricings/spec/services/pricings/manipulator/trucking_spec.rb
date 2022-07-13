@@ -90,6 +90,22 @@ RSpec.describe Pricings::Manipulator do
       end
     end
 
+    context "with manipulated trucking pricing attached to the user (newly formatted rates)" do
+      before do
+        FactoryBot.create(:trucking_pre_margin, destination_hub: hub, organization: organization, applicable: user)
+      end
+
+      let(:trucking_pricing) do
+        FactoryBot.create(:trucking_trucking, :new_rates, hub: hub, organization: organization, carriage: "pre")
+      end
+
+      it "returns the manipulated trucking pricing attached to the user", :aggregate_failures do
+        expect(target_result.result["id"]).to eq(trucking_pricing.id)
+        expect(target_result.result.dig("fees", "puf", "rate_basis")).to eq("PER_SHIPMENT")
+        expect(target_result.result["rates"].dig("kg", 0, "rate", "rate")).to eq(261.25)
+      end
+    end
+
     context "with manipulated trucking pricing attached to the user with multiple margins" do
       before do
         FactoryBot.create(:trucking_pre_margin,
@@ -216,16 +232,16 @@ RSpec.describe Pricings::Manipulator do
             organization: organization,
             carriage: "on",
             fees: {
-              "PUF": {
-                "key": "PUF",
-                "max": nil,
-                "min": 17.5,
-                "name": "PUF",
-                "value": 17.5,
-                "currency": "EUR",
-                "rate_basis": "PER_CBM_TON_RANGE",
-                "range": [
-                  { 'min': 0, 'max': 10, 'cbm': 10, 'ton': 40 }
+              PUF: {
+                key: "PUF",
+                max: nil,
+                min: 17.5,
+                name: "PUF",
+                value: 17.5,
+                currency: "EUR",
+                rate_basis: "PER_CBM_TON_RANGE",
+                range: [
+                  { min: 0, max: 10, cbm: 10, ton: 40 }
                 ]
               }
             })

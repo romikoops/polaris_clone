@@ -497,8 +497,9 @@ module Pricings
       rates.entries.each_with_object({}).each do |(key, range), hash|
         new_range = range.map { |rate|
           new_rate = rate.deep_dup
-          new_rate["rate"]["value"] = determine_manipulation(
-            rate: rate["rate"]["value"].to_d,
+          value_key = RATE_VALUE_KEYS.find { |k| new_rate.dig("rate", k) }
+          new_rate["rate"][value_key] = determine_manipulation(
+            rate: rate.dig("rate", value_key).to_d,
             value: value,
             operator: operator
           )
