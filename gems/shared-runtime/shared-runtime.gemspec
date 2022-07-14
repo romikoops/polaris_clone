@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 rails_version = File.read(File.join(__dir__, "../../.rails-version"))
 
 Gem::Specification.new do |spec|
@@ -6,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version = "1"
   spec.authors = ["Mikko Kokkonen"]
   spec.email = ["mikko.kokkonen@itsmycargo.com"]
+  spec.required_ruby_version = ">= 2.7.5"
 
   spec.summary = "Common runtime for Polaris"
 
@@ -15,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.add_dependency "activerecord-postgis-adapter"
+  spec.add_dependency "activerecord-postgres_enum"
   spec.add_dependency "activerecord-safer_migrations", "~> 3.0"
   spec.add_dependency "activestorage-cascade", "~> 0.1.1"
   spec.add_dependency "audited", "~> 4.9"

@@ -220,6 +220,7 @@ integrations *--> organization_manager
 integrations *--> profiles
 integrations *--> shipments
 ledger *--> organizations
+ledger --> routing
 ledger *--> users
 rates *--> cargo
 rates --> organizations

@@ -13,8 +13,12 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{app,config,db,lib}/**/*"]
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "aasm"
   spec.add_dependency "activerecord_json_validator", "> 2.1"
+  spec.add_dependency "carmen"
+
   spec.add_dependency "organizations"
+  spec.add_dependency "routing"
   spec.add_dependency "shared-runtime"
   spec.add_dependency "users"
 

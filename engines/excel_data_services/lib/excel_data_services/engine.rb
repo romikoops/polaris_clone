@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "activerecord_json_validator"
 require "activerecord-postgis-adapter"
 require "config"
 require "mimemagic"
@@ -13,7 +12,7 @@ require "stackprof"
 require "uuidtools"
 require "write_xlsx"
 
-require_relative "../roo/excelx_money.rb"
+require_relative "../roo/excelx_money"
 
 module ExcelDataServices
   class Engine < ::Rails::Engine

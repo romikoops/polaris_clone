@@ -3,5 +3,8 @@ gem "shared-runtime", path: "../../gems/shared-runtime"
 gem "organizations", path: "../organizations"
 eval_gemfile "../organizations/Gemfile.runtime"
 
+gem "routing", path: "../routing"
+eval_gemfile "../routing/Gemfile.runtime"
+
 gem "users", path: "../users"
 eval_gemfile "../users/Gemfile.runtime"
