@@ -52,7 +52,7 @@ jobs:
           aws-region: eu-central-1
           role-to-assume: ${{ secrets.AWS_CLUSTER_ROLE }}
           role-duration-seconds: 1200
-      - uses: Azure/k8s-set-context@v1
+      - uses: Azure/k8s-set-context@v3
         with:
           kubeconfig: ${{ secrets.KUBECONFIG_PRODUCTION }}
       - uses: azure/setup-kubectl@v2.0
