@@ -1,4 +1,4 @@
-FROM ruby:2.7-slim AS base
+FROM ruby:3.1.2-slim AS base
 
 # Upgrade bundler
 RUN gem install bundler:1.17.3
@@ -85,7 +85,7 @@ RUN redoc-cli bundle \
 #
 #
 #
-FROM ruby:2.7-slim AS app
+FROM ruby:3.1.2-slim AS app
 
 RUN gem install bundler:1.17.3
 
