@@ -2,6 +2,26 @@ en:
   activerecord:
     errors:
       models:
+        "ledger/book_routing":
+          attributes:
+            type:
+              invalid_enum_value: "invalid enum value" 
+        "ledger/merged_book_routing":
+          attributes:
+            type:
+              invalid_enum_value: "invalid enum value"
+        "ledger/rate":
+          attributes:
+            type:
+              invalid_enum_value: "invalid enum value"      
+        "ledger/service":
+          attributes:
+            type:
+              invalid_enum_value: "invalid enum value"             
+        "ledger/staged_book_routing":
+          attributes:
+            type:
+              invalid_enum_value: "invalid enum value"       
         "ledger/upload":
           attributes:
             processing_errors:

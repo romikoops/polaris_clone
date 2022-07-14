@@ -5,6 +5,8 @@ require "rails_helper"
 module Ledger
   RSpec.describe Upload, type: :model do
     describe "validations" do
+      it { expect(FactoryBot.build(:ledger_upload)).to be_valid }
+
       context "when blank processing errors" do
         let(:upload) { FactoryBot.build(:ledger_upload, processing_errors: nil) }
 
@@ -24,7 +26,7 @@ module Ledger
 
           it "is invalid with proper error text", :aggregate_failures do
             expect(upload).to be_invalid
-            expect(upload.errors.full_messages).to eq(["Processing errors invalid json"])
+            expect(upload.errors[:processing_errors]).to eq(["invalid json"])
           end
         end
       end

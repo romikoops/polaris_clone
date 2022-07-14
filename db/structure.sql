@@ -178,6 +178,16 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: book_routing_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.book_routing_type AS ENUM (
+    'Ledger::StagedBookRouting',
+    'Ledger::MergedBookRouting'
+);
+
+
+--
 -- Name: distributions_action_type; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -314,6 +324,45 @@ CREATE TYPE public.ledger_uploads_status AS ENUM (
     'processing',
     'failed',
     'done'
+);
+
+
+--
+-- Name: mode_of_transport_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.mode_of_transport_type AS ENUM (
+    'ocean',
+    'air',
+    'rail',
+    'truck',
+    'barge'
+);
+
+
+--
+-- Name: rate_basis_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.rate_basis_type AS ENUM (
+    'cbm',
+    'kg',
+    'stowage',
+    'km',
+    'shipment',
+    'unit',
+    'wm',
+    'percentage'
+);
+
+
+--
+-- Name: resolution_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.resolution_type AS ENUM (
+    'incoming',
+    'current'
 );
 
 
@@ -1637,8 +1686,7 @@ CREATE TABLE public.excel_data_services_uploads (
     status public.excel_data_services_uploads_status NOT NULL,
     last_job_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    processing_errors jsonb
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2424,6 +2472,157 @@ CREATE SEQUENCE public.layovers_id_seq
 --
 
 ALTER SEQUENCE public.layovers_id_seq OWNED BY public.layovers.id;
+
+
+--
+-- Name: ledger_book_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_book_rates (
+    book_id uuid NOT NULL,
+    rate_id uuid NOT NULL
+);
+
+
+--
+-- Name: ledger_book_routings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_book_routings (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    book_id uuid NOT NULL,
+    routing_id uuid NOT NULL,
+    service_id uuid NOT NULL,
+    type public.book_routing_type NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_books; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_books (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name character varying NOT NULL,
+    basis_book_id uuid,
+    upload_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    aasm_state character varying DEFAULT 'draft'::character varying,
+    published_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_conflicts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_conflicts (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    book_id uuid NOT NULL,
+    staged_rate_id uuid NOT NULL,
+    basis_rate_id uuid NOT NULL,
+    merged_rate_id uuid,
+    resolution public.resolution_type,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_current_books; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_current_books (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    organization_id uuid NOT NULL,
+    book_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_locations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_locations (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    name character varying,
+    geodata public.geometry(MultiPolygon,4326) NOT NULL,
+    region character varying,
+    country character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_rates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_rates (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    book_routing_id uuid NOT NULL,
+    validity daterange NOT NULL,
+    rate_currency character varying NOT NULL,
+    rate_cents integer NOT NULL,
+    min_currency character varying,
+    min_cents integer,
+    max_currency character varying,
+    max_cents integer,
+    rate_basis public.rate_basis_type,
+    kg_range numrange,
+    cbm_range numrange,
+    wm_range numrange,
+    density_range numrange,
+    km_range numrange,
+    unit_range numrange,
+    fee_code character varying NOT NULL,
+    fee_name character varying NOT NULL,
+    group_id uuid,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_routings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_routings (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    origin_location_id uuid NOT NULL,
+    destination_location_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ledger_services; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ledger_services (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    routing_id bigint,
+    carrier_id uuid NOT NULL,
+    organization_id uuid NOT NULL,
+    name character varying NOT NULL,
+    cargo_class character varying,
+    mode_of_transport public.mode_of_transport_type,
+    origin_inland_cfs character varying,
+    origin_cfs character varying,
+    destination_cfs character varying,
+    destination_inland_cfs character varying,
+    transshipment character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -6296,6 +6495,70 @@ ALTER TABLE ONLY public.layovers
 
 
 --
+-- Name: ledger_book_routings ledger_book_routings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_book_routings
+    ADD CONSTRAINT ledger_book_routings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_books ledger_books_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_books
+    ADD CONSTRAINT ledger_books_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_conflicts ledger_conflicts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_conflicts
+    ADD CONSTRAINT ledger_conflicts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_current_books ledger_current_books_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_current_books
+    ADD CONSTRAINT ledger_current_books_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_locations ledger_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_locations
+    ADD CONSTRAINT ledger_locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_rates ledger_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_rates
+    ADD CONSTRAINT ledger_rates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_routings ledger_routings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_routings
+    ADD CONSTRAINT ledger_routings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ledger_services ledger_services_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_services
+    ADD CONSTRAINT ledger_services_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ledger_uploads ledger_uploads_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8389,6 +8652,174 @@ CREATE INDEX index_layovers_on_sandbox_id ON public.layovers USING btree (sandbo
 --
 
 CREATE INDEX index_layovers_on_stop_id ON public.layovers USING btree (stop_id);
+
+
+--
+-- Name: index_ledger_book_rates_on_book_id_and_rate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_book_rates_on_book_id_and_rate_id ON public.ledger_book_rates USING btree (book_id, rate_id);
+
+
+--
+-- Name: index_ledger_book_rates_on_rate_id_and_book_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_book_rates_on_rate_id_and_book_id ON public.ledger_book_rates USING btree (rate_id, book_id);
+
+
+--
+-- Name: index_ledger_book_routings_on_book_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_book_routings_on_book_id ON public.ledger_book_routings USING btree (book_id);
+
+
+--
+-- Name: index_ledger_book_routings_on_routing_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_book_routings_on_routing_id ON public.ledger_book_routings USING btree (routing_id);
+
+
+--
+-- Name: index_ledger_book_routings_on_service_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_book_routings_on_service_id ON public.ledger_book_routings USING btree (service_id);
+
+
+--
+-- Name: index_ledger_books_on_basis_book_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_books_on_basis_book_id ON public.ledger_books USING btree (basis_book_id);
+
+
+--
+-- Name: index_ledger_books_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_ledger_books_on_name ON public.ledger_books USING btree (name);
+
+
+--
+-- Name: index_ledger_books_on_upload_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_books_on_upload_id ON public.ledger_books USING btree (upload_id);
+
+
+--
+-- Name: index_ledger_books_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_books_on_user_id ON public.ledger_books USING btree (user_id);
+
+
+--
+-- Name: index_ledger_conflicts_on_basis_rate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_conflicts_on_basis_rate_id ON public.ledger_conflicts USING btree (basis_rate_id);
+
+
+--
+-- Name: index_ledger_conflicts_on_book_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_conflicts_on_book_id ON public.ledger_conflicts USING btree (book_id);
+
+
+--
+-- Name: index_ledger_conflicts_on_merged_rate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_conflicts_on_merged_rate_id ON public.ledger_conflicts USING btree (merged_rate_id);
+
+
+--
+-- Name: index_ledger_conflicts_on_staged_rate_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_conflicts_on_staged_rate_id ON public.ledger_conflicts USING btree (staged_rate_id);
+
+
+--
+-- Name: index_ledger_current_books_on_book_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_current_books_on_book_id ON public.ledger_current_books USING btree (book_id);
+
+
+--
+-- Name: index_ledger_current_books_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_current_books_on_organization_id ON public.ledger_current_books USING btree (organization_id);
+
+
+--
+-- Name: index_ledger_current_books_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_current_books_on_user_id ON public.ledger_current_books USING btree (user_id);
+
+
+--
+-- Name: index_ledger_locations_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_ledger_locations_on_name ON public.ledger_locations USING btree (name);
+
+
+--
+-- Name: index_ledger_rates_on_book_routing_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_rates_on_book_routing_id ON public.ledger_rates USING btree (book_routing_id);
+
+
+--
+-- Name: index_ledger_rates_on_group_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_rates_on_group_id ON public.ledger_rates USING btree (group_id);
+
+
+--
+-- Name: index_ledger_routings_on_destination_location_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_routings_on_destination_location_id ON public.ledger_routings USING btree (destination_location_id);
+
+
+--
+-- Name: index_ledger_routings_on_origin_location_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_routings_on_origin_location_id ON public.ledger_routings USING btree (origin_location_id);
+
+
+--
+-- Name: index_ledger_services_on_carrier_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_services_on_carrier_id ON public.ledger_services USING btree (carrier_id);
+
+
+--
+-- Name: index_ledger_services_on_organization_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_services_on_organization_id ON public.ledger_services USING btree (organization_id);
+
+
+--
+-- Name: index_ledger_services_on_routing_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ledger_services_on_routing_id ON public.ledger_services USING btree (routing_id);
 
 
 --
@@ -11321,6 +11752,14 @@ ALTER TABLE ONLY public.cargo_cargos
 
 
 --
+-- Name: ledger_current_books fk_rails_451f1528a0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_current_books
+    ADD CONSTRAINT fk_rails_451f1528a0 FOREIGN KEY (user_id) REFERENCES public.users_users(id);
+
+
+--
 -- Name: journey_offer_results fk_rails_455c8d50e7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11457,6 +11896,14 @@ ALTER TABLE ONLY public.journey_result_sets
 
 
 --
+-- Name: ledger_rates fk_rails_63f27018a4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_rates
+    ADD CONSTRAINT fk_rails_63f27018a4 FOREIGN KEY (group_id) REFERENCES public.groups_groups(id);
+
+
+--
 -- Name: users fk_rails_642f17018b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11558,6 +12005,14 @@ ALTER TABLE ONLY public.itineraries
 
 ALTER TABLE ONLY public.oauth_access_tokens
     ADD CONSTRAINT fk_rails_732cb83ab7 FOREIGN KEY (application_id) REFERENCES public.oauth_applications(id);
+
+
+--
+-- Name: ledger_current_books fk_rails_7424e6d939; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_current_books
+    ADD CONSTRAINT fk_rails_7424e6d939 FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
 
 
 --
@@ -11961,6 +12416,14 @@ ALTER TABLE ONLY public.journey_route_sections
 
 
 --
+-- Name: ledger_services fk_rails_b135c6128c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_services
+    ADD CONSTRAINT fk_rails_b135c6128c FOREIGN KEY (organization_id) REFERENCES public.organizations_organizations(id);
+
+
+--
 -- Name: shipments_documents fk_rails_b1608cd908; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -12126,6 +12589,14 @@ ALTER TABLE ONLY public.legacy_files
 
 ALTER TABLE ONLY public.shipments
     ADD CONSTRAINT fk_rails_d52aa5da4a FOREIGN KEY (origin_hub_id) REFERENCES public.hubs(id) ON DELETE SET NULL;
+
+
+--
+-- Name: ledger_services fk_rails_d608b53a05; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ledger_services
+    ADD CONSTRAINT fk_rails_d608b53a05 FOREIGN KEY (carrier_id) REFERENCES public.routing_carriers(id);
 
 
 --
@@ -13087,7 +13558,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220629174735'),
 ('20220703160347'),
 ('20220707092136'),
-('20220711110510'),
-('20220712141456');
+('20220712141456'),
+('20220713184012'),
+('20220713184839'),
+('20220713185330'),
+('20220713213751'),
+('20220714045408'),
+('20220714052827'),
+('20220714052843'),
+('20220714052853'),
+('20220714052904');
 
 
