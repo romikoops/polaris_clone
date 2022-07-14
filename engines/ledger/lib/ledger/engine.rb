@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "aasm"
+require "activerecord_json_validator"
+require "carmen"
+
 module Ledger
   class Engine < ::Rails::Engine
     isolate_namespace Ledger

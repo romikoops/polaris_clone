@@ -1,7 +1,9 @@
 # frozen_string_literal: true
+
 require "rails"
 
 require "active_storage/cascade"
+require "active_record/postgres_enum"
 require "activerecord-postgis-adapter"
 require "activerecord-safer_migrations"
 require "audited"
