@@ -10,7 +10,7 @@ module Ledger
 
       context "when basis book is current book" do
         let(:book) do
-          FactoryBot.create(:ledger_book).tap { |b| b.basis_book = b }
+          FactoryBot.create(:ledger_book).tap { |book| book.basis_book = book }
         end
 
         it "is invalid with proper error text", :aggregate_failures do

@@ -2,7 +2,7 @@
 
 class CreateLedgerRates < ActiveRecord::Migration[5.2]
   def change
-    create_enum :rate_basis_list, Ledger::Rate::RATE_BASIS_LIST
+    create_enum :rate_basis_type, %w[cbm kg stowage km shipment unit wm percentage]
 
     create_table :ledger_rates, id: :uuid do |t|
       t.references :book_routing, type: :uuid, index: true, null: false
@@ -13,7 +13,7 @@ class CreateLedgerRates < ActiveRecord::Migration[5.2]
       t.integer :min_cents
       t.string :max_currency
       t.integer :max_cents
-      t.enum :rate_basis, enum_type: :rate_basis_list
+      t.enum :rate_basis, enum_type: :rate_basis_type
       t.numrange :kg_range
       t.numrange :cbm_range
       t.numrange :wm_range

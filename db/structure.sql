@@ -178,22 +178,12 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- Name: book_routing_types; Type: TYPE; Schema: public; Owner: -
+-- Name: book_routing_type; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE public.book_routing_types AS ENUM (
+CREATE TYPE public.book_routing_type AS ENUM (
     'Ledger::StagedBookRouting',
     'Ledger::MergedBookRouting'
-);
-
-
---
--- Name: conflict_strategies; Type: TYPE; Schema: public; Owner: -
---
-
-CREATE TYPE public.conflict_strategies AS ENUM (
-    'incoming',
-    'current'
 );
 
 
@@ -338,10 +328,10 @@ CREATE TYPE public.ledger_uploads_status AS ENUM (
 
 
 --
--- Name: modes_of_transport; Type: TYPE; Schema: public; Owner: -
+-- Name: mode_of_transport_type; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE public.modes_of_transport AS ENUM (
+CREATE TYPE public.mode_of_transport_type AS ENUM (
     'ocean',
     'air',
     'rail',
@@ -351,10 +341,10 @@ CREATE TYPE public.modes_of_transport AS ENUM (
 
 
 --
--- Name: rate_basis_list; Type: TYPE; Schema: public; Owner: -
+-- Name: rate_basis_type; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE public.rate_basis_list AS ENUM (
+CREATE TYPE public.rate_basis_type AS ENUM (
     'cbm',
     'kg',
     'stowage',
@@ -363,6 +353,16 @@ CREATE TYPE public.rate_basis_list AS ENUM (
     'unit',
     'wm',
     'percentage'
+);
+
+
+--
+-- Name: resolution_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.resolution_type AS ENUM (
+    '"incoming",',
+    '"current"'
 );
 
 
@@ -2494,7 +2494,7 @@ CREATE TABLE public.ledger_book_routings (
     book_id uuid NOT NULL,
     routing_id uuid NOT NULL,
     service_id uuid NOT NULL,
-    type public.book_routing_types NOT NULL,
+    type public.book_routing_type NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2527,7 +2527,7 @@ CREATE TABLE public.ledger_conflicts (
     staged_rate_id uuid NOT NULL,
     basis_rate_id uuid NOT NULL,
     merged_rate_id uuid,
-    resolution public.conflict_strategies,
+    resolution public.resolution_type,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2576,7 +2576,7 @@ CREATE TABLE public.ledger_rates (
     min_cents integer,
     max_currency character varying,
     max_cents integer,
-    rate_basis public.rate_basis_list,
+    rate_basis public.rate_basis_type,
     kg_range numrange,
     cbm_range numrange,
     wm_range numrange,
@@ -2615,11 +2615,12 @@ CREATE TABLE public.ledger_services (
     organization_id uuid NOT NULL,
     name character varying NOT NULL,
     cargo_class character varying,
-    mode_of_transport public.modes_of_transport,
+    mode_of_transport public.mode_of_transport_type,
     origin_inland_cfs character varying,
     origin_cfs character varying,
     destination_cfs character varying,
     destination_inland_cfs character varying,
+    transshipment character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

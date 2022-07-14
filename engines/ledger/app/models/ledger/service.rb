@@ -2,13 +2,8 @@
 
 module Ledger
   class Service < ApplicationRecord
-    MODES_OF_TRANSPORT = [
-      OCEAN = "ocean",
-      AIR = "air",
-      RAIL = "rail",
-      TRUCK = "truck",
-      BARGE = "barge"
-    ].freeze
+    MODES_OF_TRANSPORT = %w[ocean air rail truck barge].freeze
+    enum mode_of_transport: MODES_OF_TRANSPORT.zip(MODES_OF_TRANSPORT).to_h
 
     belongs_to :carrier, class_name: "Routing::Carrier"
     belongs_to :organization, class_name: "Organizations::Organization"
@@ -30,6 +25,7 @@ end
 #  name                   :string           not null
 #  origin_cfs             :string
 #  origin_inland_cfs      :string
+#  transshipment          :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  carrier_id             :uuid             not null

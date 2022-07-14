@@ -3,6 +3,7 @@
 module Ledger
   class BookRouting < ApplicationRecord
     TYPES = %w[Ledger::StagedBookRouting Ledger::MergedBookRouting].freeze
+    enum type: TYPES.zip(TYPES).to_h
 
     belongs_to :book, class_name: "Ledger::Book"
     belongs_to :routing, class_name: "Ledger::Routing"

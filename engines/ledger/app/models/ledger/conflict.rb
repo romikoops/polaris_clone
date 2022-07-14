@@ -3,13 +3,12 @@
 module Ledger
   class Conflict < ApplicationRecord
     STRATEGIES = [INCOMING = "incoming", CURRENT = "current"].freeze
+    enum resolution: STRATEGIES.zip(STRATEGIES).to_h
 
     belongs_to :book, class_name: "Ledger::Book"
     belongs_to :staged_rate, class_name: "Ledger::Rate"
     belongs_to :basis_rate, class_name: "Ledger::Rate"
     belongs_to :merged_rate, class_name: "Ledger::Rate", optional: true
-
-    enum resolution: STRATEGIES.zip(STRATEGIES).to_h
 
     validates :basis_rate, uniqueness: { scope: :staged_rate_id }
     validates :merged_rate, uniqueness: { scope: %i[staged_rate_id merged_rate_id] }

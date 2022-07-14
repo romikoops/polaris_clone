@@ -5,9 +5,9 @@ module Ledger
     validates :name, uniqueness: { allow_blank: true }
     validates :geodata, presence: true
     validates :country, inclusion: { in: Carmen::Country.all.map(&:code), allow_blank: true }
-    validates :country, presence: true, if: ->(l) { l.region.present? }
-    validates :region, presence: true, if: ->(l) { l.country.present? }
-    validate :region_correctness, if: ->(l) { l.country.present? }
+    validates :country, presence: true, if: ->(location) { location.region.present? }
+    validates :region, presence: true, if: ->(location) { location.country.present? }
+    validate :region_correctness, if: ->(location) { location.country.present? }
 
     private
 

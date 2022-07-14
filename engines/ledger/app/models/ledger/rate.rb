@@ -3,6 +3,7 @@
 module Ledger
   class Rate < ApplicationRecord
     RATE_BASIS_LIST = %w[cbm kg stowage km shipment unit wm percentage].freeze
+    enum rate_basis: RATE_BASIS_LIST.zip(RATE_BASIS_LIST).to_h
 
     monetize :rate_cents, with_model_currency: :rate_currency, numericality: { greater_than: 0 }, allow_nil: false
     monetize :min_cents, with_model_currency: :min_currency, allow_nil: true,
@@ -15,7 +16,7 @@ module Ledger
     has_and_belongs_to_many :books, class_name: "Ledger::Book"
 
     validates :validity, presence: true
-    validate :validity_correctness, if: ->(r) { r.book_routing.present? }
+    validate :validity_correctness, if: ->(rate) { rate.book_routing.present? }
     validates :rate_cents, presence: true
     validates :rate_currency, presence: true
     validates_enum :rate_basis, allow_nil: true
