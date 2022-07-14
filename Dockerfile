@@ -64,7 +64,7 @@ COPY . ./
 RUN RAILS_ENV=production bin/rails assets:precompile
 
 # OpenAPI Documentation
-FROM node:16-slim AS docs
+FROM node:18-slim AS docs
 
 WORKDIR /app
 
