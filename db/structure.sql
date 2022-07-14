@@ -361,8 +361,8 @@ CREATE TYPE public.rate_basis_type AS ENUM (
 --
 
 CREATE TYPE public.resolution_type AS ENUM (
-    '"incoming",',
-    '"current"'
+    'incoming',
+    'current'
 );
 
 
@@ -1686,8 +1686,7 @@ CREATE TABLE public.excel_data_services_uploads (
     status public.excel_data_services_uploads_status NOT NULL,
     last_job_id uuid,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    processing_errors jsonb
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -13559,7 +13558,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220629174735'),
 ('20220703160347'),
 ('20220707092136'),
-('20220711110510'),
 ('20220712141456'),
 ('20220713184012'),
 ('20220713184839'),
